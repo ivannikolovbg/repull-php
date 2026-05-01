@@ -1,0 +1,57 @@
+{
+    "name": "repull/sdk",
+    "description": "PHP SDK for Repull — the unified API for vacation-rental tech (50+ PMS platforms, Airbnb / Booking.com / VRBO / Plumguide). Generated from OpenAPI.",
+    "type": "library",
+    "keywords": [
+        "repull",
+        "vacation-rental",
+        "airbnb",
+        "booking.com",
+        "vrbo",
+        "plumguide",
+        "pms",
+        "channel-manager",
+        "sdk",
+        "api"
+    ],
+    "homepage": "https://repull.dev",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vanio AI",
+            "email": "ivan@vanio.ai",
+            "homepage": "https://vanio.ai"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ivannikolovbg/repull-php/issues",
+        "source": "https://github.com/ivannikolovbg/repull-php",
+        "docs": "https://repull.dev/docs"
+    },
+    "require": {
+        "php": "^8.1",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "guzzlehttp/guzzle": "^7.4.5",
+        "guzzlehttp/psr7": "^2.0"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Repull\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Repull\\Test\\": "tests/"
+        }
+    },
+    "scripts": {
+        "phpstan": "phpstan analyse --memory-limit=512M",
+        "test": "phpunit"
+    }
+}
