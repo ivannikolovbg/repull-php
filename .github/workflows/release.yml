@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+# Packagist auto-publishes on tag push via the GitHub webhook installed when
+# the package is submitted at https://packagist.org/packages/submit. This
+# workflow just verifies the tagged commit installs cleanly so a broken
+# release never reaches Packagist's index. After Ivan submits the package
+# once, every future tag flows through automatically.
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['8.1', '8.2', '8.3']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: curl, json, mbstring
+          coverage: none
+
+      - name: Validate composer.json (strict)
+        run: composer validate --strict
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: phpstan (parse-only on generated code)
+        run: composer phpstan
+
+      - name: phpunit
+        run: composer test
