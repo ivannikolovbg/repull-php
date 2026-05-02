@@ -138,6 +138,7 @@ class ConversationsApi
      * Get conversation detail
      *
      * @param  int $id Internal Repull thread id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConversation'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -146,10 +147,11 @@ class ConversationsApi
      */
     public function getConversation(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getConversation'][0]
     ): \Repull\Model\ConversationDetail|\Repull\Model\Error
     {
-        list($response) = $this->getConversationWithHttpInfo($id, $contentType);
+        list($response) = $this->getConversationWithHttpInfo($id, $x_schema, $contentType);
         return $response;
     }
 
@@ -159,6 +161,7 @@ class ConversationsApi
      * Get conversation detail
      *
      * @param  int $id Internal Repull thread id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConversation'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -167,10 +170,11 @@ class ConversationsApi
      */
     public function getConversationWithHttpInfo(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getConversation'][0]
     ): array
     {
-        $request = $this->getConversationRequest($id, $contentType);
+        $request = $this->getConversationRequest($id, $x_schema, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -300,6 +304,7 @@ class ConversationsApi
      * Get conversation detail
      *
      * @param  int $id Internal Repull thread id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConversation'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -307,10 +312,11 @@ class ConversationsApi
      */
     public function getConversationAsync(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getConversation'][0]
     ): PromiseInterface
     {
-        return $this->getConversationAsyncWithHttpInfo($id, $contentType)
+        return $this->getConversationAsyncWithHttpInfo($id, $x_schema, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -324,6 +330,7 @@ class ConversationsApi
      * Get conversation detail
      *
      * @param  int $id Internal Repull thread id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConversation'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -331,11 +338,12 @@ class ConversationsApi
      */
     public function getConversationAsyncWithHttpInfo(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getConversation'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ConversationDetail';
-        $request = $this->getConversationRequest($id, $contentType);
+        $request = $this->getConversationRequest($id, $x_schema, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -377,6 +385,7 @@ class ConversationsApi
      * Create request for operation 'getConversation'
      *
      * @param  int $id Internal Repull thread id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConversation'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -384,6 +393,7 @@ class ConversationsApi
      */
     public function getConversationRequest(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getConversation'][0]
     ): Request
     {
@@ -396,6 +406,7 @@ class ConversationsApi
         }
 
 
+
         $resourcePath = '/v1/conversations/{id}';
         $formParams = [];
         $queryParams = [];
@@ -404,6 +415,10 @@ class ConversationsApi
         $multipart = false;
 
 
+        // header params
+        if ($x_schema !== null) {
+            $headerParams['X-Schema'] = ObjectSerializer::toHeaderValue($x_schema);
+        }
 
         // path params
         if ($id !== null) {
@@ -478,6 +493,7 @@ class ConversationsApi
      * List messages in a conversation
      *
      * @param  int $id Internal Repull thread id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
      * @param  int|null $limit limit (optional, default to 20)
      * @param  string|null $order &#x60;desc&#x60; (default) returns newest first. &#x60;asc&#x60; returns chronological replay. (optional, default to 'desc')
@@ -489,13 +505,14 @@ class ConversationsApi
      */
     public function listConversationMessages(
         int $id,
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $order = 'desc',
         string $contentType = self::contentTypes['listConversationMessages'][0]
     ): \Repull\Model\MessageListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listConversationMessagesWithHttpInfo($id, $cursor, $limit, $order, $contentType);
+        list($response) = $this->listConversationMessagesWithHttpInfo($id, $x_schema, $cursor, $limit, $order, $contentType);
         return $response;
     }
 
@@ -505,6 +522,7 @@ class ConversationsApi
      * List messages in a conversation
      *
      * @param  int $id Internal Repull thread id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $order &#x60;desc&#x60; (default) returns newest first. &#x60;asc&#x60; returns chronological replay. (optional, default to 'desc')
@@ -516,13 +534,14 @@ class ConversationsApi
      */
     public function listConversationMessagesWithHttpInfo(
         int $id,
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $order = 'desc',
         string $contentType = self::contentTypes['listConversationMessages'][0]
     ): array
     {
-        $request = $this->listConversationMessagesRequest($id, $cursor, $limit, $order, $contentType);
+        $request = $this->listConversationMessagesRequest($id, $x_schema, $cursor, $limit, $order, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -666,6 +685,7 @@ class ConversationsApi
      * List messages in a conversation
      *
      * @param  int $id Internal Repull thread id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $order &#x60;desc&#x60; (default) returns newest first. &#x60;asc&#x60; returns chronological replay. (optional, default to 'desc')
@@ -676,13 +696,14 @@ class ConversationsApi
      */
     public function listConversationMessagesAsync(
         int $id,
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $order = 'desc',
         string $contentType = self::contentTypes['listConversationMessages'][0]
     ): PromiseInterface
     {
-        return $this->listConversationMessagesAsyncWithHttpInfo($id, $cursor, $limit, $order, $contentType)
+        return $this->listConversationMessagesAsyncWithHttpInfo($id, $x_schema, $cursor, $limit, $order, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -696,6 +717,7 @@ class ConversationsApi
      * List messages in a conversation
      *
      * @param  int $id Internal Repull thread id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $order &#x60;desc&#x60; (default) returns newest first. &#x60;asc&#x60; returns chronological replay. (optional, default to 'desc')
@@ -706,6 +728,7 @@ class ConversationsApi
      */
     public function listConversationMessagesAsyncWithHttpInfo(
         int $id,
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $order = 'desc',
@@ -713,7 +736,7 @@ class ConversationsApi
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\MessageListResponse';
-        $request = $this->listConversationMessagesRequest($id, $cursor, $limit, $order, $contentType);
+        $request = $this->listConversationMessagesRequest($id, $x_schema, $cursor, $limit, $order, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -755,6 +778,7 @@ class ConversationsApi
      * Create request for operation 'listConversationMessages'
      *
      * @param  int $id Internal Repull thread id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $order &#x60;desc&#x60; (default) returns newest first. &#x60;asc&#x60; returns chronological replay. (optional, default to 'desc')
@@ -765,6 +789,7 @@ class ConversationsApi
      */
     public function listConversationMessagesRequest(
         int $id,
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $order = 'desc',
@@ -778,6 +803,7 @@ class ConversationsApi
                 'Missing the required parameter $id when calling listConversationMessages'
             );
         }
+
 
 
         if ($limit !== null && $limit > 100) {
@@ -824,6 +850,10 @@ class ConversationsApi
             false // required
         ) ?? []);
 
+        // header params
+        if ($x_schema !== null) {
+            $headerParams['X-Schema'] = ObjectSerializer::toHeaderValue($x_schema);
+        }
 
         // path params
         if ($id !== null) {
@@ -897,6 +927,7 @@ class ConversationsApi
      *
      * List conversations
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $platform Restrict to threads on a single channel. (optional)
@@ -908,6 +939,7 @@ class ConversationsApi
      * @return \Repull\Model\ConversationListResponse|\Repull\Model\Error
      */
     public function listConversations(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $platform = null,
@@ -915,7 +947,7 @@ class ConversationsApi
         string $contentType = self::contentTypes['listConversations'][0]
     ): \Repull\Model\ConversationListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listConversationsWithHttpInfo($cursor, $limit, $platform, $status, $contentType);
+        list($response) = $this->listConversationsWithHttpInfo($x_schema, $cursor, $limit, $platform, $status, $contentType);
         return $response;
     }
 
@@ -924,6 +956,7 @@ class ConversationsApi
      *
      * List conversations
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $platform Restrict to threads on a single channel. (optional)
@@ -935,6 +968,7 @@ class ConversationsApi
      * @return array of \Repull\Model\ConversationListResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listConversationsWithHttpInfo(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $platform = null,
@@ -942,7 +976,7 @@ class ConversationsApi
         string $contentType = self::contentTypes['listConversations'][0]
     ): array
     {
-        $request = $this->listConversationsRequest($cursor, $limit, $platform, $status, $contentType);
+        $request = $this->listConversationsRequest($x_schema, $cursor, $limit, $platform, $status, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1071,6 +1105,7 @@ class ConversationsApi
      *
      * List conversations
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $platform Restrict to threads on a single channel. (optional)
@@ -1081,6 +1116,7 @@ class ConversationsApi
      * @return PromiseInterface
      */
     public function listConversationsAsync(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $platform = null,
@@ -1088,7 +1124,7 @@ class ConversationsApi
         string $contentType = self::contentTypes['listConversations'][0]
     ): PromiseInterface
     {
-        return $this->listConversationsAsyncWithHttpInfo($cursor, $limit, $platform, $status, $contentType)
+        return $this->listConversationsAsyncWithHttpInfo($x_schema, $cursor, $limit, $platform, $status, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1101,6 +1137,7 @@ class ConversationsApi
      *
      * List conversations
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $platform Restrict to threads on a single channel. (optional)
@@ -1111,6 +1148,7 @@ class ConversationsApi
      * @return PromiseInterface
      */
     public function listConversationsAsyncWithHttpInfo(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $platform = null,
@@ -1119,7 +1157,7 @@ class ConversationsApi
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ConversationListResponse';
-        $request = $this->listConversationsRequest($cursor, $limit, $platform, $status, $contentType);
+        $request = $this->listConversationsRequest($x_schema, $cursor, $limit, $platform, $status, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1160,6 +1198,7 @@ class ConversationsApi
     /**
      * Create request for operation 'listConversations'
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $platform Restrict to threads on a single channel. (optional)
@@ -1170,6 +1209,7 @@ class ConversationsApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listConversationsRequest(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $platform = null,
@@ -1177,6 +1217,7 @@ class ConversationsApi
         string $contentType = self::contentTypes['listConversations'][0]
     ): Request
     {
+
 
 
         if ($limit !== null && $limit > 100) {
@@ -1233,6 +1274,10 @@ class ConversationsApi
             false // required
         ) ?? []);
 
+        // header params
+        if ($x_schema !== null) {
+            $headerParams['X-Schema'] = ObjectSerializer::toHeaderValue($x_schema);
+        }
 
 
 

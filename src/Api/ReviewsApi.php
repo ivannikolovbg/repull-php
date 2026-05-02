@@ -135,6 +135,7 @@ class ReviewsApi
      * Get review
      *
      * @param  int $id Internal Repull review id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReview'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -143,10 +144,11 @@ class ReviewsApi
      */
     public function getReview(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getReview'][0]
     ): \Repull\Model\ReviewGetResponse|\Repull\Model\Error
     {
-        list($response) = $this->getReviewWithHttpInfo($id, $contentType);
+        list($response) = $this->getReviewWithHttpInfo($id, $x_schema, $contentType);
         return $response;
     }
 
@@ -156,6 +158,7 @@ class ReviewsApi
      * Get review
      *
      * @param  int $id Internal Repull review id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReview'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -164,10 +167,11 @@ class ReviewsApi
      */
     public function getReviewWithHttpInfo(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getReview'][0]
     ): array
     {
-        $request = $this->getReviewRequest($id, $contentType);
+        $request = $this->getReviewRequest($id, $x_schema, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -297,6 +301,7 @@ class ReviewsApi
      * Get review
      *
      * @param  int $id Internal Repull review id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReview'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -304,10 +309,11 @@ class ReviewsApi
      */
     public function getReviewAsync(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getReview'][0]
     ): PromiseInterface
     {
-        return $this->getReviewAsyncWithHttpInfo($id, $contentType)
+        return $this->getReviewAsyncWithHttpInfo($id, $x_schema, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -321,6 +327,7 @@ class ReviewsApi
      * Get review
      *
      * @param  int $id Internal Repull review id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReview'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -328,11 +335,12 @@ class ReviewsApi
      */
     public function getReviewAsyncWithHttpInfo(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getReview'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ReviewGetResponse';
-        $request = $this->getReviewRequest($id, $contentType);
+        $request = $this->getReviewRequest($id, $x_schema, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -374,6 +382,7 @@ class ReviewsApi
      * Create request for operation 'getReview'
      *
      * @param  int $id Internal Repull review id. (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReview'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -381,6 +390,7 @@ class ReviewsApi
      */
     public function getReviewRequest(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getReview'][0]
     ): Request
     {
@@ -393,6 +403,7 @@ class ReviewsApi
         }
 
 
+
         $resourcePath = '/v1/reviews/{id}';
         $formParams = [];
         $queryParams = [];
@@ -401,6 +412,10 @@ class ReviewsApi
         $multipart = false;
 
 
+        // header params
+        if ($x_schema !== null) {
+            $headerParams['X-Schema'] = ObjectSerializer::toHeaderValue($x_schema);
+        }
 
         // path params
         if ($id !== null) {
@@ -474,6 +489,7 @@ class ReviewsApi
      *
      * List reviews
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
      * @param  int|null $limit limit (optional, default to 20)
      * @param  string|null $platform platform (optional)
@@ -489,6 +505,7 @@ class ReviewsApi
      * @return \Repull\Model\ReviewListResponse|\Repull\Model\Error
      */
     public function listReviews(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $platform = null,
@@ -500,7 +517,7 @@ class ReviewsApi
         string $contentType = self::contentTypes['listReviews'][0]
     ): \Repull\Model\ReviewListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listReviewsWithHttpInfo($cursor, $limit, $platform, $listing_id, $rating_min, $rating_max, $status, $reviewer_role, $contentType);
+        list($response) = $this->listReviewsWithHttpInfo($x_schema, $cursor, $limit, $platform, $listing_id, $rating_min, $rating_max, $status, $reviewer_role, $contentType);
         return $response;
     }
 
@@ -509,6 +526,7 @@ class ReviewsApi
      *
      * List reviews
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $platform (optional)
@@ -524,6 +542,7 @@ class ReviewsApi
      * @return array of \Repull\Model\ReviewListResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listReviewsWithHttpInfo(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $platform = null,
@@ -535,7 +554,7 @@ class ReviewsApi
         string $contentType = self::contentTypes['listReviews'][0]
     ): array
     {
-        $request = $this->listReviewsRequest($cursor, $limit, $platform, $listing_id, $rating_min, $rating_max, $status, $reviewer_role, $contentType);
+        $request = $this->listReviewsRequest($x_schema, $cursor, $limit, $platform, $listing_id, $rating_min, $rating_max, $status, $reviewer_role, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -664,6 +683,7 @@ class ReviewsApi
      *
      * List reviews
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $platform (optional)
@@ -678,6 +698,7 @@ class ReviewsApi
      * @return PromiseInterface
      */
     public function listReviewsAsync(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $platform = null,
@@ -689,7 +710,7 @@ class ReviewsApi
         string $contentType = self::contentTypes['listReviews'][0]
     ): PromiseInterface
     {
-        return $this->listReviewsAsyncWithHttpInfo($cursor, $limit, $platform, $listing_id, $rating_min, $rating_max, $status, $reviewer_role, $contentType)
+        return $this->listReviewsAsyncWithHttpInfo($x_schema, $cursor, $limit, $platform, $listing_id, $rating_min, $rating_max, $status, $reviewer_role, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -702,6 +723,7 @@ class ReviewsApi
      *
      * List reviews
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $platform (optional)
@@ -716,6 +738,7 @@ class ReviewsApi
      * @return PromiseInterface
      */
     public function listReviewsAsyncWithHttpInfo(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $platform = null,
@@ -728,7 +751,7 @@ class ReviewsApi
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ReviewListResponse';
-        $request = $this->listReviewsRequest($cursor, $limit, $platform, $listing_id, $rating_min, $rating_max, $status, $reviewer_role, $contentType);
+        $request = $this->listReviewsRequest($x_schema, $cursor, $limit, $platform, $listing_id, $rating_min, $rating_max, $status, $reviewer_role, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -769,6 +792,7 @@ class ReviewsApi
     /**
      * Create request for operation 'listReviews'
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $platform (optional)
@@ -783,6 +807,7 @@ class ReviewsApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listReviewsRequest(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $platform = null,
@@ -794,6 +819,7 @@ class ReviewsApi
         string $contentType = self::contentTypes['listReviews'][0]
     ): Request
     {
+
 
 
         if ($limit !== null && $limit > 100) {
@@ -902,6 +928,10 @@ class ReviewsApi
             false // required
         ) ?? []);
 
+        // header params
+        if ($x_schema !== null) {
+            $headerParams['X-Schema'] = ObjectSerializer::toHeaderValue($x_schema);
+        }
 
 
 

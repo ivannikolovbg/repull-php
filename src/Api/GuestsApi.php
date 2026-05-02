@@ -135,6 +135,7 @@ class GuestsApi
      * Get guest profile
      *
      * @param  int $id id (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getGuest'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -143,10 +144,11 @@ class GuestsApi
      */
     public function getGuest(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getGuest'][0]
     ): \Repull\Model\GuestProfile|\Repull\Model\Error
     {
-        list($response) = $this->getGuestWithHttpInfo($id, $contentType);
+        list($response) = $this->getGuestWithHttpInfo($id, $x_schema, $contentType);
         return $response;
     }
 
@@ -156,6 +158,7 @@ class GuestsApi
      * Get guest profile
      *
      * @param  int $id (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getGuest'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -164,10 +167,11 @@ class GuestsApi
      */
     public function getGuestWithHttpInfo(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getGuest'][0]
     ): array
     {
-        $request = $this->getGuestRequest($id, $contentType);
+        $request = $this->getGuestRequest($id, $x_schema, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -297,6 +301,7 @@ class GuestsApi
      * Get guest profile
      *
      * @param  int $id (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getGuest'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -304,10 +309,11 @@ class GuestsApi
      */
     public function getGuestAsync(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getGuest'][0]
     ): PromiseInterface
     {
-        return $this->getGuestAsyncWithHttpInfo($id, $contentType)
+        return $this->getGuestAsyncWithHttpInfo($id, $x_schema, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -321,6 +327,7 @@ class GuestsApi
      * Get guest profile
      *
      * @param  int $id (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getGuest'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -328,11 +335,12 @@ class GuestsApi
      */
     public function getGuestAsyncWithHttpInfo(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getGuest'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\GuestProfile';
-        $request = $this->getGuestRequest($id, $contentType);
+        $request = $this->getGuestRequest($id, $x_schema, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -374,6 +382,7 @@ class GuestsApi
      * Create request for operation 'getGuest'
      *
      * @param  int $id (required)
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getGuest'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -381,6 +390,7 @@ class GuestsApi
      */
     public function getGuestRequest(
         int $id,
+        ?string $x_schema = null,
         string $contentType = self::contentTypes['getGuest'][0]
     ): Request
     {
@@ -393,6 +403,7 @@ class GuestsApi
         }
 
 
+
         $resourcePath = '/v1/guests/{id}';
         $formParams = [];
         $queryParams = [];
@@ -401,6 +412,10 @@ class GuestsApi
         $multipart = false;
 
 
+        // header params
+        if ($x_schema !== null) {
+            $headerParams['X-Schema'] = ObjectSerializer::toHeaderValue($x_schema);
+        }
 
         // path params
         if ($id !== null) {
@@ -474,6 +489,7 @@ class GuestsApi
      *
      * List guests
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, email, or phone. (optional)
@@ -486,6 +502,7 @@ class GuestsApi
      * @return \Repull\Model\GuestListResponse|\Repull\Model\Error
      */
     public function listGuests(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $q = null,
@@ -494,7 +511,7 @@ class GuestsApi
         string $contentType = self::contentTypes['listGuests'][0]
     ): \Repull\Model\GuestListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listGuestsWithHttpInfo($cursor, $limit, $q, $has_reservation, $listing_id, $contentType);
+        list($response) = $this->listGuestsWithHttpInfo($x_schema, $cursor, $limit, $q, $has_reservation, $listing_id, $contentType);
         return $response;
     }
 
@@ -503,6 +520,7 @@ class GuestsApi
      *
      * List guests
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, email, or phone. (optional)
@@ -515,6 +533,7 @@ class GuestsApi
      * @return array of \Repull\Model\GuestListResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listGuestsWithHttpInfo(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $q = null,
@@ -523,7 +542,7 @@ class GuestsApi
         string $contentType = self::contentTypes['listGuests'][0]
     ): array
     {
-        $request = $this->listGuestsRequest($cursor, $limit, $q, $has_reservation, $listing_id, $contentType);
+        $request = $this->listGuestsRequest($x_schema, $cursor, $limit, $q, $has_reservation, $listing_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -652,6 +671,7 @@ class GuestsApi
      *
      * List guests
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, email, or phone. (optional)
@@ -663,6 +683,7 @@ class GuestsApi
      * @return PromiseInterface
      */
     public function listGuestsAsync(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $q = null,
@@ -671,7 +692,7 @@ class GuestsApi
         string $contentType = self::contentTypes['listGuests'][0]
     ): PromiseInterface
     {
-        return $this->listGuestsAsyncWithHttpInfo($cursor, $limit, $q, $has_reservation, $listing_id, $contentType)
+        return $this->listGuestsAsyncWithHttpInfo($x_schema, $cursor, $limit, $q, $has_reservation, $listing_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -684,6 +705,7 @@ class GuestsApi
      *
      * List guests
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, email, or phone. (optional)
@@ -695,6 +717,7 @@ class GuestsApi
      * @return PromiseInterface
      */
     public function listGuestsAsyncWithHttpInfo(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $q = null,
@@ -704,7 +727,7 @@ class GuestsApi
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\GuestListResponse';
-        $request = $this->listGuestsRequest($cursor, $limit, $q, $has_reservation, $listing_id, $contentType);
+        $request = $this->listGuestsRequest($x_schema, $cursor, $limit, $q, $has_reservation, $listing_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -745,6 +768,7 @@ class GuestsApi
     /**
      * Create request for operation 'listGuests'
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, email, or phone. (optional)
@@ -756,6 +780,7 @@ class GuestsApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listGuestsRequest(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $q = null,
@@ -764,6 +789,7 @@ class GuestsApi
         string $contentType = self::contentTypes['listGuests'][0]
     ): Request
     {
+
 
 
         if ($limit !== null && $limit > 100) {
@@ -830,6 +856,10 @@ class GuestsApi
             false // required
         ) ?? []);
 
+        // header params
+        if ($x_schema !== null) {
+            $headerParams['X-Schema'] = ObjectSerializer::toHeaderValue($x_schema);
+        }
 
 
 

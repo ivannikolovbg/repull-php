@@ -1,6 +1,6 @@
 <?php
 /**
- * ListingPublishStatusChannel
+ * CustomSchemaUpdate
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ListingPublishStatusChannel Class Doc Comment
+ * CustomSchemaUpdate Class Doc Comment
  *
+ * @description Request body for &#x60;PATCH /v1/schema/custom/{id}&#x60;. All fields optional; omitted fields are left unchanged. &#x60;name&#x60; is intentionally NOT patchable — create a new schema and migrate consumers if you need to rename.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSerializable
+class CustomSchemaUpdate implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ListingPublishStatusChannel';
+    protected static string $openAPIModelName = 'CustomSchemaUpdate';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,12 +60,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'platform' => 'string',
-        'push_status' => 'string',
-        'last_pushed_at' => '\DateTime',
-        'last_pulled_at' => '\DateTime',
-        'dirty_fields' => 'string[]',
-        'platform_has_changes' => 'bool'
+        'description' => 'string',
+        'mappings' => 'array<string,string>',
+        'active' => 'bool'
     ];
 
     /**
@@ -73,12 +71,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'platform' => null,
-        'push_status' => null,
-        'last_pushed_at' => 'date-time',
-        'last_pulled_at' => 'date-time',
-        'dirty_fields' => null,
-        'platform_has_changes' => null
+        'description' => null,
+        'mappings' => null,
+        'active' => null
     ];
 
     /**
@@ -87,12 +82,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'platform' => false,
-        'push_status' => true,
-        'last_pushed_at' => true,
-        'last_pulled_at' => true,
-        'dirty_fields' => false,
-        'platform_has_changes' => false
+        'description' => true,
+        'mappings' => false,
+        'active' => false
     ];
 
     /**
@@ -171,12 +163,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'platform' => 'platform',
-        'push_status' => 'pushStatus',
-        'last_pushed_at' => 'lastPushedAt',
-        'last_pulled_at' => 'lastPulledAt',
-        'dirty_fields' => 'dirtyFields',
-        'platform_has_changes' => 'platformHasChanges'
+        'description' => 'description',
+        'mappings' => 'mappings',
+        'active' => 'active'
     ];
 
     /**
@@ -185,12 +174,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $setters = [
-        'platform' => 'setPlatform',
-        'push_status' => 'setPushStatus',
-        'last_pushed_at' => 'setLastPushedAt',
-        'last_pulled_at' => 'setLastPulledAt',
-        'dirty_fields' => 'setDirtyFields',
-        'platform_has_changes' => 'setPlatformHasChanges'
+        'description' => 'setDescription',
+        'mappings' => 'setMappings',
+        'active' => 'setActive'
     ];
 
     /**
@@ -199,12 +185,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $getters = [
-        'platform' => 'getPlatform',
-        'push_status' => 'getPushStatus',
-        'last_pushed_at' => 'getLastPushedAt',
-        'last_pulled_at' => 'getLastPulledAt',
-        'dirty_fields' => 'getDirtyFields',
-        'platform_has_changes' => 'getPlatformHasChanges'
+        'description' => 'getDescription',
+        'mappings' => 'getMappings',
+        'active' => 'getActive'
     ];
 
     /**
@@ -239,25 +222,6 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
         return self::$openAPIModelName;
     }
 
-    public const PUSH_STATUS_IDLE = 'idle';
-    public const PUSH_STATUS_PUSHING = 'pushing';
-    public const PUSH_STATUS_SUCCESS = 'success';
-    public const PUSH_STATUS_ERROR = 'error';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getPushStatusAllowableValues()
-    {
-        return [
-            self::PUSH_STATUS_IDLE,
-            self::PUSH_STATUS_PUSHING,
-            self::PUSH_STATUS_SUCCESS,
-            self::PUSH_STATUS_ERROR,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -273,12 +237,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('platform', $data ?? [], null);
-        $this->setIfExists('push_status', $data ?? [], null);
-        $this->setIfExists('last_pushed_at', $data ?? [], null);
-        $this->setIfExists('last_pulled_at', $data ?? [], null);
-        $this->setIfExists('dirty_fields', $data ?? [], null);
-        $this->setIfExists('platform_has_changes', $data ?? [], null);
+        $this->setIfExists('description', $data ?? [], null);
+        $this->setIfExists('mappings', $data ?? [], null);
+        $this->setIfExists('active', $data ?? [], null);
     }
 
     /**
@@ -306,13 +267,12 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
     {
         $invalidProperties = [];
 
-        $allowedValues = self::getPushStatusAllowableValues();
-        if (!is_null($this->container['push_status']) && !in_array($this->container['push_status'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'push_status', must be one of '%s'",
-                $this->container['push_status'],
-                implode("', '", $allowedValues)
-            );
+        if (!is_null($this->container['mappings']) && (count($this->container['mappings']) > 50)) {
+            $invalidProperties[] = "invalid value for 'mappings', number of items must be less than or equal to 50.";
+        }
+
+        if (!is_null($this->container['mappings']) && (count($this->container['mappings']) < 1)) {
+            $invalidProperties[] = "invalid value for 'mappings', number of items must be greater than or equal to 1.";
         }
 
         return $invalidProperties;
@@ -328,185 +288,96 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
 
 
     /**
-     * Gets platform
+     * Gets description
      *
      * @return string|null
      */
-    public function getPlatform(): ?string
+    public function getDescription(): ?string
     {
-        return $this->container['platform'];
+        return $this->container['description'];
     }
 
     /**
-     * Sets platform
+     * Sets description
      *
-     * @param string|null $platform platform
+     * @param string|null $description description
      *
      * @return $this
      */
-    public function setPlatform(?string $platform): static
+    public function setDescription(?string $description): static
     {
-        if (is_null($platform)) {
-            throw new InvalidArgumentException('non-nullable platform cannot be null');
-        }
-        $this->container['platform'] = $platform;
-
-        return $this;
-    }
-
-    /**
-     * Gets push_status
-     *
-     * @return string|null
-     */
-    public function getPushStatus(): ?string
-    {
-        return $this->container['push_status'];
-    }
-
-    /**
-     * Sets push_status
-     *
-     * @param string|null $push_status push_status
-     *
-     * @return $this
-     */
-    public function setPushStatus(?string $push_status): static
-    {
-        if (is_null($push_status)) {
-            array_push($this->openAPINullablesSetToNull, 'push_status');
+        if (is_null($description)) {
+            array_push($this->openAPINullablesSetToNull, 'description');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('push_status', $nullablesSetToNull);
+            $index = array_search('description', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['push_status'] = $push_status;
+        $this->container['description'] = $description;
 
         return $this;
     }
 
     /**
-     * Gets last_pushed_at
+     * Gets mappings
      *
-     * @return \DateTime|null
+     * @return array<string,string>|null
      */
-    public function getLastPushedAt(): ?\DateTime
+    public function getMappings(): ?array
     {
-        return $this->container['last_pushed_at'];
+        return $this->container['mappings'];
     }
 
     /**
-     * Sets last_pushed_at
+     * Sets mappings
      *
-     * @param \DateTime|null $last_pushed_at last_pushed_at
+     * @param array<string,string>|null $mappings Field-mapping table. Keys are the output field names emitted in the response payload; values are simple expressions referenced against the source `native` payload (dot paths, basic arithmetic, string concatenation). Min 1 entry, max 50 entries. Each key must be <= 100 chars; each expression must be <= 500 chars and pass the safety check (no `eval`, no `function`, no `process`, etc.).
      *
      * @return $this
      */
-    public function setLastPushedAt(?\DateTime $last_pushed_at): static
+    public function setMappings(?array $mappings): static
     {
-        if (is_null($last_pushed_at)) {
-            array_push($this->openAPINullablesSetToNull, 'last_pushed_at');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('last_pushed_at', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($mappings)) {
+            throw new InvalidArgumentException('non-nullable mappings cannot be null');
         }
-        $this->container['last_pushed_at'] = $last_pushed_at;
+
+        if ((count($mappings) > 50)) {
+            throw new InvalidArgumentException('invalid value for $mappings when calling CustomSchemaUpdate., number of items must be less than or equal to 50.');
+        }
+        if ((count($mappings) < 1)) {
+            throw new InvalidArgumentException('invalid length for $mappings when calling CustomSchemaUpdate., number of items must be greater than or equal to 1.');
+        }
+        $this->container['mappings'] = $mappings;
 
         return $this;
     }
 
     /**
-     * Gets last_pulled_at
-     *
-     * @return \DateTime|null
-     */
-    public function getLastPulledAt(): ?\DateTime
-    {
-        return $this->container['last_pulled_at'];
-    }
-
-    /**
-     * Sets last_pulled_at
-     *
-     * @param \DateTime|null $last_pulled_at last_pulled_at
-     *
-     * @return $this
-     */
-    public function setLastPulledAt(?\DateTime $last_pulled_at): static
-    {
-        if (is_null($last_pulled_at)) {
-            array_push($this->openAPINullablesSetToNull, 'last_pulled_at');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('last_pulled_at', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['last_pulled_at'] = $last_pulled_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets dirty_fields
-     *
-     * @return string[]|null
-     */
-    public function getDirtyFields(): ?array
-    {
-        return $this->container['dirty_fields'];
-    }
-
-    /**
-     * Sets dirty_fields
-     *
-     * @param string[]|null $dirty_fields dirty_fields
-     *
-     * @return $this
-     */
-    public function setDirtyFields(?array $dirty_fields): static
-    {
-        if (is_null($dirty_fields)) {
-            throw new InvalidArgumentException('non-nullable dirty_fields cannot be null');
-        }
-        $this->container['dirty_fields'] = $dirty_fields;
-
-        return $this;
-    }
-
-    /**
-     * Gets platform_has_changes
+     * Gets active
      *
      * @return bool|null
      */
-    public function getPlatformHasChanges(): ?bool
+    public function getActive(): ?bool
     {
-        return $this->container['platform_has_changes'];
+        return $this->container['active'];
     }
 
     /**
-     * Sets platform_has_changes
+     * Sets active
      *
-     * @param bool|null $platform_has_changes platform_has_changes
+     * @param bool|null $active Toggle the schema on/off. When `false`, requests carrying this schema name in `X-Schema` fall back to `native`.
      *
      * @return $this
      */
-    public function setPlatformHasChanges(?bool $platform_has_changes): static
+    public function setActive(?bool $active): static
     {
-        if (is_null($platform_has_changes)) {
-            throw new InvalidArgumentException('non-nullable platform_has_changes cannot be null');
+        if (is_null($active)) {
+            throw new InvalidArgumentException('non-nullable active cannot be null');
         }
-        $this->container['platform_has_changes'] = $platform_has_changes;
+        $this->container['active'] = $active;
 
         return $this;
     }

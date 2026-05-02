@@ -1015,6 +1015,7 @@ class ListingsApi
      *
      * List listings
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
@@ -1027,6 +1028,7 @@ class ListingsApi
      * @return \Repull\Model\ListingListResponse|\Repull\Model\Error
      */
     public function listListings(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $q = null,
@@ -1035,7 +1037,7 @@ class ListingsApi
         string $contentType = self::contentTypes['listListings'][0]
     ): \Repull\Model\ListingListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listListingsWithHttpInfo($cursor, $limit, $q, $status, $channel, $contentType);
+        list($response) = $this->listListingsWithHttpInfo($x_schema, $cursor, $limit, $q, $status, $channel, $contentType);
         return $response;
     }
 
@@ -1044,6 +1046,7 @@ class ListingsApi
      *
      * List listings
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
@@ -1056,6 +1059,7 @@ class ListingsApi
      * @return array of \Repull\Model\ListingListResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listListingsWithHttpInfo(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $q = null,
@@ -1064,7 +1068,7 @@ class ListingsApi
         string $contentType = self::contentTypes['listListings'][0]
     ): array
     {
-        $request = $this->listListingsRequest($cursor, $limit, $q, $status, $channel, $contentType);
+        $request = $this->listListingsRequest($x_schema, $cursor, $limit, $q, $status, $channel, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1165,6 +1169,7 @@ class ListingsApi
      *
      * List listings
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
@@ -1176,6 +1181,7 @@ class ListingsApi
      * @return PromiseInterface
      */
     public function listListingsAsync(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $q = null,
@@ -1184,7 +1190,7 @@ class ListingsApi
         string $contentType = self::contentTypes['listListings'][0]
     ): PromiseInterface
     {
-        return $this->listListingsAsyncWithHttpInfo($cursor, $limit, $q, $status, $channel, $contentType)
+        return $this->listListingsAsyncWithHttpInfo($x_schema, $cursor, $limit, $q, $status, $channel, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1197,6 +1203,7 @@ class ListingsApi
      *
      * List listings
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
@@ -1208,6 +1215,7 @@ class ListingsApi
      * @return PromiseInterface
      */
     public function listListingsAsyncWithHttpInfo(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $q = null,
@@ -1217,7 +1225,7 @@ class ListingsApi
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ListingListResponse';
-        $request = $this->listListingsRequest($cursor, $limit, $q, $status, $channel, $contentType);
+        $request = $this->listListingsRequest($x_schema, $cursor, $limit, $q, $status, $channel, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1258,6 +1266,7 @@ class ListingsApi
     /**
      * Create request for operation 'listListings'
      *
+     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
@@ -1269,6 +1278,7 @@ class ListingsApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listListingsRequest(
+        ?string $x_schema = null,
         ?string $cursor = null,
         ?int $limit = 20,
         ?string $q = null,
@@ -1277,6 +1287,7 @@ class ListingsApi
         string $contentType = self::contentTypes['listListings'][0]
     ): Request
     {
+
 
 
         if ($limit !== null && $limit > 100) {
@@ -1343,6 +1354,10 @@ class ListingsApi
             false // required
         ) ?? []);
 
+        // header params
+        if ($x_schema !== null) {
+            $headerParams['X-Schema'] = ObjectSerializer::toHeaderValue($x_schema);
+        }
 
 
 

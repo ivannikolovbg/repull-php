@@ -518,16 +518,7 @@ class ListingSegmentsResponse implements ModelInterface, ArrayAccess, JsonSerial
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $allowedValues = self::getMyQualityTierAllowableValues();
-        if (!is_null($my_quality_tier) && !in_array($my_quality_tier, $allowedValues, true)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'my_quality_tier', must be one of '%s'",
-                    $my_quality_tier,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
+        // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['my_quality_tier'] = $my_quality_tier;
 
         return $this;

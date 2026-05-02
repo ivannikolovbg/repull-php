@@ -1,6 +1,6 @@
 <?php
 /**
- * ListingPublishStatusChannel
+ * CustomSchemaCreate
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ListingPublishStatusChannel Class Doc Comment
+ * CustomSchemaCreate Class Doc Comment
  *
+ * @description Request body for &#x60;POST /v1/schema/custom&#x60;.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSerializable
+class CustomSchemaCreate implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ListingPublishStatusChannel';
+    protected static string $openAPIModelName = 'CustomSchemaCreate';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,12 +60,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'platform' => 'string',
-        'push_status' => 'string',
-        'last_pushed_at' => '\DateTime',
-        'last_pulled_at' => '\DateTime',
-        'dirty_fields' => 'string[]',
-        'platform_has_changes' => 'bool'
+        'name' => 'string',
+        'description' => 'string',
+        'mappings' => 'array<string,string>'
     ];
 
     /**
@@ -73,12 +71,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'platform' => null,
-        'push_status' => null,
-        'last_pushed_at' => 'date-time',
-        'last_pulled_at' => 'date-time',
-        'dirty_fields' => null,
-        'platform_has_changes' => null
+        'name' => null,
+        'description' => null,
+        'mappings' => null
     ];
 
     /**
@@ -87,12 +82,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'platform' => false,
-        'push_status' => true,
-        'last_pushed_at' => true,
-        'last_pulled_at' => true,
-        'dirty_fields' => false,
-        'platform_has_changes' => false
+        'name' => false,
+        'description' => true,
+        'mappings' => false
     ];
 
     /**
@@ -171,12 +163,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'platform' => 'platform',
-        'push_status' => 'pushStatus',
-        'last_pushed_at' => 'lastPushedAt',
-        'last_pulled_at' => 'lastPulledAt',
-        'dirty_fields' => 'dirtyFields',
-        'platform_has_changes' => 'platformHasChanges'
+        'name' => 'name',
+        'description' => 'description',
+        'mappings' => 'mappings'
     ];
 
     /**
@@ -185,12 +174,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $setters = [
-        'platform' => 'setPlatform',
-        'push_status' => 'setPushStatus',
-        'last_pushed_at' => 'setLastPushedAt',
-        'last_pulled_at' => 'setLastPulledAt',
-        'dirty_fields' => 'setDirtyFields',
-        'platform_has_changes' => 'setPlatformHasChanges'
+        'name' => 'setName',
+        'description' => 'setDescription',
+        'mappings' => 'setMappings'
     ];
 
     /**
@@ -199,12 +185,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $getters = [
-        'platform' => 'getPlatform',
-        'push_status' => 'getPushStatus',
-        'last_pushed_at' => 'getLastPushedAt',
-        'last_pulled_at' => 'getLastPulledAt',
-        'dirty_fields' => 'getDirtyFields',
-        'platform_has_changes' => 'getPlatformHasChanges'
+        'name' => 'getName',
+        'description' => 'getDescription',
+        'mappings' => 'getMappings'
     ];
 
     /**
@@ -239,25 +222,6 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
         return self::$openAPIModelName;
     }
 
-    public const PUSH_STATUS_IDLE = 'idle';
-    public const PUSH_STATUS_PUSHING = 'pushing';
-    public const PUSH_STATUS_SUCCESS = 'success';
-    public const PUSH_STATUS_ERROR = 'error';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getPushStatusAllowableValues()
-    {
-        return [
-            self::PUSH_STATUS_IDLE,
-            self::PUSH_STATUS_PUSHING,
-            self::PUSH_STATUS_SUCCESS,
-            self::PUSH_STATUS_ERROR,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -273,12 +237,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('platform', $data ?? [], null);
-        $this->setIfExists('push_status', $data ?? [], null);
-        $this->setIfExists('last_pushed_at', $data ?? [], null);
-        $this->setIfExists('last_pulled_at', $data ?? [], null);
-        $this->setIfExists('dirty_fields', $data ?? [], null);
-        $this->setIfExists('platform_has_changes', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('description', $data ?? [], null);
+        $this->setIfExists('mappings', $data ?? [], null);
     }
 
     /**
@@ -306,13 +267,30 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
     {
         $invalidProperties = [];
 
-        $allowedValues = self::getPushStatusAllowableValues();
-        if (!is_null($this->container['push_status']) && !in_array($this->container['push_status'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'push_status', must be one of '%s'",
-                $this->container['push_status'],
-                implode("', '", $allowedValues)
-            );
+        if ($this->container['name'] === null) {
+            $invalidProperties[] = "'name' can't be null";
+        }
+        if ((mb_strlen($this->container['name']) > 100)) {
+            $invalidProperties[] = "invalid value for 'name', the character length must be smaller than or equal to 100.";
+        }
+
+        if ((mb_strlen($this->container['name']) < 3)) {
+            $invalidProperties[] = "invalid value for 'name', the character length must be bigger than or equal to 3.";
+        }
+
+        if (!preg_match("/^[a-z0-9][a-z0-9-]{1,98}[a-z0-9]$/", $this->container['name'])) {
+            $invalidProperties[] = "invalid value for 'name', must be conform to the pattern /^[a-z0-9][a-z0-9-]{1,98}[a-z0-9]$/.";
+        }
+
+        if ($this->container['mappings'] === null) {
+            $invalidProperties[] = "'mappings' can't be null";
+        }
+        if ((count($this->container['mappings']) > 50)) {
+            $invalidProperties[] = "invalid value for 'mappings', number of items must be less than or equal to 50.";
+        }
+
+        if ((count($this->container['mappings']) < 1)) {
+            $invalidProperties[] = "invalid value for 'mappings', number of items must be greater than or equal to 1.";
         }
 
         return $invalidProperties;
@@ -328,185 +306,106 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
 
 
     /**
-     * Gets platform
+     * Gets name
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->container['name'];
+    }
+
+    /**
+     * Sets name
+     *
+     * @param string $name 3-100 lowercase chars + hyphens. Must be unique within the workspace and cannot collide with reserved names (`calry`, `calry-v1`, `native`).
+     *
+     * @return $this
+     */
+    public function setName(string $name): static
+    {
+        if (is_null($name)) {
+            throw new InvalidArgumentException('non-nullable name cannot be null');
+        }
+        if ((mb_strlen($name) > 100)) {
+            throw new InvalidArgumentException('invalid length for $name when calling CustomSchemaCreate., must be smaller than or equal to 100.');
+        }
+        if ((mb_strlen($name) < 3)) {
+            throw new InvalidArgumentException('invalid length for $name when calling CustomSchemaCreate., must be bigger than or equal to 3.');
+        }
+        if ((!preg_match("/^[a-z0-9][a-z0-9-]{1,98}[a-z0-9]$/", ObjectSerializer::toString($name)))) {
+            throw new InvalidArgumentException("invalid value for \$name when calling CustomSchemaCreate., must conform to the pattern /^[a-z0-9][a-z0-9-]{1,98}[a-z0-9]$/.");
+        }
+
+        $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets description
      *
      * @return string|null
      */
-    public function getPlatform(): ?string
+    public function getDescription(): ?string
     {
-        return $this->container['platform'];
+        return $this->container['description'];
     }
 
     /**
-     * Sets platform
+     * Sets description
      *
-     * @param string|null $platform platform
+     * @param string|null $description Optional human-readable note shown in the dashboard.
      *
      * @return $this
      */
-    public function setPlatform(?string $platform): static
+    public function setDescription(?string $description): static
     {
-        if (is_null($platform)) {
-            throw new InvalidArgumentException('non-nullable platform cannot be null');
-        }
-        $this->container['platform'] = $platform;
-
-        return $this;
-    }
-
-    /**
-     * Gets push_status
-     *
-     * @return string|null
-     */
-    public function getPushStatus(): ?string
-    {
-        return $this->container['push_status'];
-    }
-
-    /**
-     * Sets push_status
-     *
-     * @param string|null $push_status push_status
-     *
-     * @return $this
-     */
-    public function setPushStatus(?string $push_status): static
-    {
-        if (is_null($push_status)) {
-            array_push($this->openAPINullablesSetToNull, 'push_status');
+        if (is_null($description)) {
+            array_push($this->openAPINullablesSetToNull, 'description');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('push_status', $nullablesSetToNull);
+            $index = array_search('description', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['push_status'] = $push_status;
+        $this->container['description'] = $description;
 
         return $this;
     }
 
     /**
-     * Gets last_pushed_at
+     * Gets mappings
      *
-     * @return \DateTime|null
+     * @return array<string,string>
      */
-    public function getLastPushedAt(): ?\DateTime
+    public function getMappings(): array
     {
-        return $this->container['last_pushed_at'];
+        return $this->container['mappings'];
     }
 
     /**
-     * Sets last_pushed_at
+     * Sets mappings
      *
-     * @param \DateTime|null $last_pushed_at last_pushed_at
+     * @param array<string,string> $mappings Field-mapping table. Keys are the output field names emitted in the response payload; values are simple expressions referenced against the source `native` payload (dot paths, basic arithmetic, string concatenation). Min 1 entry, max 50 entries. Each key must be <= 100 chars; each expression must be <= 500 chars and pass the safety check (no `eval`, no `function`, no `process`, etc.).
      *
      * @return $this
      */
-    public function setLastPushedAt(?\DateTime $last_pushed_at): static
+    public function setMappings(array $mappings): static
     {
-        if (is_null($last_pushed_at)) {
-            array_push($this->openAPINullablesSetToNull, 'last_pushed_at');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('last_pushed_at', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($mappings)) {
+            throw new InvalidArgumentException('non-nullable mappings cannot be null');
         }
-        $this->container['last_pushed_at'] = $last_pushed_at;
 
-        return $this;
-    }
-
-    /**
-     * Gets last_pulled_at
-     *
-     * @return \DateTime|null
-     */
-    public function getLastPulledAt(): ?\DateTime
-    {
-        return $this->container['last_pulled_at'];
-    }
-
-    /**
-     * Sets last_pulled_at
-     *
-     * @param \DateTime|null $last_pulled_at last_pulled_at
-     *
-     * @return $this
-     */
-    public function setLastPulledAt(?\DateTime $last_pulled_at): static
-    {
-        if (is_null($last_pulled_at)) {
-            array_push($this->openAPINullablesSetToNull, 'last_pulled_at');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('last_pulled_at', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if ((count($mappings) > 50)) {
+            throw new InvalidArgumentException('invalid value for $mappings when calling CustomSchemaCreate., number of items must be less than or equal to 50.');
         }
-        $this->container['last_pulled_at'] = $last_pulled_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets dirty_fields
-     *
-     * @return string[]|null
-     */
-    public function getDirtyFields(): ?array
-    {
-        return $this->container['dirty_fields'];
-    }
-
-    /**
-     * Sets dirty_fields
-     *
-     * @param string[]|null $dirty_fields dirty_fields
-     *
-     * @return $this
-     */
-    public function setDirtyFields(?array $dirty_fields): static
-    {
-        if (is_null($dirty_fields)) {
-            throw new InvalidArgumentException('non-nullable dirty_fields cannot be null');
+        if ((count($mappings) < 1)) {
+            throw new InvalidArgumentException('invalid length for $mappings when calling CustomSchemaCreate., number of items must be greater than or equal to 1.');
         }
-        $this->container['dirty_fields'] = $dirty_fields;
-
-        return $this;
-    }
-
-    /**
-     * Gets platform_has_changes
-     *
-     * @return bool|null
-     */
-    public function getPlatformHasChanges(): ?bool
-    {
-        return $this->container['platform_has_changes'];
-    }
-
-    /**
-     * Sets platform_has_changes
-     *
-     * @param bool|null $platform_has_changes platform_has_changes
-     *
-     * @return $this
-     */
-    public function setPlatformHasChanges(?bool $platform_has_changes): static
-    {
-        if (is_null($platform_has_changes)) {
-            throw new InvalidArgumentException('non-nullable platform_has_changes cannot be null');
-        }
-        $this->container['platform_has_changes'] = $platform_has_changes;
+        $this->container['mappings'] = $mappings;
 
         return $this;
     }

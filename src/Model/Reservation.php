@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * Reservation Class Doc Comment
  *
- * @description A booking/reservation from a connected PMS
+ * @description A booking/reservation from a connected PMS. Identical shape between list-row (&#x60;GET /v1/reservations&#x60;) and detail (&#x60;GET /v1/reservations/{id}&#x60;) — SDK consumers can use the same type for both.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -61,20 +61,18 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPITypes = [
         'id' => 'int',
-        'confirmation_code' => 'string',
-        'property_id' => 'int',
-        'platform' => 'string',
-        'status' => 'string',
+        'listing_id' => 'int',
+        'guest_id' => 'int',
         'check_in' => '\DateTime',
         'check_out' => '\DateTime',
-        'guest_first_name' => 'string',
-        'guest_last_name' => 'string',
-        'guest_email' => 'string',
-        'guest_phone' => 'string',
-        'guest_count' => 'int',
-        'total_price' => 'float',
+        'status' => 'string',
+        'platform' => 'string',
+        'total_price' => 'string',
         'currency' => 'string',
-        'provider' => 'string'
+        'confirmation_code' => 'string',
+        'guest_details' => 'array<string,mixed>',
+        'created_at' => '\DateTime',
+        'guest_name' => 'string'
     ];
 
     /**
@@ -84,20 +82,18 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPIFormats = [
         'id' => null,
-        'confirmation_code' => null,
-        'property_id' => null,
-        'platform' => null,
-        'status' => null,
+        'listing_id' => null,
+        'guest_id' => null,
         'check_in' => 'date',
         'check_out' => 'date',
-        'guest_first_name' => null,
-        'guest_last_name' => null,
-        'guest_email' => 'email',
-        'guest_phone' => null,
-        'guest_count' => null,
+        'status' => null,
+        'platform' => null,
         'total_price' => null,
         'currency' => null,
-        'provider' => null
+        'confirmation_code' => null,
+        'guest_details' => null,
+        'created_at' => 'date-time',
+        'guest_name' => null
     ];
 
     /**
@@ -107,20 +103,18 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPINullables = [
         'id' => false,
-        'confirmation_code' => false,
-        'property_id' => false,
-        'platform' => false,
-        'status' => false,
+        'listing_id' => false,
+        'guest_id' => false,
         'check_in' => false,
         'check_out' => false,
-        'guest_first_name' => false,
-        'guest_last_name' => false,
-        'guest_email' => false,
-        'guest_phone' => false,
-        'guest_count' => false,
+        'status' => false,
+        'platform' => true,
         'total_price' => false,
         'currency' => false,
-        'provider' => false
+        'confirmation_code' => false,
+        'guest_details' => false,
+        'created_at' => false,
+        'guest_name' => true
     ];
 
     /**
@@ -200,20 +194,18 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $attributeMap = [
         'id' => 'id',
-        'confirmation_code' => 'confirmationCode',
-        'property_id' => 'propertyId',
-        'platform' => 'platform',
-        'status' => 'status',
+        'listing_id' => 'listingId',
+        'guest_id' => 'guestId',
         'check_in' => 'checkIn',
         'check_out' => 'checkOut',
-        'guest_first_name' => 'guestFirstName',
-        'guest_last_name' => 'guestLastName',
-        'guest_email' => 'guestEmail',
-        'guest_phone' => 'guestPhone',
-        'guest_count' => 'guestCount',
+        'status' => 'status',
+        'platform' => 'platform',
         'total_price' => 'totalPrice',
         'currency' => 'currency',
-        'provider' => 'provider'
+        'confirmation_code' => 'confirmationCode',
+        'guest_details' => 'guestDetails',
+        'created_at' => 'createdAt',
+        'guest_name' => 'guestName'
     ];
 
     /**
@@ -223,20 +215,18 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $setters = [
         'id' => 'setId',
-        'confirmation_code' => 'setConfirmationCode',
-        'property_id' => 'setPropertyId',
-        'platform' => 'setPlatform',
-        'status' => 'setStatus',
+        'listing_id' => 'setListingId',
+        'guest_id' => 'setGuestId',
         'check_in' => 'setCheckIn',
         'check_out' => 'setCheckOut',
-        'guest_first_name' => 'setGuestFirstName',
-        'guest_last_name' => 'setGuestLastName',
-        'guest_email' => 'setGuestEmail',
-        'guest_phone' => 'setGuestPhone',
-        'guest_count' => 'setGuestCount',
+        'status' => 'setStatus',
+        'platform' => 'setPlatform',
         'total_price' => 'setTotalPrice',
         'currency' => 'setCurrency',
-        'provider' => 'setProvider'
+        'confirmation_code' => 'setConfirmationCode',
+        'guest_details' => 'setGuestDetails',
+        'created_at' => 'setCreatedAt',
+        'guest_name' => 'setGuestName'
     ];
 
     /**
@@ -246,20 +236,18 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $getters = [
         'id' => 'getId',
-        'confirmation_code' => 'getConfirmationCode',
-        'property_id' => 'getPropertyId',
-        'platform' => 'getPlatform',
-        'status' => 'getStatus',
+        'listing_id' => 'getListingId',
+        'guest_id' => 'getGuestId',
         'check_in' => 'getCheckIn',
         'check_out' => 'getCheckOut',
-        'guest_first_name' => 'getGuestFirstName',
-        'guest_last_name' => 'getGuestLastName',
-        'guest_email' => 'getGuestEmail',
-        'guest_phone' => 'getGuestPhone',
-        'guest_count' => 'getGuestCount',
+        'status' => 'getStatus',
+        'platform' => 'getPlatform',
         'total_price' => 'getTotalPrice',
         'currency' => 'getCurrency',
-        'provider' => 'getProvider'
+        'confirmation_code' => 'getConfirmationCode',
+        'guest_details' => 'getGuestDetails',
+        'created_at' => 'getCreatedAt',
+        'guest_name' => 'getGuestName'
     ];
 
     /**
@@ -294,6 +282,10 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         return self::$openAPIModelName;
     }
 
+    public const STATUS_CONFIRMED = 'confirmed';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_CANCELLED = 'cancelled';
+    public const STATUS_COMPLETED = 'completed';
     public const PLATFORM_AIRBNB = 'airbnb';
     public const PLATFORM_BOOKING_COM = 'booking.com';
     public const PLATFORM_VRBO = 'vrbo';
@@ -301,10 +293,21 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     public const PLATFORM_WEBSITE = 'website';
     public const PLATFORM_OWNER = 'owner';
     public const PLATFORM_OTHER = 'other';
-    public const STATUS_CONFIRMED = 'confirmed';
-    public const STATUS_PENDING = 'pending';
-    public const STATUS_CANCELLED = 'cancelled';
-    public const STATUS_COMPLETED = 'completed';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getStatusAllowableValues()
+    {
+        return [
+            self::STATUS_CONFIRMED,
+            self::STATUS_PENDING,
+            self::STATUS_CANCELLED,
+            self::STATUS_COMPLETED,
+        ];
+    }
 
     /**
      * Gets allowable values of the enum
@@ -325,21 +328,6 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getStatusAllowableValues()
-    {
-        return [
-            self::STATUS_CONFIRMED,
-            self::STATUS_PENDING,
-            self::STATUS_CANCELLED,
-            self::STATUS_COMPLETED,
-        ];
-    }
-
-    /**
      * Associative array for storing property values
      *
      * @var array
@@ -354,20 +342,18 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     public function __construct(?array $data = null)
     {
         $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('confirmation_code', $data ?? [], null);
-        $this->setIfExists('property_id', $data ?? [], null);
-        $this->setIfExists('platform', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('guest_id', $data ?? [], null);
         $this->setIfExists('check_in', $data ?? [], null);
         $this->setIfExists('check_out', $data ?? [], null);
-        $this->setIfExists('guest_first_name', $data ?? [], null);
-        $this->setIfExists('guest_last_name', $data ?? [], null);
-        $this->setIfExists('guest_email', $data ?? [], null);
-        $this->setIfExists('guest_phone', $data ?? [], null);
-        $this->setIfExists('guest_count', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('platform', $data ?? [], null);
         $this->setIfExists('total_price', $data ?? [], null);
         $this->setIfExists('currency', $data ?? [], null);
-        $this->setIfExists('provider', $data ?? [], null);
+        $this->setIfExists('confirmation_code', $data ?? [], null);
+        $this->setIfExists('guest_details', $data ?? [], null);
+        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('guest_name', $data ?? [], null);
     }
 
     /**
@@ -395,15 +381,24 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
-        $allowedValues = self::getPlatformAllowableValues();
-        if (!is_null($this->container['platform']) && !in_array($this->container['platform'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'platform', must be one of '%s'",
-                $this->container['platform'],
-                implode("', '", $allowedValues)
-            );
+        if ($this->container['id'] === null) {
+            $invalidProperties[] = "'id' can't be null";
         }
-
+        if ($this->container['listing_id'] === null) {
+            $invalidProperties[] = "'listing_id' can't be null";
+        }
+        if ($this->container['guest_id'] === null) {
+            $invalidProperties[] = "'guest_id' can't be null";
+        }
+        if ($this->container['check_in'] === null) {
+            $invalidProperties[] = "'check_in' can't be null";
+        }
+        if ($this->container['check_out'] === null) {
+            $invalidProperties[] = "'check_out' can't be null";
+        }
+        if ($this->container['status'] === null) {
+            $invalidProperties[] = "'status' can't be null";
+        }
         $allowedValues = self::getStatusAllowableValues();
         if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -413,6 +408,30 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
             );
         }
 
+        $allowedValues = self::getPlatformAllowableValues();
+        if (!is_null($this->container['platform']) && !in_array($this->container['platform'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'platform', must be one of '%s'",
+                $this->container['platform'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        if ($this->container['total_price'] === null) {
+            $invalidProperties[] = "'total_price' can't be null";
+        }
+        if ($this->container['currency'] === null) {
+            $invalidProperties[] = "'currency' can't be null";
+        }
+        if ($this->container['confirmation_code'] === null) {
+            $invalidProperties[] = "'confirmation_code' can't be null";
+        }
+        if ($this->container['guest_details'] === null) {
+            $invalidProperties[] = "'guest_details' can't be null";
+        }
+        if ($this->container['created_at'] === null) {
+            $invalidProperties[] = "'created_at' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -428,9 +447,9 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets id
      *
-     * @return int|null
+     * @return int
      */
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->container['id'];
     }
@@ -438,11 +457,11 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets id
      *
-     * @param int|null $id Internal Repull reservation ID
+     * @param int $id Internal Repull reservation ID
      *
      * @return $this
      */
-    public function setId(?int $id): static
+    public function setId(int $id): static
     {
         if (is_null($id)) {
             throw new InvalidArgumentException('non-nullable id cannot be null');
@@ -453,55 +472,137 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
-     * Gets confirmation_code
+     * Gets listing_id
      *
-     * @return string|null
+     * @return int
      */
-    public function getConfirmationCode(): ?string
+    public function getListingId(): int
     {
-        return $this->container['confirmation_code'];
+        return $this->container['listing_id'];
     }
 
     /**
-     * Sets confirmation_code
+     * Sets listing_id
      *
-     * @param string|null $confirmation_code PMS confirmation code
+     * @param int $listing_id Internal Repull listing ID this reservation is on.
      *
      * @return $this
      */
-    public function setConfirmationCode(?string $confirmation_code): static
+    public function setListingId(int $listing_id): static
     {
-        if (is_null($confirmation_code)) {
-            throw new InvalidArgumentException('non-nullable confirmation_code cannot be null');
+        if (is_null($listing_id)) {
+            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
         }
-        $this->container['confirmation_code'] = $confirmation_code;
+        $this->container['listing_id'] = $listing_id;
 
         return $this;
     }
 
     /**
-     * Gets property_id
+     * Gets guest_id
      *
-     * @return int|null
+     * @return int
      */
-    public function getPropertyId(): ?int
+    public function getGuestId(): int
     {
-        return $this->container['property_id'];
+        return $this->container['guest_id'];
     }
 
     /**
-     * Sets property_id
+     * Sets guest_id
      *
-     * @param int|null $property_id Property ID
+     * @param int $guest_id Internal Repull guest ID. Use `GET /v1/guests/{id}` for the full profile.
      *
      * @return $this
      */
-    public function setPropertyId(?int $property_id): static
+    public function setGuestId(int $guest_id): static
     {
-        if (is_null($property_id)) {
-            throw new InvalidArgumentException('non-nullable property_id cannot be null');
+        if (is_null($guest_id)) {
+            throw new InvalidArgumentException('non-nullable guest_id cannot be null');
         }
-        $this->container['property_id'] = $property_id;
+        $this->container['guest_id'] = $guest_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets check_in
+     *
+     * @return \DateTime
+     */
+    public function getCheckIn(): \DateTime
+    {
+        return $this->container['check_in'];
+    }
+
+    /**
+     * Sets check_in
+     *
+     * @param \DateTime $check_in check_in
+     *
+     * @return $this
+     */
+    public function setCheckIn(\DateTime $check_in): static
+    {
+        if (is_null($check_in)) {
+            throw new InvalidArgumentException('non-nullable check_in cannot be null');
+        }
+        $this->container['check_in'] = $check_in;
+
+        return $this;
+    }
+
+    /**
+     * Gets check_out
+     *
+     * @return \DateTime
+     */
+    public function getCheckOut(): \DateTime
+    {
+        return $this->container['check_out'];
+    }
+
+    /**
+     * Sets check_out
+     *
+     * @param \DateTime $check_out check_out
+     *
+     * @return $this
+     */
+    public function setCheckOut(\DateTime $check_out): static
+    {
+        if (is_null($check_out)) {
+            throw new InvalidArgumentException('non-nullable check_out cannot be null');
+        }
+        $this->container['check_out'] = $check_out;
+
+        return $this;
+    }
+
+    /**
+     * Gets status
+     *
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->container['status'];
+    }
+
+    /**
+     * Sets status
+     *
+     * @param string $status status
+     *
+     * @return $this
+     */
+    public function setStatus(string $status): static
+    {
+        if (is_null($status)) {
+            throw new InvalidArgumentException('non-nullable status cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['status'] = $status;
 
         return $this;
     }
@@ -519,14 +620,21 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets platform
      *
-     * @param string|null $platform Booking source
+     * @param string|null $platform Booking source. Lowercase. May be null on legacy rows.
      *
      * @return $this
      */
     public function setPlatform(?string $platform): static
     {
         if (is_null($platform)) {
-            throw new InvalidArgumentException('non-nullable platform cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'platform');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('platform', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['platform'] = $platform;
@@ -535,228 +643,11 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
-     * Gets status
-     *
-     * @return string|null
-     */
-    public function getStatus(): ?string
-    {
-        return $this->container['status'];
-    }
-
-    /**
-     * Sets status
-     *
-     * @param string|null $status status
-     *
-     * @return $this
-     */
-    public function setStatus(?string $status): static
-    {
-        if (is_null($status)) {
-            throw new InvalidArgumentException('non-nullable status cannot be null');
-        }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['status'] = $status;
-
-        return $this;
-    }
-
-    /**
-     * Gets check_in
-     *
-     * @return \DateTime|null
-     */
-    public function getCheckIn(): ?\DateTime
-    {
-        return $this->container['check_in'];
-    }
-
-    /**
-     * Sets check_in
-     *
-     * @param \DateTime|null $check_in check_in
-     *
-     * @return $this
-     */
-    public function setCheckIn(?\DateTime $check_in): static
-    {
-        if (is_null($check_in)) {
-            throw new InvalidArgumentException('non-nullable check_in cannot be null');
-        }
-        $this->container['check_in'] = $check_in;
-
-        return $this;
-    }
-
-    /**
-     * Gets check_out
-     *
-     * @return \DateTime|null
-     */
-    public function getCheckOut(): ?\DateTime
-    {
-        return $this->container['check_out'];
-    }
-
-    /**
-     * Sets check_out
-     *
-     * @param \DateTime|null $check_out check_out
-     *
-     * @return $this
-     */
-    public function setCheckOut(?\DateTime $check_out): static
-    {
-        if (is_null($check_out)) {
-            throw new InvalidArgumentException('non-nullable check_out cannot be null');
-        }
-        $this->container['check_out'] = $check_out;
-
-        return $this;
-    }
-
-    /**
-     * Gets guest_first_name
-     *
-     * @return string|null
-     */
-    public function getGuestFirstName(): ?string
-    {
-        return $this->container['guest_first_name'];
-    }
-
-    /**
-     * Sets guest_first_name
-     *
-     * @param string|null $guest_first_name guest_first_name
-     *
-     * @return $this
-     */
-    public function setGuestFirstName(?string $guest_first_name): static
-    {
-        if (is_null($guest_first_name)) {
-            throw new InvalidArgumentException('non-nullable guest_first_name cannot be null');
-        }
-        $this->container['guest_first_name'] = $guest_first_name;
-
-        return $this;
-    }
-
-    /**
-     * Gets guest_last_name
-     *
-     * @return string|null
-     */
-    public function getGuestLastName(): ?string
-    {
-        return $this->container['guest_last_name'];
-    }
-
-    /**
-     * Sets guest_last_name
-     *
-     * @param string|null $guest_last_name guest_last_name
-     *
-     * @return $this
-     */
-    public function setGuestLastName(?string $guest_last_name): static
-    {
-        if (is_null($guest_last_name)) {
-            throw new InvalidArgumentException('non-nullable guest_last_name cannot be null');
-        }
-        $this->container['guest_last_name'] = $guest_last_name;
-
-        return $this;
-    }
-
-    /**
-     * Gets guest_email
-     *
-     * @return string|null
-     */
-    public function getGuestEmail(): ?string
-    {
-        return $this->container['guest_email'];
-    }
-
-    /**
-     * Sets guest_email
-     *
-     * @param string|null $guest_email guest_email
-     *
-     * @return $this
-     */
-    public function setGuestEmail(?string $guest_email): static
-    {
-        if (is_null($guest_email)) {
-            throw new InvalidArgumentException('non-nullable guest_email cannot be null');
-        }
-        $this->container['guest_email'] = $guest_email;
-
-        return $this;
-    }
-
-    /**
-     * Gets guest_phone
-     *
-     * @return string|null
-     */
-    public function getGuestPhone(): ?string
-    {
-        return $this->container['guest_phone'];
-    }
-
-    /**
-     * Sets guest_phone
-     *
-     * @param string|null $guest_phone guest_phone
-     *
-     * @return $this
-     */
-    public function setGuestPhone(?string $guest_phone): static
-    {
-        if (is_null($guest_phone)) {
-            throw new InvalidArgumentException('non-nullable guest_phone cannot be null');
-        }
-        $this->container['guest_phone'] = $guest_phone;
-
-        return $this;
-    }
-
-    /**
-     * Gets guest_count
-     *
-     * @return int|null
-     */
-    public function getGuestCount(): ?int
-    {
-        return $this->container['guest_count'];
-    }
-
-    /**
-     * Sets guest_count
-     *
-     * @param int|null $guest_count guest_count
-     *
-     * @return $this
-     */
-    public function setGuestCount(?int $guest_count): static
-    {
-        if (is_null($guest_count)) {
-            throw new InvalidArgumentException('non-nullable guest_count cannot be null');
-        }
-        $this->container['guest_count'] = $guest_count;
-
-        return $this;
-    }
-
-    /**
      * Gets total_price
      *
-     * @return float|null
+     * @return string
      */
-    public function getTotalPrice(): ?float
+    public function getTotalPrice(): string
     {
         return $this->container['total_price'];
     }
@@ -764,11 +655,11 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets total_price
      *
-     * @param float|null $total_price total_price
+     * @param string $total_price Decimal-as-string (precision 10, scale 2) to preserve precision across mixed-currency totals.
      *
      * @return $this
      */
-    public function setTotalPrice(?float $total_price): static
+    public function setTotalPrice(string $total_price): static
     {
         if (is_null($total_price)) {
             throw new InvalidArgumentException('non-nullable total_price cannot be null');
@@ -781,9 +672,9 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets currency
      *
-     * @return string|null
+     * @return string
      */
-    public function getCurrency(): ?string
+    public function getCurrency(): string
     {
         return $this->container['currency'];
     }
@@ -791,11 +682,11 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets currency
      *
-     * @param string|null $currency currency
+     * @param string $currency ISO 4217 currency code.
      *
      * @return $this
      */
-    public function setCurrency(?string $currency): static
+    public function setCurrency(string $currency): static
     {
         if (is_null($currency)) {
             throw new InvalidArgumentException('non-nullable currency cannot be null');
@@ -806,28 +697,116 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
-     * Gets provider
+     * Gets confirmation_code
      *
-     * @return string|null
+     * @return string
      */
-    public function getProvider(): ?string
+    public function getConfirmationCode(): string
     {
-        return $this->container['provider'];
+        return $this->container['confirmation_code'];
     }
 
     /**
-     * Sets provider
+     * Sets confirmation_code
      *
-     * @param string|null $provider provider
+     * @param string $confirmation_code Channel-side confirmation code (Airbnb HMxxx, Booking.com numeric, etc.).
      *
      * @return $this
      */
-    public function setProvider(?string $provider): static
+    public function setConfirmationCode(string $confirmation_code): static
     {
-        if (is_null($provider)) {
-            throw new InvalidArgumentException('non-nullable provider cannot be null');
+        if (is_null($confirmation_code)) {
+            throw new InvalidArgumentException('non-nullable confirmation_code cannot be null');
         }
-        $this->container['provider'] = $provider;
+        $this->container['confirmation_code'] = $confirmation_code;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest_details
+     *
+     * @return array<string,mixed>
+     */
+    public function getGuestDetails(): array
+    {
+        return $this->container['guest_details'];
+    }
+
+    /**
+     * Sets guest_details
+     *
+     * @param array<string,mixed> $guest_details Raw guest details from the source channel (firstName, lastName, email, phone, count, etc.). Shape varies by platform — use the dedicated guest endpoint for a normalized profile.
+     *
+     * @return $this
+     */
+    public function setGuestDetails(array $guest_details): static
+    {
+        if (is_null($guest_details)) {
+            throw new InvalidArgumentException('non-nullable guest_details cannot be null');
+        }
+        $this->container['guest_details'] = $guest_details;
+
+        return $this;
+    }
+
+    /**
+     * Gets created_at
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->container['created_at'];
+    }
+
+    /**
+     * Sets created_at
+     *
+     * @param \DateTime $created_at When the reservation row was created in Repull (not the booking-on-channel timestamp).
+     *
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $created_at): static
+    {
+        if (is_null($created_at)) {
+            throw new InvalidArgumentException('non-nullable created_at cannot be null');
+        }
+        $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest_name
+     *
+     * @return string|null
+     */
+    public function getGuestName(): ?string
+    {
+        return $this->container['guest_name'];
+    }
+
+    /**
+     * Sets guest_name
+     *
+     * @param string|null $guest_name Pre-resolved display name (`firstName lastName`) extracted from `guestDetails`. Null when no first name is available.
+     *
+     * @return $this
+     */
+    public function setGuestName(?string $guest_name): static
+    {
+        if (is_null($guest_name)) {
+            array_push($this->openAPINullablesSetToNull, 'guest_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('guest_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['guest_name'] = $guest_name;
 
         return $this;
     }

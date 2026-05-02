@@ -466,16 +466,7 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $allowedValues = self::getPlatformAllowableValues();
-        if (!is_null($platform) && !in_array($platform, $allowedValues, true)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    "Invalid value '%s' for 'platform', must be one of '%s'",
-                    $platform,
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
+        // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['platform'] = $platform;
 
         return $this;

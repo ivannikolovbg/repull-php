@@ -33,13 +33,11 @@ foreach ($files as $file) {
         continue;
     }
 
-    // Match the enum-validation block:
-    //   $allowedValues = self::getXAllowableValues();
-    //   if (!in_array($x, $allowedValues, true)) {
-    //       throw new InvalidArgumentException(...multi-line...);
-    //   }
+    // Match the enum-validation block. Two variants emitted by php-nextgen:
+    //   (a) non-nullable:  if (!in_array($x, $allowedValues, true)) { ... }
+    //   (b) nullable:      if (!is_null($x) && !in_array($x, $allowedValues, true)) { ... }
     $pattern = '/(\s+)\$allowedValues = self::get\w+AllowableValues\(\);\s*\n'
-             . '\s+if \(!in_array\(\$\w+, \$allowedValues, true\)\) \{\s*\n'
+             . '\s+if \((?:!is_null\(\$\w+\) && )?!in_array\(\$\w+, \$allowedValues, true\)\) \{\s*\n'
              . '\s+throw new InvalidArgumentException\(\s*\n'
              . '\s+sprintf\(\s*\n'
              . '\s+"Invalid value [^"]+",\s*\n'

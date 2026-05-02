@@ -1,6 +1,6 @@
 <?php
 /**
- * ReservationsApi
+ * SchemaApi
  * PHP version 8.1
  *
  * @package  Repull
@@ -45,13 +45,13 @@ use Repull\FormDataProcessor;
 use Repull\ObjectSerializer;
 
 /**
- * ReservationsApi Class Doc Comment
+ * SchemaApi Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class ReservationsApi
+class SchemaApi
 {
     /**
      * @var ClientInterface
@@ -75,19 +75,19 @@ class ReservationsApi
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
-        'cancelReservation' => [
+        'createCustomSchema' => [
             'application/json',
         ],
-        'createReservation' => [
+        'deleteCustomSchema' => [
             'application/json',
         ],
-        'getReservation' => [
+        'getCustomSchema' => [
             'application/json',
         ],
-        'listReservations' => [
+        'listCustomSchemas' => [
             'application/json',
         ],
-        'updateReservation' => [
+        'updateCustomSchema' => [
             'application/json',
         ],
     ];
@@ -139,43 +139,44 @@ class ReservationsApi
     }
 
     /**
-     * Operation cancelReservation
+     * Operation createCustomSchema
      *
-     * Cancel reservation
+     * Create a custom schema
      *
-     * @param  int $id id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelReservation'] to see the possible values for this operation
+     * @param  \Repull\Model\CustomSchemaCreate $custom_schema_create custom_schema_create (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCustomSchema'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\CustomSchemaCreateResponse|\Repull\Model\Error
      */
-    public function cancelReservation(
-        int $id,
-        string $contentType = self::contentTypes['cancelReservation'][0]
-    ): void
+    public function createCustomSchema(
+        \Repull\Model\CustomSchemaCreate $custom_schema_create,
+        string $contentType = self::contentTypes['createCustomSchema'][0]
+    ): \Repull\Model\CustomSchemaCreateResponse|\Repull\Model\Error
     {
-        $this->cancelReservationWithHttpInfo($id, $contentType);
+        list($response) = $this->createCustomSchemaWithHttpInfo($custom_schema_create, $contentType);
+        return $response;
     }
 
     /**
-     * Operation cancelReservationWithHttpInfo
+     * Operation createCustomSchemaWithHttpInfo
      *
-     * Cancel reservation
+     * Create a custom schema
      *
-     * @param  int $id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelReservation'] to see the possible values for this operation
+     * @param  \Repull\Model\CustomSchemaCreate $custom_schema_create (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCustomSchema'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\CustomSchemaCreateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
-    public function cancelReservationWithHttpInfo(
-        int $id,
-        string $contentType = self::contentTypes['cancelReservation'][0]
+    public function createCustomSchemaWithHttpInfo(
+        \Repull\Model\CustomSchemaCreate $custom_schema_create,
+        string $contentType = self::contentTypes['createCustomSchema'][0]
     ): array
     {
-        $request = $this->cancelReservationRequest($id, $contentType);
+        $request = $this->createCustomSchemaRequest($custom_schema_create, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -199,10 +200,100 @@ class ReservationsApi
 
             $statusCode = $response->getStatusCode();
 
+            switch($statusCode) {
+                case 201:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\CustomSchemaCreateResponse',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
 
-            return [null, $statusCode, $response->getHeaders()];
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\CustomSchemaCreateResponse',
+                $request,
+                $response,
+            );
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 201:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\CustomSchemaCreateResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -210,22 +301,22 @@ class ReservationsApi
     }
 
     /**
-     * Operation cancelReservationAsync
+     * Operation createCustomSchemaAsync
      *
-     * Cancel reservation
+     * Create a custom schema
      *
-     * @param  int $id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelReservation'] to see the possible values for this operation
+     * @param  \Repull\Model\CustomSchemaCreate $custom_schema_create (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCustomSchema'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function cancelReservationAsync(
-        int $id,
-        string $contentType = self::contentTypes['cancelReservation'][0]
+    public function createCustomSchemaAsync(
+        \Repull\Model\CustomSchemaCreate $custom_schema_create,
+        string $contentType = self::contentTypes['createCustomSchema'][0]
     ): PromiseInterface
     {
-        return $this->cancelReservationAsyncWithHttpInfo($id, $contentType)
+        return $this->createCustomSchemaAsyncWithHttpInfo($custom_schema_create, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -234,29 +325,42 @@ class ReservationsApi
     }
 
     /**
-     * Operation cancelReservationAsyncWithHttpInfo
+     * Operation createCustomSchemaAsyncWithHttpInfo
      *
-     * Cancel reservation
+     * Create a custom schema
      *
-     * @param  int $id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelReservation'] to see the possible values for this operation
+     * @param  \Repull\Model\CustomSchemaCreate $custom_schema_create (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCustomSchema'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function cancelReservationAsyncWithHttpInfo(
-        int $id,
-        string $contentType = self::contentTypes['cancelReservation'][0]
+    public function createCustomSchemaAsyncWithHttpInfo(
+        \Repull\Model\CustomSchemaCreate $custom_schema_create,
+        string $contentType = self::contentTypes['createCustomSchema'][0]
     ): PromiseInterface
     {
-        $returnType = '';
-        $request = $this->cancelReservationRequest($id, $contentType);
+        $returnType = '\Repull\Model\CustomSchemaCreateResponse';
+        $request = $this->createCustomSchemaRequest($custom_schema_create, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 },
                 function ($exception) {
                     $response = $exception->getResponse();
@@ -276,29 +380,354 @@ class ReservationsApi
     }
 
     /**
-     * Create request for operation 'cancelReservation'
+     * Create request for operation 'createCustomSchema'
      *
-     * @param  int $id (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelReservation'] to see the possible values for this operation
+     * @param  \Repull\Model\CustomSchemaCreate $custom_schema_create (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCustomSchema'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function cancelReservationRequest(
-        int $id,
-        string $contentType = self::contentTypes['cancelReservation'][0]
+    public function createCustomSchemaRequest(
+        \Repull\Model\CustomSchemaCreate $custom_schema_create,
+        string $contentType = self::contentTypes['createCustomSchema'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'custom_schema_create' is set
+        if ($custom_schema_create === null || (is_array($custom_schema_create) && count($custom_schema_create) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $custom_schema_create when calling createCustomSchema'
+            );
+        }
+
+
+        $resourcePath = '/v1/schema/custom';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($custom_schema_create)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($custom_schema_create));
+            } else {
+                $httpBody = $custom_schema_create;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation deleteCustomSchema
+     *
+     * Delete a custom schema
+     *
+     * @param  string $id id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteCustomSchema'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\CustomSchemaDeleteResponse|\Repull\Model\Error
+     */
+    public function deleteCustomSchema(
+        string $id,
+        string $contentType = self::contentTypes['deleteCustomSchema'][0]
+    ): \Repull\Model\CustomSchemaDeleteResponse|\Repull\Model\Error
+    {
+        list($response) = $this->deleteCustomSchemaWithHttpInfo($id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation deleteCustomSchemaWithHttpInfo
+     *
+     * Delete a custom schema
+     *
+     * @param  string $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteCustomSchema'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\CustomSchemaDeleteResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function deleteCustomSchemaWithHttpInfo(
+        string $id,
+        string $contentType = self::contentTypes['deleteCustomSchema'][0]
+    ): array
+    {
+        $request = $this->deleteCustomSchemaRequest($id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\CustomSchemaDeleteResponse',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\CustomSchemaDeleteResponse',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\CustomSchemaDeleteResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation deleteCustomSchemaAsync
+     *
+     * Delete a custom schema
+     *
+     * @param  string $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteCustomSchema'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function deleteCustomSchemaAsync(
+        string $id,
+        string $contentType = self::contentTypes['deleteCustomSchema'][0]
+    ): PromiseInterface
+    {
+        return $this->deleteCustomSchemaAsyncWithHttpInfo($id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation deleteCustomSchemaAsyncWithHttpInfo
+     *
+     * Delete a custom schema
+     *
+     * @param  string $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteCustomSchema'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function deleteCustomSchemaAsyncWithHttpInfo(
+        string $id,
+        string $contentType = self::contentTypes['deleteCustomSchema'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\CustomSchemaDeleteResponse';
+        $request = $this->deleteCustomSchemaRequest($id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'deleteCustomSchema'
+     *
+     * @param  string $id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteCustomSchema'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function deleteCustomSchemaRequest(
+        string $id,
+        string $contentType = self::contentTypes['deleteCustomSchema'][0]
     ): Request
     {
 
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new InvalidArgumentException(
-                'Missing the required parameter $id when calling cancelReservation'
+                'Missing the required parameter $id when calling deleteCustomSchema'
             );
         }
 
 
-        $resourcePath = '/v1/reservations/{id}';
+        $resourcePath = '/v1/schema/custom/{id}';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -318,7 +747,7 @@ class ReservationsApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -375,44 +804,44 @@ class ReservationsApi
     }
 
     /**
-     * Operation createReservation
+     * Operation getCustomSchema
      *
-     * Create a reservation
+     * Get a custom schema
      *
-     * @param  \Repull\Model\CreateReservationRequest $create_reservation_request create_reservation_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createReservation'] to see the possible values for this operation
+     * @param  string $id Custom schema id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCustomSchema'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\Reservation
+     * @return \Repull\Model\CustomSchema|\Repull\Model\Error
      */
-    public function createReservation(
-        \Repull\Model\CreateReservationRequest $create_reservation_request,
-        string $contentType = self::contentTypes['createReservation'][0]
-    ): \Repull\Model\Reservation
+    public function getCustomSchema(
+        string $id,
+        string $contentType = self::contentTypes['getCustomSchema'][0]
+    ): \Repull\Model\CustomSchema|\Repull\Model\Error
     {
-        list($response) = $this->createReservationWithHttpInfo($create_reservation_request, $contentType);
+        list($response) = $this->getCustomSchemaWithHttpInfo($id, $contentType);
         return $response;
     }
 
     /**
-     * Operation createReservationWithHttpInfo
+     * Operation getCustomSchemaWithHttpInfo
      *
-     * Create a reservation
+     * Get a custom schema
      *
-     * @param  \Repull\Model\CreateReservationRequest $create_reservation_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createReservation'] to see the possible values for this operation
+     * @param  string $id Custom schema id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCustomSchema'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\Reservation, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\CustomSchema|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
-    public function createReservationWithHttpInfo(
-        \Repull\Model\CreateReservationRequest $create_reservation_request,
-        string $contentType = self::contentTypes['createReservation'][0]
+    public function getCustomSchemaWithHttpInfo(
+        string $id,
+        string $contentType = self::contentTypes['getCustomSchema'][0]
     ): array
     {
-        $request = $this->createReservationRequest($create_reservation_request, $contentType);
+        $request = $this->getCustomSchemaRequest($id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -437,9 +866,27 @@ class ReservationsApi
             $statusCode = $response->getStatusCode();
 
             switch($statusCode) {
-                case 201:
+                case 200:
                     return $this->handleResponseWithDataType(
-                        '\Repull\Model\Reservation',
+                        '\Repull\Model\CustomSchema',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
                         $request,
                         $response,
                     );
@@ -460,16 +907,40 @@ class ReservationsApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Repull\Model\Reservation',
+                '\Repull\Model\CustomSchema',
                 $request,
                 $response,
             );
         } catch (ApiException $e) {
             switch ($e->getCode()) {
-                case 201:
+                case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Repull\Model\Reservation',
+                        '\Repull\Model\CustomSchema',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -481,22 +952,22 @@ class ReservationsApi
     }
 
     /**
-     * Operation createReservationAsync
+     * Operation getCustomSchemaAsync
      *
-     * Create a reservation
+     * Get a custom schema
      *
-     * @param  \Repull\Model\CreateReservationRequest $create_reservation_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createReservation'] to see the possible values for this operation
+     * @param  string $id Custom schema id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCustomSchema'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function createReservationAsync(
-        \Repull\Model\CreateReservationRequest $create_reservation_request,
-        string $contentType = self::contentTypes['createReservation'][0]
+    public function getCustomSchemaAsync(
+        string $id,
+        string $contentType = self::contentTypes['getCustomSchema'][0]
     ): PromiseInterface
     {
-        return $this->createReservationAsyncWithHttpInfo($create_reservation_request, $contentType)
+        return $this->getCustomSchemaAsyncWithHttpInfo($id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -505,23 +976,23 @@ class ReservationsApi
     }
 
     /**
-     * Operation createReservationAsyncWithHttpInfo
+     * Operation getCustomSchemaAsyncWithHttpInfo
      *
-     * Create a reservation
+     * Get a custom schema
      *
-     * @param  \Repull\Model\CreateReservationRequest $create_reservation_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createReservation'] to see the possible values for this operation
+     * @param  string $id Custom schema id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCustomSchema'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function createReservationAsyncWithHttpInfo(
-        \Repull\Model\CreateReservationRequest $create_reservation_request,
-        string $contentType = self::contentTypes['createReservation'][0]
+    public function getCustomSchemaAsyncWithHttpInfo(
+        string $id,
+        string $contentType = self::contentTypes['getCustomSchema'][0]
     ): PromiseInterface
     {
-        $returnType = '\Repull\Model\Reservation';
-        $request = $this->createReservationRequest($create_reservation_request, $contentType);
+        $returnType = '\Repull\Model\CustomSchema';
+        $request = $this->getCustomSchemaRequest($id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -560,379 +1031,29 @@ class ReservationsApi
     }
 
     /**
-     * Create request for operation 'createReservation'
+     * Create request for operation 'getCustomSchema'
      *
-     * @param  \Repull\Model\CreateReservationRequest $create_reservation_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createReservation'] to see the possible values for this operation
-     *
-     * @throws InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    public function createReservationRequest(
-        \Repull\Model\CreateReservationRequest $create_reservation_request,
-        string $contentType = self::contentTypes['createReservation'][0]
-    ): Request
-    {
-
-        // verify the required parameter 'create_reservation_request' is set
-        if ($create_reservation_request === null || (is_array($create_reservation_request) && count($create_reservation_request) === 0)) {
-            throw new InvalidArgumentException(
-                'Missing the required parameter $create_reservation_request when calling createReservation'
-            );
-        }
-
-
-        $resourcePath = '/v1/reservations';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-
-
-
-
-        $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
-            $contentType,
-            $multipart
-        );
-
-        // for model (json/xml)
-        if (isset($create_reservation_request)) {
-            if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($create_reservation_request));
-            } else {
-                $httpBody = $create_reservation_request;
-            }
-        } elseif (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
-                    foreach ($formParamValueItems as $formParamValueItem) {
-                        $multipartContents[] = [
-                            'name' => $formParamName,
-                            'contents' => $formParamValueItem
-                        ];
-                    }
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
-            } else {
-                // for HTTP post (form)
-                $httpBody = ObjectSerializer::buildQuery($formParams);
-            }
-        }
-
-        // this endpoint requires Bearer (API Key) authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
-            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
-        }
-
-        $defaultHeaders = [];
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $headers
-        );
-
-        $operationHost = $this->config->getHost();
-        $query = ObjectSerializer::buildQuery($queryParams);
-        return new Request(
-            'POST',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation getReservation
-     *
-     * Get reservation details
-     *
-     * @param  int $id Internal Repull reservation ID. (required)
-     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReservation'] to see the possible values for this operation
-     *
-     * @throws ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws InvalidArgumentException
-     * @return \Repull\Model\Reservation|\Repull\Model\Error
-     */
-    public function getReservation(
-        int $id,
-        ?string $x_schema = null,
-        string $contentType = self::contentTypes['getReservation'][0]
-    ): \Repull\Model\Reservation|\Repull\Model\Error
-    {
-        list($response) = $this->getReservationWithHttpInfo($id, $x_schema, $contentType);
-        return $response;
-    }
-
-    /**
-     * Operation getReservationWithHttpInfo
-     *
-     * Get reservation details
-     *
-     * @param  int $id Internal Repull reservation ID. (required)
-     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReservation'] to see the possible values for this operation
-     *
-     * @throws ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws InvalidArgumentException
-     * @return array of \Repull\Model\Reservation|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function getReservationWithHttpInfo(
-        int $id,
-        ?string $x_schema = null,
-        string $contentType = self::contentTypes['getReservation'][0]
-    ): array
-    {
-        $request = $this->getReservationRequest($id, $x_schema, $contentType);
-
-        try {
-            $options = $this->createHttpClientOption();
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
-                );
-            } catch (ConnectException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    null,
-                    null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-            switch($statusCode) {
-                case 200:
-                    return $this->handleResponseWithDataType(
-                        '\Repull\Model\Reservation',
-                        $request,
-                        $response,
-                    );
-                case 401:
-                    return $this->handleResponseWithDataType(
-                        '\Repull\Model\Error',
-                        $request,
-                        $response,
-                    );
-                case 404:
-                    return $this->handleResponseWithDataType(
-                        '\Repull\Model\Error',
-                        $request,
-                        $response,
-                    );
-                case 422:
-                    return $this->handleResponseWithDataType(
-                        '\Repull\Model\Error',
-                        $request,
-                        $response,
-                    );
-                case 500:
-                    return $this->handleResponseWithDataType(
-                        '\Repull\Model\Error',
-                        $request,
-                        $response,
-                    );
-            }
-            
-
-            if ($statusCode < 200 || $statusCode > 299) {
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $statusCode,
-                        (string) $request->getUri()
-                    ),
-                    $statusCode,
-                    $response->getHeaders(),
-                    (string) $response->getBody()
-                );
-            }
-
-            return $this->handleResponseWithDataType(
-                '\Repull\Model\Reservation',
-                $request,
-                $response,
-            );
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Repull\Model\Reservation',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 401:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Repull\Model\Error',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 404:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Repull\Model\Error',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 422:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Repull\Model\Error',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 500:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Repull\Model\Error',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-            }
-        
-            throw $e;
-        }
-    }
-
-    /**
-     * Operation getReservationAsync
-     *
-     * Get reservation details
-     *
-     * @param  int $id Internal Repull reservation ID. (required)
-     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReservation'] to see the possible values for this operation
-     *
-     * @throws InvalidArgumentException
-     * @return PromiseInterface
-     */
-    public function getReservationAsync(
-        int $id,
-        ?string $x_schema = null,
-        string $contentType = self::contentTypes['getReservation'][0]
-    ): PromiseInterface
-    {
-        return $this->getReservationAsyncWithHttpInfo($id, $x_schema, $contentType)
-            ->then(
-                function ($response) {
-                    return $response[0];
-                }
-            );
-    }
-
-    /**
-     * Operation getReservationAsyncWithHttpInfo
-     *
-     * Get reservation details
-     *
-     * @param  int $id Internal Repull reservation ID. (required)
-     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReservation'] to see the possible values for this operation
-     *
-     * @throws InvalidArgumentException
-     * @return PromiseInterface
-     */
-    public function getReservationAsyncWithHttpInfo(
-        int $id,
-        ?string $x_schema = null,
-        string $contentType = self::contentTypes['getReservation'][0]
-    ): PromiseInterface
-    {
-        $returnType = '\Repull\Model\Reservation';
-        $request = $this->getReservationRequest($id, $x_schema, $contentType);
-
-        return $this->client
-            ->sendAsync($request, $this->createHttpClientOption())
-            ->then(
-                function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, $returnType, []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-                },
-                function ($exception) {
-                    $response = $exception->getResponse();
-                    $statusCode = $response->getStatusCode();
-                    throw new ApiException(
-                        sprintf(
-                            '[%d] Error connecting to the API (%s)',
-                            $statusCode,
-                            $exception->getRequest()->getUri()
-                        ),
-                        $statusCode,
-                        $response->getHeaders(),
-                        (string) $response->getBody()
-                    );
-                }
-            );
-    }
-
-    /**
-     * Create request for operation 'getReservation'
-     *
-     * @param  int $id Internal Repull reservation ID. (required)
-     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReservation'] to see the possible values for this operation
+     * @param  string $id Custom schema id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getCustomSchema'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getReservationRequest(
-        int $id,
-        ?string $x_schema = null,
-        string $contentType = self::contentTypes['getReservation'][0]
+    public function getCustomSchemaRequest(
+        string $id,
+        string $contentType = self::contentTypes['getCustomSchema'][0]
     ): Request
     {
 
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new InvalidArgumentException(
-                'Missing the required parameter $id when calling getReservation'
+                'Missing the required parameter $id when calling getCustomSchema'
             );
         }
 
 
-
-        $resourcePath = '/v1/reservations/{id}';
+        $resourcePath = '/v1/schema/custom/{id}';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -940,10 +1061,6 @@ class ReservationsApi
         $multipart = false;
 
 
-        // header params
-        if ($x_schema !== null) {
-            $headerParams['X-Schema'] = ObjectSerializer::toHeaderValue($x_schema);
-        }
 
         // path params
         if ($id !== null) {
@@ -1013,84 +1130,40 @@ class ReservationsApi
     }
 
     /**
-     * Operation listReservations
+     * Operation listCustomSchemas
      *
-     * List reservations
+     * List custom schemas
      *
-     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset Deprecated — use &#x60;cursor&#x60; instead. Will be removed after the &#x60;Sunset&#x60; response header date. (optional) (deprecated)
-     * @param  string|null $platform Filter by booking platform (optional)
-     * @param  string|null $status status (optional)
-     * @param  int|null $listing_id Filter to a single listing (optional)
-     * @param  \DateTime|null $check_in_after Check-in date &gt;&#x3D; this value (optional)
-     * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
-     * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
-     * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listCustomSchemas'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\ReservationListResponse|null
+     * @return \Repull\Model\CustomSchemaListResponse|\Repull\Model\Error
      */
-    public function listReservations(
-        ?string $x_schema = null,
-        ?int $limit = 50,
-        ?string $cursor = null,
-        ?int $offset = null,
-        ?string $platform = null,
-        ?string $status = null,
-        ?int $listing_id = null,
-        ?\DateTime $check_in_after = null,
-        ?\DateTime $check_in_before = null,
-        ?\DateTime $check_in_from = null,
-        ?\DateTime $check_in_to = null,
-        string $contentType = self::contentTypes['listReservations'][0]
-    ): ?\Repull\Model\ReservationListResponse
+    public function listCustomSchemas(
+        string $contentType = self::contentTypes['listCustomSchemas'][0]
+    ): \Repull\Model\CustomSchemaListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listReservationsWithHttpInfo($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $contentType);
+        list($response) = $this->listCustomSchemasWithHttpInfo($contentType);
         return $response;
     }
 
     /**
-     * Operation listReservationsWithHttpInfo
+     * Operation listCustomSchemasWithHttpInfo
      *
-     * List reservations
+     * List custom schemas
      *
-     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset Deprecated — use &#x60;cursor&#x60; instead. Will be removed after the &#x60;Sunset&#x60; response header date. (optional) (deprecated)
-     * @param  string|null $platform Filter by booking platform (optional)
-     * @param  string|null $status (optional)
-     * @param  int|null $listing_id Filter to a single listing (optional)
-     * @param  \DateTime|null $check_in_after Check-in date &gt;&#x3D; this value (optional)
-     * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
-     * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
-     * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listCustomSchemas'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ReservationListResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\CustomSchemaListResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
-    public function listReservationsWithHttpInfo(
-        ?string $x_schema = null,
-        ?int $limit = 50,
-        ?string $cursor = null,
-        ?int $offset = null,
-        ?string $platform = null,
-        ?string $status = null,
-        ?int $listing_id = null,
-        ?\DateTime $check_in_after = null,
-        ?\DateTime $check_in_before = null,
-        ?\DateTime $check_in_from = null,
-        ?\DateTime $check_in_to = null,
-        string $contentType = self::contentTypes['listReservations'][0]
+    public function listCustomSchemasWithHttpInfo(
+        string $contentType = self::contentTypes['listCustomSchemas'][0]
     ): array
     {
-        $request = $this->listReservationsRequest($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $contentType);
+        $request = $this->listCustomSchemasRequest($contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1117,7 +1190,19 @@ class ReservationsApi
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Repull\Model\ReservationListResponse',
+                        '\Repull\Model\CustomSchemaListResponse',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
                         $request,
                         $response,
                     );
@@ -1138,7 +1223,7 @@ class ReservationsApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Repull\Model\ReservationListResponse',
+                '\Repull\Model\CustomSchemaListResponse',
                 $request,
                 $response,
             );
@@ -1147,7 +1232,23 @@ class ReservationsApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Repull\Model\ReservationListResponse',
+                        '\Repull\Model\CustomSchemaListResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1159,42 +1260,20 @@ class ReservationsApi
     }
 
     /**
-     * Operation listReservationsAsync
+     * Operation listCustomSchemasAsync
      *
-     * List reservations
+     * List custom schemas
      *
-     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset Deprecated — use &#x60;cursor&#x60; instead. Will be removed after the &#x60;Sunset&#x60; response header date. (optional) (deprecated)
-     * @param  string|null $platform Filter by booking platform (optional)
-     * @param  string|null $status (optional)
-     * @param  int|null $listing_id Filter to a single listing (optional)
-     * @param  \DateTime|null $check_in_after Check-in date &gt;&#x3D; this value (optional)
-     * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
-     * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
-     * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listCustomSchemas'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function listReservationsAsync(
-        ?string $x_schema = null,
-        ?int $limit = 50,
-        ?string $cursor = null,
-        ?int $offset = null,
-        ?string $platform = null,
-        ?string $status = null,
-        ?int $listing_id = null,
-        ?\DateTime $check_in_after = null,
-        ?\DateTime $check_in_before = null,
-        ?\DateTime $check_in_from = null,
-        ?\DateTime $check_in_to = null,
-        string $contentType = self::contentTypes['listReservations'][0]
+    public function listCustomSchemasAsync(
+        string $contentType = self::contentTypes['listCustomSchemas'][0]
     ): PromiseInterface
     {
-        return $this->listReservationsAsyncWithHttpInfo($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $contentType)
+        return $this->listCustomSchemasAsyncWithHttpInfo($contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1203,43 +1282,21 @@ class ReservationsApi
     }
 
     /**
-     * Operation listReservationsAsyncWithHttpInfo
+     * Operation listCustomSchemasAsyncWithHttpInfo
      *
-     * List reservations
+     * List custom schemas
      *
-     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset Deprecated — use &#x60;cursor&#x60; instead. Will be removed after the &#x60;Sunset&#x60; response header date. (optional) (deprecated)
-     * @param  string|null $platform Filter by booking platform (optional)
-     * @param  string|null $status (optional)
-     * @param  int|null $listing_id Filter to a single listing (optional)
-     * @param  \DateTime|null $check_in_after Check-in date &gt;&#x3D; this value (optional)
-     * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
-     * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
-     * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listCustomSchemas'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function listReservationsAsyncWithHttpInfo(
-        ?string $x_schema = null,
-        ?int $limit = 50,
-        ?string $cursor = null,
-        ?int $offset = null,
-        ?string $platform = null,
-        ?string $status = null,
-        ?int $listing_id = null,
-        ?\DateTime $check_in_after = null,
-        ?\DateTime $check_in_before = null,
-        ?\DateTime $check_in_from = null,
-        ?\DateTime $check_in_to = null,
-        string $contentType = self::contentTypes['listReservations'][0]
+    public function listCustomSchemasAsyncWithHttpInfo(
+        string $contentType = self::contentTypes['listCustomSchemas'][0]
     ): PromiseInterface
     {
-        $returnType = '\Repull\Model\ReservationListResponse';
-        $request = $this->listReservationsRequest($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $contentType);
+        $returnType = '\Repull\Model\CustomSchemaListResponse';
+        $request = $this->listCustomSchemasRequest($contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1278,163 +1335,27 @@ class ReservationsApi
     }
 
     /**
-     * Create request for operation 'listReservations'
+     * Create request for operation 'listCustomSchemas'
      *
-     * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset Deprecated — use &#x60;cursor&#x60; instead. Will be removed after the &#x60;Sunset&#x60; response header date. (optional) (deprecated)
-     * @param  string|null $platform Filter by booking platform (optional)
-     * @param  string|null $status (optional)
-     * @param  int|null $listing_id Filter to a single listing (optional)
-     * @param  \DateTime|null $check_in_after Check-in date &gt;&#x3D; this value (optional)
-     * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
-     * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
-     * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listCustomSchemas'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function listReservationsRequest(
-        ?string $x_schema = null,
-        ?int $limit = 50,
-        ?string $cursor = null,
-        ?int $offset = null,
-        ?string $platform = null,
-        ?string $status = null,
-        ?int $listing_id = null,
-        ?\DateTime $check_in_after = null,
-        ?\DateTime $check_in_before = null,
-        ?\DateTime $check_in_from = null,
-        ?\DateTime $check_in_to = null,
-        string $contentType = self::contentTypes['listReservations'][0]
+    public function listCustomSchemasRequest(
+        string $contentType = self::contentTypes['listCustomSchemas'][0]
     ): Request
     {
 
 
-        if ($limit !== null && $limit > 100) {
-            throw new InvalidArgumentException('invalid value for "$limit" when calling ReservationsApi.listReservations, must be smaller than or equal to 100.');
-        }
-        if ($limit !== null && $limit < 1) {
-            throw new InvalidArgumentException('invalid value for "$limit" when calling ReservationsApi.listReservations, must be bigger than or equal to 1.');
-        }
-        
-
-        if ($offset !== null && $offset < 0) {
-            throw new InvalidArgumentException('invalid value for "$offset" when calling ReservationsApi.listReservations, must be bigger than or equal to 0.');
-        }
-        
-
-
-
-
-
-
-
-
-        $resourcePath = '/v1/reservations';
+        $resourcePath = '/v1/schema/custom';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
         $httpBody = '';
         $multipart = false;
 
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $limit,
-            'limit', // param base name
-            'integer', // openApiType
-            'form', // style
-            true, // explode
-            false // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $cursor,
-            'cursor', // param base name
-            'string', // openApiType
-            'form', // style
-            true, // explode
-            false // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $offset,
-            'offset', // param base name
-            'integer', // openApiType
-            'form', // style
-            true, // explode
-            false // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $platform,
-            'platform', // param base name
-            'string', // openApiType
-            'form', // style
-            true, // explode
-            false // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $status,
-            'status', // param base name
-            'string', // openApiType
-            'form', // style
-            true, // explode
-            false // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $listing_id,
-            'listing_id', // param base name
-            'integer', // openApiType
-            'form', // style
-            true, // explode
-            false // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $check_in_after,
-            'check_in_after', // param base name
-            'string', // openApiType
-            'form', // style
-            true, // explode
-            false // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $check_in_before,
-            'check_in_before', // param base name
-            'string', // openApiType
-            'form', // style
-            true, // explode
-            false // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $check_in_from,
-            'checkInFrom', // param base name
-            'string', // openApiType
-            'form', // style
-            true, // explode
-            false // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $check_in_to,
-            'checkInTo', // param base name
-            'string', // openApiType
-            'form', // style
-            true, // explode
-            false // required
-        ) ?? []);
 
-        // header params
-        if ($x_schema !== null) {
-            $headerParams['X-Schema'] = ObjectSerializer::toHeaderValue($x_schema);
-        }
 
 
 
@@ -1496,47 +1417,48 @@ class ReservationsApi
     }
 
     /**
-     * Operation updateReservation
+     * Operation updateCustomSchema
      *
-     * Update reservation
+     * Update a custom schema
      *
-     * @param  int $id id (required)
-     * @param  \Repull\Model\UpdateReservationRequest|null $update_reservation_request update_reservation_request (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateReservation'] to see the possible values for this operation
+     * @param  string $id id (required)
+     * @param  \Repull\Model\CustomSchemaUpdate $custom_schema_update custom_schema_update (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateCustomSchema'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\CustomSchema|\Repull\Model\Error
      */
-    public function updateReservation(
-        int $id,
-        ?\Repull\Model\UpdateReservationRequest $update_reservation_request = null,
-        string $contentType = self::contentTypes['updateReservation'][0]
-    ): void
+    public function updateCustomSchema(
+        string $id,
+        \Repull\Model\CustomSchemaUpdate $custom_schema_update,
+        string $contentType = self::contentTypes['updateCustomSchema'][0]
+    ): \Repull\Model\CustomSchema|\Repull\Model\Error
     {
-        $this->updateReservationWithHttpInfo($id, $update_reservation_request, $contentType);
+        list($response) = $this->updateCustomSchemaWithHttpInfo($id, $custom_schema_update, $contentType);
+        return $response;
     }
 
     /**
-     * Operation updateReservationWithHttpInfo
+     * Operation updateCustomSchemaWithHttpInfo
      *
-     * Update reservation
+     * Update a custom schema
      *
-     * @param  int $id (required)
-     * @param  \Repull\Model\UpdateReservationRequest|null $update_reservation_request (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateReservation'] to see the possible values for this operation
+     * @param  string $id (required)
+     * @param  \Repull\Model\CustomSchemaUpdate $custom_schema_update (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateCustomSchema'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\CustomSchema|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
-    public function updateReservationWithHttpInfo(
-        int $id,
-        ?\Repull\Model\UpdateReservationRequest $update_reservation_request = null,
-        string $contentType = self::contentTypes['updateReservation'][0]
+    public function updateCustomSchemaWithHttpInfo(
+        string $id,
+        \Repull\Model\CustomSchemaUpdate $custom_schema_update,
+        string $contentType = self::contentTypes['updateCustomSchema'][0]
     ): array
     {
-        $request = $this->updateReservationRequest($id, $update_reservation_request, $contentType);
+        $request = $this->updateCustomSchemaRequest($id, $custom_schema_update, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1560,10 +1482,114 @@ class ReservationsApi
 
             $statusCode = $response->getStatusCode();
 
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\CustomSchema',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
 
-            return [null, $statusCode, $response->getHeaders()];
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\CustomSchema',
+                $request,
+                $response,
+            );
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\CustomSchema',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -1571,24 +1597,24 @@ class ReservationsApi
     }
 
     /**
-     * Operation updateReservationAsync
+     * Operation updateCustomSchemaAsync
      *
-     * Update reservation
+     * Update a custom schema
      *
-     * @param  int $id (required)
-     * @param  \Repull\Model\UpdateReservationRequest|null $update_reservation_request (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateReservation'] to see the possible values for this operation
+     * @param  string $id (required)
+     * @param  \Repull\Model\CustomSchemaUpdate $custom_schema_update (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateCustomSchema'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function updateReservationAsync(
-        int $id,
-        ?\Repull\Model\UpdateReservationRequest $update_reservation_request = null,
-        string $contentType = self::contentTypes['updateReservation'][0]
+    public function updateCustomSchemaAsync(
+        string $id,
+        \Repull\Model\CustomSchemaUpdate $custom_schema_update,
+        string $contentType = self::contentTypes['updateCustomSchema'][0]
     ): PromiseInterface
     {
-        return $this->updateReservationAsyncWithHttpInfo($id, $update_reservation_request, $contentType)
+        return $this->updateCustomSchemaAsyncWithHttpInfo($id, $custom_schema_update, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1597,31 +1623,44 @@ class ReservationsApi
     }
 
     /**
-     * Operation updateReservationAsyncWithHttpInfo
+     * Operation updateCustomSchemaAsyncWithHttpInfo
      *
-     * Update reservation
+     * Update a custom schema
      *
-     * @param  int $id (required)
-     * @param  \Repull\Model\UpdateReservationRequest|null $update_reservation_request (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateReservation'] to see the possible values for this operation
+     * @param  string $id (required)
+     * @param  \Repull\Model\CustomSchemaUpdate $custom_schema_update (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateCustomSchema'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function updateReservationAsyncWithHttpInfo(
-        int $id,
-        ?\Repull\Model\UpdateReservationRequest $update_reservation_request = null,
-        string $contentType = self::contentTypes['updateReservation'][0]
+    public function updateCustomSchemaAsyncWithHttpInfo(
+        string $id,
+        \Repull\Model\CustomSchemaUpdate $custom_schema_update,
+        string $contentType = self::contentTypes['updateCustomSchema'][0]
     ): PromiseInterface
     {
-        $returnType = '';
-        $request = $this->updateReservationRequest($id, $update_reservation_request, $contentType);
+        $returnType = '\Repull\Model\CustomSchema';
+        $request = $this->updateCustomSchemaRequest($id, $custom_schema_update, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 },
                 function ($exception) {
                     $response = $exception->getResponse();
@@ -1641,32 +1680,38 @@ class ReservationsApi
     }
 
     /**
-     * Create request for operation 'updateReservation'
+     * Create request for operation 'updateCustomSchema'
      *
-     * @param  int $id (required)
-     * @param  \Repull\Model\UpdateReservationRequest|null $update_reservation_request (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateReservation'] to see the possible values for this operation
+     * @param  string $id (required)
+     * @param  \Repull\Model\CustomSchemaUpdate $custom_schema_update (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateCustomSchema'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function updateReservationRequest(
-        int $id,
-        ?\Repull\Model\UpdateReservationRequest $update_reservation_request = null,
-        string $contentType = self::contentTypes['updateReservation'][0]
+    public function updateCustomSchemaRequest(
+        string $id,
+        \Repull\Model\CustomSchemaUpdate $custom_schema_update,
+        string $contentType = self::contentTypes['updateCustomSchema'][0]
     ): Request
     {
 
         // verify the required parameter 'id' is set
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new InvalidArgumentException(
-                'Missing the required parameter $id when calling updateReservation'
+                'Missing the required parameter $id when calling updateCustomSchema'
+            );
+        }
+
+        // verify the required parameter 'custom_schema_update' is set
+        if ($custom_schema_update === null || (is_array($custom_schema_update) && count($custom_schema_update) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $custom_schema_update when calling updateCustomSchema'
             );
         }
 
 
-
-        $resourcePath = '/v1/reservations/{id}';
+        $resourcePath = '/v1/schema/custom/{id}';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -1686,18 +1731,18 @@ class ReservationsApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
 
         // for model (json/xml)
-        if (isset($update_reservation_request)) {
+        if (isset($custom_schema_update)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($update_reservation_request));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($custom_schema_update));
             } else {
-                $httpBody = $update_reservation_request;
+                $httpBody = $custom_schema_update;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
