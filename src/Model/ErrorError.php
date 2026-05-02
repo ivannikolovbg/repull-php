@@ -12,7 +12,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `pro`, `enterprise`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -61,8 +61,17 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPITypes = [
         'code' => 'string',
         'message' => 'string',
+        'fix' => 'string',
         'docs_url' => 'string',
-        'example' => 'string'
+        'request_id' => 'string',
+        'field' => 'string',
+        'value_received' => 'mixed',
+        'valid_values' => 'string[]',
+        'valid_params' => 'string[]',
+        'endpoint' => 'string',
+        'did_you_mean' => 'string',
+        'retry_after' => 'int',
+        'support' => '\Repull\Model\ErrorErrorSupport'
     ];
 
     /**
@@ -73,8 +82,17 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPIFormats = [
         'code' => null,
         'message' => null,
+        'fix' => null,
         'docs_url' => 'uri',
-        'example' => null
+        'request_id' => null,
+        'field' => null,
+        'value_received' => null,
+        'valid_values' => null,
+        'valid_params' => null,
+        'endpoint' => null,
+        'did_you_mean' => null,
+        'retry_after' => null,
+        'support' => null
     ];
 
     /**
@@ -85,8 +103,17 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPINullables = [
         'code' => false,
         'message' => false,
+        'fix' => false,
         'docs_url' => false,
-        'example' => false
+        'request_id' => false,
+        'field' => false,
+        'value_received' => true,
+        'valid_values' => false,
+        'valid_params' => false,
+        'endpoint' => false,
+        'did_you_mean' => false,
+        'retry_after' => false,
+        'support' => false
     ];
 
     /**
@@ -167,8 +194,17 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $attributeMap = [
         'code' => 'code',
         'message' => 'message',
+        'fix' => 'fix',
         'docs_url' => 'docs_url',
-        'example' => 'example'
+        'request_id' => 'request_id',
+        'field' => 'field',
+        'value_received' => 'value_received',
+        'valid_values' => 'valid_values',
+        'valid_params' => 'validParams',
+        'endpoint' => 'endpoint',
+        'did_you_mean' => 'did_you_mean',
+        'retry_after' => 'retry_after',
+        'support' => 'support'
     ];
 
     /**
@@ -179,8 +215,17 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $setters = [
         'code' => 'setCode',
         'message' => 'setMessage',
+        'fix' => 'setFix',
         'docs_url' => 'setDocsUrl',
-        'example' => 'setExample'
+        'request_id' => 'setRequestId',
+        'field' => 'setField',
+        'value_received' => 'setValueReceived',
+        'valid_values' => 'setValidValues',
+        'valid_params' => 'setValidParams',
+        'endpoint' => 'setEndpoint',
+        'did_you_mean' => 'setDidYouMean',
+        'retry_after' => 'setRetryAfter',
+        'support' => 'setSupport'
     ];
 
     /**
@@ -191,8 +236,17 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $getters = [
         'code' => 'getCode',
         'message' => 'getMessage',
+        'fix' => 'getFix',
         'docs_url' => 'getDocsUrl',
-        'example' => 'getExample'
+        'request_id' => 'getRequestId',
+        'field' => 'getField',
+        'value_received' => 'getValueReceived',
+        'valid_values' => 'getValidValues',
+        'valid_params' => 'getValidParams',
+        'endpoint' => 'getEndpoint',
+        'did_you_mean' => 'getDidYouMean',
+        'retry_after' => 'getRetryAfter',
+        'support' => 'getSupport'
     ];
 
     /**
@@ -244,8 +298,17 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $this->setIfExists('code', $data ?? [], null);
         $this->setIfExists('message', $data ?? [], null);
+        $this->setIfExists('fix', $data ?? [], null);
         $this->setIfExists('docs_url', $data ?? [], null);
-        $this->setIfExists('example', $data ?? [], null);
+        $this->setIfExists('request_id', $data ?? [], null);
+        $this->setIfExists('field', $data ?? [], null);
+        $this->setIfExists('value_received', $data ?? [], null);
+        $this->setIfExists('valid_values', $data ?? [], null);
+        $this->setIfExists('valid_params', $data ?? [], null);
+        $this->setIfExists('endpoint', $data ?? [], null);
+        $this->setIfExists('did_you_mean', $data ?? [], null);
+        $this->setIfExists('retry_after', $data ?? [], null);
+        $this->setIfExists('support', $data ?? [], null);
     }
 
     /**
@@ -273,6 +336,21 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
+        if ($this->container['code'] === null) {
+            $invalidProperties[] = "'code' can't be null";
+        }
+        if ($this->container['message'] === null) {
+            $invalidProperties[] = "'message' can't be null";
+        }
+        if ($this->container['fix'] === null) {
+            $invalidProperties[] = "'fix' can't be null";
+        }
+        if ($this->container['docs_url'] === null) {
+            $invalidProperties[] = "'docs_url' can't be null";
+        }
+        if ($this->container['request_id'] === null) {
+            $invalidProperties[] = "'request_id' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -288,9 +366,9 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets code
      *
-     * @return string|null
+     * @return string
      */
-    public function getCode(): ?string
+    public function getCode(): string
     {
         return $this->container['code'];
     }
@@ -298,11 +376,11 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets code
      *
-     * @param string|null $code code
+     * @param string $code Stable machine-parseable error identifier. Match on this for retry logic. Codes are namespaced and never change meaning.
      *
      * @return $this
      */
-    public function setCode(?string $code): static
+    public function setCode(string $code): static
     {
         if (is_null($code)) {
             throw new InvalidArgumentException('non-nullable code cannot be null');
@@ -315,9 +393,9 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets message
      *
-     * @return string|null
+     * @return string
      */
-    public function getMessage(): ?string
+    public function getMessage(): string
     {
         return $this->container['message'];
     }
@@ -325,11 +403,11 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets message
      *
-     * @param string|null $message message
+     * @param string $message Human-readable cause. Echoes the offending value when relevant.
      *
      * @return $this
      */
-    public function setMessage(?string $message): static
+    public function setMessage(string $message): static
     {
         if (is_null($message)) {
             throw new InvalidArgumentException('non-nullable message cannot be null');
@@ -340,11 +418,38 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Gets fix
+     *
+     * @return string
+     */
+    public function getFix(): string
+    {
+        return $this->container['fix'];
+    }
+
+    /**
+     * Sets fix
+     *
+     * @param string $fix Exact recovery steps. Surface this verbatim in your UI / agent reasoning trace — it is written to be actionable without further reading.
+     *
+     * @return $this
+     */
+    public function setFix(string $fix): static
+    {
+        if (is_null($fix)) {
+            throw new InvalidArgumentException('non-nullable fix cannot be null');
+        }
+        $this->container['fix'] = $fix;
+
+        return $this;
+    }
+
+    /**
      * Gets docs_url
      *
-     * @return string|null
+     * @return string
      */
-    public function getDocsUrl(): ?string
+    public function getDocsUrl(): string
     {
         return $this->container['docs_url'];
     }
@@ -352,11 +457,11 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets docs_url
      *
-     * @param string|null $docs_url docs_url
+     * @param string $docs_url Canonical write-up for this error code. URL pattern: `https://repull.dev/docs/errors/{code}`.
      *
      * @return $this
      */
-    public function setDocsUrl(?string $docs_url): static
+    public function setDocsUrl(string $docs_url): static
     {
         if (is_null($docs_url)) {
             throw new InvalidArgumentException('non-nullable docs_url cannot be null');
@@ -367,28 +472,251 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
-     * Gets example
+     * Gets request_id
      *
-     * @return string|null
+     * @return string
      */
-    public function getExample(): ?string
+    public function getRequestId(): string
     {
-        return $this->container['example'];
+        return $this->container['request_id'];
     }
 
     /**
-     * Sets example
+     * Sets request_id
      *
-     * @param string|null $example Example of correct usage
+     * @param string $request_id Opaque per-request id. Mirrors the `x-request-id` response header. Capture it before retrying so logs can be correlated.
      *
      * @return $this
      */
-    public function setExample(?string $example): static
+    public function setRequestId(string $request_id): static
     {
-        if (is_null($example)) {
-            throw new InvalidArgumentException('non-nullable example cannot be null');
+        if (is_null($request_id)) {
+            throw new InvalidArgumentException('non-nullable request_id cannot be null');
         }
-        $this->container['example'] = $example;
+        $this->container['request_id'] = $request_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets field
+     *
+     * @return string|null
+     */
+    public function getField(): ?string
+    {
+        return $this->container['field'];
+    }
+
+    /**
+     * Sets field
+     *
+     * @param string|null $field Body field, query param, or path segment the error is about. Present when the error is parameter-specific.
+     *
+     * @return $this
+     */
+    public function setField(?string $field): static
+    {
+        if (is_null($field)) {
+            throw new InvalidArgumentException('non-nullable field cannot be null');
+        }
+        $this->container['field'] = $field;
+
+        return $this;
+    }
+
+    /**
+     * Gets value_received
+     *
+     * @return mixed|null
+     */
+    public function getValueReceived(): mixed
+    {
+        return $this->container['value_received'];
+    }
+
+    /**
+     * Sets value_received
+     *
+     * @param mixed|null $value_received Echo of the offending value (truncated to 200 chars). Useful for debugging — helps callers see what the server actually parsed.
+     *
+     * @return $this
+     */
+    public function setValueReceived(mixed $value_received): static
+    {
+        if (is_null($value_received)) {
+            array_push($this->openAPINullablesSetToNull, 'value_received');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('value_received', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['value_received'] = $value_received;
+
+        return $this;
+    }
+
+    /**
+     * Gets valid_values
+     *
+     * @return string[]|null
+     */
+    public function getValidValues(): ?array
+    {
+        return $this->container['valid_values'];
+    }
+
+    /**
+     * Sets valid_values
+     *
+     * @param string[]|null $valid_values Allowed values when the error is enum-related (e.g. unknown `provider`, unknown `status`).
+     *
+     * @return $this
+     */
+    public function setValidValues(?array $valid_values): static
+    {
+        if (is_null($valid_values)) {
+            throw new InvalidArgumentException('non-nullable valid_values cannot be null');
+        }
+        $this->container['valid_values'] = $valid_values;
+
+        return $this;
+    }
+
+    /**
+     * Gets valid_params
+     *
+     * @return string[]|null
+     */
+    public function getValidParams(): ?array
+    {
+        return $this->container['valid_params'];
+    }
+
+    /**
+     * Sets valid_params
+     *
+     * @param string[]|null $valid_params Sorted list of every query param this endpoint accepts. Present on `code: \"unknown_params\"` (HTTP 422) so SDK consumers can self-correct without reading docs.
+     *
+     * @return $this
+     */
+    public function setValidParams(?array $valid_params): static
+    {
+        if (is_null($valid_params)) {
+            throw new InvalidArgumentException('non-nullable valid_params cannot be null');
+        }
+        $this->container['valid_params'] = $valid_params;
+
+        return $this;
+    }
+
+    /**
+     * Gets endpoint
+     *
+     * @return string|null
+     */
+    public function getEndpoint(): ?string
+    {
+        return $this->container['endpoint'];
+    }
+
+    /**
+     * Sets endpoint
+     *
+     * @param string|null $endpoint The endpoint path that produced the error. Present on `code: \"unknown_params\"` so consumers can match validation failures to the operation they invoked.
+     *
+     * @return $this
+     */
+    public function setEndpoint(?string $endpoint): static
+    {
+        if (is_null($endpoint)) {
+            throw new InvalidArgumentException('non-nullable endpoint cannot be null');
+        }
+        $this->container['endpoint'] = $endpoint;
+
+        return $this;
+    }
+
+    /**
+     * Gets did_you_mean
+     *
+     * @return string|null
+     */
+    public function getDidYouMean(): ?string
+    {
+        return $this->container['did_you_mean'];
+    }
+
+    /**
+     * Sets did_you_mean
+     *
+     * @param string|null $did_you_mean Suggestion for typos and near-matches. Present when the server can guess the intent.
+     *
+     * @return $this
+     */
+    public function setDidYouMean(?string $did_you_mean): static
+    {
+        if (is_null($did_you_mean)) {
+            throw new InvalidArgumentException('non-nullable did_you_mean cannot be null');
+        }
+        $this->container['did_you_mean'] = $did_you_mean;
+
+        return $this;
+    }
+
+    /**
+     * Gets retry_after
+     *
+     * @return int|null
+     */
+    public function getRetryAfter(): ?int
+    {
+        return $this->container['retry_after'];
+    }
+
+    /**
+     * Sets retry_after
+     *
+     * @param int|null $retry_after Seconds the client should wait before retrying. Mirrors the `Retry-After` HTTP header. Present on rate-limit responses and on transient upstream failures that are safe to retry.
+     *
+     * @return $this
+     */
+    public function setRetryAfter(?int $retry_after): static
+    {
+        if (is_null($retry_after)) {
+            throw new InvalidArgumentException('non-nullable retry_after cannot be null');
+        }
+        $this->container['retry_after'] = $retry_after;
+
+        return $this;
+    }
+
+    /**
+     * Gets support
+     *
+     * @return \Repull\Model\ErrorErrorSupport|null
+     */
+    public function getSupport(): ?\Repull\Model\ErrorErrorSupport
+    {
+        return $this->container['support'];
+    }
+
+    /**
+     * Sets support
+     *
+     * @param \Repull\Model\ErrorErrorSupport|null $support support
+     *
+     * @return $this
+     */
+    public function setSupport(?\Repull\Model\ErrorErrorSupport $support): static
+    {
+        if (is_null($support)) {
+            throw new InvalidArgumentException('non-nullable support cannot be null');
+        }
+        $this->container['support'] = $support;
 
         return $this;
     }

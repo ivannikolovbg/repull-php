@@ -5,6 +5,32 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-05-02
+
+### Breaking
+- **Canonical pagination envelope.** Every paginated list response is now `{ data: [...], pagination: { nextCursor, hasMore, total? } }`. The bespoke `CursorPagination`, `ReservationPagination`, `MarketBrowsePagination`, and `WebhookDeliveryListResponsePagination` classes are removed; one shared `Pagination` model is used everywhere.
+- **All field names are camelCase.** Underscored attribute names on the wire (e.g. `external_id`, `listing_id`, `nightly_rate`, `submitted_at`) are now `externalId`, `listingId`, `nightlyRate`, `submittedAt`. PHP property names on the generated models still use snake_case internally, but the JSON-encoded payload — and the OpenAPI attribute map — is camelCase across every model.
+- **All IDs are string-typed.** `Reservation.id`, `Review.id`, `Listing.id`, `Guest.id`, `Conversation.id`, etc. switch from `int` to `string`. Update consumer call sites that compared IDs as integers (`if ($r->getId() === 123)` → `if ($r->getId() === '123'`).
+- **`POST /v1/connect/{provider}` (Airbnb)** — the response field renamed `oauthUrl` → `url` to match the multi-channel `ConnectSession` shape. `ConnectSession.url` is now the single canonical field for any hosted Connect URL the SDK returns.
+- **`GET /v1/markets`** — response renamed `markets` → `data`, `total_in_filter` → `total` (now nested under `pagination`). Use `$response->getData()` and `$response->getPagination()->getTotal()`.
+- **`GET /v1/reviews/{id}`** — returns the bare `Review` object, no `{ review: ... }` wrapper. The `ReviewGetResponse` model is removed; deserialize directly into `Review`.
+- **`GET /v1/channels/airbnb/{listings,reservations,messaging,reviews}`** — all wrapped in `{ data, pagination }` envelopes (`AirbnbListingListResponse`, `AirbnbReservationListResponse`, `AirbnbThreadListResponse`, `AirbnbReviewListResponse`). Iterate via `$resp->getData()` and paginate via `$resp->getPagination()->getNextCursor()`.
+
+### Added
+- **Self-documenting error envelope.** `Error.error` now exposes `code`, `message`, `fix` (recovery steps), `docsUrl`, `requestId`, `field`, `valueReceived`, `validValues`, `didYouMean`, `retryAfter`, plus `support` (links to docs/status/contact). Designed for AI agents and SDK consumers to self-recover without escalating.
+- **Rate-limit headers** documented in the API description: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`, `X-RateLimit-Policy`, `Retry-After`. SDK callers should honor `Retry-After` on 429 with exponential backoff + jitter.
+- **`X-Request-ID` header** echoed on every response and embedded in error envelopes as `requestId`.
+- **`X-Schema` header** on all 10 read endpoints — pass a custom schema slug to receive responses remapped to your field names.
+- **Custom Schemas API** (`SchemaApi`) — 5 CRUD operations: create / list / get / update / delete custom field-mapping schemas.
+- **Detail endpoints** added for one-off fetches: `GET /v1/conversations/{id}`, `GET /v1/listings/{id}`, etc., wired into the canonical envelope.
+- **Key prefix support** — `sk_test_` (sandbox) and `sk_live_` (production) prefixes are documented as the canonical auth scheme.
+
+### Notes
+- Regenerated from `https://api.repull.dev/api/repull/openapi.json` (info.version `1.0.0`).
+- Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
+- Enum validators relaxed in 33 model files for forward compatibility.
+- `composer validate --strict` clean. `vendor/bin/phpunit` (4 tests) green. `vendor/bin/phpstan analyse` (level configured in `phpstan.neon`) clean.
+
 ## [0.1.2] - 2026-05-02
 
 ### Added

@@ -12,7 +12,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `pro`, `enterprise`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * ReservationListResponse Class Doc Comment
  *
- * @description Cursor-paginated reservation list. Pass &#x60;pagination.next_cursor&#x60; back as &#x60;?cursor&#x3D;&#x60; to fetch the next page; stop when &#x60;pagination.has_more&#x60; is &#x60;false&#x60;. The &#x60;total&#x60; field is the count of rows matching the current filter (across all pages).  Legacy &#x60;?offset&#x3D;&#x60; consumers continue to receive &#x60;pagination.limit&#x60; + &#x60;pagination.offset&#x60; during the deprecation window. A &#x60;Deprecation: true&#x60; header (with a &#x60;Sunset&#x60; date) is set on responses that came in via &#x60;?offset&#x3D;&#x60; — migrate to &#x60;?cursor&#x3D;&#x60;.
+ * @description Cursor-paginated reservation list. Pass &#x60;pagination.nextCursor&#x60; back as &#x60;?cursor&#x3D;&#x60; to fetch the next page; stop when &#x60;pagination.hasMore&#x60; is &#x60;false&#x60;. The &#x60;total&#x60; field is the count of rows matching the current filter (across all pages); pass &#x60;?include_total&#x3D;false&#x60; to skip the COUNT(*) on very large workspaces.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -61,7 +61,7 @@ class ReservationListResponse implements ModelInterface, ArrayAccess, JsonSerial
      */
     protected static array $openAPITypes = [
         'data' => '\Repull\Model\Reservation[]',
-        'pagination' => '\Repull\Model\ReservationPagination'
+        'pagination' => '\Repull\Model\Pagination'
     ];
 
     /**
@@ -302,9 +302,9 @@ class ReservationListResponse implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Gets pagination
      *
-     * @return \Repull\Model\ReservationPagination|null
+     * @return \Repull\Model\Pagination|null
      */
-    public function getPagination(): ?\Repull\Model\ReservationPagination
+    public function getPagination(): ?\Repull\Model\Pagination
     {
         return $this->container['pagination'];
     }
@@ -312,11 +312,11 @@ class ReservationListResponse implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets pagination
      *
-     * @param \Repull\Model\ReservationPagination|null $pagination pagination
+     * @param \Repull\Model\Pagination|null $pagination pagination
      *
      * @return $this
      */
-    public function setPagination(?\Repull\Model\ReservationPagination $pagination): static
+    public function setPagination(?\Repull\Model\Pagination $pagination): static
     {
         if (is_null($pagination)) {
             throw new InvalidArgumentException('non-nullable pagination cannot be null');

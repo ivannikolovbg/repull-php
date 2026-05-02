@@ -12,7 +12,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `pro`, `enterprise`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -37,6 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * Pagination Class Doc Comment
  *
+ * @description Canonical cursor-based pagination envelope. Pass &#x60;nextCursor&#x60; back as &#x60;?cursor&#x3D;&#x60; to fetch the next page; stop when &#x60;hasMore&#x60; is &#x60;false&#x60;. The cursor is opaque base64 — do not parse or construct it by hand.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -59,10 +60,9 @@ class Pagination implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'total' => 'int',
-        'limit' => 'int',
-        'offset' => 'int',
-        'has_more' => 'bool'
+        'next_cursor' => 'string',
+        'has_more' => 'bool',
+        'total' => 'int'
     ];
 
     /**
@@ -71,10 +71,9 @@ class Pagination implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'total' => null,
-        'limit' => null,
-        'offset' => null,
-        'has_more' => null
+        'next_cursor' => null,
+        'has_more' => null,
+        'total' => null
     ];
 
     /**
@@ -83,10 +82,9 @@ class Pagination implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'total' => false,
-        'limit' => false,
-        'offset' => false,
-        'has_more' => false
+        'next_cursor' => true,
+        'has_more' => false,
+        'total' => false
     ];
 
     /**
@@ -165,10 +163,9 @@ class Pagination implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'total' => 'total',
-        'limit' => 'limit',
-        'offset' => 'offset',
-        'has_more' => 'hasMore'
+        'next_cursor' => 'nextCursor',
+        'has_more' => 'hasMore',
+        'total' => 'total'
     ];
 
     /**
@@ -177,10 +174,9 @@ class Pagination implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
-        'total' => 'setTotal',
-        'limit' => 'setLimit',
-        'offset' => 'setOffset',
-        'has_more' => 'setHasMore'
+        'next_cursor' => 'setNextCursor',
+        'has_more' => 'setHasMore',
+        'total' => 'setTotal'
     ];
 
     /**
@@ -189,10 +185,9 @@ class Pagination implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
-        'total' => 'getTotal',
-        'limit' => 'getLimit',
-        'offset' => 'getOffset',
-        'has_more' => 'getHasMore'
+        'next_cursor' => 'getNextCursor',
+        'has_more' => 'getHasMore',
+        'total' => 'getTotal'
     ];
 
     /**
@@ -242,10 +237,9 @@ class Pagination implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('total', $data ?? [], null);
-        $this->setIfExists('limit', $data ?? [], null);
-        $this->setIfExists('offset', $data ?? [], null);
+        $this->setIfExists('next_cursor', $data ?? [], null);
         $this->setIfExists('has_more', $data ?? [], null);
+        $this->setIfExists('total', $data ?? [], null);
     }
 
     /**
@@ -273,6 +267,12 @@ class Pagination implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
+        if ($this->container['next_cursor'] === null && !$this->isNullableSetToNull('next_cursor')) {
+            $invalidProperties[] = "'next_cursor' is required";
+        }
+        if ($this->container['has_more'] === null) {
+            $invalidProperties[] = "'has_more' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -284,6 +284,67 @@ class Pagination implements ModelInterface, ArrayAccess, JsonSerializable
         return count($this->listInvalidProperties()) === 0;
     }
 
+
+    /**
+     * Gets next_cursor
+     *
+     * @return string|null
+     */
+    public function getNextCursor(): ?string
+    {
+        return $this->container['next_cursor'];
+    }
+
+    /**
+     * Sets next_cursor
+     *
+     * @param string|null $next_cursor Opaque base64 cursor — pass back as `?cursor=<value>`. `null` when there are no more pages.
+     *
+     * @return $this
+     */
+    public function setNextCursor(?string $next_cursor): static
+    {
+        if (is_null($next_cursor)) {
+            array_push($this->openAPINullablesSetToNull, 'next_cursor');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('next_cursor', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['next_cursor'] = $next_cursor;
+
+        return $this;
+    }
+
+    /**
+     * Gets has_more
+     *
+     * @return bool
+     */
+    public function getHasMore(): bool
+    {
+        return $this->container['has_more'];
+    }
+
+    /**
+     * Sets has_more
+     *
+     * @param bool $has_more has_more
+     *
+     * @return $this
+     */
+    public function setHasMore(bool $has_more): static
+    {
+        if (is_null($has_more)) {
+            throw new InvalidArgumentException('non-nullable has_more cannot be null');
+        }
+        $this->container['has_more'] = $has_more;
+
+        return $this;
+    }
 
     /**
      * Gets total
@@ -298,7 +359,7 @@ class Pagination implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets total
      *
-     * @param int|null $total total
+     * @param int|null $total Total rows matching the current filter (across all pages). Present when `?include_total=true` (the default on most endpoints). Omit `?include_total=false` to skip the COUNT(*) on very large workspaces.
      *
      * @return $this
      */
@@ -308,87 +369,6 @@ class Pagination implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable total cannot be null');
         }
         $this->container['total'] = $total;
-
-        return $this;
-    }
-
-    /**
-     * Gets limit
-     *
-     * @return int|null
-     */
-    public function getLimit(): ?int
-    {
-        return $this->container['limit'];
-    }
-
-    /**
-     * Sets limit
-     *
-     * @param int|null $limit limit
-     *
-     * @return $this
-     */
-    public function setLimit(?int $limit): static
-    {
-        if (is_null($limit)) {
-            throw new InvalidArgumentException('non-nullable limit cannot be null');
-        }
-        $this->container['limit'] = $limit;
-
-        return $this;
-    }
-
-    /**
-     * Gets offset
-     *
-     * @return int|null
-     */
-    public function getOffset(): ?int
-    {
-        return $this->container['offset'];
-    }
-
-    /**
-     * Sets offset
-     *
-     * @param int|null $offset offset
-     *
-     * @return $this
-     */
-    public function setOffset(?int $offset): static
-    {
-        if (is_null($offset)) {
-            throw new InvalidArgumentException('non-nullable offset cannot be null');
-        }
-        $this->container['offset'] = $offset;
-
-        return $this;
-    }
-
-    /**
-     * Gets has_more
-     *
-     * @return bool|null
-     */
-    public function getHasMore(): ?bool
-    {
-        return $this->container['has_more'];
-    }
-
-    /**
-     * Sets has_more
-     *
-     * @param bool|null $has_more has_more
-     *
-     * @return $this
-     */
-    public function setHasMore(?bool $has_more): static
-    {
-        if (is_null($has_more)) {
-            throw new InvalidArgumentException('non-nullable has_more cannot be null');
-        }
-        $this->container['has_more'] = $has_more;
 
         return $this;
     }

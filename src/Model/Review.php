@@ -12,7 +12,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `pro`, `enterprise`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -60,13 +60,13 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'int',
+        'id' => 'string',
         'external_id' => 'string',
         'platform' => 'string',
-        'listing_id' => 'int',
-        'reservation_id' => 'int',
+        'listing_id' => 'string',
+        'reservation_id' => 'string',
         'reservation_confirmation_code' => 'string',
-        'guest_id' => 'int',
+        'guest_id' => 'string',
         'guest_name' => 'string',
         'guest_avatar' => 'string',
         'reviewer_role' => 'string',
@@ -218,24 +218,24 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $attributeMap = [
         'id' => 'id',
-        'external_id' => 'external_id',
+        'external_id' => 'externalId',
         'platform' => 'platform',
-        'listing_id' => 'listing_id',
-        'reservation_id' => 'reservation_id',
-        'reservation_confirmation_code' => 'reservation_confirmation_code',
-        'guest_id' => 'guest_id',
-        'guest_name' => 'guest_name',
-        'guest_avatar' => 'guest_avatar',
-        'reviewer_role' => 'reviewer_role',
+        'listing_id' => 'listingId',
+        'reservation_id' => 'reservationId',
+        'reservation_confirmation_code' => 'reservationConfirmationCode',
+        'guest_id' => 'guestId',
+        'guest_name' => 'guestName',
+        'guest_avatar' => 'guestAvatar',
+        'reviewer_role' => 'reviewerRole',
         'rating' => 'rating',
         'categories' => 'categories',
-        'public_review' => 'public_review',
-        'private_feedback' => 'private_feedback',
-        'is_reviewee_recommended' => 'is_reviewee_recommended',
+        'public_review' => 'publicReview',
+        'private_feedback' => 'privateFeedback',
+        'is_reviewee_recommended' => 'isRevieweeRecommended',
         'response' => 'response',
-        'submitted_at' => 'submitted_at',
-        'updated_at' => 'updated_at',
-        'expires_at' => 'expires_at',
+        'submitted_at' => 'submittedAt',
+        'updated_at' => 'updatedAt',
+        'expires_at' => 'expiresAt',
         'hidden' => 'hidden',
         'language' => 'language'
     ];
@@ -458,9 +458,9 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->container['id'];
     }
@@ -468,11 +468,11 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets id
      *
-     * @param int|null $id Internal Repull review id — pass back to `/v1/reviews/{id}`.
+     * @param string|null $id Internal Repull review id — pass back to `/v1/reviews/{id}`.
      *
      * @return $this
      */
-    public function setId(?int $id): static
+    public function setId(?string $id): static
     {
         if (is_null($id)) {
             throw new InvalidArgumentException('non-nullable id cannot be null');
@@ -547,9 +547,9 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets listing_id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getListingId(): ?int
+    public function getListingId(): ?string
     {
         return $this->container['listing_id'];
     }
@@ -557,11 +557,11 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets listing_id
      *
-     * @param int|null $listing_id Internal Repull listing id the review is attached to.
+     * @param string|null $listing_id Internal Repull listing id the review is attached to.
      *
      * @return $this
      */
-    public function setListingId(?int $listing_id): static
+    public function setListingId(?string $listing_id): static
     {
         if (is_null($listing_id)) {
             array_push($this->openAPINullablesSetToNull, 'listing_id');
@@ -581,9 +581,9 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets reservation_id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getReservationId(): ?int
+    public function getReservationId(): ?string
     {
         return $this->container['reservation_id'];
     }
@@ -591,11 +591,11 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets reservation_id
      *
-     * @param int|null $reservation_id reservation_id
+     * @param string|null $reservation_id reservation_id
      *
      * @return $this
      */
-    public function setReservationId(?int $reservation_id): static
+    public function setReservationId(?string $reservation_id): static
     {
         if (is_null($reservation_id)) {
             array_push($this->openAPINullablesSetToNull, 'reservation_id');
@@ -649,9 +649,9 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets guest_id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getGuestId(): ?int
+    public function getGuestId(): ?string
     {
         return $this->container['guest_id'];
     }
@@ -659,11 +659,11 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets guest_id
      *
-     * @param int|null $guest_id guest_id
+     * @param string|null $guest_id guest_id
      *
      * @return $this
      */
-    public function setGuestId(?int $guest_id): static
+    public function setGuestId(?string $guest_id): static
     {
         if (is_null($guest_id)) {
             array_push($this->openAPINullablesSetToNull, 'guest_id');

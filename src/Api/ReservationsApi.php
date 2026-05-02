@@ -11,7 +11,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `pro`, `enterprise`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -1019,8 +1019,7 @@ class ReservationsApi
      *
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset Deprecated — use &#x60;cursor&#x60; instead. Will be removed after the &#x60;Sunset&#x60; response header date. (optional) (deprecated)
+     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  string|null $platform Filter by booking platform (optional)
      * @param  string|null $status status (optional)
      * @param  int|null $listing_id Filter to a single listing (optional)
@@ -1028,17 +1027,17 @@ class ReservationsApi
      * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
      * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
+     * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\ReservationListResponse|null
+     * @return \Repull\Model\ReservationListResponse|\Repull\Model\Error
      */
     public function listReservations(
         ?string $x_schema = null,
         ?int $limit = 50,
         ?string $cursor = null,
-        ?int $offset = null,
         ?string $platform = null,
         ?string $status = null,
         ?int $listing_id = null,
@@ -1046,10 +1045,11 @@ class ReservationsApi
         ?\DateTime $check_in_before = null,
         ?\DateTime $check_in_from = null,
         ?\DateTime $check_in_to = null,
+        ?bool $include_total = true,
         string $contentType = self::contentTypes['listReservations'][0]
-    ): ?\Repull\Model\ReservationListResponse
+    ): \Repull\Model\ReservationListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listReservationsWithHttpInfo($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $contentType);
+        list($response) = $this->listReservationsWithHttpInfo($x_schema, $limit, $cursor, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $include_total, $contentType);
         return $response;
     }
 
@@ -1060,8 +1060,7 @@ class ReservationsApi
      *
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset Deprecated — use &#x60;cursor&#x60; instead. Will be removed after the &#x60;Sunset&#x60; response header date. (optional) (deprecated)
+     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  string|null $platform Filter by booking platform (optional)
      * @param  string|null $status (optional)
      * @param  int|null $listing_id Filter to a single listing (optional)
@@ -1069,17 +1068,17 @@ class ReservationsApi
      * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
      * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
+     * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ReservationListResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ReservationListResponse|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listReservationsWithHttpInfo(
         ?string $x_schema = null,
         ?int $limit = 50,
         ?string $cursor = null,
-        ?int $offset = null,
         ?string $platform = null,
         ?string $status = null,
         ?int $listing_id = null,
@@ -1087,10 +1086,11 @@ class ReservationsApi
         ?\DateTime $check_in_before = null,
         ?\DateTime $check_in_from = null,
         ?\DateTime $check_in_to = null,
+        ?bool $include_total = true,
         string $contentType = self::contentTypes['listReservations'][0]
     ): array
     {
-        $request = $this->listReservationsRequest($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $contentType);
+        $request = $this->listReservationsRequest($x_schema, $limit, $cursor, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $include_total, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1118,6 +1118,12 @@ class ReservationsApi
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\ReservationListResponse',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
                         $request,
                         $response,
                     );
@@ -1152,6 +1158,14 @@ class ReservationsApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -1165,8 +1179,7 @@ class ReservationsApi
      *
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset Deprecated — use &#x60;cursor&#x60; instead. Will be removed after the &#x60;Sunset&#x60; response header date. (optional) (deprecated)
+     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  string|null $platform Filter by booking platform (optional)
      * @param  string|null $status (optional)
      * @param  int|null $listing_id Filter to a single listing (optional)
@@ -1174,6 +1187,7 @@ class ReservationsApi
      * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
      * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
+     * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1183,7 +1197,6 @@ class ReservationsApi
         ?string $x_schema = null,
         ?int $limit = 50,
         ?string $cursor = null,
-        ?int $offset = null,
         ?string $platform = null,
         ?string $status = null,
         ?int $listing_id = null,
@@ -1191,10 +1204,11 @@ class ReservationsApi
         ?\DateTime $check_in_before = null,
         ?\DateTime $check_in_from = null,
         ?\DateTime $check_in_to = null,
+        ?bool $include_total = true,
         string $contentType = self::contentTypes['listReservations'][0]
     ): PromiseInterface
     {
-        return $this->listReservationsAsyncWithHttpInfo($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $contentType)
+        return $this->listReservationsAsyncWithHttpInfo($x_schema, $limit, $cursor, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $include_total, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1209,8 +1223,7 @@ class ReservationsApi
      *
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset Deprecated — use &#x60;cursor&#x60; instead. Will be removed after the &#x60;Sunset&#x60; response header date. (optional) (deprecated)
+     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  string|null $platform Filter by booking platform (optional)
      * @param  string|null $status (optional)
      * @param  int|null $listing_id Filter to a single listing (optional)
@@ -1218,6 +1231,7 @@ class ReservationsApi
      * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
      * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
+     * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1227,7 +1241,6 @@ class ReservationsApi
         ?string $x_schema = null,
         ?int $limit = 50,
         ?string $cursor = null,
-        ?int $offset = null,
         ?string $platform = null,
         ?string $status = null,
         ?int $listing_id = null,
@@ -1235,11 +1248,12 @@ class ReservationsApi
         ?\DateTime $check_in_before = null,
         ?\DateTime $check_in_from = null,
         ?\DateTime $check_in_to = null,
+        ?bool $include_total = true,
         string $contentType = self::contentTypes['listReservations'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ReservationListResponse';
-        $request = $this->listReservationsRequest($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $contentType);
+        $request = $this->listReservationsRequest($x_schema, $limit, $cursor, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $include_total, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1282,8 +1296,7 @@ class ReservationsApi
      *
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset Deprecated — use &#x60;cursor&#x60; instead. Will be removed after the &#x60;Sunset&#x60; response header date. (optional) (deprecated)
+     * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  string|null $platform Filter by booking platform (optional)
      * @param  string|null $status (optional)
      * @param  int|null $listing_id Filter to a single listing (optional)
@@ -1291,6 +1304,7 @@ class ReservationsApi
      * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
      * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
+     * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1300,7 +1314,6 @@ class ReservationsApi
         ?string $x_schema = null,
         ?int $limit = 50,
         ?string $cursor = null,
-        ?int $offset = null,
         ?string $platform = null,
         ?string $status = null,
         ?int $listing_id = null,
@@ -1308,6 +1321,7 @@ class ReservationsApi
         ?\DateTime $check_in_before = null,
         ?\DateTime $check_in_from = null,
         ?\DateTime $check_in_to = null,
+        ?bool $include_total = true,
         string $contentType = self::contentTypes['listReservations'][0]
     ): Request
     {
@@ -1321,10 +1335,7 @@ class ReservationsApi
         }
         
 
-        if ($offset !== null && $offset < 0) {
-            throw new InvalidArgumentException('invalid value for "$offset" when calling ReservationsApi.listReservations, must be bigger than or equal to 0.');
-        }
-        
+
 
 
 
@@ -1360,15 +1371,6 @@ class ReservationsApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $offset,
-            'offset', // param base name
-            'integer', // openApiType
-            'form', // style
-            true, // explode
-            false // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $platform,
             'platform', // param base name
             'string', // openApiType
@@ -1388,7 +1390,7 @@ class ReservationsApi
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $listing_id,
-            'listing_id', // param base name
+            'listingId', // param base name
             'integer', // openApiType
             'form', // style
             true, // explode
@@ -1426,6 +1428,15 @@ class ReservationsApi
             $check_in_to,
             'checkInTo', // param base name
             'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $include_total,
+            'include_total', // param base name
+            'boolean', // openApiType
             'form', // style
             true, // explode
             false // required

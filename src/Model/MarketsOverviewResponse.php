@@ -12,7 +12,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `pro`, `enterprise`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -37,6 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * MarketsOverviewResponse Class Doc Comment
  *
+ * @description Overview of every market the customer operates in, plus auxiliary discovery slices. Wraps the canonical &#x60;{ data, pagination }&#x60; envelope around the per-city KPI list (&#x60;data&#x60;) so SDK consumers see the same shape they get from every other list endpoint. Auxiliary fields (&#x60;totals&#x60;, &#x60;myListings&#x60;, &#x60;browse&#x60;, &#x60;freeMarket&#x60;, &#x60;subscriptions&#x60;, &#x60;tier&#x60;) are returned as siblings because they are NOT paginated. The overview returns every market in one shot — &#x60;nextCursor&#x60; is always &#x60;null&#x60; and &#x60;hasMore&#x60; is always &#x60;false&#x60;.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -59,7 +60,8 @@ class MarketsOverviewResponse implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'markets' => '\Repull\Model\MarketSummary[]',
+        'data' => '\Repull\Model\MarketSummary[]',
+        'pagination' => '\Repull\Model\Pagination',
         'totals' => '\Repull\Model\MarketsOverviewResponseTotals',
         'my_listings' => '\Repull\Model\MarketMyListing[]',
         'free_market' => 'string',
@@ -74,7 +76,8 @@ class MarketsOverviewResponse implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'markets' => null,
+        'data' => null,
+        'pagination' => null,
         'totals' => null,
         'my_listings' => null,
         'free_market' => null,
@@ -89,7 +92,8 @@ class MarketsOverviewResponse implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'markets' => false,
+        'data' => false,
+        'pagination' => false,
         'totals' => false,
         'my_listings' => false,
         'free_market' => true,
@@ -174,10 +178,11 @@ class MarketsOverviewResponse implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'markets' => 'markets',
+        'data' => 'data',
+        'pagination' => 'pagination',
         'totals' => 'totals',
         'my_listings' => 'myListings',
-        'free_market' => 'free_market',
+        'free_market' => 'freeMarket',
         'subscriptions' => 'subscriptions',
         'tier' => 'tier',
         'browse' => 'browse'
@@ -189,7 +194,8 @@ class MarketsOverviewResponse implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $setters = [
-        'markets' => 'setMarkets',
+        'data' => 'setData',
+        'pagination' => 'setPagination',
         'totals' => 'setTotals',
         'my_listings' => 'setMyListings',
         'free_market' => 'setFreeMarket',
@@ -204,7 +210,8 @@ class MarketsOverviewResponse implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $getters = [
-        'markets' => 'getMarkets',
+        'data' => 'getData',
+        'pagination' => 'getPagination',
         'totals' => 'getTotals',
         'my_listings' => 'getMyListings',
         'free_market' => 'getFreeMarket',
@@ -260,7 +267,8 @@ class MarketsOverviewResponse implements ModelInterface, ArrayAccess, JsonSerial
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('markets', $data ?? [], null);
+        $this->setIfExists('data', $data ?? [], null);
+        $this->setIfExists('pagination', $data ?? [], null);
         $this->setIfExists('totals', $data ?? [], null);
         $this->setIfExists('my_listings', $data ?? [], null);
         $this->setIfExists('free_market', $data ?? [], null);
@@ -307,28 +315,55 @@ class MarketsOverviewResponse implements ModelInterface, ArrayAccess, JsonSerial
 
 
     /**
-     * Gets markets
+     * Gets data
      *
      * @return \Repull\Model\MarketSummary[]|null
      */
-    public function getMarkets(): ?array
+    public function getData(): ?array
     {
-        return $this->container['markets'];
+        return $this->container['data'];
     }
 
     /**
-     * Sets markets
+     * Sets data
      *
-     * @param \Repull\Model\MarketSummary[]|null $markets markets
+     * @param \Repull\Model\MarketSummary[]|null $data Per-city KPIs for every market the customer operates in.
      *
      * @return $this
      */
-    public function setMarkets(?array $markets): static
+    public function setData(?array $data): static
     {
-        if (is_null($markets)) {
-            throw new InvalidArgumentException('non-nullable markets cannot be null');
+        if (is_null($data)) {
+            throw new InvalidArgumentException('non-nullable data cannot be null');
         }
-        $this->container['markets'] = $markets;
+        $this->container['data'] = $data;
+
+        return $this;
+    }
+
+    /**
+     * Gets pagination
+     *
+     * @return \Repull\Model\Pagination|null
+     */
+    public function getPagination(): ?\Repull\Model\Pagination
+    {
+        return $this->container['pagination'];
+    }
+
+    /**
+     * Sets pagination
+     *
+     * @param \Repull\Model\Pagination|null $pagination pagination
+     *
+     * @return $this
+     */
+    public function setPagination(?\Repull\Model\Pagination $pagination): static
+    {
+        if (is_null($pagination)) {
+            throw new InvalidArgumentException('non-nullable pagination cannot be null');
+        }
+        $this->container['pagination'] = $pagination;
 
         return $this;
     }
