@@ -12,7 +12,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `pro`, `enterprise`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * AirbnbListing Class Doc Comment
  *
- * @description An Airbnb listing in the host account. Mirrors the Airbnb partner API shape with light normalization.
+ * @description A Vanio listing paired with its Airbnb connection rows. The list endpoint groups every &#x60;listings_airbnb&#x60; row that points at the same Vanio &#x60;listingId&#x60; under a single &#x60;connections[]&#x60; array.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -60,15 +60,10 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'string',
+        'listing_id' => 'int',
         'name' => 'string',
-        'status' => 'string',
-        'property_type' => 'string',
-        'room_type' => 'string',
-        'bedrooms' => 'int',
-        'bathrooms' => 'float',
-        'max_guests' => 'int',
-        'thumbnail_url' => 'string'
+        'city' => 'string',
+        'connections' => '\Repull\Model\AirbnbConnection[]'
     ];
 
     /**
@@ -77,15 +72,10 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'id' => null,
+        'listing_id' => null,
         'name' => null,
-        'status' => null,
-        'property_type' => null,
-        'room_type' => null,
-        'bedrooms' => null,
-        'bathrooms' => null,
-        'max_guests' => null,
-        'thumbnail_url' => 'uri'
+        'city' => null,
+        'connections' => null
     ];
 
     /**
@@ -94,15 +84,10 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => false,
+        'listing_id' => false,
         'name' => false,
-        'status' => false,
-        'property_type' => true,
-        'room_type' => true,
-        'bedrooms' => true,
-        'bathrooms' => true,
-        'max_guests' => true,
-        'thumbnail_url' => true
+        'city' => true,
+        'connections' => false
     ];
 
     /**
@@ -181,15 +166,10 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'id' => 'id',
+        'listing_id' => 'listingId',
         'name' => 'name',
-        'status' => 'status',
-        'property_type' => 'propertyType',
-        'room_type' => 'roomType',
-        'bedrooms' => 'bedrooms',
-        'bathrooms' => 'bathrooms',
-        'max_guests' => 'maxGuests',
-        'thumbnail_url' => 'thumbnailUrl'
+        'city' => 'city',
+        'connections' => 'connections'
     ];
 
     /**
@@ -198,15 +178,10 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
-        'id' => 'setId',
+        'listing_id' => 'setListingId',
         'name' => 'setName',
-        'status' => 'setStatus',
-        'property_type' => 'setPropertyType',
-        'room_type' => 'setRoomType',
-        'bedrooms' => 'setBedrooms',
-        'bathrooms' => 'setBathrooms',
-        'max_guests' => 'setMaxGuests',
-        'thumbnail_url' => 'setThumbnailUrl'
+        'city' => 'setCity',
+        'connections' => 'setConnections'
     ];
 
     /**
@@ -215,15 +190,10 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
-        'id' => 'getId',
+        'listing_id' => 'getListingId',
         'name' => 'getName',
-        'status' => 'getStatus',
-        'property_type' => 'getPropertyType',
-        'room_type' => 'getRoomType',
-        'bedrooms' => 'getBedrooms',
-        'bathrooms' => 'getBathrooms',
-        'max_guests' => 'getMaxGuests',
-        'thumbnail_url' => 'getThumbnailUrl'
+        'city' => 'getCity',
+        'connections' => 'getConnections'
     ];
 
     /**
@@ -273,15 +243,10 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
-        $this->setIfExists('property_type', $data ?? [], null);
-        $this->setIfExists('room_type', $data ?? [], null);
-        $this->setIfExists('bedrooms', $data ?? [], null);
-        $this->setIfExists('bathrooms', $data ?? [], null);
-        $this->setIfExists('max_guests', $data ?? [], null);
-        $this->setIfExists('thumbnail_url', $data ?? [], null);
+        $this->setIfExists('city', $data ?? [], null);
+        $this->setIfExists('connections', $data ?? [], null);
     }
 
     /**
@@ -322,28 +287,28 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
 
 
     /**
-     * Gets id
+     * Gets listing_id
      *
-     * @return string|null
+     * @return int|null
      */
-    public function getId(): ?string
+    public function getListingId(): ?int
     {
-        return $this->container['id'];
+        return $this->container['listing_id'];
     }
 
     /**
-     * Sets id
+     * Sets listing_id
      *
-     * @param string|null $id Airbnb listing ID
+     * @param int|null $listing_id Vanio (Repull) listing id
      *
      * @return $this
      */
-    public function setId(?string $id): static
+    public function setListingId(?int $listing_id): static
     {
-        if (is_null($id)) {
-            throw new InvalidArgumentException('non-nullable id cannot be null');
+        if (is_null($listing_id)) {
+            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
         }
-        $this->container['id'] = $id;
+        $this->container['listing_id'] = $listing_id;
 
         return $this;
     }
@@ -376,232 +341,62 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
-     * Gets status
+     * Gets city
      *
      * @return string|null
      */
-    public function getStatus(): ?string
+    public function getCity(): ?string
     {
-        return $this->container['status'];
+        return $this->container['city'];
     }
 
     /**
-     * Sets status
+     * Sets city
      *
-     * @param string|null $status Listing status (active, unlisted, etc.)
+     * @param string|null $city city
      *
      * @return $this
      */
-    public function setStatus(?string $status): static
+    public function setCity(?string $city): static
     {
-        if (is_null($status)) {
-            throw new InvalidArgumentException('non-nullable status cannot be null');
-        }
-        $this->container['status'] = $status;
-
-        return $this;
-    }
-
-    /**
-     * Gets property_type
-     *
-     * @return string|null
-     */
-    public function getPropertyType(): ?string
-    {
-        return $this->container['property_type'];
-    }
-
-    /**
-     * Sets property_type
-     *
-     * @param string|null $property_type property_type
-     *
-     * @return $this
-     */
-    public function setPropertyType(?string $property_type): static
-    {
-        if (is_null($property_type)) {
-            array_push($this->openAPINullablesSetToNull, 'property_type');
+        if (is_null($city)) {
+            array_push($this->openAPINullablesSetToNull, 'city');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('property_type', $nullablesSetToNull);
+            $index = array_search('city', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['property_type'] = $property_type;
+        $this->container['city'] = $city;
 
         return $this;
     }
 
     /**
-     * Gets room_type
+     * Gets connections
      *
-     * @return string|null
+     * @return \Repull\Model\AirbnbConnection[]|null
      */
-    public function getRoomType(): ?string
+    public function getConnections(): ?array
     {
-        return $this->container['room_type'];
+        return $this->container['connections'];
     }
 
     /**
-     * Sets room_type
+     * Sets connections
      *
-     * @param string|null $room_type room_type
+     * @param \Repull\Model\AirbnbConnection[]|null $connections connections
      *
      * @return $this
      */
-    public function setRoomType(?string $room_type): static
+    public function setConnections(?array $connections): static
     {
-        if (is_null($room_type)) {
-            array_push($this->openAPINullablesSetToNull, 'room_type');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('room_type', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($connections)) {
+            throw new InvalidArgumentException('non-nullable connections cannot be null');
         }
-        $this->container['room_type'] = $room_type;
-
-        return $this;
-    }
-
-    /**
-     * Gets bedrooms
-     *
-     * @return int|null
-     */
-    public function getBedrooms(): ?int
-    {
-        return $this->container['bedrooms'];
-    }
-
-    /**
-     * Sets bedrooms
-     *
-     * @param int|null $bedrooms bedrooms
-     *
-     * @return $this
-     */
-    public function setBedrooms(?int $bedrooms): static
-    {
-        if (is_null($bedrooms)) {
-            array_push($this->openAPINullablesSetToNull, 'bedrooms');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('bedrooms', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['bedrooms'] = $bedrooms;
-
-        return $this;
-    }
-
-    /**
-     * Gets bathrooms
-     *
-     * @return float|null
-     */
-    public function getBathrooms(): ?float
-    {
-        return $this->container['bathrooms'];
-    }
-
-    /**
-     * Sets bathrooms
-     *
-     * @param float|null $bathrooms bathrooms
-     *
-     * @return $this
-     */
-    public function setBathrooms(?float $bathrooms): static
-    {
-        if (is_null($bathrooms)) {
-            array_push($this->openAPINullablesSetToNull, 'bathrooms');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('bathrooms', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['bathrooms'] = $bathrooms;
-
-        return $this;
-    }
-
-    /**
-     * Gets max_guests
-     *
-     * @return int|null
-     */
-    public function getMaxGuests(): ?int
-    {
-        return $this->container['max_guests'];
-    }
-
-    /**
-     * Sets max_guests
-     *
-     * @param int|null $max_guests max_guests
-     *
-     * @return $this
-     */
-    public function setMaxGuests(?int $max_guests): static
-    {
-        if (is_null($max_guests)) {
-            array_push($this->openAPINullablesSetToNull, 'max_guests');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('max_guests', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['max_guests'] = $max_guests;
-
-        return $this;
-    }
-
-    /**
-     * Gets thumbnail_url
-     *
-     * @return string|null
-     */
-    public function getThumbnailUrl(): ?string
-    {
-        return $this->container['thumbnail_url'];
-    }
-
-    /**
-     * Sets thumbnail_url
-     *
-     * @param string|null $thumbnail_url thumbnail_url
-     *
-     * @return $this
-     */
-    public function setThumbnailUrl(?string $thumbnail_url): static
-    {
-        if (is_null($thumbnail_url)) {
-            array_push($this->openAPINullablesSetToNull, 'thumbnail_url');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('thumbnail_url', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['thumbnail_url'] = $thumbnail_url;
+        $this->container['connections'] = $connections;
 
         return $this;
     }

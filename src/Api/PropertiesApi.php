@@ -11,7 +11,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `pro`, `enterprise`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -434,7 +434,10 @@ class PropertiesApi
      *
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  string|null $status Filter by status. Default returns active only; pass &#x60;all&#x60; to include inactive. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
+     * @param  string|null $status Filter by status. Default returns active only; pass &#x60;inactive&#x60; to invert or &#x60;all&#x60; to include both. (optional, default to 'active')
+     * @param  string|null $lifecycle_status Filter by lifecycle status (e.g. &#x60;live&#x60;, &#x60;draft&#x60;, &#x60;archived&#x60;). Pass &#x60;all&#x60; to disable the filter. (optional)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listProperties'] to see the possible values for this operation
      *
@@ -445,12 +448,15 @@ class PropertiesApi
     public function listProperties(
         ?int $limit = 50,
         ?string $cursor = null,
-        ?string $status = null,
+        ?int $offset = 0,
+        ?string $q = null,
+        ?string $status = 'active',
+        ?string $lifecycle_status = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listProperties'][0]
     ): \Repull\Model\PropertyListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listPropertiesWithHttpInfo($limit, $cursor, $status, $include_total, $contentType);
+        list($response) = $this->listPropertiesWithHttpInfo($limit, $cursor, $offset, $q, $status, $lifecycle_status, $include_total, $contentType);
         return $response;
     }
 
@@ -461,7 +467,10 @@ class PropertiesApi
      *
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  string|null $status Filter by status. Default returns active only; pass &#x60;all&#x60; to include inactive. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
+     * @param  string|null $status Filter by status. Default returns active only; pass &#x60;inactive&#x60; to invert or &#x60;all&#x60; to include both. (optional, default to 'active')
+     * @param  string|null $lifecycle_status Filter by lifecycle status (e.g. &#x60;live&#x60;, &#x60;draft&#x60;, &#x60;archived&#x60;). Pass &#x60;all&#x60; to disable the filter. (optional)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listProperties'] to see the possible values for this operation
      *
@@ -472,12 +481,15 @@ class PropertiesApi
     public function listPropertiesWithHttpInfo(
         ?int $limit = 50,
         ?string $cursor = null,
-        ?string $status = null,
+        ?int $offset = 0,
+        ?string $q = null,
+        ?string $status = 'active',
+        ?string $lifecycle_status = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listProperties'][0]
     ): array
     {
-        $request = $this->listPropertiesRequest($limit, $cursor, $status, $include_total, $contentType);
+        $request = $this->listPropertiesRequest($limit, $cursor, $offset, $q, $status, $lifecycle_status, $include_total, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -580,7 +592,10 @@ class PropertiesApi
      *
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  string|null $status Filter by status. Default returns active only; pass &#x60;all&#x60; to include inactive. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
+     * @param  string|null $status Filter by status. Default returns active only; pass &#x60;inactive&#x60; to invert or &#x60;all&#x60; to include both. (optional, default to 'active')
+     * @param  string|null $lifecycle_status Filter by lifecycle status (e.g. &#x60;live&#x60;, &#x60;draft&#x60;, &#x60;archived&#x60;). Pass &#x60;all&#x60; to disable the filter. (optional)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listProperties'] to see the possible values for this operation
      *
@@ -590,12 +605,15 @@ class PropertiesApi
     public function listPropertiesAsync(
         ?int $limit = 50,
         ?string $cursor = null,
-        ?string $status = null,
+        ?int $offset = 0,
+        ?string $q = null,
+        ?string $status = 'active',
+        ?string $lifecycle_status = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listProperties'][0]
     ): PromiseInterface
     {
-        return $this->listPropertiesAsyncWithHttpInfo($limit, $cursor, $status, $include_total, $contentType)
+        return $this->listPropertiesAsyncWithHttpInfo($limit, $cursor, $offset, $q, $status, $lifecycle_status, $include_total, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -610,7 +628,10 @@ class PropertiesApi
      *
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  string|null $status Filter by status. Default returns active only; pass &#x60;all&#x60; to include inactive. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
+     * @param  string|null $status Filter by status. Default returns active only; pass &#x60;inactive&#x60; to invert or &#x60;all&#x60; to include both. (optional, default to 'active')
+     * @param  string|null $lifecycle_status Filter by lifecycle status (e.g. &#x60;live&#x60;, &#x60;draft&#x60;, &#x60;archived&#x60;). Pass &#x60;all&#x60; to disable the filter. (optional)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listProperties'] to see the possible values for this operation
      *
@@ -620,13 +641,16 @@ class PropertiesApi
     public function listPropertiesAsyncWithHttpInfo(
         ?int $limit = 50,
         ?string $cursor = null,
-        ?string $status = null,
+        ?int $offset = 0,
+        ?string $q = null,
+        ?string $status = 'active',
+        ?string $lifecycle_status = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listProperties'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\PropertyListResponse';
-        $request = $this->listPropertiesRequest($limit, $cursor, $status, $include_total, $contentType);
+        $request = $this->listPropertiesRequest($limit, $cursor, $offset, $q, $status, $lifecycle_status, $include_total, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -669,7 +693,10 @@ class PropertiesApi
      *
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  string|null $status Filter by status. Default returns active only; pass &#x60;all&#x60; to include inactive. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
+     * @param  string|null $status Filter by status. Default returns active only; pass &#x60;inactive&#x60; to invert or &#x60;all&#x60; to include both. (optional, default to 'active')
+     * @param  string|null $lifecycle_status Filter by lifecycle status (e.g. &#x60;live&#x60;, &#x60;draft&#x60;, &#x60;archived&#x60;). Pass &#x60;all&#x60; to disable the filter. (optional)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listProperties'] to see the possible values for this operation
      *
@@ -679,7 +706,10 @@ class PropertiesApi
     public function listPropertiesRequest(
         ?int $limit = 50,
         ?string $cursor = null,
-        ?string $status = null,
+        ?int $offset = 0,
+        ?string $q = null,
+        ?string $status = 'active',
+        ?string $lifecycle_status = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listProperties'][0]
     ): Request
@@ -692,6 +722,15 @@ class PropertiesApi
             throw new InvalidArgumentException('invalid value for "$limit" when calling PropertiesApi.listProperties, must be bigger than or equal to 1.');
         }
         
+
+        if ($offset !== null && $offset > 10000) {
+            throw new InvalidArgumentException('invalid value for "$offset" when calling PropertiesApi.listProperties, must be smaller than or equal to 10000.');
+        }
+        if ($offset !== null && $offset < 0) {
+            throw new InvalidArgumentException('invalid value for "$offset" when calling PropertiesApi.listProperties, must be bigger than or equal to 0.');
+        }
+        
+
 
 
 
@@ -723,8 +762,35 @@ class PropertiesApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $offset,
+            'offset', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $q,
+            'q', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $status,
             'status', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $lifecycle_status,
+            'lifecycle_status', // param base name
             'string', // openApiType
             'form', // style
             true, // explode
