@@ -1,6 +1,6 @@
 <?php
 /**
- * WebhookEventCatalogDomainsInnerEventsInner
+ * CreateStudioProjectGeneration201Response
  *
  * PHP version 8.1
  *
@@ -12,7 +12,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `pro`, `enterprise`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * WebhookEventCatalogDomainsInnerEventsInner Class Doc Comment
+ * CreateStudioProjectGeneration201Response Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class WebhookEventCatalogDomainsInnerEventsInner implements ModelInterface, ArrayAccess, JsonSerializable
+class CreateStudioProjectGeneration201Response implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class WebhookEventCatalogDomainsInnerEventsInner implements ModelInterface, Arra
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'WebhookEventCatalog_domains_inner_events_inner';
+    protected static string $openAPIModelName = 'createStudioProjectGeneration_201_response';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,11 +59,7 @@ class WebhookEventCatalogDomainsInnerEventsInner implements ModelInterface, Arra
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'type' => 'string',
-        'domain' => 'string',
-        'title' => 'string',
-        'description' => 'string',
-        'sample_payload' => 'object'
+        'data' => '\Repull\Model\CreateStudioProjectGeneration201ResponseData'
     ];
 
     /**
@@ -72,11 +68,7 @@ class WebhookEventCatalogDomainsInnerEventsInner implements ModelInterface, Arra
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'type' => null,
-        'domain' => null,
-        'title' => null,
-        'description' => null,
-        'sample_payload' => null
+        'data' => null
     ];
 
     /**
@@ -85,11 +77,7 @@ class WebhookEventCatalogDomainsInnerEventsInner implements ModelInterface, Arra
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'type' => false,
-        'domain' => false,
-        'title' => false,
-        'description' => false,
-        'sample_payload' => false
+        'data' => false
     ];
 
     /**
@@ -168,11 +156,7 @@ class WebhookEventCatalogDomainsInnerEventsInner implements ModelInterface, Arra
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'type' => 'type',
-        'domain' => 'domain',
-        'title' => 'title',
-        'description' => 'description',
-        'sample_payload' => 'samplePayload'
+        'data' => 'data'
     ];
 
     /**
@@ -181,11 +165,7 @@ class WebhookEventCatalogDomainsInnerEventsInner implements ModelInterface, Arra
      * @var array<string, string>
      */
     protected static array $setters = [
-        'type' => 'setType',
-        'domain' => 'setDomain',
-        'title' => 'setTitle',
-        'description' => 'setDescription',
-        'sample_payload' => 'setSamplePayload'
+        'data' => 'setData'
     ];
 
     /**
@@ -194,11 +174,7 @@ class WebhookEventCatalogDomainsInnerEventsInner implements ModelInterface, Arra
      * @var array<string, string>
      */
     protected static array $getters = [
-        'type' => 'getType',
-        'domain' => 'getDomain',
-        'title' => 'getTitle',
-        'description' => 'getDescription',
-        'sample_payload' => 'getSamplePayload'
+        'data' => 'getData'
     ];
 
     /**
@@ -248,11 +224,7 @@ class WebhookEventCatalogDomainsInnerEventsInner implements ModelInterface, Arra
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('type', $data ?? [], null);
-        $this->setIfExists('domain', $data ?? [], null);
-        $this->setIfExists('title', $data ?? [], null);
-        $this->setIfExists('description', $data ?? [], null);
-        $this->setIfExists('sample_payload', $data ?? [], null);
+        $this->setIfExists('data', $data ?? [], null);
     }
 
     /**
@@ -293,136 +265,28 @@ class WebhookEventCatalogDomainsInnerEventsInner implements ModelInterface, Arra
 
 
     /**
-     * Gets type
+     * Gets data
      *
-     * @return string|null
+     * @return \Repull\Model\CreateStudioProjectGeneration201ResponseData|null
      */
-    public function getType(): ?string
+    public function getData(): ?\Repull\Model\CreateStudioProjectGeneration201ResponseData
     {
-        return $this->container['type'];
+        return $this->container['data'];
     }
 
     /**
-     * Sets type
+     * Sets data
      *
-     * @param string|null $type type
+     * @param \Repull\Model\CreateStudioProjectGeneration201ResponseData|null $data data
      *
      * @return $this
      */
-    public function setType(?string $type): static
+    public function setData(?\Repull\Model\CreateStudioProjectGeneration201ResponseData $data): static
     {
-        if (is_null($type)) {
-            throw new InvalidArgumentException('non-nullable type cannot be null');
+        if (is_null($data)) {
+            throw new InvalidArgumentException('non-nullable data cannot be null');
         }
-        $this->container['type'] = $type;
-
-        return $this;
-    }
-
-    /**
-     * Gets domain
-     *
-     * @return string|null
-     */
-    public function getDomain(): ?string
-    {
-        return $this->container['domain'];
-    }
-
-    /**
-     * Sets domain
-     *
-     * @param string|null $domain domain
-     *
-     * @return $this
-     */
-    public function setDomain(?string $domain): static
-    {
-        if (is_null($domain)) {
-            throw new InvalidArgumentException('non-nullable domain cannot be null');
-        }
-        $this->container['domain'] = $domain;
-
-        return $this;
-    }
-
-    /**
-     * Gets title
-     *
-     * @return string|null
-     */
-    public function getTitle(): ?string
-    {
-        return $this->container['title'];
-    }
-
-    /**
-     * Sets title
-     *
-     * @param string|null $title title
-     *
-     * @return $this
-     */
-    public function setTitle(?string $title): static
-    {
-        if (is_null($title)) {
-            throw new InvalidArgumentException('non-nullable title cannot be null');
-        }
-        $this->container['title'] = $title;
-
-        return $this;
-    }
-
-    /**
-     * Gets description
-     *
-     * @return string|null
-     */
-    public function getDescription(): ?string
-    {
-        return $this->container['description'];
-    }
-
-    /**
-     * Sets description
-     *
-     * @param string|null $description description
-     *
-     * @return $this
-     */
-    public function setDescription(?string $description): static
-    {
-        if (is_null($description)) {
-            throw new InvalidArgumentException('non-nullable description cannot be null');
-        }
-        $this->container['description'] = $description;
-
-        return $this;
-    }
-
-    /**
-     * Gets sample_payload
-     *
-     * @return object|null
-     */
-    public function getSamplePayload(): ?object
-    {
-        return $this->container['sample_payload'];
-    }
-
-    /**
-     * Sets sample_payload
-     *
-     * @param object|null $sample_payload sample_payload
-     *
-     * @return $this
-     */
-    public function setSamplePayload(?object $sample_payload): static
-    {
-        if (is_null($sample_payload)) {
-            throw new InvalidArgumentException('non-nullable sample_payload cannot be null');
-        }
-        $this->container['sample_payload'] = $sample_payload;
+        $this->container['data'] = $data;
 
         return $this;
     }
