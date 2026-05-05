@@ -234,21 +234,21 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         return self::$openAPIModelName;
     }
 
-    public const TYPE_ACCOUNT_CREATED = 'account.created';
-    public const TYPE_ACCOUNT_DISCONNECTED = 'account.disconnected';
-    public const TYPE_AI_OPERATION_COMPLETED = 'ai.operation.completed';
-    public const TYPE_AI_OPERATION_FAILED = 'ai.operation.failed';
-    public const TYPE_CALENDAR_UPDATED = 'calendar.updated';
-    public const TYPE_LISTING_CREATED = 'listing.created';
-    public const TYPE_LISTING_DELETED = 'listing.deleted';
-    public const TYPE_LISTING_UPDATED = 'listing.updated';
-    public const TYPE_PAYMENT_COMPLETED = 'payment.completed';
-    public const TYPE_PAYMENT_REFUNDED = 'payment.refunded';
-    public const TYPE_REPULL_PING = 'repull.ping';
-    public const TYPE_RESERVATION_CANCELLED = 'reservation.cancelled';
-    public const TYPE_RESERVATION_CREATED = 'reservation.created';
-    public const TYPE_RESERVATION_MESSAGE_RECEIVED = 'reservation.message.received';
-    public const TYPE_RESERVATION_UPDATED = 'reservation.updated';
+    public const TYPE_ACCOUNT/CREATED = 'account.created';
+    public const TYPE_ACCOUNT/DISCONNECTED = 'account.disconnected';
+    public const TYPE_AI/OPERATION/COMPLETED = 'ai.operation.completed';
+    public const TYPE_AI/OPERATION/FAILED = 'ai.operation.failed';
+    public const TYPE_CALENDAR/UPDATED = 'calendar.updated';
+    public const TYPE_LISTING/CREATED = 'listing.created';
+    public const TYPE_LISTING/DELETED = 'listing.deleted';
+    public const TYPE_LISTING/UPDATED = 'listing.updated';
+    public const TYPE_PAYMENT/COMPLETED = 'payment.completed';
+    public const TYPE_PAYMENT/REFUNDED = 'payment.refunded';
+    public const TYPE_REPULL/PING = 'repull.ping';
+    public const TYPE_RESERVATION/CANCELLED = 'reservation.cancelled';
+    public const TYPE_RESERVATION/CREATED = 'reservation.created';
+    public const TYPE_RESERVATION/MESSAGE/RECEIVED = 'reservation.message.received';
+    public const TYPE_RESERVATION/UPDATED = 'reservation.updated';
 
     /**
      * Gets allowable values of the enum
@@ -258,21 +258,21 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     public static function getTypeAllowableValues()
     {
         return [
-            self::TYPE_ACCOUNT_CREATED,
-            self::TYPE_ACCOUNT_DISCONNECTED,
-            self::TYPE_AI_OPERATION_COMPLETED,
-            self::TYPE_AI_OPERATION_FAILED,
-            self::TYPE_CALENDAR_UPDATED,
-            self::TYPE_LISTING_CREATED,
-            self::TYPE_LISTING_DELETED,
-            self::TYPE_LISTING_UPDATED,
-            self::TYPE_PAYMENT_COMPLETED,
-            self::TYPE_PAYMENT_REFUNDED,
-            self::TYPE_REPULL_PING,
-            self::TYPE_RESERVATION_CANCELLED,
-            self::TYPE_RESERVATION_CREATED,
-            self::TYPE_RESERVATION_MESSAGE_RECEIVED,
-            self::TYPE_RESERVATION_UPDATED,
+            self::TYPE_ACCOUNT/CREATED,
+            self::TYPE_ACCOUNT/DISCONNECTED,
+            self::TYPE_AI/OPERATION/COMPLETED,
+            self::TYPE_AI/OPERATION/FAILED,
+            self::TYPE_CALENDAR/UPDATED,
+            self::TYPE_LISTING/CREATED,
+            self::TYPE_LISTING/DELETED,
+            self::TYPE_LISTING/UPDATED,
+            self::TYPE_PAYMENT/COMPLETED,
+            self::TYPE_PAYMENT/REFUNDED,
+            self::TYPE_REPULL/PING,
+            self::TYPE_RESERVATION/CANCELLED,
+            self::TYPE_RESERVATION/CREATED,
+            self::TYPE_RESERVATION/MESSAGE/RECEIVED,
+            self::TYPE_RESERVATION/UPDATED,
         ];
     }
 

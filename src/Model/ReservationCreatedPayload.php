@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * ReservationCreatedPayload Class Doc Comment
  *
- * @description Payload for &#x60;reservation.created&#x60;. A new reservation arrived from any connected channel or direct booking.
+ * @description Payload for &#x60;reservation.created&#x60;. A new reservation arrived from any connected channel or direct booking. Stripe-pattern envelope: &#x60;data.object&#x60; carries the reservation snapshot.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -60,18 +60,7 @@ class ReservationCreatedPayload implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'int',
-        'confirmation_code' => 'string',
-        'listing_id' => 'int',
-        'platform' => 'string',
-        'status' => 'string',
-        'check_in' => '\DateTime',
-        'check_out' => '\DateTime',
-        'nights' => 'int',
-        'guests' => '\Repull\Model\ReservationCreatedPayloadGuests',
-        'primary_guest' => '\Repull\Model\ReservationCreatedPayloadPrimaryGuest',
-        'pricing' => '\Repull\Model\ReservationCreatedPayloadPricing',
-        'created_at' => '\DateTime'
+        'object' => '\Repull\Model\ReservationWebhookObject'
     ];
 
     /**
@@ -80,18 +69,7 @@ class ReservationCreatedPayload implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'id' => null,
-        'confirmation_code' => null,
-        'listing_id' => null,
-        'platform' => null,
-        'status' => null,
-        'check_in' => 'date',
-        'check_out' => 'date',
-        'nights' => null,
-        'guests' => null,
-        'primary_guest' => null,
-        'pricing' => null,
-        'created_at' => 'date-time'
+        'object' => null
     ];
 
     /**
@@ -100,18 +78,7 @@ class ReservationCreatedPayload implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => false,
-        'confirmation_code' => false,
-        'listing_id' => false,
-        'platform' => false,
-        'status' => false,
-        'check_in' => false,
-        'check_out' => false,
-        'nights' => false,
-        'guests' => false,
-        'primary_guest' => false,
-        'pricing' => false,
-        'created_at' => false
+        'object' => false
     ];
 
     /**
@@ -190,18 +157,7 @@ class ReservationCreatedPayload implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'id' => 'id',
-        'confirmation_code' => 'confirmationCode',
-        'listing_id' => 'listingId',
-        'platform' => 'platform',
-        'status' => 'status',
-        'check_in' => 'checkIn',
-        'check_out' => 'checkOut',
-        'nights' => 'nights',
-        'guests' => 'guests',
-        'primary_guest' => 'primaryGuest',
-        'pricing' => 'pricing',
-        'created_at' => 'createdAt'
+        'object' => 'object'
     ];
 
     /**
@@ -210,18 +166,7 @@ class ReservationCreatedPayload implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $setters = [
-        'id' => 'setId',
-        'confirmation_code' => 'setConfirmationCode',
-        'listing_id' => 'setListingId',
-        'platform' => 'setPlatform',
-        'status' => 'setStatus',
-        'check_in' => 'setCheckIn',
-        'check_out' => 'setCheckOut',
-        'nights' => 'setNights',
-        'guests' => 'setGuests',
-        'primary_guest' => 'setPrimaryGuest',
-        'pricing' => 'setPricing',
-        'created_at' => 'setCreatedAt'
+        'object' => 'setObject'
     ];
 
     /**
@@ -230,18 +175,7 @@ class ReservationCreatedPayload implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $getters = [
-        'id' => 'getId',
-        'confirmation_code' => 'getConfirmationCode',
-        'listing_id' => 'getListingId',
-        'platform' => 'getPlatform',
-        'status' => 'getStatus',
-        'check_in' => 'getCheckIn',
-        'check_out' => 'getCheckOut',
-        'nights' => 'getNights',
-        'guests' => 'getGuests',
-        'primary_guest' => 'getPrimaryGuest',
-        'pricing' => 'getPricing',
-        'created_at' => 'getCreatedAt'
+        'object' => 'getObject'
     ];
 
     /**
@@ -291,18 +225,7 @@ class ReservationCreatedPayload implements ModelInterface, ArrayAccess, JsonSeri
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('confirmation_code', $data ?? [], null);
-        $this->setIfExists('listing_id', $data ?? [], null);
-        $this->setIfExists('platform', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
-        $this->setIfExists('check_in', $data ?? [], null);
-        $this->setIfExists('check_out', $data ?? [], null);
-        $this->setIfExists('nights', $data ?? [], null);
-        $this->setIfExists('guests', $data ?? [], null);
-        $this->setIfExists('primary_guest', $data ?? [], null);
-        $this->setIfExists('pricing', $data ?? [], null);
-        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('object', $data ?? [], null);
     }
 
     /**
@@ -330,6 +253,9 @@ class ReservationCreatedPayload implements ModelInterface, ArrayAccess, JsonSeri
     {
         $invalidProperties = [];
 
+        if ($this->container['object'] === null) {
+            $invalidProperties[] = "'object' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -343,325 +269,28 @@ class ReservationCreatedPayload implements ModelInterface, ArrayAccess, JsonSeri
 
 
     /**
-     * Gets id
+     * Gets object
      *
-     * @return int|null
+     * @return \Repull\Model\ReservationWebhookObject
      */
-    public function getId(): ?int
+    public function getObject(): \Repull\Model\ReservationWebhookObject
     {
-        return $this->container['id'];
+        return $this->container['object'];
     }
 
     /**
-     * Sets id
+     * Sets object
      *
-     * @param int|null $id id
+     * @param \Repull\Model\ReservationWebhookObject $object object
      *
      * @return $this
      */
-    public function setId(?int $id): static
+    public function setObject(\Repull\Model\ReservationWebhookObject $object): static
     {
-        if (is_null($id)) {
-            throw new InvalidArgumentException('non-nullable id cannot be null');
+        if (is_null($object)) {
+            throw new InvalidArgumentException('non-nullable object cannot be null');
         }
-        $this->container['id'] = $id;
-
-        return $this;
-    }
-
-    /**
-     * Gets confirmation_code
-     *
-     * @return string|null
-     */
-    public function getConfirmationCode(): ?string
-    {
-        return $this->container['confirmation_code'];
-    }
-
-    /**
-     * Sets confirmation_code
-     *
-     * @param string|null $confirmation_code confirmation_code
-     *
-     * @return $this
-     */
-    public function setConfirmationCode(?string $confirmation_code): static
-    {
-        if (is_null($confirmation_code)) {
-            throw new InvalidArgumentException('non-nullable confirmation_code cannot be null');
-        }
-        $this->container['confirmation_code'] = $confirmation_code;
-
-        return $this;
-    }
-
-    /**
-     * Gets listing_id
-     *
-     * @return int|null
-     */
-    public function getListingId(): ?int
-    {
-        return $this->container['listing_id'];
-    }
-
-    /**
-     * Sets listing_id
-     *
-     * @param int|null $listing_id listing_id
-     *
-     * @return $this
-     */
-    public function setListingId(?int $listing_id): static
-    {
-        if (is_null($listing_id)) {
-            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
-        }
-        $this->container['listing_id'] = $listing_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets platform
-     *
-     * @return string|null
-     */
-    public function getPlatform(): ?string
-    {
-        return $this->container['platform'];
-    }
-
-    /**
-     * Sets platform
-     *
-     * @param string|null $platform platform
-     *
-     * @return $this
-     */
-    public function setPlatform(?string $platform): static
-    {
-        if (is_null($platform)) {
-            throw new InvalidArgumentException('non-nullable platform cannot be null');
-        }
-        $this->container['platform'] = $platform;
-
-        return $this;
-    }
-
-    /**
-     * Gets status
-     *
-     * @return string|null
-     */
-    public function getStatus(): ?string
-    {
-        return $this->container['status'];
-    }
-
-    /**
-     * Sets status
-     *
-     * @param string|null $status status
-     *
-     * @return $this
-     */
-    public function setStatus(?string $status): static
-    {
-        if (is_null($status)) {
-            throw new InvalidArgumentException('non-nullable status cannot be null');
-        }
-        $this->container['status'] = $status;
-
-        return $this;
-    }
-
-    /**
-     * Gets check_in
-     *
-     * @return \DateTime|null
-     */
-    public function getCheckIn(): ?\DateTime
-    {
-        return $this->container['check_in'];
-    }
-
-    /**
-     * Sets check_in
-     *
-     * @param \DateTime|null $check_in check_in
-     *
-     * @return $this
-     */
-    public function setCheckIn(?\DateTime $check_in): static
-    {
-        if (is_null($check_in)) {
-            throw new InvalidArgumentException('non-nullable check_in cannot be null');
-        }
-        $this->container['check_in'] = $check_in;
-
-        return $this;
-    }
-
-    /**
-     * Gets check_out
-     *
-     * @return \DateTime|null
-     */
-    public function getCheckOut(): ?\DateTime
-    {
-        return $this->container['check_out'];
-    }
-
-    /**
-     * Sets check_out
-     *
-     * @param \DateTime|null $check_out check_out
-     *
-     * @return $this
-     */
-    public function setCheckOut(?\DateTime $check_out): static
-    {
-        if (is_null($check_out)) {
-            throw new InvalidArgumentException('non-nullable check_out cannot be null');
-        }
-        $this->container['check_out'] = $check_out;
-
-        return $this;
-    }
-
-    /**
-     * Gets nights
-     *
-     * @return int|null
-     */
-    public function getNights(): ?int
-    {
-        return $this->container['nights'];
-    }
-
-    /**
-     * Sets nights
-     *
-     * @param int|null $nights nights
-     *
-     * @return $this
-     */
-    public function setNights(?int $nights): static
-    {
-        if (is_null($nights)) {
-            throw new InvalidArgumentException('non-nullable nights cannot be null');
-        }
-        $this->container['nights'] = $nights;
-
-        return $this;
-    }
-
-    /**
-     * Gets guests
-     *
-     * @return \Repull\Model\ReservationCreatedPayloadGuests|null
-     */
-    public function getGuests(): ?\Repull\Model\ReservationCreatedPayloadGuests
-    {
-        return $this->container['guests'];
-    }
-
-    /**
-     * Sets guests
-     *
-     * @param \Repull\Model\ReservationCreatedPayloadGuests|null $guests guests
-     *
-     * @return $this
-     */
-    public function setGuests(?\Repull\Model\ReservationCreatedPayloadGuests $guests): static
-    {
-        if (is_null($guests)) {
-            throw new InvalidArgumentException('non-nullable guests cannot be null');
-        }
-        $this->container['guests'] = $guests;
-
-        return $this;
-    }
-
-    /**
-     * Gets primary_guest
-     *
-     * @return \Repull\Model\ReservationCreatedPayloadPrimaryGuest|null
-     */
-    public function getPrimaryGuest(): ?\Repull\Model\ReservationCreatedPayloadPrimaryGuest
-    {
-        return $this->container['primary_guest'];
-    }
-
-    /**
-     * Sets primary_guest
-     *
-     * @param \Repull\Model\ReservationCreatedPayloadPrimaryGuest|null $primary_guest primary_guest
-     *
-     * @return $this
-     */
-    public function setPrimaryGuest(?\Repull\Model\ReservationCreatedPayloadPrimaryGuest $primary_guest): static
-    {
-        if (is_null($primary_guest)) {
-            throw new InvalidArgumentException('non-nullable primary_guest cannot be null');
-        }
-        $this->container['primary_guest'] = $primary_guest;
-
-        return $this;
-    }
-
-    /**
-     * Gets pricing
-     *
-     * @return \Repull\Model\ReservationCreatedPayloadPricing|null
-     */
-    public function getPricing(): ?\Repull\Model\ReservationCreatedPayloadPricing
-    {
-        return $this->container['pricing'];
-    }
-
-    /**
-     * Sets pricing
-     *
-     * @param \Repull\Model\ReservationCreatedPayloadPricing|null $pricing pricing
-     *
-     * @return $this
-     */
-    public function setPricing(?\Repull\Model\ReservationCreatedPayloadPricing $pricing): static
-    {
-        if (is_null($pricing)) {
-            throw new InvalidArgumentException('non-nullable pricing cannot be null');
-        }
-        $this->container['pricing'] = $pricing;
-
-        return $this;
-    }
-
-    /**
-     * Gets created_at
-     *
-     * @return \DateTime|null
-     */
-    public function getCreatedAt(): ?\DateTime
-    {
-        return $this->container['created_at'];
-    }
-
-    /**
-     * Sets created_at
-     *
-     * @param \DateTime|null $created_at created_at
-     *
-     * @return $this
-     */
-    public function setCreatedAt(?\DateTime $created_at): static
-    {
-        if (is_null($created_at)) {
-            throw new InvalidArgumentException('non-nullable created_at cannot be null');
-        }
-        $this->container['created_at'] = $created_at;
+        $this->container['object'] = $object;
 
         return $this;
     }

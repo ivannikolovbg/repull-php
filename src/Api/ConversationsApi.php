@@ -495,6 +495,7 @@ class ConversationsApi
      * @param  int $id Internal Repull thread id. (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit limit (optional, default to 20)
      * @param  string|null $order &#x60;desc&#x60; (default) returns newest first. &#x60;asc&#x60; returns chronological replay. (optional, default to 'desc')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConversationMessages'] to see the possible values for this operation
@@ -507,12 +508,13 @@ class ConversationsApi
         int $id,
         ?string $x_schema = null,
         ?string $cursor = null,
+        ?int $offset = 0,
         ?int $limit = 20,
         ?string $order = 'desc',
         string $contentType = self::contentTypes['listConversationMessages'][0]
     ): \Repull\Model\MessageListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listConversationMessagesWithHttpInfo($id, $x_schema, $cursor, $limit, $order, $contentType);
+        list($response) = $this->listConversationMessagesWithHttpInfo($id, $x_schema, $cursor, $offset, $limit, $order, $contentType);
         return $response;
     }
 
@@ -524,6 +526,7 @@ class ConversationsApi
      * @param  int $id Internal Repull thread id. (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $order &#x60;desc&#x60; (default) returns newest first. &#x60;asc&#x60; returns chronological replay. (optional, default to 'desc')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConversationMessages'] to see the possible values for this operation
@@ -536,12 +539,13 @@ class ConversationsApi
         int $id,
         ?string $x_schema = null,
         ?string $cursor = null,
+        ?int $offset = 0,
         ?int $limit = 20,
         ?string $order = 'desc',
         string $contentType = self::contentTypes['listConversationMessages'][0]
     ): array
     {
-        $request = $this->listConversationMessagesRequest($id, $x_schema, $cursor, $limit, $order, $contentType);
+        $request = $this->listConversationMessagesRequest($id, $x_schema, $cursor, $offset, $limit, $order, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -687,6 +691,7 @@ class ConversationsApi
      * @param  int $id Internal Repull thread id. (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $order &#x60;desc&#x60; (default) returns newest first. &#x60;asc&#x60; returns chronological replay. (optional, default to 'desc')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConversationMessages'] to see the possible values for this operation
@@ -698,12 +703,13 @@ class ConversationsApi
         int $id,
         ?string $x_schema = null,
         ?string $cursor = null,
+        ?int $offset = 0,
         ?int $limit = 20,
         ?string $order = 'desc',
         string $contentType = self::contentTypes['listConversationMessages'][0]
     ): PromiseInterface
     {
-        return $this->listConversationMessagesAsyncWithHttpInfo($id, $x_schema, $cursor, $limit, $order, $contentType)
+        return $this->listConversationMessagesAsyncWithHttpInfo($id, $x_schema, $cursor, $offset, $limit, $order, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -719,6 +725,7 @@ class ConversationsApi
      * @param  int $id Internal Repull thread id. (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $order &#x60;desc&#x60; (default) returns newest first. &#x60;asc&#x60; returns chronological replay. (optional, default to 'desc')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConversationMessages'] to see the possible values for this operation
@@ -730,13 +737,14 @@ class ConversationsApi
         int $id,
         ?string $x_schema = null,
         ?string $cursor = null,
+        ?int $offset = 0,
         ?int $limit = 20,
         ?string $order = 'desc',
         string $contentType = self::contentTypes['listConversationMessages'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\MessageListResponse';
-        $request = $this->listConversationMessagesRequest($id, $x_schema, $cursor, $limit, $order, $contentType);
+        $request = $this->listConversationMessagesRequest($id, $x_schema, $cursor, $offset, $limit, $order, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -780,6 +788,7 @@ class ConversationsApi
      * @param  int $id Internal Repull thread id. (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $order &#x60;desc&#x60; (default) returns newest first. &#x60;asc&#x60; returns chronological replay. (optional, default to 'desc')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConversationMessages'] to see the possible values for this operation
@@ -791,6 +800,7 @@ class ConversationsApi
         int $id,
         ?string $x_schema = null,
         ?string $cursor = null,
+        ?int $offset = 0,
         ?int $limit = 20,
         ?string $order = 'desc',
         string $contentType = self::contentTypes['listConversationMessages'][0]
@@ -806,6 +816,13 @@ class ConversationsApi
 
 
 
+        if ($offset !== null && $offset > 10000) {
+            throw new InvalidArgumentException('invalid value for "$offset" when calling ConversationsApi.listConversationMessages, must be smaller than or equal to 10000.');
+        }
+        if ($offset !== null && $offset < 0) {
+            throw new InvalidArgumentException('invalid value for "$offset" when calling ConversationsApi.listConversationMessages, must be bigger than or equal to 0.');
+        }
+        
         if ($limit !== null && $limit > 100) {
             throw new InvalidArgumentException('invalid value for "$limit" when calling ConversationsApi.listConversationMessages, must be smaller than or equal to 100.');
         }
@@ -827,6 +844,15 @@ class ConversationsApi
             $cursor,
             'cursor', // param base name
             'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $offset,
+            'offset', // param base name
+            'integer', // openApiType
             'form', // style
             true, // explode
             false // required

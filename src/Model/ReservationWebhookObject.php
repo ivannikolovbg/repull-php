@@ -1,6 +1,6 @@
 <?php
 /**
- * ReservationCancelledPayloadRefund
+ * ReservationWebhookObject
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ReservationCancelledPayloadRefund Class Doc Comment
+ * ReservationWebhookObject Class Doc Comment
  *
+ * @description Lightweight reservation snapshot delivered as &#x60;data.object&#x60; on every reservation webhook event. Stable across &#x60;reservation.created&#x60;, &#x60;reservation.updated&#x60;, and &#x60;reservation.cancelled&#x60;. Fetch the full reservation via &#x60;GET /v1/reservations/{id}&#x60; if you need pricing, guest contact info, or audit history — those are deliberately omitted to keep deliveries small.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ReservationCancelledPayloadRefund implements ModelInterface, ArrayAccess, JsonSerializable
+class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class ReservationCancelledPayloadRefund implements ModelInterface, ArrayAccess, 
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ReservationCancelledPayload_refund';
+    protected static string $openAPIModelName = 'ReservationWebhookObject';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +60,14 @@ class ReservationCancelledPayloadRefund implements ModelInterface, ArrayAccess, 
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'amount' => 'string',
-        'currency' => 'string'
+        'id' => 'int',
+        'uid' => 'string',
+        'channel' => 'string',
+        'listing_id' => 'int',
+        'customer_id' => 'int',
+        'checkin_date' => '\DateTime',
+        'checkout_date' => '\DateTime',
+        'status' => 'string'
     ];
 
     /**
@@ -69,8 +76,14 @@ class ReservationCancelledPayloadRefund implements ModelInterface, ArrayAccess, 
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'amount' => null,
-        'currency' => null
+        'id' => null,
+        'uid' => null,
+        'channel' => null,
+        'listing_id' => null,
+        'customer_id' => null,
+        'checkin_date' => 'date',
+        'checkout_date' => 'date',
+        'status' => null
     ];
 
     /**
@@ -79,8 +92,14 @@ class ReservationCancelledPayloadRefund implements ModelInterface, ArrayAccess, 
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'amount' => false,
-        'currency' => false
+        'id' => false,
+        'uid' => false,
+        'channel' => false,
+        'listing_id' => false,
+        'customer_id' => false,
+        'checkin_date' => false,
+        'checkout_date' => false,
+        'status' => false
     ];
 
     /**
@@ -159,8 +178,14 @@ class ReservationCancelledPayloadRefund implements ModelInterface, ArrayAccess, 
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'amount' => 'amount',
-        'currency' => 'currency'
+        'id' => 'id',
+        'uid' => 'uid',
+        'channel' => 'channel',
+        'listing_id' => 'listingId',
+        'customer_id' => 'customerId',
+        'checkin_date' => 'checkinDate',
+        'checkout_date' => 'checkoutDate',
+        'status' => 'status'
     ];
 
     /**
@@ -169,8 +194,14 @@ class ReservationCancelledPayloadRefund implements ModelInterface, ArrayAccess, 
      * @var array<string, string>
      */
     protected static array $setters = [
-        'amount' => 'setAmount',
-        'currency' => 'setCurrency'
+        'id' => 'setId',
+        'uid' => 'setUid',
+        'channel' => 'setChannel',
+        'listing_id' => 'setListingId',
+        'customer_id' => 'setCustomerId',
+        'checkin_date' => 'setCheckinDate',
+        'checkout_date' => 'setCheckoutDate',
+        'status' => 'setStatus'
     ];
 
     /**
@@ -179,8 +210,14 @@ class ReservationCancelledPayloadRefund implements ModelInterface, ArrayAccess, 
      * @var array<string, string>
      */
     protected static array $getters = [
-        'amount' => 'getAmount',
-        'currency' => 'getCurrency'
+        'id' => 'getId',
+        'uid' => 'getUid',
+        'channel' => 'getChannel',
+        'listing_id' => 'getListingId',
+        'customer_id' => 'getCustomerId',
+        'checkin_date' => 'getCheckinDate',
+        'checkout_date' => 'getCheckoutDate',
+        'status' => 'getStatus'
     ];
 
     /**
@@ -230,8 +267,14 @@ class ReservationCancelledPayloadRefund implements ModelInterface, ArrayAccess, 
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('amount', $data ?? [], null);
-        $this->setIfExists('currency', $data ?? [], null);
+        $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('uid', $data ?? [], null);
+        $this->setIfExists('channel', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('customer_id', $data ?? [], null);
+        $this->setIfExists('checkin_date', $data ?? [], null);
+        $this->setIfExists('checkout_date', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
     }
 
     /**
@@ -259,6 +302,30 @@ class ReservationCancelledPayloadRefund implements ModelInterface, ArrayAccess, 
     {
         $invalidProperties = [];
 
+        if ($this->container['id'] === null) {
+            $invalidProperties[] = "'id' can't be null";
+        }
+        if ($this->container['uid'] === null) {
+            $invalidProperties[] = "'uid' can't be null";
+        }
+        if ($this->container['channel'] === null) {
+            $invalidProperties[] = "'channel' can't be null";
+        }
+        if ($this->container['listing_id'] === null) {
+            $invalidProperties[] = "'listing_id' can't be null";
+        }
+        if ($this->container['customer_id'] === null) {
+            $invalidProperties[] = "'customer_id' can't be null";
+        }
+        if ($this->container['checkin_date'] === null) {
+            $invalidProperties[] = "'checkin_date' can't be null";
+        }
+        if ($this->container['checkout_date'] === null) {
+            $invalidProperties[] = "'checkout_date' can't be null";
+        }
+        if ($this->container['status'] === null) {
+            $invalidProperties[] = "'status' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -272,55 +339,217 @@ class ReservationCancelledPayloadRefund implements ModelInterface, ArrayAccess, 
 
 
     /**
-     * Gets amount
+     * Gets id
      *
-     * @return string|null
+     * @return int
      */
-    public function getAmount(): ?string
+    public function getId(): int
     {
-        return $this->container['amount'];
+        return $this->container['id'];
     }
 
     /**
-     * Sets amount
+     * Sets id
      *
-     * @param string|null $amount amount
+     * @param int $id Repull-internal reservation id. Pass to `GET /v1/reservations/{id}`.
      *
      * @return $this
      */
-    public function setAmount(?string $amount): static
+    public function setId(int $id): static
     {
-        if (is_null($amount)) {
-            throw new InvalidArgumentException('non-nullable amount cannot be null');
+        if (is_null($id)) {
+            throw new InvalidArgumentException('non-nullable id cannot be null');
         }
-        $this->container['amount'] = $amount;
+        $this->container['id'] = $id;
 
         return $this;
     }
 
     /**
-     * Gets currency
+     * Gets uid
      *
-     * @return string|null
+     * @return string
      */
-    public function getCurrency(): ?string
+    public function getUid(): string
     {
-        return $this->container['currency'];
+        return $this->container['uid'];
     }
 
     /**
-     * Sets currency
+     * Sets uid
      *
-     * @param string|null $currency currency
+     * @param string $uid Channel-side confirmation code (Airbnb HM-prefixed, Booking.com numeric, etc.). Stable across the lifetime of the reservation.
      *
      * @return $this
      */
-    public function setCurrency(?string $currency): static
+    public function setUid(string $uid): static
     {
-        if (is_null($currency)) {
-            throw new InvalidArgumentException('non-nullable currency cannot be null');
+        if (is_null($uid)) {
+            throw new InvalidArgumentException('non-nullable uid cannot be null');
         }
-        $this->container['currency'] = $currency;
+        $this->container['uid'] = $uid;
+
+        return $this;
+    }
+
+    /**
+     * Gets channel
+     *
+     * @return string
+     */
+    public function getChannel(): string
+    {
+        return $this->container['channel'];
+    }
+
+    /**
+     * Sets channel
+     *
+     * @param string $channel Source channel — `airbnb`, `booking`, `vrbo`, `direct`, `owner`, `mid_stay_clean`, etc.
+     *
+     * @return $this
+     */
+    public function setChannel(string $channel): static
+    {
+        if (is_null($channel)) {
+            throw new InvalidArgumentException('non-nullable channel cannot be null');
+        }
+        $this->container['channel'] = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_id
+     *
+     * @return int
+     */
+    public function getListingId(): int
+    {
+        return $this->container['listing_id'];
+    }
+
+    /**
+     * Sets listing_id
+     *
+     * @param int $listing_id Repull listing id this reservation is on.
+     *
+     * @return $this
+     */
+    public function setListingId(int $listing_id): static
+    {
+        if (is_null($listing_id)) {
+            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
+        }
+        $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets customer_id
+     *
+     * @return int
+     */
+    public function getCustomerId(): int
+    {
+        return $this->container['customer_id'];
+    }
+
+    /**
+     * Sets customer_id
+     *
+     * @param int $customer_id Workspace (customer) id this reservation belongs to.
+     *
+     * @return $this
+     */
+    public function setCustomerId(int $customer_id): static
+    {
+        if (is_null($customer_id)) {
+            throw new InvalidArgumentException('non-nullable customer_id cannot be null');
+        }
+        $this->container['customer_id'] = $customer_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets checkin_date
+     *
+     * @return \DateTime
+     */
+    public function getCheckinDate(): \DateTime
+    {
+        return $this->container['checkin_date'];
+    }
+
+    /**
+     * Sets checkin_date
+     *
+     * @param \DateTime $checkin_date Check-in date (local property date, no timezone).
+     *
+     * @return $this
+     */
+    public function setCheckinDate(\DateTime $checkin_date): static
+    {
+        if (is_null($checkin_date)) {
+            throw new InvalidArgumentException('non-nullable checkin_date cannot be null');
+        }
+        $this->container['checkin_date'] = $checkin_date;
+
+        return $this;
+    }
+
+    /**
+     * Gets checkout_date
+     *
+     * @return \DateTime
+     */
+    public function getCheckoutDate(): \DateTime
+    {
+        return $this->container['checkout_date'];
+    }
+
+    /**
+     * Sets checkout_date
+     *
+     * @param \DateTime $checkout_date Check-out date (local property date, no timezone).
+     *
+     * @return $this
+     */
+    public function setCheckoutDate(\DateTime $checkout_date): static
+    {
+        if (is_null($checkout_date)) {
+            throw new InvalidArgumentException('non-nullable checkout_date cannot be null');
+        }
+        $this->container['checkout_date'] = $checkout_date;
+
+        return $this;
+    }
+
+    /**
+     * Gets status
+     *
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->container['status'];
+    }
+
+    /**
+     * Sets status
+     *
+     * @param string $status Lifecycle status — typically `confirmed`, `cancelled`, `pending`, `inquiry`.
+     *
+     * @return $this
+     */
+    public function setStatus(string $status): static
+    {
+        if (is_null($status)) {
+            throw new InvalidArgumentException('non-nullable status cannot be null');
+        }
+        $this->container['status'] = $status;
 
         return $this;
     }

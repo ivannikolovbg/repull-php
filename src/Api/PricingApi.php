@@ -1164,6 +1164,7 @@ class PricingApi
      * @param  \DateTime|null $end_date Inclusive. Defaults to today + 90 days. (optional)
      * @param  int|null $limit limit (optional, default to 100)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListingPricingHistory'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -1176,10 +1177,11 @@ class PricingApi
         ?\DateTime $end_date = null,
         ?int $limit = 100,
         ?string $cursor = null,
+        ?int $offset = 0,
         string $contentType = self::contentTypes['getListingPricingHistory'][0]
     ): \Repull\Model\ListingPricingHistoryResponse|\Repull\Model\Error
     {
-        list($response) = $this->getListingPricingHistoryWithHttpInfo($id, $start_date, $end_date, $limit, $cursor, $contentType);
+        list($response) = $this->getListingPricingHistoryWithHttpInfo($id, $start_date, $end_date, $limit, $cursor, $offset, $contentType);
         return $response;
     }
 
@@ -1193,6 +1195,7 @@ class PricingApi
      * @param  \DateTime|null $end_date Inclusive. Defaults to today + 90 days. (optional)
      * @param  int|null $limit (optional, default to 100)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListingPricingHistory'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -1205,10 +1208,11 @@ class PricingApi
         ?\DateTime $end_date = null,
         ?int $limit = 100,
         ?string $cursor = null,
+        ?int $offset = 0,
         string $contentType = self::contentTypes['getListingPricingHistory'][0]
     ): array
     {
-        $request = $this->getListingPricingHistoryRequest($id, $start_date, $end_date, $limit, $cursor, $contentType);
+        $request = $this->getListingPricingHistoryRequest($id, $start_date, $end_date, $limit, $cursor, $offset, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1356,6 +1360,7 @@ class PricingApi
      * @param  \DateTime|null $end_date Inclusive. Defaults to today + 90 days. (optional)
      * @param  int|null $limit (optional, default to 100)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListingPricingHistory'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1367,10 +1372,11 @@ class PricingApi
         ?\DateTime $end_date = null,
         ?int $limit = 100,
         ?string $cursor = null,
+        ?int $offset = 0,
         string $contentType = self::contentTypes['getListingPricingHistory'][0]
     ): PromiseInterface
     {
-        return $this->getListingPricingHistoryAsyncWithHttpInfo($id, $start_date, $end_date, $limit, $cursor, $contentType)
+        return $this->getListingPricingHistoryAsyncWithHttpInfo($id, $start_date, $end_date, $limit, $cursor, $offset, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1388,6 +1394,7 @@ class PricingApi
      * @param  \DateTime|null $end_date Inclusive. Defaults to today + 90 days. (optional)
      * @param  int|null $limit (optional, default to 100)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListingPricingHistory'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1399,11 +1406,12 @@ class PricingApi
         ?\DateTime $end_date = null,
         ?int $limit = 100,
         ?string $cursor = null,
+        ?int $offset = 0,
         string $contentType = self::contentTypes['getListingPricingHistory'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ListingPricingHistoryResponse';
-        $request = $this->getListingPricingHistoryRequest($id, $start_date, $end_date, $limit, $cursor, $contentType);
+        $request = $this->getListingPricingHistoryRequest($id, $start_date, $end_date, $limit, $cursor, $offset, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1449,6 +1457,7 @@ class PricingApi
      * @param  \DateTime|null $end_date Inclusive. Defaults to today + 90 days. (optional)
      * @param  int|null $limit (optional, default to 100)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListingPricingHistory'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1460,6 +1469,7 @@ class PricingApi
         ?\DateTime $end_date = null,
         ?int $limit = 100,
         ?string $cursor = null,
+        ?int $offset = 0,
         string $contentType = self::contentTypes['getListingPricingHistory'][0]
     ): Request
     {
@@ -1481,6 +1491,13 @@ class PricingApi
         }
         
 
+        if ($offset !== null && $offset > 10000) {
+            throw new InvalidArgumentException('invalid value for "$offset" when calling PricingApi.getListingPricingHistory, must be smaller than or equal to 10000.');
+        }
+        if ($offset !== null && $offset < 0) {
+            throw new InvalidArgumentException('invalid value for "$offset" when calling PricingApi.getListingPricingHistory, must be bigger than or equal to 0.');
+        }
+        
 
         $resourcePath = '/v1/listings/{id}/pricing/history';
         $formParams = [];
@@ -1521,6 +1538,15 @@ class PricingApi
             $cursor,
             'cursor', // param base name
             'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $offset,
+            'offset', // param base name
+            'integer', // openApiType
             'form', // style
             true, // explode
             false // required

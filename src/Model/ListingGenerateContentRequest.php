@@ -321,7 +321,7 @@ class ListingGenerateContentRequest implements ModelInterface, ArrayAccess, Json
     /**
      * Sets photos
      *
-     * @param string[]|null $photos Up to 8 reference photos. When present, Kimi K2 vision is used for grounded copy.
+     * @param string[]|null $photos Up to 8 reference photos. When present, Repull AI vision is used for grounded copy.
      *
      * @return $this
      */

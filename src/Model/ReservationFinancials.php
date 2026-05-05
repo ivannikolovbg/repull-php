@@ -1,6 +1,6 @@
 <?php
 /**
- * ReservationCreatedPayloadGuests
+ * ReservationFinancials
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ReservationCreatedPayloadGuests Class Doc Comment
+ * ReservationFinancials Class Doc Comment
  *
+ * @description Normalized money block. &#x60;totalPrice&#x60; is a &#x60;number&#x60; (NOT a decimal-as-string) — the legacy top-level &#x60;totalPrice&#x60; string field is kept on the parent for back-compat but is deprecated.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ReservationCreatedPayloadGuests implements ModelInterface, ArrayAccess, JsonSerializable
+class ReservationFinancials implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class ReservationCreatedPayloadGuests implements ModelInterface, ArrayAccess, Js
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ReservationCreatedPayload_guests';
+    protected static string $openAPIModelName = 'ReservationFinancials';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,9 +60,9 @@ class ReservationCreatedPayloadGuests implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'adults' => 'int',
-        'children' => 'int',
-        'infants' => 'int'
+        'total_price' => 'float',
+        'currency' => 'string',
+        'payment_status' => 'string'
     ];
 
     /**
@@ -70,9 +71,9 @@ class ReservationCreatedPayloadGuests implements ModelInterface, ArrayAccess, Js
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'adults' => null,
-        'children' => null,
-        'infants' => null
+        'total_price' => null,
+        'currency' => null,
+        'payment_status' => null
     ];
 
     /**
@@ -81,9 +82,9 @@ class ReservationCreatedPayloadGuests implements ModelInterface, ArrayAccess, Js
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'adults' => false,
-        'children' => false,
-        'infants' => false
+        'total_price' => true,
+        'currency' => true,
+        'payment_status' => true
     ];
 
     /**
@@ -162,9 +163,9 @@ class ReservationCreatedPayloadGuests implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'adults' => 'adults',
-        'children' => 'children',
-        'infants' => 'infants'
+        'total_price' => 'totalPrice',
+        'currency' => 'currency',
+        'payment_status' => 'paymentStatus'
     ];
 
     /**
@@ -173,9 +174,9 @@ class ReservationCreatedPayloadGuests implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $setters = [
-        'adults' => 'setAdults',
-        'children' => 'setChildren',
-        'infants' => 'setInfants'
+        'total_price' => 'setTotalPrice',
+        'currency' => 'setCurrency',
+        'payment_status' => 'setPaymentStatus'
     ];
 
     /**
@@ -184,9 +185,9 @@ class ReservationCreatedPayloadGuests implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $getters = [
-        'adults' => 'getAdults',
-        'children' => 'getChildren',
-        'infants' => 'getInfants'
+        'total_price' => 'getTotalPrice',
+        'currency' => 'getCurrency',
+        'payment_status' => 'getPaymentStatus'
     ];
 
     /**
@@ -236,9 +237,9 @@ class ReservationCreatedPayloadGuests implements ModelInterface, ArrayAccess, Js
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('adults', $data ?? [], null);
-        $this->setIfExists('children', $data ?? [], null);
-        $this->setIfExists('infants', $data ?? [], null);
+        $this->setIfExists('total_price', $data ?? [], null);
+        $this->setIfExists('currency', $data ?? [], null);
+        $this->setIfExists('payment_status', $data ?? [], null);
     }
 
     /**
@@ -279,82 +280,103 @@ class ReservationCreatedPayloadGuests implements ModelInterface, ArrayAccess, Js
 
 
     /**
-     * Gets adults
+     * Gets total_price
      *
-     * @return int|null
+     * @return float|null
      */
-    public function getAdults(): ?int
+    public function getTotalPrice(): ?float
     {
-        return $this->container['adults'];
+        return $this->container['total_price'];
     }
 
     /**
-     * Sets adults
+     * Sets total_price
      *
-     * @param int|null $adults adults
+     * @param float|null $total_price Stay total in `currency`. Number, not string.
      *
      * @return $this
      */
-    public function setAdults(?int $adults): static
+    public function setTotalPrice(?float $total_price): static
     {
-        if (is_null($adults)) {
-            throw new InvalidArgumentException('non-nullable adults cannot be null');
+        if (is_null($total_price)) {
+            array_push($this->openAPINullablesSetToNull, 'total_price');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('total_price', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['adults'] = $adults;
+        $this->container['total_price'] = $total_price;
 
         return $this;
     }
 
     /**
-     * Gets children
+     * Gets currency
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getChildren(): ?int
+    public function getCurrency(): ?string
     {
-        return $this->container['children'];
+        return $this->container['currency'];
     }
 
     /**
-     * Sets children
+     * Sets currency
      *
-     * @param int|null $children children
+     * @param string|null $currency ISO 4217 currency code.
      *
      * @return $this
      */
-    public function setChildren(?int $children): static
+    public function setCurrency(?string $currency): static
     {
-        if (is_null($children)) {
-            throw new InvalidArgumentException('non-nullable children cannot be null');
+        if (is_null($currency)) {
+            array_push($this->openAPINullablesSetToNull, 'currency');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('currency', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['children'] = $children;
+        $this->container['currency'] = $currency;
 
         return $this;
     }
 
     /**
-     * Gets infants
+     * Gets payment_status
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getInfants(): ?int
+    public function getPaymentStatus(): ?string
     {
-        return $this->container['infants'];
+        return $this->container['payment_status'];
     }
 
     /**
-     * Sets infants
+     * Sets payment_status
      *
-     * @param int|null $infants infants
+     * @param string|null $payment_status Payment lifecycle status (e.g. `pending`, `paid`, `refunded`).
      *
      * @return $this
      */
-    public function setInfants(?int $infants): static
+    public function setPaymentStatus(?string $payment_status): static
     {
-        if (is_null($infants)) {
-            throw new InvalidArgumentException('non-nullable infants cannot be null');
+        if (is_null($payment_status)) {
+            array_push($this->openAPINullablesSetToNull, 'payment_status');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('payment_status', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['infants'] = $infants;
+        $this->container['payment_status'] = $payment_status;
 
         return $this;
     }

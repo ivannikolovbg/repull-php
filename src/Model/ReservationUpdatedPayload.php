@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * ReservationUpdatedPayload Class Doc Comment
  *
- * @description Payload for &#x60;reservation.updated&#x60;. Dates, guest count, status, or pricing changed on an existing reservation. The &#x60;changes&#x60; map carries &#x60;{ from, to }&#x60; deltas for each field that moved.
+ * @description Payload for &#x60;reservation.updated&#x60;. Dates, status, or any tracked field changed on an existing reservation. &#x60;data.object&#x60; is the post-change snapshot; &#x60;data.previousAttributes&#x60; lists ONLY the fields that actually moved, with their prior values. Fields not in &#x60;previousAttributes&#x60; did not change.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -60,10 +60,8 @@ class ReservationUpdatedPayload implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'int',
-        'confirmation_code' => 'string',
-        'changes' => 'array<string,mixed>',
-        'updated_at' => '\DateTime'
+        'object' => '\Repull\Model\ReservationWebhookObject',
+        'previous_attributes' => 'array<string,mixed>'
     ];
 
     /**
@@ -72,10 +70,8 @@ class ReservationUpdatedPayload implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'id' => null,
-        'confirmation_code' => null,
-        'changes' => null,
-        'updated_at' => 'date-time'
+        'object' => null,
+        'previous_attributes' => null
     ];
 
     /**
@@ -84,10 +80,8 @@ class ReservationUpdatedPayload implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => false,
-        'confirmation_code' => false,
-        'changes' => false,
-        'updated_at' => false
+        'object' => false,
+        'previous_attributes' => false
     ];
 
     /**
@@ -166,10 +160,8 @@ class ReservationUpdatedPayload implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'id' => 'id',
-        'confirmation_code' => 'confirmationCode',
-        'changes' => 'changes',
-        'updated_at' => 'updatedAt'
+        'object' => 'object',
+        'previous_attributes' => 'previousAttributes'
     ];
 
     /**
@@ -178,10 +170,8 @@ class ReservationUpdatedPayload implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $setters = [
-        'id' => 'setId',
-        'confirmation_code' => 'setConfirmationCode',
-        'changes' => 'setChanges',
-        'updated_at' => 'setUpdatedAt'
+        'object' => 'setObject',
+        'previous_attributes' => 'setPreviousAttributes'
     ];
 
     /**
@@ -190,10 +180,8 @@ class ReservationUpdatedPayload implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $getters = [
-        'id' => 'getId',
-        'confirmation_code' => 'getConfirmationCode',
-        'changes' => 'getChanges',
-        'updated_at' => 'getUpdatedAt'
+        'object' => 'getObject',
+        'previous_attributes' => 'getPreviousAttributes'
     ];
 
     /**
@@ -243,10 +231,8 @@ class ReservationUpdatedPayload implements ModelInterface, ArrayAccess, JsonSeri
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('confirmation_code', $data ?? [], null);
-        $this->setIfExists('changes', $data ?? [], null);
-        $this->setIfExists('updated_at', $data ?? [], null);
+        $this->setIfExists('object', $data ?? [], null);
+        $this->setIfExists('previous_attributes', $data ?? [], null);
     }
 
     /**
@@ -274,6 +260,9 @@ class ReservationUpdatedPayload implements ModelInterface, ArrayAccess, JsonSeri
     {
         $invalidProperties = [];
 
+        if ($this->container['object'] === null) {
+            $invalidProperties[] = "'object' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -287,109 +276,55 @@ class ReservationUpdatedPayload implements ModelInterface, ArrayAccess, JsonSeri
 
 
     /**
-     * Gets id
+     * Gets object
      *
-     * @return int|null
+     * @return \Repull\Model\ReservationWebhookObject
      */
-    public function getId(): ?int
+    public function getObject(): \Repull\Model\ReservationWebhookObject
     {
-        return $this->container['id'];
+        return $this->container['object'];
     }
 
     /**
-     * Sets id
+     * Sets object
      *
-     * @param int|null $id id
+     * @param \Repull\Model\ReservationWebhookObject $object object
      *
      * @return $this
      */
-    public function setId(?int $id): static
+    public function setObject(\Repull\Model\ReservationWebhookObject $object): static
     {
-        if (is_null($id)) {
-            throw new InvalidArgumentException('non-nullable id cannot be null');
+        if (is_null($object)) {
+            throw new InvalidArgumentException('non-nullable object cannot be null');
         }
-        $this->container['id'] = $id;
+        $this->container['object'] = $object;
 
         return $this;
     }
 
     /**
-     * Gets confirmation_code
-     *
-     * @return string|null
-     */
-    public function getConfirmationCode(): ?string
-    {
-        return $this->container['confirmation_code'];
-    }
-
-    /**
-     * Sets confirmation_code
-     *
-     * @param string|null $confirmation_code confirmation_code
-     *
-     * @return $this
-     */
-    public function setConfirmationCode(?string $confirmation_code): static
-    {
-        if (is_null($confirmation_code)) {
-            throw new InvalidArgumentException('non-nullable confirmation_code cannot be null');
-        }
-        $this->container['confirmation_code'] = $confirmation_code;
-
-        return $this;
-    }
-
-    /**
-     * Gets changes
+     * Gets previous_attributes
      *
      * @return array<string,mixed>|null
      */
-    public function getChanges(): ?array
+    public function getPreviousAttributes(): ?array
     {
-        return $this->container['changes'];
+        return $this->container['previous_attributes'];
     }
 
     /**
-     * Sets changes
+     * Sets previous_attributes
      *
-     * @param array<string,mixed>|null $changes Map of `field` → `{ from, to }` pairs describing what changed.
+     * @param array<string,mixed>|null $previous_attributes Sparse map: every key here is a field on the reservation snapshot whose value changed in this event, mapped to its prior value. Mirrors the keys of `ReservationWebhookObject` (e.g. `checkinDate`, `checkoutDate`, `status`). Receivers can diff `object[k]` vs `previousAttributes[k]` to know what moved.
      *
      * @return $this
      */
-    public function setChanges(?array $changes): static
+    public function setPreviousAttributes(?array $previous_attributes): static
     {
-        if (is_null($changes)) {
-            throw new InvalidArgumentException('non-nullable changes cannot be null');
+        if (is_null($previous_attributes)) {
+            throw new InvalidArgumentException('non-nullable previous_attributes cannot be null');
         }
-        $this->container['changes'] = $changes;
-
-        return $this;
-    }
-
-    /**
-     * Gets updated_at
-     *
-     * @return \DateTime|null
-     */
-    public function getUpdatedAt(): ?\DateTime
-    {
-        return $this->container['updated_at'];
-    }
-
-    /**
-     * Sets updated_at
-     *
-     * @param \DateTime|null $updated_at updated_at
-     *
-     * @return $this
-     */
-    public function setUpdatedAt(?\DateTime $updated_at): static
-    {
-        if (is_null($updated_at)) {
-            throw new InvalidArgumentException('non-nullable updated_at cannot be null');
-        }
-        $this->container['updated_at'] = $updated_at;
+        $this->container['previous_attributes'] = $previous_attributes;
 
         return $this;
     }

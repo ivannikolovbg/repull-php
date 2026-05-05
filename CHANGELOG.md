@@ -5,31 +5,6 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.1] - 2026-05-04
-
-### Added — Studio routes (16 ops)
-
-Repull Studio is now reachable from the PHP SDK. New `Repull\Api\StudioApi`
-class covers all 10 paths and 16 operations:
-
-- `listStudioProjects`, `createStudioProject`, `getStudioProject`,
-  `updateStudioProject`, `deleteStudioProject`
-- `listStudioProjectFiles`, `upsertStudioProjectFile`,
-  `deleteStudioProjectFile`
-- `createStudioProjectGeneration`, `generateStudioCompletion`
-- `listStudioDeployments`, `createStudioDeployment`,
-  `getStudioDeployment`, `deleteStudioDeployment`,
-  `suspendStudioDeployment`, `wakeStudioDeployment`
-
-New models: `StudioProject`, `StudioFile`, `StudioGeneration`,
-`StudioDeployment`, `StudioError`.
-
-### Fixed
-- `relax-enums.php` post-codegen patcher now also rewrites `php-nextgen`'s
-  invalid slashed constant names (e.g. `TYPE_RESERVATION/CREATED`) into
-  syntactically valid PHP (`TYPE_RESERVATION_CREATED`). Surfaced when the
-  spec adopted dotted enum values for `WebhookEvent.type`.
-
 ## [0.2.0] - 2026-05-02
 
 ### Breaking

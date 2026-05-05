@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * Reservation Class Doc Comment
  *
- * @description A booking/reservation from a connected PMS. Identical shape between list-row (&#x60;GET /v1/reservations&#x60;) and detail (&#x60;GET /v1/reservations/{id}&#x60;) — SDK consumers can use the same type for both.
+ * @description A booking/reservation from a connected PMS. Identical shape between list-row (&#x60;GET /v1/reservations&#x60;) and detail (&#x60;GET /v1/reservations/{id}&#x60;) — SDK consumers can use the same type for both.  The canonical (post-2026-05) shape uses nested &#x60;primaryGuest&#x60;, &#x60;occupancy&#x60;, &#x60;financials&#x60; blocks. The legacy flat fields (&#x60;guestId&#x60;, &#x60;totalPrice&#x60;, &#x60;currency&#x60;, &#x60;guestDetails&#x60;) remain populated for back-compat and are marked &#x60;deprecated&#x60; here. New consumers should read from the nested blocks; existing consumers continue to work unchanged.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -66,12 +66,17 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_in' => '\DateTime',
         'check_out' => '\DateTime',
         'status' => 'string',
+        'source' => 'string',
         'platform' => 'string',
+        'confirmation_code' => 'string',
+        'primary_guest' => '\Repull\Model\ReservationPrimaryGuest',
+        'occupancy' => '\Repull\Model\ReservationOccupancy',
+        'financials' => '\Repull\Model\ReservationFinancials',
         'total_price' => 'string',
         'currency' => 'string',
-        'confirmation_code' => 'string',
         'guest_details' => 'array<string,mixed>',
         'created_at' => '\DateTime',
+        'booked_at' => '\DateTime',
         'guest_name' => 'string'
     ];
 
@@ -87,12 +92,17 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_in' => 'date',
         'check_out' => 'date',
         'status' => null,
+        'source' => null,
         'platform' => null,
+        'confirmation_code' => null,
+        'primary_guest' => null,
+        'occupancy' => null,
+        'financials' => null,
         'total_price' => null,
         'currency' => null,
-        'confirmation_code' => null,
         'guest_details' => null,
         'created_at' => 'date-time',
+        'booked_at' => 'date-time',
         'guest_name' => null
     ];
 
@@ -108,12 +118,17 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_in' => false,
         'check_out' => false,
         'status' => false,
+        'source' => true,
         'platform' => true,
+        'confirmation_code' => false,
+        'primary_guest' => false,
+        'occupancy' => false,
+        'financials' => false,
         'total_price' => false,
         'currency' => false,
-        'confirmation_code' => false,
         'guest_details' => false,
         'created_at' => false,
+        'booked_at' => true,
         'guest_name' => true
     ];
 
@@ -199,12 +214,17 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_in' => 'checkIn',
         'check_out' => 'checkOut',
         'status' => 'status',
+        'source' => 'source',
         'platform' => 'platform',
+        'confirmation_code' => 'confirmationCode',
+        'primary_guest' => 'primaryGuest',
+        'occupancy' => 'occupancy',
+        'financials' => 'financials',
         'total_price' => 'totalPrice',
         'currency' => 'currency',
-        'confirmation_code' => 'confirmationCode',
         'guest_details' => 'guestDetails',
         'created_at' => 'createdAt',
+        'booked_at' => 'bookedAt',
         'guest_name' => 'guestName'
     ];
 
@@ -220,12 +240,17 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_in' => 'setCheckIn',
         'check_out' => 'setCheckOut',
         'status' => 'setStatus',
+        'source' => 'setSource',
         'platform' => 'setPlatform',
+        'confirmation_code' => 'setConfirmationCode',
+        'primary_guest' => 'setPrimaryGuest',
+        'occupancy' => 'setOccupancy',
+        'financials' => 'setFinancials',
         'total_price' => 'setTotalPrice',
         'currency' => 'setCurrency',
-        'confirmation_code' => 'setConfirmationCode',
         'guest_details' => 'setGuestDetails',
         'created_at' => 'setCreatedAt',
+        'booked_at' => 'setBookedAt',
         'guest_name' => 'setGuestName'
     ];
 
@@ -241,12 +266,17 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_in' => 'getCheckIn',
         'check_out' => 'getCheckOut',
         'status' => 'getStatus',
+        'source' => 'getSource',
         'platform' => 'getPlatform',
+        'confirmation_code' => 'getConfirmationCode',
+        'primary_guest' => 'getPrimaryGuest',
+        'occupancy' => 'getOccupancy',
+        'financials' => 'getFinancials',
         'total_price' => 'getTotalPrice',
         'currency' => 'getCurrency',
-        'confirmation_code' => 'getConfirmationCode',
         'guest_details' => 'getGuestDetails',
         'created_at' => 'getCreatedAt',
+        'booked_at' => 'getBookedAt',
         'guest_name' => 'getGuestName'
     ];
 
@@ -286,6 +316,13 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     public const STATUS_PENDING = 'pending';
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_COMPLETED = 'completed';
+    public const SOURCE_AIRBNB = 'airbnb';
+    public const SOURCE_BOOKING_COM = 'booking.com';
+    public const SOURCE_VRBO = 'vrbo';
+    public const SOURCE_DIRECT = 'direct';
+    public const SOURCE_WEBSITE = 'website';
+    public const SOURCE_OWNER = 'owner';
+    public const SOURCE_OTHER = 'other';
     public const PLATFORM_AIRBNB = 'airbnb';
     public const PLATFORM_BOOKING_COM = 'booking.com';
     public const PLATFORM_VRBO = 'vrbo';
@@ -306,6 +343,24 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
             self::STATUS_PENDING,
             self::STATUS_CANCELLED,
             self::STATUS_COMPLETED,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getSourceAllowableValues()
+    {
+        return [
+            self::SOURCE_AIRBNB,
+            self::SOURCE_BOOKING_COM,
+            self::SOURCE_VRBO,
+            self::SOURCE_DIRECT,
+            self::SOURCE_WEBSITE,
+            self::SOURCE_OWNER,
+            self::SOURCE_OTHER,
         ];
     }
 
@@ -347,12 +402,17 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('check_in', $data ?? [], null);
         $this->setIfExists('check_out', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('source', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
+        $this->setIfExists('confirmation_code', $data ?? [], null);
+        $this->setIfExists('primary_guest', $data ?? [], null);
+        $this->setIfExists('occupancy', $data ?? [], null);
+        $this->setIfExists('financials', $data ?? [], null);
         $this->setIfExists('total_price', $data ?? [], null);
         $this->setIfExists('currency', $data ?? [], null);
-        $this->setIfExists('confirmation_code', $data ?? [], null);
         $this->setIfExists('guest_details', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('booked_at', $data ?? [], null);
         $this->setIfExists('guest_name', $data ?? [], null);
     }
 
@@ -387,9 +447,6 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         if ($this->container['listing_id'] === null) {
             $invalidProperties[] = "'listing_id' can't be null";
         }
-        if ($this->container['guest_id'] === null) {
-            $invalidProperties[] = "'guest_id' can't be null";
-        }
         if ($this->container['check_in'] === null) {
             $invalidProperties[] = "'check_in' can't be null";
         }
@@ -408,6 +465,15 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
             );
         }
 
+        $allowedValues = self::getSourceAllowableValues();
+        if (!is_null($this->container['source']) && !in_array($this->container['source'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'source', must be one of '%s'",
+                $this->container['source'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         $allowedValues = self::getPlatformAllowableValues();
         if (!is_null($this->container['platform']) && !in_array($this->container['platform'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -417,17 +483,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
             );
         }
 
-        if ($this->container['total_price'] === null) {
-            $invalidProperties[] = "'total_price' can't be null";
-        }
-        if ($this->container['currency'] === null) {
-            $invalidProperties[] = "'currency' can't be null";
-        }
         if ($this->container['confirmation_code'] === null) {
             $invalidProperties[] = "'confirmation_code' can't be null";
-        }
-        if ($this->container['guest_details'] === null) {
-            $invalidProperties[] = "'guest_details' can't be null";
         }
         if ($this->container['created_at'] === null) {
             $invalidProperties[] = "'created_at' can't be null";
@@ -501,9 +558,10 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets guest_id
      *
-     * @return string
+     * @return string|null
+     * @deprecated
      */
-    public function getGuestId(): string
+    public function getGuestId(): ?string
     {
         return $this->container['guest_id'];
     }
@@ -511,11 +569,12 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets guest_id
      *
-     * @param string $guest_id Internal Repull guest ID. Use `GET /v1/guests/{id}` for the full profile.
+     * @param string|null $guest_id DEPRECATED — use `primaryGuest.id`. Internal Repull guest ID. Kept populated for back-compat.
      *
      * @return $this
+     * @deprecated
      */
-    public function setGuestId(string $guest_id): static
+    public function setGuestId(?string $guest_id): static
     {
         if (is_null($guest_id)) {
             throw new InvalidArgumentException('non-nullable guest_id cannot be null');
@@ -608,9 +667,45 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Gets source
+     *
+     * @return string|null
+     */
+    public function getSource(): ?string
+    {
+        return $this->container['source'];
+    }
+
+    /**
+     * Sets source
+     *
+     * @param string|null $source Booking source / channel. Lowercase. May be null on legacy rows. Canonical name as of 2026-05; `platform` is kept as an alias.
+     *
+     * @return $this
+     */
+    public function setSource(?string $source): static
+    {
+        if (is_null($source)) {
+            array_push($this->openAPINullablesSetToNull, 'source');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('source', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['source'] = $source;
+
+        return $this;
+    }
+
+    /**
      * Gets platform
      *
      * @return string|null
+     * @deprecated
      */
     public function getPlatform(): ?string
     {
@@ -620,9 +715,10 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets platform
      *
-     * @param string|null $platform Booking source. Lowercase. May be null on legacy rows.
+     * @param string|null $platform DEPRECATED alias for `source`. Same value, kept for back-compat.
      *
      * @return $this
+     * @deprecated
      */
     public function setPlatform(?string $platform): static
     {
@@ -638,60 +734,6 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['platform'] = $platform;
-
-        return $this;
-    }
-
-    /**
-     * Gets total_price
-     *
-     * @return string
-     */
-    public function getTotalPrice(): string
-    {
-        return $this->container['total_price'];
-    }
-
-    /**
-     * Sets total_price
-     *
-     * @param string $total_price Decimal-as-string (precision 10, scale 2) to preserve precision across mixed-currency totals.
-     *
-     * @return $this
-     */
-    public function setTotalPrice(string $total_price): static
-    {
-        if (is_null($total_price)) {
-            throw new InvalidArgumentException('non-nullable total_price cannot be null');
-        }
-        $this->container['total_price'] = $total_price;
-
-        return $this;
-    }
-
-    /**
-     * Gets currency
-     *
-     * @return string
-     */
-    public function getCurrency(): string
-    {
-        return $this->container['currency'];
-    }
-
-    /**
-     * Sets currency
-     *
-     * @param string $currency ISO 4217 currency code.
-     *
-     * @return $this
-     */
-    public function setCurrency(string $currency): static
-    {
-        if (is_null($currency)) {
-            throw new InvalidArgumentException('non-nullable currency cannot be null');
-        }
-        $this->container['currency'] = $currency;
 
         return $this;
     }
@@ -724,11 +766,151 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Gets primary_guest
+     *
+     * @return \Repull\Model\ReservationPrimaryGuest|null
+     */
+    public function getPrimaryGuest(): ?\Repull\Model\ReservationPrimaryGuest
+    {
+        return $this->container['primary_guest'];
+    }
+
+    /**
+     * Sets primary_guest
+     *
+     * @param \Repull\Model\ReservationPrimaryGuest|null $primary_guest Inline guest summary. May be undefined for owner-blocks / pre-arrival rows.
+     *
+     * @return $this
+     */
+    public function setPrimaryGuest(?\Repull\Model\ReservationPrimaryGuest $primary_guest): static
+    {
+        if (is_null($primary_guest)) {
+            throw new InvalidArgumentException('non-nullable primary_guest cannot be null');
+        }
+        $this->container['primary_guest'] = $primary_guest;
+
+        return $this;
+    }
+
+    /**
+     * Gets occupancy
+     *
+     * @return \Repull\Model\ReservationOccupancy|null
+     */
+    public function getOccupancy(): ?\Repull\Model\ReservationOccupancy
+    {
+        return $this->container['occupancy'];
+    }
+
+    /**
+     * Sets occupancy
+     *
+     * @param \Repull\Model\ReservationOccupancy|null $occupancy Normalized guest counts. May be undefined when the source channel did not provide counts.
+     *
+     * @return $this
+     */
+    public function setOccupancy(?\Repull\Model\ReservationOccupancy $occupancy): static
+    {
+        if (is_null($occupancy)) {
+            throw new InvalidArgumentException('non-nullable occupancy cannot be null');
+        }
+        $this->container['occupancy'] = $occupancy;
+
+        return $this;
+    }
+
+    /**
+     * Gets financials
+     *
+     * @return \Repull\Model\ReservationFinancials|null
+     */
+    public function getFinancials(): ?\Repull\Model\ReservationFinancials
+    {
+        return $this->container['financials'];
+    }
+
+    /**
+     * Sets financials
+     *
+     * @param \Repull\Model\ReservationFinancials|null $financials Normalized money block. Always populated for paid reservations.
+     *
+     * @return $this
+     */
+    public function setFinancials(?\Repull\Model\ReservationFinancials $financials): static
+    {
+        if (is_null($financials)) {
+            throw new InvalidArgumentException('non-nullable financials cannot be null');
+        }
+        $this->container['financials'] = $financials;
+
+        return $this;
+    }
+
+    /**
+     * Gets total_price
+     *
+     * @return string|null
+     * @deprecated
+     */
+    public function getTotalPrice(): ?string
+    {
+        return $this->container['total_price'];
+    }
+
+    /**
+     * Sets total_price
+     *
+     * @param string|null $total_price DEPRECATED — use `financials.totalPrice` (a number). Decimal-as-string (precision 10, scale 2) kept for back-compat.
+     *
+     * @return $this
+     * @deprecated
+     */
+    public function setTotalPrice(?string $total_price): static
+    {
+        if (is_null($total_price)) {
+            throw new InvalidArgumentException('non-nullable total_price cannot be null');
+        }
+        $this->container['total_price'] = $total_price;
+
+        return $this;
+    }
+
+    /**
+     * Gets currency
+     *
+     * @return string|null
+     * @deprecated
+     */
+    public function getCurrency(): ?string
+    {
+        return $this->container['currency'];
+    }
+
+    /**
+     * Sets currency
+     *
+     * @param string|null $currency DEPRECATED — use `financials.currency`. ISO 4217 currency code.
+     *
+     * @return $this
+     * @deprecated
+     */
+    public function setCurrency(?string $currency): static
+    {
+        if (is_null($currency)) {
+            throw new InvalidArgumentException('non-nullable currency cannot be null');
+        }
+        $this->container['currency'] = $currency;
+
+        return $this;
+    }
+
+    /**
      * Gets guest_details
      *
-     * @return array<string,mixed>
+     * @return array<string,mixed>|null
+     * @deprecated
      */
-    public function getGuestDetails(): array
+    public function getGuestDetails(): ?array
     {
         return $this->container['guest_details'];
     }
@@ -736,11 +918,12 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets guest_details
      *
-     * @param array<string,mixed> $guest_details Raw guest details from the source channel (firstName, lastName, email, phone, count, etc.). Shape varies by platform — use the dedicated guest endpoint for a normalized profile.
+     * @param array<string,mixed>|null $guest_details DEPRECATED — use `occupancy` for normalized counts and `primaryGuest` for guest identity. Raw guest details from the source channel; shape varies by platform.
      *
      * @return $this
+     * @deprecated
      */
-    public function setGuestDetails(array $guest_details): static
+    public function setGuestDetails(?array $guest_details): static
     {
         if (is_null($guest_details)) {
             throw new InvalidArgumentException('non-nullable guest_details cannot be null');
@@ -778,6 +961,40 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Gets booked_at
+     *
+     * @return \DateTime|null
+     */
+    public function getBookedAt(): ?\DateTime
+    {
+        return $this->container['booked_at'];
+    }
+
+    /**
+     * Sets booked_at
+     *
+     * @param \DateTime|null $booked_at When the booking was made on the source channel (when reported by the channel).
+     *
+     * @return $this
+     */
+    public function setBookedAt(?\DateTime $booked_at): static
+    {
+        if (is_null($booked_at)) {
+            array_push($this->openAPINullablesSetToNull, 'booked_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('booked_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['booked_at'] = $booked_at;
+
+        return $this;
+    }
+
+    /**
      * Gets guest_name
      *
      * @return string|null
@@ -790,7 +1007,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets guest_name
      *
-     * @param string|null $guest_name Pre-resolved display name (`firstName lastName`) extracted from `guestDetails`. Null when no first name is available.
+     * @param string|null $guest_name Pre-resolved display name (`firstName lastName`) from the joined guest row. Undefined when no first name is available.
      *
      * @return $this
      */

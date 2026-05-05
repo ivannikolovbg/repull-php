@@ -1026,8 +1026,14 @@ class ReservationsApi
      * @param  int|null $listing_id Filter to a single listing (optional)
      * @param  \DateTime|null $check_in_after Check-in date &gt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
+     * @param  \DateTime|null $check_out_after Check-out date &gt;&#x3D; this value (optional)
+     * @param  \DateTime|null $check_out_before Check-out date &lt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
      * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
+     * @param  \DateTime|null $check_in_after2 Use &#x60;check_in_after&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_in_before2 Use &#x60;check_in_before&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_out_after2 Use &#x60;check_out_after&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_out_before2 Use &#x60;check_out_before&#x60; (snake_case) instead. (optional) (deprecated)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
      *
@@ -1045,13 +1051,19 @@ class ReservationsApi
         ?int $listing_id = null,
         ?\DateTime $check_in_after = null,
         ?\DateTime $check_in_before = null,
+        ?\DateTime $check_out_after = null,
+        ?\DateTime $check_out_before = null,
         ?\DateTime $check_in_from = null,
         ?\DateTime $check_in_to = null,
+        ?\DateTime $check_in_after2 = null,
+        ?\DateTime $check_in_before2 = null,
+        ?\DateTime $check_out_after2 = null,
+        ?\DateTime $check_out_before2 = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listReservations'][0]
     ): \Repull\Model\ReservationListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listReservationsWithHttpInfo($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $include_total, $contentType);
+        list($response) = $this->listReservationsWithHttpInfo($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_out_after, $check_out_before, $check_in_from, $check_in_to, $check_in_after2, $check_in_before2, $check_out_after2, $check_out_before2, $include_total, $contentType);
         return $response;
     }
 
@@ -1069,8 +1081,14 @@ class ReservationsApi
      * @param  int|null $listing_id Filter to a single listing (optional)
      * @param  \DateTime|null $check_in_after Check-in date &gt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
+     * @param  \DateTime|null $check_out_after Check-out date &gt;&#x3D; this value (optional)
+     * @param  \DateTime|null $check_out_before Check-out date &lt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
      * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
+     * @param  \DateTime|null $check_in_after2 Use &#x60;check_in_after&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_in_before2 Use &#x60;check_in_before&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_out_after2 Use &#x60;check_out_after&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_out_before2 Use &#x60;check_out_before&#x60; (snake_case) instead. (optional) (deprecated)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
      *
@@ -1088,13 +1106,19 @@ class ReservationsApi
         ?int $listing_id = null,
         ?\DateTime $check_in_after = null,
         ?\DateTime $check_in_before = null,
+        ?\DateTime $check_out_after = null,
+        ?\DateTime $check_out_before = null,
         ?\DateTime $check_in_from = null,
         ?\DateTime $check_in_to = null,
+        ?\DateTime $check_in_after2 = null,
+        ?\DateTime $check_in_before2 = null,
+        ?\DateTime $check_out_after2 = null,
+        ?\DateTime $check_out_before2 = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listReservations'][0]
     ): array
     {
-        $request = $this->listReservationsRequest($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $include_total, $contentType);
+        $request = $this->listReservationsRequest($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_out_after, $check_out_before, $check_in_from, $check_in_to, $check_in_after2, $check_in_before2, $check_out_after2, $check_out_before2, $include_total, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1190,8 +1214,14 @@ class ReservationsApi
      * @param  int|null $listing_id Filter to a single listing (optional)
      * @param  \DateTime|null $check_in_after Check-in date &gt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
+     * @param  \DateTime|null $check_out_after Check-out date &gt;&#x3D; this value (optional)
+     * @param  \DateTime|null $check_out_before Check-out date &lt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
      * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
+     * @param  \DateTime|null $check_in_after2 Use &#x60;check_in_after&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_in_before2 Use &#x60;check_in_before&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_out_after2 Use &#x60;check_out_after&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_out_before2 Use &#x60;check_out_before&#x60; (snake_case) instead. (optional) (deprecated)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
      *
@@ -1208,13 +1238,19 @@ class ReservationsApi
         ?int $listing_id = null,
         ?\DateTime $check_in_after = null,
         ?\DateTime $check_in_before = null,
+        ?\DateTime $check_out_after = null,
+        ?\DateTime $check_out_before = null,
         ?\DateTime $check_in_from = null,
         ?\DateTime $check_in_to = null,
+        ?\DateTime $check_in_after2 = null,
+        ?\DateTime $check_in_before2 = null,
+        ?\DateTime $check_out_after2 = null,
+        ?\DateTime $check_out_before2 = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listReservations'][0]
     ): PromiseInterface
     {
-        return $this->listReservationsAsyncWithHttpInfo($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $include_total, $contentType)
+        return $this->listReservationsAsyncWithHttpInfo($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_out_after, $check_out_before, $check_in_from, $check_in_to, $check_in_after2, $check_in_before2, $check_out_after2, $check_out_before2, $include_total, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1236,8 +1272,14 @@ class ReservationsApi
      * @param  int|null $listing_id Filter to a single listing (optional)
      * @param  \DateTime|null $check_in_after Check-in date &gt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
+     * @param  \DateTime|null $check_out_after Check-out date &gt;&#x3D; this value (optional)
+     * @param  \DateTime|null $check_out_before Check-out date &lt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
      * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
+     * @param  \DateTime|null $check_in_after2 Use &#x60;check_in_after&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_in_before2 Use &#x60;check_in_before&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_out_after2 Use &#x60;check_out_after&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_out_before2 Use &#x60;check_out_before&#x60; (snake_case) instead. (optional) (deprecated)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
      *
@@ -1254,14 +1296,20 @@ class ReservationsApi
         ?int $listing_id = null,
         ?\DateTime $check_in_after = null,
         ?\DateTime $check_in_before = null,
+        ?\DateTime $check_out_after = null,
+        ?\DateTime $check_out_before = null,
         ?\DateTime $check_in_from = null,
         ?\DateTime $check_in_to = null,
+        ?\DateTime $check_in_after2 = null,
+        ?\DateTime $check_in_before2 = null,
+        ?\DateTime $check_out_after2 = null,
+        ?\DateTime $check_out_before2 = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listReservations'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ReservationListResponse';
-        $request = $this->listReservationsRequest($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_in_from, $check_in_to, $include_total, $contentType);
+        $request = $this->listReservationsRequest($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_out_after, $check_out_before, $check_in_from, $check_in_to, $check_in_after2, $check_in_before2, $check_out_after2, $check_out_before2, $include_total, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1311,8 +1359,14 @@ class ReservationsApi
      * @param  int|null $listing_id Filter to a single listing (optional)
      * @param  \DateTime|null $check_in_after Check-in date &gt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_before Check-in date &lt;&#x3D; this value (optional)
+     * @param  \DateTime|null $check_out_after Check-out date &gt;&#x3D; this value (optional)
+     * @param  \DateTime|null $check_out_before Check-out date &lt;&#x3D; this value (optional)
      * @param  \DateTime|null $check_in_from Deprecated alias for &#x60;check_in_after&#x60;. (optional) (deprecated)
      * @param  \DateTime|null $check_in_to Deprecated alias for &#x60;check_in_before&#x60;. (optional) (deprecated)
+     * @param  \DateTime|null $check_in_after2 Use &#x60;check_in_after&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_in_before2 Use &#x60;check_in_before&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_out_after2 Use &#x60;check_out_after&#x60; (snake_case) instead. (optional) (deprecated)
+     * @param  \DateTime|null $check_out_before2 Use &#x60;check_out_before&#x60; (snake_case) instead. (optional) (deprecated)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listReservations'] to see the possible values for this operation
      *
@@ -1329,8 +1383,14 @@ class ReservationsApi
         ?int $listing_id = null,
         ?\DateTime $check_in_after = null,
         ?\DateTime $check_in_before = null,
+        ?\DateTime $check_out_after = null,
+        ?\DateTime $check_out_before = null,
         ?\DateTime $check_in_from = null,
         ?\DateTime $check_in_to = null,
+        ?\DateTime $check_in_after2 = null,
+        ?\DateTime $check_in_before2 = null,
+        ?\DateTime $check_out_after2 = null,
+        ?\DateTime $check_out_before2 = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listReservations'][0]
     ): Request
@@ -1352,6 +1412,12 @@ class ReservationsApi
             throw new InvalidArgumentException('invalid value for "$offset" when calling ReservationsApi.listReservations, must be bigger than or equal to 0.');
         }
         
+
+
+
+
+
+
 
 
 
@@ -1442,6 +1508,24 @@ class ReservationsApi
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $check_out_after,
+            'check_out_after', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $check_out_before,
+            'check_out_before', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $check_in_from,
             'checkInFrom', // param base name
             'string', // openApiType
@@ -1453,6 +1537,42 @@ class ReservationsApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $check_in_to,
             'checkInTo', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $check_in_after2,
+            'checkInAfter', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $check_in_before2,
+            'checkInBefore', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $check_out_after2,
+            'checkOutAfter', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $check_out_before2,
+            'checkOutBefore', // param base name
             'string', // openApiType
             'form', // style
             true, // explode

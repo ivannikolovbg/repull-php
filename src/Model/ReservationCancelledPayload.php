@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * ReservationCancelledPayload Class Doc Comment
  *
- * @description Payload for &#x60;reservation.cancelled&#x60;. A reservation was cancelled by the guest, host, or platform.
+ * @description Payload for &#x60;reservation.cancelled&#x60;. A reservation was cancelled by the guest, host, or platform. &#x60;data.object&#x60; reflects the post-cancel snapshot (status will be &#x60;cancelled&#x60;); top-level fields capture cancellation metadata.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -60,12 +60,10 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'int',
-        'confirmation_code' => 'string',
+        'object' => '\Repull\Model\ReservationWebhookObject',
         'cancelled_at' => '\DateTime',
         'cancelled_by' => 'string',
-        'reason' => 'string',
-        'refund' => '\Repull\Model\ReservationCancelledPayloadRefund'
+        'reason' => 'string'
     ];
 
     /**
@@ -74,12 +72,10 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'id' => null,
-        'confirmation_code' => null,
+        'object' => null,
         'cancelled_at' => 'date-time',
         'cancelled_by' => null,
-        'reason' => null,
-        'refund' => null
+        'reason' => null
     ];
 
     /**
@@ -88,12 +84,10 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => false,
-        'confirmation_code' => false,
+        'object' => false,
         'cancelled_at' => false,
         'cancelled_by' => false,
-        'reason' => true,
-        'refund' => true
+        'reason' => true
     ];
 
     /**
@@ -172,12 +166,10 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'id' => 'id',
-        'confirmation_code' => 'confirmationCode',
+        'object' => 'object',
         'cancelled_at' => 'cancelledAt',
         'cancelled_by' => 'cancelledBy',
-        'reason' => 'reason',
-        'refund' => 'refund'
+        'reason' => 'reason'
     ];
 
     /**
@@ -186,12 +178,10 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $setters = [
-        'id' => 'setId',
-        'confirmation_code' => 'setConfirmationCode',
+        'object' => 'setObject',
         'cancelled_at' => 'setCancelledAt',
         'cancelled_by' => 'setCancelledBy',
-        'reason' => 'setReason',
-        'refund' => 'setRefund'
+        'reason' => 'setReason'
     ];
 
     /**
@@ -200,12 +190,10 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $getters = [
-        'id' => 'getId',
-        'confirmation_code' => 'getConfirmationCode',
+        'object' => 'getObject',
         'cancelled_at' => 'getCancelledAt',
         'cancelled_by' => 'getCancelledBy',
-        'reason' => 'getReason',
-        'refund' => 'getRefund'
+        'reason' => 'getReason'
     ];
 
     /**
@@ -240,6 +228,23 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
         return self::$openAPIModelName;
     }
 
+    public const CANCELLED_BY_GUEST = 'guest';
+    public const CANCELLED_BY_HOST = 'host';
+    public const CANCELLED_BY_PLATFORM = 'platform';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getCancelledByAllowableValues()
+    {
+        return [
+            self::CANCELLED_BY_GUEST,
+            self::CANCELLED_BY_HOST,
+            self::CANCELLED_BY_PLATFORM,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -255,12 +260,10 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('confirmation_code', $data ?? [], null);
+        $this->setIfExists('object', $data ?? [], null);
         $this->setIfExists('cancelled_at', $data ?? [], null);
         $this->setIfExists('cancelled_by', $data ?? [], null);
         $this->setIfExists('reason', $data ?? [], null);
-        $this->setIfExists('refund', $data ?? [], null);
     }
 
     /**
@@ -288,6 +291,18 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
     {
         $invalidProperties = [];
 
+        if ($this->container['object'] === null) {
+            $invalidProperties[] = "'object' can't be null";
+        }
+        $allowedValues = self::getCancelledByAllowableValues();
+        if (!is_null($this->container['cancelled_by']) && !in_array($this->container['cancelled_by'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'cancelled_by', must be one of '%s'",
+                $this->container['cancelled_by'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -301,55 +316,28 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
 
 
     /**
-     * Gets id
+     * Gets object
      *
-     * @return int|null
+     * @return \Repull\Model\ReservationWebhookObject
      */
-    public function getId(): ?int
+    public function getObject(): \Repull\Model\ReservationWebhookObject
     {
-        return $this->container['id'];
+        return $this->container['object'];
     }
 
     /**
-     * Sets id
+     * Sets object
      *
-     * @param int|null $id id
+     * @param \Repull\Model\ReservationWebhookObject $object object
      *
      * @return $this
      */
-    public function setId(?int $id): static
+    public function setObject(\Repull\Model\ReservationWebhookObject $object): static
     {
-        if (is_null($id)) {
-            throw new InvalidArgumentException('non-nullable id cannot be null');
+        if (is_null($object)) {
+            throw new InvalidArgumentException('non-nullable object cannot be null');
         }
-        $this->container['id'] = $id;
-
-        return $this;
-    }
-
-    /**
-     * Gets confirmation_code
-     *
-     * @return string|null
-     */
-    public function getConfirmationCode(): ?string
-    {
-        return $this->container['confirmation_code'];
-    }
-
-    /**
-     * Sets confirmation_code
-     *
-     * @param string|null $confirmation_code confirmation_code
-     *
-     * @return $this
-     */
-    public function setConfirmationCode(?string $confirmation_code): static
-    {
-        if (is_null($confirmation_code)) {
-            throw new InvalidArgumentException('non-nullable confirmation_code cannot be null');
-        }
-        $this->container['confirmation_code'] = $confirmation_code;
+        $this->container['object'] = $object;
 
         return $this;
     }
@@ -367,7 +355,7 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Sets cancelled_at
      *
-     * @param \DateTime|null $cancelled_at cancelled_at
+     * @param \DateTime|null $cancelled_at When the cancellation was recorded.
      *
      * @return $this
      */
@@ -394,7 +382,7 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Sets cancelled_by
      *
-     * @param string|null $cancelled_by Who initiated the cancellation (guest, host, platform).
+     * @param string|null $cancelled_by Who initiated the cancellation.
      *
      * @return $this
      */
@@ -403,6 +391,7 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
         if (is_null($cancelled_by)) {
             throw new InvalidArgumentException('non-nullable cancelled_by cannot be null');
         }
+        // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['cancelled_by'] = $cancelled_by;
 
         return $this;
@@ -421,7 +410,7 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Sets reason
      *
-     * @param string|null $reason reason
+     * @param string|null $reason Free-form cancellation reason from the source channel, if available.
      *
      * @return $this
      */
@@ -438,40 +427,6 @@ class ReservationCancelledPayload implements ModelInterface, ArrayAccess, JsonSe
             }
         }
         $this->container['reason'] = $reason;
-
-        return $this;
-    }
-
-    /**
-     * Gets refund
-     *
-     * @return \Repull\Model\ReservationCancelledPayloadRefund|null
-     */
-    public function getRefund(): ?\Repull\Model\ReservationCancelledPayloadRefund
-    {
-        return $this->container['refund'];
-    }
-
-    /**
-     * Sets refund
-     *
-     * @param \Repull\Model\ReservationCancelledPayloadRefund|null $refund refund
-     *
-     * @return $this
-     */
-    public function setRefund(?\Repull\Model\ReservationCancelledPayloadRefund $refund): static
-    {
-        if (is_null($refund)) {
-            array_push($this->openAPINullablesSetToNull, 'refund');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('refund', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['refund'] = $refund;
 
         return $this;
     }

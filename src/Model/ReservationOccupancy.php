@@ -1,6 +1,6 @@
 <?php
 /**
- * ReservationCreatedPayloadPricing
+ * ReservationOccupancy
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ReservationCreatedPayloadPricing Class Doc Comment
+ * ReservationOccupancy Class Doc Comment
  *
+ * @description Normalized guest counts for the stay. Mirrors the legacy &#x60;guestDetails.numberOf*&#x60; fields under canonical short names. Omitted when no count fields are present on the reservation.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ReservationCreatedPayloadPricing implements ModelInterface, ArrayAccess, JsonSerializable
+class ReservationOccupancy implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class ReservationCreatedPayloadPricing implements ModelInterface, ArrayAccess, J
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ReservationCreatedPayload_pricing';
+    protected static string $openAPIModelName = 'ReservationOccupancy';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,10 +60,11 @@ class ReservationCreatedPayloadPricing implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'subtotal' => 'string',
-        'taxes' => 'string',
-        'total' => 'string',
-        'currency' => 'string'
+        'adults' => 'int',
+        'children' => 'int',
+        'infants' => 'int',
+        'pets' => 'int',
+        'total' => 'int'
     ];
 
     /**
@@ -71,10 +73,11 @@ class ReservationCreatedPayloadPricing implements ModelInterface, ArrayAccess, J
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'subtotal' => null,
-        'taxes' => null,
-        'total' => null,
-        'currency' => null
+        'adults' => null,
+        'children' => null,
+        'infants' => null,
+        'pets' => null,
+        'total' => null
     ];
 
     /**
@@ -83,10 +86,11 @@ class ReservationCreatedPayloadPricing implements ModelInterface, ArrayAccess, J
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'subtotal' => false,
-        'taxes' => false,
-        'total' => false,
-        'currency' => false
+        'adults' => true,
+        'children' => true,
+        'infants' => true,
+        'pets' => true,
+        'total' => true
     ];
 
     /**
@@ -165,10 +169,11 @@ class ReservationCreatedPayloadPricing implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'subtotal' => 'subtotal',
-        'taxes' => 'taxes',
-        'total' => 'total',
-        'currency' => 'currency'
+        'adults' => 'adults',
+        'children' => 'children',
+        'infants' => 'infants',
+        'pets' => 'pets',
+        'total' => 'total'
     ];
 
     /**
@@ -177,10 +182,11 @@ class ReservationCreatedPayloadPricing implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $setters = [
-        'subtotal' => 'setSubtotal',
-        'taxes' => 'setTaxes',
-        'total' => 'setTotal',
-        'currency' => 'setCurrency'
+        'adults' => 'setAdults',
+        'children' => 'setChildren',
+        'infants' => 'setInfants',
+        'pets' => 'setPets',
+        'total' => 'setTotal'
     ];
 
     /**
@@ -189,10 +195,11 @@ class ReservationCreatedPayloadPricing implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $getters = [
-        'subtotal' => 'getSubtotal',
-        'taxes' => 'getTaxes',
-        'total' => 'getTotal',
-        'currency' => 'getCurrency'
+        'adults' => 'getAdults',
+        'children' => 'getChildren',
+        'infants' => 'getInfants',
+        'pets' => 'getPets',
+        'total' => 'getTotal'
     ];
 
     /**
@@ -242,10 +249,11 @@ class ReservationCreatedPayloadPricing implements ModelInterface, ArrayAccess, J
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('subtotal', $data ?? [], null);
-        $this->setIfExists('taxes', $data ?? [], null);
+        $this->setIfExists('adults', $data ?? [], null);
+        $this->setIfExists('children', $data ?? [], null);
+        $this->setIfExists('infants', $data ?? [], null);
+        $this->setIfExists('pets', $data ?? [], null);
         $this->setIfExists('total', $data ?? [], null);
-        $this->setIfExists('currency', $data ?? [], null);
     }
 
     /**
@@ -286,55 +294,137 @@ class ReservationCreatedPayloadPricing implements ModelInterface, ArrayAccess, J
 
 
     /**
-     * Gets subtotal
+     * Gets adults
      *
-     * @return string|null
+     * @return int|null
      */
-    public function getSubtotal(): ?string
+    public function getAdults(): ?int
     {
-        return $this->container['subtotal'];
+        return $this->container['adults'];
     }
 
     /**
-     * Sets subtotal
+     * Sets adults
      *
-     * @param string|null $subtotal subtotal
+     * @param int|null $adults adults
      *
      * @return $this
      */
-    public function setSubtotal(?string $subtotal): static
+    public function setAdults(?int $adults): static
     {
-        if (is_null($subtotal)) {
-            throw new InvalidArgumentException('non-nullable subtotal cannot be null');
+        if (is_null($adults)) {
+            array_push($this->openAPINullablesSetToNull, 'adults');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('adults', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['subtotal'] = $subtotal;
+        $this->container['adults'] = $adults;
 
         return $this;
     }
 
     /**
-     * Gets taxes
+     * Gets children
      *
-     * @return string|null
+     * @return int|null
      */
-    public function getTaxes(): ?string
+    public function getChildren(): ?int
     {
-        return $this->container['taxes'];
+        return $this->container['children'];
     }
 
     /**
-     * Sets taxes
+     * Sets children
      *
-     * @param string|null $taxes taxes
+     * @param int|null $children children
      *
      * @return $this
      */
-    public function setTaxes(?string $taxes): static
+    public function setChildren(?int $children): static
     {
-        if (is_null($taxes)) {
-            throw new InvalidArgumentException('non-nullable taxes cannot be null');
+        if (is_null($children)) {
+            array_push($this->openAPINullablesSetToNull, 'children');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('children', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['taxes'] = $taxes;
+        $this->container['children'] = $children;
+
+        return $this;
+    }
+
+    /**
+     * Gets infants
+     *
+     * @return int|null
+     */
+    public function getInfants(): ?int
+    {
+        return $this->container['infants'];
+    }
+
+    /**
+     * Sets infants
+     *
+     * @param int|null $infants infants
+     *
+     * @return $this
+     */
+    public function setInfants(?int $infants): static
+    {
+        if (is_null($infants)) {
+            array_push($this->openAPINullablesSetToNull, 'infants');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('infants', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['infants'] = $infants;
+
+        return $this;
+    }
+
+    /**
+     * Gets pets
+     *
+     * @return int|null
+     */
+    public function getPets(): ?int
+    {
+        return $this->container['pets'];
+    }
+
+    /**
+     * Sets pets
+     *
+     * @param int|null $pets pets
+     *
+     * @return $this
+     */
+    public function setPets(?int $pets): static
+    {
+        if (is_null($pets)) {
+            array_push($this->openAPINullablesSetToNull, 'pets');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('pets', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['pets'] = $pets;
 
         return $this;
     }
@@ -342,9 +432,9 @@ class ReservationCreatedPayloadPricing implements ModelInterface, ArrayAccess, J
     /**
      * Gets total
      *
-     * @return string|null
+     * @return int|null
      */
-    public function getTotal(): ?string
+    public function getTotal(): ?int
     {
         return $this->container['total'];
     }
@@ -352,43 +442,23 @@ class ReservationCreatedPayloadPricing implements ModelInterface, ArrayAccess, J
     /**
      * Sets total
      *
-     * @param string|null $total total
+     * @param int|null $total Total guests (sum across all categories as reported by the source channel).
      *
      * @return $this
      */
-    public function setTotal(?string $total): static
+    public function setTotal(?int $total): static
     {
         if (is_null($total)) {
-            throw new InvalidArgumentException('non-nullable total cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'total');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('total', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['total'] = $total;
-
-        return $this;
-    }
-
-    /**
-     * Gets currency
-     *
-     * @return string|null
-     */
-    public function getCurrency(): ?string
-    {
-        return $this->container['currency'];
-    }
-
-    /**
-     * Sets currency
-     *
-     * @param string|null $currency currency
-     *
-     * @return $this
-     */
-    public function setCurrency(?string $currency): static
-    {
-        if (is_null($currency)) {
-            throw new InvalidArgumentException('non-nullable currency cannot be null');
-        }
-        $this->container['currency'] = $currency;
 
         return $this;
     }

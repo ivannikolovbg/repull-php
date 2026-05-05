@@ -1,6 +1,6 @@
 <?php
 /**
- * ReservationCreatedPayloadPrimaryGuest
+ * ReservationPrimaryGuest
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ReservationCreatedPayloadPrimaryGuest Class Doc Comment
+ * ReservationPrimaryGuest Class Doc Comment
  *
+ * @description Inline guest summary resolved by JOIN-ing the &#x60;guests&#x60; table. Populated for every reservation that has a linked guest row; OMITTED entirely (not null) for owner-blocks / pre-arrival rows / partial-sync gaps. Always optional-chain in SDK consumers.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ReservationCreatedPayloadPrimaryGuest implements ModelInterface, ArrayAccess, JsonSerializable
+class ReservationPrimaryGuest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class ReservationCreatedPayloadPrimaryGuest implements ModelInterface, ArrayAcce
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ReservationCreatedPayload_primaryGuest';
+    protected static string $openAPIModelName = 'ReservationPrimaryGuest';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,9 +60,12 @@ class ReservationCreatedPayloadPrimaryGuest implements ModelInterface, ArrayAcce
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
+        'id' => 'string',
         'first_name' => 'string',
         'last_name' => 'string',
-        'email' => 'string'
+        'email' => 'string',
+        'phone' => 'string',
+        'language' => 'string'
     ];
 
     /**
@@ -70,9 +74,12 @@ class ReservationCreatedPayloadPrimaryGuest implements ModelInterface, ArrayAcce
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
+        'id' => null,
         'first_name' => null,
         'last_name' => null,
-        'email' => 'email'
+        'email' => 'email',
+        'phone' => null,
+        'language' => null
     ];
 
     /**
@@ -81,9 +88,12 @@ class ReservationCreatedPayloadPrimaryGuest implements ModelInterface, ArrayAcce
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'first_name' => false,
-        'last_name' => false,
-        'email' => false
+        'id' => false,
+        'first_name' => true,
+        'last_name' => true,
+        'email' => true,
+        'phone' => true,
+        'language' => true
     ];
 
     /**
@@ -162,9 +172,12 @@ class ReservationCreatedPayloadPrimaryGuest implements ModelInterface, ArrayAcce
      * @var array<string, string>
      */
     protected static array $attributeMap = [
+        'id' => 'id',
         'first_name' => 'firstName',
         'last_name' => 'lastName',
-        'email' => 'email'
+        'email' => 'email',
+        'phone' => 'phone',
+        'language' => 'language'
     ];
 
     /**
@@ -173,9 +186,12 @@ class ReservationCreatedPayloadPrimaryGuest implements ModelInterface, ArrayAcce
      * @var array<string, string>
      */
     protected static array $setters = [
+        'id' => 'setId',
         'first_name' => 'setFirstName',
         'last_name' => 'setLastName',
-        'email' => 'setEmail'
+        'email' => 'setEmail',
+        'phone' => 'setPhone',
+        'language' => 'setLanguage'
     ];
 
     /**
@@ -184,9 +200,12 @@ class ReservationCreatedPayloadPrimaryGuest implements ModelInterface, ArrayAcce
      * @var array<string, string>
      */
     protected static array $getters = [
+        'id' => 'getId',
         'first_name' => 'getFirstName',
         'last_name' => 'getLastName',
-        'email' => 'getEmail'
+        'email' => 'getEmail',
+        'phone' => 'getPhone',
+        'language' => 'getLanguage'
     ];
 
     /**
@@ -236,9 +255,12 @@ class ReservationCreatedPayloadPrimaryGuest implements ModelInterface, ArrayAcce
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('first_name', $data ?? [], null);
         $this->setIfExists('last_name', $data ?? [], null);
         $this->setIfExists('email', $data ?? [], null);
+        $this->setIfExists('phone', $data ?? [], null);
+        $this->setIfExists('language', $data ?? [], null);
     }
 
     /**
@@ -279,6 +301,33 @@ class ReservationCreatedPayloadPrimaryGuest implements ModelInterface, ArrayAcce
 
 
     /**
+     * Gets id
+     *
+     * @return string|null
+     */
+    public function getId(): ?string
+    {
+        return $this->container['id'];
+    }
+
+    /**
+     * Sets id
+     *
+     * @param string|null $id Internal Repull guest ID. Use `GET /v1/guests/{id}` for the full profile.
+     *
+     * @return $this
+     */
+    public function setId(?string $id): static
+    {
+        if (is_null($id)) {
+            throw new InvalidArgumentException('non-nullable id cannot be null');
+        }
+        $this->container['id'] = $id;
+
+        return $this;
+    }
+
+    /**
      * Gets first_name
      *
      * @return string|null
@@ -298,7 +347,14 @@ class ReservationCreatedPayloadPrimaryGuest implements ModelInterface, ArrayAcce
     public function setFirstName(?string $first_name): static
     {
         if (is_null($first_name)) {
-            throw new InvalidArgumentException('non-nullable first_name cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'first_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('first_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['first_name'] = $first_name;
 
@@ -325,7 +381,14 @@ class ReservationCreatedPayloadPrimaryGuest implements ModelInterface, ArrayAcce
     public function setLastName(?string $last_name): static
     {
         if (is_null($last_name)) {
-            throw new InvalidArgumentException('non-nullable last_name cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'last_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('last_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['last_name'] = $last_name;
 
@@ -345,16 +408,91 @@ class ReservationCreatedPayloadPrimaryGuest implements ModelInterface, ArrayAcce
     /**
      * Sets email
      *
-     * @param string|null $email email
+     * @param string|null $email Primary email contact (or first non-primary if no primary set).
      *
      * @return $this
      */
     public function setEmail(?string $email): static
     {
         if (is_null($email)) {
-            throw new InvalidArgumentException('non-nullable email cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'email');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('email', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['email'] = $email;
+
+        return $this;
+    }
+
+    /**
+     * Gets phone
+     *
+     * @return string|null
+     */
+    public function getPhone(): ?string
+    {
+        return $this->container['phone'];
+    }
+
+    /**
+     * Sets phone
+     *
+     * @param string|null $phone Primary phone contact (or first non-primary if no primary set).
+     *
+     * @return $this
+     */
+    public function setPhone(?string $phone): static
+    {
+        if (is_null($phone)) {
+            array_push($this->openAPINullablesSetToNull, 'phone');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('phone', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['phone'] = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Gets language
+     *
+     * @return string|null
+     */
+    public function getLanguage(): ?string
+    {
+        return $this->container['language'];
+    }
+
+    /**
+     * Sets language
+     *
+     * @param string|null $language Guest's preferred language (BCP-47 / ISO 639-1).
+     *
+     * @return $this
+     */
+    public function setLanguage(?string $language): static
+    {
+        if (is_null($language)) {
+            array_push($this->openAPINullablesSetToNull, 'language');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('language', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['language'] = $language;
 
         return $this;
     }
