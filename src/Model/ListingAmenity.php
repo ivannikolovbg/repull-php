@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbConnection
+ * ListingAmenity
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbConnection Class Doc Comment
+ * ListingAmenity Class Doc Comment
  *
- * @description An Airbnb-side connection record for a Vanio listing. The same property may appear under multiple connections if it has been linked from multiple Airbnb host accounts.
+ * @description A single amenity row from the unified &#x60;listings_amenities&#x60; table. Surfaced on &#x60;GET /v1/listings/{id}&#x60; and &#x60;GET /v1/properties/{id}&#x60; only when the caller passes &#x60;?include&#x3D;amenities&#x60;.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingAmenity implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbConnection';
+    protected static string $openAPIModelName = 'ListingAmenity';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,16 +60,10 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'int',
-        'airbnb_id' => 'string',
-        'host_id' => 'string',
-        'active' => 'bool',
-        'sync_enabled' => 'bool',
-        'primary' => 'bool',
-        'markup' => 'string',
-        'created_at' => '\DateTime',
-        'amenities' => '\Repull\Model\AirbnbConnectionAmenitiesInner[]',
-        'accessibility_amenities' => '\Repull\Model\AirbnbConnectionAccessibilityAmenitiesInner[]'
+        'amenity_key' => 'string',
+        'category' => 'string',
+        'is_present' => 'bool',
+        'instruction' => 'string'
     ];
 
     /**
@@ -78,16 +72,10 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'id' => null,
-        'airbnb_id' => null,
-        'host_id' => null,
-        'active' => null,
-        'sync_enabled' => null,
-        'primary' => null,
-        'markup' => null,
-        'created_at' => 'date-time',
-        'amenities' => null,
-        'accessibility_amenities' => null
+        'amenity_key' => null,
+        'category' => null,
+        'is_present' => null,
+        'instruction' => null
     ];
 
     /**
@@ -96,16 +84,10 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => false,
-        'airbnb_id' => false,
-        'host_id' => false,
-        'active' => false,
-        'sync_enabled' => false,
-        'primary' => false,
-        'markup' => true,
-        'created_at' => false,
-        'amenities' => true,
-        'accessibility_amenities' => true
+        'amenity_key' => false,
+        'category' => true,
+        'is_present' => false,
+        'instruction' => true
     ];
 
     /**
@@ -184,16 +166,10 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'id' => 'id',
-        'airbnb_id' => 'airbnbId',
-        'host_id' => 'hostId',
-        'active' => 'active',
-        'sync_enabled' => 'syncEnabled',
-        'primary' => 'primary',
-        'markup' => 'markup',
-        'created_at' => 'createdAt',
-        'amenities' => 'amenities',
-        'accessibility_amenities' => 'accessibility_amenities'
+        'amenity_key' => 'amenityKey',
+        'category' => 'category',
+        'is_present' => 'isPresent',
+        'instruction' => 'instruction'
     ];
 
     /**
@@ -202,16 +178,10 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
-        'id' => 'setId',
-        'airbnb_id' => 'setAirbnbId',
-        'host_id' => 'setHostId',
-        'active' => 'setActive',
-        'sync_enabled' => 'setSyncEnabled',
-        'primary' => 'setPrimary',
-        'markup' => 'setMarkup',
-        'created_at' => 'setCreatedAt',
-        'amenities' => 'setAmenities',
-        'accessibility_amenities' => 'setAccessibilityAmenities'
+        'amenity_key' => 'setAmenityKey',
+        'category' => 'setCategory',
+        'is_present' => 'setIsPresent',
+        'instruction' => 'setInstruction'
     ];
 
     /**
@@ -220,16 +190,10 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
-        'id' => 'getId',
-        'airbnb_id' => 'getAirbnbId',
-        'host_id' => 'getHostId',
-        'active' => 'getActive',
-        'sync_enabled' => 'getSyncEnabled',
-        'primary' => 'getPrimary',
-        'markup' => 'getMarkup',
-        'created_at' => 'getCreatedAt',
-        'amenities' => 'getAmenities',
-        'accessibility_amenities' => 'getAccessibilityAmenities'
+        'amenity_key' => 'getAmenityKey',
+        'category' => 'getCategory',
+        'is_present' => 'getIsPresent',
+        'instruction' => 'getInstruction'
     ];
 
     /**
@@ -279,16 +243,10 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('airbnb_id', $data ?? [], null);
-        $this->setIfExists('host_id', $data ?? [], null);
-        $this->setIfExists('active', $data ?? [], null);
-        $this->setIfExists('sync_enabled', $data ?? [], null);
-        $this->setIfExists('primary', $data ?? [], null);
-        $this->setIfExists('markup', $data ?? [], null);
-        $this->setIfExists('created_at', $data ?? [], null);
-        $this->setIfExists('amenities', $data ?? [], null);
-        $this->setIfExists('accessibility_amenities', $data ?? [], null);
+        $this->setIfExists('amenity_key', $data ?? [], null);
+        $this->setIfExists('category', $data ?? [], null);
+        $this->setIfExists('is_present', $data ?? [], null);
+        $this->setIfExists('instruction', $data ?? [], null);
     }
 
     /**
@@ -316,6 +274,12 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
+        if ($this->container['amenity_key'] === null) {
+            $invalidProperties[] = "'amenity_key' can't be null";
+        }
+        if ($this->container['is_present'] === null) {
+            $invalidProperties[] = "'is_present' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -329,292 +293,123 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
 
 
     /**
-     * Gets id
+     * Gets amenity_key
      *
-     * @return int|null
+     * @return string
      */
-    public function getId(): ?int
+    public function getAmenityKey(): string
     {
-        return $this->container['id'];
+        return $this->container['amenity_key'];
     }
 
     /**
-     * Sets id
+     * Sets amenity_key
      *
-     * @param int|null $id Connection row id
+     * @param string $amenity_key Canonical amenity key (e.g. `wifi`, `pool`, `parking`).
      *
      * @return $this
      */
-    public function setId(?int $id): static
+    public function setAmenityKey(string $amenity_key): static
     {
-        if (is_null($id)) {
-            throw new InvalidArgumentException('non-nullable id cannot be null');
+        if (is_null($amenity_key)) {
+            throw new InvalidArgumentException('non-nullable amenity_key cannot be null');
         }
-        $this->container['id'] = $id;
+        $this->container['amenity_key'] = $amenity_key;
 
         return $this;
     }
 
     /**
-     * Gets airbnb_id
+     * Gets category
      *
      * @return string|null
      */
-    public function getAirbnbId(): ?string
+    public function getCategory(): ?string
     {
-        return $this->container['airbnb_id'];
+        return $this->container['category'];
     }
 
     /**
-     * Sets airbnb_id
+     * Sets category
      *
-     * @param string|null $airbnb_id Airbnb-side listing id
+     * @param string|null $category Optional grouping (e.g. `essentials`, `safety`).
      *
      * @return $this
      */
-    public function setAirbnbId(?string $airbnb_id): static
+    public function setCategory(?string $category): static
     {
-        if (is_null($airbnb_id)) {
-            throw new InvalidArgumentException('non-nullable airbnb_id cannot be null');
-        }
-        $this->container['airbnb_id'] = $airbnb_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets host_id
-     *
-     * @return string|null
-     */
-    public function getHostId(): ?string
-    {
-        return $this->container['host_id'];
-    }
-
-    /**
-     * Sets host_id
-     *
-     * @param string|null $host_id Airbnb host user id
-     *
-     * @return $this
-     */
-    public function setHostId(?string $host_id): static
-    {
-        if (is_null($host_id)) {
-            throw new InvalidArgumentException('non-nullable host_id cannot be null');
-        }
-        $this->container['host_id'] = $host_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets active
-     *
-     * @return bool|null
-     */
-    public function getActive(): ?bool
-    {
-        return $this->container['active'];
-    }
-
-    /**
-     * Sets active
-     *
-     * @param bool|null $active active
-     *
-     * @return $this
-     */
-    public function setActive(?bool $active): static
-    {
-        if (is_null($active)) {
-            throw new InvalidArgumentException('non-nullable active cannot be null');
-        }
-        $this->container['active'] = $active;
-
-        return $this;
-    }
-
-    /**
-     * Gets sync_enabled
-     *
-     * @return bool|null
-     */
-    public function getSyncEnabled(): ?bool
-    {
-        return $this->container['sync_enabled'];
-    }
-
-    /**
-     * Sets sync_enabled
-     *
-     * @param bool|null $sync_enabled sync_enabled
-     *
-     * @return $this
-     */
-    public function setSyncEnabled(?bool $sync_enabled): static
-    {
-        if (is_null($sync_enabled)) {
-            throw new InvalidArgumentException('non-nullable sync_enabled cannot be null');
-        }
-        $this->container['sync_enabled'] = $sync_enabled;
-
-        return $this;
-    }
-
-    /**
-     * Gets primary
-     *
-     * @return bool|null
-     */
-    public function getPrimary(): ?bool
-    {
-        return $this->container['primary'];
-    }
-
-    /**
-     * Sets primary
-     *
-     * @param bool|null $primary primary
-     *
-     * @return $this
-     */
-    public function setPrimary(?bool $primary): static
-    {
-        if (is_null($primary)) {
-            throw new InvalidArgumentException('non-nullable primary cannot be null');
-        }
-        $this->container['primary'] = $primary;
-
-        return $this;
-    }
-
-    /**
-     * Gets markup
-     *
-     * @return string|null
-     */
-    public function getMarkup(): ?string
-    {
-        return $this->container['markup'];
-    }
-
-    /**
-     * Sets markup
-     *
-     * @param string|null $markup Decimal markup (e.g. \"1.10\" for +10%).
-     *
-     * @return $this
-     */
-    public function setMarkup(?string $markup): static
-    {
-        if (is_null($markup)) {
-            array_push($this->openAPINullablesSetToNull, 'markup');
+        if (is_null($category)) {
+            array_push($this->openAPINullablesSetToNull, 'category');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('markup', $nullablesSetToNull);
+            $index = array_search('category', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['markup'] = $markup;
+        $this->container['category'] = $category;
 
         return $this;
     }
 
     /**
-     * Gets created_at
+     * Gets is_present
      *
-     * @return \DateTime|null
+     * @return bool
      */
-    public function getCreatedAt(): ?\DateTime
+    public function getIsPresent(): bool
     {
-        return $this->container['created_at'];
+        return $this->container['is_present'];
     }
 
     /**
-     * Sets created_at
+     * Sets is_present
      *
-     * @param \DateTime|null $created_at created_at
+     * @param bool $is_present `true` when the listing has this amenity, `false` when it has been explicitly opted out.
      *
      * @return $this
      */
-    public function setCreatedAt(?\DateTime $created_at): static
+    public function setIsPresent(bool $is_present): static
     {
-        if (is_null($created_at)) {
-            throw new InvalidArgumentException('non-nullable created_at cannot be null');
+        if (is_null($is_present)) {
+            throw new InvalidArgumentException('non-nullable is_present cannot be null');
         }
-        $this->container['created_at'] = $created_at;
+        $this->container['is_present'] = $is_present;
 
         return $this;
     }
 
     /**
-     * Gets amenities
+     * Gets instruction
      *
-     * @return \Repull\Model\AirbnbConnectionAmenitiesInner[]|null
+     * @return string|null
      */
-    public function getAmenities(): ?array
+    public function getInstruction(): ?string
     {
-        return $this->container['amenities'];
+        return $this->container['instruction'];
     }
 
     /**
-     * Sets amenities
+     * Sets instruction
      *
-     * @param \Repull\Model\AirbnbConnectionAmenitiesInner[]|null $amenities Present only when `?include=amenities` is passed. Sourced from the local `listings_airbnb_amenities` cache (populated by the Airbnb sync worker). Returns `null` when the cache is empty for this connection — see the top-level `data_freshness` envelope to disambiguate \"never synced\" vs \"host disconnected\" vs \"fresh and genuinely empty\".
+     * @param string|null $instruction Optional free-form instruction for the guest (e.g. WiFi password, parking notes).
      *
      * @return $this
      */
-    public function setAmenities(?array $amenities): static
+    public function setInstruction(?string $instruction): static
     {
-        if (is_null($amenities)) {
-            array_push($this->openAPINullablesSetToNull, 'amenities');
+        if (is_null($instruction)) {
+            array_push($this->openAPINullablesSetToNull, 'instruction');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('amenities', $nullablesSetToNull);
+            $index = array_search('instruction', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['amenities'] = $amenities;
-
-        return $this;
-    }
-
-    /**
-     * Gets accessibility_amenities
-     *
-     * @return \Repull\Model\AirbnbConnectionAccessibilityAmenitiesInner[]|null
-     */
-    public function getAccessibilityAmenities(): ?array
-    {
-        return $this->container['accessibility_amenities'];
-    }
-
-    /**
-     * Sets accessibility_amenities
-     *
-     * @param \Repull\Model\AirbnbConnectionAccessibilityAmenitiesInner[]|null $accessibility_amenities Present only when `?include=amenities` is passed. Accessibility-tagged subset of the local amenity cache (step-free access, wide doorways, grab rails, disabled parking, wheelchair, accessible-height fixtures, hoists, etc). Returns an empty array when amenities synced but none qualify as accessibility; returns `null` when the cache is empty for this connection (use `data_freshness` to disambiguate \"never synced\" from \"fresh and genuinely empty\").
-     *
-     * @return $this
-     */
-    public function setAccessibilityAmenities(?array $accessibility_amenities): static
-    {
-        if (is_null($accessibility_amenities)) {
-            array_push($this->openAPINullablesSetToNull, 'accessibility_amenities');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('accessibility_amenities', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['accessibility_amenities'] = $accessibility_amenities;
+        $this->container['instruction'] = $instruction;
 
         return $this;
     }

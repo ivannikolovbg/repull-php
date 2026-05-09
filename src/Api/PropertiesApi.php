@@ -135,6 +135,7 @@ class PropertiesApi
      * Get property details
      *
      * @param  int $id id (required)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getProperty'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -143,10 +144,11 @@ class PropertiesApi
      */
     public function getProperty(
         int $id,
+        ?string $include = null,
         string $contentType = self::contentTypes['getProperty'][0]
     ): \Repull\Model\Property|\Repull\Model\Error
     {
-        list($response) = $this->getPropertyWithHttpInfo($id, $contentType);
+        list($response) = $this->getPropertyWithHttpInfo($id, $include, $contentType);
         return $response;
     }
 
@@ -156,18 +158,20 @@ class PropertiesApi
      * Get property details
      *
      * @param  int $id (required)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getProperty'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\Property|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\Property|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getPropertyWithHttpInfo(
         int $id,
+        ?string $include = null,
         string $contentType = self::contentTypes['getProperty'][0]
     ): array
     {
-        $request = $this->getPropertyRequest($id, $contentType);
+        $request = $this->getPropertyRequest($id, $include, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -199,6 +203,12 @@ class PropertiesApi
                         $response,
                     );
                 case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -243,6 +253,14 @@ class PropertiesApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -255,6 +273,7 @@ class PropertiesApi
      * Get property details
      *
      * @param  int $id (required)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getProperty'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -262,10 +281,11 @@ class PropertiesApi
      */
     public function getPropertyAsync(
         int $id,
+        ?string $include = null,
         string $contentType = self::contentTypes['getProperty'][0]
     ): PromiseInterface
     {
-        return $this->getPropertyAsyncWithHttpInfo($id, $contentType)
+        return $this->getPropertyAsyncWithHttpInfo($id, $include, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -279,6 +299,7 @@ class PropertiesApi
      * Get property details
      *
      * @param  int $id (required)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getProperty'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -286,11 +307,12 @@ class PropertiesApi
      */
     public function getPropertyAsyncWithHttpInfo(
         int $id,
+        ?string $include = null,
         string $contentType = self::contentTypes['getProperty'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\Property';
-        $request = $this->getPropertyRequest($id, $contentType);
+        $request = $this->getPropertyRequest($id, $include, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -332,6 +354,7 @@ class PropertiesApi
      * Create request for operation 'getProperty'
      *
      * @param  int $id (required)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getProperty'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -339,6 +362,7 @@ class PropertiesApi
      */
     public function getPropertyRequest(
         int $id,
+        ?string $include = null,
         string $contentType = self::contentTypes['getProperty'][0]
     ): Request
     {
@@ -351,6 +375,7 @@ class PropertiesApi
         }
 
 
+
         $resourcePath = '/v1/properties/{id}';
         $formParams = [];
         $queryParams = [];
@@ -358,6 +383,15 @@ class PropertiesApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $include,
+            'include', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
         // path params

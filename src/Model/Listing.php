@@ -66,6 +66,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'thumbnail_url' => 'string',
         'status' => 'string',
         'channels' => '\Repull\Model\ListingChannel[]',
+        'amenities' => '\Repull\Model\ListingAmenity[]',
         'created_at' => '\DateTime',
         'updated_at' => '\DateTime'
     ];
@@ -82,6 +83,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'thumbnail_url' => 'uri',
         'status' => null,
         'channels' => null,
+        'amenities' => null,
         'created_at' => 'date-time',
         'updated_at' => 'date-time'
     ];
@@ -98,6 +100,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'thumbnail_url' => true,
         'status' => false,
         'channels' => false,
+        'amenities' => false,
         'created_at' => false,
         'updated_at' => false
     ];
@@ -184,6 +187,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'thumbnail_url' => 'thumbnailUrl',
         'status' => 'status',
         'channels' => 'channels',
+        'amenities' => 'amenities',
         'created_at' => 'createdAt',
         'updated_at' => 'updatedAt'
     ];
@@ -200,6 +204,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'thumbnail_url' => 'setThumbnailUrl',
         'status' => 'setStatus',
         'channels' => 'setChannels',
+        'amenities' => 'setAmenities',
         'created_at' => 'setCreatedAt',
         'updated_at' => 'setUpdatedAt'
     ];
@@ -216,6 +221,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'thumbnail_url' => 'getThumbnailUrl',
         'status' => 'getStatus',
         'channels' => 'getChannels',
+        'amenities' => 'getAmenities',
         'created_at' => 'getCreatedAt',
         'updated_at' => 'getUpdatedAt'
     ];
@@ -290,6 +296,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('thumbnail_url', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('channels', $data ?? [], null);
+        $this->setIfExists('amenities', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
         $this->setIfExists('updated_at', $data ?? [], null);
     }
@@ -506,6 +513,33 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable channels cannot be null');
         }
         $this->container['channels'] = $channels;
+
+        return $this;
+    }
+
+    /**
+     * Gets amenities
+     *
+     * @return \Repull\Model\ListingAmenity[]|null
+     */
+    public function getAmenities(): ?array
+    {
+        return $this->container['amenities'];
+    }
+
+    /**
+     * Sets amenities
+     *
+     * @param \Repull\Model\ListingAmenity[]|null $amenities Amenity rows for the listing. **Only present when the caller passes `?include=amenities`.** Empty array (`[]`) when the listing has no amenity rows.
+     *
+     * @return $this
+     */
+    public function setAmenities(?array $amenities): static
+    {
+        if (is_null($amenities)) {
+            throw new InvalidArgumentException('non-nullable amenities cannot be null');
+        }
+        $this->container['amenities'] = $amenities;
 
         return $this;
     }

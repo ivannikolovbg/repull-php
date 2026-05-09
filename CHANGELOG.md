@@ -5,6 +5,23 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2026-05-07
+
+### Added
+- **`?include=amenities` query param** on `GET /v1/listings/{id}` and `GET /v1/properties/{id}` — opt-in expansion that returns the listing/property with its amenities array hydrated. Pass `include=amenities` to receive the expanded payload; omit to keep the lean default response. Unknown values return 422.
+- New `ListingAmenity` model and amenity arrays on `Listing` / `Property` responses.
+
+### Notes
+- Regenerated from `https://api.repull.dev/openapi.json`. Tracks vanio-repull-api PRs #59 and #61.
+- Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
+- Enum validators relaxed in 58 model files for forward compatibility.
+- `vendor/bin/phpunit` (4 tests) green.
+
+## [0.2.1] - 2026-05-06
+
+### Changed
+- Reservation `primaryGuest` / `occupancy` / `financials` shape regen.
+
 ## [0.2.0] - 2026-05-02
 
 ### Breaking

@@ -60,7 +60,8 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPITypes = [
         'listing_id' => 'string',
-        'channels' => '\Repull\Model\ListingPublishStatusChannel[]'
+        'channels' => '\Repull\Model\ListingPublishStatusChannel[]',
+        'connections' => '\Repull\Model\ListingPublishStatusConnection[]'
     ];
 
     /**
@@ -70,7 +71,8 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPIFormats = [
         'listing_id' => null,
-        'channels' => null
+        'channels' => null,
+        'connections' => null
     ];
 
     /**
@@ -80,7 +82,8 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPINullables = [
         'listing_id' => false,
-        'channels' => false
+        'channels' => false,
+        'connections' => false
     ];
 
     /**
@@ -160,7 +163,8 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $attributeMap = [
         'listing_id' => 'listingId',
-        'channels' => 'channels'
+        'channels' => 'channels',
+        'connections' => 'connections'
     ];
 
     /**
@@ -170,7 +174,8 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $setters = [
         'listing_id' => 'setListingId',
-        'channels' => 'setChannels'
+        'channels' => 'setChannels',
+        'connections' => 'setConnections'
     ];
 
     /**
@@ -180,7 +185,8 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $getters = [
         'listing_id' => 'getListingId',
-        'channels' => 'getChannels'
+        'channels' => 'getChannels',
+        'connections' => 'getConnections'
     ];
 
     /**
@@ -232,6 +238,7 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
     {
         $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('channels', $data ?? [], null);
+        $this->setIfExists('connections', $data ?? [], null);
     }
 
     /**
@@ -311,7 +318,7 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
     /**
      * Sets channels
      *
-     * @param \Repull\Model\ListingPublishStatusChannel[]|null $channels channels
+     * @param \Repull\Model\ListingPublishStatusChannel[]|null $channels Sync activity per channel — empty if the listing has never been pushed/pulled. Empty does NOT mean \"not connected\"; check `connections` for that.
      *
      * @return $this
      */
@@ -321,6 +328,33 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
             throw new InvalidArgumentException('non-nullable channels cannot be null');
         }
         $this->container['channels'] = $channels;
+
+        return $this;
+    }
+
+    /**
+     * Gets connections
+     *
+     * @return \Repull\Model\ListingPublishStatusConnection[]|null
+     */
+    public function getConnections(): ?array
+    {
+        return $this->container['connections'];
+    }
+
+    /**
+     * Sets connections
+     *
+     * @param \Repull\Model\ListingPublishStatusConnection[]|null $connections Connection state per channel. Populated even when `channels` is empty so callers can distinguish \"owned, never pushed\" from \"owned, never connected\".
+     *
+     * @return $this
+     */
+    public function setConnections(?array $connections): static
+    {
+        if (is_null($connections)) {
+            throw new InvalidArgumentException('non-nullable connections cannot be null');
+        }
+        $this->container['connections'] = $connections;
 
         return $this;
     }

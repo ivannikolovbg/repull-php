@@ -73,7 +73,8 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'bathrooms' => 'float',
         'max_guests' => 'int',
         'thumbnail' => 'string',
-        'provider' => 'string'
+        'provider' => 'string',
+        'amenities' => '\Repull\Model\ListingAmenity[]'
     ];
 
     /**
@@ -95,7 +96,8 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'bathrooms' => null,
         'max_guests' => null,
         'thumbnail' => 'uri',
-        'provider' => null
+        'provider' => null,
+        'amenities' => null
     ];
 
     /**
@@ -117,7 +119,8 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'bathrooms' => false,
         'max_guests' => false,
         'thumbnail' => false,
-        'provider' => false
+        'provider' => false,
+        'amenities' => false
     ];
 
     /**
@@ -209,7 +212,8 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'bathrooms' => 'bathrooms',
         'max_guests' => 'maxGuests',
         'thumbnail' => 'thumbnail',
-        'provider' => 'provider'
+        'provider' => 'provider',
+        'amenities' => 'amenities'
     ];
 
     /**
@@ -231,7 +235,8 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'bathrooms' => 'setBathrooms',
         'max_guests' => 'setMaxGuests',
         'thumbnail' => 'setThumbnail',
-        'provider' => 'setProvider'
+        'provider' => 'setProvider',
+        'amenities' => 'setAmenities'
     ];
 
     /**
@@ -253,7 +258,8 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'bathrooms' => 'getBathrooms',
         'max_guests' => 'getMaxGuests',
         'thumbnail' => 'getThumbnail',
-        'provider' => 'getProvider'
+        'provider' => 'getProvider',
+        'amenities' => 'getAmenities'
     ];
 
     /**
@@ -317,6 +323,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('max_guests', $data ?? [], null);
         $this->setIfExists('thumbnail', $data ?? [], null);
         $this->setIfExists('provider', $data ?? [], null);
+        $this->setIfExists('amenities', $data ?? [], null);
     }
 
     /**
@@ -730,6 +737,33 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable provider cannot be null');
         }
         $this->container['provider'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * Gets amenities
+     *
+     * @return \Repull\Model\ListingAmenity[]|null
+     */
+    public function getAmenities(): ?array
+    {
+        return $this->container['amenities'];
+    }
+
+    /**
+     * Sets amenities
+     *
+     * @param \Repull\Model\ListingAmenity[]|null $amenities Amenity rows for the property. **Only present when the caller passes `?include=amenities`.** Empty array (`[]`) when the property has no amenity rows.
+     *
+     * @return $this
+     */
+    public function setAmenities(?array $amenities): static
+    {
+        if (is_null($amenities)) {
+            throw new InvalidArgumentException('non-nullable amenities cannot be null');
+        }
+        $this->container['amenities'] = $amenities;
 
         return $this;
     }

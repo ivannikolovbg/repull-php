@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbConnectionErrorsValue
+ * ListingPublishStatusConnection
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbConnectionErrorsValue Class Doc Comment
+ * ListingPublishStatusConnection Class Doc Comment
  *
+ * @description Per-channel connection state. Distinct from &#x60;channels&#x60; (sync activity) — a listing can be connected here yet have empty &#x60;channels&#x60; if it has never been pushed.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbConnectionErrorsValue implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class AirbnbConnectionErrorsValue implements ModelInterface, ArrayAccess, JsonSe
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbConnection__errors_value';
+    protected static string $openAPIModelName = 'ListingPublishStatusConnection';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +60,10 @@ class AirbnbConnectionErrorsValue implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'message' => 'string',
-        'status' => 'int'
+        'channel' => 'string',
+        'connected' => 'bool',
+        'sync_enabled' => 'bool',
+        'since' => '\DateTime'
     ];
 
     /**
@@ -69,8 +72,10 @@ class AirbnbConnectionErrorsValue implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'message' => null,
-        'status' => null
+        'channel' => null,
+        'connected' => null,
+        'sync_enabled' => null,
+        'since' => 'date-time'
     ];
 
     /**
@@ -79,8 +84,10 @@ class AirbnbConnectionErrorsValue implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'message' => false,
-        'status' => true
+        'channel' => false,
+        'connected' => false,
+        'sync_enabled' => false,
+        'since' => true
     ];
 
     /**
@@ -159,8 +166,10 @@ class AirbnbConnectionErrorsValue implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'message' => 'message',
-        'status' => 'status'
+        'channel' => 'channel',
+        'connected' => 'connected',
+        'sync_enabled' => 'syncEnabled',
+        'since' => 'since'
     ];
 
     /**
@@ -169,8 +178,10 @@ class AirbnbConnectionErrorsValue implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $setters = [
-        'message' => 'setMessage',
-        'status' => 'setStatus'
+        'channel' => 'setChannel',
+        'connected' => 'setConnected',
+        'sync_enabled' => 'setSyncEnabled',
+        'since' => 'setSince'
     ];
 
     /**
@@ -179,8 +190,10 @@ class AirbnbConnectionErrorsValue implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $getters = [
-        'message' => 'getMessage',
-        'status' => 'getStatus'
+        'channel' => 'getChannel',
+        'connected' => 'getConnected',
+        'sync_enabled' => 'getSyncEnabled',
+        'since' => 'getSince'
     ];
 
     /**
@@ -230,8 +243,10 @@ class AirbnbConnectionErrorsValue implements ModelInterface, ArrayAccess, JsonSe
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('message', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('channel', $data ?? [], null);
+        $this->setIfExists('connected', $data ?? [], null);
+        $this->setIfExists('sync_enabled', $data ?? [], null);
+        $this->setIfExists('since', $data ?? [], null);
     }
 
     /**
@@ -272,62 +287,116 @@ class AirbnbConnectionErrorsValue implements ModelInterface, ArrayAccess, JsonSe
 
 
     /**
-     * Gets message
+     * Gets channel
      *
      * @return string|null
      */
-    public function getMessage(): ?string
+    public function getChannel(): ?string
     {
-        return $this->container['message'];
+        return $this->container['channel'];
     }
 
     /**
-     * Sets message
+     * Sets channel
      *
-     * @param string|null $message message
+     * @param string|null $channel Channel name: airbnb, booking, vrbo, etc.
      *
      * @return $this
      */
-    public function setMessage(?string $message): static
+    public function setChannel(?string $channel): static
     {
-        if (is_null($message)) {
-            throw new InvalidArgumentException('non-nullable message cannot be null');
+        if (is_null($channel)) {
+            throw new InvalidArgumentException('non-nullable channel cannot be null');
         }
-        $this->container['message'] = $message;
+        $this->container['channel'] = $channel;
 
         return $this;
     }
 
     /**
-     * Gets status
+     * Gets connected
      *
-     * @return int|null
+     * @return bool|null
      */
-    public function getStatus(): ?int
+    public function getConnected(): ?bool
     {
-        return $this->container['status'];
+        return $this->container['connected'];
     }
 
     /**
-     * Sets status
+     * Sets connected
      *
-     * @param int|null $status status
+     * @param bool|null $connected True when the link is active (not disconnected/suspended).
      *
      * @return $this
      */
-    public function setStatus(?int $status): static
+    public function setConnected(?bool $connected): static
     {
-        if (is_null($status)) {
-            array_push($this->openAPINullablesSetToNull, 'status');
+        if (is_null($connected)) {
+            throw new InvalidArgumentException('non-nullable connected cannot be null');
+        }
+        $this->container['connected'] = $connected;
+
+        return $this;
+    }
+
+    /**
+     * Gets sync_enabled
+     *
+     * @return bool|null
+     */
+    public function getSyncEnabled(): ?bool
+    {
+        return $this->container['sync_enabled'];
+    }
+
+    /**
+     * Sets sync_enabled
+     *
+     * @param bool|null $sync_enabled True when sync writes are enabled for this channel.
+     *
+     * @return $this
+     */
+    public function setSyncEnabled(?bool $sync_enabled): static
+    {
+        if (is_null($sync_enabled)) {
+            throw new InvalidArgumentException('non-nullable sync_enabled cannot be null');
+        }
+        $this->container['sync_enabled'] = $sync_enabled;
+
+        return $this;
+    }
+
+    /**
+     * Gets since
+     *
+     * @return \DateTime|null
+     */
+    public function getSince(): ?\DateTime
+    {
+        return $this->container['since'];
+    }
+
+    /**
+     * Sets since
+     *
+     * @param \DateTime|null $since ISO timestamp the connection was first established.
+     *
+     * @return $this
+     */
+    public function setSince(?\DateTime $since): static
+    {
+        if (is_null($since)) {
+            array_push($this->openAPINullablesSetToNull, 'since');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('status', $nullablesSetToNull);
+            $index = array_search('since', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['status'] = $status;
+        $this->container['since'] = $since;
 
         return $this;
     }
