@@ -61,9 +61,7 @@ class AirbnbConnectionAmenitiesInner implements ModelInterface, ArrayAccess, Jso
     protected static array $openAPITypes = [
         'id' => 'string',
         'is_present' => 'bool',
-        'name' => 'string',
-        'category' => 'string',
-        'icon' => 'string'
+        'instruction' => 'string'
     ];
 
     /**
@@ -74,9 +72,7 @@ class AirbnbConnectionAmenitiesInner implements ModelInterface, ArrayAccess, Jso
     protected static array $openAPIFormats = [
         'id' => null,
         'is_present' => null,
-        'name' => null,
-        'category' => null,
-        'icon' => null
+        'instruction' => null
     ];
 
     /**
@@ -87,9 +83,7 @@ class AirbnbConnectionAmenitiesInner implements ModelInterface, ArrayAccess, Jso
     protected static array $openAPINullables = [
         'id' => false,
         'is_present' => false,
-        'name' => true,
-        'category' => true,
-        'icon' => true
+        'instruction' => true
     ];
 
     /**
@@ -170,9 +164,7 @@ class AirbnbConnectionAmenitiesInner implements ModelInterface, ArrayAccess, Jso
     protected static array $attributeMap = [
         'id' => 'id',
         'is_present' => 'is_present',
-        'name' => 'name',
-        'category' => 'category',
-        'icon' => 'icon'
+        'instruction' => 'instruction'
     ];
 
     /**
@@ -183,9 +175,7 @@ class AirbnbConnectionAmenitiesInner implements ModelInterface, ArrayAccess, Jso
     protected static array $setters = [
         'id' => 'setId',
         'is_present' => 'setIsPresent',
-        'name' => 'setName',
-        'category' => 'setCategory',
-        'icon' => 'setIcon'
+        'instruction' => 'setInstruction'
     ];
 
     /**
@@ -196,9 +186,7 @@ class AirbnbConnectionAmenitiesInner implements ModelInterface, ArrayAccess, Jso
     protected static array $getters = [
         'id' => 'getId',
         'is_present' => 'getIsPresent',
-        'name' => 'getName',
-        'category' => 'getCategory',
-        'icon' => 'getIcon'
+        'instruction' => 'getInstruction'
     ];
 
     /**
@@ -250,9 +238,7 @@ class AirbnbConnectionAmenitiesInner implements ModelInterface, ArrayAccess, Jso
     {
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('is_present', $data ?? [], null);
-        $this->setIfExists('name', $data ?? [], null);
-        $this->setIfExists('category', $data ?? [], null);
-        $this->setIfExists('icon', $data ?? [], null);
+        $this->setIfExists('instruction', $data ?? [], null);
     }
 
     /**
@@ -305,7 +291,7 @@ class AirbnbConnectionAmenitiesInner implements ModelInterface, ArrayAccess, Jso
     /**
      * Sets id
      *
-     * @param string|null $id id
+     * @param string|null $id Airbnb amenity id (e.g. `wifi`, `kitchen`).
      *
      * @return $this
      */
@@ -347,103 +333,35 @@ class AirbnbConnectionAmenitiesInner implements ModelInterface, ArrayAccess, Jso
     }
 
     /**
-     * Gets name
+     * Gets instruction
      *
      * @return string|null
      */
-    public function getName(): ?string
+    public function getInstruction(): ?string
     {
-        return $this->container['name'];
+        return $this->container['instruction'];
     }
 
     /**
-     * Sets name
+     * Sets instruction
      *
-     * @param string|null $name name
+     * @param string|null $instruction Host-supplied instruction for the amenity (e.g. \"WiFi password is on the fridge\").
      *
      * @return $this
      */
-    public function setName(?string $name): static
+    public function setInstruction(?string $instruction): static
     {
-        if (is_null($name)) {
-            array_push($this->openAPINullablesSetToNull, 'name');
+        if (is_null($instruction)) {
+            array_push($this->openAPINullablesSetToNull, 'instruction');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('name', $nullablesSetToNull);
+            $index = array_search('instruction', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['name'] = $name;
-
-        return $this;
-    }
-
-    /**
-     * Gets category
-     *
-     * @return string|null
-     */
-    public function getCategory(): ?string
-    {
-        return $this->container['category'];
-    }
-
-    /**
-     * Sets category
-     *
-     * @param string|null $category category
-     *
-     * @return $this
-     */
-    public function setCategory(?string $category): static
-    {
-        if (is_null($category)) {
-            array_push($this->openAPINullablesSetToNull, 'category');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('category', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['category'] = $category;
-
-        return $this;
-    }
-
-    /**
-     * Gets icon
-     *
-     * @return string|null
-     */
-    public function getIcon(): ?string
-    {
-        return $this->container['icon'];
-    }
-
-    /**
-     * Sets icon
-     *
-     * @param string|null $icon icon
-     *
-     * @return $this
-     */
-    public function setIcon(?string $icon): static
-    {
-        if (is_null($icon)) {
-            array_push($this->openAPINullablesSetToNull, 'icon');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('icon', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['icon'] = $icon;
+        $this->container['instruction'] = $instruction;
 
         return $this;
     }

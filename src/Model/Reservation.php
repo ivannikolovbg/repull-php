@@ -651,7 +651,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets status
      *
-     * @param string $status status
+     * @param string $status Lifecycle status. The API normalises a multi-decade internal taxonomy down to these four buckets, so the value you receive is always one of the enum constants. `completed` is derived from `checkOut < today`.
      *
      * @return $this
      */

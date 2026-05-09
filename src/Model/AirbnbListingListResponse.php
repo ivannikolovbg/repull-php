@@ -60,7 +60,8 @@ class AirbnbListingListResponse implements ModelInterface, ArrayAccess, JsonSeri
      */
     protected static array $openAPITypes = [
         'data' => '\Repull\Model\AirbnbListing[]',
-        'pagination' => '\Repull\Model\Pagination'
+        'pagination' => '\Repull\Model\Pagination',
+        'data_freshness' => '\Repull\Model\AirbnbDataFreshness'
     ];
 
     /**
@@ -70,7 +71,8 @@ class AirbnbListingListResponse implements ModelInterface, ArrayAccess, JsonSeri
      */
     protected static array $openAPIFormats = [
         'data' => null,
-        'pagination' => null
+        'pagination' => null,
+        'data_freshness' => null
     ];
 
     /**
@@ -80,7 +82,8 @@ class AirbnbListingListResponse implements ModelInterface, ArrayAccess, JsonSeri
      */
     protected static array $openAPINullables = [
         'data' => false,
-        'pagination' => false
+        'pagination' => false,
+        'data_freshness' => false
     ];
 
     /**
@@ -160,7 +163,8 @@ class AirbnbListingListResponse implements ModelInterface, ArrayAccess, JsonSeri
      */
     protected static array $attributeMap = [
         'data' => 'data',
-        'pagination' => 'pagination'
+        'pagination' => 'pagination',
+        'data_freshness' => 'data_freshness'
     ];
 
     /**
@@ -170,7 +174,8 @@ class AirbnbListingListResponse implements ModelInterface, ArrayAccess, JsonSeri
      */
     protected static array $setters = [
         'data' => 'setData',
-        'pagination' => 'setPagination'
+        'pagination' => 'setPagination',
+        'data_freshness' => 'setDataFreshness'
     ];
 
     /**
@@ -180,7 +185,8 @@ class AirbnbListingListResponse implements ModelInterface, ArrayAccess, JsonSeri
      */
     protected static array $getters = [
         'data' => 'getData',
-        'pagination' => 'getPagination'
+        'pagination' => 'getPagination',
+        'data_freshness' => 'getDataFreshness'
     ];
 
     /**
@@ -232,6 +238,7 @@ class AirbnbListingListResponse implements ModelInterface, ArrayAccess, JsonSeri
     {
         $this->setIfExists('data', $data ?? [], null);
         $this->setIfExists('pagination', $data ?? [], null);
+        $this->setIfExists('data_freshness', $data ?? [], null);
     }
 
     /**
@@ -259,6 +266,15 @@ class AirbnbListingListResponse implements ModelInterface, ArrayAccess, JsonSeri
     {
         $invalidProperties = [];
 
+        if ($this->container['data'] === null) {
+            $invalidProperties[] = "'data' can't be null";
+        }
+        if ($this->container['pagination'] === null) {
+            $invalidProperties[] = "'pagination' can't be null";
+        }
+        if ($this->container['data_freshness'] === null) {
+            $invalidProperties[] = "'data_freshness' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -274,9 +290,9 @@ class AirbnbListingListResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Gets data
      *
-     * @return \Repull\Model\AirbnbListing[]|null
+     * @return \Repull\Model\AirbnbListing[]
      */
-    public function getData(): ?array
+    public function getData(): array
     {
         return $this->container['data'];
     }
@@ -284,11 +300,11 @@ class AirbnbListingListResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets data
      *
-     * @param \Repull\Model\AirbnbListing[]|null $data data
+     * @param \Repull\Model\AirbnbListing[] $data data
      *
      * @return $this
      */
-    public function setData(?array $data): static
+    public function setData(array $data): static
     {
         if (is_null($data)) {
             throw new InvalidArgumentException('non-nullable data cannot be null');
@@ -301,9 +317,9 @@ class AirbnbListingListResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Gets pagination
      *
-     * @return \Repull\Model\Pagination|null
+     * @return \Repull\Model\Pagination
      */
-    public function getPagination(): ?\Repull\Model\Pagination
+    public function getPagination(): \Repull\Model\Pagination
     {
         return $this->container['pagination'];
     }
@@ -311,16 +327,43 @@ class AirbnbListingListResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets pagination
      *
-     * @param \Repull\Model\Pagination|null $pagination pagination
+     * @param \Repull\Model\Pagination $pagination pagination
      *
      * @return $this
      */
-    public function setPagination(?\Repull\Model\Pagination $pagination): static
+    public function setPagination(\Repull\Model\Pagination $pagination): static
     {
         if (is_null($pagination)) {
             throw new InvalidArgumentException('non-nullable pagination cannot be null');
         }
         $this->container['pagination'] = $pagination;
+
+        return $this;
+    }
+
+    /**
+     * Gets data_freshness
+     *
+     * @return \Repull\Model\AirbnbDataFreshness
+     */
+    public function getDataFreshness(): \Repull\Model\AirbnbDataFreshness
+    {
+        return $this->container['data_freshness'];
+    }
+
+    /**
+     * Sets data_freshness
+     *
+     * @param \Repull\Model\AirbnbDataFreshness $data_freshness data_freshness
+     *
+     * @return $this
+     */
+    public function setDataFreshness(\Repull\Model\AirbnbDataFreshness $data_freshness): static
+    {
+        if (is_null($data_freshness)) {
+            throw new InvalidArgumentException('non-nullable data_freshness cannot be null');
+        }
+        $this->container['data_freshness'] = $data_freshness;
 
         return $this;
     }

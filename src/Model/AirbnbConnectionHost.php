@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbConnection
+ * AirbnbConnectionHost
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbConnection Class Doc Comment
+ * AirbnbConnectionHost Class Doc Comment
  *
- * @description An Airbnb-side connection record for a Vanio listing. The same property may appear under multiple connections if it has been linked from multiple Airbnb host accounts.
+ * @description One Airbnb host record under the workspace, decorated with its most recent disconnect reason from &#x60;airbnb_host_events&#x60; (backfill events excluded).
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
+class AirbnbConnectionHost implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbConnection';
+    protected static string $openAPIModelName = 'AirbnbConnectionHost';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,16 +60,12 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'int',
-        'airbnb_id' => 'string',
-        'host_id' => 'string',
-        'active' => 'bool',
-        'sync_enabled' => 'bool',
-        'primary' => 'bool',
-        'markup' => 'string',
-        'created_at' => '\DateTime',
-        'amenities' => '\Repull\Model\AirbnbConnectionAmenitiesInner[]',
-        'accessibility_amenities' => '\Repull\Model\AirbnbConnectionAccessibilityAmenitiesInner[]'
+        'airbnb_user_id' => 'string',
+        'name' => 'string',
+        'is_connected' => 'bool',
+        'last_synced_at' => '\DateTime',
+        'deactivated_at' => '\DateTime',
+        'last_disconnect_reason' => 'string'
     ];
 
     /**
@@ -78,16 +74,12 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'id' => null,
-        'airbnb_id' => null,
-        'host_id' => null,
-        'active' => null,
-        'sync_enabled' => null,
-        'primary' => null,
-        'markup' => null,
-        'created_at' => 'date-time',
-        'amenities' => null,
-        'accessibility_amenities' => null
+        'airbnb_user_id' => null,
+        'name' => null,
+        'is_connected' => null,
+        'last_synced_at' => 'date-time',
+        'deactivated_at' => 'date-time',
+        'last_disconnect_reason' => null
     ];
 
     /**
@@ -96,16 +88,12 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => false,
-        'airbnb_id' => false,
-        'host_id' => false,
-        'active' => false,
-        'sync_enabled' => false,
-        'primary' => false,
-        'markup' => true,
-        'created_at' => false,
-        'amenities' => true,
-        'accessibility_amenities' => true
+        'airbnb_user_id' => false,
+        'name' => true,
+        'is_connected' => false,
+        'last_synced_at' => true,
+        'deactivated_at' => true,
+        'last_disconnect_reason' => true
     ];
 
     /**
@@ -184,16 +172,12 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'id' => 'id',
-        'airbnb_id' => 'airbnbId',
-        'host_id' => 'hostId',
-        'active' => 'active',
-        'sync_enabled' => 'syncEnabled',
-        'primary' => 'primary',
-        'markup' => 'markup',
-        'created_at' => 'createdAt',
-        'amenities' => 'amenities',
-        'accessibility_amenities' => 'accessibility_amenities'
+        'airbnb_user_id' => 'airbnbUserId',
+        'name' => 'name',
+        'is_connected' => 'isConnected',
+        'last_synced_at' => 'lastSyncedAt',
+        'deactivated_at' => 'deactivatedAt',
+        'last_disconnect_reason' => 'lastDisconnectReason'
     ];
 
     /**
@@ -202,16 +186,12 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
-        'id' => 'setId',
-        'airbnb_id' => 'setAirbnbId',
-        'host_id' => 'setHostId',
-        'active' => 'setActive',
-        'sync_enabled' => 'setSyncEnabled',
-        'primary' => 'setPrimary',
-        'markup' => 'setMarkup',
-        'created_at' => 'setCreatedAt',
-        'amenities' => 'setAmenities',
-        'accessibility_amenities' => 'setAccessibilityAmenities'
+        'airbnb_user_id' => 'setAirbnbUserId',
+        'name' => 'setName',
+        'is_connected' => 'setIsConnected',
+        'last_synced_at' => 'setLastSyncedAt',
+        'deactivated_at' => 'setDeactivatedAt',
+        'last_disconnect_reason' => 'setLastDisconnectReason'
     ];
 
     /**
@@ -220,16 +200,12 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
-        'id' => 'getId',
-        'airbnb_id' => 'getAirbnbId',
-        'host_id' => 'getHostId',
-        'active' => 'getActive',
-        'sync_enabled' => 'getSyncEnabled',
-        'primary' => 'getPrimary',
-        'markup' => 'getMarkup',
-        'created_at' => 'getCreatedAt',
-        'amenities' => 'getAmenities',
-        'accessibility_amenities' => 'getAccessibilityAmenities'
+        'airbnb_user_id' => 'getAirbnbUserId',
+        'name' => 'getName',
+        'is_connected' => 'getIsConnected',
+        'last_synced_at' => 'getLastSyncedAt',
+        'deactivated_at' => 'getDeactivatedAt',
+        'last_disconnect_reason' => 'getLastDisconnectReason'
     ];
 
     /**
@@ -279,16 +255,12 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('airbnb_id', $data ?? [], null);
-        $this->setIfExists('host_id', $data ?? [], null);
-        $this->setIfExists('active', $data ?? [], null);
-        $this->setIfExists('sync_enabled', $data ?? [], null);
-        $this->setIfExists('primary', $data ?? [], null);
-        $this->setIfExists('markup', $data ?? [], null);
-        $this->setIfExists('created_at', $data ?? [], null);
-        $this->setIfExists('amenities', $data ?? [], null);
-        $this->setIfExists('accessibility_amenities', $data ?? [], null);
+        $this->setIfExists('airbnb_user_id', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('is_connected', $data ?? [], null);
+        $this->setIfExists('last_synced_at', $data ?? [], null);
+        $this->setIfExists('deactivated_at', $data ?? [], null);
+        $this->setIfExists('last_disconnect_reason', $data ?? [], null);
     }
 
     /**
@@ -316,6 +288,24 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
+        if ($this->container['airbnb_user_id'] === null) {
+            $invalidProperties[] = "'airbnb_user_id' can't be null";
+        }
+        if ($this->container['name'] === null && !$this->isNullableSetToNull('name')) {
+            $invalidProperties[] = "'name' is required";
+        }
+        if ($this->container['is_connected'] === null) {
+            $invalidProperties[] = "'is_connected' can't be null";
+        }
+        if ($this->container['last_synced_at'] === null && !$this->isNullableSetToNull('last_synced_at')) {
+            $invalidProperties[] = "'last_synced_at' is required";
+        }
+        if ($this->container['deactivated_at'] === null && !$this->isNullableSetToNull('deactivated_at')) {
+            $invalidProperties[] = "'deactivated_at' is required";
+        }
+        if ($this->container['last_disconnect_reason'] === null && !$this->isNullableSetToNull('last_disconnect_reason')) {
+            $invalidProperties[] = "'last_disconnect_reason' is required";
+        }
         return $invalidProperties;
     }
 
@@ -329,292 +319,191 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
 
 
     /**
-     * Gets id
+     * Gets airbnb_user_id
      *
-     * @return int|null
+     * @return string
      */
-    public function getId(): ?int
+    public function getAirbnbUserId(): string
     {
-        return $this->container['id'];
+        return $this->container['airbnb_user_id'];
     }
 
     /**
-     * Sets id
+     * Sets airbnb_user_id
      *
-     * @param int|null $id Connection row id
+     * @param string $airbnb_user_id Upstream Airbnb user id.
      *
      * @return $this
      */
-    public function setId(?int $id): static
+    public function setAirbnbUserId(string $airbnb_user_id): static
     {
-        if (is_null($id)) {
-            throw new InvalidArgumentException('non-nullable id cannot be null');
+        if (is_null($airbnb_user_id)) {
+            throw new InvalidArgumentException('non-nullable airbnb_user_id cannot be null');
         }
-        $this->container['id'] = $id;
+        $this->container['airbnb_user_id'] = $airbnb_user_id;
 
         return $this;
     }
 
     /**
-     * Gets airbnb_id
+     * Gets name
      *
      * @return string|null
      */
-    public function getAirbnbId(): ?string
+    public function getName(): ?string
     {
-        return $this->container['airbnb_id'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets airbnb_id
+     * Sets name
      *
-     * @param string|null $airbnb_id Airbnb-side listing id
+     * @param string|null $name Display name (preferred form, falling back to legal first name). Null when both fields are empty.
      *
      * @return $this
      */
-    public function setAirbnbId(?string $airbnb_id): static
+    public function setName(?string $name): static
     {
-        if (is_null($airbnb_id)) {
-            throw new InvalidArgumentException('non-nullable airbnb_id cannot be null');
-        }
-        $this->container['airbnb_id'] = $airbnb_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets host_id
-     *
-     * @return string|null
-     */
-    public function getHostId(): ?string
-    {
-        return $this->container['host_id'];
-    }
-
-    /**
-     * Sets host_id
-     *
-     * @param string|null $host_id Airbnb host user id
-     *
-     * @return $this
-     */
-    public function setHostId(?string $host_id): static
-    {
-        if (is_null($host_id)) {
-            throw new InvalidArgumentException('non-nullable host_id cannot be null');
-        }
-        $this->container['host_id'] = $host_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets active
-     *
-     * @return bool|null
-     */
-    public function getActive(): ?bool
-    {
-        return $this->container['active'];
-    }
-
-    /**
-     * Sets active
-     *
-     * @param bool|null $active active
-     *
-     * @return $this
-     */
-    public function setActive(?bool $active): static
-    {
-        if (is_null($active)) {
-            throw new InvalidArgumentException('non-nullable active cannot be null');
-        }
-        $this->container['active'] = $active;
-
-        return $this;
-    }
-
-    /**
-     * Gets sync_enabled
-     *
-     * @return bool|null
-     */
-    public function getSyncEnabled(): ?bool
-    {
-        return $this->container['sync_enabled'];
-    }
-
-    /**
-     * Sets sync_enabled
-     *
-     * @param bool|null $sync_enabled sync_enabled
-     *
-     * @return $this
-     */
-    public function setSyncEnabled(?bool $sync_enabled): static
-    {
-        if (is_null($sync_enabled)) {
-            throw new InvalidArgumentException('non-nullable sync_enabled cannot be null');
-        }
-        $this->container['sync_enabled'] = $sync_enabled;
-
-        return $this;
-    }
-
-    /**
-     * Gets primary
-     *
-     * @return bool|null
-     */
-    public function getPrimary(): ?bool
-    {
-        return $this->container['primary'];
-    }
-
-    /**
-     * Sets primary
-     *
-     * @param bool|null $primary primary
-     *
-     * @return $this
-     */
-    public function setPrimary(?bool $primary): static
-    {
-        if (is_null($primary)) {
-            throw new InvalidArgumentException('non-nullable primary cannot be null');
-        }
-        $this->container['primary'] = $primary;
-
-        return $this;
-    }
-
-    /**
-     * Gets markup
-     *
-     * @return string|null
-     */
-    public function getMarkup(): ?string
-    {
-        return $this->container['markup'];
-    }
-
-    /**
-     * Sets markup
-     *
-     * @param string|null $markup Decimal markup (e.g. \"1.10\" for +10%).
-     *
-     * @return $this
-     */
-    public function setMarkup(?string $markup): static
-    {
-        if (is_null($markup)) {
-            array_push($this->openAPINullablesSetToNull, 'markup');
+        if (is_null($name)) {
+            array_push($this->openAPINullablesSetToNull, 'name');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('markup', $nullablesSetToNull);
+            $index = array_search('name', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['markup'] = $markup;
+        $this->container['name'] = $name;
 
         return $this;
     }
 
     /**
-     * Gets created_at
+     * Gets is_connected
+     *
+     * @return bool
+     */
+    public function getIsConnected(): bool
+    {
+        return $this->container['is_connected'];
+    }
+
+    /**
+     * Sets is_connected
+     *
+     * @param bool $is_connected is_connected
+     *
+     * @return $this
+     */
+    public function setIsConnected(bool $is_connected): static
+    {
+        if (is_null($is_connected)) {
+            throw new InvalidArgumentException('non-nullable is_connected cannot be null');
+        }
+        $this->container['is_connected'] = $is_connected;
+
+        return $this;
+    }
+
+    /**
+     * Gets last_synced_at
      *
      * @return \DateTime|null
      */
-    public function getCreatedAt(): ?\DateTime
+    public function getLastSyncedAt(): ?\DateTime
     {
-        return $this->container['created_at'];
+        return $this->container['last_synced_at'];
     }
 
     /**
-     * Sets created_at
+     * Sets last_synced_at
      *
-     * @param \DateTime|null $created_at created_at
+     * @param \DateTime|null $last_synced_at When the host record was last touched (token refresh / activation / restriction). Closest available proxy for \"last successful sync\".
      *
      * @return $this
      */
-    public function setCreatedAt(?\DateTime $created_at): static
+    public function setLastSyncedAt(?\DateTime $last_synced_at): static
     {
-        if (is_null($created_at)) {
-            throw new InvalidArgumentException('non-nullable created_at cannot be null');
-        }
-        $this->container['created_at'] = $created_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets amenities
-     *
-     * @return \Repull\Model\AirbnbConnectionAmenitiesInner[]|null
-     */
-    public function getAmenities(): ?array
-    {
-        return $this->container['amenities'];
-    }
-
-    /**
-     * Sets amenities
-     *
-     * @param \Repull\Model\AirbnbConnectionAmenitiesInner[]|null $amenities Present only when `?include=amenities` is passed. Sourced from the local `listings_airbnb_amenities` cache (populated by the Airbnb sync worker). Returns `null` when the cache is empty for this connection — see the top-level `data_freshness` envelope to disambiguate \"never synced\" vs \"host disconnected\" vs \"fresh and genuinely empty\".
-     *
-     * @return $this
-     */
-    public function setAmenities(?array $amenities): static
-    {
-        if (is_null($amenities)) {
-            array_push($this->openAPINullablesSetToNull, 'amenities');
+        if (is_null($last_synced_at)) {
+            array_push($this->openAPINullablesSetToNull, 'last_synced_at');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('amenities', $nullablesSetToNull);
+            $index = array_search('last_synced_at', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['amenities'] = $amenities;
+        $this->container['last_synced_at'] = $last_synced_at;
 
         return $this;
     }
 
     /**
-     * Gets accessibility_amenities
+     * Gets deactivated_at
      *
-     * @return \Repull\Model\AirbnbConnectionAccessibilityAmenitiesInner[]|null
+     * @return \DateTime|null
      */
-    public function getAccessibilityAmenities(): ?array
+    public function getDeactivatedAt(): ?\DateTime
     {
-        return $this->container['accessibility_amenities'];
+        return $this->container['deactivated_at'];
     }
 
     /**
-     * Sets accessibility_amenities
+     * Sets deactivated_at
      *
-     * @param \Repull\Model\AirbnbConnectionAccessibilityAmenitiesInner[]|null $accessibility_amenities Present only when `?include=amenities` is passed. Accessibility-tagged subset of the local amenity cache (step-free access, wide doorways, grab rails, disabled parking, wheelchair, accessible-height fixtures, hoists, etc). Returns an empty array when amenities synced but none qualify as accessibility; returns `null` when the cache is empty for this connection (use `data_freshness` to disambiguate \"never synced\" from \"fresh and genuinely empty\").
+     * @param \DateTime|null $deactivated_at When the host was last marked inactive. Null on currently-connected hosts.
      *
      * @return $this
      */
-    public function setAccessibilityAmenities(?array $accessibility_amenities): static
+    public function setDeactivatedAt(?\DateTime $deactivated_at): static
     {
-        if (is_null($accessibility_amenities)) {
-            array_push($this->openAPINullablesSetToNull, 'accessibility_amenities');
+        if (is_null($deactivated_at)) {
+            array_push($this->openAPINullablesSetToNull, 'deactivated_at');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('accessibility_amenities', $nullablesSetToNull);
+            $index = array_search('deactivated_at', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['accessibility_amenities'] = $accessibility_amenities;
+        $this->container['deactivated_at'] = $deactivated_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets last_disconnect_reason
+     *
+     * @return string|null
+     */
+    public function getLastDisconnectReason(): ?string
+    {
+        return $this->container['last_disconnect_reason'];
+    }
+
+    /**
+     * Sets last_disconnect_reason
+     *
+     * @param string|null $last_disconnect_reason Reason of the most recent non-backfill disconnect event. Common values: `token_refresh_rejected`, `auth_expired`, `user_revoked`. Null when the host has no recorded disconnects.
+     *
+     * @return $this
+     */
+    public function setLastDisconnectReason(?string $last_disconnect_reason): static
+    {
+        if (is_null($last_disconnect_reason)) {
+            array_push($this->openAPINullablesSetToNull, 'last_disconnect_reason');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('last_disconnect_reason', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['last_disconnect_reason'] = $last_disconnect_reason;
 
         return $this;
     }

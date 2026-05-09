@@ -764,6 +764,7 @@ class ListingsApi
      *
      * @param  int $id Repull listing id (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListing'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -773,10 +774,11 @@ class ListingsApi
     public function getListing(
         int $id,
         ?string $x_schema = null,
+        ?string $include = null,
         string $contentType = self::contentTypes['getListing'][0]
     ): \Repull\Model\Listing|\Repull\Model\Error
     {
-        list($response) = $this->getListingWithHttpInfo($id, $x_schema, $contentType);
+        list($response) = $this->getListingWithHttpInfo($id, $x_schema, $include, $contentType);
         return $response;
     }
 
@@ -787,6 +789,7 @@ class ListingsApi
      *
      * @param  int $id Repull listing id (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListing'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -796,10 +799,11 @@ class ListingsApi
     public function getListingWithHttpInfo(
         int $id,
         ?string $x_schema = null,
+        ?string $include = null,
         string $contentType = self::contentTypes['getListing'][0]
     ): array
     {
-        $request = $this->getListingRequest($id, $x_schema, $contentType);
+        $request = $this->getListingRequest($id, $x_schema, $include, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -916,6 +920,7 @@ class ListingsApi
      *
      * @param  int $id Repull listing id (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListing'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -924,10 +929,11 @@ class ListingsApi
     public function getListingAsync(
         int $id,
         ?string $x_schema = null,
+        ?string $include = null,
         string $contentType = self::contentTypes['getListing'][0]
     ): PromiseInterface
     {
-        return $this->getListingAsyncWithHttpInfo($id, $x_schema, $contentType)
+        return $this->getListingAsyncWithHttpInfo($id, $x_schema, $include, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -942,6 +948,7 @@ class ListingsApi
      *
      * @param  int $id Repull listing id (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListing'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -950,11 +957,12 @@ class ListingsApi
     public function getListingAsyncWithHttpInfo(
         int $id,
         ?string $x_schema = null,
+        ?string $include = null,
         string $contentType = self::contentTypes['getListing'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\Listing';
-        $request = $this->getListingRequest($id, $x_schema, $contentType);
+        $request = $this->getListingRequest($id, $x_schema, $include, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -997,6 +1005,7 @@ class ListingsApi
      *
      * @param  int $id Repull listing id (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListing'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1005,6 +1014,7 @@ class ListingsApi
     public function getListingRequest(
         int $id,
         ?string $x_schema = null,
+        ?string $include = null,
         string $contentType = self::contentTypes['getListing'][0]
     ): Request
     {
@@ -1018,6 +1028,7 @@ class ListingsApi
 
 
 
+
         $resourcePath = '/v1/listings/{id}';
         $formParams = [];
         $queryParams = [];
@@ -1025,6 +1036,15 @@ class ListingsApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $include,
+            'include', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
         // header params
         if ($x_schema !== null) {
@@ -1108,12 +1128,12 @@ class ListingsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\ListingPublishStatusResponse
+     * @return \Repull\Model\ListingPublishStatusResponse|\Repull\Model\Error
      */
     public function getListingPublishStatus(
         int $id,
         string $contentType = self::contentTypes['getListingPublishStatus'][0]
-    ): \Repull\Model\ListingPublishStatusResponse
+    ): \Repull\Model\ListingPublishStatusResponse|\Repull\Model\Error
     {
         list($response) = $this->getListingPublishStatusWithHttpInfo($id, $contentType);
         return $response;
@@ -1129,7 +1149,7 @@ class ListingsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListingPublishStatusResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListingPublishStatusResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getListingPublishStatusWithHttpInfo(
         int $id,
@@ -1167,6 +1187,18 @@ class ListingsApi
                         $request,
                         $response,
                     );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -1194,6 +1226,22 @@ class ListingsApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\ListingPublishStatusResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
