@@ -764,7 +764,7 @@ class ListingsApi
      *
      * @param  int $id Repull listing id (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;, &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListing'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -789,7 +789,7 @@ class ListingsApi
      *
      * @param  int $id Repull listing id (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;, &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListing'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -920,7 +920,7 @@ class ListingsApi
      *
      * @param  int $id Repull listing id (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;, &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListing'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -948,7 +948,7 @@ class ListingsApi
      *
      * @param  int $id Repull listing id (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;, &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListing'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1005,7 +1005,7 @@ class ListingsApi
      *
      * @param  int $id Repull listing id (required)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
-     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;, &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListing'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1442,6 +1442,7 @@ class ListingsApi
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
      * @param  string|null $status Filter by listing status. (optional)
      * @param  string|null $channel Restrict to listings published on the given channel (&#x60;airbnb&#x60;, &#x60;booking&#x60;, &#x60;vrbo&#x60;, etc.). Joins through &#x60;listing_platform_links&#x60; and matches active links only. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (Note: &#x60;amenities&#x60; is not yet supported on the list endpoint — use the detail endpoint to fetch amenity rows for a single listing.) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listListings'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -1456,10 +1457,11 @@ class ListingsApi
         ?string $q = null,
         ?string $status = null,
         ?string $channel = null,
+        ?string $include = null,
         string $contentType = self::contentTypes['listListings'][0]
     ): \Repull\Model\ListingListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listListingsWithHttpInfo($x_schema, $cursor, $offset, $limit, $q, $status, $channel, $contentType);
+        list($response) = $this->listListingsWithHttpInfo($x_schema, $cursor, $offset, $limit, $q, $status, $channel, $include, $contentType);
         return $response;
     }
 
@@ -1475,6 +1477,7 @@ class ListingsApi
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
      * @param  string|null $status Filter by listing status. (optional)
      * @param  string|null $channel Restrict to listings published on the given channel (&#x60;airbnb&#x60;, &#x60;booking&#x60;, &#x60;vrbo&#x60;, etc.). Joins through &#x60;listing_platform_links&#x60; and matches active links only. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (Note: &#x60;amenities&#x60; is not yet supported on the list endpoint — use the detail endpoint to fetch amenity rows for a single listing.) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listListings'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -1489,10 +1492,11 @@ class ListingsApi
         ?string $q = null,
         ?string $status = null,
         ?string $channel = null,
+        ?string $include = null,
         string $contentType = self::contentTypes['listListings'][0]
     ): array
     {
-        $request = $this->listListingsRequest($x_schema, $cursor, $offset, $limit, $q, $status, $channel, $contentType);
+        $request = $this->listListingsRequest($x_schema, $cursor, $offset, $limit, $q, $status, $channel, $include, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1600,6 +1604,7 @@ class ListingsApi
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
      * @param  string|null $status Filter by listing status. (optional)
      * @param  string|null $channel Restrict to listings published on the given channel (&#x60;airbnb&#x60;, &#x60;booking&#x60;, &#x60;vrbo&#x60;, etc.). Joins through &#x60;listing_platform_links&#x60; and matches active links only. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (Note: &#x60;amenities&#x60; is not yet supported on the list endpoint — use the detail endpoint to fetch amenity rows for a single listing.) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listListings'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1613,10 +1618,11 @@ class ListingsApi
         ?string $q = null,
         ?string $status = null,
         ?string $channel = null,
+        ?string $include = null,
         string $contentType = self::contentTypes['listListings'][0]
     ): PromiseInterface
     {
-        return $this->listListingsAsyncWithHttpInfo($x_schema, $cursor, $offset, $limit, $q, $status, $channel, $contentType)
+        return $this->listListingsAsyncWithHttpInfo($x_schema, $cursor, $offset, $limit, $q, $status, $channel, $include, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1636,6 +1642,7 @@ class ListingsApi
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
      * @param  string|null $status Filter by listing status. (optional)
      * @param  string|null $channel Restrict to listings published on the given channel (&#x60;airbnb&#x60;, &#x60;booking&#x60;, &#x60;vrbo&#x60;, etc.). Joins through &#x60;listing_platform_links&#x60; and matches active links only. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (Note: &#x60;amenities&#x60; is not yet supported on the list endpoint — use the detail endpoint to fetch amenity rows for a single listing.) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listListings'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1649,11 +1656,12 @@ class ListingsApi
         ?string $q = null,
         ?string $status = null,
         ?string $channel = null,
+        ?string $include = null,
         string $contentType = self::contentTypes['listListings'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ListingListResponse';
-        $request = $this->listListingsRequest($x_schema, $cursor, $offset, $limit, $q, $status, $channel, $contentType);
+        $request = $this->listListingsRequest($x_schema, $cursor, $offset, $limit, $q, $status, $channel, $include, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1701,6 +1709,7 @@ class ListingsApi
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
      * @param  string|null $status Filter by listing status. (optional)
      * @param  string|null $channel Restrict to listings published on the given channel (&#x60;airbnb&#x60;, &#x60;booking&#x60;, &#x60;vrbo&#x60;, etc.). Joins through &#x60;listing_platform_links&#x60; and matches active links only. (optional)
+     * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (Note: &#x60;amenities&#x60; is not yet supported on the list endpoint — use the detail endpoint to fetch amenity rows for a single listing.) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listListings'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1714,6 +1723,7 @@ class ListingsApi
         ?string $q = null,
         ?string $status = null,
         ?string $channel = null,
+        ?string $include = null,
         string $contentType = self::contentTypes['listListings'][0]
     ): Request
     {
@@ -1734,6 +1744,7 @@ class ListingsApi
             throw new InvalidArgumentException('invalid value for "$limit" when calling ListingsApi.listListings, must be bigger than or equal to 1.');
         }
         
+
 
 
 
@@ -1794,6 +1805,15 @@ class ListingsApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $channel,
             'channel', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $include,
+            'include', // param base name
             'string', // openApiType
             'form', // style
             true, // explode

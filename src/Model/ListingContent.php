@@ -37,6 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * ListingContent Class Doc Comment
  *
+ * @description Rich multilingual content slab for a listing — guest-facing copy sourced from &#x60;listings_descriptions&#x60; (the &#x60;en&#x60; row when surfaced via &#x60;?include&#x3D;content&#x60;). Also returned as the AI-generated payload from &#x60;POST /v1/listings/{id}/generate-content&#x60; (where &#x60;title&#x60; and &#x60;amenities&#x60; are populated). All fields are individually nullable.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -65,9 +66,12 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
         'space' => 'string',
         'guest_access' => 'string',
         'neighborhood_overview' => 'string',
+        'getting_around' => 'string',
         'transit' => 'string',
-        'notes' => 'string',
         'house_rules' => 'string',
+        'additional_rules' => 'mixed',
+        'notes' => 'string',
+        'interaction_with_guests' => 'string',
         'amenities' => 'string[]'
     ];
 
@@ -83,9 +87,12 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
         'space' => null,
         'guest_access' => null,
         'neighborhood_overview' => null,
+        'getting_around' => null,
         'transit' => null,
-        'notes' => null,
         'house_rules' => null,
+        'additional_rules' => null,
+        'notes' => null,
+        'interaction_with_guests' => null,
         'amenities' => null
     ];
 
@@ -95,15 +102,18 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'title' => false,
-        'summary' => false,
-        'description' => false,
-        'space' => false,
-        'guest_access' => false,
-        'neighborhood_overview' => false,
-        'transit' => false,
-        'notes' => false,
-        'house_rules' => false,
+        'title' => true,
+        'summary' => true,
+        'description' => true,
+        'space' => true,
+        'guest_access' => true,
+        'neighborhood_overview' => true,
+        'getting_around' => true,
+        'transit' => true,
+        'house_rules' => true,
+        'additional_rules' => true,
+        'notes' => true,
+        'interaction_with_guests' => true,
         'amenities' => false
     ];
 
@@ -189,9 +199,12 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
         'space' => 'space',
         'guest_access' => 'guestAccess',
         'neighborhood_overview' => 'neighborhoodOverview',
+        'getting_around' => 'gettingAround',
         'transit' => 'transit',
-        'notes' => 'notes',
         'house_rules' => 'houseRules',
+        'additional_rules' => 'additionalRules',
+        'notes' => 'notes',
+        'interaction_with_guests' => 'interactionWithGuests',
         'amenities' => 'amenities'
     ];
 
@@ -207,9 +220,12 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
         'space' => 'setSpace',
         'guest_access' => 'setGuestAccess',
         'neighborhood_overview' => 'setNeighborhoodOverview',
+        'getting_around' => 'setGettingAround',
         'transit' => 'setTransit',
-        'notes' => 'setNotes',
         'house_rules' => 'setHouseRules',
+        'additional_rules' => 'setAdditionalRules',
+        'notes' => 'setNotes',
+        'interaction_with_guests' => 'setInteractionWithGuests',
         'amenities' => 'setAmenities'
     ];
 
@@ -225,9 +241,12 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
         'space' => 'getSpace',
         'guest_access' => 'getGuestAccess',
         'neighborhood_overview' => 'getNeighborhoodOverview',
+        'getting_around' => 'getGettingAround',
         'transit' => 'getTransit',
-        'notes' => 'getNotes',
         'house_rules' => 'getHouseRules',
+        'additional_rules' => 'getAdditionalRules',
+        'notes' => 'getNotes',
+        'interaction_with_guests' => 'getInteractionWithGuests',
         'amenities' => 'getAmenities'
     ];
 
@@ -284,9 +303,12 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('space', $data ?? [], null);
         $this->setIfExists('guest_access', $data ?? [], null);
         $this->setIfExists('neighborhood_overview', $data ?? [], null);
+        $this->setIfExists('getting_around', $data ?? [], null);
         $this->setIfExists('transit', $data ?? [], null);
-        $this->setIfExists('notes', $data ?? [], null);
         $this->setIfExists('house_rules', $data ?? [], null);
+        $this->setIfExists('additional_rules', $data ?? [], null);
+        $this->setIfExists('notes', $data ?? [], null);
+        $this->setIfExists('interaction_with_guests', $data ?? [], null);
         $this->setIfExists('amenities', $data ?? [], null);
     }
 
@@ -344,16 +366,23 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets title
      *
-     * @param string|null $title title
+     * @param string|null $title Public listing title. Populated only by `generate-content`; not stored on `listings_descriptions`.
      *
      * @return $this
      */
     public function setTitle(?string $title): static
     {
         if (is_null($title)) {
-            throw new InvalidArgumentException('non-nullable title cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'title');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('title', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        if ((mb_strlen($title) > 50)) {
+        if (!is_null($title) && (mb_strlen($title) > 50)) {
             throw new InvalidArgumentException('invalid length for $title when calling ListingContent., must be smaller than or equal to 50.');
         }
 
@@ -382,7 +411,14 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
     public function setSummary(?string $summary): static
     {
         if (is_null($summary)) {
-            throw new InvalidArgumentException('non-nullable summary cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'summary');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('summary', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['summary'] = $summary;
 
@@ -409,7 +445,14 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
     public function setDescription(?string $description): static
     {
         if (is_null($description)) {
-            throw new InvalidArgumentException('non-nullable description cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'description');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('description', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['description'] = $description;
 
@@ -436,7 +479,14 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
     public function setSpace(?string $space): static
     {
         if (is_null($space)) {
-            throw new InvalidArgumentException('non-nullable space cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'space');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('space', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['space'] = $space;
 
@@ -463,7 +513,14 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
     public function setGuestAccess(?string $guest_access): static
     {
         if (is_null($guest_access)) {
-            throw new InvalidArgumentException('non-nullable guest_access cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'guest_access');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('guest_access', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['guest_access'] = $guest_access;
 
@@ -490,9 +547,50 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
     public function setNeighborhoodOverview(?string $neighborhood_overview): static
     {
         if (is_null($neighborhood_overview)) {
-            throw new InvalidArgumentException('non-nullable neighborhood_overview cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'neighborhood_overview');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('neighborhood_overview', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['neighborhood_overview'] = $neighborhood_overview;
+
+        return $this;
+    }
+
+    /**
+     * Gets getting_around
+     *
+     * @return string|null
+     */
+    public function getGettingAround(): ?string
+    {
+        return $this->container['getting_around'];
+    }
+
+    /**
+     * Sets getting_around
+     *
+     * @param string|null $getting_around Free-text directions for getting to + around the property (e.g. \"Take Highway 95 north for 12 miles\").
+     *
+     * @return $this
+     */
+    public function setGettingAround(?string $getting_around): static
+    {
+        if (is_null($getting_around)) {
+            array_push($this->openAPINullablesSetToNull, 'getting_around');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('getting_around', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['getting_around'] = $getting_around;
 
         return $this;
     }
@@ -517,36 +615,16 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
     public function setTransit(?string $transit): static
     {
         if (is_null($transit)) {
-            throw new InvalidArgumentException('non-nullable transit cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'transit');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('transit', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['transit'] = $transit;
-
-        return $this;
-    }
-
-    /**
-     * Gets notes
-     *
-     * @return string|null
-     */
-    public function getNotes(): ?string
-    {
-        return $this->container['notes'];
-    }
-
-    /**
-     * Sets notes
-     *
-     * @param string|null $notes notes
-     *
-     * @return $this
-     */
-    public function setNotes(?string $notes): static
-    {
-        if (is_null($notes)) {
-            throw new InvalidArgumentException('non-nullable notes cannot be null');
-        }
-        $this->container['notes'] = $notes;
 
         return $this;
     }
@@ -571,9 +649,118 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
     public function setHouseRules(?string $house_rules): static
     {
         if (is_null($house_rules)) {
-            throw new InvalidArgumentException('non-nullable house_rules cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'house_rules');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('house_rules', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['house_rules'] = $house_rules;
+
+        return $this;
+    }
+
+    /**
+     * Gets additional_rules
+     *
+     * @return mixed|null
+     */
+    public function getAdditionalRules(): mixed
+    {
+        return $this->container['additional_rules'];
+    }
+
+    /**
+     * Sets additional_rules
+     *
+     * @param mixed|null $additional_rules Structured supplementary rules (JSON; shape evolves with the listings_descriptions schema).
+     *
+     * @return $this
+     */
+    public function setAdditionalRules(mixed $additional_rules): static
+    {
+        if (is_null($additional_rules)) {
+            array_push($this->openAPINullablesSetToNull, 'additional_rules');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('additional_rules', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['additional_rules'] = $additional_rules;
+
+        return $this;
+    }
+
+    /**
+     * Gets notes
+     *
+     * @return string|null
+     */
+    public function getNotes(): ?string
+    {
+        return $this->container['notes'];
+    }
+
+    /**
+     * Sets notes
+     *
+     * @param string|null $notes notes
+     *
+     * @return $this
+     */
+    public function setNotes(?string $notes): static
+    {
+        if (is_null($notes)) {
+            array_push($this->openAPINullablesSetToNull, 'notes');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('notes', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['notes'] = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Gets interaction_with_guests
+     *
+     * @return string|null
+     */
+    public function getInteractionWithGuests(): ?string
+    {
+        return $this->container['interaction_with_guests'];
+    }
+
+    /**
+     * Sets interaction_with_guests
+     *
+     * @param string|null $interaction_with_guests Host’s description of how they engage with guests (e.g. \"Self check-in, available via message\").
+     *
+     * @return $this
+     */
+    public function setInteractionWithGuests(?string $interaction_with_guests): static
+    {
+        if (is_null($interaction_with_guests)) {
+            array_push($this->openAPINullablesSetToNull, 'interaction_with_guests');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('interaction_with_guests', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['interaction_with_guests'] = $interaction_with_guests;
 
         return $this;
     }
@@ -591,7 +778,7 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets amenities
      *
-     * @param string[]|null $amenities amenities
+     * @param string[]|null $amenities Free-text amenity strings. Populated only by `generate-content`; the `?include=amenities` expansion returns the structured `ListingAmenity[]` instead.
      *
      * @return $this
      */

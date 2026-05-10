@@ -67,6 +67,8 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'string',
         'channels' => '\Repull\Model\ListingChannel[]',
         'amenities' => '\Repull\Model\ListingAmenity[]',
+        'content' => '\Repull\Model\ListingContent',
+        'details' => '\Repull\Model\ListingDetails',
         'created_at' => '\DateTime',
         'updated_at' => '\DateTime'
     ];
@@ -84,6 +86,8 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => null,
         'channels' => null,
         'amenities' => null,
+        'content' => null,
+        'details' => null,
         'created_at' => 'date-time',
         'updated_at' => 'date-time'
     ];
@@ -101,6 +105,8 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => false,
         'channels' => false,
         'amenities' => false,
+        'content' => true,
+        'details' => true,
         'created_at' => false,
         'updated_at' => false
     ];
@@ -188,6 +194,8 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'status',
         'channels' => 'channels',
         'amenities' => 'amenities',
+        'content' => 'content',
+        'details' => 'details',
         'created_at' => 'createdAt',
         'updated_at' => 'updatedAt'
     ];
@@ -205,6 +213,8 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'setStatus',
         'channels' => 'setChannels',
         'amenities' => 'setAmenities',
+        'content' => 'setContent',
+        'details' => 'setDetails',
         'created_at' => 'setCreatedAt',
         'updated_at' => 'setUpdatedAt'
     ];
@@ -222,6 +232,8 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'getStatus',
         'channels' => 'getChannels',
         'amenities' => 'getAmenities',
+        'content' => 'getContent',
+        'details' => 'getDetails',
         'created_at' => 'getCreatedAt',
         'updated_at' => 'getUpdatedAt'
     ];
@@ -297,6 +309,8 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('channels', $data ?? [], null);
         $this->setIfExists('amenities', $data ?? [], null);
+        $this->setIfExists('content', $data ?? [], null);
+        $this->setIfExists('details', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
         $this->setIfExists('updated_at', $data ?? [], null);
     }
@@ -540,6 +554,74 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable amenities cannot be null');
         }
         $this->container['amenities'] = $amenities;
+
+        return $this;
+    }
+
+    /**
+     * Gets content
+     *
+     * @return \Repull\Model\ListingContent|null
+     */
+    public function getContent(): ?\Repull\Model\ListingContent
+    {
+        return $this->container['content'];
+    }
+
+    /**
+     * Sets content
+     *
+     * @param \Repull\Model\ListingContent|null $content **Only present when the caller passes `?include=content`.** Sourced from `listings_descriptions` for the `en` locale. `null` when the listing has no description row stored (vs the field being absent — that signals the caller did not opt into the expansion).
+     *
+     * @return $this
+     */
+    public function setContent(?\Repull\Model\ListingContent $content): static
+    {
+        if (is_null($content)) {
+            array_push($this->openAPINullablesSetToNull, 'content');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('content', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['content'] = $content;
+
+        return $this;
+    }
+
+    /**
+     * Gets details
+     *
+     * @return \Repull\Model\ListingDetails|null
+     */
+    public function getDetails(): ?\Repull\Model\ListingDetails
+    {
+        return $this->container['details'];
+    }
+
+    /**
+     * Sets details
+     *
+     * @param \Repull\Model\ListingDetails|null $details **Only present when the caller passes `?include=details`.** Sourced from `listings_details`. `null` when the listing has no details row stored (vs the field being absent — that signals the caller did not opt into the expansion).
+     *
+     * @return $this
+     */
+    public function setDetails(?\Repull\Model\ListingDetails $details): static
+    {
+        if (is_null($details)) {
+            array_push($this->openAPINullablesSetToNull, 'details');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('details', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['details'] = $details;
 
         return $this;
     }
