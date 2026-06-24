@@ -5,6 +5,15 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.5] - 2026-06-24
+
+### Added
+- **`messaging` Airbnb Connect access scope (read + send guest messages, no property management).** `POST /v1/connect/airbnb` now accepts `accessType: "messaging"` alongside `read_only` and `full_access`. The `messaging` scope grants read scopes plus message read/send but NOT property management, so it can coexist with another app (e.g. an existing PMS) that already holds property management on the same Airbnb account. Exposed as `CreateConnectionRequest::ACCESS_TYPE_MESSAGING`.
+
+### Notes
+- Regenerated from `https://api.repull.dev/openapi.json`. Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
+- Enum validators relaxed in 58 model files for forward compatibility.
+
 ## [0.2.4] - 2026-05-15
 
 ### Added

@@ -236,6 +236,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
 
     public const ACCESS_TYPE_READ_ONLY = 'read_only';
     public const ACCESS_TYPE_FULL_ACCESS = 'full_access';
+    public const ACCESS_TYPE_MESSAGING = 'messaging';
 
     /**
      * Gets allowable values of the enum
@@ -247,6 +248,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         return [
             self::ACCESS_TYPE_READ_ONLY,
             self::ACCESS_TYPE_FULL_ACCESS,
+            self::ACCESS_TYPE_MESSAGING,
         ];
     }
 
@@ -357,7 +359,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets access_type
      *
-     * @param string|null $access_type Airbnb only — selects the OAuth scope set. 'read_only' grants calendar-only access; 'full_access' grants full host scopes (default).
+     * @param string|null $access_type Airbnb only — selects the OAuth scope set. 'read_only' grants read-only scopes; 'messaging' grants read scopes plus message read/send but NOT property management, so it can coexist with another app (e.g. an existing PMS) that already holds property management on the same Airbnb account; 'full_access' (default) grants full host scopes including the exclusive property management (only one app per Airbnb account can hold it).
      *
      * @return $this
      */
