@@ -11,6 +11,15 @@
  * throw into a no-op so the SDK accepts unknown values and lets the caller
  * decide what to do with them.
  *
+ * It ALSO fixes a php-nextgen codegen defect: enum values containing dots
+ * (e.g. "account.created", "reservation.message.received") are turned into
+ * constant names with a "/" separator — "TYPE_ACCOUNT/CREATED" — which is
+ * illegal PHP and fails phpstan with "Syntax error, unexpected '/'". The
+ * legacy `php` generator produces valid "_" separators; `php-nextgen` does
+ * not (reproduced on 7.22.0 and 7.23.0). We rewrite "/" to "_" inside
+ * generated const declarations and self::CONST references so the names are
+ * valid PHP regardless of which generator version npx resolves.
+ *
  * Run after `regen.sh`. Idempotent.
  */
 
@@ -48,6 +57,39 @@ foreach ($files as $file) {
              . '\s+\}/m';
 
     $replaced = preg_replace($pattern, '$1// (relax-enums.php) accept unknown enum values for forward compat', $src);
+    if ($replaced === null) {
+        $replaced = $src;
+    }
+
+    // Fix php-nextgen's illegal "/" separator in enum constant names.
+    //   public const TYPE_ACCOUNT/CREATED = 'account.created';
+    //   self::TYPE_ACCOUNT/CREATED,
+    // become
+    //   public const TYPE_ACCOUNT_CREATED = 'account.created';
+    //   self::TYPE_ACCOUNT_CREATED,
+    // A PHP const name is /[A-Z_][A-Z0-9_]*/i; the only place a "/" appears
+    // inside such a token is this codegen defect, so a token-scoped replace is
+    // safe. We loop until stable to collapse multi-dot names (A/B/C -> A_B_C).
+    $fixConstSlashes = static function (string $code): string {
+        // const declarations: `const NAME/WITH/SLASHES`
+        $code = preg_replace_callback(
+            '/\bconst\s+([A-Za-z_][A-Za-z0-9_]*(?:\/[A-Za-z0-9_]+)+)\b/',
+            static fn(array $m): string => 'const ' . str_replace('/', '_', $m[1]),
+            $code
+        );
+        // self:: references: `self::NAME/WITH/SLASHES`
+        $code = preg_replace_callback(
+            '/\bself::([A-Za-z_][A-Za-z0-9_]*(?:\/[A-Za-z0-9_]+)+)\b/',
+            static fn(array $m): string => 'self::' . str_replace('/', '_', $m[1]),
+            $code
+        );
+        return $code;
+    };
+    $beforeSlashFix = $replaced;
+    $replaced = $fixConstSlashes($replaced);
+    if ($replaced !== $beforeSlashFix) {
+        echo "fixed const-name slashes: " . basename($file) . "\n";
+    }
 
     if ($replaced !== null && $replaced !== $src) {
         file_put_contents($file, $replaced);

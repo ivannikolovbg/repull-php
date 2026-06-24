@@ -5,6 +5,15 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.6] - 2026-06-24
+
+### Fixed
+- **Valid PHP constant names for webhook event types.** The `php-nextgen` generator turned dotted enum values (`account.created`, `ai.operation.completed`, `reservation.message.received`, …) into constant names with an illegal `/` separator (`WebhookEvent::TYPE_ACCOUNT/CREATED`), producing a `Syntax error, unexpected '/'` that failed `phpstan` and made `src/Model/WebhookEvent.php` un-parseable. The post-codegen patcher (`scripts/relax-enums.php`) now rewrites `/` to `_` in generated const declarations and `self::` references, yielding valid names (`WebhookEvent::TYPE_ACCOUNT_CREATED`, `TYPE_AI_OPERATION_COMPLETED`, `TYPE_RESERVATION_MESSAGE_RECEIVED`, …). Reproduced on generator 7.22.0 and 7.23.0, so the fix is version-independent.
+
+### Notes
+- Includes the `messaging` Airbnb Connect access scope from 0.2.5 (`CreateConnectionRequest::ACCESS_TYPE_MESSAGING`).
+- Regenerated from `https://api.repull.dev/openapi.json`. Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
+
 ## [0.2.5] - 2026-06-24
 
 ### Added
