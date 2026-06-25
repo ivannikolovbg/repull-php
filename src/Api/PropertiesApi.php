@@ -472,6 +472,7 @@ class PropertiesApi
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
      * @param  string|null $status Filter by status. Default returns active only; pass &#x60;inactive&#x60; to invert or &#x60;all&#x60; to include both. (optional, default to 'active')
      * @param  string|null $lifecycle_status Filter by lifecycle status (e.g. &#x60;live&#x60;, &#x60;draft&#x60;, &#x60;archived&#x60;). Pass &#x60;all&#x60; to disable the filter. (optional)
+     * @param  string|null $channel Filter to properties with an active link on the given OTA/channel (airbnb, booking, vrbo). Omit to include every channel. Each property also returns a &#x60;channels&#x60; array listing the OTAs it is published on. (optional)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listProperties'] to see the possible values for this operation
      *
@@ -486,11 +487,12 @@ class PropertiesApi
         ?string $q = null,
         ?string $status = 'active',
         ?string $lifecycle_status = null,
+        ?string $channel = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listProperties'][0]
     ): \Repull\Model\PropertyListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listPropertiesWithHttpInfo($limit, $cursor, $offset, $q, $status, $lifecycle_status, $include_total, $contentType);
+        list($response) = $this->listPropertiesWithHttpInfo($limit, $cursor, $offset, $q, $status, $lifecycle_status, $channel, $include_total, $contentType);
         return $response;
     }
 
@@ -505,6 +507,7 @@ class PropertiesApi
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
      * @param  string|null $status Filter by status. Default returns active only; pass &#x60;inactive&#x60; to invert or &#x60;all&#x60; to include both. (optional, default to 'active')
      * @param  string|null $lifecycle_status Filter by lifecycle status (e.g. &#x60;live&#x60;, &#x60;draft&#x60;, &#x60;archived&#x60;). Pass &#x60;all&#x60; to disable the filter. (optional)
+     * @param  string|null $channel Filter to properties with an active link on the given OTA/channel (airbnb, booking, vrbo). Omit to include every channel. Each property also returns a &#x60;channels&#x60; array listing the OTAs it is published on. (optional)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listProperties'] to see the possible values for this operation
      *
@@ -519,11 +522,12 @@ class PropertiesApi
         ?string $q = null,
         ?string $status = 'active',
         ?string $lifecycle_status = null,
+        ?string $channel = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listProperties'][0]
     ): array
     {
-        $request = $this->listPropertiesRequest($limit, $cursor, $offset, $q, $status, $lifecycle_status, $include_total, $contentType);
+        $request = $this->listPropertiesRequest($limit, $cursor, $offset, $q, $status, $lifecycle_status, $channel, $include_total, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -630,6 +634,7 @@ class PropertiesApi
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
      * @param  string|null $status Filter by status. Default returns active only; pass &#x60;inactive&#x60; to invert or &#x60;all&#x60; to include both. (optional, default to 'active')
      * @param  string|null $lifecycle_status Filter by lifecycle status (e.g. &#x60;live&#x60;, &#x60;draft&#x60;, &#x60;archived&#x60;). Pass &#x60;all&#x60; to disable the filter. (optional)
+     * @param  string|null $channel Filter to properties with an active link on the given OTA/channel (airbnb, booking, vrbo). Omit to include every channel. Each property also returns a &#x60;channels&#x60; array listing the OTAs it is published on. (optional)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listProperties'] to see the possible values for this operation
      *
@@ -643,11 +648,12 @@ class PropertiesApi
         ?string $q = null,
         ?string $status = 'active',
         ?string $lifecycle_status = null,
+        ?string $channel = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listProperties'][0]
     ): PromiseInterface
     {
-        return $this->listPropertiesAsyncWithHttpInfo($limit, $cursor, $offset, $q, $status, $lifecycle_status, $include_total, $contentType)
+        return $this->listPropertiesAsyncWithHttpInfo($limit, $cursor, $offset, $q, $status, $lifecycle_status, $channel, $include_total, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -666,6 +672,7 @@ class PropertiesApi
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
      * @param  string|null $status Filter by status. Default returns active only; pass &#x60;inactive&#x60; to invert or &#x60;all&#x60; to include both. (optional, default to 'active')
      * @param  string|null $lifecycle_status Filter by lifecycle status (e.g. &#x60;live&#x60;, &#x60;draft&#x60;, &#x60;archived&#x60;). Pass &#x60;all&#x60; to disable the filter. (optional)
+     * @param  string|null $channel Filter to properties with an active link on the given OTA/channel (airbnb, booking, vrbo). Omit to include every channel. Each property also returns a &#x60;channels&#x60; array listing the OTAs it is published on. (optional)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listProperties'] to see the possible values for this operation
      *
@@ -679,12 +686,13 @@ class PropertiesApi
         ?string $q = null,
         ?string $status = 'active',
         ?string $lifecycle_status = null,
+        ?string $channel = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listProperties'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\PropertyListResponse';
-        $request = $this->listPropertiesRequest($limit, $cursor, $offset, $q, $status, $lifecycle_status, $include_total, $contentType);
+        $request = $this->listPropertiesRequest($limit, $cursor, $offset, $q, $status, $lifecycle_status, $channel, $include_total, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -731,6 +739,7 @@ class PropertiesApi
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
      * @param  string|null $status Filter by status. Default returns active only; pass &#x60;inactive&#x60; to invert or &#x60;all&#x60; to include both. (optional, default to 'active')
      * @param  string|null $lifecycle_status Filter by lifecycle status (e.g. &#x60;live&#x60;, &#x60;draft&#x60;, &#x60;archived&#x60;). Pass &#x60;all&#x60; to disable the filter. (optional)
+     * @param  string|null $channel Filter to properties with an active link on the given OTA/channel (airbnb, booking, vrbo). Omit to include every channel. Each property also returns a &#x60;channels&#x60; array listing the OTAs it is published on. (optional)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listProperties'] to see the possible values for this operation
      *
@@ -744,6 +753,7 @@ class PropertiesApi
         ?string $q = null,
         ?string $status = 'active',
         ?string $lifecycle_status = null,
+        ?string $channel = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listProperties'][0]
     ): Request
@@ -764,6 +774,7 @@ class PropertiesApi
             throw new InvalidArgumentException('invalid value for "$offset" when calling PropertiesApi.listProperties, must be bigger than or equal to 0.');
         }
         
+
 
 
 
@@ -825,6 +836,15 @@ class PropertiesApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $lifecycle_status,
             'lifecycle_status', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $channel,
+            'channel', // param base name
             'string', // openApiType
             'form', // style
             true, // explode

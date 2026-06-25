@@ -74,6 +74,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'max_guests' => 'int',
         'thumbnail' => 'string',
         'provider' => 'string',
+        'channels' => 'string[]',
         'amenities' => '\Repull\Model\ListingAmenity[]'
     ];
 
@@ -97,6 +98,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'max_guests' => null,
         'thumbnail' => 'uri',
         'provider' => null,
+        'channels' => null,
         'amenities' => null
     ];
 
@@ -120,6 +122,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'max_guests' => false,
         'thumbnail' => false,
         'provider' => false,
+        'channels' => false,
         'amenities' => false
     ];
 
@@ -213,6 +216,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'max_guests' => 'maxGuests',
         'thumbnail' => 'thumbnail',
         'provider' => 'provider',
+        'channels' => 'channels',
         'amenities' => 'amenities'
     ];
 
@@ -236,6 +240,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'max_guests' => 'setMaxGuests',
         'thumbnail' => 'setThumbnail',
         'provider' => 'setProvider',
+        'channels' => 'setChannels',
         'amenities' => 'setAmenities'
     ];
 
@@ -259,6 +264,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'max_guests' => 'getMaxGuests',
         'thumbnail' => 'getThumbnail',
         'provider' => 'getProvider',
+        'channels' => 'getChannels',
         'amenities' => 'getAmenities'
     ];
 
@@ -323,6 +329,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('max_guests', $data ?? [], null);
         $this->setIfExists('thumbnail', $data ?? [], null);
         $this->setIfExists('provider', $data ?? [], null);
+        $this->setIfExists('channels', $data ?? [], null);
         $this->setIfExists('amenities', $data ?? [], null);
     }
 
@@ -737,6 +744,33 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable provider cannot be null');
         }
         $this->container['provider'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * Gets channels
+     *
+     * @return string[]|null
+     */
+    public function getChannels(): ?array
+    {
+        return $this->container['channels'];
+    }
+
+    /**
+     * Sets channels
+     *
+     * @param string[]|null $channels OTAs/channels this property is actively published on (e.g. `airbnb`, `booking`, `vrbo`). Empty array when the property has no active channel links.
+     *
+     * @return $this
+     */
+    public function setChannels(?array $channels): static
+    {
+        if (is_null($channels)) {
+            throw new InvalidArgumentException('non-nullable channels cannot be null');
+        }
+        $this->container['channels'] = $channels;
 
         return $this;
     }

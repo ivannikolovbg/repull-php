@@ -5,6 +5,17 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.7] - 2026-06-25
+
+### Added
+- **Booking.com hosted Connect flow.** New methods on `ConnectApi` for connecting a Booking.com hotel: `verifyBookingHotel` (`POST /v1/connect/booking/verify`), `listConnectBookingRooms` (`GET /v1/connect/booking/rooms`), and `mapConnectBookingRooms` (`POST /v1/connect/booking/map-rooms`), plus `createConnectSession` (`POST /v1/connect`) for the multi-channel Connect picker session. `CreateConnectionRequest::$redirect_url` now applies to Airbnb + Booking.com hosted connect flows (previously Airbnb only).
+- **`channel` filter on `GET /v1/properties`.** `PropertiesApi::listProperties` accepts an optional `channel` argument to filter to properties with an active link on the given OTA/channel (`airbnb`, `booking`, `vrbo`). Omit to include every channel.
+- **`channels` array on `Property`.** Each property now returns `channels` — the OTAs/channels it is actively published on (e.g. `airbnb`, `booking`, `vrbo`). Empty array when the property has no active channel links. Accessor: `Property::getChannels()`.
+
+### Notes
+- Regenerated from `https://api.repull.dev/openapi.json`. Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
+- Enum validators relaxed in 58 model files for forward compatibility; const-name `/`→`_` fix applied by `scripts/relax-enums.php`.
+
 ## [0.2.6] - 2026-06-24
 
 ### Fixed

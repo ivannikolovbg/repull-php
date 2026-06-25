@@ -332,7 +332,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets redirect_url
      *
-     * @param string|null $redirect_url Airbnb only — where to redirect the user after the OAuth flow completes.
+     * @param string|null $redirect_url Airbnb + Booking.com — where to redirect the user after they finish the hosted connect flow.
      *
      * @return $this
      */
