@@ -61,7 +61,8 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $openAPITypes = [
         'redirect_url' => 'string',
         'state' => 'string',
-        'allowed_providers' => 'string[]'
+        'allowed_providers' => 'string[]',
+        'locale' => 'string'
     ];
 
     /**
@@ -72,7 +73,8 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $openAPIFormats = [
         'redirect_url' => 'uri',
         'state' => null,
-        'allowed_providers' => null
+        'allowed_providers' => null,
+        'locale' => null
     ];
 
     /**
@@ -83,7 +85,8 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $openAPINullables = [
         'redirect_url' => false,
         'state' => true,
-        'allowed_providers' => true
+        'allowed_providers' => true,
+        'locale' => true
     ];
 
     /**
@@ -164,7 +167,8 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $attributeMap = [
         'redirect_url' => 'redirectUrl',
         'state' => 'state',
-        'allowed_providers' => 'allowedProviders'
+        'allowed_providers' => 'allowedProviders',
+        'locale' => 'locale'
     ];
 
     /**
@@ -175,7 +179,8 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $setters = [
         'redirect_url' => 'setRedirectUrl',
         'state' => 'setState',
-        'allowed_providers' => 'setAllowedProviders'
+        'allowed_providers' => 'setAllowedProviders',
+        'locale' => 'setLocale'
     ];
 
     /**
@@ -186,7 +191,8 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $getters = [
         'redirect_url' => 'getRedirectUrl',
         'state' => 'getState',
-        'allowed_providers' => 'getAllowedProviders'
+        'allowed_providers' => 'getAllowedProviders',
+        'locale' => 'getLocale'
     ];
 
     /**
@@ -239,6 +245,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         $this->setIfExists('redirect_url', $data ?? [], null);
         $this->setIfExists('state', $data ?? [], null);
         $this->setIfExists('allowed_providers', $data ?? [], null);
+        $this->setIfExists('locale', $data ?? [], null);
     }
 
     /**
@@ -372,6 +379,40 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
             }
         }
         $this->container['allowed_providers'] = $allowed_providers;
+
+        return $this;
+    }
+
+    /**
+     * Gets locale
+     *
+     * @return string|null
+     */
+    public function getLocale(): ?string
+    {
+        return $this->container['locale'];
+    }
+
+    /**
+     * Sets locale
+     *
+     * @param string|null $locale Optional UI language for the hosted Connect pages. Accepts any supported locale code (currently `en`, `fr`). When set it pins the language for the whole flow, overriding the workspace `default_language`. Unknown codes are ignored and the page falls back to the workspace default, then `Accept-Language`, then `en`. The end user can still override per-visit with a `?locale=` query param on the hosted page.
+     *
+     * @return $this
+     */
+    public function setLocale(?string $locale): static
+    {
+        if (is_null($locale)) {
+            array_push($this->openAPINullablesSetToNull, 'locale');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('locale', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['locale'] = $locale;
 
         return $this;
     }

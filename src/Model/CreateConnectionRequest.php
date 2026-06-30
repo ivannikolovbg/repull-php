@@ -64,7 +64,8 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => 'string',
         'api_key' => 'string',
         'client_id' => 'string',
-        'client_secret' => 'string'
+        'client_secret' => 'string',
+        'locale' => 'string'
     ];
 
     /**
@@ -77,7 +78,8 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => null,
         'api_key' => null,
         'client_id' => null,
-        'client_secret' => null
+        'client_secret' => null,
+        'locale' => null
     ];
 
     /**
@@ -90,7 +92,8 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => false,
         'api_key' => false,
         'client_id' => false,
-        'client_secret' => false
+        'client_secret' => false,
+        'locale' => true
     ];
 
     /**
@@ -173,7 +176,8 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => 'accessType',
         'api_key' => 'apiKey',
         'client_id' => 'clientId',
-        'client_secret' => 'clientSecret'
+        'client_secret' => 'clientSecret',
+        'locale' => 'locale'
     ];
 
     /**
@@ -186,7 +190,8 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => 'setAccessType',
         'api_key' => 'setApiKey',
         'client_id' => 'setClientId',
-        'client_secret' => 'setClientSecret'
+        'client_secret' => 'setClientSecret',
+        'locale' => 'setLocale'
     ];
 
     /**
@@ -199,7 +204,8 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => 'getAccessType',
         'api_key' => 'getApiKey',
         'client_id' => 'getClientId',
-        'client_secret' => 'getClientSecret'
+        'client_secret' => 'getClientSecret',
+        'locale' => 'getLocale'
     ];
 
     /**
@@ -271,6 +277,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         $this->setIfExists('api_key', $data ?? [], null);
         $this->setIfExists('client_id', $data ?? [], null);
         $this->setIfExists('client_secret', $data ?? [], null);
+        $this->setIfExists('locale', $data ?? [], null);
     }
 
     /**
@@ -451,6 +458,40 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
             throw new InvalidArgumentException('non-nullable client_secret cannot be null');
         }
         $this->container['client_secret'] = $client_secret;
+
+        return $this;
+    }
+
+    /**
+     * Gets locale
+     *
+     * @return string|null
+     */
+    public function getLocale(): ?string
+    {
+        return $this->container['locale'];
+    }
+
+    /**
+     * Sets locale
+     *
+     * @param string|null $locale Airbnb only — optional UI language for the hosted Connect pages. Accepts any supported locale code (currently `en`, `fr`); unknown codes are ignored and resolution falls back to the workspace `default_language`, then `Accept-Language`, then `en`.
+     *
+     * @return $this
+     */
+    public function setLocale(?string $locale): static
+    {
+        if (is_null($locale)) {
+            array_push($this->openAPINullablesSetToNull, 'locale');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('locale', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['locale'] = $locale;
 
         return $this;
     }
