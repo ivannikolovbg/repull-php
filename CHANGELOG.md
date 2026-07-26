@@ -5,6 +5,16 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.9] - 2026-07-26
+
+### Added
+- **Deactivate a listing.** `ListingsApi::deactivateListing` (`DELETE /v1/listings/{id}`) unpublishes/deactivates a listing.
+- **Reactivate / toggle a listing.** `ListingsApi::updateListingActive` (`PATCH /v1/listings/{id}`) updates a listing's active state.
+
+### Notes
+- `POST /v1/listings` now documents a `402` response (billing/quota required) in addition to `201`/`400`.
+- Regenerated from `https://api.repull.dev/openapi.json`. Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
+
 ## [0.2.7] - 2026-06-25
 
 ### Added

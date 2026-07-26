@@ -1,6 +1,6 @@
 <?php
 /**
- * BulkPricingResponse
+ * ListingActiveResponse
  *
  * PHP version 8.1
  *
@@ -35,15 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * BulkPricingResponse Class Doc Comment
+ * ListingActiveResponse Class Doc Comment
  *
- * @description Response for &#x60;POST /v1/listings/pricing/bulk&#x60;. Per-item failures are returned granularly so the SDK consumer can retry just the bad entries.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class BulkPricingResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingActiveResponse implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +51,7 @@ class BulkPricingResponse implements ModelInterface, ArrayAccess, JsonSerializab
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'BulkPricingResponse';
+    protected static string $openAPIModelName = 'ListingActiveResponse';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,9 +59,8 @@ class BulkPricingResponse implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'processed' => 'int',
-        'succeeded' => 'int',
-        'failed' => '\Repull\Model\BulkPricingFailure[]'
+        'id' => 'string',
+        'active' => 'bool'
     ];
 
     /**
@@ -71,9 +69,8 @@ class BulkPricingResponse implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'processed' => null,
-        'succeeded' => null,
-        'failed' => null
+        'id' => null,
+        'active' => null
     ];
 
     /**
@@ -82,9 +79,8 @@ class BulkPricingResponse implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'processed' => false,
-        'succeeded' => false,
-        'failed' => false
+        'id' => false,
+        'active' => false
     ];
 
     /**
@@ -163,9 +159,8 @@ class BulkPricingResponse implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'processed' => 'processed',
-        'succeeded' => 'succeeded',
-        'failed' => 'failed'
+        'id' => 'id',
+        'active' => 'active'
     ];
 
     /**
@@ -174,9 +169,8 @@ class BulkPricingResponse implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, string>
      */
     protected static array $setters = [
-        'processed' => 'setProcessed',
-        'succeeded' => 'setSucceeded',
-        'failed' => 'setFailed'
+        'id' => 'setId',
+        'active' => 'setActive'
     ];
 
     /**
@@ -185,9 +179,8 @@ class BulkPricingResponse implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, string>
      */
     protected static array $getters = [
-        'processed' => 'getProcessed',
-        'succeeded' => 'getSucceeded',
-        'failed' => 'getFailed'
+        'id' => 'getId',
+        'active' => 'getActive'
     ];
 
     /**
@@ -237,9 +230,8 @@ class BulkPricingResponse implements ModelInterface, ArrayAccess, JsonSerializab
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('processed', $data ?? [], null);
-        $this->setIfExists('succeeded', $data ?? [], null);
-        $this->setIfExists('failed', $data ?? [], null);
+        $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('active', $data ?? [], null);
     }
 
     /**
@@ -280,82 +272,55 @@ class BulkPricingResponse implements ModelInterface, ArrayAccess, JsonSerializab
 
 
     /**
-     * Gets processed
+     * Gets id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getProcessed(): ?int
+    public function getId(): ?string
     {
-        return $this->container['processed'];
+        return $this->container['id'];
     }
 
     /**
-     * Sets processed
+     * Sets id
      *
-     * @param int|null $processed Total dates attempted across every item.
+     * @param string|null $id The listing id (id fields are serialized as strings to preserve precision).
      *
      * @return $this
      */
-    public function setProcessed(?int $processed): static
+    public function setId(?string $id): static
     {
-        if (is_null($processed)) {
-            throw new InvalidArgumentException('non-nullable processed cannot be null');
+        if (is_null($id)) {
+            throw new InvalidArgumentException('non-nullable id cannot be null');
         }
-        $this->container['processed'] = $processed;
+        $this->container['id'] = $id;
 
         return $this;
     }
 
     /**
-     * Gets succeeded
+     * Gets active
      *
-     * @return int|null
+     * @return bool|null
      */
-    public function getSucceeded(): ?int
+    public function getActive(): ?bool
     {
-        return $this->container['succeeded'];
+        return $this->container['active'];
     }
 
     /**
-     * Sets succeeded
+     * Sets active
      *
-     * @param int|null $succeeded Total dates that were successfully applied (or declined).
+     * @param bool|null $active The resulting active state after the toggle.
      *
      * @return $this
      */
-    public function setSucceeded(?int $succeeded): static
+    public function setActive(?bool $active): static
     {
-        if (is_null($succeeded)) {
-            throw new InvalidArgumentException('non-nullable succeeded cannot be null');
+        if (is_null($active)) {
+            throw new InvalidArgumentException('non-nullable active cannot be null');
         }
-        $this->container['succeeded'] = $succeeded;
-
-        return $this;
-    }
-
-    /**
-     * Gets failed
-     *
-     * @return \Repull\Model\BulkPricingFailure[]|null
-     */
-    public function getFailed(): ?array
-    {
-        return $this->container['failed'];
-    }
-
-    /**
-     * Sets failed
-     *
-     * @param \Repull\Model\BulkPricingFailure[]|null $failed failed
-     *
-     * @return $this
-     */
-    public function setFailed(?array $failed): static
-    {
-        if (is_null($failed)) {
-            throw new InvalidArgumentException('non-nullable failed cannot be null');
-        }
-        $this->container['failed'] = $failed;
+        $this->container['active'] = $active;
 
         return $this;
     }
