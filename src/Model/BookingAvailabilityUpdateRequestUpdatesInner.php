@@ -1,6 +1,6 @@
 <?php
 /**
- * CreateStudioDeployment201ResponseData
+ * BookingAvailabilityUpdateRequestUpdatesInner
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * CreateStudioDeployment201ResponseData Class Doc Comment
+ * BookingAvailabilityUpdateRequestUpdatesInner Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class CreateStudioDeployment201ResponseData implements ModelInterface, ArrayAccess, JsonSerializable
+class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class CreateStudioDeployment201ResponseData implements ModelInterface, ArrayAcce
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'createStudioDeployment_201_response_data';
+    protected static string $openAPIModelName = 'BookingAvailabilityUpdateRequest_updates_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,9 +59,18 @@ class CreateStudioDeployment201ResponseData implements ModelInterface, ArrayAcce
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'deployment_id' => 'string',
-        'subdomain' => 'string',
-        'status' => 'string'
+        'room_id' => 'string',
+        'rate_id' => 'string',
+        'date_range' => '\Repull\Model\BookingPricingRateUpdateDateRange',
+        'price' => 'float',
+        'currency' => 'string',
+        'single_price' => 'float',
+        'occupancy' => 'int',
+        'rooms_to_sell' => 'int',
+        'restrictions' => '\Repull\Model\BookingPricingRateUpdateRestrictions',
+        'available_rooms' => 'int',
+        'status' => 'string',
+        'closed' => 'bool'
     ];
 
     /**
@@ -70,9 +79,18 @@ class CreateStudioDeployment201ResponseData implements ModelInterface, ArrayAcce
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'deployment_id' => 'uuid',
-        'subdomain' => null,
-        'status' => null
+        'room_id' => null,
+        'rate_id' => null,
+        'date_range' => null,
+        'price' => null,
+        'currency' => null,
+        'single_price' => null,
+        'occupancy' => null,
+        'rooms_to_sell' => null,
+        'restrictions' => null,
+        'available_rooms' => null,
+        'status' => null,
+        'closed' => null
     ];
 
     /**
@@ -81,9 +99,18 @@ class CreateStudioDeployment201ResponseData implements ModelInterface, ArrayAcce
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'deployment_id' => false,
-        'subdomain' => false,
-        'status' => false
+        'room_id' => false,
+        'rate_id' => false,
+        'date_range' => false,
+        'price' => false,
+        'currency' => false,
+        'single_price' => true,
+        'occupancy' => true,
+        'rooms_to_sell' => true,
+        'restrictions' => false,
+        'available_rooms' => false,
+        'status' => true,
+        'closed' => true
     ];
 
     /**
@@ -162,9 +189,18 @@ class CreateStudioDeployment201ResponseData implements ModelInterface, ArrayAcce
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'deployment_id' => 'deployment_id',
-        'subdomain' => 'subdomain',
-        'status' => 'status'
+        'room_id' => 'roomId',
+        'rate_id' => 'rateId',
+        'date_range' => 'dateRange',
+        'price' => 'price',
+        'currency' => 'currency',
+        'single_price' => 'singlePrice',
+        'occupancy' => 'occupancy',
+        'rooms_to_sell' => 'roomsToSell',
+        'restrictions' => 'restrictions',
+        'available_rooms' => 'availableRooms',
+        'status' => 'status',
+        'closed' => 'closed'
     ];
 
     /**
@@ -173,9 +209,18 @@ class CreateStudioDeployment201ResponseData implements ModelInterface, ArrayAcce
      * @var array<string, string>
      */
     protected static array $setters = [
-        'deployment_id' => 'setDeploymentId',
-        'subdomain' => 'setSubdomain',
-        'status' => 'setStatus'
+        'room_id' => 'setRoomId',
+        'rate_id' => 'setRateId',
+        'date_range' => 'setDateRange',
+        'price' => 'setPrice',
+        'currency' => 'setCurrency',
+        'single_price' => 'setSinglePrice',
+        'occupancy' => 'setOccupancy',
+        'rooms_to_sell' => 'setRoomsToSell',
+        'restrictions' => 'setRestrictions',
+        'available_rooms' => 'setAvailableRooms',
+        'status' => 'setStatus',
+        'closed' => 'setClosed'
     ];
 
     /**
@@ -184,9 +229,18 @@ class CreateStudioDeployment201ResponseData implements ModelInterface, ArrayAcce
      * @var array<string, string>
      */
     protected static array $getters = [
-        'deployment_id' => 'getDeploymentId',
-        'subdomain' => 'getSubdomain',
-        'status' => 'getStatus'
+        'room_id' => 'getRoomId',
+        'rate_id' => 'getRateId',
+        'date_range' => 'getDateRange',
+        'price' => 'getPrice',
+        'currency' => 'getCurrency',
+        'single_price' => 'getSinglePrice',
+        'occupancy' => 'getOccupancy',
+        'rooms_to_sell' => 'getRoomsToSell',
+        'restrictions' => 'getRestrictions',
+        'available_rooms' => 'getAvailableRooms',
+        'status' => 'getStatus',
+        'closed' => 'getClosed'
     ];
 
     /**
@@ -221,7 +275,9 @@ class CreateStudioDeployment201ResponseData implements ModelInterface, ArrayAcce
         return self::$openAPIModelName;
     }
 
-    public const STATUS_PROVISIONING = 'provisioning';
+    public const STATUS_AVAILABLE = 'available';
+    public const STATUS_UNAVAILABLE = 'unavailable';
+    public const STATUS_ON_REQUEST = 'on_request';
 
     /**
      * Gets allowable values of the enum
@@ -231,7 +287,9 @@ class CreateStudioDeployment201ResponseData implements ModelInterface, ArrayAcce
     public static function getStatusAllowableValues()
     {
         return [
-            self::STATUS_PROVISIONING,
+            self::STATUS_AVAILABLE,
+            self::STATUS_UNAVAILABLE,
+            self::STATUS_ON_REQUEST,
         ];
     }
 
@@ -249,9 +307,18 @@ class CreateStudioDeployment201ResponseData implements ModelInterface, ArrayAcce
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('deployment_id', $data ?? [], null);
-        $this->setIfExists('subdomain', $data ?? [], null);
+        $this->setIfExists('room_id', $data ?? [], null);
+        $this->setIfExists('rate_id', $data ?? [], null);
+        $this->setIfExists('date_range', $data ?? [], null);
+        $this->setIfExists('price', $data ?? [], null);
+        $this->setIfExists('currency', $data ?? [], null);
+        $this->setIfExists('single_price', $data ?? [], null);
+        $this->setIfExists('occupancy', $data ?? [], null);
+        $this->setIfExists('rooms_to_sell', $data ?? [], null);
+        $this->setIfExists('restrictions', $data ?? [], null);
+        $this->setIfExists('available_rooms', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('closed', $data ?? [], null);
     }
 
     /**
@@ -279,6 +346,24 @@ class CreateStudioDeployment201ResponseData implements ModelInterface, ArrayAcce
     {
         $invalidProperties = [];
 
+        if ($this->container['room_id'] === null) {
+            $invalidProperties[] = "'room_id' can't be null";
+        }
+        if ($this->container['rate_id'] === null) {
+            $invalidProperties[] = "'rate_id' can't be null";
+        }
+        if ($this->container['date_range'] === null) {
+            $invalidProperties[] = "'date_range' can't be null";
+        }
+        if ($this->container['price'] === null) {
+            $invalidProperties[] = "'price' can't be null";
+        }
+        if ($this->container['currency'] === null) {
+            $invalidProperties[] = "'currency' can't be null";
+        }
+        if ($this->container['available_rooms'] === null) {
+            $invalidProperties[] = "'available_rooms' can't be null";
+        }
         $allowedValues = self::getStatusAllowableValues();
         if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -301,55 +386,292 @@ class CreateStudioDeployment201ResponseData implements ModelInterface, ArrayAcce
 
 
     /**
-     * Gets deployment_id
+     * Gets room_id
      *
-     * @return string|null
+     * @return string
      */
-    public function getDeploymentId(): ?string
+    public function getRoomId(): string
     {
-        return $this->container['deployment_id'];
+        return $this->container['room_id'];
     }
 
     /**
-     * Sets deployment_id
+     * Sets room_id
      *
-     * @param string|null $deployment_id deployment_id
+     * @param string $room_id Booking.com room id.
      *
      * @return $this
      */
-    public function setDeploymentId(?string $deployment_id): static
+    public function setRoomId(string $room_id): static
     {
-        if (is_null($deployment_id)) {
-            throw new InvalidArgumentException('non-nullable deployment_id cannot be null');
+        if (is_null($room_id)) {
+            throw new InvalidArgumentException('non-nullable room_id cannot be null');
         }
-        $this->container['deployment_id'] = $deployment_id;
+        $this->container['room_id'] = $room_id;
 
         return $this;
     }
 
     /**
-     * Gets subdomain
+     * Gets rate_id
      *
-     * @return string|null
+     * @return string
      */
-    public function getSubdomain(): ?string
+    public function getRateId(): string
     {
-        return $this->container['subdomain'];
+        return $this->container['rate_id'];
     }
 
     /**
-     * Sets subdomain
+     * Sets rate_id
      *
-     * @param string|null $subdomain subdomain
+     * @param string $rate_id Booking.com rate-plan id.
      *
      * @return $this
      */
-    public function setSubdomain(?string $subdomain): static
+    public function setRateId(string $rate_id): static
     {
-        if (is_null($subdomain)) {
-            throw new InvalidArgumentException('non-nullable subdomain cannot be null');
+        if (is_null($rate_id)) {
+            throw new InvalidArgumentException('non-nullable rate_id cannot be null');
         }
-        $this->container['subdomain'] = $subdomain;
+        $this->container['rate_id'] = $rate_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets date_range
+     *
+     * @return \Repull\Model\BookingPricingRateUpdateDateRange
+     */
+    public function getDateRange(): \Repull\Model\BookingPricingRateUpdateDateRange
+    {
+        return $this->container['date_range'];
+    }
+
+    /**
+     * Sets date_range
+     *
+     * @param \Repull\Model\BookingPricingRateUpdateDateRange $date_range date_range
+     *
+     * @return $this
+     */
+    public function setDateRange(\Repull\Model\BookingPricingRateUpdateDateRange $date_range): static
+    {
+        if (is_null($date_range)) {
+            throw new InvalidArgumentException('non-nullable date_range cannot be null');
+        }
+        $this->container['date_range'] = $date_range;
+
+        return $this;
+    }
+
+    /**
+     * Gets price
+     *
+     * @return float
+     */
+    public function getPrice(): float
+    {
+        return $this->container['price'];
+    }
+
+    /**
+     * Sets price
+     *
+     * @param float $price price
+     *
+     * @return $this
+     */
+    public function setPrice(float $price): static
+    {
+        if (is_null($price)) {
+            throw new InvalidArgumentException('non-nullable price cannot be null');
+        }
+        $this->container['price'] = $price;
+
+        return $this;
+    }
+
+    /**
+     * Gets currency
+     *
+     * @return string
+     */
+    public function getCurrency(): string
+    {
+        return $this->container['currency'];
+    }
+
+    /**
+     * Sets currency
+     *
+     * @param string $currency currency
+     *
+     * @return $this
+     */
+    public function setCurrency(string $currency): static
+    {
+        if (is_null($currency)) {
+            throw new InvalidArgumentException('non-nullable currency cannot be null');
+        }
+        $this->container['currency'] = $currency;
+
+        return $this;
+    }
+
+    /**
+     * Gets single_price
+     *
+     * @return float|null
+     */
+    public function getSinglePrice(): ?float
+    {
+        return $this->container['single_price'];
+    }
+
+    /**
+     * Sets single_price
+     *
+     * @param float|null $single_price single_price
+     *
+     * @return $this
+     */
+    public function setSinglePrice(?float $single_price): static
+    {
+        if (is_null($single_price)) {
+            array_push($this->openAPINullablesSetToNull, 'single_price');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('single_price', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['single_price'] = $single_price;
+
+        return $this;
+    }
+
+    /**
+     * Gets occupancy
+     *
+     * @return int|null
+     */
+    public function getOccupancy(): ?int
+    {
+        return $this->container['occupancy'];
+    }
+
+    /**
+     * Sets occupancy
+     *
+     * @param int|null $occupancy occupancy
+     *
+     * @return $this
+     */
+    public function setOccupancy(?int $occupancy): static
+    {
+        if (is_null($occupancy)) {
+            array_push($this->openAPINullablesSetToNull, 'occupancy');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('occupancy', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['occupancy'] = $occupancy;
+
+        return $this;
+    }
+
+    /**
+     * Gets rooms_to_sell
+     *
+     * @return int|null
+     */
+    public function getRoomsToSell(): ?int
+    {
+        return $this->container['rooms_to_sell'];
+    }
+
+    /**
+     * Sets rooms_to_sell
+     *
+     * @param int|null $rooms_to_sell Rooms to sell for the date range. Set to `0` to stop-sell this room/rate on the rates endpoint (Booking's dedicated `<closed>` stop-sell flag lives on the availability endpoint — see `BookingAvailabilityUpdate.closed`).
+     *
+     * @return $this
+     */
+    public function setRoomsToSell(?int $rooms_to_sell): static
+    {
+        if (is_null($rooms_to_sell)) {
+            array_push($this->openAPINullablesSetToNull, 'rooms_to_sell');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('rooms_to_sell', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['rooms_to_sell'] = $rooms_to_sell;
+
+        return $this;
+    }
+
+    /**
+     * Gets restrictions
+     *
+     * @return \Repull\Model\BookingPricingRateUpdateRestrictions|null
+     */
+    public function getRestrictions(): ?\Repull\Model\BookingPricingRateUpdateRestrictions
+    {
+        return $this->container['restrictions'];
+    }
+
+    /**
+     * Sets restrictions
+     *
+     * @param \Repull\Model\BookingPricingRateUpdateRestrictions|null $restrictions restrictions
+     *
+     * @return $this
+     */
+    public function setRestrictions(?\Repull\Model\BookingPricingRateUpdateRestrictions $restrictions): static
+    {
+        if (is_null($restrictions)) {
+            throw new InvalidArgumentException('non-nullable restrictions cannot be null');
+        }
+        $this->container['restrictions'] = $restrictions;
+
+        return $this;
+    }
+
+    /**
+     * Gets available_rooms
+     *
+     * @return int
+     */
+    public function getAvailableRooms(): int
+    {
+        return $this->container['available_rooms'];
+    }
+
+    /**
+     * Sets available_rooms
+     *
+     * @param int $available_rooms Rooms to sell (`roomstosell`). `0` blocks the room for the range.
+     *
+     * @return $this
+     */
+    public function setAvailableRooms(int $available_rooms): static
+    {
+        if (is_null($available_rooms)) {
+            throw new InvalidArgumentException('non-nullable available_rooms cannot be null');
+        }
+        $this->container['available_rooms'] = $available_rooms;
 
         return $this;
     }
@@ -374,10 +696,51 @@ class CreateStudioDeployment201ResponseData implements ModelInterface, ArrayAcce
     public function setStatus(?string $status): static
     {
         if (is_null($status)) {
-            throw new InvalidArgumentException('non-nullable status cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'status');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('status', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets closed
+     *
+     * @return bool|null
+     */
+    public function getClosed(): ?bool
+    {
+        return $this->container['closed'];
+    }
+
+    /**
+     * Sets closed
+     *
+     * @param bool|null $closed Dedicated stop-sell flag (`<closed>` in Booking's XML). `true` fully stops sale for the room/date-range regardless of `availableRooms`.
+     *
+     * @return $this
+     */
+    public function setClosed(?bool $closed): static
+    {
+        if (is_null($closed)) {
+            array_push($this->openAPINullablesSetToNull, 'closed');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('closed', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['closed'] = $closed;
 
         return $this;
     }

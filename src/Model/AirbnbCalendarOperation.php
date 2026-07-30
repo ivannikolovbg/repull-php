@@ -1,6 +1,6 @@
 <?php
 /**
- * CreateReservationRequest
+ * AirbnbCalendarOperation
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * CreateReservationRequest Class Doc Comment
+ * AirbnbCalendarOperation Class Doc Comment
  *
+ * @description One calendar operation. Supply either &#x60;start_date&#x60; + &#x60;end_date&#x60; OR a &#x60;dates&#x60; array. Every restriction here is forwarded verbatim to Airbnb&#39;s batch calendar API.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class CreateReservationRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class CreateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'create_reservation_request';
+    protected static string $openAPIModelName = 'AirbnbCalendarOperation';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,16 +60,16 @@ class CreateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'property_id' => 'string',
-        'check_in' => '\DateTime',
-        'check_out' => '\DateTime',
-        'guest_first_name' => 'string',
-        'guest_last_name' => 'string',
-        'guest_email' => 'string',
-        'guest_phone' => 'string',
-        'guest_count' => 'int',
-        'total_price' => 'float',
-        'currency' => 'string'
+        'start_date' => '\DateTime',
+        'end_date' => '\DateTime',
+        'dates' => 'string[]',
+        'daily_price' => 'float',
+        'availability' => 'string',
+        'min_nights' => 'int',
+        'max_nights' => 'int',
+        'closed_to_arrival' => 'bool',
+        'closed_to_departure' => 'bool',
+        'notes' => 'string'
     ];
 
     /**
@@ -77,16 +78,16 @@ class CreateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'property_id' => null,
-        'check_in' => 'date',
-        'check_out' => 'date',
-        'guest_first_name' => null,
-        'guest_last_name' => null,
-        'guest_email' => null,
-        'guest_phone' => null,
-        'guest_count' => null,
-        'total_price' => null,
-        'currency' => null
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'dates' => null,
+        'daily_price' => null,
+        'availability' => null,
+        'min_nights' => null,
+        'max_nights' => null,
+        'closed_to_arrival' => null,
+        'closed_to_departure' => null,
+        'notes' => null
     ];
 
     /**
@@ -95,16 +96,16 @@ class CreateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'property_id' => false,
-        'check_in' => false,
-        'check_out' => false,
-        'guest_first_name' => false,
-        'guest_last_name' => false,
-        'guest_email' => false,
-        'guest_phone' => false,
-        'guest_count' => false,
-        'total_price' => false,
-        'currency' => false
+        'start_date' => true,
+        'end_date' => true,
+        'dates' => true,
+        'daily_price' => true,
+        'availability' => true,
+        'min_nights' => true,
+        'max_nights' => true,
+        'closed_to_arrival' => true,
+        'closed_to_departure' => true,
+        'notes' => true
     ];
 
     /**
@@ -183,16 +184,16 @@ class CreateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'property_id' => 'propertyId',
-        'check_in' => 'checkIn',
-        'check_out' => 'checkOut',
-        'guest_first_name' => 'guestFirstName',
-        'guest_last_name' => 'guestLastName',
-        'guest_email' => 'guestEmail',
-        'guest_phone' => 'guestPhone',
-        'guest_count' => 'guestCount',
-        'total_price' => 'totalPrice',
-        'currency' => 'currency'
+        'start_date' => 'start_date',
+        'end_date' => 'end_date',
+        'dates' => 'dates',
+        'daily_price' => 'daily_price',
+        'availability' => 'availability',
+        'min_nights' => 'min_nights',
+        'max_nights' => 'max_nights',
+        'closed_to_arrival' => 'closed_to_arrival',
+        'closed_to_departure' => 'closed_to_departure',
+        'notes' => 'notes'
     ];
 
     /**
@@ -201,16 +202,16 @@ class CreateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      * @var array<string, string>
      */
     protected static array $setters = [
-        'property_id' => 'setPropertyId',
-        'check_in' => 'setCheckIn',
-        'check_out' => 'setCheckOut',
-        'guest_first_name' => 'setGuestFirstName',
-        'guest_last_name' => 'setGuestLastName',
-        'guest_email' => 'setGuestEmail',
-        'guest_phone' => 'setGuestPhone',
-        'guest_count' => 'setGuestCount',
-        'total_price' => 'setTotalPrice',
-        'currency' => 'setCurrency'
+        'start_date' => 'setStartDate',
+        'end_date' => 'setEndDate',
+        'dates' => 'setDates',
+        'daily_price' => 'setDailyPrice',
+        'availability' => 'setAvailability',
+        'min_nights' => 'setMinNights',
+        'max_nights' => 'setMaxNights',
+        'closed_to_arrival' => 'setClosedToArrival',
+        'closed_to_departure' => 'setClosedToDeparture',
+        'notes' => 'setNotes'
     ];
 
     /**
@@ -219,16 +220,16 @@ class CreateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      * @var array<string, string>
      */
     protected static array $getters = [
-        'property_id' => 'getPropertyId',
-        'check_in' => 'getCheckIn',
-        'check_out' => 'getCheckOut',
-        'guest_first_name' => 'getGuestFirstName',
-        'guest_last_name' => 'getGuestLastName',
-        'guest_email' => 'getGuestEmail',
-        'guest_phone' => 'getGuestPhone',
-        'guest_count' => 'getGuestCount',
-        'total_price' => 'getTotalPrice',
-        'currency' => 'getCurrency'
+        'start_date' => 'getStartDate',
+        'end_date' => 'getEndDate',
+        'dates' => 'getDates',
+        'daily_price' => 'getDailyPrice',
+        'availability' => 'getAvailability',
+        'min_nights' => 'getMinNights',
+        'max_nights' => 'getMaxNights',
+        'closed_to_arrival' => 'getClosedToArrival',
+        'closed_to_departure' => 'getClosedToDeparture',
+        'notes' => 'getNotes'
     ];
 
     /**
@@ -263,6 +264,23 @@ class CreateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
         return self::$openAPIModelName;
     }
 
+    public const AVAILABILITY_AVAILABLE = 'available';
+    public const AVAILABILITY_UNAVAILABLE = 'unavailable';
+    public const AVAILABILITY__DEFAULT = 'default';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getAvailabilityAllowableValues()
+    {
+        return [
+            self::AVAILABILITY_AVAILABLE,
+            self::AVAILABILITY_UNAVAILABLE,
+            self::AVAILABILITY__DEFAULT,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -278,16 +296,16 @@ class CreateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('property_id', $data ?? [], null);
-        $this->setIfExists('check_in', $data ?? [], null);
-        $this->setIfExists('check_out', $data ?? [], null);
-        $this->setIfExists('guest_first_name', $data ?? [], null);
-        $this->setIfExists('guest_last_name', $data ?? [], null);
-        $this->setIfExists('guest_email', $data ?? [], null);
-        $this->setIfExists('guest_phone', $data ?? [], null);
-        $this->setIfExists('guest_count', $data ?? [], null);
-        $this->setIfExists('total_price', $data ?? [], null);
-        $this->setIfExists('currency', $data ?? [], null);
+        $this->setIfExists('start_date', $data ?? [], null);
+        $this->setIfExists('end_date', $data ?? [], null);
+        $this->setIfExists('dates', $data ?? [], null);
+        $this->setIfExists('daily_price', $data ?? [], null);
+        $this->setIfExists('availability', $data ?? [], null);
+        $this->setIfExists('min_nights', $data ?? [], null);
+        $this->setIfExists('max_nights', $data ?? [], null);
+        $this->setIfExists('closed_to_arrival', $data ?? [], null);
+        $this->setIfExists('closed_to_departure', $data ?? [], null);
+        $this->setIfExists('notes', $data ?? [], null);
     }
 
     /**
@@ -315,21 +333,15 @@ class CreateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
     {
         $invalidProperties = [];
 
-        if ($this->container['property_id'] === null) {
-            $invalidProperties[] = "'property_id' can't be null";
+        $allowedValues = self::getAvailabilityAllowableValues();
+        if (!is_null($this->container['availability']) && !in_array($this->container['availability'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'availability', must be one of '%s'",
+                $this->container['availability'],
+                implode("', '", $allowedValues)
+            );
         }
-        if ($this->container['check_in'] === null) {
-            $invalidProperties[] = "'check_in' can't be null";
-        }
-        if ($this->container['check_out'] === null) {
-            $invalidProperties[] = "'check_out' can't be null";
-        }
-        if ($this->container['guest_first_name'] === null) {
-            $invalidProperties[] = "'guest_first_name' can't be null";
-        }
-        if ($this->container['guest_last_name'] === null) {
-            $invalidProperties[] = "'guest_last_name' can't be null";
-        }
+
         return $invalidProperties;
     }
 
@@ -343,271 +355,342 @@ class CreateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
 
 
     /**
-     * Gets property_id
+     * Gets start_date
      *
-     * @return string
+     * @return \DateTime|null
      */
-    public function getPropertyId(): string
+    public function getStartDate(): ?\DateTime
     {
-        return $this->container['property_id'];
+        return $this->container['start_date'];
     }
 
     /**
-     * Sets property_id
+     * Sets start_date
      *
-     * @param string $property_id property_id
+     * @param \DateTime|null $start_date Inclusive range start (pair with `end_date`).
      *
      * @return $this
      */
-    public function setPropertyId(string $property_id): static
+    public function setStartDate(?\DateTime $start_date): static
     {
-        if (is_null($property_id)) {
-            throw new InvalidArgumentException('non-nullable property_id cannot be null');
+        if (is_null($start_date)) {
+            array_push($this->openAPINullablesSetToNull, 'start_date');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('start_date', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['property_id'] = $property_id;
+        $this->container['start_date'] = $start_date;
 
         return $this;
     }
 
     /**
-     * Gets check_in
+     * Gets end_date
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getCheckIn(): \DateTime
+    public function getEndDate(): ?\DateTime
     {
-        return $this->container['check_in'];
+        return $this->container['end_date'];
     }
 
     /**
-     * Sets check_in
+     * Sets end_date
      *
-     * @param \DateTime $check_in check_in
+     * @param \DateTime|null $end_date Inclusive range end (pair with `start_date`).
      *
      * @return $this
      */
-    public function setCheckIn(\DateTime $check_in): static
+    public function setEndDate(?\DateTime $end_date): static
     {
-        if (is_null($check_in)) {
-            throw new InvalidArgumentException('non-nullable check_in cannot be null');
+        if (is_null($end_date)) {
+            array_push($this->openAPINullablesSetToNull, 'end_date');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('end_date', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['check_in'] = $check_in;
+        $this->container['end_date'] = $end_date;
 
         return $this;
     }
 
     /**
-     * Gets check_out
+     * Gets dates
      *
-     * @return \DateTime
+     * @return string[]|null
      */
-    public function getCheckOut(): \DateTime
+    public function getDates(): ?array
     {
-        return $this->container['check_out'];
+        return $this->container['dates'];
     }
 
     /**
-     * Sets check_out
+     * Sets dates
      *
-     * @param \DateTime $check_out check_out
+     * @param string[]|null $dates Explicit date or `start:end` range strings, as an alternative to `start_date`/`end_date`.
      *
      * @return $this
      */
-    public function setCheckOut(\DateTime $check_out): static
+    public function setDates(?array $dates): static
     {
-        if (is_null($check_out)) {
-            throw new InvalidArgumentException('non-nullable check_out cannot be null');
+        if (is_null($dates)) {
+            array_push($this->openAPINullablesSetToNull, 'dates');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('dates', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['check_out'] = $check_out;
+        $this->container['dates'] = $dates;
 
         return $this;
     }
 
     /**
-     * Gets guest_first_name
-     *
-     * @return string
-     */
-    public function getGuestFirstName(): string
-    {
-        return $this->container['guest_first_name'];
-    }
-
-    /**
-     * Sets guest_first_name
-     *
-     * @param string $guest_first_name guest_first_name
-     *
-     * @return $this
-     */
-    public function setGuestFirstName(string $guest_first_name): static
-    {
-        if (is_null($guest_first_name)) {
-            throw new InvalidArgumentException('non-nullable guest_first_name cannot be null');
-        }
-        $this->container['guest_first_name'] = $guest_first_name;
-
-        return $this;
-    }
-
-    /**
-     * Gets guest_last_name
-     *
-     * @return string
-     */
-    public function getGuestLastName(): string
-    {
-        return $this->container['guest_last_name'];
-    }
-
-    /**
-     * Sets guest_last_name
-     *
-     * @param string $guest_last_name guest_last_name
-     *
-     * @return $this
-     */
-    public function setGuestLastName(string $guest_last_name): static
-    {
-        if (is_null($guest_last_name)) {
-            throw new InvalidArgumentException('non-nullable guest_last_name cannot be null');
-        }
-        $this->container['guest_last_name'] = $guest_last_name;
-
-        return $this;
-    }
-
-    /**
-     * Gets guest_email
-     *
-     * @return string|null
-     */
-    public function getGuestEmail(): ?string
-    {
-        return $this->container['guest_email'];
-    }
-
-    /**
-     * Sets guest_email
-     *
-     * @param string|null $guest_email guest_email
-     *
-     * @return $this
-     */
-    public function setGuestEmail(?string $guest_email): static
-    {
-        if (is_null($guest_email)) {
-            throw new InvalidArgumentException('non-nullable guest_email cannot be null');
-        }
-        $this->container['guest_email'] = $guest_email;
-
-        return $this;
-    }
-
-    /**
-     * Gets guest_phone
-     *
-     * @return string|null
-     */
-    public function getGuestPhone(): ?string
-    {
-        return $this->container['guest_phone'];
-    }
-
-    /**
-     * Sets guest_phone
-     *
-     * @param string|null $guest_phone guest_phone
-     *
-     * @return $this
-     */
-    public function setGuestPhone(?string $guest_phone): static
-    {
-        if (is_null($guest_phone)) {
-            throw new InvalidArgumentException('non-nullable guest_phone cannot be null');
-        }
-        $this->container['guest_phone'] = $guest_phone;
-
-        return $this;
-    }
-
-    /**
-     * Gets guest_count
-     *
-     * @return int|null
-     */
-    public function getGuestCount(): ?int
-    {
-        return $this->container['guest_count'];
-    }
-
-    /**
-     * Sets guest_count
-     *
-     * @param int|null $guest_count guest_count
-     *
-     * @return $this
-     */
-    public function setGuestCount(?int $guest_count): static
-    {
-        if (is_null($guest_count)) {
-            throw new InvalidArgumentException('non-nullable guest_count cannot be null');
-        }
-        $this->container['guest_count'] = $guest_count;
-
-        return $this;
-    }
-
-    /**
-     * Gets total_price
+     * Gets daily_price
      *
      * @return float|null
      */
-    public function getTotalPrice(): ?float
+    public function getDailyPrice(): ?float
     {
-        return $this->container['total_price'];
+        return $this->container['daily_price'];
     }
 
     /**
-     * Sets total_price
+     * Sets daily_price
      *
-     * @param float|null $total_price total_price
+     * @param float|null $daily_price Nightly price override.
      *
      * @return $this
      */
-    public function setTotalPrice(?float $total_price): static
+    public function setDailyPrice(?float $daily_price): static
     {
-        if (is_null($total_price)) {
-            throw new InvalidArgumentException('non-nullable total_price cannot be null');
+        if (is_null($daily_price)) {
+            array_push($this->openAPINullablesSetToNull, 'daily_price');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('daily_price', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['total_price'] = $total_price;
+        $this->container['daily_price'] = $daily_price;
 
         return $this;
     }
 
     /**
-     * Gets currency
+     * Gets availability
      *
      * @return string|null
      */
-    public function getCurrency(): ?string
+    public function getAvailability(): ?string
     {
-        return $this->container['currency'];
+        return $this->container['availability'];
     }
 
     /**
-     * Sets currency
+     * Sets availability
      *
-     * @param string|null $currency currency
+     * @param string|null $availability Stop-sell is expressed here: `unavailable` blocks the date(s); `available` re-opens; `default` reverts to rule-based availability.
      *
      * @return $this
      */
-    public function setCurrency(?string $currency): static
+    public function setAvailability(?string $availability): static
     {
-        if (is_null($currency)) {
-            throw new InvalidArgumentException('non-nullable currency cannot be null');
+        if (is_null($availability)) {
+            array_push($this->openAPINullablesSetToNull, 'availability');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('availability', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['currency'] = $currency;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['availability'] = $availability;
+
+        return $this;
+    }
+
+    /**
+     * Gets min_nights
+     *
+     * @return int|null
+     */
+    public function getMinNights(): ?int
+    {
+        return $this->container['min_nights'];
+    }
+
+    /**
+     * Sets min_nights
+     *
+     * @param int|null $min_nights Minimum length of stay for the date(s).
+     *
+     * @return $this
+     */
+    public function setMinNights(?int $min_nights): static
+    {
+        if (is_null($min_nights)) {
+            array_push($this->openAPINullablesSetToNull, 'min_nights');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('min_nights', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['min_nights'] = $min_nights;
+
+        return $this;
+    }
+
+    /**
+     * Gets max_nights
+     *
+     * @return int|null
+     */
+    public function getMaxNights(): ?int
+    {
+        return $this->container['max_nights'];
+    }
+
+    /**
+     * Sets max_nights
+     *
+     * @param int|null $max_nights Maximum length of stay for the date(s).
+     *
+     * @return $this
+     */
+    public function setMaxNights(?int $max_nights): static
+    {
+        if (is_null($max_nights)) {
+            array_push($this->openAPINullablesSetToNull, 'max_nights');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('max_nights', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['max_nights'] = $max_nights;
+
+        return $this;
+    }
+
+    /**
+     * Gets closed_to_arrival
+     *
+     * @return bool|null
+     */
+    public function getClosedToArrival(): ?bool
+    {
+        return $this->container['closed_to_arrival'];
+    }
+
+    /**
+     * Sets closed_to_arrival
+     *
+     * @param bool|null $closed_to_arrival Closed-to-arrival — no check-ins on the affected date(s).
+     *
+     * @return $this
+     */
+    public function setClosedToArrival(?bool $closed_to_arrival): static
+    {
+        if (is_null($closed_to_arrival)) {
+            array_push($this->openAPINullablesSetToNull, 'closed_to_arrival');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('closed_to_arrival', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['closed_to_arrival'] = $closed_to_arrival;
+
+        return $this;
+    }
+
+    /**
+     * Gets closed_to_departure
+     *
+     * @return bool|null
+     */
+    public function getClosedToDeparture(): ?bool
+    {
+        return $this->container['closed_to_departure'];
+    }
+
+    /**
+     * Sets closed_to_departure
+     *
+     * @param bool|null $closed_to_departure Closed-to-departure — no check-outs on the affected date(s).
+     *
+     * @return $this
+     */
+    public function setClosedToDeparture(?bool $closed_to_departure): static
+    {
+        if (is_null($closed_to_departure)) {
+            array_push($this->openAPINullablesSetToNull, 'closed_to_departure');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('closed_to_departure', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['closed_to_departure'] = $closed_to_departure;
+
+        return $this;
+    }
+
+    /**
+     * Gets notes
+     *
+     * @return string|null
+     */
+    public function getNotes(): ?string
+    {
+        return $this->container['notes'];
+    }
+
+    /**
+     * Sets notes
+     *
+     * @param string|null $notes notes
+     *
+     * @return $this
+     */
+    public function setNotes(?string $notes): static
+    {
+        if (is_null($notes)) {
+            array_push($this->openAPINullablesSetToNull, 'notes');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('notes', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['notes'] = $notes;
 
         return $this;
     }

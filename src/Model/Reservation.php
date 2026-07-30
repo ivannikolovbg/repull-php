@@ -76,6 +76,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'currency' => 'string',
         'guest_details' => 'array<string,mixed>',
         'created_at' => '\DateTime',
+        'updated_at' => '\DateTime',
         'booked_at' => '\DateTime',
         'guest_name' => 'string'
     ];
@@ -102,6 +103,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'currency' => null,
         'guest_details' => null,
         'created_at' => 'date-time',
+        'updated_at' => 'date-time',
         'booked_at' => 'date-time',
         'guest_name' => null
     ];
@@ -128,6 +130,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'currency' => false,
         'guest_details' => false,
         'created_at' => false,
+        'updated_at' => false,
         'booked_at' => true,
         'guest_name' => true
     ];
@@ -224,6 +227,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'currency' => 'currency',
         'guest_details' => 'guestDetails',
         'created_at' => 'createdAt',
+        'updated_at' => 'updatedAt',
         'booked_at' => 'bookedAt',
         'guest_name' => 'guestName'
     ];
@@ -250,6 +254,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'currency' => 'setCurrency',
         'guest_details' => 'setGuestDetails',
         'created_at' => 'setCreatedAt',
+        'updated_at' => 'setUpdatedAt',
         'booked_at' => 'setBookedAt',
         'guest_name' => 'setGuestName'
     ];
@@ -276,6 +281,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'currency' => 'getCurrency',
         'guest_details' => 'getGuestDetails',
         'created_at' => 'getCreatedAt',
+        'updated_at' => 'getUpdatedAt',
         'booked_at' => 'getBookedAt',
         'guest_name' => 'getGuestName'
     ];
@@ -412,6 +418,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('currency', $data ?? [], null);
         $this->setIfExists('guest_details', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('updated_at', $data ?? [], null);
         $this->setIfExists('booked_at', $data ?? [], null);
         $this->setIfExists('guest_name', $data ?? [], null);
     }
@@ -488,6 +495,9 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         }
         if ($this->container['created_at'] === null) {
             $invalidProperties[] = "'created_at' can't be null";
+        }
+        if ($this->container['updated_at'] === null) {
+            $invalidProperties[] = "'updated_at' can't be null";
         }
         return $invalidProperties;
     }
@@ -956,6 +966,33 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable created_at cannot be null');
         }
         $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets updated_at
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt(): \DateTime
+    {
+        return $this->container['updated_at'];
+    }
+
+    /**
+     * Sets updated_at
+     *
+     * @param \DateTime $updated_at Last time this reservation was modified (dates, status, price, or guest details). Advances on every amendment or cancellation — poll or compare this value to reconcile changes instead of fingerprinting individual fields.
+     *
+     * @return $this
+     */
+    public function setUpdatedAt(\DateTime $updated_at): static
+    {
+        if (is_null($updated_at)) {
+            throw new InvalidArgumentException('non-nullable updated_at cannot be null');
+        }
+        $this->container['updated_at'] = $updated_at;
 
         return $this;
     }

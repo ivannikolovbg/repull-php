@@ -1,6 +1,6 @@
 <?php
 /**
- * ListStudioProjects200Response
+ * AirbnbPricingWriteRequest
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ListStudioProjects200Response Class Doc Comment
+ * AirbnbPricingWriteRequest Class Doc Comment
  *
+ * @description Body for &#x60;PUT /v1/channels/airbnb/listings/{id}/pricing&#x60;. The &#x60;type&#x60; discriminator selects the pricing sub-resource. &#x60;type: \&quot;calendar\&quot;&#x60; shares the same per-date restriction shape as the availability endpoint (min/max nights, closed-to-arrival/departure, stop-sell via &#x60;availability: \&quot;unavailable\&quot;&#x60;).
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ListStudioProjects200Response implements ModelInterface, ArrayAccess, JsonSerializable
+class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class ListStudioProjects200Response implements ModelInterface, ArrayAccess, Json
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'listStudioProjects_200_response';
+    protected static string $openAPIModelName = 'AirbnbPricingWriteRequest';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,7 +60,13 @@ class ListStudioProjects200Response implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'data' => '\Repull\Model\StudioProject[]'
+        'type' => 'string',
+        'operations' => '\Repull\Model\AirbnbCalendarOperation[]',
+        'model_type' => 'string',
+        'settings' => 'array<string,mixed>',
+        'records' => 'array<string,mixed>[]',
+        'currency' => 'string',
+        'rule' => 'array<string,mixed>'
     ];
 
     /**
@@ -68,7 +75,13 @@ class ListStudioProjects200Response implements ModelInterface, ArrayAccess, Json
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'data' => null
+        'type' => null,
+        'operations' => null,
+        'model_type' => null,
+        'settings' => null,
+        'records' => null,
+        'currency' => null,
+        'rule' => null
     ];
 
     /**
@@ -77,7 +90,13 @@ class ListStudioProjects200Response implements ModelInterface, ArrayAccess, Json
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'data' => false
+        'type' => false,
+        'operations' => false,
+        'model_type' => true,
+        'settings' => true,
+        'records' => true,
+        'currency' => true,
+        'rule' => true
     ];
 
     /**
@@ -156,7 +175,13 @@ class ListStudioProjects200Response implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'data' => 'data'
+        'type' => 'type',
+        'operations' => 'operations',
+        'model_type' => 'modelType',
+        'settings' => 'settings',
+        'records' => 'records',
+        'currency' => 'currency',
+        'rule' => 'rule'
     ];
 
     /**
@@ -165,7 +190,13 @@ class ListStudioProjects200Response implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $setters = [
-        'data' => 'setData'
+        'type' => 'setType',
+        'operations' => 'setOperations',
+        'model_type' => 'setModelType',
+        'settings' => 'setSettings',
+        'records' => 'setRecords',
+        'currency' => 'setCurrency',
+        'rule' => 'setRule'
     ];
 
     /**
@@ -174,7 +205,13 @@ class ListStudioProjects200Response implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $getters = [
-        'data' => 'getData'
+        'type' => 'getType',
+        'operations' => 'getOperations',
+        'model_type' => 'getModelType',
+        'settings' => 'getSettings',
+        'records' => 'getRecords',
+        'currency' => 'getCurrency',
+        'rule' => 'getRule'
     ];
 
     /**
@@ -209,6 +246,33 @@ class ListStudioProjects200Response implements ModelInterface, ArrayAccess, Json
         return self::$openAPIModelName;
     }
 
+    public const TYPE_MODEL = 'model';
+    public const TYPE_STANDARD = 'standard';
+    public const TYPE_LOS = 'los';
+    public const TYPE_RATE_PLAN = 'rate-plan';
+    public const TYPE_FEES = 'fees';
+    public const TYPE_CURRENCY = 'currency';
+    public const TYPE_RULE = 'rule';
+    public const TYPE_CALENDAR = 'calendar';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getTypeAllowableValues()
+    {
+        return [
+            self::TYPE_MODEL,
+            self::TYPE_STANDARD,
+            self::TYPE_LOS,
+            self::TYPE_RATE_PLAN,
+            self::TYPE_FEES,
+            self::TYPE_CURRENCY,
+            self::TYPE_RULE,
+            self::TYPE_CALENDAR,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -224,7 +288,13 @@ class ListStudioProjects200Response implements ModelInterface, ArrayAccess, Json
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('data', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
+        $this->setIfExists('operations', $data ?? [], null);
+        $this->setIfExists('model_type', $data ?? [], null);
+        $this->setIfExists('settings', $data ?? [], null);
+        $this->setIfExists('records', $data ?? [], null);
+        $this->setIfExists('currency', $data ?? [], null);
+        $this->setIfExists('rule', $data ?? [], null);
     }
 
     /**
@@ -252,6 +322,18 @@ class ListStudioProjects200Response implements ModelInterface, ArrayAccess, Json
     {
         $invalidProperties = [];
 
+        if ($this->container['type'] === null) {
+            $invalidProperties[] = "'type' can't be null";
+        }
+        $allowedValues = self::getTypeAllowableValues();
+        if (!is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'type', must be one of '%s'",
+                $this->container['type'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -265,28 +347,226 @@ class ListStudioProjects200Response implements ModelInterface, ArrayAccess, Json
 
 
     /**
-     * Gets data
+     * Gets type
      *
-     * @return \Repull\Model\StudioProject[]|null
+     * @return string
      */
-    public function getData(): ?array
+    public function getType(): string
     {
-        return $this->container['data'];
+        return $this->container['type'];
     }
 
     /**
-     * Sets data
+     * Sets type
      *
-     * @param \Repull\Model\StudioProject[]|null $data data
+     * @param string $type type
      *
      * @return $this
      */
-    public function setData(?array $data): static
+    public function setType(string $type): static
     {
-        if (is_null($data)) {
-            throw new InvalidArgumentException('non-nullable data cannot be null');
+        if (is_null($type)) {
+            throw new InvalidArgumentException('non-nullable type cannot be null');
         }
-        $this->container['data'] = $data;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['type'] = $type;
+
+        return $this;
+    }
+
+    /**
+     * Gets operations
+     *
+     * @return \Repull\Model\AirbnbCalendarOperation[]|null
+     */
+    public function getOperations(): ?array
+    {
+        return $this->container['operations'];
+    }
+
+    /**
+     * Sets operations
+     *
+     * @param \Repull\Model\AirbnbCalendarOperation[]|null $operations Required when `type: \"calendar\"`. Batch of per-date price + restriction operations.
+     *
+     * @return $this
+     */
+    public function setOperations(?array $operations): static
+    {
+        if (is_null($operations)) {
+            throw new InvalidArgumentException('non-nullable operations cannot be null');
+        }
+        $this->container['operations'] = $operations;
+
+        return $this;
+    }
+
+    /**
+     * Gets model_type
+     *
+     * @return string|null
+     */
+    public function getModelType(): ?string
+    {
+        return $this->container['model_type'];
+    }
+
+    /**
+     * Sets model_type
+     *
+     * @param string|null $model_type Required when `type: \"model\"` — the pricing-availability model to switch the listing to.
+     *
+     * @return $this
+     */
+    public function setModelType(?string $model_type): static
+    {
+        if (is_null($model_type)) {
+            array_push($this->openAPINullablesSetToNull, 'model_type');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('model_type', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['model_type'] = $model_type;
+
+        return $this;
+    }
+
+    /**
+     * Gets settings
+     *
+     * @return array<string,mixed>|null
+     */
+    public function getSettings(): ?array
+    {
+        return $this->container['settings'];
+    }
+
+    /**
+     * Sets settings
+     *
+     * @param array<string,mixed>|null $settings Required for `type: \"standard\" | \"rate-plan\" | \"fees\"` — the pricing-settings object to PUT.
+     *
+     * @return $this
+     */
+    public function setSettings(?array $settings): static
+    {
+        if (is_null($settings)) {
+            array_push($this->openAPINullablesSetToNull, 'settings');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('settings', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['settings'] = $settings;
+
+        return $this;
+    }
+
+    /**
+     * Gets records
+     *
+     * @return array<string,mixed>[]|null
+     */
+    public function getRecords(): ?array
+    {
+        return $this->container['records'];
+    }
+
+    /**
+     * Sets records
+     *
+     * @param array<string,mixed>[]|null $records Required for `type: \"los\"` — length-of-stay records.
+     *
+     * @return $this
+     */
+    public function setRecords(?array $records): static
+    {
+        if (is_null($records)) {
+            array_push($this->openAPINullablesSetToNull, 'records');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('records', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['records'] = $records;
+
+        return $this;
+    }
+
+    /**
+     * Gets currency
+     *
+     * @return string|null
+     */
+    public function getCurrency(): ?string
+    {
+        return $this->container['currency'];
+    }
+
+    /**
+     * Sets currency
+     *
+     * @param string|null $currency Required for `type: \"currency\"` — ISO 4217 code.
+     *
+     * @return $this
+     */
+    public function setCurrency(?string $currency): static
+    {
+        if (is_null($currency)) {
+            array_push($this->openAPINullablesSetToNull, 'currency');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('currency', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['currency'] = $currency;
+
+        return $this;
+    }
+
+    /**
+     * Gets rule
+     *
+     * @return array<string,mixed>|null
+     */
+    public function getRule(): ?array
+    {
+        return $this->container['rule'];
+    }
+
+    /**
+     * Sets rule
+     *
+     * @param array<string,mixed>|null $rule Required for `type: \"rule\"` — a single pricing rule appended to the listing.
+     *
+     * @return $this
+     */
+    public function setRule(?array $rule): static
+    {
+        if (is_null($rule)) {
+            array_push($this->openAPINullablesSetToNull, 'rule');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('rule', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['rule'] = $rule;
 
         return $this;
     }

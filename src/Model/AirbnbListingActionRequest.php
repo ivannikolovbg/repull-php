@@ -1,6 +1,6 @@
 <?php
 /**
- * UpdateReservationRequest
+ * AirbnbListingActionRequest
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * UpdateReservationRequest Class Doc Comment
+ * AirbnbListingActionRequest Class Doc Comment
  *
+ * @description Body for &#x60;POST /v1/channels/airbnb/listings/{id}&#x60;.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class UpdateReservationRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class AirbnbListingActionRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class UpdateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'update_reservation_request';
+    protected static string $openAPIModelName = 'AirbnbListingActionRequest';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,10 +60,10 @@ class UpdateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'check_in' => '\DateTime',
-        'check_out' => '\DateTime',
-        'status' => 'string',
-        'total_price' => 'float'
+        'action' => 'string',
+        'airbnb_connection_id' => 'string',
+        'host_id' => 'string',
+        'force' => 'bool'
     ];
 
     /**
@@ -71,10 +72,10 @@ class UpdateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'check_in' => 'date',
-        'check_out' => 'date',
-        'status' => null,
-        'total_price' => null
+        'action' => null,
+        'airbnb_connection_id' => null,
+        'host_id' => null,
+        'force' => null
     ];
 
     /**
@@ -83,10 +84,10 @@ class UpdateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'check_in' => false,
-        'check_out' => false,
-        'status' => false,
-        'total_price' => false
+        'action' => false,
+        'airbnb_connection_id' => false,
+        'host_id' => false,
+        'force' => false
     ];
 
     /**
@@ -165,10 +166,10 @@ class UpdateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'check_in' => 'checkIn',
-        'check_out' => 'checkOut',
-        'status' => 'status',
-        'total_price' => 'totalPrice'
+        'action' => 'action',
+        'airbnb_connection_id' => 'airbnbConnectionId',
+        'host_id' => 'hostId',
+        'force' => 'force'
     ];
 
     /**
@@ -177,10 +178,10 @@ class UpdateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      * @var array<string, string>
      */
     protected static array $setters = [
-        'check_in' => 'setCheckIn',
-        'check_out' => 'setCheckOut',
-        'status' => 'setStatus',
-        'total_price' => 'setTotalPrice'
+        'action' => 'setAction',
+        'airbnb_connection_id' => 'setAirbnbConnectionId',
+        'host_id' => 'setHostId',
+        'force' => 'setForce'
     ];
 
     /**
@@ -189,10 +190,10 @@ class UpdateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      * @var array<string, string>
      */
     protected static array $getters = [
-        'check_in' => 'getCheckIn',
-        'check_out' => 'getCheckOut',
-        'status' => 'getStatus',
-        'total_price' => 'getTotalPrice'
+        'action' => 'getAction',
+        'airbnb_connection_id' => 'getAirbnbConnectionId',
+        'host_id' => 'getHostId',
+        'force' => 'getForce'
     ];
 
     /**
@@ -227,6 +228,23 @@ class UpdateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
         return self::$openAPIModelName;
     }
 
+    public const ACTION_DELETE = 'delete';
+    public const ACTION_PUSH = 'push';
+    public const ACTION_PUBLISH = 'publish';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getActionAllowableValues()
+    {
+        return [
+            self::ACTION_DELETE,
+            self::ACTION_PUSH,
+            self::ACTION_PUBLISH,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -242,10 +260,10 @@ class UpdateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('check_in', $data ?? [], null);
-        $this->setIfExists('check_out', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
-        $this->setIfExists('total_price', $data ?? [], null);
+        $this->setIfExists('action', $data ?? [], null);
+        $this->setIfExists('airbnb_connection_id', $data ?? [], null);
+        $this->setIfExists('host_id', $data ?? [], null);
+        $this->setIfExists('force', $data ?? [], false);
     }
 
     /**
@@ -273,6 +291,18 @@ class UpdateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
     {
         $invalidProperties = [];
 
+        if ($this->container['action'] === null) {
+            $invalidProperties[] = "'action' can't be null";
+        }
+        $allowedValues = self::getActionAllowableValues();
+        if (!is_null($this->container['action']) && !in_array($this->container['action'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'action', must be one of '%s'",
+                $this->container['action'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -286,109 +316,110 @@ class UpdateReservationRequest implements ModelInterface, ArrayAccess, JsonSeria
 
 
     /**
-     * Gets check_in
+     * Gets action
      *
-     * @return \DateTime|null
+     * @return string
      */
-    public function getCheckIn(): ?\DateTime
+    public function getAction(): string
     {
-        return $this->container['check_in'];
+        return $this->container['action'];
     }
 
     /**
-     * Sets check_in
+     * Sets action
      *
-     * @param \DateTime|null $check_in check_in
+     * @param string $action `delete` deactivates the Repull record. `push`/`publish` push content to Airbnb.
      *
      * @return $this
      */
-    public function setCheckIn(?\DateTime $check_in): static
+    public function setAction(string $action): static
     {
-        if (is_null($check_in)) {
-            throw new InvalidArgumentException('non-nullable check_in cannot be null');
+        if (is_null($action)) {
+            throw new InvalidArgumentException('non-nullable action cannot be null');
         }
-        $this->container['check_in'] = $check_in;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['action'] = $action;
 
         return $this;
     }
 
     /**
-     * Gets check_out
-     *
-     * @return \DateTime|null
-     */
-    public function getCheckOut(): ?\DateTime
-    {
-        return $this->container['check_out'];
-    }
-
-    /**
-     * Sets check_out
-     *
-     * @param \DateTime|null $check_out check_out
-     *
-     * @return $this
-     */
-    public function setCheckOut(?\DateTime $check_out): static
-    {
-        if (is_null($check_out)) {
-            throw new InvalidArgumentException('non-nullable check_out cannot be null');
-        }
-        $this->container['check_out'] = $check_out;
-
-        return $this;
-    }
-
-    /**
-     * Gets status
+     * Gets airbnb_connection_id
      *
      * @return string|null
      */
-    public function getStatus(): ?string
+    public function getAirbnbConnectionId(): ?string
     {
-        return $this->container['status'];
+        return $this->container['airbnb_connection_id'];
     }
 
     /**
-     * Sets status
+     * Sets airbnb_connection_id
      *
-     * @param string|null $status status
+     * @param string|null $airbnb_connection_id For `push`/`publish`: the Airbnb connection to update (from `GET /v1/channels/airbnb/listings/{id}`). Pass this OR `hostId`.
      *
      * @return $this
      */
-    public function setStatus(?string $status): static
+    public function setAirbnbConnectionId(?string $airbnb_connection_id): static
     {
-        if (is_null($status)) {
-            throw new InvalidArgumentException('non-nullable status cannot be null');
+        if (is_null($airbnb_connection_id)) {
+            throw new InvalidArgumentException('non-nullable airbnb_connection_id cannot be null');
         }
-        $this->container['status'] = $status;
+        $this->container['airbnb_connection_id'] = $airbnb_connection_id;
 
         return $this;
     }
 
     /**
-     * Gets total_price
+     * Gets host_id
      *
-     * @return float|null
+     * @return string|null
      */
-    public function getTotalPrice(): ?float
+    public function getHostId(): ?string
     {
-        return $this->container['total_price'];
+        return $this->container['host_id'];
     }
 
     /**
-     * Sets total_price
+     * Sets host_id
      *
-     * @param float|null $total_price total_price
+     * @param string|null $host_id For `push`/`publish`: create + publish a new Airbnb listing under this host. Pass this OR `airbnbConnectionId`.
      *
      * @return $this
      */
-    public function setTotalPrice(?float $total_price): static
+    public function setHostId(?string $host_id): static
     {
-        if (is_null($total_price)) {
-            throw new InvalidArgumentException('non-nullable total_price cannot be null');
+        if (is_null($host_id)) {
+            throw new InvalidArgumentException('non-nullable host_id cannot be null');
         }
-        $this->container['total_price'] = $total_price;
+        $this->container['host_id'] = $host_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets force
+     *
+     * @return bool|null
+     */
+    public function getForce(): ?bool
+    {
+        return $this->container['force'];
+    }
+
+    /**
+     * Sets force
+     *
+     * @param bool|null $force For `push`/`publish`: re-push every field, ignoring dirty-field tracking.
+     *
+     * @return $this
+     */
+    public function setForce(?bool $force): static
+    {
+        if (is_null($force)) {
+            throw new InvalidArgumentException('non-nullable force cannot be null');
+        }
+        $this->container['force'] = $force;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * GenerateStudioCompletion200ResponseData
+ * BookingAvailabilityUpdate
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * GenerateStudioCompletion200ResponseData Class Doc Comment
+ * BookingAvailabilityUpdate Class Doc Comment
  *
+ * @description One (room, rate-plan, date-range) availability update. Carries inventory (&#x60;availableRooms&#x60;), the dedicated stop-sell flag (&#x60;closed&#x60;), and the same length-of-stay / arrival restrictions as a rate update.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class GenerateStudioCompletion200ResponseData implements ModelInterface, ArrayAccess, JsonSerializable
+class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class GenerateStudioCompletion200ResponseData implements ModelInterface, ArrayAc
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'generateStudioCompletion_200_response_data';
+    protected static string $openAPIModelName = 'BookingAvailabilityUpdate';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,15 +60,13 @@ class GenerateStudioCompletion200ResponseData implements ModelInterface, ArrayAc
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'text' => 'string',
-        'generation_id' => 'string',
-        'model' => 'string',
-        'tokens_in' => 'int',
-        'tokens_out' => 'int',
-        'latency_ms' => 'int',
-        'cost_usd_micro' => 'int',
-        'cached' => 'bool',
-        'fallback' => 'bool'
+        'room_id' => 'string',
+        'rate_id' => 'string',
+        'date_range' => '\Repull\Model\BookingPricingRateUpdateDateRange',
+        'available_rooms' => 'int',
+        'status' => 'string',
+        'closed' => 'bool',
+        'restrictions' => '\Repull\Model\BookingPricingRateUpdateRestrictions'
     ];
 
     /**
@@ -76,15 +75,13 @@ class GenerateStudioCompletion200ResponseData implements ModelInterface, ArrayAc
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'text' => null,
-        'generation_id' => 'uuid',
-        'model' => null,
-        'tokens_in' => null,
-        'tokens_out' => null,
-        'latency_ms' => null,
-        'cost_usd_micro' => null,
-        'cached' => null,
-        'fallback' => null
+        'room_id' => null,
+        'rate_id' => null,
+        'date_range' => null,
+        'available_rooms' => null,
+        'status' => null,
+        'closed' => null,
+        'restrictions' => null
     ];
 
     /**
@@ -93,15 +90,13 @@ class GenerateStudioCompletion200ResponseData implements ModelInterface, ArrayAc
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'text' => false,
-        'generation_id' => false,
-        'model' => false,
-        'tokens_in' => false,
-        'tokens_out' => false,
-        'latency_ms' => false,
-        'cost_usd_micro' => false,
-        'cached' => false,
-        'fallback' => false
+        'room_id' => false,
+        'rate_id' => false,
+        'date_range' => false,
+        'available_rooms' => false,
+        'status' => true,
+        'closed' => true,
+        'restrictions' => false
     ];
 
     /**
@@ -180,15 +175,13 @@ class GenerateStudioCompletion200ResponseData implements ModelInterface, ArrayAc
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'text' => 'text',
-        'generation_id' => 'generation_id',
-        'model' => 'model',
-        'tokens_in' => 'tokens_in',
-        'tokens_out' => 'tokens_out',
-        'latency_ms' => 'latency_ms',
-        'cost_usd_micro' => 'cost_usd_micro',
-        'cached' => 'cached',
-        'fallback' => 'fallback'
+        'room_id' => 'roomId',
+        'rate_id' => 'rateId',
+        'date_range' => 'dateRange',
+        'available_rooms' => 'availableRooms',
+        'status' => 'status',
+        'closed' => 'closed',
+        'restrictions' => 'restrictions'
     ];
 
     /**
@@ -197,15 +190,13 @@ class GenerateStudioCompletion200ResponseData implements ModelInterface, ArrayAc
      * @var array<string, string>
      */
     protected static array $setters = [
-        'text' => 'setText',
-        'generation_id' => 'setGenerationId',
-        'model' => 'setModel',
-        'tokens_in' => 'setTokensIn',
-        'tokens_out' => 'setTokensOut',
-        'latency_ms' => 'setLatencyMs',
-        'cost_usd_micro' => 'setCostUsdMicro',
-        'cached' => 'setCached',
-        'fallback' => 'setFallback'
+        'room_id' => 'setRoomId',
+        'rate_id' => 'setRateId',
+        'date_range' => 'setDateRange',
+        'available_rooms' => 'setAvailableRooms',
+        'status' => 'setStatus',
+        'closed' => 'setClosed',
+        'restrictions' => 'setRestrictions'
     ];
 
     /**
@@ -214,15 +205,13 @@ class GenerateStudioCompletion200ResponseData implements ModelInterface, ArrayAc
      * @var array<string, string>
      */
     protected static array $getters = [
-        'text' => 'getText',
-        'generation_id' => 'getGenerationId',
-        'model' => 'getModel',
-        'tokens_in' => 'getTokensIn',
-        'tokens_out' => 'getTokensOut',
-        'latency_ms' => 'getLatencyMs',
-        'cost_usd_micro' => 'getCostUsdMicro',
-        'cached' => 'getCached',
-        'fallback' => 'getFallback'
+        'room_id' => 'getRoomId',
+        'rate_id' => 'getRateId',
+        'date_range' => 'getDateRange',
+        'available_rooms' => 'getAvailableRooms',
+        'status' => 'getStatus',
+        'closed' => 'getClosed',
+        'restrictions' => 'getRestrictions'
     ];
 
     /**
@@ -257,6 +246,23 @@ class GenerateStudioCompletion200ResponseData implements ModelInterface, ArrayAc
         return self::$openAPIModelName;
     }
 
+    public const STATUS_AVAILABLE = 'available';
+    public const STATUS_UNAVAILABLE = 'unavailable';
+    public const STATUS_ON_REQUEST = 'on_request';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getStatusAllowableValues()
+    {
+        return [
+            self::STATUS_AVAILABLE,
+            self::STATUS_UNAVAILABLE,
+            self::STATUS_ON_REQUEST,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -272,15 +278,13 @@ class GenerateStudioCompletion200ResponseData implements ModelInterface, ArrayAc
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('text', $data ?? [], null);
-        $this->setIfExists('generation_id', $data ?? [], null);
-        $this->setIfExists('model', $data ?? [], null);
-        $this->setIfExists('tokens_in', $data ?? [], null);
-        $this->setIfExists('tokens_out', $data ?? [], null);
-        $this->setIfExists('latency_ms', $data ?? [], null);
-        $this->setIfExists('cost_usd_micro', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
-        $this->setIfExists('fallback', $data ?? [], null);
+        $this->setIfExists('room_id', $data ?? [], null);
+        $this->setIfExists('rate_id', $data ?? [], null);
+        $this->setIfExists('date_range', $data ?? [], null);
+        $this->setIfExists('available_rooms', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('closed', $data ?? [], null);
+        $this->setIfExists('restrictions', $data ?? [], null);
     }
 
     /**
@@ -308,6 +312,27 @@ class GenerateStudioCompletion200ResponseData implements ModelInterface, ArrayAc
     {
         $invalidProperties = [];
 
+        if ($this->container['room_id'] === null) {
+            $invalidProperties[] = "'room_id' can't be null";
+        }
+        if ($this->container['rate_id'] === null) {
+            $invalidProperties[] = "'rate_id' can't be null";
+        }
+        if ($this->container['date_range'] === null) {
+            $invalidProperties[] = "'date_range' can't be null";
+        }
+        if ($this->container['available_rooms'] === null) {
+            $invalidProperties[] = "'available_rooms' can't be null";
+        }
+        $allowedValues = self::getStatusAllowableValues();
+        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'status', must be one of '%s'",
+                $this->container['status'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -321,244 +346,205 @@ class GenerateStudioCompletion200ResponseData implements ModelInterface, ArrayAc
 
 
     /**
-     * Gets text
+     * Gets room_id
+     *
+     * @return string
+     */
+    public function getRoomId(): string
+    {
+        return $this->container['room_id'];
+    }
+
+    /**
+     * Sets room_id
+     *
+     * @param string $room_id Booking.com room id.
+     *
+     * @return $this
+     */
+    public function setRoomId(string $room_id): static
+    {
+        if (is_null($room_id)) {
+            throw new InvalidArgumentException('non-nullable room_id cannot be null');
+        }
+        $this->container['room_id'] = $room_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets rate_id
+     *
+     * @return string
+     */
+    public function getRateId(): string
+    {
+        return $this->container['rate_id'];
+    }
+
+    /**
+     * Sets rate_id
+     *
+     * @param string $rate_id Booking.com rate-plan id.
+     *
+     * @return $this
+     */
+    public function setRateId(string $rate_id): static
+    {
+        if (is_null($rate_id)) {
+            throw new InvalidArgumentException('non-nullable rate_id cannot be null');
+        }
+        $this->container['rate_id'] = $rate_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets date_range
+     *
+     * @return \Repull\Model\BookingPricingRateUpdateDateRange
+     */
+    public function getDateRange(): \Repull\Model\BookingPricingRateUpdateDateRange
+    {
+        return $this->container['date_range'];
+    }
+
+    /**
+     * Sets date_range
+     *
+     * @param \Repull\Model\BookingPricingRateUpdateDateRange $date_range date_range
+     *
+     * @return $this
+     */
+    public function setDateRange(\Repull\Model\BookingPricingRateUpdateDateRange $date_range): static
+    {
+        if (is_null($date_range)) {
+            throw new InvalidArgumentException('non-nullable date_range cannot be null');
+        }
+        $this->container['date_range'] = $date_range;
+
+        return $this;
+    }
+
+    /**
+     * Gets available_rooms
+     *
+     * @return int
+     */
+    public function getAvailableRooms(): int
+    {
+        return $this->container['available_rooms'];
+    }
+
+    /**
+     * Sets available_rooms
+     *
+     * @param int $available_rooms Rooms to sell (`roomstosell`). `0` blocks the room for the range.
+     *
+     * @return $this
+     */
+    public function setAvailableRooms(int $available_rooms): static
+    {
+        if (is_null($available_rooms)) {
+            throw new InvalidArgumentException('non-nullable available_rooms cannot be null');
+        }
+        $this->container['available_rooms'] = $available_rooms;
+
+        return $this;
+    }
+
+    /**
+     * Gets status
      *
      * @return string|null
      */
-    public function getText(): ?string
+    public function getStatus(): ?string
     {
-        return $this->container['text'];
+        return $this->container['status'];
     }
 
     /**
-     * Sets text
+     * Sets status
      *
-     * @param string|null $text Generated completion text.
+     * @param string|null $status status
      *
      * @return $this
      */
-    public function setText(?string $text): static
+    public function setStatus(?string $status): static
     {
-        if (is_null($text)) {
-            throw new InvalidArgumentException('non-nullable text cannot be null');
+        if (is_null($status)) {
+            array_push($this->openAPINullablesSetToNull, 'status');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('status', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['text'] = $text;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['status'] = $status;
 
         return $this;
     }
 
     /**
-     * Gets generation_id
-     *
-     * @return string|null
-     */
-    public function getGenerationId(): ?string
-    {
-        return $this->container['generation_id'];
-    }
-
-    /**
-     * Sets generation_id
-     *
-     * @param string|null $generation_id generation_id
-     *
-     * @return $this
-     */
-    public function setGenerationId(?string $generation_id): static
-    {
-        if (is_null($generation_id)) {
-            throw new InvalidArgumentException('non-nullable generation_id cannot be null');
-        }
-        $this->container['generation_id'] = $generation_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets model
-     *
-     * @return string|null
-     */
-    public function getModel(): ?string
-    {
-        return $this->container['model'];
-    }
-
-    /**
-     * Sets model
-     *
-     * @param string|null $model Model identifier that produced the response.
-     *
-     * @return $this
-     */
-    public function setModel(?string $model): static
-    {
-        if (is_null($model)) {
-            throw new InvalidArgumentException('non-nullable model cannot be null');
-        }
-        $this->container['model'] = $model;
-
-        return $this;
-    }
-
-    /**
-     * Gets tokens_in
-     *
-     * @return int|null
-     */
-    public function getTokensIn(): ?int
-    {
-        return $this->container['tokens_in'];
-    }
-
-    /**
-     * Sets tokens_in
-     *
-     * @param int|null $tokens_in tokens_in
-     *
-     * @return $this
-     */
-    public function setTokensIn(?int $tokens_in): static
-    {
-        if (is_null($tokens_in)) {
-            throw new InvalidArgumentException('non-nullable tokens_in cannot be null');
-        }
-        $this->container['tokens_in'] = $tokens_in;
-
-        return $this;
-    }
-
-    /**
-     * Gets tokens_out
-     *
-     * @return int|null
-     */
-    public function getTokensOut(): ?int
-    {
-        return $this->container['tokens_out'];
-    }
-
-    /**
-     * Sets tokens_out
-     *
-     * @param int|null $tokens_out tokens_out
-     *
-     * @return $this
-     */
-    public function setTokensOut(?int $tokens_out): static
-    {
-        if (is_null($tokens_out)) {
-            throw new InvalidArgumentException('non-nullable tokens_out cannot be null');
-        }
-        $this->container['tokens_out'] = $tokens_out;
-
-        return $this;
-    }
-
-    /**
-     * Gets latency_ms
-     *
-     * @return int|null
-     */
-    public function getLatencyMs(): ?int
-    {
-        return $this->container['latency_ms'];
-    }
-
-    /**
-     * Sets latency_ms
-     *
-     * @param int|null $latency_ms latency_ms
-     *
-     * @return $this
-     */
-    public function setLatencyMs(?int $latency_ms): static
-    {
-        if (is_null($latency_ms)) {
-            throw new InvalidArgumentException('non-nullable latency_ms cannot be null');
-        }
-        $this->container['latency_ms'] = $latency_ms;
-
-        return $this;
-    }
-
-    /**
-     * Gets cost_usd_micro
-     *
-     * @return int|null
-     */
-    public function getCostUsdMicro(): ?int
-    {
-        return $this->container['cost_usd_micro'];
-    }
-
-    /**
-     * Sets cost_usd_micro
-     *
-     * @param int|null $cost_usd_micro Cost in millionths of a USD.
-     *
-     * @return $this
-     */
-    public function setCostUsdMicro(?int $cost_usd_micro): static
-    {
-        if (is_null($cost_usd_micro)) {
-            throw new InvalidArgumentException('non-nullable cost_usd_micro cannot be null');
-        }
-        $this->container['cost_usd_micro'] = $cost_usd_micro;
-
-        return $this;
-    }
-
-    /**
-     * Gets cached
+     * Gets closed
      *
      * @return bool|null
      */
-    public function getCached(): ?bool
+    public function getClosed(): ?bool
     {
-        return $this->container['cached'];
+        return $this->container['closed'];
     }
 
     /**
-     * Sets cached
+     * Sets closed
      *
-     * @param bool|null $cached True if the response was served from cache.
+     * @param bool|null $closed Dedicated stop-sell flag (`<closed>` in Booking's XML). `true` fully stops sale for the room/date-range regardless of `availableRooms`.
      *
      * @return $this
      */
-    public function setCached(?bool $cached): static
+    public function setClosed(?bool $closed): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($closed)) {
+            array_push($this->openAPINullablesSetToNull, 'closed');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('closed', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['cached'] = $cached;
+        $this->container['closed'] = $closed;
 
         return $this;
     }
 
     /**
-     * Gets fallback
+     * Gets restrictions
      *
-     * @return bool|null
+     * @return \Repull\Model\BookingPricingRateUpdateRestrictions|null
      */
-    public function getFallback(): ?bool
+    public function getRestrictions(): ?\Repull\Model\BookingPricingRateUpdateRestrictions
     {
-        return $this->container['fallback'];
+        return $this->container['restrictions'];
     }
 
     /**
-     * Sets fallback
+     * Sets restrictions
      *
-     * @param bool|null $fallback True if the primary model failed and Repull AI fell back to the secondary.
+     * @param \Repull\Model\BookingPricingRateUpdateRestrictions|null $restrictions restrictions
      *
      * @return $this
      */
-    public function setFallback(?bool $fallback): static
+    public function setRestrictions(?\Repull\Model\BookingPricingRateUpdateRestrictions $restrictions): static
     {
-        if (is_null($fallback)) {
-            throw new InvalidArgumentException('non-nullable fallback cannot be null');
+        if (is_null($restrictions)) {
+            throw new InvalidArgumentException('non-nullable restrictions cannot be null');
         }
-        $this->container['fallback'] = $fallback;
+        $this->container['restrictions'] = $restrictions;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * CreateStudioProjectGenerationRequest
+ * SandboxSeedResult
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * CreateStudioProjectGenerationRequest Class Doc Comment
+ * SandboxSeedResult Class Doc Comment
  *
+ * @description Result of provisioning the sandbox fixture set.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class CreateStudioProjectGenerationRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class SandboxSeedResult implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class CreateStudioProjectGenerationRequest implements ModelInterface, ArrayAcces
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'createStudioProjectGeneration_request';
+    protected static string $openAPIModelName = 'SandboxSeedResult';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,7 +60,11 @@ class CreateStudioProjectGenerationRequest implements ModelInterface, ArrayAcces
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'prompt' => 'string'
+        'customer_id' => 'string',
+        'seeded_at' => '\DateTime',
+        'listings' => '\Repull\Model\SandboxFixtureRef[]',
+        'reservations' => '\Repull\Model\SandboxFixtureRef[]',
+        'connections' => '\Repull\Model\SandboxFixtureRef[]'
     ];
 
     /**
@@ -68,7 +73,11 @@ class CreateStudioProjectGenerationRequest implements ModelInterface, ArrayAcces
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'prompt' => null
+        'customer_id' => null,
+        'seeded_at' => 'date-time',
+        'listings' => null,
+        'reservations' => null,
+        'connections' => null
     ];
 
     /**
@@ -77,7 +86,11 @@ class CreateStudioProjectGenerationRequest implements ModelInterface, ArrayAcces
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'prompt' => false
+        'customer_id' => false,
+        'seeded_at' => false,
+        'listings' => false,
+        'reservations' => false,
+        'connections' => false
     ];
 
     /**
@@ -156,7 +169,11 @@ class CreateStudioProjectGenerationRequest implements ModelInterface, ArrayAcces
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'prompt' => 'prompt'
+        'customer_id' => 'customerId',
+        'seeded_at' => 'seededAt',
+        'listings' => 'listings',
+        'reservations' => 'reservations',
+        'connections' => 'connections'
     ];
 
     /**
@@ -165,7 +182,11 @@ class CreateStudioProjectGenerationRequest implements ModelInterface, ArrayAcces
      * @var array<string, string>
      */
     protected static array $setters = [
-        'prompt' => 'setPrompt'
+        'customer_id' => 'setCustomerId',
+        'seeded_at' => 'setSeededAt',
+        'listings' => 'setListings',
+        'reservations' => 'setReservations',
+        'connections' => 'setConnections'
     ];
 
     /**
@@ -174,7 +195,11 @@ class CreateStudioProjectGenerationRequest implements ModelInterface, ArrayAcces
      * @var array<string, string>
      */
     protected static array $getters = [
-        'prompt' => 'getPrompt'
+        'customer_id' => 'getCustomerId',
+        'seeded_at' => 'getSeededAt',
+        'listings' => 'getListings',
+        'reservations' => 'getReservations',
+        'connections' => 'getConnections'
     ];
 
     /**
@@ -224,7 +249,11 @@ class CreateStudioProjectGenerationRequest implements ModelInterface, ArrayAcces
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('prompt', $data ?? [], null);
+        $this->setIfExists('customer_id', $data ?? [], null);
+        $this->setIfExists('seeded_at', $data ?? [], null);
+        $this->setIfExists('listings', $data ?? [], null);
+        $this->setIfExists('reservations', $data ?? [], null);
+        $this->setIfExists('connections', $data ?? [], null);
     }
 
     /**
@@ -252,8 +281,20 @@ class CreateStudioProjectGenerationRequest implements ModelInterface, ArrayAcces
     {
         $invalidProperties = [];
 
-        if ($this->container['prompt'] === null) {
-            $invalidProperties[] = "'prompt' can't be null";
+        if ($this->container['customer_id'] === null) {
+            $invalidProperties[] = "'customer_id' can't be null";
+        }
+        if ($this->container['seeded_at'] === null) {
+            $invalidProperties[] = "'seeded_at' can't be null";
+        }
+        if ($this->container['listings'] === null) {
+            $invalidProperties[] = "'listings' can't be null";
+        }
+        if ($this->container['reservations'] === null) {
+            $invalidProperties[] = "'reservations' can't be null";
+        }
+        if ($this->container['connections'] === null) {
+            $invalidProperties[] = "'connections' can't be null";
         }
         return $invalidProperties;
     }
@@ -268,28 +309,136 @@ class CreateStudioProjectGenerationRequest implements ModelInterface, ArrayAcces
 
 
     /**
-     * Gets prompt
+     * Gets customer_id
      *
      * @return string
      */
-    public function getPrompt(): string
+    public function getCustomerId(): string
     {
-        return $this->container['prompt'];
+        return $this->container['customer_id'];
     }
 
     /**
-     * Sets prompt
+     * Sets customer_id
      *
-     * @param string $prompt Prompt to send to Repull AI.
+     * @param string $customer_id customer_id
      *
      * @return $this
      */
-    public function setPrompt(string $prompt): static
+    public function setCustomerId(string $customer_id): static
     {
-        if (is_null($prompt)) {
-            throw new InvalidArgumentException('non-nullable prompt cannot be null');
+        if (is_null($customer_id)) {
+            throw new InvalidArgumentException('non-nullable customer_id cannot be null');
         }
-        $this->container['prompt'] = $prompt;
+        $this->container['customer_id'] = $customer_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets seeded_at
+     *
+     * @return \DateTime
+     */
+    public function getSeededAt(): \DateTime
+    {
+        return $this->container['seeded_at'];
+    }
+
+    /**
+     * Sets seeded_at
+     *
+     * @param \DateTime $seeded_at seeded_at
+     *
+     * @return $this
+     */
+    public function setSeededAt(\DateTime $seeded_at): static
+    {
+        if (is_null($seeded_at)) {
+            throw new InvalidArgumentException('non-nullable seeded_at cannot be null');
+        }
+        $this->container['seeded_at'] = $seeded_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets listings
+     *
+     * @return \Repull\Model\SandboxFixtureRef[]
+     */
+    public function getListings(): array
+    {
+        return $this->container['listings'];
+    }
+
+    /**
+     * Sets listings
+     *
+     * @param \Repull\Model\SandboxFixtureRef[] $listings 3 sample listings.
+     *
+     * @return $this
+     */
+    public function setListings(array $listings): static
+    {
+        if (is_null($listings)) {
+            throw new InvalidArgumentException('non-nullable listings cannot be null');
+        }
+        $this->container['listings'] = $listings;
+
+        return $this;
+    }
+
+    /**
+     * Gets reservations
+     *
+     * @return \Repull\Model\SandboxFixtureRef[]
+     */
+    public function getReservations(): array
+    {
+        return $this->container['reservations'];
+    }
+
+    /**
+     * Sets reservations
+     *
+     * @param \Repull\Model\SandboxFixtureRef[] $reservations 5 reservations across the lifecycle: created, modified, cancelled, date-changed, pending.
+     *
+     * @return $this
+     */
+    public function setReservations(array $reservations): static
+    {
+        if (is_null($reservations)) {
+            throw new InvalidArgumentException('non-nullable reservations cannot be null');
+        }
+        $this->container['reservations'] = $reservations;
+
+        return $this;
+    }
+
+    /**
+     * Gets connections
+     *
+     * @return \Repull\Model\SandboxFixtureRef[]
+     */
+    public function getConnections(): array
+    {
+        return $this->container['connections'];
+    }
+
+    /**
+     * Sets connections
+     *
+     * @param \Repull\Model\SandboxFixtureRef[] $connections 2 fake connected provider accounts: Airbnb + Booking.com.
+     *
+     * @return $this
+     */
+    public function setConnections(array $connections): static
+    {
+        if (is_null($connections)) {
+            throw new InvalidArgumentException('non-nullable connections cannot be null');
+        }
+        $this->container['connections'] = $connections;
 
         return $this;
     }

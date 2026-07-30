@@ -1,6 +1,6 @@
 <?php
 /**
- * ListStudioDeployments200Response
+ * SandboxFixtureRef
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ListStudioDeployments200Response Class Doc Comment
+ * SandboxFixtureRef Class Doc Comment
  *
+ * @description A seeded fixture: its stable reference key plus the synthetic id the read endpoints return for it.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ListStudioDeployments200Response implements ModelInterface, ArrayAccess, JsonSerializable
+class SandboxFixtureRef implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class ListStudioDeployments200Response implements ModelInterface, ArrayAccess, J
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'listStudioDeployments_200_response';
+    protected static string $openAPIModelName = 'SandboxFixtureRef';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +60,8 @@ class ListStudioDeployments200Response implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'data' => '\Repull\Model\StudioDeployment[]',
-        'pagination' => '\Repull\Model\Pagination'
+        'ref' => 'string',
+        'id' => 'string'
     ];
 
     /**
@@ -69,8 +70,8 @@ class ListStudioDeployments200Response implements ModelInterface, ArrayAccess, J
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'data' => null,
-        'pagination' => null
+        'ref' => null,
+        'id' => null
     ];
 
     /**
@@ -79,8 +80,8 @@ class ListStudioDeployments200Response implements ModelInterface, ArrayAccess, J
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'data' => false,
-        'pagination' => false
+        'ref' => false,
+        'id' => false
     ];
 
     /**
@@ -159,8 +160,8 @@ class ListStudioDeployments200Response implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'data' => 'data',
-        'pagination' => 'pagination'
+        'ref' => 'ref',
+        'id' => 'id'
     ];
 
     /**
@@ -169,8 +170,8 @@ class ListStudioDeployments200Response implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $setters = [
-        'data' => 'setData',
-        'pagination' => 'setPagination'
+        'ref' => 'setRef',
+        'id' => 'setId'
     ];
 
     /**
@@ -179,8 +180,8 @@ class ListStudioDeployments200Response implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $getters = [
-        'data' => 'getData',
-        'pagination' => 'getPagination'
+        'ref' => 'getRef',
+        'id' => 'getId'
     ];
 
     /**
@@ -230,8 +231,8 @@ class ListStudioDeployments200Response implements ModelInterface, ArrayAccess, J
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('data', $data ?? [], null);
-        $this->setIfExists('pagination', $data ?? [], null);
+        $this->setIfExists('ref', $data ?? [], null);
+        $this->setIfExists('id', $data ?? [], null);
     }
 
     /**
@@ -259,6 +260,12 @@ class ListStudioDeployments200Response implements ModelInterface, ArrayAccess, J
     {
         $invalidProperties = [];
 
+        if ($this->container['ref'] === null) {
+            $invalidProperties[] = "'ref' can't be null";
+        }
+        if ($this->container['id'] === null) {
+            $invalidProperties[] = "'id' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -272,55 +279,55 @@ class ListStudioDeployments200Response implements ModelInterface, ArrayAccess, J
 
 
     /**
-     * Gets data
+     * Gets ref
      *
-     * @return \Repull\Model\StudioDeployment[]|null
+     * @return string
      */
-    public function getData(): ?array
+    public function getRef(): string
     {
-        return $this->container['data'];
+        return $this->container['ref'];
     }
 
     /**
-     * Sets data
+     * Sets ref
      *
-     * @param \Repull\Model\StudioDeployment[]|null $data data
+     * @param string $ref Stable reference key — constant across re-seeds.
      *
      * @return $this
      */
-    public function setData(?array $data): static
+    public function setRef(string $ref): static
     {
-        if (is_null($data)) {
-            throw new InvalidArgumentException('non-nullable data cannot be null');
+        if (is_null($ref)) {
+            throw new InvalidArgumentException('non-nullable ref cannot be null');
         }
-        $this->container['data'] = $data;
+        $this->container['ref'] = $ref;
 
         return $this;
     }
 
     /**
-     * Gets pagination
+     * Gets id
      *
-     * @return \Repull\Model\Pagination|null
+     * @return string
      */
-    public function getPagination(): ?\Repull\Model\Pagination
+    public function getId(): string
     {
-        return $this->container['pagination'];
+        return $this->container['id'];
     }
 
     /**
-     * Sets pagination
+     * Sets id
      *
-     * @param \Repull\Model\Pagination|null $pagination pagination
+     * @param string $id Synthetic id (>= 900,000,000). Reference it against GET /v1/listings, /v1/reservations, /v1/connect.
      *
      * @return $this
      */
-    public function setPagination(?\Repull\Model\Pagination $pagination): static
+    public function setId(string $id): static
     {
-        if (is_null($pagination)) {
-            throw new InvalidArgumentException('non-nullable pagination cannot be null');
+        if (is_null($id)) {
+            throw new InvalidArgumentException('non-nullable id cannot be null');
         }
-        $this->container['pagination'] = $pagination;
+        $this->container['id'] = $id;
 
         return $this;
     }

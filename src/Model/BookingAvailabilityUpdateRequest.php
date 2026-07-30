@@ -1,6 +1,6 @@
 <?php
 /**
- * CreateStudioProject201Response
+ * BookingAvailabilityUpdateRequest
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * CreateStudioProject201Response Class Doc Comment
+ * BookingAvailabilityUpdateRequest Class Doc Comment
  *
+ * @description Body for &#x60;PUT /v1/channels/booking/availability&#x60;. Selects one of Booking&#39;s three ARI write paths via &#x60;type&#x60; and forwards &#x60;updates&#x60; verbatim to the connector.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class CreateStudioProject201Response implements ModelInterface, ArrayAccess, JsonSerializable
+class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class CreateStudioProject201Response implements ModelInterface, ArrayAccess, Jso
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'createStudioProject_201_response';
+    protected static string $openAPIModelName = 'BookingAvailabilityUpdateRequest';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,7 +60,9 @@ class CreateStudioProject201Response implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'data' => '\Repull\Model\CreateStudioProject201ResponseData'
+        'type' => 'string',
+        'property_id' => '\Repull\Model\BookingAvailabilityUpdateRequestPropertyId',
+        'updates' => '\Repull\Model\BookingAvailabilityUpdateRequestUpdatesInner[]'
     ];
 
     /**
@@ -68,7 +71,9 @@ class CreateStudioProject201Response implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'data' => null
+        'type' => null,
+        'property_id' => null,
+        'updates' => null
     ];
 
     /**
@@ -77,7 +82,9 @@ class CreateStudioProject201Response implements ModelInterface, ArrayAccess, Jso
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'data' => false
+        'type' => false,
+        'property_id' => false,
+        'updates' => false
     ];
 
     /**
@@ -156,7 +163,9 @@ class CreateStudioProject201Response implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'data' => 'data'
+        'type' => 'type',
+        'property_id' => 'property_id',
+        'updates' => 'updates'
     ];
 
     /**
@@ -165,7 +174,9 @@ class CreateStudioProject201Response implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string>
      */
     protected static array $setters = [
-        'data' => 'setData'
+        'type' => 'setType',
+        'property_id' => 'setPropertyId',
+        'updates' => 'setUpdates'
     ];
 
     /**
@@ -174,7 +185,9 @@ class CreateStudioProject201Response implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string>
      */
     protected static array $getters = [
-        'data' => 'getData'
+        'type' => 'getType',
+        'property_id' => 'getPropertyId',
+        'updates' => 'getUpdates'
     ];
 
     /**
@@ -209,6 +222,23 @@ class CreateStudioProject201Response implements ModelInterface, ArrayAccess, Jso
         return self::$openAPIModelName;
     }
 
+    public const TYPE_RATES = 'rates';
+    public const TYPE_AVAILABILITY = 'availability';
+    public const TYPE_DERIVED_PRICING = 'derived-pricing';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getTypeAllowableValues()
+    {
+        return [
+            self::TYPE_RATES,
+            self::TYPE_AVAILABILITY,
+            self::TYPE_DERIVED_PRICING,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -224,7 +254,9 @@ class CreateStudioProject201Response implements ModelInterface, ArrayAccess, Jso
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('data', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
+        $this->setIfExists('property_id', $data ?? [], null);
+        $this->setIfExists('updates', $data ?? [], null);
     }
 
     /**
@@ -252,6 +284,28 @@ class CreateStudioProject201Response implements ModelInterface, ArrayAccess, Jso
     {
         $invalidProperties = [];
 
+        if ($this->container['type'] === null) {
+            $invalidProperties[] = "'type' can't be null";
+        }
+        $allowedValues = self::getTypeAllowableValues();
+        if (!is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'type', must be one of '%s'",
+                $this->container['type'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        if ($this->container['property_id'] === null) {
+            $invalidProperties[] = "'property_id' can't be null";
+        }
+        if ($this->container['updates'] === null) {
+            $invalidProperties[] = "'updates' can't be null";
+        }
+        if ((count($this->container['updates']) < 1)) {
+            $invalidProperties[] = "invalid value for 'updates', number of items must be greater than or equal to 1.";
+        }
+
         return $invalidProperties;
     }
 
@@ -265,28 +319,88 @@ class CreateStudioProject201Response implements ModelInterface, ArrayAccess, Jso
 
 
     /**
-     * Gets data
+     * Gets type
      *
-     * @return \Repull\Model\CreateStudioProject201ResponseData|null
+     * @return string
      */
-    public function getData(): ?\Repull\Model\CreateStudioProject201ResponseData
+    public function getType(): string
     {
-        return $this->container['data'];
+        return $this->container['type'];
     }
 
     /**
-     * Sets data
+     * Sets type
      *
-     * @param \Repull\Model\CreateStudioProject201ResponseData|null $data data
+     * @param string $type `rates` → price + restrictions (`updateRates`); `availability` → inventory + stop-sell + restrictions (`updateAvailability`); `derived-pricing` → occupancy-derived pricing rules (`updateDerivedPricing`).
      *
      * @return $this
      */
-    public function setData(?\Repull\Model\CreateStudioProject201ResponseData $data): static
+    public function setType(string $type): static
     {
-        if (is_null($data)) {
-            throw new InvalidArgumentException('non-nullable data cannot be null');
+        if (is_null($type)) {
+            throw new InvalidArgumentException('non-nullable type cannot be null');
         }
-        $this->container['data'] = $data;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['type'] = $type;
+
+        return $this;
+    }
+
+    /**
+     * Gets property_id
+     *
+     * @return \Repull\Model\BookingAvailabilityUpdateRequestPropertyId
+     */
+    public function getPropertyId(): \Repull\Model\BookingAvailabilityUpdateRequestPropertyId
+    {
+        return $this->container['property_id'];
+    }
+
+    /**
+     * Sets property_id
+     *
+     * @param \Repull\Model\BookingAvailabilityUpdateRequestPropertyId $property_id property_id
+     *
+     * @return $this
+     */
+    public function setPropertyId(\Repull\Model\BookingAvailabilityUpdateRequestPropertyId $property_id): static
+    {
+        if (is_null($property_id)) {
+            throw new InvalidArgumentException('non-nullable property_id cannot be null');
+        }
+        $this->container['property_id'] = $property_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets updates
+     *
+     * @return \Repull\Model\BookingAvailabilityUpdateRequestUpdatesInner[]
+     */
+    public function getUpdates(): array
+    {
+        return $this->container['updates'];
+    }
+
+    /**
+     * Sets updates
+     *
+     * @param \Repull\Model\BookingAvailabilityUpdateRequestUpdatesInner[] $updates For `type: \"rates\"` each item is a `BookingPricingRateUpdate`; for `type: \"availability\"` a `BookingAvailabilityUpdate`; for `type: \"derived-pricing\"` a derived-price rule set.
+     *
+     * @return $this
+     */
+    public function setUpdates(array $updates): static
+    {
+        if (is_null($updates)) {
+            throw new InvalidArgumentException('non-nullable updates cannot be null');
+        }
+
+
+        if ((count($updates) < 1)) {
+            throw new InvalidArgumentException('invalid length for $updates when calling BookingAvailabilityUpdateRequest., number of items must be greater than or equal to 1.');
+        }
+        $this->container['updates'] = $updates;
 
         return $this;
     }

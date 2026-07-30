@@ -1,6 +1,6 @@
 <?php
 /**
- * GenerateStudioCompletionRequestProjectId
+ * ListingContentUpdateRequestAmenities
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * GenerateStudioCompletionRequestProjectId Class Doc Comment
+ * ListingContentUpdateRequestAmenities Class Doc Comment
  *
- * @description Project the generation belongs to (used for billing + rate limits).
+ * @description FULL replacement of the amenity set. Accepts canonical keys as a string[] or structured rows. Omit to leave amenities untouched; send &#x60;[]&#x60; to clear them.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class GenerateStudioCompletionRequestProjectId implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingContentUpdateRequestAmenities implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class GenerateStudioCompletionRequestProjectId implements ModelInterface, ArrayA
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'generateStudioCompletion_request_project_id';
+    protected static string $openAPIModelName = 'ListingContentUpdateRequest_amenities';
 
     /**
      * Array of property to type mappings. Used for (de)serialization

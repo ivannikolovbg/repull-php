@@ -1,6 +1,6 @@
 <?php
 /**
- * ListStudioProjectFiles200Response
+ * ListingContentUpdateRequestAddress
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ListStudioProjectFiles200Response Class Doc Comment
+ * ListingContentUpdateRequestAddress Class Doc Comment
  *
+ * @description Partial address. Only provided sub-fields are written.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ListStudioProjectFiles200Response implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingContentUpdateRequestAddress implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class ListStudioProjectFiles200Response implements ModelInterface, ArrayAccess, 
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'listStudioProjectFiles_200_response';
+    protected static string $openAPIModelName = 'ListingContentUpdateRequest_address';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,7 +60,11 @@ class ListStudioProjectFiles200Response implements ModelInterface, ArrayAccess, 
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'data' => '\Repull\Model\StudioFile[]'
+        'street' => 'string',
+        'city' => 'string',
+        'country_code' => 'string',
+        'lat' => 'float',
+        'lng' => 'float'
     ];
 
     /**
@@ -68,7 +73,11 @@ class ListStudioProjectFiles200Response implements ModelInterface, ArrayAccess, 
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'data' => null
+        'street' => null,
+        'city' => null,
+        'country_code' => null,
+        'lat' => null,
+        'lng' => null
     ];
 
     /**
@@ -77,7 +86,11 @@ class ListStudioProjectFiles200Response implements ModelInterface, ArrayAccess, 
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'data' => false
+        'street' => true,
+        'city' => true,
+        'country_code' => true,
+        'lat' => true,
+        'lng' => true
     ];
 
     /**
@@ -156,7 +169,11 @@ class ListStudioProjectFiles200Response implements ModelInterface, ArrayAccess, 
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'data' => 'data'
+        'street' => 'street',
+        'city' => 'city',
+        'country_code' => 'countryCode',
+        'lat' => 'lat',
+        'lng' => 'lng'
     ];
 
     /**
@@ -165,7 +182,11 @@ class ListStudioProjectFiles200Response implements ModelInterface, ArrayAccess, 
      * @var array<string, string>
      */
     protected static array $setters = [
-        'data' => 'setData'
+        'street' => 'setStreet',
+        'city' => 'setCity',
+        'country_code' => 'setCountryCode',
+        'lat' => 'setLat',
+        'lng' => 'setLng'
     ];
 
     /**
@@ -174,7 +195,11 @@ class ListStudioProjectFiles200Response implements ModelInterface, ArrayAccess, 
      * @var array<string, string>
      */
     protected static array $getters = [
-        'data' => 'getData'
+        'street' => 'getStreet',
+        'city' => 'getCity',
+        'country_code' => 'getCountryCode',
+        'lat' => 'getLat',
+        'lng' => 'getLng'
     ];
 
     /**
@@ -224,7 +249,11 @@ class ListStudioProjectFiles200Response implements ModelInterface, ArrayAccess, 
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('data', $data ?? [], null);
+        $this->setIfExists('street', $data ?? [], null);
+        $this->setIfExists('city', $data ?? [], null);
+        $this->setIfExists('country_code', $data ?? [], null);
+        $this->setIfExists('lat', $data ?? [], null);
+        $this->setIfExists('lng', $data ?? [], null);
     }
 
     /**
@@ -265,28 +294,171 @@ class ListStudioProjectFiles200Response implements ModelInterface, ArrayAccess, 
 
 
     /**
-     * Gets data
+     * Gets street
      *
-     * @return \Repull\Model\StudioFile[]|null
+     * @return string|null
      */
-    public function getData(): ?array
+    public function getStreet(): ?string
     {
-        return $this->container['data'];
+        return $this->container['street'];
     }
 
     /**
-     * Sets data
+     * Sets street
      *
-     * @param \Repull\Model\StudioFile[]|null $data data
+     * @param string|null $street street
      *
      * @return $this
      */
-    public function setData(?array $data): static
+    public function setStreet(?string $street): static
     {
-        if (is_null($data)) {
-            throw new InvalidArgumentException('non-nullable data cannot be null');
+        if (is_null($street)) {
+            array_push($this->openAPINullablesSetToNull, 'street');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('street', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['data'] = $data;
+        $this->container['street'] = $street;
+
+        return $this;
+    }
+
+    /**
+     * Gets city
+     *
+     * @return string|null
+     */
+    public function getCity(): ?string
+    {
+        return $this->container['city'];
+    }
+
+    /**
+     * Sets city
+     *
+     * @param string|null $city city
+     *
+     * @return $this
+     */
+    public function setCity(?string $city): static
+    {
+        if (is_null($city)) {
+            array_push($this->openAPINullablesSetToNull, 'city');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('city', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['city'] = $city;
+
+        return $this;
+    }
+
+    /**
+     * Gets country_code
+     *
+     * @return string|null
+     */
+    public function getCountryCode(): ?string
+    {
+        return $this->container['country_code'];
+    }
+
+    /**
+     * Sets country_code
+     *
+     * @param string|null $country_code ISO-3166 alpha-2 country code.
+     *
+     * @return $this
+     */
+    public function setCountryCode(?string $country_code): static
+    {
+        if (is_null($country_code)) {
+            array_push($this->openAPINullablesSetToNull, 'country_code');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('country_code', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['country_code'] = $country_code;
+
+        return $this;
+    }
+
+    /**
+     * Gets lat
+     *
+     * @return float|null
+     */
+    public function getLat(): ?float
+    {
+        return $this->container['lat'];
+    }
+
+    /**
+     * Sets lat
+     *
+     * @param float|null $lat lat
+     *
+     * @return $this
+     */
+    public function setLat(?float $lat): static
+    {
+        if (is_null($lat)) {
+            array_push($this->openAPINullablesSetToNull, 'lat');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('lat', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['lat'] = $lat;
+
+        return $this;
+    }
+
+    /**
+     * Gets lng
+     *
+     * @return float|null
+     */
+    public function getLng(): ?float
+    {
+        return $this->container['lng'];
+    }
+
+    /**
+     * Sets lng
+     *
+     * @param float|null $lng lng
+     *
+     * @return $this
+     */
+    public function setLng(?float $lng): static
+    {
+        if (is_null($lng)) {
+            array_push($this->openAPINullablesSetToNull, 'lng');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('lng', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['lng'] = $lng;
 
         return $this;
     }

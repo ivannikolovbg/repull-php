@@ -1,6 +1,6 @@
 <?php
 /**
- * DeleteStudioProjectFile200Response
+ * SandboxResetResultDeleted
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * DeleteStudioProjectFile200Response Class Doc Comment
+ * SandboxResetResultDeleted Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class DeleteStudioProjectFile200Response implements ModelInterface, ArrayAccess, JsonSerializable
+class SandboxResetResultDeleted implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class DeleteStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'deleteStudioProjectFile_200_response';
+    protected static string $openAPIModelName = 'SandboxResetResult_deleted';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,7 +59,9 @@ class DeleteStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'data' => '\Repull\Model\DeleteStudioProjectFile200ResponseData'
+        'listings' => 'int',
+        'reservations' => 'int',
+        'connections' => 'int'
     ];
 
     /**
@@ -68,7 +70,9 @@ class DeleteStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'data' => null
+        'listings' => null,
+        'reservations' => null,
+        'connections' => null
     ];
 
     /**
@@ -77,7 +81,9 @@ class DeleteStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'data' => false
+        'listings' => false,
+        'reservations' => false,
+        'connections' => false
     ];
 
     /**
@@ -156,7 +162,9 @@ class DeleteStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'data' => 'data'
+        'listings' => 'listings',
+        'reservations' => 'reservations',
+        'connections' => 'connections'
     ];
 
     /**
@@ -165,7 +173,9 @@ class DeleteStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      * @var array<string, string>
      */
     protected static array $setters = [
-        'data' => 'setData'
+        'listings' => 'setListings',
+        'reservations' => 'setReservations',
+        'connections' => 'setConnections'
     ];
 
     /**
@@ -174,7 +184,9 @@ class DeleteStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      * @var array<string, string>
      */
     protected static array $getters = [
-        'data' => 'getData'
+        'listings' => 'getListings',
+        'reservations' => 'getReservations',
+        'connections' => 'getConnections'
     ];
 
     /**
@@ -224,7 +236,9 @@ class DeleteStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('data', $data ?? [], null);
+        $this->setIfExists('listings', $data ?? [], null);
+        $this->setIfExists('reservations', $data ?? [], null);
+        $this->setIfExists('connections', $data ?? [], null);
     }
 
     /**
@@ -252,6 +266,15 @@ class DeleteStudioProjectFile200Response implements ModelInterface, ArrayAccess,
     {
         $invalidProperties = [];
 
+        if ($this->container['listings'] === null) {
+            $invalidProperties[] = "'listings' can't be null";
+        }
+        if ($this->container['reservations'] === null) {
+            $invalidProperties[] = "'reservations' can't be null";
+        }
+        if ($this->container['connections'] === null) {
+            $invalidProperties[] = "'connections' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -265,28 +288,82 @@ class DeleteStudioProjectFile200Response implements ModelInterface, ArrayAccess,
 
 
     /**
-     * Gets data
+     * Gets listings
      *
-     * @return \Repull\Model\DeleteStudioProjectFile200ResponseData|null
+     * @return int
      */
-    public function getData(): ?\Repull\Model\DeleteStudioProjectFile200ResponseData
+    public function getListings(): int
     {
-        return $this->container['data'];
+        return $this->container['listings'];
     }
 
     /**
-     * Sets data
+     * Sets listings
      *
-     * @param \Repull\Model\DeleteStudioProjectFile200ResponseData|null $data data
+     * @param int $listings listings
      *
      * @return $this
      */
-    public function setData(?\Repull\Model\DeleteStudioProjectFile200ResponseData $data): static
+    public function setListings(int $listings): static
     {
-        if (is_null($data)) {
-            throw new InvalidArgumentException('non-nullable data cannot be null');
+        if (is_null($listings)) {
+            throw new InvalidArgumentException('non-nullable listings cannot be null');
         }
-        $this->container['data'] = $data;
+        $this->container['listings'] = $listings;
+
+        return $this;
+    }
+
+    /**
+     * Gets reservations
+     *
+     * @return int
+     */
+    public function getReservations(): int
+    {
+        return $this->container['reservations'];
+    }
+
+    /**
+     * Sets reservations
+     *
+     * @param int $reservations reservations
+     *
+     * @return $this
+     */
+    public function setReservations(int $reservations): static
+    {
+        if (is_null($reservations)) {
+            throw new InvalidArgumentException('non-nullable reservations cannot be null');
+        }
+        $this->container['reservations'] = $reservations;
+
+        return $this;
+    }
+
+    /**
+     * Gets connections
+     *
+     * @return int
+     */
+    public function getConnections(): int
+    {
+        return $this->container['connections'];
+    }
+
+    /**
+     * Sets connections
+     *
+     * @param int $connections connections
+     *
+     * @return $this
+     */
+    public function setConnections(int $connections): static
+    {
+        if (is_null($connections)) {
+            throw new InvalidArgumentException('non-nullable connections cannot be null');
+        }
+        $this->container['connections'] = $connections;
 
         return $this;
     }

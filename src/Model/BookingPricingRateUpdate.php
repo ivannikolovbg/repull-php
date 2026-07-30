@@ -552,7 +552,7 @@ class BookingPricingRateUpdate implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets rooms_to_sell
      *
-     * @param int|null $rooms_to_sell rooms_to_sell
+     * @param int|null $rooms_to_sell Rooms to sell for the date range. Set to `0` to stop-sell this room/rate on the rates endpoint (Booking's dedicated `<closed>` stop-sell flag lives on the availability endpoint — see `BookingAvailabilityUpdate.closed`).
      *
      * @return $this
      */

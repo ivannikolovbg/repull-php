@@ -1,6 +1,6 @@
 <?php
 /**
- * UpdateStudioProjectRequest
+ * ListingContentUpdateRequest
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * UpdateStudioProjectRequest Class Doc Comment
+ * ListingContentUpdateRequest Class Doc Comment
  *
+ * @description Canonical PMS-owned listing content. Every field is optional — this is a partial update, only the fields you send are written; absent fields are left untouched. This is a LOCAL write only: it does NOT push to Airbnb/Booking.com. Distribution is a separate explicit publish step. &#x60;photos&#x60; are ingested by URL and attached to the listing in order (full-replace by default, or append via &#x60;photosMode&#x60;).
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class UpdateStudioProjectRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class UpdateStudioProjectRequest implements ModelInterface, ArrayAccess, JsonSer
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'updateStudioProject_request';
+    protected static string $openAPIModelName = 'ListingContentUpdateRequest';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +60,16 @@ class UpdateStudioProjectRequest implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
+        'title' => 'string',
         'name' => 'string',
-        'status' => 'string'
+        'description' => 'string',
+        'summary' => 'string',
+        'amenities' => '\Repull\Model\ListingContentUpdateRequestAmenities',
+        'address' => '\Repull\Model\ListingContentUpdateRequestAddress',
+        'occupancy' => '\Repull\Model\ListingContentUpdateRequestOccupancy',
+        'policies' => '\Repull\Model\ListingContentUpdateRequestPolicies',
+        'photos' => '\Repull\Model\ListingContentUpdateRequestPhotosInner[]',
+        'photos_mode' => 'string'
     ];
 
     /**
@@ -69,8 +78,16 @@ class UpdateStudioProjectRequest implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
+        'title' => null,
         'name' => null,
-        'status' => null
+        'description' => null,
+        'summary' => null,
+        'amenities' => null,
+        'address' => null,
+        'occupancy' => null,
+        'policies' => null,
+        'photos' => null,
+        'photos_mode' => null
     ];
 
     /**
@@ -79,8 +96,16 @@ class UpdateStudioProjectRequest implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'name' => false,
-        'status' => false
+        'title' => true,
+        'name' => true,
+        'description' => true,
+        'summary' => true,
+        'amenities' => false,
+        'address' => false,
+        'occupancy' => false,
+        'policies' => false,
+        'photos' => false,
+        'photos_mode' => false
     ];
 
     /**
@@ -159,8 +184,16 @@ class UpdateStudioProjectRequest implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $attributeMap = [
+        'title' => 'title',
         'name' => 'name',
-        'status' => 'status'
+        'description' => 'description',
+        'summary' => 'summary',
+        'amenities' => 'amenities',
+        'address' => 'address',
+        'occupancy' => 'occupancy',
+        'policies' => 'policies',
+        'photos' => 'photos',
+        'photos_mode' => 'photosMode'
     ];
 
     /**
@@ -169,8 +202,16 @@ class UpdateStudioProjectRequest implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $setters = [
+        'title' => 'setTitle',
         'name' => 'setName',
-        'status' => 'setStatus'
+        'description' => 'setDescription',
+        'summary' => 'setSummary',
+        'amenities' => 'setAmenities',
+        'address' => 'setAddress',
+        'occupancy' => 'setOccupancy',
+        'policies' => 'setPolicies',
+        'photos' => 'setPhotos',
+        'photos_mode' => 'setPhotosMode'
     ];
 
     /**
@@ -179,8 +220,16 @@ class UpdateStudioProjectRequest implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $getters = [
+        'title' => 'getTitle',
         'name' => 'getName',
-        'status' => 'getStatus'
+        'description' => 'getDescription',
+        'summary' => 'getSummary',
+        'amenities' => 'getAmenities',
+        'address' => 'getAddress',
+        'occupancy' => 'getOccupancy',
+        'policies' => 'getPolicies',
+        'photos' => 'getPhotos',
+        'photos_mode' => 'getPhotosMode'
     ];
 
     /**
@@ -215,23 +264,19 @@ class UpdateStudioProjectRequest implements ModelInterface, ArrayAccess, JsonSer
         return self::$openAPIModelName;
     }
 
-    public const STATUS_DRAFT = 'draft';
-    public const STATUS_BUILDING = 'building';
-    public const STATUS_LIVE = 'live';
-    public const STATUS_ARCHIVED = 'archived';
+    public const PHOTOS_MODE_REPLACE = 'replace';
+    public const PHOTOS_MODE_APPEND = 'append';
 
     /**
      * Gets allowable values of the enum
      *
      * @return string[]
      */
-    public static function getStatusAllowableValues()
+    public static function getPhotosModeAllowableValues()
     {
         return [
-            self::STATUS_DRAFT,
-            self::STATUS_BUILDING,
-            self::STATUS_LIVE,
-            self::STATUS_ARCHIVED,
+            self::PHOTOS_MODE_REPLACE,
+            self::PHOTOS_MODE_APPEND,
         ];
     }
 
@@ -249,8 +294,16 @@ class UpdateStudioProjectRequest implements ModelInterface, ArrayAccess, JsonSer
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('title', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('description', $data ?? [], null);
+        $this->setIfExists('summary', $data ?? [], null);
+        $this->setIfExists('amenities', $data ?? [], null);
+        $this->setIfExists('address', $data ?? [], null);
+        $this->setIfExists('occupancy', $data ?? [], null);
+        $this->setIfExists('policies', $data ?? [], null);
+        $this->setIfExists('photos', $data ?? [], null);
+        $this->setIfExists('photos_mode', $data ?? [], 'replace');
     }
 
     /**
@@ -278,11 +331,11 @@ class UpdateStudioProjectRequest implements ModelInterface, ArrayAccess, JsonSer
     {
         $invalidProperties = [];
 
-        $allowedValues = self::getStatusAllowableValues();
-        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
+        $allowedValues = self::getPhotosModeAllowableValues();
+        if (!is_null($this->container['photos_mode']) && !in_array($this->container['photos_mode'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'status', must be one of '%s'",
-                $this->container['status'],
+                "invalid value '%s' for 'photos_mode', must be one of '%s'",
+                $this->container['photos_mode'],
                 implode("', '", $allowedValues)
             );
         }
@@ -300,6 +353,40 @@ class UpdateStudioProjectRequest implements ModelInterface, ArrayAccess, JsonSer
 
 
     /**
+     * Gets title
+     *
+     * @return string|null
+     */
+    public function getTitle(): ?string
+    {
+        return $this->container['title'];
+    }
+
+    /**
+     * Sets title
+     *
+     * @param string|null $title Guest-facing title. Written to the listing name and the `en` description.
+     *
+     * @return $this
+     */
+    public function setTitle(?string $title): static
+    {
+        if (is_null($title)) {
+            array_push($this->openAPINullablesSetToNull, 'title');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('title', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['title'] = $title;
+
+        return $this;
+    }
+
+    /**
      * Gets name
      *
      * @return string|null
@@ -312,14 +399,21 @@ class UpdateStudioProjectRequest implements ModelInterface, ArrayAccess, JsonSer
     /**
      * Sets name
      *
-     * @param string|null $name name
+     * @param string|null $name Alias for `title`.
      *
      * @return $this
      */
     public function setName(?string $name): static
     {
         if (is_null($name)) {
-            throw new InvalidArgumentException('non-nullable name cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['name'] = $name;
 
@@ -327,29 +421,232 @@ class UpdateStudioProjectRequest implements ModelInterface, ArrayAccess, JsonSer
     }
 
     /**
-     * Gets status
+     * Gets description
      *
      * @return string|null
      */
-    public function getStatus(): ?string
+    public function getDescription(): ?string
     {
-        return $this->container['status'];
+        return $this->container['description'];
     }
 
     /**
-     * Sets status
+     * Sets description
      *
-     * @param string|null $status status
+     * @param string|null $description Long-form listing description.
      *
      * @return $this
      */
-    public function setStatus(?string $status): static
+    public function setDescription(?string $description): static
     {
-        if (is_null($status)) {
-            throw new InvalidArgumentException('non-nullable status cannot be null');
+        if (is_null($description)) {
+            array_push($this->openAPINullablesSetToNull, 'description');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('description', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['description'] = $description;
+
+        return $this;
+    }
+
+    /**
+     * Gets summary
+     *
+     * @return string|null
+     */
+    public function getSummary(): ?string
+    {
+        return $this->container['summary'];
+    }
+
+    /**
+     * Sets summary
+     *
+     * @param string|null $summary Short summary / tagline.
+     *
+     * @return $this
+     */
+    public function setSummary(?string $summary): static
+    {
+        if (is_null($summary)) {
+            array_push($this->openAPINullablesSetToNull, 'summary');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('summary', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['summary'] = $summary;
+
+        return $this;
+    }
+
+    /**
+     * Gets amenities
+     *
+     * @return \Repull\Model\ListingContentUpdateRequestAmenities|null
+     */
+    public function getAmenities(): ?\Repull\Model\ListingContentUpdateRequestAmenities
+    {
+        return $this->container['amenities'];
+    }
+
+    /**
+     * Sets amenities
+     *
+     * @param \Repull\Model\ListingContentUpdateRequestAmenities|null $amenities amenities
+     *
+     * @return $this
+     */
+    public function setAmenities(?\Repull\Model\ListingContentUpdateRequestAmenities $amenities): static
+    {
+        if (is_null($amenities)) {
+            throw new InvalidArgumentException('non-nullable amenities cannot be null');
+        }
+        $this->container['amenities'] = $amenities;
+
+        return $this;
+    }
+
+    /**
+     * Gets address
+     *
+     * @return \Repull\Model\ListingContentUpdateRequestAddress|null
+     */
+    public function getAddress(): ?\Repull\Model\ListingContentUpdateRequestAddress
+    {
+        return $this->container['address'];
+    }
+
+    /**
+     * Sets address
+     *
+     * @param \Repull\Model\ListingContentUpdateRequestAddress|null $address address
+     *
+     * @return $this
+     */
+    public function setAddress(?\Repull\Model\ListingContentUpdateRequestAddress $address): static
+    {
+        if (is_null($address)) {
+            throw new InvalidArgumentException('non-nullable address cannot be null');
+        }
+        $this->container['address'] = $address;
+
+        return $this;
+    }
+
+    /**
+     * Gets occupancy
+     *
+     * @return \Repull\Model\ListingContentUpdateRequestOccupancy|null
+     */
+    public function getOccupancy(): ?\Repull\Model\ListingContentUpdateRequestOccupancy
+    {
+        return $this->container['occupancy'];
+    }
+
+    /**
+     * Sets occupancy
+     *
+     * @param \Repull\Model\ListingContentUpdateRequestOccupancy|null $occupancy occupancy
+     *
+     * @return $this
+     */
+    public function setOccupancy(?\Repull\Model\ListingContentUpdateRequestOccupancy $occupancy): static
+    {
+        if (is_null($occupancy)) {
+            throw new InvalidArgumentException('non-nullable occupancy cannot be null');
+        }
+        $this->container['occupancy'] = $occupancy;
+
+        return $this;
+    }
+
+    /**
+     * Gets policies
+     *
+     * @return \Repull\Model\ListingContentUpdateRequestPolicies|null
+     */
+    public function getPolicies(): ?\Repull\Model\ListingContentUpdateRequestPolicies
+    {
+        return $this->container['policies'];
+    }
+
+    /**
+     * Sets policies
+     *
+     * @param \Repull\Model\ListingContentUpdateRequestPolicies|null $policies policies
+     *
+     * @return $this
+     */
+    public function setPolicies(?\Repull\Model\ListingContentUpdateRequestPolicies $policies): static
+    {
+        if (is_null($policies)) {
+            throw new InvalidArgumentException('non-nullable policies cannot be null');
+        }
+        $this->container['policies'] = $policies;
+
+        return $this;
+    }
+
+    /**
+     * Gets photos
+     *
+     * @return \Repull\Model\ListingContentUpdateRequestPhotosInner[]|null
+     */
+    public function getPhotos(): ?array
+    {
+        return $this->container['photos'];
+    }
+
+    /**
+     * Sets photos
+     *
+     * @param \Repull\Model\ListingContentUpdateRequestPhotosInner[]|null $photos Photo set — full replacement by default (pass `photosMode: \"append\"` to add after existing photos, or `[]` to clear; omit to leave untouched). Each entry is a hosted image URL (string) or a structured ref. URL-ingest only: the URL is persisted and attached to the listing in order — the OTA push downloads it at publish time. Binary/multipart upload is a follow-up. A non-empty array with no valid http(s) URL is reported in `deferred` (existing photos left untouched).
+     *
+     * @return $this
+     */
+    public function setPhotos(?array $photos): static
+    {
+        if (is_null($photos)) {
+            throw new InvalidArgumentException('non-nullable photos cannot be null');
+        }
+        $this->container['photos'] = $photos;
+
+        return $this;
+    }
+
+    /**
+     * Gets photos_mode
+     *
+     * @return string|null
+     */
+    public function getPhotosMode(): ?string
+    {
+        return $this->container['photos_mode'];
+    }
+
+    /**
+     * Sets photos_mode
+     *
+     * @param string|null $photos_mode How `photos` is applied: `replace` (full replacement of the photo set) or `append` (add after the existing photos). Ignored when `photos` is absent.
+     *
+     * @return $this
+     */
+    public function setPhotosMode(?string $photos_mode): static
+    {
+        if (is_null($photos_mode)) {
+            throw new InvalidArgumentException('non-nullable photos_mode cannot be null');
         }
         // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['status'] = $status;
+        $this->container['photos_mode'] = $photos_mode;
 
         return $this;
     }

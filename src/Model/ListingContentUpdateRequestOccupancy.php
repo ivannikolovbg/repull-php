@@ -1,6 +1,6 @@
 <?php
 /**
- * GenerateStudioCompletion200Response
+ * ListingContentUpdateRequestOccupancy
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * GenerateStudioCompletion200Response Class Doc Comment
+ * ListingContentUpdateRequestOccupancy Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class GenerateStudioCompletion200Response implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingContentUpdateRequestOccupancy implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class GenerateStudioCompletion200Response implements ModelInterface, ArrayAccess
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'generateStudioCompletion_200_response';
+    protected static string $openAPIModelName = 'ListingContentUpdateRequest_occupancy';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,7 +59,10 @@ class GenerateStudioCompletion200Response implements ModelInterface, ArrayAccess
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'data' => '\Repull\Model\GenerateStudioCompletion200ResponseData'
+        'max_guests' => 'int',
+        'bedrooms' => 'int',
+        'beds' => 'int',
+        'bathrooms' => 'float'
     ];
 
     /**
@@ -68,7 +71,10 @@ class GenerateStudioCompletion200Response implements ModelInterface, ArrayAccess
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'data' => null
+        'max_guests' => null,
+        'bedrooms' => null,
+        'beds' => null,
+        'bathrooms' => null
     ];
 
     /**
@@ -77,7 +83,10 @@ class GenerateStudioCompletion200Response implements ModelInterface, ArrayAccess
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'data' => false
+        'max_guests' => true,
+        'bedrooms' => true,
+        'beds' => true,
+        'bathrooms' => true
     ];
 
     /**
@@ -156,7 +165,10 @@ class GenerateStudioCompletion200Response implements ModelInterface, ArrayAccess
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'data' => 'data'
+        'max_guests' => 'maxGuests',
+        'bedrooms' => 'bedrooms',
+        'beds' => 'beds',
+        'bathrooms' => 'bathrooms'
     ];
 
     /**
@@ -165,7 +177,10 @@ class GenerateStudioCompletion200Response implements ModelInterface, ArrayAccess
      * @var array<string, string>
      */
     protected static array $setters = [
-        'data' => 'setData'
+        'max_guests' => 'setMaxGuests',
+        'bedrooms' => 'setBedrooms',
+        'beds' => 'setBeds',
+        'bathrooms' => 'setBathrooms'
     ];
 
     /**
@@ -174,7 +189,10 @@ class GenerateStudioCompletion200Response implements ModelInterface, ArrayAccess
      * @var array<string, string>
      */
     protected static array $getters = [
-        'data' => 'getData'
+        'max_guests' => 'getMaxGuests',
+        'bedrooms' => 'getBedrooms',
+        'beds' => 'getBeds',
+        'bathrooms' => 'getBathrooms'
     ];
 
     /**
@@ -224,7 +242,10 @@ class GenerateStudioCompletion200Response implements ModelInterface, ArrayAccess
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('data', $data ?? [], null);
+        $this->setIfExists('max_guests', $data ?? [], null);
+        $this->setIfExists('bedrooms', $data ?? [], null);
+        $this->setIfExists('beds', $data ?? [], null);
+        $this->setIfExists('bathrooms', $data ?? [], null);
     }
 
     /**
@@ -265,28 +286,137 @@ class GenerateStudioCompletion200Response implements ModelInterface, ArrayAccess
 
 
     /**
-     * Gets data
+     * Gets max_guests
      *
-     * @return \Repull\Model\GenerateStudioCompletion200ResponseData|null
+     * @return int|null
      */
-    public function getData(): ?\Repull\Model\GenerateStudioCompletion200ResponseData
+    public function getMaxGuests(): ?int
     {
-        return $this->container['data'];
+        return $this->container['max_guests'];
     }
 
     /**
-     * Sets data
+     * Sets max_guests
      *
-     * @param \Repull\Model\GenerateStudioCompletion200ResponseData|null $data data
+     * @param int|null $max_guests max_guests
      *
      * @return $this
      */
-    public function setData(?\Repull\Model\GenerateStudioCompletion200ResponseData $data): static
+    public function setMaxGuests(?int $max_guests): static
     {
-        if (is_null($data)) {
-            throw new InvalidArgumentException('non-nullable data cannot be null');
+        if (is_null($max_guests)) {
+            array_push($this->openAPINullablesSetToNull, 'max_guests');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('max_guests', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['data'] = $data;
+        $this->container['max_guests'] = $max_guests;
+
+        return $this;
+    }
+
+    /**
+     * Gets bedrooms
+     *
+     * @return int|null
+     */
+    public function getBedrooms(): ?int
+    {
+        return $this->container['bedrooms'];
+    }
+
+    /**
+     * Sets bedrooms
+     *
+     * @param int|null $bedrooms bedrooms
+     *
+     * @return $this
+     */
+    public function setBedrooms(?int $bedrooms): static
+    {
+        if (is_null($bedrooms)) {
+            array_push($this->openAPINullablesSetToNull, 'bedrooms');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('bedrooms', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['bedrooms'] = $bedrooms;
+
+        return $this;
+    }
+
+    /**
+     * Gets beds
+     *
+     * @return int|null
+     */
+    public function getBeds(): ?int
+    {
+        return $this->container['beds'];
+    }
+
+    /**
+     * Sets beds
+     *
+     * @param int|null $beds beds
+     *
+     * @return $this
+     */
+    public function setBeds(?int $beds): static
+    {
+        if (is_null($beds)) {
+            array_push($this->openAPINullablesSetToNull, 'beds');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('beds', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['beds'] = $beds;
+
+        return $this;
+    }
+
+    /**
+     * Gets bathrooms
+     *
+     * @return float|null
+     */
+    public function getBathrooms(): ?float
+    {
+        return $this->container['bathrooms'];
+    }
+
+    /**
+     * Sets bathrooms
+     *
+     * @param float|null $bathrooms Decimal, e.g. 1.5.
+     *
+     * @return $this
+     */
+    public function setBathrooms(?float $bathrooms): static
+    {
+        if (is_null($bathrooms)) {
+            array_push($this->openAPINullablesSetToNull, 'bathrooms');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('bathrooms', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['bathrooms'] = $bathrooms;
 
         return $this;
     }

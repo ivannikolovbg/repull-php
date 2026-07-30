@@ -1,6 +1,6 @@
 <?php
 /**
- * UpsertStudioProjectFileRequest
+ * MapAirbnbListingRequest
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * UpsertStudioProjectFileRequest Class Doc Comment
+ * MapAirbnbListingRequest Class Doc Comment
  *
+ * @description Body for &#x60;POST /v1/channels/airbnb/listings/map&#x60;.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class UpsertStudioProjectFileRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class MapAirbnbListingRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class UpsertStudioProjectFileRequest implements ModelInterface, ArrayAccess, Jso
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'upsertStudioProjectFile_request';
+    protected static string $openAPIModelName = 'MapAirbnbListingRequest';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,7 +60,10 @@ class UpsertStudioProjectFileRequest implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'content' => 'string'
+        'airbnb_id' => 'string',
+        'listing_id' => 'int',
+        'host_id' => 'string',
+        'sync_enabled' => 'bool'
     ];
 
     /**
@@ -68,7 +72,10 @@ class UpsertStudioProjectFileRequest implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'content' => null
+        'airbnb_id' => null,
+        'listing_id' => null,
+        'host_id' => null,
+        'sync_enabled' => null
     ];
 
     /**
@@ -77,7 +84,10 @@ class UpsertStudioProjectFileRequest implements ModelInterface, ArrayAccess, Jso
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'content' => false
+        'airbnb_id' => false,
+        'listing_id' => false,
+        'host_id' => false,
+        'sync_enabled' => false
     ];
 
     /**
@@ -156,7 +166,10 @@ class UpsertStudioProjectFileRequest implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'content' => 'content'
+        'airbnb_id' => 'airbnbId',
+        'listing_id' => 'listingId',
+        'host_id' => 'hostId',
+        'sync_enabled' => 'syncEnabled'
     ];
 
     /**
@@ -165,7 +178,10 @@ class UpsertStudioProjectFileRequest implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string>
      */
     protected static array $setters = [
-        'content' => 'setContent'
+        'airbnb_id' => 'setAirbnbId',
+        'listing_id' => 'setListingId',
+        'host_id' => 'setHostId',
+        'sync_enabled' => 'setSyncEnabled'
     ];
 
     /**
@@ -174,7 +190,10 @@ class UpsertStudioProjectFileRequest implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string>
      */
     protected static array $getters = [
-        'content' => 'getContent'
+        'airbnb_id' => 'getAirbnbId',
+        'listing_id' => 'getListingId',
+        'host_id' => 'getHostId',
+        'sync_enabled' => 'getSyncEnabled'
     ];
 
     /**
@@ -224,7 +243,10 @@ class UpsertStudioProjectFileRequest implements ModelInterface, ArrayAccess, Jso
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('content', $data ?? [], null);
+        $this->setIfExists('airbnb_id', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('host_id', $data ?? [], null);
+        $this->setIfExists('sync_enabled', $data ?? [], true);
     }
 
     /**
@@ -252,8 +274,11 @@ class UpsertStudioProjectFileRequest implements ModelInterface, ArrayAccess, Jso
     {
         $invalidProperties = [];
 
-        if ($this->container['content'] === null) {
-            $invalidProperties[] = "'content' can't be null";
+        if ($this->container['airbnb_id'] === null) {
+            $invalidProperties[] = "'airbnb_id' can't be null";
+        }
+        if ($this->container['listing_id'] === null) {
+            $invalidProperties[] = "'listing_id' can't be null";
         }
         return $invalidProperties;
     }
@@ -268,28 +293,109 @@ class UpsertStudioProjectFileRequest implements ModelInterface, ArrayAccess, Jso
 
 
     /**
-     * Gets content
+     * Gets airbnb_id
      *
      * @return string
      */
-    public function getContent(): string
+    public function getAirbnbId(): string
     {
-        return $this->container['content'];
+        return $this->container['airbnb_id'];
     }
 
     /**
-     * Sets content
+     * Sets airbnb_id
      *
-     * @param string $content Full UTF-8 file contents — partial updates are not supported.
+     * @param string $airbnb_id The Airbnb listing id to map. Discover it via `GET /v1/channels/airbnb/listings`.
      *
      * @return $this
      */
-    public function setContent(string $content): static
+    public function setAirbnbId(string $airbnb_id): static
     {
-        if (is_null($content)) {
-            throw new InvalidArgumentException('non-nullable content cannot be null');
+        if (is_null($airbnb_id)) {
+            throw new InvalidArgumentException('non-nullable airbnb_id cannot be null');
         }
-        $this->container['content'] = $content;
+        $this->container['airbnb_id'] = $airbnb_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_id
+     *
+     * @return int
+     */
+    public function getListingId(): int
+    {
+        return $this->container['listing_id'];
+    }
+
+    /**
+     * Sets listing_id
+     *
+     * @param int $listing_id Canonical Repull listing id to link the Airbnb listing to. Must belong to your workspace. A numeric string is also accepted.
+     *
+     * @return $this
+     */
+    public function setListingId(int $listing_id): static
+    {
+        if (is_null($listing_id)) {
+            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
+        }
+        $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets host_id
+     *
+     * @return string|null
+     */
+    public function getHostId(): ?string
+    {
+        return $this->container['host_id'];
+    }
+
+    /**
+     * Sets host_id
+     *
+     * @param string|null $host_id Optional. When present, must match the Airbnb listing's host id — guards against mapping the wrong host's listing.
+     *
+     * @return $this
+     */
+    public function setHostId(?string $host_id): static
+    {
+        if (is_null($host_id)) {
+            throw new InvalidArgumentException('non-nullable host_id cannot be null');
+        }
+        $this->container['host_id'] = $host_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets sync_enabled
+     *
+     * @return bool|null
+     */
+    public function getSyncEnabled(): ?bool
+    {
+        return $this->container['sync_enabled'];
+    }
+
+    /**
+     * Sets sync_enabled
+     *
+     * @param bool|null $sync_enabled Whether the resulting platform link has sync enabled.
+     *
+     * @return $this
+     */
+    public function setSyncEnabled(?bool $sync_enabled): static
+    {
+        if (is_null($sync_enabled)) {
+            throw new InvalidArgumentException('non-nullable sync_enabled cannot be null');
+        }
+        $this->container['sync_enabled'] = $sync_enabled;
 
         return $this;
     }

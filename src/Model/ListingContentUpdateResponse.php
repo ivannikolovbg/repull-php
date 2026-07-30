@@ -1,6 +1,6 @@
 <?php
 /**
- * CreateStudioProject201ResponseData
+ * ListingContentUpdateResponse
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * CreateStudioProject201ResponseData Class Doc Comment
+ * ListingContentUpdateResponse Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class CreateStudioProject201ResponseData implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingContentUpdateResponse implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class CreateStudioProject201ResponseData implements ModelInterface, ArrayAccess,
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'createStudioProject_201_response_data';
+    protected static string $openAPIModelName = 'ListingContentUpdateResponse';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,8 +60,8 @@ class CreateStudioProject201ResponseData implements ModelInterface, ArrayAccess,
      */
     protected static array $openAPITypes = [
         'id' => 'string',
-        'slug' => 'string',
-        'status' => 'string'
+        'changed' => 'string[]',
+        'deferred' => 'string[]'
     ];
 
     /**
@@ -70,9 +70,9 @@ class CreateStudioProject201ResponseData implements ModelInterface, ArrayAccess,
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'id' => 'uuid',
-        'slug' => null,
-        'status' => null
+        'id' => null,
+        'changed' => null,
+        'deferred' => null
     ];
 
     /**
@@ -82,8 +82,8 @@ class CreateStudioProject201ResponseData implements ModelInterface, ArrayAccess,
      */
     protected static array $openAPINullables = [
         'id' => false,
-        'slug' => false,
-        'status' => false
+        'changed' => false,
+        'deferred' => false
     ];
 
     /**
@@ -163,8 +163,8 @@ class CreateStudioProject201ResponseData implements ModelInterface, ArrayAccess,
      */
     protected static array $attributeMap = [
         'id' => 'id',
-        'slug' => 'slug',
-        'status' => 'status'
+        'changed' => 'changed',
+        'deferred' => 'deferred'
     ];
 
     /**
@@ -174,8 +174,8 @@ class CreateStudioProject201ResponseData implements ModelInterface, ArrayAccess,
      */
     protected static array $setters = [
         'id' => 'setId',
-        'slug' => 'setSlug',
-        'status' => 'setStatus'
+        'changed' => 'setChanged',
+        'deferred' => 'setDeferred'
     ];
 
     /**
@@ -185,8 +185,8 @@ class CreateStudioProject201ResponseData implements ModelInterface, ArrayAccess,
      */
     protected static array $getters = [
         'id' => 'getId',
-        'slug' => 'getSlug',
-        'status' => 'getStatus'
+        'changed' => 'getChanged',
+        'deferred' => 'getDeferred'
     ];
 
     /**
@@ -221,25 +221,6 @@ class CreateStudioProject201ResponseData implements ModelInterface, ArrayAccess,
         return self::$openAPIModelName;
     }
 
-    public const STATUS_DRAFT = 'draft';
-    public const STATUS_BUILDING = 'building';
-    public const STATUS_LIVE = 'live';
-    public const STATUS_ARCHIVED = 'archived';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getStatusAllowableValues()
-    {
-        return [
-            self::STATUS_DRAFT,
-            self::STATUS_BUILDING,
-            self::STATUS_LIVE,
-            self::STATUS_ARCHIVED,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -256,8 +237,8 @@ class CreateStudioProject201ResponseData implements ModelInterface, ArrayAccess,
     public function __construct(?array $data = null)
     {
         $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('slug', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('changed', $data ?? [], null);
+        $this->setIfExists('deferred', $data ?? [], null);
     }
 
     /**
@@ -285,15 +266,6 @@ class CreateStudioProject201ResponseData implements ModelInterface, ArrayAccess,
     {
         $invalidProperties = [];
 
-        $allowedValues = self::getStatusAllowableValues();
-        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'status', must be one of '%s'",
-                $this->container['status'],
-                implode("', '", $allowedValues)
-            );
-        }
-
         return $invalidProperties;
     }
 
@@ -319,7 +291,7 @@ class CreateStudioProject201ResponseData implements ModelInterface, ArrayAccess,
     /**
      * Sets id
      *
-     * @param string|null $id id
+     * @param string|null $id The listing id (serialized as a string to preserve precision).
      *
      * @return $this
      */
@@ -334,56 +306,55 @@ class CreateStudioProject201ResponseData implements ModelInterface, ArrayAccess,
     }
 
     /**
-     * Gets slug
+     * Gets changed
      *
-     * @return string|null
+     * @return string[]|null
      */
-    public function getSlug(): ?string
+    public function getChanged(): ?array
     {
-        return $this->container['slug'];
+        return $this->container['changed'];
     }
 
     /**
-     * Sets slug
+     * Sets changed
      *
-     * @param string|null $slug slug
+     * @param string[]|null $changed Content slabs that were actually written, e.g. [\"title\",\"occupancy\",\"amenities\"].
      *
      * @return $this
      */
-    public function setSlug(?string $slug): static
+    public function setChanged(?array $changed): static
     {
-        if (is_null($slug)) {
-            throw new InvalidArgumentException('non-nullable slug cannot be null');
+        if (is_null($changed)) {
+            throw new InvalidArgumentException('non-nullable changed cannot be null');
         }
-        $this->container['slug'] = $slug;
+        $this->container['changed'] = $changed;
 
         return $this;
     }
 
     /**
-     * Gets status
+     * Gets deferred
      *
-     * @return string|null
+     * @return string[]|null
      */
-    public function getStatus(): ?string
+    public function getDeferred(): ?array
     {
-        return $this->container['status'];
+        return $this->container['deferred'];
     }
 
     /**
-     * Sets status
+     * Sets deferred
      *
-     * @param string|null $status status
+     * @param string[]|null $deferred Provided-but-not-applied fields — e.g. \"photos\" when a non-empty photos array carried no valid http(s) URL.
      *
      * @return $this
      */
-    public function setStatus(?string $status): static
+    public function setDeferred(?array $deferred): static
     {
-        if (is_null($status)) {
-            throw new InvalidArgumentException('non-nullable status cannot be null');
+        if (is_null($deferred)) {
+            throw new InvalidArgumentException('non-nullable deferred cannot be null');
         }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['status'] = $status;
+        $this->container['deferred'] = $deferred;
 
         return $this;
     }

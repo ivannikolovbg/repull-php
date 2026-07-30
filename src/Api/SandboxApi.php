@@ -1,6 +1,6 @@
 <?php
 /**
- * AvailabilityApi
+ * SandboxApi
  * PHP version 8.1
  *
  * @package  Repull
@@ -45,13 +45,13 @@ use Repull\FormDataProcessor;
 use Repull\ObjectSerializer;
 
 /**
- * AvailabilityApi Class Doc Comment
+ * SandboxApi Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class AvailabilityApi
+class SandboxApi
 {
     /**
      * @var ClientInterface
@@ -75,10 +75,10 @@ class AvailabilityApi
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
-        'getAvailability' => [
+        'resetSandbox' => [
             'application/json',
         ],
-        'updateAvailability' => [
+        'seedSandbox' => [
             'application/json',
         ],
     ];
@@ -130,52 +130,40 @@ class AvailabilityApi
     }
 
     /**
-     * Operation getAvailability
+     * Operation resetSandbox
      *
-     * Get availability calendar
+     * Reset sandbox fixtures
      *
-     * @param  int $property_id property_id (required)
-     * @param  \DateTime $start_date start_date (required)
-     * @param  \DateTime $end_date end_date (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAvailability'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['resetSandbox'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\CalendarResponse
+     * @return \Repull\Model\SandboxResetResult|\Repull\Model\Error
      */
-    public function getAvailability(
-        int $property_id,
-        \DateTime $start_date,
-        \DateTime $end_date,
-        string $contentType = self::contentTypes['getAvailability'][0]
-    ): \Repull\Model\CalendarResponse
+    public function resetSandbox(
+        string $contentType = self::contentTypes['resetSandbox'][0]
+    ): \Repull\Model\SandboxResetResult|\Repull\Model\Error
     {
-        list($response) = $this->getAvailabilityWithHttpInfo($property_id, $start_date, $end_date, $contentType);
+        list($response) = $this->resetSandboxWithHttpInfo($contentType);
         return $response;
     }
 
     /**
-     * Operation getAvailabilityWithHttpInfo
+     * Operation resetSandboxWithHttpInfo
      *
-     * Get availability calendar
+     * Reset sandbox fixtures
      *
-     * @param  int $property_id (required)
-     * @param  \DateTime $start_date (required)
-     * @param  \DateTime $end_date (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAvailability'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['resetSandbox'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\CalendarResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SandboxResetResult|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getAvailabilityWithHttpInfo(
-        int $property_id,
-        \DateTime $start_date,
-        \DateTime $end_date,
-        string $contentType = self::contentTypes['getAvailability'][0]
+    public function resetSandboxWithHttpInfo(
+        string $contentType = self::contentTypes['resetSandbox'][0]
     ): array
     {
-        $request = $this->getAvailabilityRequest($property_id, $start_date, $end_date, $contentType);
+        $request = $this->resetSandboxRequest($contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -202,7 +190,19 @@ class AvailabilityApi
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Repull\Model\CalendarResponse',
+                        '\Repull\Model\SandboxResetResult',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
                         $request,
                         $response,
                     );
@@ -223,7 +223,7 @@ class AvailabilityApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Repull\Model\CalendarResponse',
+                '\Repull\Model\SandboxResetResult',
                 $request,
                 $response,
             );
@@ -232,7 +232,23 @@ class AvailabilityApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Repull\Model\CalendarResponse',
+                        '\Repull\Model\SandboxResetResult',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -244,26 +260,20 @@ class AvailabilityApi
     }
 
     /**
-     * Operation getAvailabilityAsync
+     * Operation resetSandboxAsync
      *
-     * Get availability calendar
+     * Reset sandbox fixtures
      *
-     * @param  int $property_id (required)
-     * @param  \DateTime $start_date (required)
-     * @param  \DateTime $end_date (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAvailability'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['resetSandbox'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function getAvailabilityAsync(
-        int $property_id,
-        \DateTime $start_date,
-        \DateTime $end_date,
-        string $contentType = self::contentTypes['getAvailability'][0]
+    public function resetSandboxAsync(
+        string $contentType = self::contentTypes['resetSandbox'][0]
     ): PromiseInterface
     {
-        return $this->getAvailabilityAsyncWithHttpInfo($property_id, $start_date, $end_date, $contentType)
+        return $this->resetSandboxAsyncWithHttpInfo($contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -272,27 +282,21 @@ class AvailabilityApi
     }
 
     /**
-     * Operation getAvailabilityAsyncWithHttpInfo
+     * Operation resetSandboxAsyncWithHttpInfo
      *
-     * Get availability calendar
+     * Reset sandbox fixtures
      *
-     * @param  int $property_id (required)
-     * @param  \DateTime $start_date (required)
-     * @param  \DateTime $end_date (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAvailability'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['resetSandbox'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function getAvailabilityAsyncWithHttpInfo(
-        int $property_id,
-        \DateTime $start_date,
-        \DateTime $end_date,
-        string $contentType = self::contentTypes['getAvailability'][0]
+    public function resetSandboxAsyncWithHttpInfo(
+        string $contentType = self::contentTypes['resetSandbox'][0]
     ): PromiseInterface
     {
-        $returnType = '\Repull\Model\CalendarResponse';
-        $request = $this->getAvailabilityRequest($property_id, $start_date, $end_date, $contentType);
+        $returnType = '\Repull\Model\SandboxResetResult';
+        $request = $this->resetSandboxRequest($contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -331,81 +335,28 @@ class AvailabilityApi
     }
 
     /**
-     * Create request for operation 'getAvailability'
+     * Create request for operation 'resetSandbox'
      *
-     * @param  int $property_id (required)
-     * @param  \DateTime $start_date (required)
-     * @param  \DateTime $end_date (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAvailability'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['resetSandbox'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getAvailabilityRequest(
-        int $property_id,
-        \DateTime $start_date,
-        \DateTime $end_date,
-        string $contentType = self::contentTypes['getAvailability'][0]
+    public function resetSandboxRequest(
+        string $contentType = self::contentTypes['resetSandbox'][0]
     ): Request
     {
 
-        // verify the required parameter 'property_id' is set
-        if ($property_id === null || (is_array($property_id) && count($property_id) === 0)) {
-            throw new InvalidArgumentException(
-                'Missing the required parameter $property_id when calling getAvailability'
-            );
-        }
 
-        // verify the required parameter 'start_date' is set
-        if ($start_date === null || (is_array($start_date) && count($start_date) === 0)) {
-            throw new InvalidArgumentException(
-                'Missing the required parameter $start_date when calling getAvailability'
-            );
-        }
-
-        // verify the required parameter 'end_date' is set
-        if ($end_date === null || (is_array($end_date) && count($end_date) === 0)) {
-            throw new InvalidArgumentException(
-                'Missing the required parameter $end_date when calling getAvailability'
-            );
-        }
-
-
-        $resourcePath = '/v1/availability/{propertyId}';
+        $resourcePath = '/v1/sandbox/reset';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
         $httpBody = '';
         $multipart = false;
 
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $start_date,
-            'startDate', // param base name
-            'string', // openApiType
-            'form', // style
-            true, // explode
-            true // required
-        ) ?? []);
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $end_date,
-            'endDate', // param base name
-            'string', // openApiType
-            'form', // style
-            true, // explode
-            true // required
-        ) ?? []);
 
 
-        // path params
-        if ($property_id !== null) {
-            $resourcePath = str_replace(
-                '{propertyId}',
-                ObjectSerializer::toPathValue($property_id),
-                $resourcePath
-            );
-        }
 
 
         $headers = $this->headerSelector->selectHeaders(
@@ -458,7 +409,7 @@ class AvailabilityApi
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
-            'GET',
+            'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
@@ -466,47 +417,40 @@ class AvailabilityApi
     }
 
     /**
-     * Operation updateAvailability
+     * Operation seedSandbox
      *
-     * Update availability
+     * Seed sandbox fixtures
      *
-     * @param  int $property_id property_id (required)
-     * @param  \Repull\Model\UpdateAvailabilityRequest|null $update_availability_request update_availability_request (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAvailability'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['seedSandbox'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\SandboxSeedResult|\Repull\Model\Error
      */
-    public function updateAvailability(
-        int $property_id,
-        ?\Repull\Model\UpdateAvailabilityRequest $update_availability_request = null,
-        string $contentType = self::contentTypes['updateAvailability'][0]
-    ): void
+    public function seedSandbox(
+        string $contentType = self::contentTypes['seedSandbox'][0]
+    ): \Repull\Model\SandboxSeedResult|\Repull\Model\Error
     {
-        $this->updateAvailabilityWithHttpInfo($property_id, $update_availability_request, $contentType);
+        list($response) = $this->seedSandboxWithHttpInfo($contentType);
+        return $response;
     }
 
     /**
-     * Operation updateAvailabilityWithHttpInfo
+     * Operation seedSandboxWithHttpInfo
      *
-     * Update availability
+     * Seed sandbox fixtures
      *
-     * @param  int $property_id (required)
-     * @param  \Repull\Model\UpdateAvailabilityRequest|null $update_availability_request (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAvailability'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['seedSandbox'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SandboxSeedResult|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
-    public function updateAvailabilityWithHttpInfo(
-        int $property_id,
-        ?\Repull\Model\UpdateAvailabilityRequest $update_availability_request = null,
-        string $contentType = self::contentTypes['updateAvailability'][0]
+    public function seedSandboxWithHttpInfo(
+        string $contentType = self::contentTypes['seedSandbox'][0]
     ): array
     {
-        $request = $this->updateAvailabilityRequest($property_id, $update_availability_request, $contentType);
+        $request = $this->seedSandboxRequest($contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -530,10 +474,72 @@ class AvailabilityApi
 
             $statusCode = $response->getStatusCode();
 
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SandboxSeedResult',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
 
-            return [null, $statusCode, $response->getHeaders()];
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SandboxSeedResult',
+                $request,
+                $response,
+            );
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SandboxSeedResult',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -541,24 +547,20 @@ class AvailabilityApi
     }
 
     /**
-     * Operation updateAvailabilityAsync
+     * Operation seedSandboxAsync
      *
-     * Update availability
+     * Seed sandbox fixtures
      *
-     * @param  int $property_id (required)
-     * @param  \Repull\Model\UpdateAvailabilityRequest|null $update_availability_request (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAvailability'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['seedSandbox'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function updateAvailabilityAsync(
-        int $property_id,
-        ?\Repull\Model\UpdateAvailabilityRequest $update_availability_request = null,
-        string $contentType = self::contentTypes['updateAvailability'][0]
+    public function seedSandboxAsync(
+        string $contentType = self::contentTypes['seedSandbox'][0]
     ): PromiseInterface
     {
-        return $this->updateAvailabilityAsyncWithHttpInfo($property_id, $update_availability_request, $contentType)
+        return $this->seedSandboxAsyncWithHttpInfo($contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -567,31 +569,40 @@ class AvailabilityApi
     }
 
     /**
-     * Operation updateAvailabilityAsyncWithHttpInfo
+     * Operation seedSandboxAsyncWithHttpInfo
      *
-     * Update availability
+     * Seed sandbox fixtures
      *
-     * @param  int $property_id (required)
-     * @param  \Repull\Model\UpdateAvailabilityRequest|null $update_availability_request (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAvailability'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['seedSandbox'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function updateAvailabilityAsyncWithHttpInfo(
-        int $property_id,
-        ?\Repull\Model\UpdateAvailabilityRequest $update_availability_request = null,
-        string $contentType = self::contentTypes['updateAvailability'][0]
+    public function seedSandboxAsyncWithHttpInfo(
+        string $contentType = self::contentTypes['seedSandbox'][0]
     ): PromiseInterface
     {
-        $returnType = '';
-        $request = $this->updateAvailabilityRequest($property_id, $update_availability_request, $contentType);
+        $returnType = '\Repull\Model\SandboxSeedResult';
+        $request = $this->seedSandboxRequest($contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 },
                 function ($exception) {
                     $response = $exception->getResponse();
@@ -611,32 +622,20 @@ class AvailabilityApi
     }
 
     /**
-     * Create request for operation 'updateAvailability'
+     * Create request for operation 'seedSandbox'
      *
-     * @param  int $property_id (required)
-     * @param  \Repull\Model\UpdateAvailabilityRequest|null $update_availability_request (optional)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAvailability'] to see the possible values for this operation
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['seedSandbox'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function updateAvailabilityRequest(
-        int $property_id,
-        ?\Repull\Model\UpdateAvailabilityRequest $update_availability_request = null,
-        string $contentType = self::contentTypes['updateAvailability'][0]
+    public function seedSandboxRequest(
+        string $contentType = self::contentTypes['seedSandbox'][0]
     ): Request
     {
 
-        // verify the required parameter 'property_id' is set
-        if ($property_id === null || (is_array($property_id) && count($property_id) === 0)) {
-            throw new InvalidArgumentException(
-                'Missing the required parameter $property_id when calling updateAvailability'
-            );
-        }
 
-
-
-        $resourcePath = '/v1/availability/{propertyId}';
+        $resourcePath = '/v1/sandbox/seed';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -645,31 +644,16 @@ class AvailabilityApi
 
 
 
-        // path params
-        if ($property_id !== null) {
-            $resourcePath = str_replace(
-                '{propertyId}',
-                ObjectSerializer::toPathValue($property_id),
-                $resourcePath
-            );
-        }
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
 
         // for model (json/xml)
-        if (isset($update_availability_request)) {
-            if (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($update_availability_request));
-            } else {
-                $httpBody = $update_availability_request;
-            }
-        } elseif (count($formParams) > 0) {
+        if (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -712,7 +696,7 @@ class AvailabilityApi
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
-            'PUT',
+            'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody

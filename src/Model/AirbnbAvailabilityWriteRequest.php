@@ -1,6 +1,6 @@
 <?php
 /**
- * DeleteStudioProjectFile200ResponseData
+ * AirbnbAvailabilityWriteRequest
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * DeleteStudioProjectFile200ResponseData Class Doc Comment
+ * AirbnbAvailabilityWriteRequest Class Doc Comment
  *
+ * @description Body for &#x60;PUT /v1/channels/airbnb/listings/{id}/availability&#x60;. &#x60;type: \&quot;calendar\&quot;&#x60; carries per-date restrictions (min/max nights, closed-to-arrival/departure, stop-sell); &#x60;type: \&quot;rules\&quot;&#x60; carries listing-level availability rules (default min/max nights, booking lead time, turnover days).
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class DeleteStudioProjectFile200ResponseData implements ModelInterface, ArrayAccess, JsonSerializable
+class AirbnbAvailabilityWriteRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class DeleteStudioProjectFile200ResponseData implements ModelInterface, ArrayAcc
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'deleteStudioProjectFile_200_response_data';
+    protected static string $openAPIModelName = 'AirbnbAvailabilityWriteRequest';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +60,9 @@ class DeleteStudioProjectFile200ResponseData implements ModelInterface, ArrayAcc
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'path' => 'string',
-        'deleted' => 'bool'
+        'type' => 'string',
+        'operations' => '\Repull\Model\AirbnbCalendarOperation[]',
+        'rules' => 'array<string,mixed>'
     ];
 
     /**
@@ -69,8 +71,9 @@ class DeleteStudioProjectFile200ResponseData implements ModelInterface, ArrayAcc
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'path' => null,
-        'deleted' => null
+        'type' => null,
+        'operations' => null,
+        'rules' => null
     ];
 
     /**
@@ -79,8 +82,9 @@ class DeleteStudioProjectFile200ResponseData implements ModelInterface, ArrayAcc
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'path' => false,
-        'deleted' => false
+        'type' => false,
+        'operations' => false,
+        'rules' => false
     ];
 
     /**
@@ -159,8 +163,9 @@ class DeleteStudioProjectFile200ResponseData implements ModelInterface, ArrayAcc
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'path' => 'path',
-        'deleted' => 'deleted'
+        'type' => 'type',
+        'operations' => 'operations',
+        'rules' => 'rules'
     ];
 
     /**
@@ -169,8 +174,9 @@ class DeleteStudioProjectFile200ResponseData implements ModelInterface, ArrayAcc
      * @var array<string, string>
      */
     protected static array $setters = [
-        'path' => 'setPath',
-        'deleted' => 'setDeleted'
+        'type' => 'setType',
+        'operations' => 'setOperations',
+        'rules' => 'setRules'
     ];
 
     /**
@@ -179,8 +185,9 @@ class DeleteStudioProjectFile200ResponseData implements ModelInterface, ArrayAcc
      * @var array<string, string>
      */
     protected static array $getters = [
-        'path' => 'getPath',
-        'deleted' => 'getDeleted'
+        'type' => 'getType',
+        'operations' => 'getOperations',
+        'rules' => 'getRules'
     ];
 
     /**
@@ -215,6 +222,21 @@ class DeleteStudioProjectFile200ResponseData implements ModelInterface, ArrayAcc
         return self::$openAPIModelName;
     }
 
+    public const TYPE_RULES = 'rules';
+    public const TYPE_CALENDAR = 'calendar';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getTypeAllowableValues()
+    {
+        return [
+            self::TYPE_RULES,
+            self::TYPE_CALENDAR,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -230,8 +252,9 @@ class DeleteStudioProjectFile200ResponseData implements ModelInterface, ArrayAcc
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('path', $data ?? [], null);
-        $this->setIfExists('deleted', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
+        $this->setIfExists('operations', $data ?? [], null);
+        $this->setIfExists('rules', $data ?? [], null);
     }
 
     /**
@@ -259,6 +282,18 @@ class DeleteStudioProjectFile200ResponseData implements ModelInterface, ArrayAcc
     {
         $invalidProperties = [];
 
+        if ($this->container['type'] === null) {
+            $invalidProperties[] = "'type' can't be null";
+        }
+        $allowedValues = self::getTypeAllowableValues();
+        if (!is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'type', must be one of '%s'",
+                $this->container['type'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -272,55 +307,83 @@ class DeleteStudioProjectFile200ResponseData implements ModelInterface, ArrayAcc
 
 
     /**
-     * Gets path
+     * Gets type
      *
-     * @return string|null
+     * @return string
      */
-    public function getPath(): ?string
+    public function getType(): string
     {
-        return $this->container['path'];
+        return $this->container['type'];
     }
 
     /**
-     * Sets path
+     * Sets type
      *
-     * @param string|null $path path
+     * @param string $type type
      *
      * @return $this
      */
-    public function setPath(?string $path): static
+    public function setType(string $type): static
     {
-        if (is_null($path)) {
-            throw new InvalidArgumentException('non-nullable path cannot be null');
+        if (is_null($type)) {
+            throw new InvalidArgumentException('non-nullable type cannot be null');
         }
-        $this->container['path'] = $path;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['type'] = $type;
 
         return $this;
     }
 
     /**
-     * Gets deleted
+     * Gets operations
      *
-     * @return bool|null
+     * @return \Repull\Model\AirbnbCalendarOperation[]|null
      */
-    public function getDeleted(): ?bool
+    public function getOperations(): ?array
     {
-        return $this->container['deleted'];
+        return $this->container['operations'];
     }
 
     /**
-     * Sets deleted
+     * Sets operations
      *
-     * @param bool|null $deleted deleted
+     * @param \Repull\Model\AirbnbCalendarOperation[]|null $operations Required when `type: \"calendar\"`. Batch of per-date restriction operations.
      *
      * @return $this
      */
-    public function setDeleted(?bool $deleted): static
+    public function setOperations(?array $operations): static
     {
-        if (is_null($deleted)) {
-            throw new InvalidArgumentException('non-nullable deleted cannot be null');
+        if (is_null($operations)) {
+            throw new InvalidArgumentException('non-nullable operations cannot be null');
         }
-        $this->container['deleted'] = $deleted;
+        $this->container['operations'] = $operations;
+
+        return $this;
+    }
+
+    /**
+     * Gets rules
+     *
+     * @return array<string,mixed>|null
+     */
+    public function getRules(): ?array
+    {
+        return $this->container['rules'];
+    }
+
+    /**
+     * Sets rules
+     *
+     * @param array<string,mixed>|null $rules Required when `type: \"rules\"`. Airbnb availability-rules object — `default_min_nights`, `default_max_nights`, `booking_lead_time`, `turnover_days`, `day_of_week_min_nights`, `seasonal_min_nights`, etc.
+     *
+     * @return $this
+     */
+    public function setRules(?array $rules): static
+    {
+        if (is_null($rules)) {
+            throw new InvalidArgumentException('non-nullable rules cannot be null');
+        }
+        $this->container['rules'] = $rules;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * GetStudioDeployment200Response
+ * ListingContentUpdateRequestAmenitiesOneOfInner
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * GetStudioDeployment200Response Class Doc Comment
+ * ListingContentUpdateRequestAmenitiesOneOfInner Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class GetStudioDeployment200Response implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingContentUpdateRequestAmenitiesOneOfInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class GetStudioDeployment200Response implements ModelInterface, ArrayAccess, Jso
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'getStudioDeployment_200_response';
+    protected static string $openAPIModelName = 'ListingContentUpdateRequest_amenities_oneOf_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,7 +59,10 @@ class GetStudioDeployment200Response implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'data' => '\Repull\Model\StudioDeployment'
+        'amenity_key' => 'string',
+        'category' => 'string',
+        'is_present' => 'bool',
+        'instruction' => 'string'
     ];
 
     /**
@@ -68,7 +71,10 @@ class GetStudioDeployment200Response implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'data' => null
+        'amenity_key' => null,
+        'category' => null,
+        'is_present' => null,
+        'instruction' => null
     ];
 
     /**
@@ -77,7 +83,10 @@ class GetStudioDeployment200Response implements ModelInterface, ArrayAccess, Jso
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'data' => false
+        'amenity_key' => false,
+        'category' => true,
+        'is_present' => true,
+        'instruction' => true
     ];
 
     /**
@@ -156,7 +165,10 @@ class GetStudioDeployment200Response implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'data' => 'data'
+        'amenity_key' => 'amenityKey',
+        'category' => 'category',
+        'is_present' => 'isPresent',
+        'instruction' => 'instruction'
     ];
 
     /**
@@ -165,7 +177,10 @@ class GetStudioDeployment200Response implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string>
      */
     protected static array $setters = [
-        'data' => 'setData'
+        'amenity_key' => 'setAmenityKey',
+        'category' => 'setCategory',
+        'is_present' => 'setIsPresent',
+        'instruction' => 'setInstruction'
     ];
 
     /**
@@ -174,7 +189,10 @@ class GetStudioDeployment200Response implements ModelInterface, ArrayAccess, Jso
      * @var array<string, string>
      */
     protected static array $getters = [
-        'data' => 'getData'
+        'amenity_key' => 'getAmenityKey',
+        'category' => 'getCategory',
+        'is_present' => 'getIsPresent',
+        'instruction' => 'getInstruction'
     ];
 
     /**
@@ -224,7 +242,10 @@ class GetStudioDeployment200Response implements ModelInterface, ArrayAccess, Jso
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('data', $data ?? [], null);
+        $this->setIfExists('amenity_key', $data ?? [], null);
+        $this->setIfExists('category', $data ?? [], null);
+        $this->setIfExists('is_present', $data ?? [], true);
+        $this->setIfExists('instruction', $data ?? [], null);
     }
 
     /**
@@ -252,6 +273,9 @@ class GetStudioDeployment200Response implements ModelInterface, ArrayAccess, Jso
     {
         $invalidProperties = [];
 
+        if ($this->container['amenity_key'] === null) {
+            $invalidProperties[] = "'amenity_key' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -265,28 +289,130 @@ class GetStudioDeployment200Response implements ModelInterface, ArrayAccess, Jso
 
 
     /**
-     * Gets data
+     * Gets amenity_key
      *
-     * @return \Repull\Model\StudioDeployment|null
+     * @return string
      */
-    public function getData(): ?\Repull\Model\StudioDeployment
+    public function getAmenityKey(): string
     {
-        return $this->container['data'];
+        return $this->container['amenity_key'];
     }
 
     /**
-     * Sets data
+     * Sets amenity_key
      *
-     * @param \Repull\Model\StudioDeployment|null $data data
+     * @param string $amenity_key amenity_key
      *
      * @return $this
      */
-    public function setData(?\Repull\Model\StudioDeployment $data): static
+    public function setAmenityKey(string $amenity_key): static
     {
-        if (is_null($data)) {
-            throw new InvalidArgumentException('non-nullable data cannot be null');
+        if (is_null($amenity_key)) {
+            throw new InvalidArgumentException('non-nullable amenity_key cannot be null');
         }
-        $this->container['data'] = $data;
+        $this->container['amenity_key'] = $amenity_key;
+
+        return $this;
+    }
+
+    /**
+     * Gets category
+     *
+     * @return string|null
+     */
+    public function getCategory(): ?string
+    {
+        return $this->container['category'];
+    }
+
+    /**
+     * Sets category
+     *
+     * @param string|null $category category
+     *
+     * @return $this
+     */
+    public function setCategory(?string $category): static
+    {
+        if (is_null($category)) {
+            array_push($this->openAPINullablesSetToNull, 'category');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('category', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['category'] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Gets is_present
+     *
+     * @return bool|null
+     */
+    public function getIsPresent(): ?bool
+    {
+        return $this->container['is_present'];
+    }
+
+    /**
+     * Sets is_present
+     *
+     * @param bool|null $is_present is_present
+     *
+     * @return $this
+     */
+    public function setIsPresent(?bool $is_present): static
+    {
+        if (is_null($is_present)) {
+            array_push($this->openAPINullablesSetToNull, 'is_present');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('is_present', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['is_present'] = $is_present;
+
+        return $this;
+    }
+
+    /**
+     * Gets instruction
+     *
+     * @return string|null
+     */
+    public function getInstruction(): ?string
+    {
+        return $this->container['instruction'];
+    }
+
+    /**
+     * Sets instruction
+     *
+     * @param string|null $instruction instruction
+     *
+     * @return $this
+     */
+    public function setInstruction(?string $instruction): static
+    {
+        if (is_null($instruction)) {
+            array_push($this->openAPINullablesSetToNull, 'instruction');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('instruction', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['instruction'] = $instruction;
 
         return $this;
     }

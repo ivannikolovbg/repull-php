@@ -1,6 +1,6 @@
 <?php
 /**
- * UpsertStudioProjectFile200Response
+ * MapAirbnbListingResponse
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * UpsertStudioProjectFile200Response Class Doc Comment
+ * MapAirbnbListingResponse Class Doc Comment
  *
+ * @description Id fields are strings (API-wide convention — bigint ids are stringified to avoid 53-bit JS-number precision loss).
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class UpsertStudioProjectFile200Response implements ModelInterface, ArrayAccess, JsonSerializable
+class MapAirbnbListingResponse implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class UpsertStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'upsertStudioProjectFile_200_response';
+    protected static string $openAPIModelName = 'MapAirbnbListingResponse';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,7 +60,14 @@ class UpsertStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'data' => '\Repull\Model\UpsertStudioProjectFile200ResponseData'
+        'success' => 'bool',
+        'already_mapped' => 'bool',
+        'airbnb_id' => 'string',
+        'listing_id' => 'string',
+        'previous_listing_id' => 'string',
+        'host_id' => 'string',
+        'listing_airbnb_id' => 'string',
+        'platform_link_id' => 'string'
     ];
 
     /**
@@ -68,7 +76,14 @@ class UpsertStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'data' => null
+        'success' => null,
+        'already_mapped' => null,
+        'airbnb_id' => null,
+        'listing_id' => null,
+        'previous_listing_id' => null,
+        'host_id' => null,
+        'listing_airbnb_id' => null,
+        'platform_link_id' => null
     ];
 
     /**
@@ -77,7 +92,14 @@ class UpsertStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'data' => false
+        'success' => false,
+        'already_mapped' => false,
+        'airbnb_id' => false,
+        'listing_id' => false,
+        'previous_listing_id' => false,
+        'host_id' => false,
+        'listing_airbnb_id' => false,
+        'platform_link_id' => false
     ];
 
     /**
@@ -156,7 +178,14 @@ class UpsertStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'data' => 'data'
+        'success' => 'success',
+        'already_mapped' => 'alreadyMapped',
+        'airbnb_id' => 'airbnbId',
+        'listing_id' => 'listingId',
+        'previous_listing_id' => 'previousListingId',
+        'host_id' => 'hostId',
+        'listing_airbnb_id' => 'listingAirbnbId',
+        'platform_link_id' => 'platformLinkId'
     ];
 
     /**
@@ -165,7 +194,14 @@ class UpsertStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      * @var array<string, string>
      */
     protected static array $setters = [
-        'data' => 'setData'
+        'success' => 'setSuccess',
+        'already_mapped' => 'setAlreadyMapped',
+        'airbnb_id' => 'setAirbnbId',
+        'listing_id' => 'setListingId',
+        'previous_listing_id' => 'setPreviousListingId',
+        'host_id' => 'setHostId',
+        'listing_airbnb_id' => 'setListingAirbnbId',
+        'platform_link_id' => 'setPlatformLinkId'
     ];
 
     /**
@@ -174,7 +210,14 @@ class UpsertStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      * @var array<string, string>
      */
     protected static array $getters = [
-        'data' => 'getData'
+        'success' => 'getSuccess',
+        'already_mapped' => 'getAlreadyMapped',
+        'airbnb_id' => 'getAirbnbId',
+        'listing_id' => 'getListingId',
+        'previous_listing_id' => 'getPreviousListingId',
+        'host_id' => 'getHostId',
+        'listing_airbnb_id' => 'getListingAirbnbId',
+        'platform_link_id' => 'getPlatformLinkId'
     ];
 
     /**
@@ -224,7 +267,14 @@ class UpsertStudioProjectFile200Response implements ModelInterface, ArrayAccess,
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('data', $data ?? [], null);
+        $this->setIfExists('success', $data ?? [], null);
+        $this->setIfExists('already_mapped', $data ?? [], null);
+        $this->setIfExists('airbnb_id', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('previous_listing_id', $data ?? [], null);
+        $this->setIfExists('host_id', $data ?? [], null);
+        $this->setIfExists('listing_airbnb_id', $data ?? [], null);
+        $this->setIfExists('platform_link_id', $data ?? [], null);
     }
 
     /**
@@ -252,6 +302,27 @@ class UpsertStudioProjectFile200Response implements ModelInterface, ArrayAccess,
     {
         $invalidProperties = [];
 
+        if ($this->container['success'] === null) {
+            $invalidProperties[] = "'success' can't be null";
+        }
+        if ($this->container['already_mapped'] === null) {
+            $invalidProperties[] = "'already_mapped' can't be null";
+        }
+        if ($this->container['airbnb_id'] === null) {
+            $invalidProperties[] = "'airbnb_id' can't be null";
+        }
+        if ($this->container['listing_id'] === null) {
+            $invalidProperties[] = "'listing_id' can't be null";
+        }
+        if ($this->container['host_id'] === null) {
+            $invalidProperties[] = "'host_id' can't be null";
+        }
+        if ($this->container['listing_airbnb_id'] === null) {
+            $invalidProperties[] = "'listing_airbnb_id' can't be null";
+        }
+        if ($this->container['platform_link_id'] === null) {
+            $invalidProperties[] = "'platform_link_id' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -265,28 +336,217 @@ class UpsertStudioProjectFile200Response implements ModelInterface, ArrayAccess,
 
 
     /**
-     * Gets data
+     * Gets success
      *
-     * @return \Repull\Model\UpsertStudioProjectFile200ResponseData|null
+     * @return bool
      */
-    public function getData(): ?\Repull\Model\UpsertStudioProjectFile200ResponseData
+    public function getSuccess(): bool
     {
-        return $this->container['data'];
+        return $this->container['success'];
     }
 
     /**
-     * Sets data
+     * Sets success
      *
-     * @param \Repull\Model\UpsertStudioProjectFile200ResponseData|null $data data
+     * @param bool $success success
      *
      * @return $this
      */
-    public function setData(?\Repull\Model\UpsertStudioProjectFile200ResponseData $data): static
+    public function setSuccess(bool $success): static
     {
-        if (is_null($data)) {
-            throw new InvalidArgumentException('non-nullable data cannot be null');
+        if (is_null($success)) {
+            throw new InvalidArgumentException('non-nullable success cannot be null');
         }
-        $this->container['data'] = $data;
+        $this->container['success'] = $success;
+
+        return $this;
+    }
+
+    /**
+     * Gets already_mapped
+     *
+     * @return bool
+     */
+    public function getAlreadyMapped(): bool
+    {
+        return $this->container['already_mapped'];
+    }
+
+    /**
+     * Sets already_mapped
+     *
+     * @param bool $already_mapped True when the Airbnb listing was already mapped to this listing (no-op).
+     *
+     * @return $this
+     */
+    public function setAlreadyMapped(bool $already_mapped): static
+    {
+        if (is_null($already_mapped)) {
+            throw new InvalidArgumentException('non-nullable already_mapped cannot be null');
+        }
+        $this->container['already_mapped'] = $already_mapped;
+
+        return $this;
+    }
+
+    /**
+     * Gets airbnb_id
+     *
+     * @return string
+     */
+    public function getAirbnbId(): string
+    {
+        return $this->container['airbnb_id'];
+    }
+
+    /**
+     * Sets airbnb_id
+     *
+     * @param string $airbnb_id airbnb_id
+     *
+     * @return $this
+     */
+    public function setAirbnbId(string $airbnb_id): static
+    {
+        if (is_null($airbnb_id)) {
+            throw new InvalidArgumentException('non-nullable airbnb_id cannot be null');
+        }
+        $this->container['airbnb_id'] = $airbnb_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_id
+     *
+     * @return string
+     */
+    public function getListingId(): string
+    {
+        return $this->container['listing_id'];
+    }
+
+    /**
+     * Sets listing_id
+     *
+     * @param string $listing_id listing_id
+     *
+     * @return $this
+     */
+    public function setListingId(string $listing_id): static
+    {
+        if (is_null($listing_id)) {
+            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
+        }
+        $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets previous_listing_id
+     *
+     * @return string|null
+     */
+    public function getPreviousListingId(): ?string
+    {
+        return $this->container['previous_listing_id'];
+    }
+
+    /**
+     * Sets previous_listing_id
+     *
+     * @param string|null $previous_listing_id The listing the Airbnb record pointed at before this call. Omitted on a no-op.
+     *
+     * @return $this
+     */
+    public function setPreviousListingId(?string $previous_listing_id): static
+    {
+        if (is_null($previous_listing_id)) {
+            throw new InvalidArgumentException('non-nullable previous_listing_id cannot be null');
+        }
+        $this->container['previous_listing_id'] = $previous_listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets host_id
+     *
+     * @return string
+     */
+    public function getHostId(): string
+    {
+        return $this->container['host_id'];
+    }
+
+    /**
+     * Sets host_id
+     *
+     * @param string $host_id host_id
+     *
+     * @return $this
+     */
+    public function setHostId(string $host_id): static
+    {
+        if (is_null($host_id)) {
+            throw new InvalidArgumentException('non-nullable host_id cannot be null');
+        }
+        $this->container['host_id'] = $host_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_airbnb_id
+     *
+     * @return string
+     */
+    public function getListingAirbnbId(): string
+    {
+        return $this->container['listing_airbnb_id'];
+    }
+
+    /**
+     * Sets listing_airbnb_id
+     *
+     * @param string $listing_airbnb_id Internal id of the `listings_airbnb` record.
+     *
+     * @return $this
+     */
+    public function setListingAirbnbId(string $listing_airbnb_id): static
+    {
+        if (is_null($listing_airbnb_id)) {
+            throw new InvalidArgumentException('non-nullable listing_airbnb_id cannot be null');
+        }
+        $this->container['listing_airbnb_id'] = $listing_airbnb_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets platform_link_id
+     *
+     * @return string
+     */
+    public function getPlatformLinkId(): string
+    {
+        return $this->container['platform_link_id'];
+    }
+
+    /**
+     * Sets platform_link_id
+     *
+     * @param string $platform_link_id Internal id of the resulting `listing_platform_links` row.
+     *
+     * @return $this
+     */
+    public function setPlatformLinkId(string $platform_link_id): static
+    {
+        if (is_null($platform_link_id)) {
+            throw new InvalidArgumentException('non-nullable platform_link_id cannot be null');
+        }
+        $this->container['platform_link_id'] = $platform_link_id;
 
         return $this;
     }

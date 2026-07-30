@@ -1,6 +1,6 @@
 <?php
 /**
- * UpdateAvailabilityRequest
+ * SandboxResetResult
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * UpdateAvailabilityRequest Class Doc Comment
+ * SandboxResetResult Class Doc Comment
  *
+ * @description Result of clearing the sandbox fixture set. Only ever deletes rows in the isolated sandbox data space.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class UpdateAvailabilityRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class SandboxResetResult implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class UpdateAvailabilityRequest implements ModelInterface, ArrayAccess, JsonSeri
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'update_availability_request';
+    protected static string $openAPIModelName = 'SandboxResetResult';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,7 +60,9 @@ class UpdateAvailabilityRequest implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'dates' => '\Repull\Model\CalendarDay[]'
+        'customer_id' => 'string',
+        'reset_at' => '\DateTime',
+        'deleted' => '\Repull\Model\SandboxResetResultDeleted'
     ];
 
     /**
@@ -68,7 +71,9 @@ class UpdateAvailabilityRequest implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'dates' => null
+        'customer_id' => null,
+        'reset_at' => 'date-time',
+        'deleted' => null
     ];
 
     /**
@@ -77,7 +82,9 @@ class UpdateAvailabilityRequest implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'dates' => false
+        'customer_id' => false,
+        'reset_at' => false,
+        'deleted' => false
     ];
 
     /**
@@ -156,7 +163,9 @@ class UpdateAvailabilityRequest implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'dates' => 'dates'
+        'customer_id' => 'customerId',
+        'reset_at' => 'resetAt',
+        'deleted' => 'deleted'
     ];
 
     /**
@@ -165,7 +174,9 @@ class UpdateAvailabilityRequest implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $setters = [
-        'dates' => 'setDates'
+        'customer_id' => 'setCustomerId',
+        'reset_at' => 'setResetAt',
+        'deleted' => 'setDeleted'
     ];
 
     /**
@@ -174,7 +185,9 @@ class UpdateAvailabilityRequest implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $getters = [
-        'dates' => 'getDates'
+        'customer_id' => 'getCustomerId',
+        'reset_at' => 'getResetAt',
+        'deleted' => 'getDeleted'
     ];
 
     /**
@@ -224,7 +237,9 @@ class UpdateAvailabilityRequest implements ModelInterface, ArrayAccess, JsonSeri
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('dates', $data ?? [], null);
+        $this->setIfExists('customer_id', $data ?? [], null);
+        $this->setIfExists('reset_at', $data ?? [], null);
+        $this->setIfExists('deleted', $data ?? [], null);
     }
 
     /**
@@ -252,6 +267,15 @@ class UpdateAvailabilityRequest implements ModelInterface, ArrayAccess, JsonSeri
     {
         $invalidProperties = [];
 
+        if ($this->container['customer_id'] === null) {
+            $invalidProperties[] = "'customer_id' can't be null";
+        }
+        if ($this->container['reset_at'] === null) {
+            $invalidProperties[] = "'reset_at' can't be null";
+        }
+        if ($this->container['deleted'] === null) {
+            $invalidProperties[] = "'deleted' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -265,28 +289,82 @@ class UpdateAvailabilityRequest implements ModelInterface, ArrayAccess, JsonSeri
 
 
     /**
-     * Gets dates
+     * Gets customer_id
      *
-     * @return \Repull\Model\CalendarDay[]|null
+     * @return string
      */
-    public function getDates(): ?array
+    public function getCustomerId(): string
     {
-        return $this->container['dates'];
+        return $this->container['customer_id'];
     }
 
     /**
-     * Sets dates
+     * Sets customer_id
      *
-     * @param \Repull\Model\CalendarDay[]|null $dates dates
+     * @param string $customer_id customer_id
      *
      * @return $this
      */
-    public function setDates(?array $dates): static
+    public function setCustomerId(string $customer_id): static
     {
-        if (is_null($dates)) {
-            throw new InvalidArgumentException('non-nullable dates cannot be null');
+        if (is_null($customer_id)) {
+            throw new InvalidArgumentException('non-nullable customer_id cannot be null');
         }
-        $this->container['dates'] = $dates;
+        $this->container['customer_id'] = $customer_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets reset_at
+     *
+     * @return \DateTime
+     */
+    public function getResetAt(): \DateTime
+    {
+        return $this->container['reset_at'];
+    }
+
+    /**
+     * Sets reset_at
+     *
+     * @param \DateTime $reset_at reset_at
+     *
+     * @return $this
+     */
+    public function setResetAt(\DateTime $reset_at): static
+    {
+        if (is_null($reset_at)) {
+            throw new InvalidArgumentException('non-nullable reset_at cannot be null');
+        }
+        $this->container['reset_at'] = $reset_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets deleted
+     *
+     * @return \Repull\Model\SandboxResetResultDeleted
+     */
+    public function getDeleted(): \Repull\Model\SandboxResetResultDeleted
+    {
+        return $this->container['deleted'];
+    }
+
+    /**
+     * Sets deleted
+     *
+     * @param \Repull\Model\SandboxResetResultDeleted $deleted deleted
+     *
+     * @return $this
+     */
+    public function setDeleted(\Repull\Model\SandboxResetResultDeleted $deleted): static
+    {
+        if (is_null($deleted)) {
+            throw new InvalidArgumentException('non-nullable deleted cannot be null');
+        }
+        $this->container['deleted'] = $deleted;
 
         return $this;
     }

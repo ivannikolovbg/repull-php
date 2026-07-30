@@ -1,6 +1,6 @@
 <?php
 /**
- * GenerateStudioCompletionRequest
+ * ListingContentUpdateRequestPhotosInnerOneOf
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * GenerateStudioCompletionRequest Class Doc Comment
+ * ListingContentUpdateRequestPhotosInnerOneOf Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class GenerateStudioCompletionRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingContentUpdateRequestPhotosInnerOneOf implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class GenerateStudioCompletionRequest implements ModelInterface, ArrayAccess, Js
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'generateStudioCompletion_request';
+    protected static string $openAPIModelName = 'ListingContentUpdateRequest_photos_inner_oneOf';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,11 +59,14 @@ class GenerateStudioCompletionRequest implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'project_id' => '\Repull\Model\GenerateStudioCompletionRequestProjectId',
-        'prompt' => 'string',
-        'system_prompt' => 'string',
-        'temperature' => 'float',
-        'max_tokens' => 'int'
+        'url' => 'string',
+        'thumbnail_url' => 'string',
+        'caption' => 'string',
+        'category' => 'string',
+        'width' => 'int',
+        'height' => 'int',
+        'sort_order' => 'int',
+        'source_url' => 'string'
     ];
 
     /**
@@ -72,11 +75,14 @@ class GenerateStudioCompletionRequest implements ModelInterface, ArrayAccess, Js
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'project_id' => null,
-        'prompt' => null,
-        'system_prompt' => null,
-        'temperature' => null,
-        'max_tokens' => null
+        'url' => 'uri',
+        'thumbnail_url' => 'uri',
+        'caption' => null,
+        'category' => null,
+        'width' => null,
+        'height' => null,
+        'sort_order' => null,
+        'source_url' => 'uri'
     ];
 
     /**
@@ -85,11 +91,14 @@ class GenerateStudioCompletionRequest implements ModelInterface, ArrayAccess, Js
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'project_id' => false,
-        'prompt' => false,
-        'system_prompt' => false,
-        'temperature' => false,
-        'max_tokens' => false
+        'url' => false,
+        'thumbnail_url' => true,
+        'caption' => true,
+        'category' => true,
+        'width' => true,
+        'height' => true,
+        'sort_order' => true,
+        'source_url' => true
     ];
 
     /**
@@ -168,11 +177,14 @@ class GenerateStudioCompletionRequest implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'project_id' => 'project_id',
-        'prompt' => 'prompt',
-        'system_prompt' => 'system_prompt',
-        'temperature' => 'temperature',
-        'max_tokens' => 'max_tokens'
+        'url' => 'url',
+        'thumbnail_url' => 'thumbnailUrl',
+        'caption' => 'caption',
+        'category' => 'category',
+        'width' => 'width',
+        'height' => 'height',
+        'sort_order' => 'sortOrder',
+        'source_url' => 'sourceUrl'
     ];
 
     /**
@@ -181,11 +193,14 @@ class GenerateStudioCompletionRequest implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $setters = [
-        'project_id' => 'setProjectId',
-        'prompt' => 'setPrompt',
-        'system_prompt' => 'setSystemPrompt',
-        'temperature' => 'setTemperature',
-        'max_tokens' => 'setMaxTokens'
+        'url' => 'setUrl',
+        'thumbnail_url' => 'setThumbnailUrl',
+        'caption' => 'setCaption',
+        'category' => 'setCategory',
+        'width' => 'setWidth',
+        'height' => 'setHeight',
+        'sort_order' => 'setSortOrder',
+        'source_url' => 'setSourceUrl'
     ];
 
     /**
@@ -194,11 +209,14 @@ class GenerateStudioCompletionRequest implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $getters = [
-        'project_id' => 'getProjectId',
-        'prompt' => 'getPrompt',
-        'system_prompt' => 'getSystemPrompt',
-        'temperature' => 'getTemperature',
-        'max_tokens' => 'getMaxTokens'
+        'url' => 'getUrl',
+        'thumbnail_url' => 'getThumbnailUrl',
+        'caption' => 'getCaption',
+        'category' => 'getCategory',
+        'width' => 'getWidth',
+        'height' => 'getHeight',
+        'sort_order' => 'getSortOrder',
+        'source_url' => 'getSourceUrl'
     ];
 
     /**
@@ -248,11 +266,14 @@ class GenerateStudioCompletionRequest implements ModelInterface, ArrayAccess, Js
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('project_id', $data ?? [], null);
-        $this->setIfExists('prompt', $data ?? [], null);
-        $this->setIfExists('system_prompt', $data ?? [], null);
-        $this->setIfExists('temperature', $data ?? [], null);
-        $this->setIfExists('max_tokens', $data ?? [], null);
+        $this->setIfExists('url', $data ?? [], null);
+        $this->setIfExists('thumbnail_url', $data ?? [], null);
+        $this->setIfExists('caption', $data ?? [], null);
+        $this->setIfExists('category', $data ?? [], 'property');
+        $this->setIfExists('width', $data ?? [], null);
+        $this->setIfExists('height', $data ?? [], null);
+        $this->setIfExists('sort_order', $data ?? [], null);
+        $this->setIfExists('source_url', $data ?? [], null);
     }
 
     /**
@@ -280,36 +301,9 @@ class GenerateStudioCompletionRequest implements ModelInterface, ArrayAccess, Js
     {
         $invalidProperties = [];
 
-        if ($this->container['project_id'] === null) {
-            $invalidProperties[] = "'project_id' can't be null";
+        if ($this->container['url'] === null) {
+            $invalidProperties[] = "'url' can't be null";
         }
-        if ($this->container['prompt'] === null) {
-            $invalidProperties[] = "'prompt' can't be null";
-        }
-        if ((mb_strlen($this->container['prompt']) > 32000)) {
-            $invalidProperties[] = "invalid value for 'prompt', the character length must be smaller than or equal to 32000.";
-        }
-
-        if (!is_null($this->container['system_prompt']) && (mb_strlen($this->container['system_prompt']) > 32000)) {
-            $invalidProperties[] = "invalid value for 'system_prompt', the character length must be smaller than or equal to 32000.";
-        }
-
-        if (!is_null($this->container['temperature']) && ($this->container['temperature'] > 2)) {
-            $invalidProperties[] = "invalid value for 'temperature', must be smaller than or equal to 2.";
-        }
-
-        if (!is_null($this->container['temperature']) && ($this->container['temperature'] < 0)) {
-            $invalidProperties[] = "invalid value for 'temperature', must be bigger than or equal to 0.";
-        }
-
-        if (!is_null($this->container['max_tokens']) && ($this->container['max_tokens'] > 16384)) {
-            $invalidProperties[] = "invalid value for 'max_tokens', must be smaller than or equal to 16384.";
-        }
-
-        if (!is_null($this->container['max_tokens']) && ($this->container['max_tokens'] < 1)) {
-            $invalidProperties[] = "invalid value for 'max_tokens', must be bigger than or equal to 1.";
-        }
-
         return $invalidProperties;
     }
 
@@ -323,160 +317,266 @@ class GenerateStudioCompletionRequest implements ModelInterface, ArrayAccess, Js
 
 
     /**
-     * Gets project_id
-     *
-     * @return \Repull\Model\GenerateStudioCompletionRequestProjectId
-     */
-    public function getProjectId(): \Repull\Model\GenerateStudioCompletionRequestProjectId
-    {
-        return $this->container['project_id'];
-    }
-
-    /**
-     * Sets project_id
-     *
-     * @param \Repull\Model\GenerateStudioCompletionRequestProjectId $project_id project_id
-     *
-     * @return $this
-     */
-    public function setProjectId(\Repull\Model\GenerateStudioCompletionRequestProjectId $project_id): static
-    {
-        if (is_null($project_id)) {
-            throw new InvalidArgumentException('non-nullable project_id cannot be null');
-        }
-        $this->container['project_id'] = $project_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets prompt
+     * Gets url
      *
      * @return string
      */
-    public function getPrompt(): string
+    public function getUrl(): string
     {
-        return $this->container['prompt'];
+        return $this->container['url'];
     }
 
     /**
-     * Sets prompt
+     * Sets url
      *
-     * @param string $prompt User prompt. Up to 32,000 characters.
+     * @param string $url Hosted image URL (http/https).
      *
      * @return $this
      */
-    public function setPrompt(string $prompt): static
+    public function setUrl(string $url): static
     {
-        if (is_null($prompt)) {
-            throw new InvalidArgumentException('non-nullable prompt cannot be null');
+        if (is_null($url)) {
+            throw new InvalidArgumentException('non-nullable url cannot be null');
         }
-        if ((mb_strlen($prompt) > 32000)) {
-            throw new InvalidArgumentException('invalid length for $prompt when calling GenerateStudioCompletionRequest., must be smaller than or equal to 32000.');
-        }
-
-        $this->container['prompt'] = $prompt;
+        $this->container['url'] = $url;
 
         return $this;
     }
 
     /**
-     * Gets system_prompt
+     * Gets thumbnail_url
      *
      * @return string|null
      */
-    public function getSystemPrompt(): ?string
+    public function getThumbnailUrl(): ?string
     {
-        return $this->container['system_prompt'];
+        return $this->container['thumbnail_url'];
     }
 
     /**
-     * Sets system_prompt
+     * Sets thumbnail_url
      *
-     * @param string|null $system_prompt Optional system prompt to steer the response.
+     * @param string|null $thumbnail_url thumbnail_url
      *
      * @return $this
      */
-    public function setSystemPrompt(?string $system_prompt): static
+    public function setThumbnailUrl(?string $thumbnail_url): static
     {
-        if (is_null($system_prompt)) {
-            throw new InvalidArgumentException('non-nullable system_prompt cannot be null');
+        if (is_null($thumbnail_url)) {
+            array_push($this->openAPINullablesSetToNull, 'thumbnail_url');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('thumbnail_url', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        if ((mb_strlen($system_prompt) > 32000)) {
-            throw new InvalidArgumentException('invalid length for $system_prompt when calling GenerateStudioCompletionRequest., must be smaller than or equal to 32000.');
-        }
-
-        $this->container['system_prompt'] = $system_prompt;
+        $this->container['thumbnail_url'] = $thumbnail_url;
 
         return $this;
     }
 
     /**
-     * Gets temperature
+     * Gets caption
      *
-     * @return float|null
+     * @return string|null
      */
-    public function getTemperature(): ?float
+    public function getCaption(): ?string
     {
-        return $this->container['temperature'];
+        return $this->container['caption'];
     }
 
     /**
-     * Sets temperature
+     * Sets caption
      *
-     * @param float|null $temperature Sampling temperature. Defaults to model preset.
+     * @param string|null $caption caption
      *
      * @return $this
      */
-    public function setTemperature(?float $temperature): static
+    public function setCaption(?string $caption): static
     {
-        if (is_null($temperature)) {
-            throw new InvalidArgumentException('non-nullable temperature cannot be null');
+        if (is_null($caption)) {
+            array_push($this->openAPINullablesSetToNull, 'caption');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('caption', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-
-        if (($temperature > 2)) {
-            throw new InvalidArgumentException('invalid value for $temperature when calling GenerateStudioCompletionRequest., must be smaller than or equal to 2.');
-        }
-        if (($temperature < 0)) {
-            throw new InvalidArgumentException('invalid value for $temperature when calling GenerateStudioCompletionRequest., must be bigger than or equal to 0.');
-        }
-
-        $this->container['temperature'] = $temperature;
+        $this->container['caption'] = $caption;
 
         return $this;
     }
 
     /**
-     * Gets max_tokens
+     * Gets category
+     *
+     * @return string|null
+     */
+    public function getCategory(): ?string
+    {
+        return $this->container['category'];
+    }
+
+    /**
+     * Sets category
+     *
+     * @param string|null $category category
+     *
+     * @return $this
+     */
+    public function setCategory(?string $category): static
+    {
+        if (is_null($category)) {
+            array_push($this->openAPINullablesSetToNull, 'category');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('category', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['category'] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Gets width
      *
      * @return int|null
      */
-    public function getMaxTokens(): ?int
+    public function getWidth(): ?int
     {
-        return $this->container['max_tokens'];
+        return $this->container['width'];
     }
 
     /**
-     * Sets max_tokens
+     * Sets width
      *
-     * @param int|null $max_tokens Maximum completion tokens.
+     * @param int|null $width width
      *
      * @return $this
      */
-    public function setMaxTokens(?int $max_tokens): static
+    public function setWidth(?int $width): static
     {
-        if (is_null($max_tokens)) {
-            throw new InvalidArgumentException('non-nullable max_tokens cannot be null');
+        if (is_null($width)) {
+            array_push($this->openAPINullablesSetToNull, 'width');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('width', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
+        $this->container['width'] = $width;
 
-        if (($max_tokens > 16384)) {
-            throw new InvalidArgumentException('invalid value for $max_tokens when calling GenerateStudioCompletionRequest., must be smaller than or equal to 16384.');
-        }
-        if (($max_tokens < 1)) {
-            throw new InvalidArgumentException('invalid value for $max_tokens when calling GenerateStudioCompletionRequest., must be bigger than or equal to 1.');
-        }
+        return $this;
+    }
 
-        $this->container['max_tokens'] = $max_tokens;
+    /**
+     * Gets height
+     *
+     * @return int|null
+     */
+    public function getHeight(): ?int
+    {
+        return $this->container['height'];
+    }
+
+    /**
+     * Sets height
+     *
+     * @param int|null $height height
+     *
+     * @return $this
+     */
+    public function setHeight(?int $height): static
+    {
+        if (is_null($height)) {
+            array_push($this->openAPINullablesSetToNull, 'height');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('height', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['height'] = $height;
+
+        return $this;
+    }
+
+    /**
+     * Gets sort_order
+     *
+     * @return int|null
+     */
+    public function getSortOrder(): ?int
+    {
+        return $this->container['sort_order'];
+    }
+
+    /**
+     * Sets sort_order
+     *
+     * @param int|null $sort_order Explicit position; defaults to the array index.
+     *
+     * @return $this
+     */
+    public function setSortOrder(?int $sort_order): static
+    {
+        if (is_null($sort_order)) {
+            array_push($this->openAPINullablesSetToNull, 'sort_order');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('sort_order', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['sort_order'] = $sort_order;
+
+        return $this;
+    }
+
+    /**
+     * Gets source_url
+     *
+     * @return string|null
+     */
+    public function getSourceUrl(): ?string
+    {
+        return $this->container['source_url'];
+    }
+
+    /**
+     * Sets source_url
+     *
+     * @param string|null $source_url Provenance URL; defaults to `url`.
+     *
+     * @return $this
+     */
+    public function setSourceUrl(?string $source_url): static
+    {
+        if (is_null($source_url)) {
+            array_push($this->openAPINullablesSetToNull, 'source_url');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('source_url', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['source_url'] = $source_url;
 
         return $this;
     }

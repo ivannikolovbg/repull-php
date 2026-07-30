@@ -1,6 +1,6 @@
 <?php
 /**
- * BookingPricingRateUpdateRestrictions
+ * ListingContentUpdateRequestPolicies
  *
  * PHP version 8.1
  *
@@ -35,15 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * BookingPricingRateUpdateRestrictions Class Doc Comment
+ * ListingContentUpdateRequestPolicies Class Doc Comment
  *
- * @description Optional length-of-stay / availability restrictions for one rate update. Every field here is forwarded verbatim into Booking.com&#39;s rates XML (&#x60;minimumstay&#x60;, &#x60;maximumstay&#x60;, &#x60;closedonarrival&#x60;, &#x60;closedondeparture&#x60;, …) — omit a field to leave that restriction untouched.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingContentUpdateRequestPolicies implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +51,7 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'BookingPricingRateUpdateRestrictions';
+    protected static string $openAPIModelName = 'ListingContentUpdateRequest_policies';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,15 +59,17 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'min_stay' => 'int',
-        'max_stay' => 'int',
-        'closed_to_arrival' => 'bool',
-        'closed_to_departure' => 'bool',
-        'min_stay_arrival' => 'int',
-        'max_stay_arrival' => 'int',
-        'exact_stay_arrival' => 'int',
-        'min_advance_res' => 'string',
-        'max_advance_res' => 'string'
+        'check_in_time_start' => 'string',
+        'check_in_time_end' => 'string',
+        'check_out_time' => 'string',
+        'house_rules' => 'string',
+        'cancellation_policy' => 'string',
+        'cancellation' => 'string',
+        'allows_children' => 'bool',
+        'allows_infants' => 'bool',
+        'allows_pets' => 'bool',
+        'allows_smoking' => 'bool',
+        'allows_events' => 'bool'
     ];
 
     /**
@@ -77,15 +78,17 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'min_stay' => null,
-        'max_stay' => null,
-        'closed_to_arrival' => null,
-        'closed_to_departure' => null,
-        'min_stay_arrival' => null,
-        'max_stay_arrival' => null,
-        'exact_stay_arrival' => null,
-        'min_advance_res' => null,
-        'max_advance_res' => null
+        'check_in_time_start' => null,
+        'check_in_time_end' => null,
+        'check_out_time' => null,
+        'house_rules' => null,
+        'cancellation_policy' => null,
+        'cancellation' => null,
+        'allows_children' => null,
+        'allows_infants' => null,
+        'allows_pets' => null,
+        'allows_smoking' => null,
+        'allows_events' => null
     ];
 
     /**
@@ -94,15 +97,17 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'min_stay' => true,
-        'max_stay' => true,
-        'closed_to_arrival' => true,
-        'closed_to_departure' => true,
-        'min_stay_arrival' => true,
-        'max_stay_arrival' => true,
-        'exact_stay_arrival' => true,
-        'min_advance_res' => true,
-        'max_advance_res' => true
+        'check_in_time_start' => true,
+        'check_in_time_end' => true,
+        'check_out_time' => true,
+        'house_rules' => true,
+        'cancellation_policy' => true,
+        'cancellation' => true,
+        'allows_children' => true,
+        'allows_infants' => true,
+        'allows_pets' => true,
+        'allows_smoking' => true,
+        'allows_events' => true
     ];
 
     /**
@@ -181,15 +186,17 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'min_stay' => 'minStay',
-        'max_stay' => 'maxStay',
-        'closed_to_arrival' => 'closedToArrival',
-        'closed_to_departure' => 'closedToDeparture',
-        'min_stay_arrival' => 'minStayArrival',
-        'max_stay_arrival' => 'maxStayArrival',
-        'exact_stay_arrival' => 'exactStayArrival',
-        'min_advance_res' => 'minAdvanceRes',
-        'max_advance_res' => 'maxAdvanceRes'
+        'check_in_time_start' => 'checkInTimeStart',
+        'check_in_time_end' => 'checkInTimeEnd',
+        'check_out_time' => 'checkOutTime',
+        'house_rules' => 'houseRules',
+        'cancellation_policy' => 'cancellationPolicy',
+        'cancellation' => 'cancellation',
+        'allows_children' => 'allowsChildren',
+        'allows_infants' => 'allowsInfants',
+        'allows_pets' => 'allowsPets',
+        'allows_smoking' => 'allowsSmoking',
+        'allows_events' => 'allowsEvents'
     ];
 
     /**
@@ -198,15 +205,17 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
      * @var array<string, string>
      */
     protected static array $setters = [
-        'min_stay' => 'setMinStay',
-        'max_stay' => 'setMaxStay',
-        'closed_to_arrival' => 'setClosedToArrival',
-        'closed_to_departure' => 'setClosedToDeparture',
-        'min_stay_arrival' => 'setMinStayArrival',
-        'max_stay_arrival' => 'setMaxStayArrival',
-        'exact_stay_arrival' => 'setExactStayArrival',
-        'min_advance_res' => 'setMinAdvanceRes',
-        'max_advance_res' => 'setMaxAdvanceRes'
+        'check_in_time_start' => 'setCheckInTimeStart',
+        'check_in_time_end' => 'setCheckInTimeEnd',
+        'check_out_time' => 'setCheckOutTime',
+        'house_rules' => 'setHouseRules',
+        'cancellation_policy' => 'setCancellationPolicy',
+        'cancellation' => 'setCancellation',
+        'allows_children' => 'setAllowsChildren',
+        'allows_infants' => 'setAllowsInfants',
+        'allows_pets' => 'setAllowsPets',
+        'allows_smoking' => 'setAllowsSmoking',
+        'allows_events' => 'setAllowsEvents'
     ];
 
     /**
@@ -215,15 +224,17 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
      * @var array<string, string>
      */
     protected static array $getters = [
-        'min_stay' => 'getMinStay',
-        'max_stay' => 'getMaxStay',
-        'closed_to_arrival' => 'getClosedToArrival',
-        'closed_to_departure' => 'getClosedToDeparture',
-        'min_stay_arrival' => 'getMinStayArrival',
-        'max_stay_arrival' => 'getMaxStayArrival',
-        'exact_stay_arrival' => 'getExactStayArrival',
-        'min_advance_res' => 'getMinAdvanceRes',
-        'max_advance_res' => 'getMaxAdvanceRes'
+        'check_in_time_start' => 'getCheckInTimeStart',
+        'check_in_time_end' => 'getCheckInTimeEnd',
+        'check_out_time' => 'getCheckOutTime',
+        'house_rules' => 'getHouseRules',
+        'cancellation_policy' => 'getCancellationPolicy',
+        'cancellation' => 'getCancellation',
+        'allows_children' => 'getAllowsChildren',
+        'allows_infants' => 'getAllowsInfants',
+        'allows_pets' => 'getAllowsPets',
+        'allows_smoking' => 'getAllowsSmoking',
+        'allows_events' => 'getAllowsEvents'
     ];
 
     /**
@@ -273,15 +284,17 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('min_stay', $data ?? [], null);
-        $this->setIfExists('max_stay', $data ?? [], null);
-        $this->setIfExists('closed_to_arrival', $data ?? [], null);
-        $this->setIfExists('closed_to_departure', $data ?? [], null);
-        $this->setIfExists('min_stay_arrival', $data ?? [], null);
-        $this->setIfExists('max_stay_arrival', $data ?? [], null);
-        $this->setIfExists('exact_stay_arrival', $data ?? [], null);
-        $this->setIfExists('min_advance_res', $data ?? [], null);
-        $this->setIfExists('max_advance_res', $data ?? [], null);
+        $this->setIfExists('check_in_time_start', $data ?? [], null);
+        $this->setIfExists('check_in_time_end', $data ?? [], null);
+        $this->setIfExists('check_out_time', $data ?? [], null);
+        $this->setIfExists('house_rules', $data ?? [], null);
+        $this->setIfExists('cancellation_policy', $data ?? [], null);
+        $this->setIfExists('cancellation', $data ?? [], null);
+        $this->setIfExists('allows_children', $data ?? [], null);
+        $this->setIfExists('allows_infants', $data ?? [], null);
+        $this->setIfExists('allows_pets', $data ?? [], null);
+        $this->setIfExists('allows_smoking', $data ?? [], null);
+        $this->setIfExists('allows_events', $data ?? [], null);
     }
 
     /**
@@ -322,307 +335,375 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
 
 
     /**
-     * Gets min_stay
-     *
-     * @return int|null
-     */
-    public function getMinStay(): ?int
-    {
-        return $this->container['min_stay'];
-    }
-
-    /**
-     * Sets min_stay
-     *
-     * @param int|null $min_stay Minimum length of stay (`minimumstay`).
-     *
-     * @return $this
-     */
-    public function setMinStay(?int $min_stay): static
-    {
-        if (is_null($min_stay)) {
-            array_push($this->openAPINullablesSetToNull, 'min_stay');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('min_stay', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['min_stay'] = $min_stay;
-
-        return $this;
-    }
-
-    /**
-     * Gets max_stay
-     *
-     * @return int|null
-     */
-    public function getMaxStay(): ?int
-    {
-        return $this->container['max_stay'];
-    }
-
-    /**
-     * Sets max_stay
-     *
-     * @param int|null $max_stay Maximum length of stay (`maximumstay`).
-     *
-     * @return $this
-     */
-    public function setMaxStay(?int $max_stay): static
-    {
-        if (is_null($max_stay)) {
-            array_push($this->openAPINullablesSetToNull, 'max_stay');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('max_stay', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['max_stay'] = $max_stay;
-
-        return $this;
-    }
-
-    /**
-     * Gets closed_to_arrival
-     *
-     * @return bool|null
-     */
-    public function getClosedToArrival(): ?bool
-    {
-        return $this->container['closed_to_arrival'];
-    }
-
-    /**
-     * Sets closed_to_arrival
-     *
-     * @param bool|null $closed_to_arrival Closed-to-arrival — guests may not check in on the affected dates (`closedonarrival`).
-     *
-     * @return $this
-     */
-    public function setClosedToArrival(?bool $closed_to_arrival): static
-    {
-        if (is_null($closed_to_arrival)) {
-            array_push($this->openAPINullablesSetToNull, 'closed_to_arrival');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('closed_to_arrival', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['closed_to_arrival'] = $closed_to_arrival;
-
-        return $this;
-    }
-
-    /**
-     * Gets closed_to_departure
-     *
-     * @return bool|null
-     */
-    public function getClosedToDeparture(): ?bool
-    {
-        return $this->container['closed_to_departure'];
-    }
-
-    /**
-     * Sets closed_to_departure
-     *
-     * @param bool|null $closed_to_departure Closed-to-departure — guests may not check out on the affected dates (`closedondeparture`).
-     *
-     * @return $this
-     */
-    public function setClosedToDeparture(?bool $closed_to_departure): static
-    {
-        if (is_null($closed_to_departure)) {
-            array_push($this->openAPINullablesSetToNull, 'closed_to_departure');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('closed_to_departure', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['closed_to_departure'] = $closed_to_departure;
-
-        return $this;
-    }
-
-    /**
-     * Gets min_stay_arrival
-     *
-     * @return int|null
-     */
-    public function getMinStayArrival(): ?int
-    {
-        return $this->container['min_stay_arrival'];
-    }
-
-    /**
-     * Sets min_stay_arrival
-     *
-     * @param int|null $min_stay_arrival Arrival-based minimum length of stay (`minimumstay_arrival`).
-     *
-     * @return $this
-     */
-    public function setMinStayArrival(?int $min_stay_arrival): static
-    {
-        if (is_null($min_stay_arrival)) {
-            array_push($this->openAPINullablesSetToNull, 'min_stay_arrival');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('min_stay_arrival', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['min_stay_arrival'] = $min_stay_arrival;
-
-        return $this;
-    }
-
-    /**
-     * Gets max_stay_arrival
-     *
-     * @return int|null
-     */
-    public function getMaxStayArrival(): ?int
-    {
-        return $this->container['max_stay_arrival'];
-    }
-
-    /**
-     * Sets max_stay_arrival
-     *
-     * @param int|null $max_stay_arrival Arrival-based maximum length of stay (`maximumstay_arrival`).
-     *
-     * @return $this
-     */
-    public function setMaxStayArrival(?int $max_stay_arrival): static
-    {
-        if (is_null($max_stay_arrival)) {
-            array_push($this->openAPINullablesSetToNull, 'max_stay_arrival');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('max_stay_arrival', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['max_stay_arrival'] = $max_stay_arrival;
-
-        return $this;
-    }
-
-    /**
-     * Gets exact_stay_arrival
-     *
-     * @return int|null
-     */
-    public function getExactStayArrival(): ?int
-    {
-        return $this->container['exact_stay_arrival'];
-    }
-
-    /**
-     * Sets exact_stay_arrival
-     *
-     * @param int|null $exact_stay_arrival Arrival-based exact length of stay (`exactstay_arrival`).
-     *
-     * @return $this
-     */
-    public function setExactStayArrival(?int $exact_stay_arrival): static
-    {
-        if (is_null($exact_stay_arrival)) {
-            array_push($this->openAPINullablesSetToNull, 'exact_stay_arrival');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('exact_stay_arrival', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['exact_stay_arrival'] = $exact_stay_arrival;
-
-        return $this;
-    }
-
-    /**
-     * Gets min_advance_res
+     * Gets check_in_time_start
      *
      * @return string|null
      */
-    public function getMinAdvanceRes(): ?string
+    public function getCheckInTimeStart(): ?string
     {
-        return $this->container['min_advance_res'];
+        return $this->container['check_in_time_start'];
     }
 
     /**
-     * Sets min_advance_res
+     * Sets check_in_time_start
      *
-     * @param string|null $min_advance_res Minimum advance-reservation window, format `XDY` (X days Y hours) — `min_advance_res`.
+     * @param string|null $check_in_time_start e.g. \"15\" (3pm).
      *
      * @return $this
      */
-    public function setMinAdvanceRes(?string $min_advance_res): static
+    public function setCheckInTimeStart(?string $check_in_time_start): static
     {
-        if (is_null($min_advance_res)) {
-            array_push($this->openAPINullablesSetToNull, 'min_advance_res');
+        if (is_null($check_in_time_start)) {
+            array_push($this->openAPINullablesSetToNull, 'check_in_time_start');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('min_advance_res', $nullablesSetToNull);
+            $index = array_search('check_in_time_start', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['min_advance_res'] = $min_advance_res;
+        $this->container['check_in_time_start'] = $check_in_time_start;
 
         return $this;
     }
 
     /**
-     * Gets max_advance_res
+     * Gets check_in_time_end
      *
      * @return string|null
      */
-    public function getMaxAdvanceRes(): ?string
+    public function getCheckInTimeEnd(): ?string
     {
-        return $this->container['max_advance_res'];
+        return $this->container['check_in_time_end'];
     }
 
     /**
-     * Sets max_advance_res
+     * Sets check_in_time_end
      *
-     * @param string|null $max_advance_res Maximum advance-reservation window, format `XDY` (X days Y hours) — `max_advance_res`.
+     * @param string|null $check_in_time_end check_in_time_end
      *
      * @return $this
      */
-    public function setMaxAdvanceRes(?string $max_advance_res): static
+    public function setCheckInTimeEnd(?string $check_in_time_end): static
     {
-        if (is_null($max_advance_res)) {
-            array_push($this->openAPINullablesSetToNull, 'max_advance_res');
+        if (is_null($check_in_time_end)) {
+            array_push($this->openAPINullablesSetToNull, 'check_in_time_end');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('max_advance_res', $nullablesSetToNull);
+            $index = array_search('check_in_time_end', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['max_advance_res'] = $max_advance_res;
+        $this->container['check_in_time_end'] = $check_in_time_end;
+
+        return $this;
+    }
+
+    /**
+     * Gets check_out_time
+     *
+     * @return string|null
+     */
+    public function getCheckOutTime(): ?string
+    {
+        return $this->container['check_out_time'];
+    }
+
+    /**
+     * Sets check_out_time
+     *
+     * @param string|null $check_out_time e.g. \"11\" (11am).
+     *
+     * @return $this
+     */
+    public function setCheckOutTime(?string $check_out_time): static
+    {
+        if (is_null($check_out_time)) {
+            array_push($this->openAPINullablesSetToNull, 'check_out_time');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('check_out_time', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['check_out_time'] = $check_out_time;
+
+        return $this;
+    }
+
+    /**
+     * Gets house_rules
+     *
+     * @return string|null
+     */
+    public function getHouseRules(): ?string
+    {
+        return $this->container['house_rules'];
+    }
+
+    /**
+     * Sets house_rules
+     *
+     * @param string|null $house_rules Free-text house rules.
+     *
+     * @return $this
+     */
+    public function setHouseRules(?string $house_rules): static
+    {
+        if (is_null($house_rules)) {
+            array_push($this->openAPINullablesSetToNull, 'house_rules');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('house_rules', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['house_rules'] = $house_rules;
+
+        return $this;
+    }
+
+    /**
+     * Gets cancellation_policy
+     *
+     * @return string|null
+     */
+    public function getCancellationPolicy(): ?string
+    {
+        return $this->container['cancellation_policy'];
+    }
+
+    /**
+     * Sets cancellation_policy
+     *
+     * @param string|null $cancellation_policy Cancellation policy slug/label.
+     *
+     * @return $this
+     */
+    public function setCancellationPolicy(?string $cancellation_policy): static
+    {
+        if (is_null($cancellation_policy)) {
+            array_push($this->openAPINullablesSetToNull, 'cancellation_policy');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('cancellation_policy', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['cancellation_policy'] = $cancellation_policy;
+
+        return $this;
+    }
+
+    /**
+     * Gets cancellation
+     *
+     * @return string|null
+     */
+    public function getCancellation(): ?string
+    {
+        return $this->container['cancellation'];
+    }
+
+    /**
+     * Sets cancellation
+     *
+     * @param string|null $cancellation Alias for `cancellationPolicy`.
+     *
+     * @return $this
+     */
+    public function setCancellation(?string $cancellation): static
+    {
+        if (is_null($cancellation)) {
+            array_push($this->openAPINullablesSetToNull, 'cancellation');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('cancellation', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['cancellation'] = $cancellation;
+
+        return $this;
+    }
+
+    /**
+     * Gets allows_children
+     *
+     * @return bool|null
+     */
+    public function getAllowsChildren(): ?bool
+    {
+        return $this->container['allows_children'];
+    }
+
+    /**
+     * Sets allows_children
+     *
+     * @param bool|null $allows_children allows_children
+     *
+     * @return $this
+     */
+    public function setAllowsChildren(?bool $allows_children): static
+    {
+        if (is_null($allows_children)) {
+            array_push($this->openAPINullablesSetToNull, 'allows_children');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('allows_children', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['allows_children'] = $allows_children;
+
+        return $this;
+    }
+
+    /**
+     * Gets allows_infants
+     *
+     * @return bool|null
+     */
+    public function getAllowsInfants(): ?bool
+    {
+        return $this->container['allows_infants'];
+    }
+
+    /**
+     * Sets allows_infants
+     *
+     * @param bool|null $allows_infants allows_infants
+     *
+     * @return $this
+     */
+    public function setAllowsInfants(?bool $allows_infants): static
+    {
+        if (is_null($allows_infants)) {
+            array_push($this->openAPINullablesSetToNull, 'allows_infants');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('allows_infants', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['allows_infants'] = $allows_infants;
+
+        return $this;
+    }
+
+    /**
+     * Gets allows_pets
+     *
+     * @return bool|null
+     */
+    public function getAllowsPets(): ?bool
+    {
+        return $this->container['allows_pets'];
+    }
+
+    /**
+     * Sets allows_pets
+     *
+     * @param bool|null $allows_pets allows_pets
+     *
+     * @return $this
+     */
+    public function setAllowsPets(?bool $allows_pets): static
+    {
+        if (is_null($allows_pets)) {
+            array_push($this->openAPINullablesSetToNull, 'allows_pets');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('allows_pets', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['allows_pets'] = $allows_pets;
+
+        return $this;
+    }
+
+    /**
+     * Gets allows_smoking
+     *
+     * @return bool|null
+     */
+    public function getAllowsSmoking(): ?bool
+    {
+        return $this->container['allows_smoking'];
+    }
+
+    /**
+     * Sets allows_smoking
+     *
+     * @param bool|null $allows_smoking allows_smoking
+     *
+     * @return $this
+     */
+    public function setAllowsSmoking(?bool $allows_smoking): static
+    {
+        if (is_null($allows_smoking)) {
+            array_push($this->openAPINullablesSetToNull, 'allows_smoking');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('allows_smoking', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['allows_smoking'] = $allows_smoking;
+
+        return $this;
+    }
+
+    /**
+     * Gets allows_events
+     *
+     * @return bool|null
+     */
+    public function getAllowsEvents(): ?bool
+    {
+        return $this->container['allows_events'];
+    }
+
+    /**
+     * Sets allows_events
+     *
+     * @param bool|null $allows_events allows_events
+     *
+     * @return $this
+     */
+    public function setAllowsEvents(?bool $allows_events): static
+    {
+        if (is_null($allows_events)) {
+            array_push($this->openAPINullablesSetToNull, 'allows_events');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('allows_events', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['allows_events'] = $allows_events;
 
         return $this;
     }

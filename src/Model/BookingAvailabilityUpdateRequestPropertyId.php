@@ -1,6 +1,6 @@
 <?php
 /**
- * CreateStudioProjectGeneration201Response
+ * BookingAvailabilityUpdateRequestPropertyId
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * CreateStudioProjectGeneration201Response Class Doc Comment
+ * BookingAvailabilityUpdateRequestPropertyId Class Doc Comment
  *
+ * @description Booking.com hotel/property id (numeric; accepted as int or numeric string).
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class CreateStudioProjectGeneration201Response implements ModelInterface, ArrayAccess, JsonSerializable
+class BookingAvailabilityUpdateRequestPropertyId implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class CreateStudioProjectGeneration201Response implements ModelInterface, ArrayA
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'createStudioProjectGeneration_201_response';
+    protected static string $openAPIModelName = 'BookingAvailabilityUpdateRequest_property_id';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,7 +60,7 @@ class CreateStudioProjectGeneration201Response implements ModelInterface, ArrayA
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'data' => '\Repull\Model\CreateStudioProjectGeneration201ResponseData'
+        
     ];
 
     /**
@@ -68,7 +69,7 @@ class CreateStudioProjectGeneration201Response implements ModelInterface, ArrayA
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'data' => null
+        
     ];
 
     /**
@@ -77,7 +78,7 @@ class CreateStudioProjectGeneration201Response implements ModelInterface, ArrayA
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'data' => false
+        
     ];
 
     /**
@@ -156,7 +157,7 @@ class CreateStudioProjectGeneration201Response implements ModelInterface, ArrayA
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'data' => 'data'
+        
     ];
 
     /**
@@ -165,7 +166,7 @@ class CreateStudioProjectGeneration201Response implements ModelInterface, ArrayA
      * @var array<string, string>
      */
     protected static array $setters = [
-        'data' => 'setData'
+        
     ];
 
     /**
@@ -174,7 +175,7 @@ class CreateStudioProjectGeneration201Response implements ModelInterface, ArrayA
      * @var array<string, string>
      */
     protected static array $getters = [
-        'data' => 'getData'
+        
     ];
 
     /**
@@ -224,7 +225,6 @@ class CreateStudioProjectGeneration201Response implements ModelInterface, ArrayA
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('data', $data ?? [], null);
     }
 
     /**
@@ -263,33 +263,6 @@ class CreateStudioProjectGeneration201Response implements ModelInterface, ArrayA
         return count($this->listInvalidProperties()) === 0;
     }
 
-
-    /**
-     * Gets data
-     *
-     * @return \Repull\Model\CreateStudioProjectGeneration201ResponseData|null
-     */
-    public function getData(): ?\Repull\Model\CreateStudioProjectGeneration201ResponseData
-    {
-        return $this->container['data'];
-    }
-
-    /**
-     * Sets data
-     *
-     * @param \Repull\Model\CreateStudioProjectGeneration201ResponseData|null $data data
-     *
-     * @return $this
-     */
-    public function setData(?\Repull\Model\CreateStudioProjectGeneration201ResponseData $data): static
-    {
-        if (is_null($data)) {
-            throw new InvalidArgumentException('non-nullable data cannot be null');
-        }
-        $this->container['data'] = $data;
-
-        return $this;
-    }
     /**
      * Returns true if offset exists. False otherwise.
      *

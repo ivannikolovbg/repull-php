@@ -1,6 +1,6 @@
 <?php
 /**
- * GetStudioProject200Response
+ * ListingContentUpdateRequestPhotosInner
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * GetStudioProject200Response Class Doc Comment
+ * ListingContentUpdateRequestPhotosInner Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class GetStudioProject200Response implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingContentUpdateRequestPhotosInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class GetStudioProject200Response implements ModelInterface, ArrayAccess, JsonSe
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'getStudioProject_200_response';
+    protected static string $openAPIModelName = 'ListingContentUpdateRequest_photos_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,7 +59,14 @@ class GetStudioProject200Response implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'data' => '\Repull\Model\StudioProject'
+        'url' => 'string',
+        'thumbnail_url' => 'string',
+        'caption' => 'string',
+        'category' => 'string',
+        'width' => 'int',
+        'height' => 'int',
+        'sort_order' => 'int',
+        'source_url' => 'string'
     ];
 
     /**
@@ -68,7 +75,14 @@ class GetStudioProject200Response implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'data' => null
+        'url' => 'uri',
+        'thumbnail_url' => 'uri',
+        'caption' => null,
+        'category' => null,
+        'width' => null,
+        'height' => null,
+        'sort_order' => null,
+        'source_url' => 'uri'
     ];
 
     /**
@@ -77,7 +91,14 @@ class GetStudioProject200Response implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'data' => false
+        'url' => false,
+        'thumbnail_url' => true,
+        'caption' => true,
+        'category' => true,
+        'width' => true,
+        'height' => true,
+        'sort_order' => true,
+        'source_url' => true
     ];
 
     /**
@@ -156,7 +177,14 @@ class GetStudioProject200Response implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'data' => 'data'
+        'url' => 'url',
+        'thumbnail_url' => 'thumbnailUrl',
+        'caption' => 'caption',
+        'category' => 'category',
+        'width' => 'width',
+        'height' => 'height',
+        'sort_order' => 'sortOrder',
+        'source_url' => 'sourceUrl'
     ];
 
     /**
@@ -165,7 +193,14 @@ class GetStudioProject200Response implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $setters = [
-        'data' => 'setData'
+        'url' => 'setUrl',
+        'thumbnail_url' => 'setThumbnailUrl',
+        'caption' => 'setCaption',
+        'category' => 'setCategory',
+        'width' => 'setWidth',
+        'height' => 'setHeight',
+        'sort_order' => 'setSortOrder',
+        'source_url' => 'setSourceUrl'
     ];
 
     /**
@@ -174,7 +209,14 @@ class GetStudioProject200Response implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $getters = [
-        'data' => 'getData'
+        'url' => 'getUrl',
+        'thumbnail_url' => 'getThumbnailUrl',
+        'caption' => 'getCaption',
+        'category' => 'getCategory',
+        'width' => 'getWidth',
+        'height' => 'getHeight',
+        'sort_order' => 'getSortOrder',
+        'source_url' => 'getSourceUrl'
     ];
 
     /**
@@ -224,7 +266,14 @@ class GetStudioProject200Response implements ModelInterface, ArrayAccess, JsonSe
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('data', $data ?? [], null);
+        $this->setIfExists('url', $data ?? [], null);
+        $this->setIfExists('thumbnail_url', $data ?? [], null);
+        $this->setIfExists('caption', $data ?? [], null);
+        $this->setIfExists('category', $data ?? [], 'property');
+        $this->setIfExists('width', $data ?? [], null);
+        $this->setIfExists('height', $data ?? [], null);
+        $this->setIfExists('sort_order', $data ?? [], null);
+        $this->setIfExists('source_url', $data ?? [], null);
     }
 
     /**
@@ -252,6 +301,9 @@ class GetStudioProject200Response implements ModelInterface, ArrayAccess, JsonSe
     {
         $invalidProperties = [];
 
+        if ($this->container['url'] === null) {
+            $invalidProperties[] = "'url' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -265,28 +317,266 @@ class GetStudioProject200Response implements ModelInterface, ArrayAccess, JsonSe
 
 
     /**
-     * Gets data
+     * Gets url
      *
-     * @return \Repull\Model\StudioProject|null
+     * @return string
      */
-    public function getData(): ?\Repull\Model\StudioProject
+    public function getUrl(): string
     {
-        return $this->container['data'];
+        return $this->container['url'];
     }
 
     /**
-     * Sets data
+     * Sets url
      *
-     * @param \Repull\Model\StudioProject|null $data data
+     * @param string $url Hosted image URL (http/https).
      *
      * @return $this
      */
-    public function setData(?\Repull\Model\StudioProject $data): static
+    public function setUrl(string $url): static
     {
-        if (is_null($data)) {
-            throw new InvalidArgumentException('non-nullable data cannot be null');
+        if (is_null($url)) {
+            throw new InvalidArgumentException('non-nullable url cannot be null');
         }
-        $this->container['data'] = $data;
+        $this->container['url'] = $url;
+
+        return $this;
+    }
+
+    /**
+     * Gets thumbnail_url
+     *
+     * @return string|null
+     */
+    public function getThumbnailUrl(): ?string
+    {
+        return $this->container['thumbnail_url'];
+    }
+
+    /**
+     * Sets thumbnail_url
+     *
+     * @param string|null $thumbnail_url thumbnail_url
+     *
+     * @return $this
+     */
+    public function setThumbnailUrl(?string $thumbnail_url): static
+    {
+        if (is_null($thumbnail_url)) {
+            array_push($this->openAPINullablesSetToNull, 'thumbnail_url');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('thumbnail_url', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['thumbnail_url'] = $thumbnail_url;
+
+        return $this;
+    }
+
+    /**
+     * Gets caption
+     *
+     * @return string|null
+     */
+    public function getCaption(): ?string
+    {
+        return $this->container['caption'];
+    }
+
+    /**
+     * Sets caption
+     *
+     * @param string|null $caption caption
+     *
+     * @return $this
+     */
+    public function setCaption(?string $caption): static
+    {
+        if (is_null($caption)) {
+            array_push($this->openAPINullablesSetToNull, 'caption');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('caption', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['caption'] = $caption;
+
+        return $this;
+    }
+
+    /**
+     * Gets category
+     *
+     * @return string|null
+     */
+    public function getCategory(): ?string
+    {
+        return $this->container['category'];
+    }
+
+    /**
+     * Sets category
+     *
+     * @param string|null $category category
+     *
+     * @return $this
+     */
+    public function setCategory(?string $category): static
+    {
+        if (is_null($category)) {
+            array_push($this->openAPINullablesSetToNull, 'category');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('category', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['category'] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Gets width
+     *
+     * @return int|null
+     */
+    public function getWidth(): ?int
+    {
+        return $this->container['width'];
+    }
+
+    /**
+     * Sets width
+     *
+     * @param int|null $width width
+     *
+     * @return $this
+     */
+    public function setWidth(?int $width): static
+    {
+        if (is_null($width)) {
+            array_push($this->openAPINullablesSetToNull, 'width');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('width', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['width'] = $width;
+
+        return $this;
+    }
+
+    /**
+     * Gets height
+     *
+     * @return int|null
+     */
+    public function getHeight(): ?int
+    {
+        return $this->container['height'];
+    }
+
+    /**
+     * Sets height
+     *
+     * @param int|null $height height
+     *
+     * @return $this
+     */
+    public function setHeight(?int $height): static
+    {
+        if (is_null($height)) {
+            array_push($this->openAPINullablesSetToNull, 'height');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('height', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['height'] = $height;
+
+        return $this;
+    }
+
+    /**
+     * Gets sort_order
+     *
+     * @return int|null
+     */
+    public function getSortOrder(): ?int
+    {
+        return $this->container['sort_order'];
+    }
+
+    /**
+     * Sets sort_order
+     *
+     * @param int|null $sort_order Explicit position; defaults to the array index.
+     *
+     * @return $this
+     */
+    public function setSortOrder(?int $sort_order): static
+    {
+        if (is_null($sort_order)) {
+            array_push($this->openAPINullablesSetToNull, 'sort_order');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('sort_order', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['sort_order'] = $sort_order;
+
+        return $this;
+    }
+
+    /**
+     * Gets source_url
+     *
+     * @return string|null
+     */
+    public function getSourceUrl(): ?string
+    {
+        return $this->container['source_url'];
+    }
+
+    /**
+     * Sets source_url
+     *
+     * @param string|null $source_url Provenance URL; defaults to `url`.
+     *
+     * @return $this
+     */
+    public function setSourceUrl(?string $source_url): static
+    {
+        if (is_null($source_url)) {
+            array_push($this->openAPINullablesSetToNull, 'source_url');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('source_url', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['source_url'] = $source_url;
 
         return $this;
     }

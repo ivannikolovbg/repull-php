@@ -75,9 +75,6 @@ class BookingComApi
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
-        'createBookingProperty' => [
-            'application/json',
-        ],
         'getBookingContent' => [
             'application/json',
         ],
@@ -97,9 +94,6 @@ class BookingComApi
             'application/json',
         ],
         'sendBookingMessage' => [
-            'application/json',
-        ],
-        'syncBooking' => [
             'application/json',
         ],
         'updateBookingAvailability' => [
@@ -157,265 +151,6 @@ class BookingComApi
     public function getConfig(): Configuration
     {
         return $this->config;
-    }
-
-    /**
-     * Operation createBookingProperty
-     *
-     * Create Booking.com property
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createBookingProperty'] to see the possible values for this operation
-     *
-     * @throws ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws InvalidArgumentException
-     * @return \Repull\Model\BookingProperty
-     */
-    public function createBookingProperty(
-        string $contentType = self::contentTypes['createBookingProperty'][0]
-    ): \Repull\Model\BookingProperty
-    {
-        list($response) = $this->createBookingPropertyWithHttpInfo($contentType);
-        return $response;
-    }
-
-    /**
-     * Operation createBookingPropertyWithHttpInfo
-     *
-     * Create Booking.com property
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createBookingProperty'] to see the possible values for this operation
-     *
-     * @throws ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws InvalidArgumentException
-     * @return array of \Repull\Model\BookingProperty, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function createBookingPropertyWithHttpInfo(
-        string $contentType = self::contentTypes['createBookingProperty'][0]
-    ): array
-    {
-        $request = $this->createBookingPropertyRequest($contentType);
-
-        try {
-            $options = $this->createHttpClientOption();
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
-                );
-            } catch (ConnectException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    null,
-                    null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-            switch($statusCode) {
-                case 201:
-                    return $this->handleResponseWithDataType(
-                        '\Repull\Model\BookingProperty',
-                        $request,
-                        $response,
-                    );
-            }
-            
-
-            if ($statusCode < 200 || $statusCode > 299) {
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $statusCode,
-                        (string) $request->getUri()
-                    ),
-                    $statusCode,
-                    $response->getHeaders(),
-                    (string) $response->getBody()
-                );
-            }
-
-            return $this->handleResponseWithDataType(
-                '\Repull\Model\BookingProperty',
-                $request,
-                $response,
-            );
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 201:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Repull\Model\BookingProperty',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-            }
-        
-            throw $e;
-        }
-    }
-
-    /**
-     * Operation createBookingPropertyAsync
-     *
-     * Create Booking.com property
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createBookingProperty'] to see the possible values for this operation
-     *
-     * @throws InvalidArgumentException
-     * @return PromiseInterface
-     */
-    public function createBookingPropertyAsync(
-        string $contentType = self::contentTypes['createBookingProperty'][0]
-    ): PromiseInterface
-    {
-        return $this->createBookingPropertyAsyncWithHttpInfo($contentType)
-            ->then(
-                function ($response) {
-                    return $response[0];
-                }
-            );
-    }
-
-    /**
-     * Operation createBookingPropertyAsyncWithHttpInfo
-     *
-     * Create Booking.com property
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createBookingProperty'] to see the possible values for this operation
-     *
-     * @throws InvalidArgumentException
-     * @return PromiseInterface
-     */
-    public function createBookingPropertyAsyncWithHttpInfo(
-        string $contentType = self::contentTypes['createBookingProperty'][0]
-    ): PromiseInterface
-    {
-        $returnType = '\Repull\Model\BookingProperty';
-        $request = $this->createBookingPropertyRequest($contentType);
-
-        return $this->client
-            ->sendAsync($request, $this->createHttpClientOption())
-            ->then(
-                function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, $returnType, []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-                },
-                function ($exception) {
-                    $response = $exception->getResponse();
-                    $statusCode = $response->getStatusCode();
-                    throw new ApiException(
-                        sprintf(
-                            '[%d] Error connecting to the API (%s)',
-                            $statusCode,
-                            $exception->getRequest()->getUri()
-                        ),
-                        $statusCode,
-                        $response->getHeaders(),
-                        (string) $response->getBody()
-                    );
-                }
-            );
-    }
-
-    /**
-     * Create request for operation 'createBookingProperty'
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createBookingProperty'] to see the possible values for this operation
-     *
-     * @throws InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    public function createBookingPropertyRequest(
-        string $contentType = self::contentTypes['createBookingProperty'][0]
-    ): Request
-    {
-
-
-        $resourcePath = '/v1/channels/booking/properties';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-
-
-
-
-        $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
-            $contentType,
-            $multipart
-        );
-
-        // for model (json/xml)
-        if (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
-                    foreach ($formParamValueItems as $formParamValueItem) {
-                        $multipartContents[] = [
-                            'name' => $formParamName,
-                            'contents' => $formParamValueItem
-                        ];
-                    }
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
-            } else {
-                // for HTTP post (form)
-                $httpBody = ObjectSerializer::buildQuery($formParams);
-            }
-        }
-
-        // this endpoint requires Bearer (API Key) authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
-            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
-        }
-
-        $defaultHeaders = [];
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $headers
-        );
-
-        $operationHost = $this->config->getHost();
-        $query = ObjectSerializer::buildQuery($queryParams);
-        return new Request(
-            'POST',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
     }
 
     /**
@@ -2366,232 +2101,24 @@ class BookingComApi
     }
 
     /**
-     * Operation syncBooking
-     *
-     * Bulk sync to Booking.com
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['syncBooking'] to see the possible values for this operation
-     *
-     * @throws ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws InvalidArgumentException
-     * @return void
-     */
-    public function syncBooking(
-        string $contentType = self::contentTypes['syncBooking'][0]
-    ): void
-    {
-        $this->syncBookingWithHttpInfo($contentType);
-    }
-
-    /**
-     * Operation syncBookingWithHttpInfo
-     *
-     * Bulk sync to Booking.com
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['syncBooking'] to see the possible values for this operation
-     *
-     * @throws ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function syncBookingWithHttpInfo(
-        string $contentType = self::contentTypes['syncBooking'][0]
-    ): array
-    {
-        $request = $this->syncBookingRequest($contentType);
-
-        try {
-            $options = $this->createHttpClientOption();
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
-                );
-            } catch (ConnectException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    null,
-                    null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-
-            return [null, $statusCode, $response->getHeaders()];
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-            }
-        
-            throw $e;
-        }
-    }
-
-    /**
-     * Operation syncBookingAsync
-     *
-     * Bulk sync to Booking.com
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['syncBooking'] to see the possible values for this operation
-     *
-     * @throws InvalidArgumentException
-     * @return PromiseInterface
-     */
-    public function syncBookingAsync(
-        string $contentType = self::contentTypes['syncBooking'][0]
-    ): PromiseInterface
-    {
-        return $this->syncBookingAsyncWithHttpInfo($contentType)
-            ->then(
-                function ($response) {
-                    return $response[0];
-                }
-            );
-    }
-
-    /**
-     * Operation syncBookingAsyncWithHttpInfo
-     *
-     * Bulk sync to Booking.com
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['syncBooking'] to see the possible values for this operation
-     *
-     * @throws InvalidArgumentException
-     * @return PromiseInterface
-     */
-    public function syncBookingAsyncWithHttpInfo(
-        string $contentType = self::contentTypes['syncBooking'][0]
-    ): PromiseInterface
-    {
-        $returnType = '';
-        $request = $this->syncBookingRequest($contentType);
-
-        return $this->client
-            ->sendAsync($request, $this->createHttpClientOption())
-            ->then(
-                function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
-                },
-                function ($exception) {
-                    $response = $exception->getResponse();
-                    $statusCode = $response->getStatusCode();
-                    throw new ApiException(
-                        sprintf(
-                            '[%d] Error connecting to the API (%s)',
-                            $statusCode,
-                            $exception->getRequest()->getUri()
-                        ),
-                        $statusCode,
-                        $response->getHeaders(),
-                        (string) $response->getBody()
-                    );
-                }
-            );
-    }
-
-    /**
-     * Create request for operation 'syncBooking'
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['syncBooking'] to see the possible values for this operation
-     *
-     * @throws InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    public function syncBookingRequest(
-        string $contentType = self::contentTypes['syncBooking'][0]
-    ): Request
-    {
-
-
-        $resourcePath = '/v1/channels/booking/sync';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-
-
-
-
-        $headers = $this->headerSelector->selectHeaders(
-            [],
-            $contentType,
-            $multipart
-        );
-
-        // for model (json/xml)
-        if (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
-                    foreach ($formParamValueItems as $formParamValueItem) {
-                        $multipartContents[] = [
-                            'name' => $formParamName,
-                            'contents' => $formParamValueItem
-                        ];
-                    }
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
-            } else {
-                // for HTTP post (form)
-                $httpBody = ObjectSerializer::buildQuery($formParams);
-            }
-        }
-
-        // this endpoint requires Bearer (API Key) authentication (access token)
-        if (!empty($this->config->getAccessToken())) {
-            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
-        }
-
-        $defaultHeaders = [];
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $headers
-        );
-
-        $operationHost = $this->config->getHost();
-        $query = ObjectSerializer::buildQuery($queryParams);
-        return new Request(
-            'POST',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
      * Operation updateBookingAvailability
      *
      * Update Booking.com rates/availability
      *
+     * @param  \Repull\Model\BookingAvailabilityUpdateRequest $booking_availability_update_request booking_availability_update_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateBookingAvailability'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function updateBookingAvailability(
+        \Repull\Model\BookingAvailabilityUpdateRequest $booking_availability_update_request,
         string $contentType = self::contentTypes['updateBookingAvailability'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->updateBookingAvailabilityWithHttpInfo($contentType);
+        list($response) = $this->updateBookingAvailabilityWithHttpInfo($booking_availability_update_request, $contentType);
+        return $response;
     }
 
     /**
@@ -2599,6 +2126,7 @@ class BookingComApi
      *
      * Update Booking.com rates/availability
      *
+     * @param  \Repull\Model\BookingAvailabilityUpdateRequest $booking_availability_update_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateBookingAvailability'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -2606,10 +2134,11 @@ class BookingComApi
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
     public function updateBookingAvailabilityWithHttpInfo(
+        \Repull\Model\BookingAvailabilityUpdateRequest $booking_availability_update_request,
         string $contentType = self::contentTypes['updateBookingAvailability'][0]
     ): array
     {
-        $request = $this->updateBookingAvailabilityRequest($contentType);
+        $request = $this->updateBookingAvailabilityRequest($booking_availability_update_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2637,6 +2166,38 @@ class BookingComApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -2648,16 +2209,18 @@ class BookingComApi
      *
      * Update Booking.com rates/availability
      *
+     * @param  \Repull\Model\BookingAvailabilityUpdateRequest $booking_availability_update_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateBookingAvailability'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function updateBookingAvailabilityAsync(
+        \Repull\Model\BookingAvailabilityUpdateRequest $booking_availability_update_request,
         string $contentType = self::contentTypes['updateBookingAvailability'][0]
     ): PromiseInterface
     {
-        return $this->updateBookingAvailabilityAsyncWithHttpInfo($contentType)
+        return $this->updateBookingAvailabilityAsyncWithHttpInfo($booking_availability_update_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2670,17 +2233,19 @@ class BookingComApi
      *
      * Update Booking.com rates/availability
      *
+     * @param  \Repull\Model\BookingAvailabilityUpdateRequest $booking_availability_update_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateBookingAvailability'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function updateBookingAvailabilityAsyncWithHttpInfo(
+        \Repull\Model\BookingAvailabilityUpdateRequest $booking_availability_update_request,
         string $contentType = self::contentTypes['updateBookingAvailability'][0]
     ): PromiseInterface
     {
         $returnType = '';
-        $request = $this->updateBookingAvailabilityRequest($contentType);
+        $request = $this->updateBookingAvailabilityRequest($booking_availability_update_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2708,15 +2273,24 @@ class BookingComApi
     /**
      * Create request for operation 'updateBookingAvailability'
      *
+     * @param  \Repull\Model\BookingAvailabilityUpdateRequest $booking_availability_update_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateBookingAvailability'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function updateBookingAvailabilityRequest(
+        \Repull\Model\BookingAvailabilityUpdateRequest $booking_availability_update_request,
         string $contentType = self::contentTypes['updateBookingAvailability'][0]
     ): Request
     {
+
+        // verify the required parameter 'booking_availability_update_request' is set
+        if ($booking_availability_update_request === null || (is_array($booking_availability_update_request) && count($booking_availability_update_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $booking_availability_update_request when calling updateBookingAvailability'
+            );
+        }
 
 
         $resourcePath = '/v1/channels/booking/availability';
@@ -2731,13 +2305,20 @@ class BookingComApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if (isset($booking_availability_update_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($booking_availability_update_request));
+            } else {
+                $httpBody = $booking_availability_update_request;
+            }
+        } elseif (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
