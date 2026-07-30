@@ -75,10 +75,19 @@ class PlumguideApi
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
+        'deletePlumguideWebhooks' => [
+            'application/json',
+        ],
         'getPlumguideAvailability' => [
             'application/json',
         ],
         'getPlumguidePricing' => [
+            'application/json',
+        ],
+        'getPlumguideWebhooks' => [
+            'application/json',
+        ],
+        'listPlumguideBookings' => [
             'application/json',
         ],
         'listPlumguideListings' => [
@@ -88,6 +97,9 @@ class PlumguideApi
             'application/json',
         ],
         'updatePlumguidePricing' => [
+            'application/json',
+        ],
+        'updatePlumguideWebhooks' => [
             'application/json',
         ],
     ];
@@ -136,6 +148,242 @@ class PlumguideApi
     public function getConfig(): Configuration
     {
         return $this->config;
+    }
+
+    /**
+     * Operation deletePlumguideWebhooks
+     *
+     * Remove Plumguide webhook config
+     *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deletePlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\Error|null
+     */
+    public function deletePlumguideWebhooks(
+        string $contentType = self::contentTypes['deletePlumguideWebhooks'][0]
+    ): ?\Repull\Model\Error
+    {
+        list($response) = $this->deletePlumguideWebhooksWithHttpInfo($contentType);
+        return $response;
+    }
+
+    /**
+     * Operation deletePlumguideWebhooksWithHttpInfo
+     *
+     * Remove Plumguide webhook config
+     *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deletePlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function deletePlumguideWebhooksWithHttpInfo(
+        string $contentType = self::contentTypes['deletePlumguideWebhooks'][0]
+    ): array
+    {
+        $request = $this->deletePlumguideWebhooksRequest($contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            return [null, $statusCode, $response->getHeaders()];
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation deletePlumguideWebhooksAsync
+     *
+     * Remove Plumguide webhook config
+     *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deletePlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function deletePlumguideWebhooksAsync(
+        string $contentType = self::contentTypes['deletePlumguideWebhooks'][0]
+    ): PromiseInterface
+    {
+        return $this->deletePlumguideWebhooksAsyncWithHttpInfo($contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation deletePlumguideWebhooksAsyncWithHttpInfo
+     *
+     * Remove Plumguide webhook config
+     *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deletePlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function deletePlumguideWebhooksAsyncWithHttpInfo(
+        string $contentType = self::contentTypes['deletePlumguideWebhooks'][0]
+    ): PromiseInterface
+    {
+        $returnType = '';
+        $request = $this->deletePlumguideWebhooksRequest($contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'deletePlumguideWebhooks'
+     *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deletePlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function deletePlumguideWebhooksRequest(
+        string $contentType = self::contentTypes['deletePlumguideWebhooks'][0]
+    ): Request
+    {
+
+
+        $resourcePath = '/v1/channels/plumguide/webhooks';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'DELETE',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
     }
 
     /**
@@ -505,6 +753,518 @@ class PlumguideApi
 
         $headers = $this->headerSelector->selectHeaders(
             [],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getPlumguideWebhooks
+     *
+     * Get Plumguide webhook config
+     *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\Error|null
+     */
+    public function getPlumguideWebhooks(
+        string $contentType = self::contentTypes['getPlumguideWebhooks'][0]
+    ): ?\Repull\Model\Error
+    {
+        list($response) = $this->getPlumguideWebhooksWithHttpInfo($contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getPlumguideWebhooksWithHttpInfo
+     *
+     * Get Plumguide webhook config
+     *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getPlumguideWebhooksWithHttpInfo(
+        string $contentType = self::contentTypes['getPlumguideWebhooks'][0]
+    ): array
+    {
+        $request = $this->getPlumguideWebhooksRequest($contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            return [null, $statusCode, $response->getHeaders()];
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getPlumguideWebhooksAsync
+     *
+     * Get Plumguide webhook config
+     *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getPlumguideWebhooksAsync(
+        string $contentType = self::contentTypes['getPlumguideWebhooks'][0]
+    ): PromiseInterface
+    {
+        return $this->getPlumguideWebhooksAsyncWithHttpInfo($contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getPlumguideWebhooksAsyncWithHttpInfo
+     *
+     * Get Plumguide webhook config
+     *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getPlumguideWebhooksAsyncWithHttpInfo(
+        string $contentType = self::contentTypes['getPlumguideWebhooks'][0]
+    ): PromiseInterface
+    {
+        $returnType = '';
+        $request = $this->getPlumguideWebhooksRequest($contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getPlumguideWebhooks'
+     *
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getPlumguideWebhooksRequest(
+        string $contentType = self::contentTypes['getPlumguideWebhooks'][0]
+    ): Request
+    {
+
+
+        $resourcePath = '/v1/channels/plumguide/webhooks';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation listPlumguideBookings
+     *
+     * List Plumguide bookings
+     *
+     * @param  int|null $listing_id Filter to a single Plumguide listing. (optional)
+     * @param  string|null $booking_code Fetch a single booking by its Plumguide booking code. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listPlumguideBookings'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\Error|null
+     */
+    public function listPlumguideBookings(
+        ?int $listing_id = null,
+        ?string $booking_code = null,
+        string $contentType = self::contentTypes['listPlumguideBookings'][0]
+    ): ?\Repull\Model\Error
+    {
+        list($response) = $this->listPlumguideBookingsWithHttpInfo($listing_id, $booking_code, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation listPlumguideBookingsWithHttpInfo
+     *
+     * List Plumguide bookings
+     *
+     * @param  int|null $listing_id Filter to a single Plumguide listing. (optional)
+     * @param  string|null $booking_code Fetch a single booking by its Plumguide booking code. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listPlumguideBookings'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function listPlumguideBookingsWithHttpInfo(
+        ?int $listing_id = null,
+        ?string $booking_code = null,
+        string $contentType = self::contentTypes['listPlumguideBookings'][0]
+    ): array
+    {
+        $request = $this->listPlumguideBookingsRequest($listing_id, $booking_code, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            return [null, $statusCode, $response->getHeaders()];
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation listPlumguideBookingsAsync
+     *
+     * List Plumguide bookings
+     *
+     * @param  int|null $listing_id Filter to a single Plumguide listing. (optional)
+     * @param  string|null $booking_code Fetch a single booking by its Plumguide booking code. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listPlumguideBookings'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function listPlumguideBookingsAsync(
+        ?int $listing_id = null,
+        ?string $booking_code = null,
+        string $contentType = self::contentTypes['listPlumguideBookings'][0]
+    ): PromiseInterface
+    {
+        return $this->listPlumguideBookingsAsyncWithHttpInfo($listing_id, $booking_code, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation listPlumguideBookingsAsyncWithHttpInfo
+     *
+     * List Plumguide bookings
+     *
+     * @param  int|null $listing_id Filter to a single Plumguide listing. (optional)
+     * @param  string|null $booking_code Fetch a single booking by its Plumguide booking code. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listPlumguideBookings'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function listPlumguideBookingsAsyncWithHttpInfo(
+        ?int $listing_id = null,
+        ?string $booking_code = null,
+        string $contentType = self::contentTypes['listPlumguideBookings'][0]
+    ): PromiseInterface
+    {
+        $returnType = '';
+        $request = $this->listPlumguideBookingsRequest($listing_id, $booking_code, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'listPlumguideBookings'
+     *
+     * @param  int|null $listing_id Filter to a single Plumguide listing. (optional)
+     * @param  string|null $booking_code Fetch a single booking by its Plumguide booking code. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listPlumguideBookings'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function listPlumguideBookingsRequest(
+        ?int $listing_id = null,
+        ?string $booking_code = null,
+        string $contentType = self::contentTypes['listPlumguideBookings'][0]
+    ): Request
+    {
+
+
+
+
+        $resourcePath = '/v1/channels/plumguide/bookings';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $listing_id,
+            'listing_id', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $booking_code,
+            'booking_code', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -1192,6 +1952,274 @@ class PlumguideApi
 
         // for model (json/xml)
         if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation updatePlumguideWebhooks
+     *
+     * Replace Plumguide webhook config
+     *
+     * @param  array<string,mixed> $request_body request_body (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updatePlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\Error|null
+     */
+    public function updatePlumguideWebhooks(
+        array $request_body,
+        string $contentType = self::contentTypes['updatePlumguideWebhooks'][0]
+    ): ?\Repull\Model\Error
+    {
+        list($response) = $this->updatePlumguideWebhooksWithHttpInfo($request_body, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation updatePlumguideWebhooksWithHttpInfo
+     *
+     * Replace Plumguide webhook config
+     *
+     * @param  array<string,mixed> $request_body (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updatePlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function updatePlumguideWebhooksWithHttpInfo(
+        array $request_body,
+        string $contentType = self::contentTypes['updatePlumguideWebhooks'][0]
+    ): array
+    {
+        $request = $this->updatePlumguideWebhooksRequest($request_body, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            return [null, $statusCode, $response->getHeaders()];
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation updatePlumguideWebhooksAsync
+     *
+     * Replace Plumguide webhook config
+     *
+     * @param  array<string,mixed> $request_body (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updatePlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updatePlumguideWebhooksAsync(
+        array $request_body,
+        string $contentType = self::contentTypes['updatePlumguideWebhooks'][0]
+    ): PromiseInterface
+    {
+        return $this->updatePlumguideWebhooksAsyncWithHttpInfo($request_body, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation updatePlumguideWebhooksAsyncWithHttpInfo
+     *
+     * Replace Plumguide webhook config
+     *
+     * @param  array<string,mixed> $request_body (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updatePlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updatePlumguideWebhooksAsyncWithHttpInfo(
+        array $request_body,
+        string $contentType = self::contentTypes['updatePlumguideWebhooks'][0]
+    ): PromiseInterface
+    {
+        $returnType = '';
+        $request = $this->updatePlumguideWebhooksRequest($request_body, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'updatePlumguideWebhooks'
+     *
+     * @param  array<string,mixed> $request_body (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updatePlumguideWebhooks'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function updatePlumguideWebhooksRequest(
+        array $request_body,
+        string $contentType = self::contentTypes['updatePlumguideWebhooks'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'request_body' is set
+        if ($request_body === null || (is_array($request_body) && count($request_body) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $request_body when calling updatePlumguideWebhooks'
+            );
+        }
+
+
+        $resourcePath = '/v1/channels/plumguide/webhooks';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($request_body)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($request_body));
+            } else {
+                $httpBody = $request_body;
+            }
+        } elseif (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
