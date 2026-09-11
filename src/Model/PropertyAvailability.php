@@ -12,7 +12,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.  ## Plan Limits (402 — `listings_limit_exceeded`) The Repull API also enforces a per-tier cap on **active listings**:  | Tier | Active listings cap | |---|---| | `free` | 3 | | `starter` | 50 | | `custom` | unlimited |  When a customer's active-listing count is above their tier cap, the API returns **`402 Payment Required`** with `error.code = \"listings_limit_exceeded\"` on every route EXCEPT:  - `/v1/health` — uptime probes are never gated. - `/v1/usage/_*` — so dashboards can render the over-cap state. - Any `DELETE` — so the customer can trim listings to get back under the cap without paying.  Unlike 429, 402 is NOT a \"wait and retry\" condition — `Retry-After` is not set. The only paths back to 200 are:   1. `DELETE` enough listings to come back under the cap, or   2. Upgrade at `https://repull.dev/dashboard/billing`. The server-side usage cache is 60s, so the first 200 after an upgrade may take up to a minute.  The envelope mirrors `rate_limit_exceeded` for SDK ergonomics: `tier`, `limit`, `active_listings`, `upgrade_url`, plus the standard `code` / `message` / `fix` / `docs_url` / `request_id`.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_live_YOUR_API_KEY ```  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.  ## Plan Limits (402 — `listings_limit_exceeded`) The Repull API also enforces a per-tier cap on **active listings**:  | Tier | Active listings cap | |---|---| | `free` | 3 | | `starter` | 50 | | `custom` | unlimited |  When a customer's active-listing count is above their tier cap, the API returns **`402 Payment Required`** with `error.code = \"listings_limit_exceeded\"` on every route EXCEPT:  - `/v1/health` — uptime probes are never gated. - `/v1/usage/_*` — so dashboards can render the over-cap state. - Any `DELETE` — so the customer can trim listings to get back under the cap without paying.  Unlike 429, 402 is NOT a \"wait and retry\" condition — `Retry-After` is not set. The only paths back to 200 are:   1. `DELETE` enough listings to come back under the cap, or   2. Upgrade at `https://repull.dev/dashboard/billing`. The server-side usage cache is 60s, so the first 200 after an upgrade may take up to a minute.  The envelope mirrors `rate_limit_exceeded` for SDK ergonomics: `tier`, `limit`, `active_listings`, `upgrade_url`, plus the standard `code` / `message` / `fix` / `docs_url` / `request_id`.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * PropertyAvailability Class Doc Comment
  *
- * @description Channel-agnostic availability calendar for a property over the requested window. Every date in &#x60;[from, to]&#x60; (inclusive) is present in &#x60;days&#x60;; dates with no explicit calendar row fall back to available at the default price.
+ * @description Channel-agnostic availability calendar for a property over the requested window. &#x60;days&#x60; carries only the dates backed by a real calendar row; anything the calendar does not cover is reported in &#x60;coverage.missingDates&#x60; rather than synthesised as available.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -62,7 +62,8 @@ class PropertyAvailability implements ModelInterface, ArrayAccess, JsonSerializa
     protected static array $openAPITypes = [
         'property_id' => 'string',
         'currency' => 'string',
-        'days' => '\Repull\Model\PropertyAvailabilityDay[]'
+        'days' => '\Repull\Model\PropertyAvailabilityDay[]',
+        'coverage' => '\Repull\Model\PropertyAvailabilityCoverage'
     ];
 
     /**
@@ -73,7 +74,8 @@ class PropertyAvailability implements ModelInterface, ArrayAccess, JsonSerializa
     protected static array $openAPIFormats = [
         'property_id' => null,
         'currency' => null,
-        'days' => null
+        'days' => null,
+        'coverage' => null
     ];
 
     /**
@@ -84,7 +86,8 @@ class PropertyAvailability implements ModelInterface, ArrayAccess, JsonSerializa
     protected static array $openAPINullables = [
         'property_id' => false,
         'currency' => false,
-        'days' => false
+        'days' => false,
+        'coverage' => false
     ];
 
     /**
@@ -165,7 +168,8 @@ class PropertyAvailability implements ModelInterface, ArrayAccess, JsonSerializa
     protected static array $attributeMap = [
         'property_id' => 'propertyId',
         'currency' => 'currency',
-        'days' => 'days'
+        'days' => 'days',
+        'coverage' => 'coverage'
     ];
 
     /**
@@ -176,7 +180,8 @@ class PropertyAvailability implements ModelInterface, ArrayAccess, JsonSerializa
     protected static array $setters = [
         'property_id' => 'setPropertyId',
         'currency' => 'setCurrency',
-        'days' => 'setDays'
+        'days' => 'setDays',
+        'coverage' => 'setCoverage'
     ];
 
     /**
@@ -187,7 +192,8 @@ class PropertyAvailability implements ModelInterface, ArrayAccess, JsonSerializa
     protected static array $getters = [
         'property_id' => 'getPropertyId',
         'currency' => 'getCurrency',
-        'days' => 'getDays'
+        'days' => 'getDays',
+        'coverage' => 'getCoverage'
     ];
 
     /**
@@ -240,6 +246,7 @@ class PropertyAvailability implements ModelInterface, ArrayAccess, JsonSerializa
         $this->setIfExists('property_id', $data ?? [], null);
         $this->setIfExists('currency', $data ?? [], null);
         $this->setIfExists('days', $data ?? [], null);
+        $this->setIfExists('coverage', $data ?? [], null);
     }
 
     /**
@@ -275,6 +282,9 @@ class PropertyAvailability implements ModelInterface, ArrayAccess, JsonSerializa
         }
         if ($this->container['days'] === null) {
             $invalidProperties[] = "'days' can't be null";
+        }
+        if ($this->container['coverage'] === null) {
+            $invalidProperties[] = "'coverage' can't be null";
         }
         return $invalidProperties;
     }
@@ -355,7 +365,7 @@ class PropertyAvailability implements ModelInterface, ArrayAccess, JsonSerializa
     /**
      * Sets days
      *
-     * @param \Repull\Model\PropertyAvailabilityDay[] $days Dense per-date calendar for the requested window (capped at 366 days), ordered ascending by date.
+     * @param \Repull\Model\PropertyAvailabilityDay[] $days Per-date calendar for the requested window (capped at 366 days), ordered ascending by date. Contains only dates we hold data for — it may be shorter than the window, or empty.
      *
      * @return $this
      */
@@ -365,6 +375,33 @@ class PropertyAvailability implements ModelInterface, ArrayAccess, JsonSerializa
             throw new InvalidArgumentException('non-nullable days cannot be null');
         }
         $this->container['days'] = $days;
+
+        return $this;
+    }
+
+    /**
+     * Gets coverage
+     *
+     * @return \Repull\Model\PropertyAvailabilityCoverage
+     */
+    public function getCoverage(): \Repull\Model\PropertyAvailabilityCoverage
+    {
+        return $this->container['coverage'];
+    }
+
+    /**
+     * Sets coverage
+     *
+     * @param \Repull\Model\PropertyAvailabilityCoverage $coverage coverage
+     *
+     * @return $this
+     */
+    public function setCoverage(\Repull\Model\PropertyAvailabilityCoverage $coverage): static
+    {
+        if (is_null($coverage)) {
+            throw new InvalidArgumentException('non-nullable coverage cannot be null');
+        }
+        $this->container['coverage'] = $coverage;
 
         return $this;
     }

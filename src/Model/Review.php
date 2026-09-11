@@ -12,7 +12,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.  ## Plan Limits (402 — `listings_limit_exceeded`) The Repull API also enforces a per-tier cap on **active listings**:  | Tier | Active listings cap | |---|---| | `free` | 3 | | `starter` | 50 | | `custom` | unlimited |  When a customer's active-listing count is above their tier cap, the API returns **`402 Payment Required`** with `error.code = \"listings_limit_exceeded\"` on every route EXCEPT:  - `/v1/health` — uptime probes are never gated. - `/v1/usage/_*` — so dashboards can render the over-cap state. - Any `DELETE` — so the customer can trim listings to get back under the cap without paying.  Unlike 429, 402 is NOT a \"wait and retry\" condition — `Retry-After` is not set. The only paths back to 200 are:   1. `DELETE` enough listings to come back under the cap, or   2. Upgrade at `https://repull.dev/dashboard/billing`. The server-side usage cache is 60s, so the first 200 after an upgrade may take up to a minute.  The envelope mirrors `rate_limit_exceeded` for SDK ergonomics: `tier`, `limit`, `active_listings`, `upgrade_url`, plus the standard `code` / `message` / `fix` / `docs_url` / `request_id`.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_live_YOUR_API_KEY ```  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.  ## Plan Limits (402 — `listings_limit_exceeded`) The Repull API also enforces a per-tier cap on **active listings**:  | Tier | Active listings cap | |---|---| | `free` | 3 | | `starter` | 50 | | `custom` | unlimited |  When a customer's active-listing count is above their tier cap, the API returns **`402 Payment Required`** with `error.code = \"listings_limit_exceeded\"` on every route EXCEPT:  - `/v1/health` — uptime probes are never gated. - `/v1/usage/_*` — so dashboards can render the over-cap state. - Any `DELETE` — so the customer can trim listings to get back under the cap without paying.  Unlike 429, 402 is NOT a \"wait and retry\" condition — `Retry-After` is not set. The only paths back to 200 are:   1. `DELETE` enough listings to come back under the cap, or   2. Upgrade at `https://repull.dev/dashboard/billing`. The server-side usage cache is 60s, so the first 200 after an upgrade may take up to a minute.  The envelope mirrors `rate_limit_exceeded` for SDK ergonomics: `tier`, `limit`, `active_listings`, `upgrade_url`, plus the standard `code` / `message` / `fix` / `docs_url` / `request_id`.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -64,6 +64,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         'external_id' => 'string',
         'platform' => 'string',
         'listing_id' => 'string',
+        'provider_property_id' => 'string',
         'reservation_id' => 'string',
         'reservation_confirmation_code' => 'string',
         'guest_id' => 'string',
@@ -93,6 +94,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         'external_id' => null,
         'platform' => null,
         'listing_id' => null,
+        'provider_property_id' => null,
         'reservation_id' => null,
         'reservation_confirmation_code' => null,
         'guest_id' => null,
@@ -122,6 +124,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         'external_id' => false,
         'platform' => true,
         'listing_id' => true,
+        'provider_property_id' => true,
         'reservation_id' => true,
         'reservation_confirmation_code' => true,
         'guest_id' => true,
@@ -221,6 +224,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         'external_id' => 'externalId',
         'platform' => 'platform',
         'listing_id' => 'listingId',
+        'provider_property_id' => 'providerPropertyId',
         'reservation_id' => 'reservationId',
         'reservation_confirmation_code' => 'reservationConfirmationCode',
         'guest_id' => 'guestId',
@@ -250,6 +254,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         'external_id' => 'setExternalId',
         'platform' => 'setPlatform',
         'listing_id' => 'setListingId',
+        'provider_property_id' => 'setProviderPropertyId',
         'reservation_id' => 'setReservationId',
         'reservation_confirmation_code' => 'setReservationConfirmationCode',
         'guest_id' => 'setGuestId',
@@ -279,6 +284,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         'external_id' => 'getExternalId',
         'platform' => 'getPlatform',
         'listing_id' => 'getListingId',
+        'provider_property_id' => 'getProviderPropertyId',
         'reservation_id' => 'getReservationId',
         'reservation_confirmation_code' => 'getReservationConfirmationCode',
         'guest_id' => 'getGuestId',
@@ -381,6 +387,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('external_id', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('provider_property_id', $data ?? [], null);
         $this->setIfExists('reservation_id', $data ?? [], null);
         $this->setIfExists('reservation_confirmation_code', $data ?? [], null);
         $this->setIfExists('guest_id', $data ?? [], null);
@@ -495,7 +502,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets external_id
      *
-     * @param string|null $external_id ID in the source channel (Airbnb review id, Booking review id, etc.).
+     * @param string|null $external_id ID in the source channel (Airbnb review id, Booking review id, etc.). Pass as `review_id` to the provider reply endpoint.
      *
      * @return $this
      */
@@ -574,6 +581,40 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets provider_property_id
+     *
+     * @return string|null
+     */
+    public function getProviderPropertyId(): ?string
+    {
+        return $this->container['provider_property_id'];
+    }
+
+    /**
+     * Sets provider_property_id
+     *
+     * @param string|null $provider_property_id The source channel's own listing/property id for this review (Booking.com hotel/property id, Airbnb listing id, …). Pass this as `property_id` to `POST /v1/channels/booking/reviews` to post a host reply — it is the bridge from a unified review straight to the provider-specific reply call. `null` when the source listing id has not been mirrored yet.
+     *
+     * @return $this
+     */
+    public function setProviderPropertyId(?string $provider_property_id): static
+    {
+        if (is_null($provider_property_id)) {
+            array_push($this->openAPINullablesSetToNull, 'provider_property_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('provider_property_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['provider_property_id'] = $provider_property_id;
 
         return $this;
     }

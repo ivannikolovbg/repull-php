@@ -2,7 +2,7 @@
 /**
  * Quickstart: list the latest 10 reservations.
  *
- *   REPULL_API_KEY=sk_test_... php examples/quickstart.php
+ *   REPULL_API_KEY=sk_live_... php examples/quickstart.php
  */
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -16,7 +16,7 @@ $apiKey = getenv('REPULL_API_KEY') ?: throw new RuntimeException('Set REPULL_API
 $config = Configuration::getDefaultConfiguration()->setAccessToken($apiKey);
 $api    = new ReservationsApi(new Client(), $config);
 
-$response = $api->v1ReservationsGet(limit: 10);
+$response = $api->listReservations(limit: 10);
 
 foreach ($response->getData() ?? [] as $r) {
     printf(

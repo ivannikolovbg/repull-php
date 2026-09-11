@@ -64,16 +64,16 @@ foreach ($response->getData() as $r) {
 Run it:
 
 ```bash
-REPULL_API_KEY=sk_test_... php examples/quickstart.php
+REPULL_API_KEY=sk_live_... php examples/quickstart.php
 ```
 
 ## Authentication
 
-All requests require a Bearer token. Sandbox keys start with `sk_test_`, production with `sk_live_`. Get a key at <https://repull.dev/dashboard>.
+All requests require a Bearer token (`sk_live_...`). Get a key at <https://repull.dev/dashboard>.
 
 ```php
 $config = Configuration::getDefaultConfiguration()
-    ->setAccessToken('sk_test_...');
+    ->setAccessToken('sk_live_...');
 ```
 
 ## Examples

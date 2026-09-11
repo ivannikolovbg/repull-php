@@ -19,9 +19,9 @@ final class SmokeTest extends TestCase
     public function testConfigurationAcceptsBearerToken(): void
     {
         $config = Configuration::getDefaultConfiguration()
-            ->setAccessToken('sk_test_smoke');
+            ->setAccessToken('sk_live_smoke');
 
-        $this->assertSame('sk_test_smoke', $config->getAccessToken());
+        $this->assertSame('sk_live_smoke', $config->getAccessToken());
     }
 
     public function testReservationsApiInstantiates(): void

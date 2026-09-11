@@ -5,6 +5,28 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.12] - 2026-09-11
+
+### Removed
+- **Sandbox API deleted.** `SandboxApi` (`POST /v1/sandbox/reset`, `POST /v1/sandbox/seed`) and its models (`SandboxFixtureRef`, `SandboxResetResult`, `SandboxResetResultDeleted`, `SandboxSeedResult`) are gone — the sandbox was removed from the live API and `sk_test_...` keys now return `401`. README/examples updated to use `sk_live_...`.
+
+### Added
+Regenerated against the live spec (89 → 102 → 124 tracked paths over prior drift); this release brings 24 previously-undeclared operations into the SDK:
+- **Reviews.** `ReviewsApi::replyToReview` (`POST /v1/reviews/{id}/reply`).
+- **Airbnb alterations.** `AirbnbApi::acceptAirbnbAlteration` / `declineAirbnbAlteration` (`POST /v1/channels/airbnb/alterations/{id}/accept` / `/decline`).
+- **Booking.com rooms.** `BookingComApi` gains the rooms listing for a Booking.com property (`GET /v1/channels/booking/properties/{id}/rooms`).
+- **Booking.com hosted Connect callback.** `ConnectApi::bookingConnectCallback` (`GET /v1/connect/booking/callback`).
+- **PMS credential submission.** `ConnectApi::submit{Beds24,Bookingsync,Guesty,Hospitable,Hostaway,Igms,Lodgify,Ownerrez,Smoobu,Vrbo}Credentials` — direct API-key/credential connect flows for ten PMS providers that previously only supported OAuth.
+- **Health checks.** `SystemApi` gains `getAtlasHealth`, `getAuthHealth`, `getMcpHealth`, `getWebhooksHealth`, and `getChannelHealth(channel)`.
+- **Listing photos.** `ListingsApi::listListingPhotos` / `getListingPhotosUploadUrl` (`GET /v1/listings/{id}/photos`, `POST /v1/listings/{id}/photos/upload-url`).
+- **Batch availability.** `AvailabilityApi::batchAvailability` (`POST /v1/availability/batch`).
+- **Quotes.** New `POST /v1/quotes` endpoint (pricing quote for a stay).
+
+### Notes
+- Regenerated from `https://api.repull.dev/openapi.json`. Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
+- `POST /v1/reviews/{id}/reply` was missing its `{id}` path-parameter declaration in the live spec, which fails openapi-generator's spec validation and — if validation is skipped — silently drops `id` from the generated method signature (`ReviewsApi::replyToReview` would have built requests against the literal, unsubstituted `/v1/reviews/{id}/reply` URL). A fix for the spec source (`vanio-repull-api`) has been prepared and committed locally on that repo's `fix/reviews-reply-path-param` branch (not yet merged/deployed). This SDK was generated against a locally-patched copy of the spec carrying that same parameter declaration (`id: integer, in: path, required`) so `replyToReview(int $id, ...)` works correctly today; the *committed* `openapi/v1.json` in this repo is untouched and remains byte-for-byte identical to the live spec.
+- Examples (`examples/quickstart.php`, `examples/connect_airbnb.php`) updated for current method names (`listReservations`, `createConnection`, `getConnectStatus`) — they referenced pre-rename method names (`v1ReservationsGet`, `v1ConnectProviderPost`, `v1ConnectProviderGet`) that no longer exist in the generated client.
+
 ## [0.2.9] - 2026-07-26
 
 ### Added
