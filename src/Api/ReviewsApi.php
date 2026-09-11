@@ -1032,13 +1032,13 @@ class ReviewsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\ReplyToReview201Response|\Repull\Model\Error|null
+     * @return \Repull\Model\ReplyToReview201Response|\Repull\Model\Error
      */
     public function replyToReview(
         int $id,
         \Repull\Model\ReplyToReviewRequest $reply_to_review_request,
         string $contentType = self::contentTypes['replyToReview'][0]
-    ): \Repull\Model\ReplyToReview201Response|\Repull\Model\Error|null
+    ): \Repull\Model\ReplyToReview201Response|\Repull\Model\Error
     {
         list($response) = $this->replyToReviewWithHttpInfo($id, $reply_to_review_request, $contentType);
         return $response;
@@ -1055,7 +1055,7 @@ class ReviewsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ReplyToReview201Response|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ReplyToReview201Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function replyToReviewWithHttpInfo(
         int $id,
@@ -1106,6 +1106,12 @@ class ReviewsApi
                         $request,
                         $response,
                     );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -1146,6 +1152,14 @@ class ReviewsApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',

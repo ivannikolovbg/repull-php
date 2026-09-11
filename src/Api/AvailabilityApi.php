@@ -142,12 +142,12 @@ class AvailabilityApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\AvailabilityWriteResult|\Repull\Model\Error|null
+     * @return \Repull\Model\AvailabilityWriteResult|\Repull\Model\Error
      */
     public function batchUpdateAvailability(
         \Repull\Model\AvailabilityBatchWriteRequest $availability_batch_write_request,
         string $contentType = self::contentTypes['batchUpdateAvailability'][0]
-    ): \Repull\Model\AvailabilityWriteResult|\Repull\Model\Error|null
+    ): \Repull\Model\AvailabilityWriteResult|\Repull\Model\Error
     {
         list($response) = $this->batchUpdateAvailabilityWithHttpInfo($availability_batch_write_request, $contentType);
         return $response;
@@ -163,7 +163,7 @@ class AvailabilityApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AvailabilityWriteResult|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AvailabilityWriteResult|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function batchUpdateAvailabilityWithHttpInfo(
         \Repull\Model\AvailabilityBatchWriteRequest $availability_batch_write_request,
@@ -213,6 +213,12 @@ class AvailabilityApi
                         $request,
                         $response,
                     );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -253,6 +259,14 @@ class AvailabilityApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -818,13 +832,13 @@ class AvailabilityApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\AvailabilityWriteResult|\Repull\Model\Error|null
+     * @return \Repull\Model\AvailabilityWriteResult|\Repull\Model\Error
      */
     public function updateAvailability(
         int $property_id,
         \Repull\Model\AvailabilityWriteRequest $availability_write_request,
         string $contentType = self::contentTypes['updateAvailability'][0]
-    ): \Repull\Model\AvailabilityWriteResult|\Repull\Model\Error|null
+    ): \Repull\Model\AvailabilityWriteResult|\Repull\Model\Error
     {
         list($response) = $this->updateAvailabilityWithHttpInfo($property_id, $availability_write_request, $contentType);
         return $response;
@@ -841,7 +855,7 @@ class AvailabilityApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AvailabilityWriteResult|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AvailabilityWriteResult|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function updateAvailabilityWithHttpInfo(
         int $property_id,
@@ -892,6 +906,12 @@ class AvailabilityApi
                         $request,
                         $response,
                     );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -932,6 +952,14 @@ class AvailabilityApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',

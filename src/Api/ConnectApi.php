@@ -3085,12 +3085,12 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
      */
     public function submitBeds24Credentials(
         \Repull\Model\SubmitBeds24CredentialsRequest $submit_beds24_credentials_request,
         string $contentType = self::contentTypes['submitBeds24Credentials'][0]
-    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
     {
         list($response) = $this->submitBeds24CredentialsWithHttpInfo($submit_beds24_credentials_request, $contentType);
         return $response;
@@ -3106,7 +3106,7 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function submitBeds24CredentialsWithHttpInfo(
         \Repull\Model\SubmitBeds24CredentialsRequest $submit_beds24_credentials_request,
@@ -3162,6 +3162,12 @@ class ConnectApi
                         $request,
                         $response,
                     );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -3210,6 +3216,14 @@ class ConnectApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -3410,12 +3424,12 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
      */
     public function submitBookingsyncCredentials(
         \Repull\Model\SubmitBookingsyncCredentialsRequest $submit_bookingsync_credentials_request,
         string $contentType = self::contentTypes['submitBookingsyncCredentials'][0]
-    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
     {
         list($response) = $this->submitBookingsyncCredentialsWithHttpInfo($submit_bookingsync_credentials_request, $contentType);
         return $response;
@@ -3431,7 +3445,7 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function submitBookingsyncCredentialsWithHttpInfo(
         \Repull\Model\SubmitBookingsyncCredentialsRequest $submit_bookingsync_credentials_request,
@@ -3487,6 +3501,12 @@ class ConnectApi
                         $request,
                         $response,
                     );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -3535,6 +3555,14 @@ class ConnectApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -3735,12 +3763,12 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
      */
     public function submitGuestyCredentials(
         \Repull\Model\SubmitGuestyCredentialsRequest $submit_guesty_credentials_request,
         string $contentType = self::contentTypes['submitGuestyCredentials'][0]
-    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
     {
         list($response) = $this->submitGuestyCredentialsWithHttpInfo($submit_guesty_credentials_request, $contentType);
         return $response;
@@ -3756,7 +3784,7 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function submitGuestyCredentialsWithHttpInfo(
         \Repull\Model\SubmitGuestyCredentialsRequest $submit_guesty_credentials_request,
@@ -3812,6 +3840,12 @@ class ConnectApi
                         $request,
                         $response,
                     );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -3860,6 +3894,14 @@ class ConnectApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -4060,12 +4102,12 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
      */
     public function submitHospitableCredentials(
         \Repull\Model\SubmitHospitableCredentialsRequest $submit_hospitable_credentials_request,
         string $contentType = self::contentTypes['submitHospitableCredentials'][0]
-    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
     {
         list($response) = $this->submitHospitableCredentialsWithHttpInfo($submit_hospitable_credentials_request, $contentType);
         return $response;
@@ -4081,7 +4123,7 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function submitHospitableCredentialsWithHttpInfo(
         \Repull\Model\SubmitHospitableCredentialsRequest $submit_hospitable_credentials_request,
@@ -4137,6 +4179,12 @@ class ConnectApi
                         $request,
                         $response,
                     );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -4185,6 +4233,14 @@ class ConnectApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -4385,12 +4441,12 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
      */
     public function submitHostawayCredentials(
         \Repull\Model\SubmitHostawayCredentialsRequest $submit_hostaway_credentials_request,
         string $contentType = self::contentTypes['submitHostawayCredentials'][0]
-    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
     {
         list($response) = $this->submitHostawayCredentialsWithHttpInfo($submit_hostaway_credentials_request, $contentType);
         return $response;
@@ -4406,7 +4462,7 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function submitHostawayCredentialsWithHttpInfo(
         \Repull\Model\SubmitHostawayCredentialsRequest $submit_hostaway_credentials_request,
@@ -4462,6 +4518,12 @@ class ConnectApi
                         $request,
                         $response,
                     );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -4510,6 +4572,14 @@ class ConnectApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -4710,12 +4780,12 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
      */
     public function submitIgmsCredentials(
         \Repull\Model\SubmitIgmsCredentialsRequest $submit_igms_credentials_request,
         string $contentType = self::contentTypes['submitIgmsCredentials'][0]
-    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
     {
         list($response) = $this->submitIgmsCredentialsWithHttpInfo($submit_igms_credentials_request, $contentType);
         return $response;
@@ -4731,7 +4801,7 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function submitIgmsCredentialsWithHttpInfo(
         \Repull\Model\SubmitIgmsCredentialsRequest $submit_igms_credentials_request,
@@ -4787,6 +4857,12 @@ class ConnectApi
                         $request,
                         $response,
                     );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -4835,6 +4911,14 @@ class ConnectApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -5035,12 +5119,12 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
      */
     public function submitLodgifyCredentials(
         \Repull\Model\SubmitLodgifyCredentialsRequest $submit_lodgify_credentials_request,
         string $contentType = self::contentTypes['submitLodgifyCredentials'][0]
-    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
     {
         list($response) = $this->submitLodgifyCredentialsWithHttpInfo($submit_lodgify_credentials_request, $contentType);
         return $response;
@@ -5056,7 +5140,7 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function submitLodgifyCredentialsWithHttpInfo(
         \Repull\Model\SubmitLodgifyCredentialsRequest $submit_lodgify_credentials_request,
@@ -5112,6 +5196,12 @@ class ConnectApi
                         $request,
                         $response,
                     );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -5160,6 +5250,14 @@ class ConnectApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -5360,12 +5458,12 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
      */
     public function submitOwnerrezCredentials(
         \Repull\Model\SubmitOwnerrezCredentialsRequest $submit_ownerrez_credentials_request,
         string $contentType = self::contentTypes['submitOwnerrezCredentials'][0]
-    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
     {
         list($response) = $this->submitOwnerrezCredentialsWithHttpInfo($submit_ownerrez_credentials_request, $contentType);
         return $response;
@@ -5381,7 +5479,7 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function submitOwnerrezCredentialsWithHttpInfo(
         \Repull\Model\SubmitOwnerrezCredentialsRequest $submit_ownerrez_credentials_request,
@@ -5437,6 +5535,12 @@ class ConnectApi
                         $request,
                         $response,
                     );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -5485,6 +5589,14 @@ class ConnectApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -5685,12 +5797,12 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
      */
     public function submitSmoobuCredentials(
         \Repull\Model\SubmitSmoobuCredentialsRequest $submit_smoobu_credentials_request,
         string $contentType = self::contentTypes['submitSmoobuCredentials'][0]
-    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
     {
         list($response) = $this->submitSmoobuCredentialsWithHttpInfo($submit_smoobu_credentials_request, $contentType);
         return $response;
@@ -5706,7 +5818,7 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function submitSmoobuCredentialsWithHttpInfo(
         \Repull\Model\SubmitSmoobuCredentialsRequest $submit_smoobu_credentials_request,
@@ -5762,6 +5874,12 @@ class ConnectApi
                         $request,
                         $response,
                     );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -5810,6 +5928,14 @@ class ConnectApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -6010,12 +6136,12 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
      */
     public function submitVrboCredentials(
         \Repull\Model\SubmitVrboCredentialsRequest $submit_vrbo_credentials_request,
         string $contentType = self::contentTypes['submitVrboCredentials'][0]
-    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|null
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
     {
         list($response) = $this->submitVrboCredentialsWithHttpInfo($submit_vrbo_credentials_request, $contentType);
         return $response;
@@ -6031,7 +6157,7 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function submitVrboCredentialsWithHttpInfo(
         \Repull\Model\SubmitVrboCredentialsRequest $submit_vrbo_credentials_request,
@@ -6087,6 +6213,12 @@ class ConnectApi
                         $request,
                         $response,
                     );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -6135,6 +6267,14 @@ class ConnectApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',

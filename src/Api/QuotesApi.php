@@ -141,7 +141,7 @@ class QuotesApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\Quote|\Repull\Model\Error|null
+     * @return \Repull\Model\Quote|\Repull\Model\Error
      */
     public function getQuote(
         int $property_id,
@@ -151,7 +151,7 @@ class QuotesApi
         ?int $pets = 0,
         ?int $website_id = null,
         string $contentType = self::contentTypes['getQuote'][0]
-    ): \Repull\Model\Quote|\Repull\Model\Error|null
+    ): \Repull\Model\Quote|\Repull\Model\Error
     {
         list($response) = $this->getQuoteWithHttpInfo($property_id, $check_in, $check_out, $guests, $pets, $website_id, $contentType);
         return $response;
@@ -172,7 +172,7 @@ class QuotesApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\Quote|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\Quote|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getQuoteWithHttpInfo(
         int $property_id,
@@ -227,6 +227,12 @@ class QuotesApi
                         $request,
                         $response,
                     );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -267,6 +273,14 @@ class QuotesApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
