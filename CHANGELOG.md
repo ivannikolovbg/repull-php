@@ -5,6 +5,18 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.13] - 2026-09-11
+
+### Added
+Regenerated against the live spec (174 operations, 124 paths — path count unchanged, four new METHODS added to existing paths):
+- **Guests.** `GuestsApi::createGuest` (`POST /v1/guests`).
+- **Reservations.** `ReservationsApi::createReservation` (`POST /v1/reservations`), `ReservationsApi::updateReservation` (`PATCH /v1/reservations/{id}`).
+- **Conversations.** `ConversationsApi::sendConversationMessage` (`POST /v1/conversations/{id}/messages`).
+
+### Notes
+- Regenerated from `https://api.repull.dev/openapi.json`. Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
+- The spec-freshness guard (`scripts/check-spec-freshness.py`) now compares full operations (method + path), not just path keys — these four endpoints were added as new methods on paths that already existed, so a path-only diff would have missed them entirely.
+
 ## [0.2.12] - 2026-09-11
 
 ### Removed
