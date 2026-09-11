@@ -5,6 +5,20 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.14] - 2026-09-11
+
+### Fixed
+Regenerated against the live spec after 19 schema corrections were merged upstream. Path/operation inventory is unchanged (124 paths / 174 operations) — only the SHAPES of existing types changed:
+- **10 fields renamed snake_case → camelCase** on the wire: `data_freshness` → `dataFreshness` (`AirbnbListingListResponse` and the inline `AirbnbDataFreshness`-bearing responses), `last_synced_at` → `lastSyncedAt`, `fix_url` → `fixUrl` (both on `AirbnbDataFreshness`), `next_cursor` → `nextCursor`, `has_more` → `hasMore` (`Pagination` and cursor-paginated list responses), `monthly_requests` → `monthlyRequests`, `daily_ai_requests` → `dailyAiRequests`, `daily_ai` → `dailyAi`, `dynamic_pricing_listings` → `dynamicPricingListings`, `resets_at` → `resetsAt` (usage/limits responses).
+- **3 list responses became bare arrays** instead of `{data, pagination}` wrapper objects: `BookingComApi::listBookingProperties()` now returns `Repull\Model\BookingProperty[]`, `BookingComApi::listBookingConversations()` now returns `Repull\Model\BookingConversation[]`, `VRBOApi::listVrboListings()` now returns `Repull\Model\VrboListing[]`. The `BookingPropertyListResponse`, `BookingConversationListResponse`, and `VrboListingListResponse` wrapper model classes are removed — nothing else referenced them.
+- **4 id fields `integer` → `string`**: `AirbnbAlteration::$id`, `AirbnbAlteration::$reservationId`, `AirbnbConnection::$id`, `AirbnbListing::$listingId`.
+- **`Property::$latitude` / `Property::$longitude`: `float` → `string`** (decimal degrees, as a string, to avoid float-precision drift).
+
+### Notes
+- Regenerated from `https://api.repull.dev/openapi.json`. Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
+- `scripts/check-spec-freshness.py` was strengthened to diff full schema shapes (property names, types, required lists), not just the operation inventory — it would have caught this class of drift immediately instead of silently shipping wrong types.
+- No hand-maintained files were lost by the `rm -rf src` regen step; the only files that disappeared are the three wrapper model classes above, which no longer exist because their endpoints now return bare arrays.
+
 ## [0.2.13] - 2026-09-11
 
 ### Added
