@@ -12,7 +12,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.  ## Plan Limits (402 — `listings_limit_exceeded`) The Repull API also enforces a per-tier cap on **active listings**:  | Tier | Active listings cap | |---|---| | `free` | 3 | | `starter` | 50 | | `custom` | unlimited |  When a customer's active-listing count is above their tier cap, the API returns **`402 Payment Required`** with `error.code = \"listings_limit_exceeded\"` on every route EXCEPT:  - `/v1/health` — uptime probes are never gated. - `/v1/usage/_*` — so dashboards can render the over-cap state. - Any `DELETE` — so the customer can trim listings to get back under the cap without paying.  Unlike 429, 402 is NOT a \"wait and retry\" condition — `Retry-After` is not set. The only paths back to 200 are:   1. `DELETE` enough listings to come back under the cap, or   2. Upgrade at `https://repull.dev/dashboard/billing`. The server-side usage cache is 60s, so the first 200 after an upgrade may take up to a minute.  The envelope mirrors `rate_limit_exceeded` for SDK ergonomics: `tier`, `limit`, `active_listings`, `upgrade_url`, plus the standard `code` / `message` / `fix` / `docs_url` / `request_id`.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_live_YOUR_API_KEY ```  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resetsAt` fields.  ## Plan Limits (402 — `listings_limit_exceeded`) The Repull API also enforces a per-tier cap on **active listings**:  | Tier | Active listings cap | |---|---| | `free` | 3 | | `starter` | 50 | | `custom` | unlimited |  When a customer's active-listing count is above their tier cap, the API returns **`402 Payment Required`** with `error.code = \"listings_limit_exceeded\"` on every route EXCEPT:  - `/v1/health` — uptime probes are never gated. - `/v1/usage/_*` — so dashboards can render the over-cap state. - Any `DELETE` — so the customer can trim listings to get back under the cap without paying.  Unlike 429, 402 is NOT a \"wait and retry\" condition — `Retry-After` is not set. The only paths back to 200 are:   1. `DELETE` enough listings to come back under the cap, or   2. Upgrade at `https://repull.dev/dashboard/billing`. The server-side usage cache is 60s, so the first 200 after an upgrade may take up to a minute.  The envelope mirrors `rate_limit_exceeded` for SDK ergonomics: `tier`, `limit`, `active_listings`, `upgrade_url`, plus the standard `code` / `message` / `fix` / `docs_url` / `request_id`.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * ReservationFinancials Class Doc Comment
  *
- * @description Normalized money block. &#x60;totalPrice&#x60; is a &#x60;number&#x60; (NOT a decimal-as-string) — the legacy top-level &#x60;totalPrice&#x60; string field is kept on the parent for back-compat but is deprecated.
+ * @description Normalized money block. &#x60;totalPrice&#x60; is a &#x60;number&#x60; (NOT a decimal-as-string) — the legacy top-level &#x60;totalPrice&#x60; string field is kept on the parent for back-compat but is deprecated. &#x60;totalPrice&#x60; is the GUEST-side stay total (what the guest paid), NOT the host payout.  The full host/guest breakdown — accommodation subtotal, discounts, cleaning and other guest fees, channel service fees split host/guest, tax lines, and the expected host payout — is served inline under &#x60;host&#x60; and &#x60;guest&#x60; for EVERY channel. (Earlier versions of this spec sent you to &#x60;GET /v1/channels/airbnb/transactions&#x60; for the host payout; that endpoint is Airbnb-only and is no longer the place to look for a reservation&#39;s financials. It remains useful for settlement-level detail — actual payout dates and settlement status — which the reservation record does not carry.)  Not yet served here: individual guest **payment records** (charges, refunds, schedules) and post-booking **adjustments** — neither is stored on the reservation breakdown.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -62,7 +62,10 @@ class ReservationFinancials implements ModelInterface, ArrayAccess, JsonSerializ
     protected static array $openAPITypes = [
         'total_price' => 'float',
         'currency' => 'string',
-        'payment_status' => 'string'
+        'payment_status' => 'string',
+        'cancellation_policy' => 'string',
+        'host' => '\Repull\Model\ReservationHostFinancials',
+        'guest' => '\Repull\Model\ReservationGuestFinancials'
     ];
 
     /**
@@ -73,7 +76,10 @@ class ReservationFinancials implements ModelInterface, ArrayAccess, JsonSerializ
     protected static array $openAPIFormats = [
         'total_price' => null,
         'currency' => null,
-        'payment_status' => null
+        'payment_status' => null,
+        'cancellation_policy' => null,
+        'host' => null,
+        'guest' => null
     ];
 
     /**
@@ -84,7 +90,10 @@ class ReservationFinancials implements ModelInterface, ArrayAccess, JsonSerializ
     protected static array $openAPINullables = [
         'total_price' => true,
         'currency' => true,
-        'payment_status' => true
+        'payment_status' => true,
+        'cancellation_policy' => false,
+        'host' => false,
+        'guest' => false
     ];
 
     /**
@@ -165,7 +174,10 @@ class ReservationFinancials implements ModelInterface, ArrayAccess, JsonSerializ
     protected static array $attributeMap = [
         'total_price' => 'totalPrice',
         'currency' => 'currency',
-        'payment_status' => 'paymentStatus'
+        'payment_status' => 'paymentStatus',
+        'cancellation_policy' => 'cancellationPolicy',
+        'host' => 'host',
+        'guest' => 'guest'
     ];
 
     /**
@@ -176,7 +188,10 @@ class ReservationFinancials implements ModelInterface, ArrayAccess, JsonSerializ
     protected static array $setters = [
         'total_price' => 'setTotalPrice',
         'currency' => 'setCurrency',
-        'payment_status' => 'setPaymentStatus'
+        'payment_status' => 'setPaymentStatus',
+        'cancellation_policy' => 'setCancellationPolicy',
+        'host' => 'setHost',
+        'guest' => 'setGuest'
     ];
 
     /**
@@ -187,7 +202,10 @@ class ReservationFinancials implements ModelInterface, ArrayAccess, JsonSerializ
     protected static array $getters = [
         'total_price' => 'getTotalPrice',
         'currency' => 'getCurrency',
-        'payment_status' => 'getPaymentStatus'
+        'payment_status' => 'getPaymentStatus',
+        'cancellation_policy' => 'getCancellationPolicy',
+        'host' => 'getHost',
+        'guest' => 'getGuest'
     ];
 
     /**
@@ -240,6 +258,9 @@ class ReservationFinancials implements ModelInterface, ArrayAccess, JsonSerializ
         $this->setIfExists('total_price', $data ?? [], null);
         $this->setIfExists('currency', $data ?? [], null);
         $this->setIfExists('payment_status', $data ?? [], null);
+        $this->setIfExists('cancellation_policy', $data ?? [], null);
+        $this->setIfExists('host', $data ?? [], null);
+        $this->setIfExists('guest', $data ?? [], null);
     }
 
     /**
@@ -292,7 +313,7 @@ class ReservationFinancials implements ModelInterface, ArrayAccess, JsonSerializ
     /**
      * Sets total_price
      *
-     * @param float|null $total_price Stay total in `currency`. Number, not string.
+     * @param float|null $total_price GUEST-side stay total in `currency` — what the guest paid, not the host payout. Number, not string. For the host payout see `financials.host.revenue`.
      *
      * @return $this
      */
@@ -377,6 +398,87 @@ class ReservationFinancials implements ModelInterface, ArrayAccess, JsonSerializ
             }
         }
         $this->container['payment_status'] = $payment_status;
+
+        return $this;
+    }
+
+    /**
+     * Gets cancellation_policy
+     *
+     * @return string|null
+     */
+    public function getCancellationPolicy(): ?string
+    {
+        return $this->container['cancellation_policy'];
+    }
+
+    /**
+     * Sets cancellation_policy
+     *
+     * @param string|null $cancellation_policy Channel cancellation policy code, verbatim from the reservation. Airbnb codes look like `strict_14_with_grace_period`, `moderate`, `flexible`, `tiered_pricing_non_refundable`; Booking.com reports a numeric policy id. Omitted when the channel did not supply one.
+     *
+     * @return $this
+     */
+    public function setCancellationPolicy(?string $cancellation_policy): static
+    {
+        if (is_null($cancellation_policy)) {
+            throw new InvalidArgumentException('non-nullable cancellation_policy cannot be null');
+        }
+        $this->container['cancellation_policy'] = $cancellation_policy;
+
+        return $this;
+    }
+
+    /**
+     * Gets host
+     *
+     * @return \Repull\Model\ReservationHostFinancials|null
+     */
+    public function getHost(): ?\Repull\Model\ReservationHostFinancials
+    {
+        return $this->container['host'];
+    }
+
+    /**
+     * Sets host
+     *
+     * @param \Repull\Model\ReservationHostFinancials|null $host host
+     *
+     * @return $this
+     */
+    public function setHost(?\Repull\Model\ReservationHostFinancials $host): static
+    {
+        if (is_null($host)) {
+            throw new InvalidArgumentException('non-nullable host cannot be null');
+        }
+        $this->container['host'] = $host;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest
+     *
+     * @return \Repull\Model\ReservationGuestFinancials|null
+     */
+    public function getGuest(): ?\Repull\Model\ReservationGuestFinancials
+    {
+        return $this->container['guest'];
+    }
+
+    /**
+     * Sets guest
+     *
+     * @param \Repull\Model\ReservationGuestFinancials|null $guest guest
+     *
+     * @return $this
+     */
+    public function setGuest(?\Repull\Model\ReservationGuestFinancials $guest): static
+    {
+        if (is_null($guest)) {
+            throw new InvalidArgumentException('non-nullable guest cannot be null');
+        }
+        $this->container['guest'] = $guest;
 
         return $this;
     }

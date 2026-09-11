@@ -1,6 +1,6 @@
 <?php
 /**
- * StudioErrorError
+ * SendBookingMessageRequest
  *
  * PHP version 8.1
  *
@@ -12,7 +12,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.  ## Plan Limits (402 — `listings_limit_exceeded`) The Repull API also enforces a per-tier cap on **active listings**:  | Tier | Active listings cap | |---|---| | `free` | 3 | | `starter` | 50 | | `custom` | unlimited |  When a customer's active-listing count is above their tier cap, the API returns **`402 Payment Required`** with `error.code = \"listings_limit_exceeded\"` on every route EXCEPT:  - `/v1/health` — uptime probes are never gated. - `/v1/usage/_*` — so dashboards can render the over-cap state. - Any `DELETE` — so the customer can trim listings to get back under the cap without paying.  Unlike 429, 402 is NOT a \"wait and retry\" condition — `Retry-After` is not set. The only paths back to 200 are:   1. `DELETE` enough listings to come back under the cap, or   2. Upgrade at `https://repull.dev/dashboard/billing`. The server-side usage cache is 60s, so the first 200 after an upgrade may take up to a minute.  The envelope mirrors `rate_limit_exceeded` for SDK ergonomics: `tier`, `limit`, `active_listings`, `upgrade_url`, plus the standard `code` / `message` / `fix` / `docs_url` / `request_id`.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_live_YOUR_API_KEY ```  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resetsAt` fields.  ## Plan Limits (402 — `listings_limit_exceeded`) The Repull API also enforces a per-tier cap on **active listings**:  | Tier | Active listings cap | |---|---| | `free` | 3 | | `starter` | 50 | | `custom` | unlimited |  When a customer's active-listing count is above their tier cap, the API returns **`402 Payment Required`** with `error.code = \"listings_limit_exceeded\"` on every route EXCEPT:  - `/v1/health` — uptime probes are never gated. - `/v1/usage/_*` — so dashboards can render the over-cap state. - Any `DELETE` — so the customer can trim listings to get back under the cap without paying.  Unlike 429, 402 is NOT a \"wait and retry\" condition — `Retry-After` is not set. The only paths back to 200 are:   1. `DELETE` enough listings to come back under the cap, or   2. Upgrade at `https://repull.dev/dashboard/billing`. The server-side usage cache is 60s, so the first 200 after an upgrade may take up to a minute.  The envelope mirrors `rate_limit_exceeded` for SDK ergonomics: `tier`, `limit`, `active_listings`, `upgrade_url`, plus the standard `code` / `message` / `fix` / `docs_url` / `request_id`.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * StudioErrorError Class Doc Comment
+ * SendBookingMessageRequest Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class StudioErrorError implements ModelInterface, ArrayAccess, JsonSerializable
+class SendBookingMessageRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class StudioErrorError implements ModelInterface, ArrayAccess, JsonSerializable
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'StudioError_error';
+    protected static string $openAPIModelName = 'send_booking_message_request';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,10 +59,9 @@ class StudioErrorError implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'code' => 'string',
-        'message' => 'string',
-        'fix' => 'string',
-        'docs_url' => 'string'
+        'property_id' => 'int',
+        'conversation_id' => 'string',
+        'message' => 'string'
     ];
 
     /**
@@ -71,10 +70,9 @@ class StudioErrorError implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'code' => null,
-        'message' => null,
-        'fix' => null,
-        'docs_url' => 'uri'
+        'property_id' => null,
+        'conversation_id' => null,
+        'message' => null
     ];
 
     /**
@@ -83,10 +81,9 @@ class StudioErrorError implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'code' => false,
-        'message' => false,
-        'fix' => false,
-        'docs_url' => false
+        'property_id' => false,
+        'conversation_id' => false,
+        'message' => false
     ];
 
     /**
@@ -165,10 +162,9 @@ class StudioErrorError implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'code' => 'code',
-        'message' => 'message',
-        'fix' => 'fix',
-        'docs_url' => 'docs_url'
+        'property_id' => 'property_id',
+        'conversation_id' => 'conversation_id',
+        'message' => 'message'
     ];
 
     /**
@@ -177,10 +173,9 @@ class StudioErrorError implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
-        'code' => 'setCode',
-        'message' => 'setMessage',
-        'fix' => 'setFix',
-        'docs_url' => 'setDocsUrl'
+        'property_id' => 'setPropertyId',
+        'conversation_id' => 'setConversationId',
+        'message' => 'setMessage'
     ];
 
     /**
@@ -189,10 +184,9 @@ class StudioErrorError implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
-        'code' => 'getCode',
-        'message' => 'getMessage',
-        'fix' => 'getFix',
-        'docs_url' => 'getDocsUrl'
+        'property_id' => 'getPropertyId',
+        'conversation_id' => 'getConversationId',
+        'message' => 'getMessage'
     ];
 
     /**
@@ -242,10 +236,9 @@ class StudioErrorError implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('code', $data ?? [], null);
+        $this->setIfExists('property_id', $data ?? [], null);
+        $this->setIfExists('conversation_id', $data ?? [], null);
         $this->setIfExists('message', $data ?? [], null);
-        $this->setIfExists('fix', $data ?? [], null);
-        $this->setIfExists('docs_url', $data ?? [], null);
     }
 
     /**
@@ -273,8 +266,11 @@ class StudioErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['code'] === null) {
-            $invalidProperties[] = "'code' can't be null";
+        if ($this->container['property_id'] === null) {
+            $invalidProperties[] = "'property_id' can't be null";
+        }
+        if ($this->container['conversation_id'] === null) {
+            $invalidProperties[] = "'conversation_id' can't be null";
         }
         if ($this->container['message'] === null) {
             $invalidProperties[] = "'message' can't be null";
@@ -292,28 +288,55 @@ class StudioErrorError implements ModelInterface, ArrayAccess, JsonSerializable
 
 
     /**
-     * Gets code
+     * Gets property_id
      *
-     * @return string
+     * @return int
      */
-    public function getCode(): string
+    public function getPropertyId(): int
     {
-        return $this->container['code'];
+        return $this->container['property_id'];
     }
 
     /**
-     * Sets code
+     * Sets property_id
      *
-     * @param string $code Stable machine-readable error code (e.g. `bad_request`, `not_found`, `rate_limited`).
+     * @param int $property_id Booking.com property (hotel) id the conversation belongs to.
      *
      * @return $this
      */
-    public function setCode(string $code): static
+    public function setPropertyId(int $property_id): static
     {
-        if (is_null($code)) {
-            throw new InvalidArgumentException('non-nullable code cannot be null');
+        if (is_null($property_id)) {
+            throw new InvalidArgumentException('non-nullable property_id cannot be null');
         }
-        $this->container['code'] = $code;
+        $this->container['property_id'] = $property_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets conversation_id
+     *
+     * @return string
+     */
+    public function getConversationId(): string
+    {
+        return $this->container['conversation_id'];
+    }
+
+    /**
+     * Sets conversation_id
+     *
+     * @param string $conversation_id Booking.com conversation id to reply in.
+     *
+     * @return $this
+     */
+    public function setConversationId(string $conversation_id): static
+    {
+        if (is_null($conversation_id)) {
+            throw new InvalidArgumentException('non-nullable conversation_id cannot be null');
+        }
+        $this->container['conversation_id'] = $conversation_id;
 
         return $this;
     }
@@ -331,7 +354,7 @@ class StudioErrorError implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets message
      *
-     * @param string $message Human-readable description of what went wrong.
+     * @param string $message Message body to send to the guest.
      *
      * @return $this
      */
@@ -341,60 +364,6 @@ class StudioErrorError implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable message cannot be null');
         }
         $this->container['message'] = $message;
-
-        return $this;
-    }
-
-    /**
-     * Gets fix
-     *
-     * @return string|null
-     */
-    public function getFix(): ?string
-    {
-        return $this->container['fix'];
-    }
-
-    /**
-     * Sets fix
-     *
-     * @param string|null $fix Suggested next action for the caller (optional).
-     *
-     * @return $this
-     */
-    public function setFix(?string $fix): static
-    {
-        if (is_null($fix)) {
-            throw new InvalidArgumentException('non-nullable fix cannot be null');
-        }
-        $this->container['fix'] = $fix;
-
-        return $this;
-    }
-
-    /**
-     * Gets docs_url
-     *
-     * @return string|null
-     */
-    public function getDocsUrl(): ?string
-    {
-        return $this->container['docs_url'];
-    }
-
-    /**
-     * Sets docs_url
-     *
-     * @param string|null $docs_url Link to the docs page that explains this error.
-     *
-     * @return $this
-     */
-    public function setDocsUrl(?string $docs_url): static
-    {
-        if (is_null($docs_url)) {
-            throw new InvalidArgumentException('non-nullable docs_url cannot be null');
-        }
-        $this->container['docs_url'] = $docs_url;
 
         return $this;
     }

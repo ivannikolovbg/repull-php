@@ -1,6 +1,6 @@
 <?php
 /**
- * SandboxResetResult
+ * SyncAirbnbTransactionsRequest
  *
  * PHP version 8.1
  *
@@ -12,7 +12,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.  ## Plan Limits (402 — `listings_limit_exceeded`) The Repull API also enforces a per-tier cap on **active listings**:  | Tier | Active listings cap | |---|---| | `free` | 3 | | `starter` | 50 | | `custom` | unlimited |  When a customer's active-listing count is above their tier cap, the API returns **`402 Payment Required`** with `error.code = \"listings_limit_exceeded\"` on every route EXCEPT:  - `/v1/health` — uptime probes are never gated. - `/v1/usage/_*` — so dashboards can render the over-cap state. - Any `DELETE` — so the customer can trim listings to get back under the cap without paying.  Unlike 429, 402 is NOT a \"wait and retry\" condition — `Retry-After` is not set. The only paths back to 200 are:   1. `DELETE` enough listings to come back under the cap, or   2. Upgrade at `https://repull.dev/dashboard/billing`. The server-side usage cache is 60s, so the first 200 after an upgrade may take up to a minute.  The envelope mirrors `rate_limit_exceeded` for SDK ergonomics: `tier`, `limit`, `active_listings`, `upgrade_url`, plus the standard `code` / `message` / `fix` / `docs_url` / `request_id`.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_live_YOUR_API_KEY ```  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resetsAt` fields.  ## Plan Limits (402 — `listings_limit_exceeded`) The Repull API also enforces a per-tier cap on **active listings**:  | Tier | Active listings cap | |---|---| | `free` | 3 | | `starter` | 50 | | `custom` | unlimited |  When a customer's active-listing count is above their tier cap, the API returns **`402 Payment Required`** with `error.code = \"listings_limit_exceeded\"` on every route EXCEPT:  - `/v1/health` — uptime probes are never gated. - `/v1/usage/_*` — so dashboards can render the over-cap state. - Any `DELETE` — so the customer can trim listings to get back under the cap without paying.  Unlike 429, 402 is NOT a \"wait and retry\" condition — `Retry-After` is not set. The only paths back to 200 are:   1. `DELETE` enough listings to come back under the cap, or   2. Upgrade at `https://repull.dev/dashboard/billing`. The server-side usage cache is 60s, so the first 200 after an upgrade may take up to a minute.  The envelope mirrors `rate_limit_exceeded` for SDK ergonomics: `tier`, `limit`, `active_listings`, `upgrade_url`, plus the standard `code` / `message` / `fix` / `docs_url` / `request_id`.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -35,15 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * SandboxResetResult Class Doc Comment
+ * SyncAirbnbTransactionsRequest Class Doc Comment
  *
- * @description Result of clearing the sandbox fixture set. Only ever deletes rows in the isolated sandbox data space.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class SandboxResetResult implements ModelInterface, ArrayAccess, JsonSerializable
+class SyncAirbnbTransactionsRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +51,7 @@ class SandboxResetResult implements ModelInterface, ArrayAccess, JsonSerializabl
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'SandboxResetResult';
+    protected static string $openAPIModelName = 'sync_airbnb_transactions_request';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,9 +59,9 @@ class SandboxResetResult implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'customer_id' => 'string',
-        'reset_at' => '\DateTime',
-        'deleted' => '\Repull\Model\SandboxResetResultDeleted'
+        'start_date' => '\DateTime',
+        'end_date' => '\DateTime',
+        'transaction_type' => 'string'
     ];
 
     /**
@@ -71,9 +70,9 @@ class SandboxResetResult implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'customer_id' => null,
-        'reset_at' => 'date-time',
-        'deleted' => null
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'transaction_type' => null
     ];
 
     /**
@@ -82,9 +81,9 @@ class SandboxResetResult implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'customer_id' => false,
-        'reset_at' => false,
-        'deleted' => false
+        'start_date' => false,
+        'end_date' => false,
+        'transaction_type' => false
     ];
 
     /**
@@ -163,9 +162,9 @@ class SandboxResetResult implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'customer_id' => 'customerId',
-        'reset_at' => 'resetAt',
-        'deleted' => 'deleted'
+        'start_date' => 'start_date',
+        'end_date' => 'end_date',
+        'transaction_type' => 'transaction_type'
     ];
 
     /**
@@ -174,9 +173,9 @@ class SandboxResetResult implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $setters = [
-        'customer_id' => 'setCustomerId',
-        'reset_at' => 'setResetAt',
-        'deleted' => 'setDeleted'
+        'start_date' => 'setStartDate',
+        'end_date' => 'setEndDate',
+        'transaction_type' => 'setTransactionType'
     ];
 
     /**
@@ -185,9 +184,9 @@ class SandboxResetResult implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $getters = [
-        'customer_id' => 'getCustomerId',
-        'reset_at' => 'getResetAt',
-        'deleted' => 'getDeleted'
+        'start_date' => 'getStartDate',
+        'end_date' => 'getEndDate',
+        'transaction_type' => 'getTransactionType'
     ];
 
     /**
@@ -222,6 +221,21 @@ class SandboxResetResult implements ModelInterface, ArrayAccess, JsonSerializabl
         return self::$openAPIModelName;
     }
 
+    public const TRANSACTION_TYPE_COMPLETED = 'COMPLETED';
+    public const TRANSACTION_TYPE_UPCOMING = 'UPCOMING';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getTransactionTypeAllowableValues()
+    {
+        return [
+            self::TRANSACTION_TYPE_COMPLETED,
+            self::TRANSACTION_TYPE_UPCOMING,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -237,9 +251,9 @@ class SandboxResetResult implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('customer_id', $data ?? [], null);
-        $this->setIfExists('reset_at', $data ?? [], null);
-        $this->setIfExists('deleted', $data ?? [], null);
+        $this->setIfExists('start_date', $data ?? [], null);
+        $this->setIfExists('end_date', $data ?? [], null);
+        $this->setIfExists('transaction_type', $data ?? [], null);
     }
 
     /**
@@ -267,15 +281,15 @@ class SandboxResetResult implements ModelInterface, ArrayAccess, JsonSerializabl
     {
         $invalidProperties = [];
 
-        if ($this->container['customer_id'] === null) {
-            $invalidProperties[] = "'customer_id' can't be null";
+        $allowedValues = self::getTransactionTypeAllowableValues();
+        if (!is_null($this->container['transaction_type']) && !in_array($this->container['transaction_type'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'transaction_type', must be one of '%s'",
+                $this->container['transaction_type'],
+                implode("', '", $allowedValues)
+            );
         }
-        if ($this->container['reset_at'] === null) {
-            $invalidProperties[] = "'reset_at' can't be null";
-        }
-        if ($this->container['deleted'] === null) {
-            $invalidProperties[] = "'deleted' can't be null";
-        }
+
         return $invalidProperties;
     }
 
@@ -289,82 +303,83 @@ class SandboxResetResult implements ModelInterface, ArrayAccess, JsonSerializabl
 
 
     /**
-     * Gets customer_id
+     * Gets start_date
      *
-     * @return string
+     * @return \DateTime|null
      */
-    public function getCustomerId(): string
+    public function getStartDate(): ?\DateTime
     {
-        return $this->container['customer_id'];
+        return $this->container['start_date'];
     }
 
     /**
-     * Sets customer_id
+     * Sets start_date
      *
-     * @param string $customer_id customer_id
+     * @param \DateTime|null $start_date Inclusive lower bound on transaction date.
      *
      * @return $this
      */
-    public function setCustomerId(string $customer_id): static
+    public function setStartDate(?\DateTime $start_date): static
     {
-        if (is_null($customer_id)) {
-            throw new InvalidArgumentException('non-nullable customer_id cannot be null');
+        if (is_null($start_date)) {
+            throw new InvalidArgumentException('non-nullable start_date cannot be null');
         }
-        $this->container['customer_id'] = $customer_id;
+        $this->container['start_date'] = $start_date;
 
         return $this;
     }
 
     /**
-     * Gets reset_at
+     * Gets end_date
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getResetAt(): \DateTime
+    public function getEndDate(): ?\DateTime
     {
-        return $this->container['reset_at'];
+        return $this->container['end_date'];
     }
 
     /**
-     * Sets reset_at
+     * Sets end_date
      *
-     * @param \DateTime $reset_at reset_at
+     * @param \DateTime|null $end_date Inclusive upper bound on transaction date.
      *
      * @return $this
      */
-    public function setResetAt(\DateTime $reset_at): static
+    public function setEndDate(?\DateTime $end_date): static
     {
-        if (is_null($reset_at)) {
-            throw new InvalidArgumentException('non-nullable reset_at cannot be null');
+        if (is_null($end_date)) {
+            throw new InvalidArgumentException('non-nullable end_date cannot be null');
         }
-        $this->container['reset_at'] = $reset_at;
+        $this->container['end_date'] = $end_date;
 
         return $this;
     }
 
     /**
-     * Gets deleted
+     * Gets transaction_type
      *
-     * @return \Repull\Model\SandboxResetResultDeleted
+     * @return string|null
      */
-    public function getDeleted(): \Repull\Model\SandboxResetResultDeleted
+    public function getTransactionType(): ?string
     {
-        return $this->container['deleted'];
+        return $this->container['transaction_type'];
     }
 
     /**
-     * Sets deleted
+     * Sets transaction_type
      *
-     * @param \Repull\Model\SandboxResetResultDeleted $deleted deleted
+     * @param string|null $transaction_type transaction_type
      *
      * @return $this
      */
-    public function setDeleted(\Repull\Model\SandboxResetResultDeleted $deleted): static
+    public function setTransactionType(?string $transaction_type): static
     {
-        if (is_null($deleted)) {
-            throw new InvalidArgumentException('non-nullable deleted cannot be null');
+        if (is_null($transaction_type)) {
+            throw new InvalidArgumentException('non-nullable transaction_type cannot be null');
         }
-        $this->container['deleted'] = $deleted;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['transaction_type'] = $transaction_type;
 
         return $this;
     }

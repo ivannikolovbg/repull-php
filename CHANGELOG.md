@@ -5,6 +5,54 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.14] - 2026-09-11
+
+### Fixed
+Regenerated against the live spec after 19 schema corrections were merged upstream. Path/operation inventory is unchanged (124 paths / 174 operations) — only the SHAPES of existing types changed:
+- **10 fields renamed snake_case → camelCase** on the wire: `data_freshness` → `dataFreshness` (`AirbnbListingListResponse` and the inline `AirbnbDataFreshness`-bearing responses), `last_synced_at` → `lastSyncedAt`, `fix_url` → `fixUrl` (both on `AirbnbDataFreshness`), `next_cursor` → `nextCursor`, `has_more` → `hasMore` (`Pagination` and cursor-paginated list responses), `monthly_requests` → `monthlyRequests`, `daily_ai_requests` → `dailyAiRequests`, `daily_ai` → `dailyAi`, `dynamic_pricing_listings` → `dynamicPricingListings`, `resets_at` → `resetsAt` (usage/limits responses).
+- **3 list responses became bare arrays** instead of `{data, pagination}` wrapper objects: `BookingComApi::listBookingProperties()` now returns `Repull\Model\BookingProperty[]`, `BookingComApi::listBookingConversations()` now returns `Repull\Model\BookingConversation[]`, `VRBOApi::listVrboListings()` now returns `Repull\Model\VrboListing[]`. The `BookingPropertyListResponse`, `BookingConversationListResponse`, and `VrboListingListResponse` wrapper model classes are removed — nothing else referenced them.
+- **4 id fields `integer` → `string`**: `AirbnbAlteration::$id`, `AirbnbAlteration::$reservationId`, `AirbnbConnection::$id`, `AirbnbListing::$listingId`.
+- **`Property::$latitude` / `Property::$longitude`: `float` → `string`** (decimal degrees, as a string, to avoid float-precision drift).
+
+### Notes
+- Regenerated from `https://api.repull.dev/openapi.json`. Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
+- `scripts/check-spec-freshness.py` was strengthened to diff full schema shapes (property names, types, required lists), not just the operation inventory — it would have caught this class of drift immediately instead of silently shipping wrong types.
+- No hand-maintained files were lost by the `rm -rf src` regen step; the only files that disappeared are the three wrapper model classes above, which no longer exist because their endpoints now return bare arrays.
+
+## [0.2.13] - 2026-09-11
+
+### Added
+Regenerated against the live spec (174 operations, 124 paths — path count unchanged, four new METHODS added to existing paths):
+- **Guests.** `GuestsApi::createGuest` (`POST /v1/guests`).
+- **Reservations.** `ReservationsApi::createReservation` (`POST /v1/reservations`), `ReservationsApi::updateReservation` (`PATCH /v1/reservations/{id}`).
+- **Conversations.** `ConversationsApi::sendConversationMessage` (`POST /v1/conversations/{id}/messages`).
+
+### Notes
+- Regenerated from `https://api.repull.dev/openapi.json`. Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
+- The spec-freshness guard (`scripts/check-spec-freshness.py`) now compares full operations (method + path), not just path keys — these four endpoints were added as new methods on paths that already existed, so a path-only diff would have missed them entirely.
+
+## [0.2.12] - 2026-09-11
+
+### Removed
+- **Sandbox API deleted.** `SandboxApi` (`POST /v1/sandbox/reset`, `POST /v1/sandbox/seed`) and its models (`SandboxFixtureRef`, `SandboxResetResult`, `SandboxResetResultDeleted`, `SandboxSeedResult`) are gone — the sandbox was removed from the live API and `sk_test_...` keys now return `401`. README/examples updated to use `sk_live_...`.
+
+### Added
+Regenerated against the live spec (89 → 102 → 124 tracked paths over prior drift); this release brings 24 previously-undeclared operations into the SDK:
+- **Reviews.** `ReviewsApi::replyToReview` (`POST /v1/reviews/{id}/reply`).
+- **Airbnb alterations.** `AirbnbApi::acceptAirbnbAlteration` / `declineAirbnbAlteration` (`POST /v1/channels/airbnb/alterations/{id}/accept` / `/decline`).
+- **Booking.com rooms.** `BookingComApi` gains the rooms listing for a Booking.com property (`GET /v1/channels/booking/properties/{id}/rooms`).
+- **Booking.com hosted Connect callback.** `ConnectApi::bookingConnectCallback` (`GET /v1/connect/booking/callback`).
+- **PMS credential submission.** `ConnectApi::submit{Beds24,Bookingsync,Guesty,Hospitable,Hostaway,Igms,Lodgify,Ownerrez,Smoobu,Vrbo}Credentials` — direct API-key/credential connect flows for ten PMS providers that previously only supported OAuth.
+- **Health checks.** `SystemApi` gains `getAtlasHealth`, `getAuthHealth`, `getMcpHealth`, `getWebhooksHealth`, and `getChannelHealth(channel)`.
+- **Listing photos.** `ListingsApi::listListingPhotos` / `getListingPhotosUploadUrl` (`GET /v1/listings/{id}/photos`, `POST /v1/listings/{id}/photos/upload-url`).
+- **Batch availability.** `AvailabilityApi::batchAvailability` (`POST /v1/availability/batch`).
+- **Quotes.** New `POST /v1/quotes` endpoint (pricing quote for a stay).
+
+### Notes
+- Regenerated from `https://api.repull.dev/openapi.json`. Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
+- `POST /v1/reviews/{id}/reply` was missing its `{id}` path-parameter declaration in the live spec, which fails openapi-generator's spec validation and — if validation is skipped — silently drops `id` from the generated method signature (`ReviewsApi::replyToReview` would have built requests against the literal, unsubstituted `/v1/reviews/{id}/reply` URL). A fix for the spec source (`vanio-repull-api`) has been prepared and committed locally on that repo's `fix/reviews-reply-path-param` branch (not yet merged/deployed). This SDK was generated against a locally-patched copy of the spec carrying that same parameter declaration (`id: integer, in: path, required`) so `replyToReview(int $id, ...)` works correctly today; the *committed* `openapi/v1.json` in this repo is untouched and remains byte-for-byte identical to the live spec.
+- Examples (`examples/quickstart.php`, `examples/connect_airbnb.php`) updated for current method names (`listReservations`, `createConnection`, `getConnectStatus`) — they referenced pre-rename method names (`v1ReservationsGet`, `v1ConnectProviderPost`, `v1ConnectProviderGet`) that no longer exist in the generated client.
+
 ## [0.2.9] - 2026-07-26
 
 ### Added

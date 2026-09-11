@@ -11,7 +11,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.  ## Plan Limits (402 — `listings_limit_exceeded`) The Repull API also enforces a per-tier cap on **active listings**:  | Tier | Active listings cap | |---|---| | `free` | 3 | | `starter` | 50 | | `custom` | unlimited |  When a customer's active-listing count is above their tier cap, the API returns **`402 Payment Required`** with `error.code = \"listings_limit_exceeded\"` on every route EXCEPT:  - `/v1/health` — uptime probes are never gated. - `/v1/usage/_*` — so dashboards can render the over-cap state. - Any `DELETE` — so the customer can trim listings to get back under the cap without paying.  Unlike 429, 402 is NOT a \"wait and retry\" condition — `Retry-After` is not set. The only paths back to 200 are:   1. `DELETE` enough listings to come back under the cap, or   2. Upgrade at `https://repull.dev/dashboard/billing`. The server-side usage cache is 60s, so the first 200 after an upgrade may take up to a minute.  The envelope mirrors `rate_limit_exceeded` for SDK ergonomics: `tier`, `limit`, `active_listings`, `upgrade_url`, plus the standard `code` / `message` / `fix` / `docs_url` / `request_id`.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_live_YOUR_API_KEY ```  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resetsAt` fields.  ## Plan Limits (402 — `listings_limit_exceeded`) The Repull API also enforces a per-tier cap on **active listings**:  | Tier | Active listings cap | |---|---| | `free` | 3 | | `starter` | 50 | | `custom` | unlimited |  When a customer's active-listing count is above their tier cap, the API returns **`402 Payment Required`** with `error.code = \"listings_limit_exceeded\"` on every route EXCEPT:  - `/v1/health` — uptime probes are never gated. - `/v1/usage/_*` — so dashboards can render the over-cap state. - Any `DELETE` — so the customer can trim listings to get back under the cap without paying.  Unlike 429, 402 is NOT a \"wait and retry\" condition — `Retry-After` is not set. The only paths back to 200 are:   1. `DELETE` enough listings to come back under the cap, or   2. Upgrade at `https://repull.dev/dashboard/billing`. The server-side usage cache is 60s, so the first 200 after an upgrade may take up to a minute.  The envelope mirrors `rate_limit_exceeded` for SDK ergonomics: `tier`, `limit`, `active_listings`, `upgrade_url`, plus the standard `code` / `message` / `fix` / `docs_url` / `request_id`.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -75,6 +75,9 @@ class ConnectApi
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
+        'bookingConnectCallback' => [
+            'application/json',
+        ],
         'createConnectSession' => [
             'application/json',
         ],
@@ -100,6 +103,36 @@ class ConnectApi
             'application/json',
         ],
         'selectConnectProvider' => [
+            'application/json',
+        ],
+        'submitBeds24Credentials' => [
+            'application/json',
+        ],
+        'submitBookingsyncCredentials' => [
+            'application/json',
+        ],
+        'submitGuestyCredentials' => [
+            'application/json',
+        ],
+        'submitHospitableCredentials' => [
+            'application/json',
+        ],
+        'submitHostawayCredentials' => [
+            'application/json',
+        ],
+        'submitIgmsCredentials' => [
+            'application/json',
+        ],
+        'submitLodgifyCredentials' => [
+            'application/json',
+        ],
+        'submitOwnerrezCredentials' => [
+            'application/json',
+        ],
+        'submitSmoobuCredentials' => [
+            'application/json',
+        ],
+        'submitVrboCredentials' => [
             'application/json',
         ],
         'verifyBookingHotel' => [
@@ -151,6 +184,245 @@ class ConnectApi
     public function getConfig(): Configuration
     {
         return $this->config;
+    }
+
+    /**
+     * Operation bookingConnectCallback
+     *
+     * Booking.com connectivity callback
+     *
+     * @param  array<string,mixed> $request_body request_body (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['bookingConnectCallback'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\Error|null
+     */
+    public function bookingConnectCallback(
+        array $request_body,
+        string $contentType = self::contentTypes['bookingConnectCallback'][0]
+    ): ?\Repull\Model\Error
+    {
+        list($response) = $this->bookingConnectCallbackWithHttpInfo($request_body, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation bookingConnectCallbackWithHttpInfo
+     *
+     * Booking.com connectivity callback
+     *
+     * @param  array<string,mixed> $request_body (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['bookingConnectCallback'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function bookingConnectCallbackWithHttpInfo(
+        array $request_body,
+        string $contentType = self::contentTypes['bookingConnectCallback'][0]
+    ): array
+    {
+        $request = $this->bookingConnectCallbackRequest($request_body, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            return [null, $statusCode, $response->getHeaders()];
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation bookingConnectCallbackAsync
+     *
+     * Booking.com connectivity callback
+     *
+     * @param  array<string,mixed> $request_body (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['bookingConnectCallback'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function bookingConnectCallbackAsync(
+        array $request_body,
+        string $contentType = self::contentTypes['bookingConnectCallback'][0]
+    ): PromiseInterface
+    {
+        return $this->bookingConnectCallbackAsyncWithHttpInfo($request_body, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation bookingConnectCallbackAsyncWithHttpInfo
+     *
+     * Booking.com connectivity callback
+     *
+     * @param  array<string,mixed> $request_body (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['bookingConnectCallback'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function bookingConnectCallbackAsyncWithHttpInfo(
+        array $request_body,
+        string $contentType = self::contentTypes['bookingConnectCallback'][0]
+    ): PromiseInterface
+    {
+        $returnType = '';
+        $request = $this->bookingConnectCallbackRequest($request_body, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'bookingConnectCallback'
+     *
+     * @param  array<string,mixed> $request_body (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['bookingConnectCallback'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function bookingConnectCallbackRequest(
+        array $request_body,
+        string $contentType = self::contentTypes['bookingConnectCallback'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'request_body' is set
+        if ($request_body === null || (is_array($request_body) && count($request_body) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $request_body when calling bookingConnectCallback'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/booking/callback';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($request_body)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($request_body));
+            } else {
+                $httpBody = $request_body;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
     }
 
     /**
@@ -748,14 +1020,15 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function deleteConnection(
         string $provider,
         string $contentType = self::contentTypes['deleteConnection'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->deleteConnectionWithHttpInfo($provider, $contentType);
+        list($response) = $this->deleteConnectionWithHttpInfo($provider, $contentType);
+        return $response;
     }
 
     /**
@@ -803,6 +1076,22 @@ class ConnectApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 501:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -918,7 +1207,7 @@ class ConnectApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -2763,6 +3052,3396 @@ class ConnectApi
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
             }
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation submitBeds24Credentials
+     *
+     * Submit Beds24 credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitBeds24CredentialsRequest $submit_beds24_credentials_request submit_beds24_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitBeds24Credentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+     */
+    public function submitBeds24Credentials(
+        \Repull\Model\SubmitBeds24CredentialsRequest $submit_beds24_credentials_request,
+        string $contentType = self::contentTypes['submitBeds24Credentials'][0]
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+    {
+        list($response) = $this->submitBeds24CredentialsWithHttpInfo($submit_beds24_credentials_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation submitBeds24CredentialsWithHttpInfo
+     *
+     * Submit Beds24 credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitBeds24CredentialsRequest $submit_beds24_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitBeds24Credentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function submitBeds24CredentialsWithHttpInfo(
+        \Repull\Model\SubmitBeds24CredentialsRequest $submit_beds24_credentials_request,
+        string $contentType = self::contentTypes['submitBeds24Credentials'][0]
+    ): array
+    {
+        $request = $this->submitBeds24CredentialsRequest($submit_beds24_credentials_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SubmitBeds24Credentials200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation submitBeds24CredentialsAsync
+     *
+     * Submit Beds24 credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitBeds24CredentialsRequest $submit_beds24_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitBeds24Credentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitBeds24CredentialsAsync(
+        \Repull\Model\SubmitBeds24CredentialsRequest $submit_beds24_credentials_request,
+        string $contentType = self::contentTypes['submitBeds24Credentials'][0]
+    ): PromiseInterface
+    {
+        return $this->submitBeds24CredentialsAsyncWithHttpInfo($submit_beds24_credentials_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation submitBeds24CredentialsAsyncWithHttpInfo
+     *
+     * Submit Beds24 credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitBeds24CredentialsRequest $submit_beds24_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitBeds24Credentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitBeds24CredentialsAsyncWithHttpInfo(
+        \Repull\Model\SubmitBeds24CredentialsRequest $submit_beds24_credentials_request,
+        string $contentType = self::contentTypes['submitBeds24Credentials'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\SubmitBeds24Credentials200Response';
+        $request = $this->submitBeds24CredentialsRequest($submit_beds24_credentials_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'submitBeds24Credentials'
+     *
+     * @param  \Repull\Model\SubmitBeds24CredentialsRequest $submit_beds24_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitBeds24Credentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function submitBeds24CredentialsRequest(
+        \Repull\Model\SubmitBeds24CredentialsRequest $submit_beds24_credentials_request,
+        string $contentType = self::contentTypes['submitBeds24Credentials'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'submit_beds24_credentials_request' is set
+        if ($submit_beds24_credentials_request === null || (is_array($submit_beds24_credentials_request) && count($submit_beds24_credentials_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $submit_beds24_credentials_request when calling submitBeds24Credentials'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/beds24/credentials';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($submit_beds24_credentials_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($submit_beds24_credentials_request));
+            } else {
+                $httpBody = $submit_beds24_credentials_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation submitBookingsyncCredentials
+     *
+     * Submit BookingSync credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitBookingsyncCredentialsRequest $submit_bookingsync_credentials_request submit_bookingsync_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitBookingsyncCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+     */
+    public function submitBookingsyncCredentials(
+        \Repull\Model\SubmitBookingsyncCredentialsRequest $submit_bookingsync_credentials_request,
+        string $contentType = self::contentTypes['submitBookingsyncCredentials'][0]
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+    {
+        list($response) = $this->submitBookingsyncCredentialsWithHttpInfo($submit_bookingsync_credentials_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation submitBookingsyncCredentialsWithHttpInfo
+     *
+     * Submit BookingSync credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitBookingsyncCredentialsRequest $submit_bookingsync_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitBookingsyncCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function submitBookingsyncCredentialsWithHttpInfo(
+        \Repull\Model\SubmitBookingsyncCredentialsRequest $submit_bookingsync_credentials_request,
+        string $contentType = self::contentTypes['submitBookingsyncCredentials'][0]
+    ): array
+    {
+        $request = $this->submitBookingsyncCredentialsRequest($submit_bookingsync_credentials_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SubmitBeds24Credentials200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation submitBookingsyncCredentialsAsync
+     *
+     * Submit BookingSync credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitBookingsyncCredentialsRequest $submit_bookingsync_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitBookingsyncCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitBookingsyncCredentialsAsync(
+        \Repull\Model\SubmitBookingsyncCredentialsRequest $submit_bookingsync_credentials_request,
+        string $contentType = self::contentTypes['submitBookingsyncCredentials'][0]
+    ): PromiseInterface
+    {
+        return $this->submitBookingsyncCredentialsAsyncWithHttpInfo($submit_bookingsync_credentials_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation submitBookingsyncCredentialsAsyncWithHttpInfo
+     *
+     * Submit BookingSync credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitBookingsyncCredentialsRequest $submit_bookingsync_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitBookingsyncCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitBookingsyncCredentialsAsyncWithHttpInfo(
+        \Repull\Model\SubmitBookingsyncCredentialsRequest $submit_bookingsync_credentials_request,
+        string $contentType = self::contentTypes['submitBookingsyncCredentials'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\SubmitBeds24Credentials200Response';
+        $request = $this->submitBookingsyncCredentialsRequest($submit_bookingsync_credentials_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'submitBookingsyncCredentials'
+     *
+     * @param  \Repull\Model\SubmitBookingsyncCredentialsRequest $submit_bookingsync_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitBookingsyncCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function submitBookingsyncCredentialsRequest(
+        \Repull\Model\SubmitBookingsyncCredentialsRequest $submit_bookingsync_credentials_request,
+        string $contentType = self::contentTypes['submitBookingsyncCredentials'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'submit_bookingsync_credentials_request' is set
+        if ($submit_bookingsync_credentials_request === null || (is_array($submit_bookingsync_credentials_request) && count($submit_bookingsync_credentials_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $submit_bookingsync_credentials_request when calling submitBookingsyncCredentials'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/bookingsync/credentials';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($submit_bookingsync_credentials_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($submit_bookingsync_credentials_request));
+            } else {
+                $httpBody = $submit_bookingsync_credentials_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation submitGuestyCredentials
+     *
+     * Submit Guesty credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitGuestyCredentialsRequest $submit_guesty_credentials_request submit_guesty_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitGuestyCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+     */
+    public function submitGuestyCredentials(
+        \Repull\Model\SubmitGuestyCredentialsRequest $submit_guesty_credentials_request,
+        string $contentType = self::contentTypes['submitGuestyCredentials'][0]
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+    {
+        list($response) = $this->submitGuestyCredentialsWithHttpInfo($submit_guesty_credentials_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation submitGuestyCredentialsWithHttpInfo
+     *
+     * Submit Guesty credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitGuestyCredentialsRequest $submit_guesty_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitGuestyCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function submitGuestyCredentialsWithHttpInfo(
+        \Repull\Model\SubmitGuestyCredentialsRequest $submit_guesty_credentials_request,
+        string $contentType = self::contentTypes['submitGuestyCredentials'][0]
+    ): array
+    {
+        $request = $this->submitGuestyCredentialsRequest($submit_guesty_credentials_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SubmitBeds24Credentials200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation submitGuestyCredentialsAsync
+     *
+     * Submit Guesty credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitGuestyCredentialsRequest $submit_guesty_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitGuestyCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitGuestyCredentialsAsync(
+        \Repull\Model\SubmitGuestyCredentialsRequest $submit_guesty_credentials_request,
+        string $contentType = self::contentTypes['submitGuestyCredentials'][0]
+    ): PromiseInterface
+    {
+        return $this->submitGuestyCredentialsAsyncWithHttpInfo($submit_guesty_credentials_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation submitGuestyCredentialsAsyncWithHttpInfo
+     *
+     * Submit Guesty credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitGuestyCredentialsRequest $submit_guesty_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitGuestyCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitGuestyCredentialsAsyncWithHttpInfo(
+        \Repull\Model\SubmitGuestyCredentialsRequest $submit_guesty_credentials_request,
+        string $contentType = self::contentTypes['submitGuestyCredentials'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\SubmitBeds24Credentials200Response';
+        $request = $this->submitGuestyCredentialsRequest($submit_guesty_credentials_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'submitGuestyCredentials'
+     *
+     * @param  \Repull\Model\SubmitGuestyCredentialsRequest $submit_guesty_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitGuestyCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function submitGuestyCredentialsRequest(
+        \Repull\Model\SubmitGuestyCredentialsRequest $submit_guesty_credentials_request,
+        string $contentType = self::contentTypes['submitGuestyCredentials'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'submit_guesty_credentials_request' is set
+        if ($submit_guesty_credentials_request === null || (is_array($submit_guesty_credentials_request) && count($submit_guesty_credentials_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $submit_guesty_credentials_request when calling submitGuestyCredentials'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/guesty/credentials';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($submit_guesty_credentials_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($submit_guesty_credentials_request));
+            } else {
+                $httpBody = $submit_guesty_credentials_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation submitHospitableCredentials
+     *
+     * Submit Hospitable credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitHospitableCredentialsRequest $submit_hospitable_credentials_request submit_hospitable_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitHospitableCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+     */
+    public function submitHospitableCredentials(
+        \Repull\Model\SubmitHospitableCredentialsRequest $submit_hospitable_credentials_request,
+        string $contentType = self::contentTypes['submitHospitableCredentials'][0]
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+    {
+        list($response) = $this->submitHospitableCredentialsWithHttpInfo($submit_hospitable_credentials_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation submitHospitableCredentialsWithHttpInfo
+     *
+     * Submit Hospitable credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitHospitableCredentialsRequest $submit_hospitable_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitHospitableCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function submitHospitableCredentialsWithHttpInfo(
+        \Repull\Model\SubmitHospitableCredentialsRequest $submit_hospitable_credentials_request,
+        string $contentType = self::contentTypes['submitHospitableCredentials'][0]
+    ): array
+    {
+        $request = $this->submitHospitableCredentialsRequest($submit_hospitable_credentials_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SubmitBeds24Credentials200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation submitHospitableCredentialsAsync
+     *
+     * Submit Hospitable credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitHospitableCredentialsRequest $submit_hospitable_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitHospitableCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitHospitableCredentialsAsync(
+        \Repull\Model\SubmitHospitableCredentialsRequest $submit_hospitable_credentials_request,
+        string $contentType = self::contentTypes['submitHospitableCredentials'][0]
+    ): PromiseInterface
+    {
+        return $this->submitHospitableCredentialsAsyncWithHttpInfo($submit_hospitable_credentials_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation submitHospitableCredentialsAsyncWithHttpInfo
+     *
+     * Submit Hospitable credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitHospitableCredentialsRequest $submit_hospitable_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitHospitableCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitHospitableCredentialsAsyncWithHttpInfo(
+        \Repull\Model\SubmitHospitableCredentialsRequest $submit_hospitable_credentials_request,
+        string $contentType = self::contentTypes['submitHospitableCredentials'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\SubmitBeds24Credentials200Response';
+        $request = $this->submitHospitableCredentialsRequest($submit_hospitable_credentials_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'submitHospitableCredentials'
+     *
+     * @param  \Repull\Model\SubmitHospitableCredentialsRequest $submit_hospitable_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitHospitableCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function submitHospitableCredentialsRequest(
+        \Repull\Model\SubmitHospitableCredentialsRequest $submit_hospitable_credentials_request,
+        string $contentType = self::contentTypes['submitHospitableCredentials'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'submit_hospitable_credentials_request' is set
+        if ($submit_hospitable_credentials_request === null || (is_array($submit_hospitable_credentials_request) && count($submit_hospitable_credentials_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $submit_hospitable_credentials_request when calling submitHospitableCredentials'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/hospitable/credentials';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($submit_hospitable_credentials_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($submit_hospitable_credentials_request));
+            } else {
+                $httpBody = $submit_hospitable_credentials_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation submitHostawayCredentials
+     *
+     * Submit Hostaway credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitHostawayCredentialsRequest $submit_hostaway_credentials_request submit_hostaway_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitHostawayCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+     */
+    public function submitHostawayCredentials(
+        \Repull\Model\SubmitHostawayCredentialsRequest $submit_hostaway_credentials_request,
+        string $contentType = self::contentTypes['submitHostawayCredentials'][0]
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+    {
+        list($response) = $this->submitHostawayCredentialsWithHttpInfo($submit_hostaway_credentials_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation submitHostawayCredentialsWithHttpInfo
+     *
+     * Submit Hostaway credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitHostawayCredentialsRequest $submit_hostaway_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitHostawayCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function submitHostawayCredentialsWithHttpInfo(
+        \Repull\Model\SubmitHostawayCredentialsRequest $submit_hostaway_credentials_request,
+        string $contentType = self::contentTypes['submitHostawayCredentials'][0]
+    ): array
+    {
+        $request = $this->submitHostawayCredentialsRequest($submit_hostaway_credentials_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SubmitBeds24Credentials200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation submitHostawayCredentialsAsync
+     *
+     * Submit Hostaway credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitHostawayCredentialsRequest $submit_hostaway_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitHostawayCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitHostawayCredentialsAsync(
+        \Repull\Model\SubmitHostawayCredentialsRequest $submit_hostaway_credentials_request,
+        string $contentType = self::contentTypes['submitHostawayCredentials'][0]
+    ): PromiseInterface
+    {
+        return $this->submitHostawayCredentialsAsyncWithHttpInfo($submit_hostaway_credentials_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation submitHostawayCredentialsAsyncWithHttpInfo
+     *
+     * Submit Hostaway credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitHostawayCredentialsRequest $submit_hostaway_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitHostawayCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitHostawayCredentialsAsyncWithHttpInfo(
+        \Repull\Model\SubmitHostawayCredentialsRequest $submit_hostaway_credentials_request,
+        string $contentType = self::contentTypes['submitHostawayCredentials'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\SubmitBeds24Credentials200Response';
+        $request = $this->submitHostawayCredentialsRequest($submit_hostaway_credentials_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'submitHostawayCredentials'
+     *
+     * @param  \Repull\Model\SubmitHostawayCredentialsRequest $submit_hostaway_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitHostawayCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function submitHostawayCredentialsRequest(
+        \Repull\Model\SubmitHostawayCredentialsRequest $submit_hostaway_credentials_request,
+        string $contentType = self::contentTypes['submitHostawayCredentials'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'submit_hostaway_credentials_request' is set
+        if ($submit_hostaway_credentials_request === null || (is_array($submit_hostaway_credentials_request) && count($submit_hostaway_credentials_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $submit_hostaway_credentials_request when calling submitHostawayCredentials'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/hostaway/credentials';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($submit_hostaway_credentials_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($submit_hostaway_credentials_request));
+            } else {
+                $httpBody = $submit_hostaway_credentials_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation submitIgmsCredentials
+     *
+     * Submit iGMS credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitIgmsCredentialsRequest $submit_igms_credentials_request submit_igms_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitIgmsCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+     */
+    public function submitIgmsCredentials(
+        \Repull\Model\SubmitIgmsCredentialsRequest $submit_igms_credentials_request,
+        string $contentType = self::contentTypes['submitIgmsCredentials'][0]
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+    {
+        list($response) = $this->submitIgmsCredentialsWithHttpInfo($submit_igms_credentials_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation submitIgmsCredentialsWithHttpInfo
+     *
+     * Submit iGMS credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitIgmsCredentialsRequest $submit_igms_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitIgmsCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function submitIgmsCredentialsWithHttpInfo(
+        \Repull\Model\SubmitIgmsCredentialsRequest $submit_igms_credentials_request,
+        string $contentType = self::contentTypes['submitIgmsCredentials'][0]
+    ): array
+    {
+        $request = $this->submitIgmsCredentialsRequest($submit_igms_credentials_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SubmitBeds24Credentials200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation submitIgmsCredentialsAsync
+     *
+     * Submit iGMS credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitIgmsCredentialsRequest $submit_igms_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitIgmsCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitIgmsCredentialsAsync(
+        \Repull\Model\SubmitIgmsCredentialsRequest $submit_igms_credentials_request,
+        string $contentType = self::contentTypes['submitIgmsCredentials'][0]
+    ): PromiseInterface
+    {
+        return $this->submitIgmsCredentialsAsyncWithHttpInfo($submit_igms_credentials_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation submitIgmsCredentialsAsyncWithHttpInfo
+     *
+     * Submit iGMS credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitIgmsCredentialsRequest $submit_igms_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitIgmsCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitIgmsCredentialsAsyncWithHttpInfo(
+        \Repull\Model\SubmitIgmsCredentialsRequest $submit_igms_credentials_request,
+        string $contentType = self::contentTypes['submitIgmsCredentials'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\SubmitBeds24Credentials200Response';
+        $request = $this->submitIgmsCredentialsRequest($submit_igms_credentials_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'submitIgmsCredentials'
+     *
+     * @param  \Repull\Model\SubmitIgmsCredentialsRequest $submit_igms_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitIgmsCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function submitIgmsCredentialsRequest(
+        \Repull\Model\SubmitIgmsCredentialsRequest $submit_igms_credentials_request,
+        string $contentType = self::contentTypes['submitIgmsCredentials'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'submit_igms_credentials_request' is set
+        if ($submit_igms_credentials_request === null || (is_array($submit_igms_credentials_request) && count($submit_igms_credentials_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $submit_igms_credentials_request when calling submitIgmsCredentials'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/igms/credentials';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($submit_igms_credentials_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($submit_igms_credentials_request));
+            } else {
+                $httpBody = $submit_igms_credentials_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation submitLodgifyCredentials
+     *
+     * Submit Lodgify credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitLodgifyCredentialsRequest $submit_lodgify_credentials_request submit_lodgify_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitLodgifyCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+     */
+    public function submitLodgifyCredentials(
+        \Repull\Model\SubmitLodgifyCredentialsRequest $submit_lodgify_credentials_request,
+        string $contentType = self::contentTypes['submitLodgifyCredentials'][0]
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+    {
+        list($response) = $this->submitLodgifyCredentialsWithHttpInfo($submit_lodgify_credentials_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation submitLodgifyCredentialsWithHttpInfo
+     *
+     * Submit Lodgify credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitLodgifyCredentialsRequest $submit_lodgify_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitLodgifyCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function submitLodgifyCredentialsWithHttpInfo(
+        \Repull\Model\SubmitLodgifyCredentialsRequest $submit_lodgify_credentials_request,
+        string $contentType = self::contentTypes['submitLodgifyCredentials'][0]
+    ): array
+    {
+        $request = $this->submitLodgifyCredentialsRequest($submit_lodgify_credentials_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SubmitBeds24Credentials200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation submitLodgifyCredentialsAsync
+     *
+     * Submit Lodgify credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitLodgifyCredentialsRequest $submit_lodgify_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitLodgifyCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitLodgifyCredentialsAsync(
+        \Repull\Model\SubmitLodgifyCredentialsRequest $submit_lodgify_credentials_request,
+        string $contentType = self::contentTypes['submitLodgifyCredentials'][0]
+    ): PromiseInterface
+    {
+        return $this->submitLodgifyCredentialsAsyncWithHttpInfo($submit_lodgify_credentials_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation submitLodgifyCredentialsAsyncWithHttpInfo
+     *
+     * Submit Lodgify credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitLodgifyCredentialsRequest $submit_lodgify_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitLodgifyCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitLodgifyCredentialsAsyncWithHttpInfo(
+        \Repull\Model\SubmitLodgifyCredentialsRequest $submit_lodgify_credentials_request,
+        string $contentType = self::contentTypes['submitLodgifyCredentials'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\SubmitBeds24Credentials200Response';
+        $request = $this->submitLodgifyCredentialsRequest($submit_lodgify_credentials_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'submitLodgifyCredentials'
+     *
+     * @param  \Repull\Model\SubmitLodgifyCredentialsRequest $submit_lodgify_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitLodgifyCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function submitLodgifyCredentialsRequest(
+        \Repull\Model\SubmitLodgifyCredentialsRequest $submit_lodgify_credentials_request,
+        string $contentType = self::contentTypes['submitLodgifyCredentials'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'submit_lodgify_credentials_request' is set
+        if ($submit_lodgify_credentials_request === null || (is_array($submit_lodgify_credentials_request) && count($submit_lodgify_credentials_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $submit_lodgify_credentials_request when calling submitLodgifyCredentials'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/lodgify/credentials';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($submit_lodgify_credentials_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($submit_lodgify_credentials_request));
+            } else {
+                $httpBody = $submit_lodgify_credentials_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation submitOwnerrezCredentials
+     *
+     * Submit OwnerRez credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitOwnerrezCredentialsRequest $submit_ownerrez_credentials_request submit_ownerrez_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitOwnerrezCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+     */
+    public function submitOwnerrezCredentials(
+        \Repull\Model\SubmitOwnerrezCredentialsRequest $submit_ownerrez_credentials_request,
+        string $contentType = self::contentTypes['submitOwnerrezCredentials'][0]
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+    {
+        list($response) = $this->submitOwnerrezCredentialsWithHttpInfo($submit_ownerrez_credentials_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation submitOwnerrezCredentialsWithHttpInfo
+     *
+     * Submit OwnerRez credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitOwnerrezCredentialsRequest $submit_ownerrez_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitOwnerrezCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function submitOwnerrezCredentialsWithHttpInfo(
+        \Repull\Model\SubmitOwnerrezCredentialsRequest $submit_ownerrez_credentials_request,
+        string $contentType = self::contentTypes['submitOwnerrezCredentials'][0]
+    ): array
+    {
+        $request = $this->submitOwnerrezCredentialsRequest($submit_ownerrez_credentials_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SubmitBeds24Credentials200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation submitOwnerrezCredentialsAsync
+     *
+     * Submit OwnerRez credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitOwnerrezCredentialsRequest $submit_ownerrez_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitOwnerrezCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitOwnerrezCredentialsAsync(
+        \Repull\Model\SubmitOwnerrezCredentialsRequest $submit_ownerrez_credentials_request,
+        string $contentType = self::contentTypes['submitOwnerrezCredentials'][0]
+    ): PromiseInterface
+    {
+        return $this->submitOwnerrezCredentialsAsyncWithHttpInfo($submit_ownerrez_credentials_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation submitOwnerrezCredentialsAsyncWithHttpInfo
+     *
+     * Submit OwnerRez credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitOwnerrezCredentialsRequest $submit_ownerrez_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitOwnerrezCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitOwnerrezCredentialsAsyncWithHttpInfo(
+        \Repull\Model\SubmitOwnerrezCredentialsRequest $submit_ownerrez_credentials_request,
+        string $contentType = self::contentTypes['submitOwnerrezCredentials'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\SubmitBeds24Credentials200Response';
+        $request = $this->submitOwnerrezCredentialsRequest($submit_ownerrez_credentials_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'submitOwnerrezCredentials'
+     *
+     * @param  \Repull\Model\SubmitOwnerrezCredentialsRequest $submit_ownerrez_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitOwnerrezCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function submitOwnerrezCredentialsRequest(
+        \Repull\Model\SubmitOwnerrezCredentialsRequest $submit_ownerrez_credentials_request,
+        string $contentType = self::contentTypes['submitOwnerrezCredentials'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'submit_ownerrez_credentials_request' is set
+        if ($submit_ownerrez_credentials_request === null || (is_array($submit_ownerrez_credentials_request) && count($submit_ownerrez_credentials_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $submit_ownerrez_credentials_request when calling submitOwnerrezCredentials'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/ownerrez/credentials';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($submit_ownerrez_credentials_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($submit_ownerrez_credentials_request));
+            } else {
+                $httpBody = $submit_ownerrez_credentials_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation submitSmoobuCredentials
+     *
+     * Submit Smoobu credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitSmoobuCredentialsRequest $submit_smoobu_credentials_request submit_smoobu_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitSmoobuCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+     */
+    public function submitSmoobuCredentials(
+        \Repull\Model\SubmitSmoobuCredentialsRequest $submit_smoobu_credentials_request,
+        string $contentType = self::contentTypes['submitSmoobuCredentials'][0]
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+    {
+        list($response) = $this->submitSmoobuCredentialsWithHttpInfo($submit_smoobu_credentials_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation submitSmoobuCredentialsWithHttpInfo
+     *
+     * Submit Smoobu credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitSmoobuCredentialsRequest $submit_smoobu_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitSmoobuCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function submitSmoobuCredentialsWithHttpInfo(
+        \Repull\Model\SubmitSmoobuCredentialsRequest $submit_smoobu_credentials_request,
+        string $contentType = self::contentTypes['submitSmoobuCredentials'][0]
+    ): array
+    {
+        $request = $this->submitSmoobuCredentialsRequest($submit_smoobu_credentials_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SubmitBeds24Credentials200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation submitSmoobuCredentialsAsync
+     *
+     * Submit Smoobu credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitSmoobuCredentialsRequest $submit_smoobu_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitSmoobuCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitSmoobuCredentialsAsync(
+        \Repull\Model\SubmitSmoobuCredentialsRequest $submit_smoobu_credentials_request,
+        string $contentType = self::contentTypes['submitSmoobuCredentials'][0]
+    ): PromiseInterface
+    {
+        return $this->submitSmoobuCredentialsAsyncWithHttpInfo($submit_smoobu_credentials_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation submitSmoobuCredentialsAsyncWithHttpInfo
+     *
+     * Submit Smoobu credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitSmoobuCredentialsRequest $submit_smoobu_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitSmoobuCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitSmoobuCredentialsAsyncWithHttpInfo(
+        \Repull\Model\SubmitSmoobuCredentialsRequest $submit_smoobu_credentials_request,
+        string $contentType = self::contentTypes['submitSmoobuCredentials'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\SubmitBeds24Credentials200Response';
+        $request = $this->submitSmoobuCredentialsRequest($submit_smoobu_credentials_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'submitSmoobuCredentials'
+     *
+     * @param  \Repull\Model\SubmitSmoobuCredentialsRequest $submit_smoobu_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitSmoobuCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function submitSmoobuCredentialsRequest(
+        \Repull\Model\SubmitSmoobuCredentialsRequest $submit_smoobu_credentials_request,
+        string $contentType = self::contentTypes['submitSmoobuCredentials'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'submit_smoobu_credentials_request' is set
+        if ($submit_smoobu_credentials_request === null || (is_array($submit_smoobu_credentials_request) && count($submit_smoobu_credentials_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $submit_smoobu_credentials_request when calling submitSmoobuCredentials'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/smoobu/credentials';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($submit_smoobu_credentials_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($submit_smoobu_credentials_request));
+            } else {
+                $httpBody = $submit_smoobu_credentials_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation submitVrboCredentials
+     *
+     * Submit Vrbo credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitVrboCredentialsRequest $submit_vrbo_credentials_request submit_vrbo_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitVrboCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+     */
+    public function submitVrboCredentials(
+        \Repull\Model\SubmitVrboCredentialsRequest $submit_vrbo_credentials_request,
+        string $contentType = self::contentTypes['submitVrboCredentials'][0]
+    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+    {
+        list($response) = $this->submitVrboCredentialsWithHttpInfo($submit_vrbo_credentials_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation submitVrboCredentialsWithHttpInfo
+     *
+     * Submit Vrbo credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitVrboCredentialsRequest $submit_vrbo_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitVrboCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function submitVrboCredentialsWithHttpInfo(
+        \Repull\Model\SubmitVrboCredentialsRequest $submit_vrbo_credentials_request,
+        string $contentType = self::contentTypes['submitVrboCredentials'][0]
+    ): array
+    {
+        $request = $this->submitVrboCredentialsRequest($submit_vrbo_credentials_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SubmitBeds24Credentials200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation submitVrboCredentialsAsync
+     *
+     * Submit Vrbo credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitVrboCredentialsRequest $submit_vrbo_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitVrboCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitVrboCredentialsAsync(
+        \Repull\Model\SubmitVrboCredentialsRequest $submit_vrbo_credentials_request,
+        string $contentType = self::contentTypes['submitVrboCredentials'][0]
+    ): PromiseInterface
+    {
+        return $this->submitVrboCredentialsAsyncWithHttpInfo($submit_vrbo_credentials_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation submitVrboCredentialsAsyncWithHttpInfo
+     *
+     * Submit Vrbo credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitVrboCredentialsRequest $submit_vrbo_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitVrboCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitVrboCredentialsAsyncWithHttpInfo(
+        \Repull\Model\SubmitVrboCredentialsRequest $submit_vrbo_credentials_request,
+        string $contentType = self::contentTypes['submitVrboCredentials'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\SubmitBeds24Credentials200Response';
+        $request = $this->submitVrboCredentialsRequest($submit_vrbo_credentials_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'submitVrboCredentials'
+     *
+     * @param  \Repull\Model\SubmitVrboCredentialsRequest $submit_vrbo_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitVrboCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function submitVrboCredentialsRequest(
+        \Repull\Model\SubmitVrboCredentialsRequest $submit_vrbo_credentials_request,
+        string $contentType = self::contentTypes['submitVrboCredentials'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'submit_vrbo_credentials_request' is set
+        if ($submit_vrbo_credentials_request === null || (is_array($submit_vrbo_credentials_request) && count($submit_vrbo_credentials_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $submit_vrbo_credentials_request when calling submitVrboCredentials'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/vrbo/credentials';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($submit_vrbo_credentials_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($submit_vrbo_credentials_request));
+            } else {
+                $httpBody = $submit_vrbo_credentials_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
         $defaultHeaders = [];

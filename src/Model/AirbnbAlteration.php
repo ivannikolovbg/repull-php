@@ -12,7 +12,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_test_YOUR_API_KEY ```  Sandbox keys start with `sk_test_`, production with `sk_live_`.  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resets_at` fields.  ## Plan Limits (402 — `listings_limit_exceeded`) The Repull API also enforces a per-tier cap on **active listings**:  | Tier | Active listings cap | |---|---| | `free` | 3 | | `starter` | 50 | | `custom` | unlimited |  When a customer's active-listing count is above their tier cap, the API returns **`402 Payment Required`** with `error.code = \"listings_limit_exceeded\"` on every route EXCEPT:  - `/v1/health` — uptime probes are never gated. - `/v1/usage/_*` — so dashboards can render the over-cap state. - Any `DELETE` — so the customer can trim listings to get back under the cap without paying.  Unlike 429, 402 is NOT a \"wait and retry\" condition — `Retry-After` is not set. The only paths back to 200 are:   1. `DELETE` enough listings to come back under the cap, or   2. Upgrade at `https://repull.dev/dashboard/billing`. The server-side usage cache is 60s, so the first 200 after an upgrade may take up to a minute.  The envelope mirrors `rate_limit_exceeded` for SDK ergonomics: `tier`, `limit`, `active_listings`, `upgrade_url`, plus the standard `code` / `message` / `fix` / `docs_url` / `request_id`.
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_live_YOUR_API_KEY ```  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resetsAt` fields.  ## Plan Limits (402 — `listings_limit_exceeded`) The Repull API also enforces a per-tier cap on **active listings**:  | Tier | Active listings cap | |---|---| | `free` | 3 | | `starter` | 50 | | `custom` | unlimited |  When a customer's active-listing count is above their tier cap, the API returns **`402 Payment Required`** with `error.code = \"listings_limit_exceeded\"` on every route EXCEPT:  - `/v1/health` — uptime probes are never gated. - `/v1/usage/_*` — so dashboards can render the over-cap state. - Any `DELETE` — so the customer can trim listings to get back under the cap without paying.  Unlike 429, 402 is NOT a \"wait and retry\" condition — `Retry-After` is not set. The only paths back to 200 are:   1. `DELETE` enough listings to come back under the cap, or   2. Upgrade at `https://repull.dev/dashboard/billing`. The server-side usage cache is 60s, so the first 200 after an upgrade may take up to a minute.  The envelope mirrors `rate_limit_exceeded` for SDK ergonomics: `tier`, `limit`, `active_listings`, `upgrade_url`, plus the standard `code` / `message` / `fix` / `docs_url` / `request_id`.
  *
  * The version of the OpenAPI document: 1.0.0
  * Contact: ivan@vanio.ai
@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * AirbnbAlteration Class Doc Comment
  *
- * @description An Airbnb reservation alteration request (date change, guest-count change, or price change), mirrored locally in &#x60;reservation_alterations&#x60;. Additional Airbnb-side fields may be present.
+ * @description An Airbnb reservation alteration request (date change, guest-count change, or price change), mirrored locally in &#x60;reservation_alterations&#x60;. Fields prefixed &#x60;original*&#x60; describe the reservation as it stands today; &#x60;new*&#x60; fields describe the proposed change. Compare them to render a diff and decide whether to accept (&#x60;POST .../{id}/accept&#x60;) or decline (&#x60;POST .../{id}/decline&#x60;).
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -60,11 +60,24 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
+        'id' => 'string',
         'alteration_id' => 'string',
-        'reservation_id' => 'int',
+        'reservation_id' => 'string',
         'platform' => 'string',
         'status' => 'string',
-        'created_at' => '\DateTime'
+        'initiator' => 'string',
+        'reason' => 'string',
+        'notes' => 'string',
+        'original_check_in' => '\DateTime',
+        'original_check_out' => '\DateTime',
+        'original_guest_count' => 'int',
+        'original_total_price' => 'string',
+        'new_check_in' => '\DateTime',
+        'new_check_out' => '\DateTime',
+        'new_guest_count' => 'int',
+        'new_total_price' => 'string',
+        'created_at' => '\DateTime',
+        'updated_at' => '\DateTime'
     ];
 
     /**
@@ -73,11 +86,24 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
+        'id' => null,
         'alteration_id' => null,
         'reservation_id' => null,
         'platform' => null,
         'status' => null,
-        'created_at' => 'date-time'
+        'initiator' => null,
+        'reason' => null,
+        'notes' => null,
+        'original_check_in' => 'date-time',
+        'original_check_out' => 'date-time',
+        'original_guest_count' => null,
+        'original_total_price' => null,
+        'new_check_in' => 'date-time',
+        'new_check_out' => 'date-time',
+        'new_guest_count' => null,
+        'new_total_price' => null,
+        'created_at' => 'date-time',
+        'updated_at' => 'date-time'
     ];
 
     /**
@@ -86,11 +112,24 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
+        'id' => false,
         'alteration_id' => true,
         'reservation_id' => true,
         'platform' => false,
         'status' => true,
-        'created_at' => true
+        'initiator' => true,
+        'reason' => true,
+        'notes' => true,
+        'original_check_in' => true,
+        'original_check_out' => true,
+        'original_guest_count' => true,
+        'original_total_price' => true,
+        'new_check_in' => true,
+        'new_check_out' => true,
+        'new_guest_count' => true,
+        'new_total_price' => true,
+        'created_at' => true,
+        'updated_at' => true
     ];
 
     /**
@@ -169,11 +208,24 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
+        'id' => 'id',
         'alteration_id' => 'alterationId',
         'reservation_id' => 'reservationId',
         'platform' => 'platform',
         'status' => 'status',
-        'created_at' => 'createdAt'
+        'initiator' => 'initiator',
+        'reason' => 'reason',
+        'notes' => 'notes',
+        'original_check_in' => 'originalCheckIn',
+        'original_check_out' => 'originalCheckOut',
+        'original_guest_count' => 'originalGuestCount',
+        'original_total_price' => 'originalTotalPrice',
+        'new_check_in' => 'newCheckIn',
+        'new_check_out' => 'newCheckOut',
+        'new_guest_count' => 'newGuestCount',
+        'new_total_price' => 'newTotalPrice',
+        'created_at' => 'createdAt',
+        'updated_at' => 'updatedAt'
     ];
 
     /**
@@ -182,11 +234,24 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
+        'id' => 'setId',
         'alteration_id' => 'setAlterationId',
         'reservation_id' => 'setReservationId',
         'platform' => 'setPlatform',
         'status' => 'setStatus',
-        'created_at' => 'setCreatedAt'
+        'initiator' => 'setInitiator',
+        'reason' => 'setReason',
+        'notes' => 'setNotes',
+        'original_check_in' => 'setOriginalCheckIn',
+        'original_check_out' => 'setOriginalCheckOut',
+        'original_guest_count' => 'setOriginalGuestCount',
+        'original_total_price' => 'setOriginalTotalPrice',
+        'new_check_in' => 'setNewCheckIn',
+        'new_check_out' => 'setNewCheckOut',
+        'new_guest_count' => 'setNewGuestCount',
+        'new_total_price' => 'setNewTotalPrice',
+        'created_at' => 'setCreatedAt',
+        'updated_at' => 'setUpdatedAt'
     ];
 
     /**
@@ -195,11 +260,24 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
+        'id' => 'getId',
         'alteration_id' => 'getAlterationId',
         'reservation_id' => 'getReservationId',
         'platform' => 'getPlatform',
         'status' => 'getStatus',
-        'created_at' => 'getCreatedAt'
+        'initiator' => 'getInitiator',
+        'reason' => 'getReason',
+        'notes' => 'getNotes',
+        'original_check_in' => 'getOriginalCheckIn',
+        'original_check_out' => 'getOriginalCheckOut',
+        'original_guest_count' => 'getOriginalGuestCount',
+        'original_total_price' => 'getOriginalTotalPrice',
+        'new_check_in' => 'getNewCheckIn',
+        'new_check_out' => 'getNewCheckOut',
+        'new_guest_count' => 'getNewGuestCount',
+        'new_total_price' => 'getNewTotalPrice',
+        'created_at' => 'getCreatedAt',
+        'updated_at' => 'getUpdatedAt'
     ];
 
     /**
@@ -249,11 +327,24 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('alteration_id', $data ?? [], null);
         $this->setIfExists('reservation_id', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('initiator', $data ?? [], null);
+        $this->setIfExists('reason', $data ?? [], null);
+        $this->setIfExists('notes', $data ?? [], null);
+        $this->setIfExists('original_check_in', $data ?? [], null);
+        $this->setIfExists('original_check_out', $data ?? [], null);
+        $this->setIfExists('original_guest_count', $data ?? [], null);
+        $this->setIfExists('original_total_price', $data ?? [], null);
+        $this->setIfExists('new_check_in', $data ?? [], null);
+        $this->setIfExists('new_check_out', $data ?? [], null);
+        $this->setIfExists('new_guest_count', $data ?? [], null);
+        $this->setIfExists('new_total_price', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('updated_at', $data ?? [], null);
     }
 
     /**
@@ -294,6 +385,33 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
 
 
     /**
+     * Gets id
+     *
+     * @return string|null
+     */
+    public function getId(): ?string
+    {
+        return $this->container['id'];
+    }
+
+    /**
+     * Sets id
+     *
+     * @param string|null $id Internal Repull mirror-row id (not the Airbnb alteration id — use `alterationId` for the `{id}` path param on the get / accept / decline routes).
+     *
+     * @return $this
+     */
+    public function setId(?string $id): static
+    {
+        if (is_null($id)) {
+            throw new InvalidArgumentException('non-nullable id cannot be null');
+        }
+        $this->container['id'] = $id;
+
+        return $this;
+    }
+
+    /**
      * Gets alteration_id
      *
      * @return string|null
@@ -306,7 +424,7 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets alteration_id
      *
-     * @param string|null $alteration_id Airbnb alteration id.
+     * @param string|null $alteration_id Airbnb alteration id. This is the `{id}` you pass to `GET/POST /v1/channels/airbnb/alterations/{id}` and the accept / decline sub-routes.
      *
      * @return $this
      */
@@ -330,9 +448,9 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets reservation_id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getReservationId(): ?int
+    public function getReservationId(): ?string
     {
         return $this->container['reservation_id'];
     }
@@ -340,11 +458,11 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets reservation_id
      *
-     * @param int|null $reservation_id Repull reservation id the alteration belongs to.
+     * @param string|null $reservation_id Repull reservation id the alteration belongs to.
      *
      * @return $this
      */
-    public function setReservationId(?int $reservation_id): static
+    public function setReservationId(?string $reservation_id): static
     {
         if (is_null($reservation_id)) {
             array_push($this->openAPINullablesSetToNull, 'reservation_id');
@@ -374,7 +492,7 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets platform
      *
-     * @param string|null $platform platform
+     * @param string|null $platform Always `airbnb` on this surface.
      *
      * @return $this
      */
@@ -401,7 +519,7 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets status
      *
-     * @param string|null $status Alteration status (e.g. `pending`).
+     * @param string|null $status Alteration lifecycle status — e.g. `pending` (awaiting a decision), `accepted`, `declined`, `canceled`.
      *
      * @return $this
      */
@@ -423,6 +541,380 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Gets initiator
+     *
+     * @return string|null
+     */
+    public function getInitiator(): ?string
+    {
+        return $this->container['initiator'];
+    }
+
+    /**
+     * Sets initiator
+     *
+     * @param string|null $initiator Who proposed the alteration — e.g. `host` or `guest`.
+     *
+     * @return $this
+     */
+    public function setInitiator(?string $initiator): static
+    {
+        if (is_null($initiator)) {
+            array_push($this->openAPINullablesSetToNull, 'initiator');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('initiator', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['initiator'] = $initiator;
+
+        return $this;
+    }
+
+    /**
+     * Gets reason
+     *
+     * @return string|null
+     */
+    public function getReason(): ?string
+    {
+        return $this->container['reason'];
+    }
+
+    /**
+     * Sets reason
+     *
+     * @param string|null $reason Free-text reason supplied with the alteration request.
+     *
+     * @return $this
+     */
+    public function setReason(?string $reason): static
+    {
+        if (is_null($reason)) {
+            array_push($this->openAPINullablesSetToNull, 'reason');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('reason', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['reason'] = $reason;
+
+        return $this;
+    }
+
+    /**
+     * Gets notes
+     *
+     * @return string|null
+     */
+    public function getNotes(): ?string
+    {
+        return $this->container['notes'];
+    }
+
+    /**
+     * Sets notes
+     *
+     * @param string|null $notes Additional notes attached to the alteration.
+     *
+     * @return $this
+     */
+    public function setNotes(?string $notes): static
+    {
+        if (is_null($notes)) {
+            array_push($this->openAPINullablesSetToNull, 'notes');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('notes', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['notes'] = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Gets original_check_in
+     *
+     * @return \DateTime|null
+     */
+    public function getOriginalCheckIn(): ?\DateTime
+    {
+        return $this->container['original_check_in'];
+    }
+
+    /**
+     * Sets original_check_in
+     *
+     * @param \DateTime|null $original_check_in Check-in on the reservation BEFORE the proposed change.
+     *
+     * @return $this
+     */
+    public function setOriginalCheckIn(?\DateTime $original_check_in): static
+    {
+        if (is_null($original_check_in)) {
+            array_push($this->openAPINullablesSetToNull, 'original_check_in');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('original_check_in', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['original_check_in'] = $original_check_in;
+
+        return $this;
+    }
+
+    /**
+     * Gets original_check_out
+     *
+     * @return \DateTime|null
+     */
+    public function getOriginalCheckOut(): ?\DateTime
+    {
+        return $this->container['original_check_out'];
+    }
+
+    /**
+     * Sets original_check_out
+     *
+     * @param \DateTime|null $original_check_out Check-out on the reservation BEFORE the proposed change.
+     *
+     * @return $this
+     */
+    public function setOriginalCheckOut(?\DateTime $original_check_out): static
+    {
+        if (is_null($original_check_out)) {
+            array_push($this->openAPINullablesSetToNull, 'original_check_out');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('original_check_out', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['original_check_out'] = $original_check_out;
+
+        return $this;
+    }
+
+    /**
+     * Gets original_guest_count
+     *
+     * @return int|null
+     */
+    public function getOriginalGuestCount(): ?int
+    {
+        return $this->container['original_guest_count'];
+    }
+
+    /**
+     * Sets original_guest_count
+     *
+     * @param int|null $original_guest_count Guest count BEFORE the proposed change.
+     *
+     * @return $this
+     */
+    public function setOriginalGuestCount(?int $original_guest_count): static
+    {
+        if (is_null($original_guest_count)) {
+            array_push($this->openAPINullablesSetToNull, 'original_guest_count');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('original_guest_count', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['original_guest_count'] = $original_guest_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets original_total_price
+     *
+     * @return string|null
+     */
+    public function getOriginalTotalPrice(): ?string
+    {
+        return $this->container['original_total_price'];
+    }
+
+    /**
+     * Sets original_total_price
+     *
+     * @param string|null $original_total_price Total price (decimal string) BEFORE the proposed change.
+     *
+     * @return $this
+     */
+    public function setOriginalTotalPrice(?string $original_total_price): static
+    {
+        if (is_null($original_total_price)) {
+            array_push($this->openAPINullablesSetToNull, 'original_total_price');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('original_total_price', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['original_total_price'] = $original_total_price;
+
+        return $this;
+    }
+
+    /**
+     * Gets new_check_in
+     *
+     * @return \DateTime|null
+     */
+    public function getNewCheckIn(): ?\DateTime
+    {
+        return $this->container['new_check_in'];
+    }
+
+    /**
+     * Sets new_check_in
+     *
+     * @param \DateTime|null $new_check_in Proposed new check-in.
+     *
+     * @return $this
+     */
+    public function setNewCheckIn(?\DateTime $new_check_in): static
+    {
+        if (is_null($new_check_in)) {
+            array_push($this->openAPINullablesSetToNull, 'new_check_in');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('new_check_in', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['new_check_in'] = $new_check_in;
+
+        return $this;
+    }
+
+    /**
+     * Gets new_check_out
+     *
+     * @return \DateTime|null
+     */
+    public function getNewCheckOut(): ?\DateTime
+    {
+        return $this->container['new_check_out'];
+    }
+
+    /**
+     * Sets new_check_out
+     *
+     * @param \DateTime|null $new_check_out Proposed new check-out.
+     *
+     * @return $this
+     */
+    public function setNewCheckOut(?\DateTime $new_check_out): static
+    {
+        if (is_null($new_check_out)) {
+            array_push($this->openAPINullablesSetToNull, 'new_check_out');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('new_check_out', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['new_check_out'] = $new_check_out;
+
+        return $this;
+    }
+
+    /**
+     * Gets new_guest_count
+     *
+     * @return int|null
+     */
+    public function getNewGuestCount(): ?int
+    {
+        return $this->container['new_guest_count'];
+    }
+
+    /**
+     * Sets new_guest_count
+     *
+     * @param int|null $new_guest_count Proposed new guest count.
+     *
+     * @return $this
+     */
+    public function setNewGuestCount(?int $new_guest_count): static
+    {
+        if (is_null($new_guest_count)) {
+            array_push($this->openAPINullablesSetToNull, 'new_guest_count');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('new_guest_count', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['new_guest_count'] = $new_guest_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets new_total_price
+     *
+     * @return string|null
+     */
+    public function getNewTotalPrice(): ?string
+    {
+        return $this->container['new_total_price'];
+    }
+
+    /**
+     * Sets new_total_price
+     *
+     * @param string|null $new_total_price Proposed new total price (decimal string).
+     *
+     * @return $this
+     */
+    public function setNewTotalPrice(?string $new_total_price): static
+    {
+        if (is_null($new_total_price)) {
+            array_push($this->openAPINullablesSetToNull, 'new_total_price');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('new_total_price', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['new_total_price'] = $new_total_price;
+
+        return $this;
+    }
+
+    /**
      * Gets created_at
      *
      * @return \DateTime|null
@@ -435,7 +927,7 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets created_at
      *
-     * @param \DateTime|null $created_at created_at
+     * @param \DateTime|null $created_at When the alteration was first mirrored locally.
      *
      * @return $this
      */
@@ -452,6 +944,40 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets updated_at
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->container['updated_at'];
+    }
+
+    /**
+     * Sets updated_at
+     *
+     * @param \DateTime|null $updated_at When the alteration mirror row was last updated.
+     *
+     * @return $this
+     */
+    public function setUpdatedAt(?\DateTime $updated_at): static
+    {
+        if (is_null($updated_at)) {
+            array_push($this->openAPINullablesSetToNull, 'updated_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('updated_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['updated_at'] = $updated_at;
 
         return $this;
     }
