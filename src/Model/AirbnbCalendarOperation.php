@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * AirbnbCalendarOperation Class Doc Comment
  *
- * @description One calendar operation. Supply either &#x60;start_date&#x60; + &#x60;end_date&#x60; OR a &#x60;dates&#x60; array. Every restriction here is forwarded verbatim to Airbnb&#39;s batch calendar API.
+ * @description One calendar operation, applied to every date it names. Supply either &#x60;dates&#x60; OR a &#x60;start_date&#x60; + &#x60;end_date&#x60; pair (not both). Unknown fields are refused with &#x60;422 invalid_params&#x60; rather than dropped, so a misspelling such as &#x60;price&#x60; (the field is &#x60;daily_price&#x60;) can never look like a successful write.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -65,6 +65,7 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
         'dates' => 'string[]',
         'daily_price' => 'float',
         'availability' => 'string',
+        'busy_subtype' => 'string',
         'min_nights' => 'int',
         'max_nights' => 'int',
         'closed_to_arrival' => 'bool',
@@ -83,6 +84,7 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
         'dates' => null,
         'daily_price' => null,
         'availability' => null,
+        'busy_subtype' => null,
         'min_nights' => null,
         'max_nights' => null,
         'closed_to_arrival' => null,
@@ -101,6 +103,7 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
         'dates' => true,
         'daily_price' => true,
         'availability' => true,
+        'busy_subtype' => true,
         'min_nights' => true,
         'max_nights' => true,
         'closed_to_arrival' => true,
@@ -189,6 +192,7 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
         'dates' => 'dates',
         'daily_price' => 'daily_price',
         'availability' => 'availability',
+        'busy_subtype' => 'busy_subtype',
         'min_nights' => 'min_nights',
         'max_nights' => 'max_nights',
         'closed_to_arrival' => 'closed_to_arrival',
@@ -207,6 +211,7 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
         'dates' => 'setDates',
         'daily_price' => 'setDailyPrice',
         'availability' => 'setAvailability',
+        'busy_subtype' => 'setBusySubtype',
         'min_nights' => 'setMinNights',
         'max_nights' => 'setMaxNights',
         'closed_to_arrival' => 'setClosedToArrival',
@@ -225,6 +230,7 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
         'dates' => 'getDates',
         'daily_price' => 'getDailyPrice',
         'availability' => 'getAvailability',
+        'busy_subtype' => 'getBusySubtype',
         'min_nights' => 'getMinNights',
         'max_nights' => 'getMaxNights',
         'closed_to_arrival' => 'getClosedToArrival',
@@ -267,6 +273,8 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
     public const AVAILABILITY_AVAILABLE = 'available';
     public const AVAILABILITY_UNAVAILABLE = 'unavailable';
     public const AVAILABILITY__DEFAULT = 'default';
+    public const BUSY_SUBTYPE_BLOCKED_BY_HOST = 'BLOCKED_BY_HOST';
+    public const BUSY_SUBTYPE_OUTSIDE_RESERVATION = 'OUTSIDE_RESERVATION';
 
     /**
      * Gets allowable values of the enum
@@ -279,6 +287,19 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
             self::AVAILABILITY_AVAILABLE,
             self::AVAILABILITY_UNAVAILABLE,
             self::AVAILABILITY__DEFAULT,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getBusySubtypeAllowableValues()
+    {
+        return [
+            self::BUSY_SUBTYPE_BLOCKED_BY_HOST,
+            self::BUSY_SUBTYPE_OUTSIDE_RESERVATION,
         ];
     }
 
@@ -301,6 +322,7 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
         $this->setIfExists('dates', $data ?? [], null);
         $this->setIfExists('daily_price', $data ?? [], null);
         $this->setIfExists('availability', $data ?? [], null);
+        $this->setIfExists('busy_subtype', $data ?? [], null);
         $this->setIfExists('min_nights', $data ?? [], null);
         $this->setIfExists('max_nights', $data ?? [], null);
         $this->setIfExists('closed_to_arrival', $data ?? [], null);
@@ -333,6 +355,14 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
     {
         $invalidProperties = [];
 
+        if (!is_null($this->container['dates']) && (count($this->container['dates']) < 1)) {
+            $invalidProperties[] = "invalid value for 'dates', number of items must be greater than or equal to 1.";
+        }
+
+        if (!is_null($this->container['daily_price']) && ($this->container['daily_price'] < 0)) {
+            $invalidProperties[] = "invalid value for 'daily_price', must be bigger than or equal to 0.";
+        }
+
         $allowedValues = self::getAvailabilityAllowableValues();
         if (!is_null($this->container['availability']) && !in_array($this->container['availability'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -340,6 +370,31 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
                 $this->container['availability'],
                 implode("', '", $allowedValues)
             );
+        }
+
+        $allowedValues = self::getBusySubtypeAllowableValues();
+        if (!is_null($this->container['busy_subtype']) && !in_array($this->container['busy_subtype'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'busy_subtype', must be one of '%s'",
+                $this->container['busy_subtype'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        if (!is_null($this->container['min_nights']) && ($this->container['min_nights'] > 1125)) {
+            $invalidProperties[] = "invalid value for 'min_nights', must be smaller than or equal to 1125.";
+        }
+
+        if (!is_null($this->container['min_nights']) && ($this->container['min_nights'] < 1)) {
+            $invalidProperties[] = "invalid value for 'min_nights', must be bigger than or equal to 1.";
+        }
+
+        if (!is_null($this->container['max_nights']) && ($this->container['max_nights'] > 1125)) {
+            $invalidProperties[] = "invalid value for 'max_nights', must be smaller than or equal to 1125.";
+        }
+
+        if (!is_null($this->container['max_nights']) && ($this->container['max_nights'] < 1)) {
+            $invalidProperties[] = "invalid value for 'max_nights', must be bigger than or equal to 1.";
         }
 
         return $invalidProperties;
@@ -367,7 +422,7 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets start_date
      *
-     * @param \DateTime|null $start_date Inclusive range start (pair with `end_date`).
+     * @param \DateTime|null $start_date Inclusive range start, YYYY-MM-DD. Send together with `end_date`.
      *
      * @return $this
      */
@@ -401,7 +456,7 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets end_date
      *
-     * @param \DateTime|null $end_date Inclusive range end (pair with `start_date`).
+     * @param \DateTime|null $end_date Inclusive range end, YYYY-MM-DD, on or after `start_date`.
      *
      * @return $this
      */
@@ -435,7 +490,7 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets dates
      *
-     * @param string[]|null $dates Explicit date or `start:end` range strings, as an alternative to `start_date`/`end_date`.
+     * @param string[]|null $dates Dates as `YYYY-MM-DD`, or inclusive ranges as `YYYY-MM-DD:YYYY-MM-DD` — an alternative to `start_date`/`end_date`.
      *
      * @return $this
      */
@@ -450,6 +505,11 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
+        }
+
+
+        if (!is_null($dates) && (count($dates) < 1)) {
+            throw new InvalidArgumentException('invalid length for $dates when calling AirbnbCalendarOperation., number of items must be greater than or equal to 1.');
         }
         $this->container['dates'] = $dates;
 
@@ -469,7 +529,7 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets daily_price
      *
-     * @param float|null $daily_price Nightly price override.
+     * @param float|null $daily_price Nightly price override, in the listing currency.
      *
      * @return $this
      */
@@ -485,6 +545,11 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
+
+        if (!is_null($daily_price) && ($daily_price < 0)) {
+            throw new InvalidArgumentException('invalid value for $daily_price when calling AirbnbCalendarOperation., must be bigger than or equal to 0.');
+        }
+
         $this->container['daily_price'] = $daily_price;
 
         return $this;
@@ -526,6 +591,41 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
     }
 
     /**
+     * Gets busy_subtype
+     *
+     * @return string|null
+     */
+    public function getBusySubtype(): ?string
+    {
+        return $this->container['busy_subtype'];
+    }
+
+    /**
+     * Sets busy_subtype
+     *
+     * @param string|null $busy_subtype Why a blocked date is blocked. Airbnb requires it whenever `availability` is `unavailable`; when you leave it out, Repull sends **`BLOCKED_BY_HOST`**. Use `OUTSIDE_RESERVATION` for a date held by a booking made on another channel.
+     *
+     * @return $this
+     */
+    public function setBusySubtype(?string $busy_subtype): static
+    {
+        if (is_null($busy_subtype)) {
+            array_push($this->openAPINullablesSetToNull, 'busy_subtype');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('busy_subtype', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['busy_subtype'] = $busy_subtype;
+
+        return $this;
+    }
+
+    /**
      * Gets min_nights
      *
      * @return int|null
@@ -554,6 +654,14 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
+
+        if (!is_null($min_nights) && ($min_nights > 1125)) {
+            throw new InvalidArgumentException('invalid value for $min_nights when calling AirbnbCalendarOperation., must be smaller than or equal to 1125.');
+        }
+        if (!is_null($min_nights) && ($min_nights < 1)) {
+            throw new InvalidArgumentException('invalid value for $min_nights when calling AirbnbCalendarOperation., must be bigger than or equal to 1.');
+        }
+
         $this->container['min_nights'] = $min_nights;
 
         return $this;
@@ -572,7 +680,7 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets max_nights
      *
-     * @param int|null $max_nights Maximum length of stay for the date(s).
+     * @param int|null $max_nights Maximum length of stay for the date(s); no lower than `min_nights`.
      *
      * @return $this
      */
@@ -588,6 +696,14 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
+
+        if (!is_null($max_nights) && ($max_nights > 1125)) {
+            throw new InvalidArgumentException('invalid value for $max_nights when calling AirbnbCalendarOperation., must be smaller than or equal to 1125.');
+        }
+        if (!is_null($max_nights) && ($max_nights < 1)) {
+            throw new InvalidArgumentException('invalid value for $max_nights when calling AirbnbCalendarOperation., must be bigger than or equal to 1.');
+        }
+
         $this->container['max_nights'] = $max_nights;
 
         return $this;

@@ -330,6 +330,14 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -601,6 +609,14 @@ class AirbnbApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -804,14 +820,15 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function airbnbReservationAction(
         string $code,
         string $contentType = self::contentTypes['airbnbReservationAction'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->airbnbReservationActionWithHttpInfo($code, $contentType);
+        list($response) = $this->airbnbReservationActionWithHttpInfo($code, $contentType);
+        return $response;
     }
 
     /**
@@ -859,6 +876,14 @@ class AirbnbApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -974,7 +999,7 @@ class AirbnbApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -1097,6 +1122,14 @@ class AirbnbApi
         } catch (ApiException $e) {
             switch ($e->getCode()) {
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -1361,6 +1394,14 @@ class AirbnbApi
         } catch (ApiException $e) {
             switch ($e->getCode()) {
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -1649,6 +1690,14 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -1921,6 +1970,14 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -2156,7 +2213,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\DeleteAirbnbListingPhoto200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\DeleteAirbnbListingPhoto200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function deleteAirbnbListingPhotoWithHttpInfo(
         string $id,
@@ -2192,6 +2249,12 @@ class AirbnbApi
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\DeleteAirbnbListingPhoto200Response',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
                         $request,
                         $response,
                     );
@@ -2240,6 +2303,14 @@ class AirbnbApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\DeleteAirbnbListingPhoto200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2508,7 +2579,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\DeleteAirbnbListingPhoto200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\DeleteAirbnbListingPhoto200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function deleteAirbnbListingRoomWithHttpInfo(
         string $id,
@@ -2548,6 +2619,12 @@ class AirbnbApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -2603,6 +2680,14 @@ class AirbnbApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -2874,7 +2959,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AirbnbReview|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbReview|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function editAirbnbReviewWithHttpInfo(
         string $id,
@@ -2914,6 +2999,12 @@ class AirbnbApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -2969,6 +3060,14 @@ class AirbnbApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -3235,7 +3334,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\GetAirbnbAlteration200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\GetAirbnbAlteration200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getAirbnbAlterationWithHttpInfo(
         string $id,
@@ -3274,6 +3373,12 @@ class AirbnbApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -3323,6 +3428,14 @@ class AirbnbApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -3564,7 +3677,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\GetAirbnbCheckinGuide200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\GetAirbnbCheckinGuide200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getAirbnbCheckinGuideWithHttpInfo(
         string $id,
@@ -3604,6 +3717,12 @@ class AirbnbApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -3659,6 +3778,14 @@ class AirbnbApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -3921,7 +4048,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\GetAirbnbCheckinGuide200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\GetAirbnbCheckinGuide200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getAirbnbCheckoutGuideWithHttpInfo(
         string $id,
@@ -3960,6 +4087,12 @@ class AirbnbApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -4015,6 +4148,14 @@ class AirbnbApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -4528,13 +4669,13 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\AirbnbListing
+     * @return \Repull\Model\AirbnbListing|\Repull\Model\Error
      */
     public function getAirbnbListing(
         string $id,
         ?string $include = null,
         string $contentType = self::contentTypes['getAirbnbListing'][0]
-    ): \Repull\Model\AirbnbListing
+    ): \Repull\Model\AirbnbListing|\Repull\Model\Error
     {
         list($response) = $this->getAirbnbListingWithHttpInfo($id, $include, $contentType);
         return $response;
@@ -4551,7 +4692,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AirbnbListing, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbListing|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getAirbnbListingWithHttpInfo(
         string $id,
@@ -4590,6 +4731,12 @@ class AirbnbApi
                         $request,
                         $response,
                     );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -4617,6 +4764,14 @@ class AirbnbApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\AirbnbListing',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -4831,14 +4986,15 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function getAirbnbListingAvailability(
         string $id,
         string $contentType = self::contentTypes['getAirbnbListingAvailability'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->getAirbnbListingAvailabilityWithHttpInfo($id, $contentType);
+        list($response) = $this->getAirbnbListingAvailabilityWithHttpInfo($id, $contentType);
+        return $response;
     }
 
     /**
@@ -4886,6 +5042,14 @@ class AirbnbApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -5001,7 +5165,7 @@ class AirbnbApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -5067,14 +5231,15 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function getAirbnbListingPricing(
         string $id,
         string $contentType = self::contentTypes['getAirbnbListingPricing'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->getAirbnbListingPricingWithHttpInfo($id, $contentType);
+        list($response) = $this->getAirbnbListingPricingWithHttpInfo($id, $contentType);
+        return $response;
     }
 
     /**
@@ -5122,6 +5287,14 @@ class AirbnbApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -5237,7 +5410,7 @@ class AirbnbApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -5327,7 +5500,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\GetAirbnbListingQuality200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\GetAirbnbListingQuality200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getAirbnbListingQualityWithHttpInfo(
         string $id,
@@ -5367,6 +5540,12 @@ class AirbnbApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -5422,6 +5601,14 @@ class AirbnbApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -5687,7 +5874,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\GetAirbnbListingSettings200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\GetAirbnbListingSettings200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getAirbnbListingSettingsWithHttpInfo(
         string $id,
@@ -5727,6 +5914,12 @@ class AirbnbApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -5782,6 +5975,14 @@ class AirbnbApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -6023,12 +6224,12 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\AirbnbReservation
+     * @return \Repull\Model\AirbnbReservation|\Repull\Model\Error
      */
     public function getAirbnbReservation(
         string $code,
         string $contentType = self::contentTypes['getAirbnbReservation'][0]
-    ): \Repull\Model\AirbnbReservation
+    ): \Repull\Model\AirbnbReservation|\Repull\Model\Error
     {
         list($response) = $this->getAirbnbReservationWithHttpInfo($code, $contentType);
         return $response;
@@ -6044,7 +6245,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AirbnbReservation, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbReservation|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getAirbnbReservationWithHttpInfo(
         string $code,
@@ -6082,6 +6283,12 @@ class AirbnbApi
                         $request,
                         $response,
                     );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -6109,6 +6316,14 @@ class AirbnbApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\AirbnbReservation',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -6328,7 +6543,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\GetAirbnbThread200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\GetAirbnbThread200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getAirbnbThreadWithHttpInfo(
         string $thread_id,
@@ -6367,6 +6582,12 @@ class AirbnbApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -6416,6 +6637,14 @@ class AirbnbApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -6657,7 +6886,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListAirbnbAlterations200Response|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListAirbnbAlterations200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbAlterationsWithHttpInfo(
         ?string $type = 'pending',
@@ -6702,6 +6931,12 @@ class AirbnbApi
                         $request,
                         $response,
                     );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
                 case 500:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
@@ -6740,6 +6975,14 @@ class AirbnbApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -6981,7 +7224,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListAirbnbListingAmenities200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListAirbnbListingAmenities200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbListingAmenitiesWithHttpInfo(
         string $id,
@@ -7020,6 +7263,12 @@ class AirbnbApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -7075,6 +7324,14 @@ class AirbnbApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -7327,7 +7584,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\GetAirbnbCheckinGuide200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\GetAirbnbCheckinGuide200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbListingDescriptionsWithHttpInfo(
         string $id,
@@ -7368,6 +7625,12 @@ class AirbnbApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -7423,6 +7686,14 @@ class AirbnbApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -7680,14 +7951,15 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function listAirbnbListingPhotos(
         string $id,
         string $contentType = self::contentTypes['listAirbnbListingPhotos'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->listAirbnbListingPhotosWithHttpInfo($id, $contentType);
+        list($response) = $this->listAirbnbListingPhotosWithHttpInfo($id, $contentType);
+        return $response;
     }
 
     /**
@@ -7735,6 +8007,14 @@ class AirbnbApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -7850,7 +8130,7 @@ class AirbnbApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -7937,7 +8217,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\GetAirbnbCheckinGuide200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\GetAirbnbCheckinGuide200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbListingRoomsWithHttpInfo(
         string $id,
@@ -7976,6 +8256,12 @@ class AirbnbApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -8031,6 +8317,14 @@ class AirbnbApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -8530,8 +8824,8 @@ class AirbnbApi
      *
      * List Airbnb reservations
      *
-     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
      * @param  string|null $listing_id Filter to one Airbnb listing id (numeric string). (optional)
      * @param  string|null $status Filter by reservation status. Omit to receive all statuses. (optional)
@@ -8542,7 +8836,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\AirbnbReservationListResponse
+     * @return \Repull\Model\AirbnbReservationListResponse|\Repull\Model\Error
      */
     public function listAirbnbReservations(
         ?string $cursor = null,
@@ -8554,7 +8848,7 @@ class AirbnbApi
         ?\DateTime $end_date = null,
         ?bool $include_total = true,
         string $contentType = self::contentTypes['listAirbnbReservations'][0]
-    ): \Repull\Model\AirbnbReservationListResponse
+    ): \Repull\Model\AirbnbReservationListResponse|\Repull\Model\Error
     {
         list($response) = $this->listAirbnbReservationsWithHttpInfo($cursor, $offset, $limit, $listing_id, $status, $start_date, $end_date, $include_total, $contentType);
         return $response;
@@ -8565,8 +8859,8 @@ class AirbnbApi
      *
      * List Airbnb reservations
      *
-     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
      * @param  string|null $listing_id Filter to one Airbnb listing id (numeric string). (optional)
      * @param  string|null $status Filter by reservation status. Omit to receive all statuses. (optional)
@@ -8577,7 +8871,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AirbnbReservationListResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbReservationListResponse|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbReservationsWithHttpInfo(
         ?string $cursor = null,
@@ -8622,6 +8916,12 @@ class AirbnbApi
                         $request,
                         $response,
                     );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -8653,6 +8953,14 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -8664,8 +8972,8 @@ class AirbnbApi
      *
      * List Airbnb reservations
      *
-     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
      * @param  string|null $listing_id Filter to one Airbnb listing id (numeric string). (optional)
      * @param  string|null $status Filter by reservation status. Omit to receive all statuses. (optional)
@@ -8702,8 +9010,8 @@ class AirbnbApi
      *
      * List Airbnb reservations
      *
-     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
      * @param  string|null $listing_id Filter to one Airbnb listing id (numeric string). (optional)
      * @param  string|null $status Filter by reservation status. Omit to receive all statuses. (optional)
@@ -8769,8 +9077,8 @@ class AirbnbApi
     /**
      * Create request for operation 'listAirbnbReservations'
      *
-     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.next_cursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
      * @param  string|null $listing_id Filter to one Airbnb listing id (numeric string). (optional)
      * @param  string|null $status Filter by reservation status. Omit to receive all statuses. (optional)
@@ -8965,11 +9273,11 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\AirbnbReviewListResponse
+     * @return \Repull\Model\AirbnbReviewListResponse|\Repull\Model\Error
      */
     public function listAirbnbReviews(
         string $contentType = self::contentTypes['listAirbnbReviews'][0]
-    ): \Repull\Model\AirbnbReviewListResponse
+    ): \Repull\Model\AirbnbReviewListResponse|\Repull\Model\Error
     {
         list($response) = $this->listAirbnbReviewsWithHttpInfo($contentType);
         return $response;
@@ -8984,7 +9292,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AirbnbReviewListResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbReviewListResponse|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbReviewsWithHttpInfo(
         string $contentType = self::contentTypes['listAirbnbReviews'][0]
@@ -9021,6 +9329,12 @@ class AirbnbApi
                         $request,
                         $response,
                     );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -9048,6 +9362,14 @@ class AirbnbApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\AirbnbReviewListResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9225,12 +9547,12 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\MessageListResponse
+     * @return \Repull\Model\MessageListResponse|\Repull\Model\Error
      */
     public function listAirbnbThreadMessages(
         string $thread_id,
         string $contentType = self::contentTypes['listAirbnbThreadMessages'][0]
-    ): \Repull\Model\MessageListResponse
+    ): \Repull\Model\MessageListResponse|\Repull\Model\Error
     {
         list($response) = $this->listAirbnbThreadMessagesWithHttpInfo($thread_id, $contentType);
         return $response;
@@ -9246,7 +9568,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\MessageListResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\MessageListResponse|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbThreadMessagesWithHttpInfo(
         string $thread_id,
@@ -9284,6 +9606,12 @@ class AirbnbApi
                         $request,
                         $response,
                     );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -9311,6 +9639,14 @@ class AirbnbApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\MessageListResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -9508,11 +9844,11 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\AirbnbThreadListResponse
+     * @return \Repull\Model\AirbnbThreadListResponse|\Repull\Model\Error
      */
     public function listAirbnbThreads(
         string $contentType = self::contentTypes['listAirbnbThreads'][0]
-    ): \Repull\Model\AirbnbThreadListResponse
+    ): \Repull\Model\AirbnbThreadListResponse|\Repull\Model\Error
     {
         list($response) = $this->listAirbnbThreadsWithHttpInfo($contentType);
         return $response;
@@ -9527,7 +9863,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AirbnbThreadListResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbThreadListResponse|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbThreadsWithHttpInfo(
         string $contentType = self::contentTypes['listAirbnbThreads'][0]
@@ -9564,6 +9900,12 @@ class AirbnbApi
                         $request,
                         $response,
                     );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -9591,6 +9933,14 @@ class AirbnbApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\AirbnbThreadListResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10076,7 +10426,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\MapAirbnbListingResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\MapAirbnbListingResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function mapAirbnbListingWithHttpInfo(
         \Repull\Model\MapAirbnbListingRequest $map_airbnb_listing_request,
@@ -10111,6 +10461,12 @@ class AirbnbApi
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\MapAirbnbListingResponse',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
                         $request,
                         $response,
                     );
@@ -10159,6 +10515,14 @@ class AirbnbApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\MapAirbnbListingResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10404,7 +10768,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AirbnbReview|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbReview|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function respondAirbnbReviewWithHttpInfo(
         string $id,
@@ -10444,6 +10808,12 @@ class AirbnbApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -10499,6 +10869,14 @@ class AirbnbApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -10743,14 +11121,15 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      * @deprecated
      */
     public function respondAirbnbReviewLegacy(
         string $contentType = self::contentTypes['respondAirbnbReviewLegacy'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->respondAirbnbReviewLegacyWithHttpInfo($contentType);
+        list($response) = $this->respondAirbnbReviewLegacyWithHttpInfo($contentType);
+        return $response;
     }
 
     /**
@@ -10797,6 +11176,14 @@ class AirbnbApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -10894,7 +11281,7 @@ class AirbnbApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -11021,6 +11408,14 @@ class AirbnbApi
         } catch (ApiException $e) {
             switch ($e->getCode()) {
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -11632,6 +12027,14 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -11846,15 +12249,16 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function updateAirbnbListingAvailability(
         string $id,
         \Repull\Model\AirbnbAvailabilityWriteRequest $airbnb_availability_write_request,
         string $contentType = self::contentTypes['updateAirbnbListingAvailability'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->updateAirbnbListingAvailabilityWithHttpInfo($id, $airbnb_availability_write_request, $contentType);
+        list($response) = $this->updateAirbnbListingAvailabilityWithHttpInfo($id, $airbnb_availability_write_request, $contentType);
+        return $response;
     }
 
     /**
@@ -11904,6 +12308,46 @@ class AirbnbApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -12032,7 +12476,7 @@ class AirbnbApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -12106,15 +12550,16 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function updateAirbnbListingPricing(
         string $id,
         \Repull\Model\AirbnbPricingWriteRequest $airbnb_pricing_write_request,
         string $contentType = self::contentTypes['updateAirbnbListingPricing'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->updateAirbnbListingPricingWithHttpInfo($id, $airbnb_pricing_write_request, $contentType);
+        list($response) = $this->updateAirbnbListingPricingWithHttpInfo($id, $airbnb_pricing_write_request, $contentType);
+        return $response;
     }
 
     /**
@@ -12164,6 +12609,46 @@ class AirbnbApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -12292,7 +12777,7 @@ class AirbnbApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -12430,6 +12915,14 @@ class AirbnbApi
         } catch (ApiException $e) {
             switch ($e->getCode()) {
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -12683,14 +13176,15 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function uploadAirbnbListingPhotos(
         string $id,
         string $contentType = self::contentTypes['uploadAirbnbListingPhotos'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->uploadAirbnbListingPhotosWithHttpInfo($id, $contentType);
+        list($response) = $this->uploadAirbnbListingPhotosWithHttpInfo($id, $contentType);
+        return $response;
     }
 
     /**
@@ -12738,6 +13232,14 @@ class AirbnbApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -12853,7 +13355,7 @@ class AirbnbApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );

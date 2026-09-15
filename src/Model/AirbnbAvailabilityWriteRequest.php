@@ -294,6 +294,10 @@ class AirbnbAvailabilityWriteRequest implements ModelInterface, ArrayAccess, Jso
             );
         }
 
+        if (!is_null($this->container['operations']) && (count($this->container['operations']) < 1)) {
+            $invalidProperties[] = "invalid value for 'operations', number of items must be greater than or equal to 1.";
+        }
+
         return $invalidProperties;
     }
 
@@ -355,6 +359,11 @@ class AirbnbAvailabilityWriteRequest implements ModelInterface, ArrayAccess, Jso
     {
         if (is_null($operations)) {
             throw new InvalidArgumentException('non-nullable operations cannot be null');
+        }
+
+
+        if ((count($operations) < 1)) {
+            throw new InvalidArgumentException('invalid length for $operations when calling AirbnbAvailabilityWriteRequest., number of items must be greater than or equal to 1.');
         }
         $this->container['operations'] = $operations;
 

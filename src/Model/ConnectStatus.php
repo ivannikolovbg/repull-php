@@ -66,7 +66,8 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'string',
         'external_account_id' => 'string',
         'created_at' => '\DateTime',
-        'host' => '\Repull\Model\ConnectHost'
+        'host' => '\Repull\Model\ConnectHost',
+        'accounts' => '\Repull\Model\ConnectStatusAccountsInner[]'
     ];
 
     /**
@@ -81,7 +82,8 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => null,
         'external_account_id' => null,
         'created_at' => 'date-time',
-        'host' => null
+        'host' => null,
+        'accounts' => null
     ];
 
     /**
@@ -96,7 +98,8 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => false,
         'external_account_id' => true,
         'created_at' => false,
-        'host' => true
+        'host' => true,
+        'accounts' => false
     ];
 
     /**
@@ -181,7 +184,8 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'status',
         'external_account_id' => 'externalAccountId',
         'created_at' => 'createdAt',
-        'host' => 'host'
+        'host' => 'host',
+        'accounts' => 'accounts'
     ];
 
     /**
@@ -196,7 +200,8 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'setStatus',
         'external_account_id' => 'setExternalAccountId',
         'created_at' => 'setCreatedAt',
-        'host' => 'setHost'
+        'host' => 'setHost',
+        'accounts' => 'setAccounts'
     ];
 
     /**
@@ -211,7 +216,8 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'getStatus',
         'external_account_id' => 'getExternalAccountId',
         'created_at' => 'getCreatedAt',
-        'host' => 'getHost'
+        'host' => 'getHost',
+        'accounts' => 'getAccounts'
     ];
 
     /**
@@ -285,6 +291,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('external_account_id', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
         $this->setIfExists('host', $data ?? [], null);
+        $this->setIfExists('accounts', $data ?? [], null);
     }
 
     /**
@@ -533,6 +540,33 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['host'] = $host;
+
+        return $this;
+    }
+
+    /**
+     * Gets accounts
+     *
+     * @return \Repull\Model\ConnectStatusAccountsInner[]|null
+     */
+    public function getAccounts(): ?array
+    {
+        return $this->container['accounts'];
+    }
+
+    /**
+     * Sets accounts
+     *
+     * @param \Repull\Model\ConnectStatusAccountsInner[]|null $accounts Airbnb only: every Airbnb account this workspace has connected, including ones since disconnected. Pass `externalAccountId` as `accountId` to `DELETE /v1/connect/airbnb` to disconnect one account.
+     *
+     * @return $this
+     */
+    public function setAccounts(?array $accounts): static
+    {
+        if (is_null($accounts)) {
+            throw new InvalidArgumentException('non-nullable accounts cannot be null');
+        }
+        $this->container['accounts'] = $accounts;
 
         return $this;
     }

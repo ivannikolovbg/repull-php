@@ -70,6 +70,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'valid_params' => 'string[]',
         'endpoint' => 'string',
         'did_you_mean' => 'string',
+        'listing_ids' => 'string[]',
         'retry_after' => 'int',
         'support' => '\Repull\Model\ErrorErrorSupport'
     ];
@@ -91,6 +92,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'valid_params' => null,
         'endpoint' => null,
         'did_you_mean' => null,
+        'listing_ids' => null,
         'retry_after' => null,
         'support' => null
     ];
@@ -112,6 +114,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'valid_params' => false,
         'endpoint' => false,
         'did_you_mean' => false,
+        'listing_ids' => false,
         'retry_after' => false,
         'support' => false
     ];
@@ -203,6 +206,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'valid_params' => 'validParams',
         'endpoint' => 'endpoint',
         'did_you_mean' => 'did_you_mean',
+        'listing_ids' => 'listing_ids',
         'retry_after' => 'retry_after',
         'support' => 'support'
     ];
@@ -224,6 +228,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'valid_params' => 'setValidParams',
         'endpoint' => 'setEndpoint',
         'did_you_mean' => 'setDidYouMean',
+        'listing_ids' => 'setListingIds',
         'retry_after' => 'setRetryAfter',
         'support' => 'setSupport'
     ];
@@ -245,6 +250,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'valid_params' => 'getValidParams',
         'endpoint' => 'getEndpoint',
         'did_you_mean' => 'getDidYouMean',
+        'listing_ids' => 'getListingIds',
         'retry_after' => 'getRetryAfter',
         'support' => 'getSupport'
     ];
@@ -307,6 +313,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('valid_params', $data ?? [], null);
         $this->setIfExists('endpoint', $data ?? [], null);
         $this->setIfExists('did_you_mean', $data ?? [], null);
+        $this->setIfExists('listing_ids', $data ?? [], null);
         $this->setIfExists('retry_after', $data ?? [], null);
         $this->setIfExists('support', $data ?? [], null);
     }
@@ -663,6 +670,33 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable did_you_mean cannot be null');
         }
         $this->container['did_you_mean'] = $did_you_mean;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_ids
+     *
+     * @return string[]|null
+     */
+    public function getListingIds(): ?array
+    {
+        return $this->container['listing_ids'];
+    }
+
+    /**
+     * Sets listing_ids
+     *
+     * @param string[]|null $listing_ids Every inactive listing the request involved. Present on `code: \"listing_inactive\"` (HTTP 403) — activate these ids and retry.
+     *
+     * @return $this
+     */
+    public function setListingIds(?array $listing_ids): static
+    {
+        if (is_null($listing_ids)) {
+            throw new InvalidArgumentException('non-nullable listing_ids cannot be null');
+        }
+        $this->container['listing_ids'] = $listing_ids;
 
         return $this;
     }

@@ -1016,18 +1016,20 @@ class ConnectApi
      * Disconnect provider
      *
      * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  string|null $account_id The account to disconnect: the Airbnb host id (&#x60;accounts[].externalAccountId&#x60; on &#x60;GET /v1/connect/airbnb&#x60;) or the Booking.com hotel id. Required when the workspace has more than one connected account for the provider. Not the same as the &#x60;X-Account-Id&#x60; header. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteConnection'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\Error|null
+     * @return \Repull\Model\DeleteConnection200Response|\Repull\Model\Error
      */
     public function deleteConnection(
         string $provider,
+        ?string $account_id = null,
         string $contentType = self::contentTypes['deleteConnection'][0]
-    ): ?\Repull\Model\Error
+    ): \Repull\Model\DeleteConnection200Response|\Repull\Model\Error
     {
-        list($response) = $this->deleteConnectionWithHttpInfo($provider, $contentType);
+        list($response) = $this->deleteConnectionWithHttpInfo($provider, $account_id, $contentType);
         return $response;
     }
 
@@ -1037,18 +1039,20 @@ class ConnectApi
      * Disconnect provider
      *
      * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  string|null $account_id The account to disconnect: the Airbnb host id (&#x60;accounts[].externalAccountId&#x60; on &#x60;GET /v1/connect/airbnb&#x60;) or the Booking.com hotel id. Required when the workspace has more than one connected account for the provider. Not the same as the &#x60;X-Account-Id&#x60; header. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteConnection'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\DeleteConnection200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function deleteConnectionWithHttpInfo(
         string $provider,
+        ?string $account_id = null,
         string $contentType = self::contentTypes['deleteConnection'][0]
     ): array
     {
-        $request = $this->deleteConnectionRequest($provider, $contentType);
+        $request = $this->deleteConnectionRequest($provider, $account_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1072,11 +1076,85 @@ class ConnectApi
 
             $statusCode = $response->getStatusCode();
 
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\DeleteConnection200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 501:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
 
-            return [null, $statusCode, $response->getHeaders()];
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\DeleteConnection200Response',
+                $request,
+                $response,
+            );
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\DeleteConnection200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -1104,6 +1182,7 @@ class ConnectApi
      * Disconnect provider
      *
      * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  string|null $account_id The account to disconnect: the Airbnb host id (&#x60;accounts[].externalAccountId&#x60; on &#x60;GET /v1/connect/airbnb&#x60;) or the Booking.com hotel id. Required when the workspace has more than one connected account for the provider. Not the same as the &#x60;X-Account-Id&#x60; header. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteConnection'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1111,10 +1190,11 @@ class ConnectApi
      */
     public function deleteConnectionAsync(
         string $provider,
+        ?string $account_id = null,
         string $contentType = self::contentTypes['deleteConnection'][0]
     ): PromiseInterface
     {
-        return $this->deleteConnectionAsyncWithHttpInfo($provider, $contentType)
+        return $this->deleteConnectionAsyncWithHttpInfo($provider, $account_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1128,6 +1208,7 @@ class ConnectApi
      * Disconnect provider
      *
      * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  string|null $account_id The account to disconnect: the Airbnb host id (&#x60;accounts[].externalAccountId&#x60; on &#x60;GET /v1/connect/airbnb&#x60;) or the Booking.com hotel id. Required when the workspace has more than one connected account for the provider. Not the same as the &#x60;X-Account-Id&#x60; header. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteConnection'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1135,17 +1216,31 @@ class ConnectApi
      */
     public function deleteConnectionAsyncWithHttpInfo(
         string $provider,
+        ?string $account_id = null,
         string $contentType = self::contentTypes['deleteConnection'][0]
     ): PromiseInterface
     {
-        $returnType = '';
-        $request = $this->deleteConnectionRequest($provider, $contentType);
+        $returnType = '\Repull\Model\DeleteConnection200Response';
+        $request = $this->deleteConnectionRequest($provider, $account_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 },
                 function ($exception) {
                     $response = $exception->getResponse();
@@ -1168,6 +1263,7 @@ class ConnectApi
      * Create request for operation 'deleteConnection'
      *
      * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  string|null $account_id The account to disconnect: the Airbnb host id (&#x60;accounts[].externalAccountId&#x60; on &#x60;GET /v1/connect/airbnb&#x60;) or the Booking.com hotel id. Required when the workspace has more than one connected account for the provider. Not the same as the &#x60;X-Account-Id&#x60; header. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteConnection'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1175,6 +1271,7 @@ class ConnectApi
      */
     public function deleteConnectionRequest(
         string $provider,
+        ?string $account_id = null,
         string $contentType = self::contentTypes['deleteConnection'][0]
     ): Request
     {
@@ -1187,6 +1284,7 @@ class ConnectApi
         }
 
 
+
         $resourcePath = '/v1/connect/{provider}';
         $formParams = [];
         $queryParams = [];
@@ -1194,6 +1292,15 @@ class ConnectApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $account_id,
+            'accountId', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
         // path params

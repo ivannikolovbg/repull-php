@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * WebhookEvent Class Doc Comment
  *
- * @description The full event envelope POSTed to your webhook URL. Discriminated on &#x60;type&#x60; — narrow &#x60;event.data&#x60; by switching on &#x60;event.type&#x60;. Use the matching &#x60;*Event&#x60; variant directly if your SDK lacks discriminator support.
+ * @description The full event envelope POSTed to your webhook URL. Discriminated on &#x60;type&#x60; — narrow &#x60;event.data&#x60; by switching on &#x60;event.type&#x60;. Use the matching &#x60;*Event&#x60; variant directly if your SDK lacks discriminator support. Events about an inactive listing (reservations, messages, alterations, reviews, payments, calendar and listing events) are not delivered. The data keeps syncing while the listing is inactive, but its events are never sent — including after you reactivate it; webhooks resume for events that happen from reactivation on. Account-level events are always delivered.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

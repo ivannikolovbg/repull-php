@@ -395,13 +395,14 @@ class PlumguideApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function getPlumguideAvailability(
         string $contentType = self::contentTypes['getPlumguideAvailability'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->getPlumguideAvailabilityWithHttpInfo($contentType);
+        list($response) = $this->getPlumguideAvailabilityWithHttpInfo($contentType);
+        return $response;
     }
 
     /**
@@ -447,6 +448,14 @@ class PlumguideApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -541,7 +550,7 @@ class PlumguideApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -606,13 +615,14 @@ class PlumguideApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function getPlumguidePricing(
         string $contentType = self::contentTypes['getPlumguidePricing'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->getPlumguidePricingWithHttpInfo($contentType);
+        list($response) = $this->getPlumguidePricingWithHttpInfo($contentType);
+        return $response;
     }
 
     /**
@@ -658,6 +668,14 @@ class PlumguideApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -752,7 +770,7 @@ class PlumguideApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -1115,6 +1133,14 @@ class PlumguideApi
         } catch (ApiException $e) {
             switch ($e->getCode()) {
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -1588,13 +1614,14 @@ class PlumguideApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function updatePlumguideAvailability(
         string $contentType = self::contentTypes['updatePlumguideAvailability'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->updatePlumguideAvailabilityWithHttpInfo($contentType);
+        list($response) = $this->updatePlumguideAvailabilityWithHttpInfo($contentType);
+        return $response;
     }
 
     /**
@@ -1640,6 +1667,14 @@ class PlumguideApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -1734,7 +1769,7 @@ class PlumguideApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -1799,13 +1834,14 @@ class PlumguideApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function updatePlumguidePricing(
         string $contentType = self::contentTypes['updatePlumguidePricing'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->updatePlumguidePricingWithHttpInfo($contentType);
+        list($response) = $this->updatePlumguidePricingWithHttpInfo($contentType);
+        return $response;
     }
 
     /**
@@ -1851,6 +1887,14 @@ class PlumguideApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -1945,7 +1989,7 @@ class PlumguideApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );

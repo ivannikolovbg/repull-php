@@ -62,7 +62,8 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         'success' => 'bool',
         'mapped' => 'int',
         'session_id' => 'string',
-        'connection_id' => 'string'
+        'connection_id' => 'string',
+        'reservations_imported' => 'int'
     ];
 
     /**
@@ -74,7 +75,8 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         'success' => null,
         'mapped' => null,
         'session_id' => null,
-        'connection_id' => null
+        'connection_id' => null,
+        'reservations_imported' => null
     ];
 
     /**
@@ -86,7 +88,8 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         'success' => false,
         'mapped' => false,
         'session_id' => false,
-        'connection_id' => false
+        'connection_id' => false,
+        'reservations_imported' => true
     ];
 
     /**
@@ -168,7 +171,8 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         'success' => 'success',
         'mapped' => 'mapped',
         'session_id' => 'sessionId',
-        'connection_id' => 'connectionId'
+        'connection_id' => 'connectionId',
+        'reservations_imported' => 'reservationsImported'
     ];
 
     /**
@@ -180,7 +184,8 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         'success' => 'setSuccess',
         'mapped' => 'setMapped',
         'session_id' => 'setSessionId',
-        'connection_id' => 'setConnectionId'
+        'connection_id' => 'setConnectionId',
+        'reservations_imported' => 'setReservationsImported'
     ];
 
     /**
@@ -192,7 +197,8 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         'success' => 'getSuccess',
         'mapped' => 'getMapped',
         'session_id' => 'getSessionId',
-        'connection_id' => 'getConnectionId'
+        'connection_id' => 'getConnectionId',
+        'reservations_imported' => 'getReservationsImported'
     ];
 
     /**
@@ -246,6 +252,7 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         $this->setIfExists('mapped', $data ?? [], null);
         $this->setIfExists('session_id', $data ?? [], null);
         $this->setIfExists('connection_id', $data ?? [], null);
+        $this->setIfExists('reservations_imported', $data ?? [], null);
     }
 
     /**
@@ -401,6 +408,40 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
             throw new InvalidArgumentException('non-nullable connection_id cannot be null');
         }
         $this->container['connection_id'] = $connection_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets reservations_imported
+     *
+     * @return int|null
+     */
+    public function getReservationsImported(): ?int
+    {
+        return $this->container['reservations_imported'];
+    }
+
+    /**
+     * Sets reservations_imported
+     *
+     * @param int|null $reservations_imported Reservations pulled from Booking.com once the rooms were mapped. Mapping triggers the same full property sync the dashboard's Sync button runs, because a reservation can only be resolved to a listing through a mapped room. `null` means the sync could not be run — the connection and mapping are still good, and the property can be synced from the dashboard.
+     *
+     * @return $this
+     */
+    public function setReservationsImported(?int $reservations_imported): static
+    {
+        if (is_null($reservations_imported)) {
+            array_push($this->openAPINullablesSetToNull, 'reservations_imported');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('reservations_imported', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['reservations_imported'] = $reservations_imported;
 
         return $this;
     }

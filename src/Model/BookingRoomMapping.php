@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * BookingRoomMapping Class Doc Comment
  *
- * @description A single room→listing assignment. Pass &#x60;listingId: null&#x60; to explicitly UNMAP a room (e.g. \&quot;skip this room for now\&quot;) — this also removes the corresponding &#x60;listing_platform_links&#x60; row.
+ * @description A single room→listing assignment. Pass &#x60;listingId: null&#x60; to explicitly UNMAP a room (e.g. \&quot;skip this room for now\&quot;) — this also removes the corresponding &#x60;listing_platform_links&#x60; row. Pass &#x60;create: true&#x60; instead of a &#x60;listingId&#x60; to have a listing created for the room, which is what a customer onboarding from Booking.com first needs, since they have no listings to map to yet.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -61,7 +61,8 @@ class BookingRoomMapping implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     protected static array $openAPITypes = [
         'room_id' => 'string',
-        'listing_id' => 'string'
+        'listing_id' => 'string',
+        'create' => 'bool'
     ];
 
     /**
@@ -71,7 +72,8 @@ class BookingRoomMapping implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     protected static array $openAPIFormats = [
         'room_id' => null,
-        'listing_id' => null
+        'listing_id' => null,
+        'create' => null
     ];
 
     /**
@@ -81,7 +83,8 @@ class BookingRoomMapping implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     protected static array $openAPINullables = [
         'room_id' => false,
-        'listing_id' => true
+        'listing_id' => true,
+        'create' => false
     ];
 
     /**
@@ -161,7 +164,8 @@ class BookingRoomMapping implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     protected static array $attributeMap = [
         'room_id' => 'roomId',
-        'listing_id' => 'listingId'
+        'listing_id' => 'listingId',
+        'create' => 'create'
     ];
 
     /**
@@ -171,7 +175,8 @@ class BookingRoomMapping implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     protected static array $setters = [
         'room_id' => 'setRoomId',
-        'listing_id' => 'setListingId'
+        'listing_id' => 'setListingId',
+        'create' => 'setCreate'
     ];
 
     /**
@@ -181,7 +186,8 @@ class BookingRoomMapping implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     protected static array $getters = [
         'room_id' => 'getRoomId',
-        'listing_id' => 'getListingId'
+        'listing_id' => 'getListingId',
+        'create' => 'getCreate'
     ];
 
     /**
@@ -233,6 +239,7 @@ class BookingRoomMapping implements ModelInterface, ArrayAccess, JsonSerializabl
     {
         $this->setIfExists('room_id', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('create', $data ?? [], null);
     }
 
     /**
@@ -315,7 +322,7 @@ class BookingRoomMapping implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Sets listing_id
      *
-     * @param string|null $listing_id Repull listing to bind to this room. `null` to unmap.
+     * @param string|null $listing_id Repull listing to bind to this room. `null` to unmap. Omit when `create` is true.
      *
      * @return $this
      */
@@ -332,6 +339,33 @@ class BookingRoomMapping implements ModelInterface, ArrayAccess, JsonSerializabl
             }
         }
         $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets create
+     *
+     * @return bool|null
+     */
+    public function getCreate(): ?bool
+    {
+        return $this->container['create'];
+    }
+
+    /**
+     * Sets create
+     *
+     * @param bool|null $create Create a new listing for this room and map it, instead of binding an existing one. Mutually exclusive with `listingId` — sending both is rejected with 400 rather than silently resolved. Idempotent: a room that is already mapped keeps its existing listing and no duplicate is created.
+     *
+     * @return $this
+     */
+    public function setCreate(?bool $create): static
+    {
+        if (is_null($create)) {
+            throw new InvalidArgumentException('non-nullable create cannot be null');
+        }
+        $this->container['create'] = $create;
 
         return $this;
     }

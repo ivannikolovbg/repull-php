@@ -67,7 +67,8 @@ class BookingVerifyHotelResponse implements ModelInterface, ArrayAccess, JsonSer
         'hotel_name' => 'string',
         'hotel_type' => 'string',
         'country' => 'string',
-        'city' => 'string'
+        'city' => 'string',
+        'missing_capabilities' => 'string[]'
     ];
 
     /**
@@ -83,7 +84,8 @@ class BookingVerifyHotelResponse implements ModelInterface, ArrayAccess, JsonSer
         'hotel_name' => null,
         'hotel_type' => null,
         'country' => null,
-        'city' => null
+        'city' => null,
+        'missing_capabilities' => null
     ];
 
     /**
@@ -99,7 +101,8 @@ class BookingVerifyHotelResponse implements ModelInterface, ArrayAccess, JsonSer
         'hotel_name' => true,
         'hotel_type' => true,
         'country' => true,
-        'city' => true
+        'city' => true,
+        'missing_capabilities' => false
     ];
 
     /**
@@ -185,7 +188,8 @@ class BookingVerifyHotelResponse implements ModelInterface, ArrayAccess, JsonSer
         'hotel_name' => 'hotelName',
         'hotel_type' => 'hotelType',
         'country' => 'country',
-        'city' => 'city'
+        'city' => 'city',
+        'missing_capabilities' => 'missingCapabilities'
     ];
 
     /**
@@ -201,7 +205,8 @@ class BookingVerifyHotelResponse implements ModelInterface, ArrayAccess, JsonSer
         'hotel_name' => 'setHotelName',
         'hotel_type' => 'setHotelType',
         'country' => 'setCountry',
-        'city' => 'setCity'
+        'city' => 'setCity',
+        'missing_capabilities' => 'setMissingCapabilities'
     ];
 
     /**
@@ -217,7 +222,8 @@ class BookingVerifyHotelResponse implements ModelInterface, ArrayAccess, JsonSer
         'hotel_name' => 'getHotelName',
         'hotel_type' => 'getHotelType',
         'country' => 'getCountry',
-        'city' => 'getCity'
+        'city' => 'getCity',
+        'missing_capabilities' => 'getMissingCapabilities'
     ];
 
     /**
@@ -252,6 +258,25 @@ class BookingVerifyHotelResponse implements ModelInterface, ArrayAccess, JsonSer
         return self::$openAPIModelName;
     }
 
+    public const MISSING_CAPABILITIES_CONTENT = 'content';
+    public const MISSING_CAPABILITIES_RESERVATIONS = 'reservations';
+    public const MISSING_CAPABILITIES_RATES = 'rates';
+    public const MISSING_CAPABILITIES_MESSAGING = 'messaging';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getMissingCapabilitiesAllowableValues()
+    {
+        return [
+            self::MISSING_CAPABILITIES_CONTENT,
+            self::MISSING_CAPABILITIES_RESERVATIONS,
+            self::MISSING_CAPABILITIES_RATES,
+            self::MISSING_CAPABILITIES_MESSAGING,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -275,6 +300,7 @@ class BookingVerifyHotelResponse implements ModelInterface, ArrayAccess, JsonSer
         $this->setIfExists('hotel_type', $data ?? [], null);
         $this->setIfExists('country', $data ?? [], null);
         $this->setIfExists('city', $data ?? [], null);
+        $this->setIfExists('missing_capabilities', $data ?? [], null);
     }
 
     /**
@@ -566,6 +592,42 @@ class BookingVerifyHotelResponse implements ModelInterface, ArrayAccess, JsonSer
             }
         }
         $this->container['city'] = $city;
+
+        return $this;
+    }
+
+    /**
+     * Gets missing_capabilities
+     *
+     * @return string[]|null
+     */
+    public function getMissingCapabilities(): ?array
+    {
+        return $this->container['missing_capabilities'];
+    }
+
+    /**
+     * Sets missing_capabilities
+     *
+     * @param string[]|null $missing_capabilities Capabilities Booking.com explicitly refused for this property (HTTP 401/403), usually empty. `content` means the connection is live and syncs reservations, rates and messages normally, but the Content API was never granted, so the property name, rooms and photos cannot be read from Booking.com and are substituted. A capability whose probe failed for any other reason is omitted rather than listed here.
+     *
+     * @return $this
+     */
+    public function setMissingCapabilities(?array $missing_capabilities): static
+    {
+        if (is_null($missing_capabilities)) {
+            throw new InvalidArgumentException('non-nullable missing_capabilities cannot be null');
+        }
+        $allowedValues = self::getMissingCapabilitiesAllowableValues();
+        if (array_diff($missing_capabilities, $allowedValues)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    "Invalid value for 'missing_capabilities', must be one of '%s'",
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['missing_capabilities'] = $missing_capabilities;
 
         return $this;
     }

@@ -536,6 +536,14 @@ class BookingComApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -732,12 +740,13 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\Error|null
+     * @return \Repull\Model\Error
+     * @deprecated
      */
     public function createBookingWebhook(
         \Repull\Model\CreateBookingWebhookRequest $create_booking_webhook_request,
         string $contentType = self::contentTypes['createBookingWebhook'][0]
-    ): ?\Repull\Model\Error
+    ): \Repull\Model\Error
     {
         list($response) = $this->createBookingWebhookWithHttpInfo($create_booking_webhook_request, $contentType);
         return $response;
@@ -754,6 +763,7 @@ class BookingComApi
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @deprecated
      */
     public function createBookingWebhookWithHttpInfo(
         \Repull\Model\CreateBookingWebhookRequest $create_booking_webhook_request,
@@ -788,14 +798,6 @@ class BookingComApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
-                case 400:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Repull\Model\Error',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -804,15 +806,7 @@ class BookingComApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
-                case 404:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Repull\Model\Error',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 500:
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -836,6 +830,7 @@ class BookingComApi
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
+     * @deprecated
      */
     public function createBookingWebhookAsync(
         \Repull\Model\CreateBookingWebhookRequest $create_booking_webhook_request,
@@ -860,6 +855,7 @@ class BookingComApi
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
+     * @deprecated
      */
     public function createBookingWebhookAsyncWithHttpInfo(
         \Repull\Model\CreateBookingWebhookRequest $create_booking_webhook_request,
@@ -900,6 +896,7 @@ class BookingComApi
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
+     * @deprecated
      */
     public function createBookingWebhookRequest(
         \Repull\Model\CreateBookingWebhookRequest $create_booking_webhook_request,
@@ -1000,12 +997,13 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\Error|null
+     * @return \Repull\Model\Error
+     * @deprecated
      */
     public function deleteBookingWebhook(
         string $notification_type,
         string $contentType = self::contentTypes['deleteBookingWebhook'][0]
-    ): ?\Repull\Model\Error
+    ): \Repull\Model\Error
     {
         list($response) = $this->deleteBookingWebhookWithHttpInfo($notification_type, $contentType);
         return $response;
@@ -1022,6 +1020,7 @@ class BookingComApi
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @deprecated
      */
     public function deleteBookingWebhookWithHttpInfo(
         string $notification_type,
@@ -1056,14 +1055,6 @@ class BookingComApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
-                case 400:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Repull\Model\Error',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -1072,15 +1063,7 @@ class BookingComApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
-                case 404:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Repull\Model\Error',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 500:
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -1104,6 +1087,7 @@ class BookingComApi
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
+     * @deprecated
      */
     public function deleteBookingWebhookAsync(
         string $notification_type,
@@ -1128,6 +1112,7 @@ class BookingComApi
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
+     * @deprecated
      */
     public function deleteBookingWebhookAsyncWithHttpInfo(
         string $notification_type,
@@ -1168,6 +1153,7 @@ class BookingComApi
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
+     * @deprecated
      */
     public function deleteBookingWebhookRequest(
         string $notification_type,
@@ -1303,7 +1289,7 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\BookingAvailabilityStateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\BookingAvailabilityStateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getBookingAvailabilityWithHttpInfo(
         string $property_id,
@@ -1352,6 +1338,12 @@ class BookingComApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -1409,6 +1401,14 @@ class BookingComApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -1763,6 +1763,14 @@ class BookingComApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -1960,13 +1968,14 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function getBookingContent(
         string $contentType = self::contentTypes['getBookingContent'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->getBookingContentWithHttpInfo($contentType);
+        list($response) = $this->getBookingContentWithHttpInfo($contentType);
+        return $response;
     }
 
     /**
@@ -2012,6 +2021,22 @@ class BookingComApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -2106,7 +2131,7 @@ class BookingComApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -2205,7 +2230,7 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\BookingPricingResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\BookingPricingResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getBookingListingPricingWithHttpInfo(
         int $id,
@@ -2254,6 +2279,12 @@ class BookingComApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -2311,6 +2342,14 @@ class BookingComApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -2664,6 +2703,14 @@ class BookingComApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -2860,11 +2907,11 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\BookingConversation[]
+     * @return \Repull\Model\BookingConversation[]|\Repull\Model\Error
      */
     public function listBookingConversations(
         string $contentType = self::contentTypes['listBookingConversations'][0]
-    ): array
+    ): array|\Repull\Model\Error
     {
         list($response) = $this->listBookingConversationsWithHttpInfo($contentType);
         return $response;
@@ -2879,7 +2926,7 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\BookingConversation[], HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\BookingConversation[]|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listBookingConversationsWithHttpInfo(
         string $contentType = self::contentTypes['listBookingConversations'][0]
@@ -2916,6 +2963,18 @@ class BookingComApi
                         $request,
                         $response,
                     );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -2943,6 +3002,22 @@ class BookingComApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\BookingConversation[]',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3400,7 +3475,7 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\BookingRoomsRatesResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\BookingRoomsRatesResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listBookingPropertyRoomsWithHttpInfo(
         int $id,
@@ -3445,6 +3520,12 @@ class BookingComApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -3502,6 +3583,14 @@ class BookingComApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -3746,7 +3835,7 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListBookingReservations200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListBookingReservations200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listBookingReservationsWithHttpInfo(
         ?string $type = 'new',
@@ -3793,6 +3882,12 @@ class BookingComApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -3850,6 +3945,14 @@ class BookingComApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -4158,6 +4261,14 @@ class BookingComApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -4355,11 +4466,12 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\Error|null
+     * @return \Repull\Model\Error
+     * @deprecated
      */
     public function listBookingWebhooks(
         string $contentType = self::contentTypes['listBookingWebhooks'][0]
-    ): ?\Repull\Model\Error
+    ): \Repull\Model\Error
     {
         list($response) = $this->listBookingWebhooksWithHttpInfo($contentType);
         return $response;
@@ -4375,6 +4487,7 @@ class BookingComApi
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @deprecated
      */
     public function listBookingWebhooksWithHttpInfo(
         string $contentType = self::contentTypes['listBookingWebhooks'][0]
@@ -4416,15 +4529,7 @@ class BookingComApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
-                case 404:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        '\Repull\Model\Error',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-                case 500:
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -4447,6 +4552,7 @@ class BookingComApi
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
+     * @deprecated
      */
     public function listBookingWebhooksAsync(
         string $contentType = self::contentTypes['listBookingWebhooks'][0]
@@ -4469,6 +4575,7 @@ class BookingComApi
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
+     * @deprecated
      */
     public function listBookingWebhooksAsyncWithHttpInfo(
         string $contentType = self::contentTypes['listBookingWebhooks'][0]
@@ -4507,6 +4614,7 @@ class BookingComApi
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
+     * @deprecated
      */
     public function listBookingWebhooksRequest(
         string $contentType = self::contentTypes['listBookingWebhooks'][0]
@@ -4613,7 +4721,7 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ReplyBookingReview200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ReplyBookingReview200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function replyBookingReviewWithHttpInfo(
         \Repull\Model\ReplyBookingReviewRequest $reply_booking_review_request,
@@ -4652,6 +4760,18 @@ class BookingComApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -4701,6 +4821,22 @@ class BookingComApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -4989,6 +5125,14 @@ class BookingComApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -5250,6 +5394,14 @@ class BookingComApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -5525,6 +5677,14 @@ class BookingComApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 404:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -5720,13 +5880,14 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function updateBookingContent(
         string $contentType = self::contentTypes['updateBookingContent'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->updateBookingContentWithHttpInfo($contentType);
+        list($response) = $this->updateBookingContentWithHttpInfo($contentType);
+        return $response;
     }
 
     /**
@@ -5772,6 +5933,22 @@ class BookingComApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -5866,7 +6043,7 @@ class BookingComApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );
@@ -5956,7 +6133,7 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\BookingPricingUpdateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\BookingPricingUpdateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function updateBookingListingPricingWithHttpInfo(
         int $id,
@@ -6002,6 +6179,12 @@ class BookingComApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -6059,6 +6242,14 @@ class BookingComApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',

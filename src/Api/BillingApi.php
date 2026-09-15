@@ -374,8 +374,8 @@ class BillingApi
      * @param  string|null $status Status-class filter. (optional)
      * @param  string|null $q Free-text match on path / operation / request id. (optional)
      * @param  int|null $limit Page size (max 200). (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor from the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $cursor Opaque cursor from the previous response&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUsageLogs'] to see the possible values for this operation
      *
@@ -409,8 +409,8 @@ class BillingApi
      * @param  string|null $status Status-class filter. (optional)
      * @param  string|null $q Free-text match on path / operation / request id. (optional)
      * @param  int|null $limit Page size (max 200). (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor from the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $cursor Opaque cursor from the previous response&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUsageLogs'] to see the possible values for this operation
      *
@@ -550,8 +550,8 @@ class BillingApi
      * @param  string|null $status Status-class filter. (optional)
      * @param  string|null $q Free-text match on path / operation / request id. (optional)
      * @param  int|null $limit Page size (max 200). (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor from the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $cursor Opaque cursor from the previous response&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUsageLogs'] to see the possible values for this operation
      *
@@ -588,8 +588,8 @@ class BillingApi
      * @param  string|null $status Status-class filter. (optional)
      * @param  string|null $q Free-text match on path / operation / request id. (optional)
      * @param  int|null $limit Page size (max 200). (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor from the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $cursor Opaque cursor from the previous response&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUsageLogs'] to see the possible values for this operation
      *
@@ -655,8 +655,8 @@ class BillingApi
      * @param  string|null $status Status-class filter. (optional)
      * @param  string|null $q Free-text match on path / operation / request id. (optional)
      * @param  int|null $limit Page size (max 200). (optional, default to 50)
-     * @param  string|null $cursor Opaque cursor from the previous response&#39;s &#x60;pagination.next_cursor&#x60;. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  string|null $cursor Opaque cursor from the previous response&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  bool|null $include_total When &#x60;true&#x60; (default), the response&#39;s &#x60;pagination.total&#x60; carries the count of rows matching the current filter, across all pages. Pass &#x60;false&#x60; to skip the count for very large workspaces where the per-page COUNT(*) cost matters. (optional, default to true)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getUsageLogs'] to see the possible values for this operation
      *

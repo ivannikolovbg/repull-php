@@ -108,6 +108,9 @@ class ListingsApi
         'publishListingToBooking' => [
             'application/json',
         ],
+        'setListingsStatus' => [
+            'application/json',
+        ],
         'updateListingActive' => [
             'application/json',
         ],
@@ -507,7 +510,7 @@ class ListingsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListingPhotoUploadUrlResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListingPhotoUploadUrlResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function createListingPhotoUploadUrlWithHttpInfo(
         int $id,
@@ -547,6 +550,12 @@ class ListingsApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -596,6 +605,14 @@ class ListingsApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -1183,7 +1200,7 @@ class ListingsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListingPhotoDeleteResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListingPhotoDeleteResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function deleteListingPhotoWithHttpInfo(
         int $id,
@@ -1223,6 +1240,12 @@ class ListingsApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -1272,6 +1295,14 @@ class ListingsApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -1533,7 +1564,7 @@ class ListingsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListingGenerateContentResponse|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListingGenerateContentResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function generateListingContentWithHttpInfo(
         int $id,
@@ -1572,6 +1603,12 @@ class ListingsApi
                         $request,
                         $response,
                     );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
                 case 404:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
@@ -1605,6 +1642,14 @@ class ListingsApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\ListingGenerateContentResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -1852,7 +1897,7 @@ class ListingsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\Listing|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\Listing|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getListingWithHttpInfo(
         int $id,
@@ -1893,6 +1938,12 @@ class ListingsApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -1942,6 +1993,14 @@ class ListingsApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -2207,7 +2266,7 @@ class ListingsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListingPublishStatusResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListingPublishStatusResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getListingPublishStatusWithHttpInfo(
         int $id,
@@ -2242,6 +2301,12 @@ class ListingsApi
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\ListingPublishStatusResponse',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
                         $request,
                         $response,
                     );
@@ -2284,6 +2349,14 @@ class ListingsApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\ListingPublishStatusResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2519,7 +2592,7 @@ class ListingsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListingPhotosResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListingPhotosResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listListingPhotosWithHttpInfo(
         int $id,
@@ -2563,6 +2636,12 @@ class ListingsApi
                         $request,
                         $response,
                     );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
                 case 404:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
@@ -2601,6 +2680,14 @@ class ListingsApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -2807,10 +2894,10 @@ class ListingsApi
      *
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
-     * @param  string|null $status Filter by listing status. (optional)
+     * @param  string|null $status Filter by listing status. Defaults to &#x60;active&#x60;. Pass &#x60;inactive&#x60; to list the listings you can activate, &#x60;archived&#x60; for archived ones, or &#x60;all&#x60; for every status. Inactive listings are returned with identity fields only — &#x60;id&#x60;, &#x60;name&#x60;, &#x60;status&#x60; and &#x60;channels&#x60; — and never with &#x60;address&#x60;, &#x60;thumbnailUrl&#x60;, &#x60;content&#x60; or &#x60;details&#x60;; activate one to see the rest. (optional, default to 'active')
      * @param  string|null $channel Restrict to listings published on the given channel (&#x60;airbnb&#x60;, &#x60;booking&#x60;, &#x60;vrbo&#x60;, etc.). Joins through &#x60;listing_platform_links&#x60; and matches active links only. (optional)
      * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (Note: &#x60;amenities&#x60; is not yet supported on the list endpoint — use the detail endpoint to fetch amenity rows for a single listing.) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listListings'] to see the possible values for this operation
@@ -2825,7 +2912,7 @@ class ListingsApi
         ?int $offset = 0,
         ?int $limit = 20,
         ?string $q = null,
-        ?string $status = null,
+        ?string $status = 'active',
         ?string $channel = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listListings'][0]
@@ -2842,10 +2929,10 @@ class ListingsApi
      *
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
-     * @param  string|null $status Filter by listing status. (optional)
+     * @param  string|null $status Filter by listing status. Defaults to &#x60;active&#x60;. Pass &#x60;inactive&#x60; to list the listings you can activate, &#x60;archived&#x60; for archived ones, or &#x60;all&#x60; for every status. Inactive listings are returned with identity fields only — &#x60;id&#x60;, &#x60;name&#x60;, &#x60;status&#x60; and &#x60;channels&#x60; — and never with &#x60;address&#x60;, &#x60;thumbnailUrl&#x60;, &#x60;content&#x60; or &#x60;details&#x60;; activate one to see the rest. (optional, default to 'active')
      * @param  string|null $channel Restrict to listings published on the given channel (&#x60;airbnb&#x60;, &#x60;booking&#x60;, &#x60;vrbo&#x60;, etc.). Joins through &#x60;listing_platform_links&#x60; and matches active links only. (optional)
      * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (Note: &#x60;amenities&#x60; is not yet supported on the list endpoint — use the detail endpoint to fetch amenity rows for a single listing.) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listListings'] to see the possible values for this operation
@@ -2860,7 +2947,7 @@ class ListingsApi
         ?int $offset = 0,
         ?int $limit = 20,
         ?string $q = null,
-        ?string $status = null,
+        ?string $status = 'active',
         ?string $channel = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listListings'][0]
@@ -2969,10 +3056,10 @@ class ListingsApi
      *
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
-     * @param  string|null $status Filter by listing status. (optional)
+     * @param  string|null $status Filter by listing status. Defaults to &#x60;active&#x60;. Pass &#x60;inactive&#x60; to list the listings you can activate, &#x60;archived&#x60; for archived ones, or &#x60;all&#x60; for every status. Inactive listings are returned with identity fields only — &#x60;id&#x60;, &#x60;name&#x60;, &#x60;status&#x60; and &#x60;channels&#x60; — and never with &#x60;address&#x60;, &#x60;thumbnailUrl&#x60;, &#x60;content&#x60; or &#x60;details&#x60;; activate one to see the rest. (optional, default to 'active')
      * @param  string|null $channel Restrict to listings published on the given channel (&#x60;airbnb&#x60;, &#x60;booking&#x60;, &#x60;vrbo&#x60;, etc.). Joins through &#x60;listing_platform_links&#x60; and matches active links only. (optional)
      * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (Note: &#x60;amenities&#x60; is not yet supported on the list endpoint — use the detail endpoint to fetch amenity rows for a single listing.) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listListings'] to see the possible values for this operation
@@ -2986,7 +3073,7 @@ class ListingsApi
         ?int $offset = 0,
         ?int $limit = 20,
         ?string $q = null,
-        ?string $status = null,
+        ?string $status = 'active',
         ?string $channel = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listListings'][0]
@@ -3007,10 +3094,10 @@ class ListingsApi
      *
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
-     * @param  string|null $status Filter by listing status. (optional)
+     * @param  string|null $status Filter by listing status. Defaults to &#x60;active&#x60;. Pass &#x60;inactive&#x60; to list the listings you can activate, &#x60;archived&#x60; for archived ones, or &#x60;all&#x60; for every status. Inactive listings are returned with identity fields only — &#x60;id&#x60;, &#x60;name&#x60;, &#x60;status&#x60; and &#x60;channels&#x60; — and never with &#x60;address&#x60;, &#x60;thumbnailUrl&#x60;, &#x60;content&#x60; or &#x60;details&#x60;; activate one to see the rest. (optional, default to 'active')
      * @param  string|null $channel Restrict to listings published on the given channel (&#x60;airbnb&#x60;, &#x60;booking&#x60;, &#x60;vrbo&#x60;, etc.). Joins through &#x60;listing_platform_links&#x60; and matches active links only. (optional)
      * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (Note: &#x60;amenities&#x60; is not yet supported on the list endpoint — use the detail endpoint to fetch amenity rows for a single listing.) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listListings'] to see the possible values for this operation
@@ -3024,7 +3111,7 @@ class ListingsApi
         ?int $offset = 0,
         ?int $limit = 20,
         ?string $q = null,
-        ?string $status = null,
+        ?string $status = 'active',
         ?string $channel = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listListings'][0]
@@ -3074,10 +3161,10 @@ class ListingsApi
      *
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $q Case-insensitive substring search on name, street, or city. (optional)
-     * @param  string|null $status Filter by listing status. (optional)
+     * @param  string|null $status Filter by listing status. Defaults to &#x60;active&#x60;. Pass &#x60;inactive&#x60; to list the listings you can activate, &#x60;archived&#x60; for archived ones, or &#x60;all&#x60; for every status. Inactive listings are returned with identity fields only — &#x60;id&#x60;, &#x60;name&#x60;, &#x60;status&#x60; and &#x60;channels&#x60; — and never with &#x60;address&#x60;, &#x60;thumbnailUrl&#x60;, &#x60;content&#x60; or &#x60;details&#x60;; activate one to see the rest. (optional, default to 'active')
      * @param  string|null $channel Restrict to listings published on the given channel (&#x60;airbnb&#x60;, &#x60;booking&#x60;, &#x60;vrbo&#x60;, etc.). Joins through &#x60;listing_platform_links&#x60; and matches active links only. (optional)
      * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;content&#x60;, &#x60;details&#x60;. Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (Note: &#x60;amenities&#x60; is not yet supported on the list endpoint — use the detail endpoint to fetch amenity rows for a single listing.) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listListings'] to see the possible values for this operation
@@ -3091,7 +3178,7 @@ class ListingsApi
         ?int $offset = 0,
         ?int $limit = 20,
         ?string $q = null,
-        ?string $status = null,
+        ?string $status = 'active',
         ?string $channel = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listListings'][0]
@@ -3288,7 +3375,7 @@ class ListingsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListingPublishResponse|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListingPublishResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function publishListingToAirbnbWithHttpInfo(
         int $id,
@@ -3333,6 +3420,12 @@ class ListingsApi
                         $request,
                         $response,
                     );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -3365,6 +3458,14 @@ class ListingsApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -3601,7 +3702,7 @@ class ListingsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListingPublishResponse|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListingPublishResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function publishListingToBookingWithHttpInfo(
         int $id,
@@ -3645,6 +3746,12 @@ class ListingsApi
                         $request,
                         $response,
                     );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -3677,6 +3784,14 @@ class ListingsApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -3819,6 +3934,359 @@ class ListingsApi
 
         // for model (json/xml)
         if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation setListingsStatus
+     *
+     * Activate or deactivate listings in bulk
+     *
+     * @param  \Repull\Model\ListingStatusBatchRequest $listing_status_batch_request listing_status_batch_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setListingsStatus'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\ListingStatusBatchResponse|\Repull\Model\Error
+     */
+    public function setListingsStatus(
+        \Repull\Model\ListingStatusBatchRequest $listing_status_batch_request,
+        string $contentType = self::contentTypes['setListingsStatus'][0]
+    ): \Repull\Model\ListingStatusBatchResponse|\Repull\Model\Error
+    {
+        list($response) = $this->setListingsStatusWithHttpInfo($listing_status_batch_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation setListingsStatusWithHttpInfo
+     *
+     * Activate or deactivate listings in bulk
+     *
+     * @param  \Repull\Model\ListingStatusBatchRequest $listing_status_batch_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setListingsStatus'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\ListingStatusBatchResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function setListingsStatusWithHttpInfo(
+        \Repull\Model\ListingStatusBatchRequest $listing_status_batch_request,
+        string $contentType = self::contentTypes['setListingsStatus'][0]
+    ): array
+    {
+        $request = $this->setListingsStatusRequest($listing_status_batch_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\ListingStatusBatchResponse',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 402:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\ListingStatusBatchResponse',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\ListingStatusBatchResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 402:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation setListingsStatusAsync
+     *
+     * Activate or deactivate listings in bulk
+     *
+     * @param  \Repull\Model\ListingStatusBatchRequest $listing_status_batch_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setListingsStatus'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function setListingsStatusAsync(
+        \Repull\Model\ListingStatusBatchRequest $listing_status_batch_request,
+        string $contentType = self::contentTypes['setListingsStatus'][0]
+    ): PromiseInterface
+    {
+        return $this->setListingsStatusAsyncWithHttpInfo($listing_status_batch_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation setListingsStatusAsyncWithHttpInfo
+     *
+     * Activate or deactivate listings in bulk
+     *
+     * @param  \Repull\Model\ListingStatusBatchRequest $listing_status_batch_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setListingsStatus'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function setListingsStatusAsyncWithHttpInfo(
+        \Repull\Model\ListingStatusBatchRequest $listing_status_batch_request,
+        string $contentType = self::contentTypes['setListingsStatus'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\ListingStatusBatchResponse';
+        $request = $this->setListingsStatusRequest($listing_status_batch_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'setListingsStatus'
+     *
+     * @param  \Repull\Model\ListingStatusBatchRequest $listing_status_batch_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setListingsStatus'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function setListingsStatusRequest(
+        \Repull\Model\ListingStatusBatchRequest $listing_status_batch_request,
+        string $contentType = self::contentTypes['setListingsStatus'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'listing_status_batch_request' is set
+        if ($listing_status_batch_request === null || (is_array($listing_status_batch_request) && count($listing_status_batch_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $listing_status_batch_request when calling setListingsStatus'
+            );
+        }
+
+
+        $resourcePath = '/v1/listings/status';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($listing_status_batch_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($listing_status_batch_request));
+            } else {
+                $httpBody = $listing_status_batch_request;
+            }
+        } elseif (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -4266,7 +4734,7 @@ class ListingsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListingContentUpdateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListingContentUpdateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function updateListingContentWithHttpInfo(
         int $id,
@@ -4306,6 +4774,12 @@ class ListingsApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -4355,6 +4829,14 @@ class ListingsApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',

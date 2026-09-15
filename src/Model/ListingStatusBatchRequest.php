@@ -1,6 +1,6 @@
 <?php
 /**
- * BookingConnectRoomsResponse
+ * ListingStatusBatchRequest
  *
  * PHP version 8.1
  *
@@ -35,15 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * BookingConnectRoomsResponse Class Doc Comment
+ * ListingStatusBatchRequest Class Doc Comment
  *
- * @description Returned by &#x60;GET /v1/connect/booking/rooms&#x60;. The hosted picker page polls this every ~2s while the room import runs server-side; once &#x60;status&#x60; is &#x60;ready&#x60; it renders the mapping UI.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingStatusBatchRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +51,7 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'BookingConnectRoomsResponse';
+    protected static string $openAPIModelName = 'ListingStatusBatchRequest';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,12 +59,8 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'status' => 'string',
-        'session_id' => 'string',
-        'hotel_id' => 'string',
-        'rooms' => '\Repull\Model\BookingConnectRoom[]',
-        'listing_options' => '\Repull\Model\BookingConnectListingOption[]',
-        'missing_capabilities' => 'string[]'
+        'listing_ids' => 'string[]',
+        'active' => 'bool'
     ];
 
     /**
@@ -74,12 +69,8 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'status' => null,
-        'session_id' => null,
-        'hotel_id' => null,
-        'rooms' => null,
-        'listing_options' => null,
-        'missing_capabilities' => null
+        'listing_ids' => null,
+        'active' => null
     ];
 
     /**
@@ -88,12 +79,8 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'status' => false,
-        'session_id' => false,
-        'hotel_id' => false,
-        'rooms' => false,
-        'listing_options' => false,
-        'missing_capabilities' => false
+        'listing_ids' => false,
+        'active' => false
     ];
 
     /**
@@ -172,12 +159,8 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'status' => 'status',
-        'session_id' => 'sessionId',
-        'hotel_id' => 'hotelId',
-        'rooms' => 'rooms',
-        'listing_options' => 'listingOptions',
-        'missing_capabilities' => 'missingCapabilities'
+        'listing_ids' => 'listingIds',
+        'active' => 'active'
     ];
 
     /**
@@ -186,12 +169,8 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $setters = [
-        'status' => 'setStatus',
-        'session_id' => 'setSessionId',
-        'hotel_id' => 'setHotelId',
-        'rooms' => 'setRooms',
-        'listing_options' => 'setListingOptions',
-        'missing_capabilities' => 'setMissingCapabilities'
+        'listing_ids' => 'setListingIds',
+        'active' => 'setActive'
     ];
 
     /**
@@ -200,12 +179,8 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $getters = [
-        'status' => 'getStatus',
-        'session_id' => 'getSessionId',
-        'hotel_id' => 'getHotelId',
-        'rooms' => 'getRooms',
-        'listing_options' => 'getListingOptions',
-        'missing_capabilities' => 'getMissingCapabilities'
+        'listing_ids' => 'getListingIds',
+        'active' => 'getActive'
     ];
 
     /**
@@ -240,42 +215,6 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
         return self::$openAPIModelName;
     }
 
-    public const STATUS_IMPORTING = 'importing';
-    public const STATUS_READY = 'ready';
-    public const STATUS_COMPLETED = 'completed';
-    public const MISSING_CAPABILITIES_CONTENT = 'content';
-    public const MISSING_CAPABILITIES_RESERVATIONS = 'reservations';
-    public const MISSING_CAPABILITIES_RATES = 'rates';
-    public const MISSING_CAPABILITIES_MESSAGING = 'messaging';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getStatusAllowableValues()
-    {
-        return [
-            self::STATUS_IMPORTING,
-            self::STATUS_READY,
-            self::STATUS_COMPLETED,
-        ];
-    }
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getMissingCapabilitiesAllowableValues()
-    {
-        return [
-            self::MISSING_CAPABILITIES_CONTENT,
-            self::MISSING_CAPABILITIES_RESERVATIONS,
-            self::MISSING_CAPABILITIES_RATES,
-            self::MISSING_CAPABILITIES_MESSAGING,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -291,12 +230,8 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('status', $data ?? [], null);
-        $this->setIfExists('session_id', $data ?? [], null);
-        $this->setIfExists('hotel_id', $data ?? [], null);
-        $this->setIfExists('rooms', $data ?? [], null);
-        $this->setIfExists('listing_options', $data ?? [], null);
-        $this->setIfExists('missing_capabilities', $data ?? [], null);
+        $this->setIfExists('listing_ids', $data ?? [], null);
+        $this->setIfExists('active', $data ?? [], null);
     }
 
     /**
@@ -324,29 +259,19 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
     {
         $invalidProperties = [];
 
-        if ($this->container['status'] === null) {
-            $invalidProperties[] = "'status' can't be null";
+        if ($this->container['listing_ids'] === null) {
+            $invalidProperties[] = "'listing_ids' can't be null";
         }
-        $allowedValues = self::getStatusAllowableValues();
-        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'status', must be one of '%s'",
-                $this->container['status'],
-                implode("', '", $allowedValues)
-            );
+        if ((count($this->container['listing_ids']) > 500)) {
+            $invalidProperties[] = "invalid value for 'listing_ids', number of items must be less than or equal to 500.";
         }
 
-        if ($this->container['session_id'] === null) {
-            $invalidProperties[] = "'session_id' can't be null";
+        if ((count($this->container['listing_ids']) < 1)) {
+            $invalidProperties[] = "invalid value for 'listing_ids', number of items must be greater than or equal to 1.";
         }
-        if ($this->container['hotel_id'] === null) {
-            $invalidProperties[] = "'hotel_id' can't be null";
-        }
-        if ($this->container['rooms'] === null) {
-            $invalidProperties[] = "'rooms' can't be null";
-        }
-        if ($this->container['listing_options'] === null) {
-            $invalidProperties[] = "'listing_options' can't be null";
+
+        if ($this->container['active'] === null) {
+            $invalidProperties[] = "'active' can't be null";
         }
         return $invalidProperties;
     }
@@ -361,173 +286,62 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
 
 
     /**
-     * Gets status
+     * Gets listing_ids
      *
-     * @return string
+     * @return string[]
      */
-    public function getStatus(): string
+    public function getListingIds(): array
     {
-        return $this->container['status'];
+        return $this->container['listing_ids'];
     }
 
     /**
-     * Sets status
+     * Sets listing_ids
      *
-     * @param string $status `importing` — listings_booking row exists but rooms not yet imported. `ready` — rooms imported, awaiting mapping. `completed` — session already finished.
+     * @param string[] $listing_ids Listing ids to change, 1 to 500, each at most once. Send them as returned by `GET /v1/listings` (strings); plain integers are accepted too.
      *
      * @return $this
      */
-    public function setStatus(string $status): static
+    public function setListingIds(array $listing_ids): static
     {
-        if (is_null($status)) {
-            throw new InvalidArgumentException('non-nullable status cannot be null');
+        if (is_null($listing_ids)) {
+            throw new InvalidArgumentException('non-nullable listing_ids cannot be null');
         }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['status'] = $status;
+
+        if ((count($listing_ids) > 500)) {
+            throw new InvalidArgumentException('invalid value for $listing_ids when calling ListingStatusBatchRequest., number of items must be less than or equal to 500.');
+        }
+        if ((count($listing_ids) < 1)) {
+            throw new InvalidArgumentException('invalid length for $listing_ids when calling ListingStatusBatchRequest., number of items must be greater than or equal to 1.');
+        }
+        $this->container['listing_ids'] = $listing_ids;
 
         return $this;
     }
 
     /**
-     * Gets session_id
+     * Gets active
      *
-     * @return string
+     * @return bool
      */
-    public function getSessionId(): string
+    public function getActive(): bool
     {
-        return $this->container['session_id'];
+        return $this->container['active'];
     }
 
     /**
-     * Sets session_id
+     * Sets active
      *
-     * @param string $session_id session_id
+     * @param bool $active `false` deactivates every listing in `listingIds`; `true` activates them. Active listings count toward your plan's listing limit.
      *
      * @return $this
      */
-    public function setSessionId(string $session_id): static
+    public function setActive(bool $active): static
     {
-        if (is_null($session_id)) {
-            throw new InvalidArgumentException('non-nullable session_id cannot be null');
+        if (is_null($active)) {
+            throw new InvalidArgumentException('non-nullable active cannot be null');
         }
-        $this->container['session_id'] = $session_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets hotel_id
-     *
-     * @return string
-     */
-    public function getHotelId(): string
-    {
-        return $this->container['hotel_id'];
-    }
-
-    /**
-     * Sets hotel_id
-     *
-     * @param string $hotel_id hotel_id
-     *
-     * @return $this
-     */
-    public function setHotelId(string $hotel_id): static
-    {
-        if (is_null($hotel_id)) {
-            throw new InvalidArgumentException('non-nullable hotel_id cannot be null');
-        }
-        $this->container['hotel_id'] = $hotel_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets rooms
-     *
-     * @return \Repull\Model\BookingConnectRoom[]
-     */
-    public function getRooms(): array
-    {
-        return $this->container['rooms'];
-    }
-
-    /**
-     * Sets rooms
-     *
-     * @param \Repull\Model\BookingConnectRoom[] $rooms rooms
-     *
-     * @return $this
-     */
-    public function setRooms(array $rooms): static
-    {
-        if (is_null($rooms)) {
-            throw new InvalidArgumentException('non-nullable rooms cannot be null');
-        }
-        $this->container['rooms'] = $rooms;
-
-        return $this;
-    }
-
-    /**
-     * Gets listing_options
-     *
-     * @return \Repull\Model\BookingConnectListingOption[]
-     */
-    public function getListingOptions(): array
-    {
-        return $this->container['listing_options'];
-    }
-
-    /**
-     * Sets listing_options
-     *
-     * @param \Repull\Model\BookingConnectListingOption[] $listing_options listing_options
-     *
-     * @return $this
-     */
-    public function setListingOptions(array $listing_options): static
-    {
-        if (is_null($listing_options)) {
-            throw new InvalidArgumentException('non-nullable listing_options cannot be null');
-        }
-        $this->container['listing_options'] = $listing_options;
-
-        return $this;
-    }
-
-    /**
-     * Gets missing_capabilities
-     *
-     * @return string[]|null
-     */
-    public function getMissingCapabilities(): ?array
-    {
-        return $this->container['missing_capabilities'];
-    }
-
-    /**
-     * Sets missing_capabilities
-     *
-     * @param string[]|null $missing_capabilities Capabilities Booking.com explicitly refused for this property, usually empty. `content` means reservations, availability and messaging sync normally, but the Content API was never granted — so room names and photos are placeholders, and nightly prices cannot be published until the grant is added (the currency is unknown and is never guessed).
-     *
-     * @return $this
-     */
-    public function setMissingCapabilities(?array $missing_capabilities): static
-    {
-        if (is_null($missing_capabilities)) {
-            throw new InvalidArgumentException('non-nullable missing_capabilities cannot be null');
-        }
-        $allowedValues = self::getMissingCapabilitiesAllowableValues();
-        if (array_diff($missing_capabilities, $allowedValues)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    "Invalid value for 'missing_capabilities', must be one of '%s'",
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
-        $this->container['missing_capabilities'] = $missing_capabilities;
+        $this->container['active'] = $active;
 
         return $this;
     }

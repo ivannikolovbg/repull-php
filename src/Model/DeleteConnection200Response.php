@@ -1,6 +1,6 @@
 <?php
 /**
- * BookingConnectRoomsResponse
+ * DeleteConnection200Response
  *
  * PHP version 8.1
  *
@@ -35,15 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * BookingConnectRoomsResponse Class Doc Comment
+ * DeleteConnection200Response Class Doc Comment
  *
- * @description Returned by &#x60;GET /v1/connect/booking/rooms&#x60;. The hosted picker page polls this every ~2s while the room import runs server-side; once &#x60;status&#x60; is &#x60;ready&#x60; it renders the mapping UI.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class DeleteConnection200Response implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +51,7 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'BookingConnectRoomsResponse';
+    protected static string $openAPIModelName = 'delete_connection_200_response';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,12 +59,10 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'status' => 'string',
-        'session_id' => 'string',
-        'hotel_id' => 'string',
-        'rooms' => '\Repull\Model\BookingConnectRoom[]',
-        'listing_options' => '\Repull\Model\BookingConnectListingOption[]',
-        'missing_capabilities' => 'string[]'
+        'disconnected' => 'bool',
+        'provider' => 'string',
+        'account_id' => 'string',
+        'listings_deactivated' => 'string[]'
     ];
 
     /**
@@ -74,12 +71,10 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'status' => null,
-        'session_id' => null,
-        'hotel_id' => null,
-        'rooms' => null,
-        'listing_options' => null,
-        'missing_capabilities' => null
+        'disconnected' => null,
+        'provider' => null,
+        'account_id' => null,
+        'listings_deactivated' => null
     ];
 
     /**
@@ -88,12 +83,10 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'status' => false,
-        'session_id' => false,
-        'hotel_id' => false,
-        'rooms' => false,
-        'listing_options' => false,
-        'missing_capabilities' => false
+        'disconnected' => false,
+        'provider' => false,
+        'account_id' => true,
+        'listings_deactivated' => false
     ];
 
     /**
@@ -172,12 +165,10 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'status' => 'status',
-        'session_id' => 'sessionId',
-        'hotel_id' => 'hotelId',
-        'rooms' => 'rooms',
-        'listing_options' => 'listingOptions',
-        'missing_capabilities' => 'missingCapabilities'
+        'disconnected' => 'disconnected',
+        'provider' => 'provider',
+        'account_id' => 'accountId',
+        'listings_deactivated' => 'listingsDeactivated'
     ];
 
     /**
@@ -186,12 +177,10 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $setters = [
-        'status' => 'setStatus',
-        'session_id' => 'setSessionId',
-        'hotel_id' => 'setHotelId',
-        'rooms' => 'setRooms',
-        'listing_options' => 'setListingOptions',
-        'missing_capabilities' => 'setMissingCapabilities'
+        'disconnected' => 'setDisconnected',
+        'provider' => 'setProvider',
+        'account_id' => 'setAccountId',
+        'listings_deactivated' => 'setListingsDeactivated'
     ];
 
     /**
@@ -200,12 +189,10 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $getters = [
-        'status' => 'getStatus',
-        'session_id' => 'getSessionId',
-        'hotel_id' => 'getHotelId',
-        'rooms' => 'getRooms',
-        'listing_options' => 'getListingOptions',
-        'missing_capabilities' => 'getMissingCapabilities'
+        'disconnected' => 'getDisconnected',
+        'provider' => 'getProvider',
+        'account_id' => 'getAccountId',
+        'listings_deactivated' => 'getListingsDeactivated'
     ];
 
     /**
@@ -240,42 +227,6 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
         return self::$openAPIModelName;
     }
 
-    public const STATUS_IMPORTING = 'importing';
-    public const STATUS_READY = 'ready';
-    public const STATUS_COMPLETED = 'completed';
-    public const MISSING_CAPABILITIES_CONTENT = 'content';
-    public const MISSING_CAPABILITIES_RESERVATIONS = 'reservations';
-    public const MISSING_CAPABILITIES_RATES = 'rates';
-    public const MISSING_CAPABILITIES_MESSAGING = 'messaging';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getStatusAllowableValues()
-    {
-        return [
-            self::STATUS_IMPORTING,
-            self::STATUS_READY,
-            self::STATUS_COMPLETED,
-        ];
-    }
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getMissingCapabilitiesAllowableValues()
-    {
-        return [
-            self::MISSING_CAPABILITIES_CONTENT,
-            self::MISSING_CAPABILITIES_RESERVATIONS,
-            self::MISSING_CAPABILITIES_RATES,
-            self::MISSING_CAPABILITIES_MESSAGING,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -291,12 +242,10 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('status', $data ?? [], null);
-        $this->setIfExists('session_id', $data ?? [], null);
-        $this->setIfExists('hotel_id', $data ?? [], null);
-        $this->setIfExists('rooms', $data ?? [], null);
-        $this->setIfExists('listing_options', $data ?? [], null);
-        $this->setIfExists('missing_capabilities', $data ?? [], null);
+        $this->setIfExists('disconnected', $data ?? [], null);
+        $this->setIfExists('provider', $data ?? [], null);
+        $this->setIfExists('account_id', $data ?? [], null);
+        $this->setIfExists('listings_deactivated', $data ?? [], null);
     }
 
     /**
@@ -324,29 +273,17 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
     {
         $invalidProperties = [];
 
-        if ($this->container['status'] === null) {
-            $invalidProperties[] = "'status' can't be null";
+        if ($this->container['disconnected'] === null) {
+            $invalidProperties[] = "'disconnected' can't be null";
         }
-        $allowedValues = self::getStatusAllowableValues();
-        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'status', must be one of '%s'",
-                $this->container['status'],
-                implode("', '", $allowedValues)
-            );
+        if ($this->container['provider'] === null) {
+            $invalidProperties[] = "'provider' can't be null";
         }
-
-        if ($this->container['session_id'] === null) {
-            $invalidProperties[] = "'session_id' can't be null";
+        if ($this->container['account_id'] === null && !$this->isNullableSetToNull('account_id')) {
+            $invalidProperties[] = "'account_id' is required";
         }
-        if ($this->container['hotel_id'] === null) {
-            $invalidProperties[] = "'hotel_id' can't be null";
-        }
-        if ($this->container['rooms'] === null) {
-            $invalidProperties[] = "'rooms' can't be null";
-        }
-        if ($this->container['listing_options'] === null) {
-            $invalidProperties[] = "'listing_options' can't be null";
+        if ($this->container['listings_deactivated'] === null) {
+            $invalidProperties[] = "'listings_deactivated' can't be null";
         }
         return $invalidProperties;
     }
@@ -361,173 +298,116 @@ class BookingConnectRoomsResponse implements ModelInterface, ArrayAccess, JsonSe
 
 
     /**
-     * Gets status
+     * Gets disconnected
+     *
+     * @return bool
+     */
+    public function getDisconnected(): bool
+    {
+        return $this->container['disconnected'];
+    }
+
+    /**
+     * Sets disconnected
+     *
+     * @param bool $disconnected Always `true` on success.
+     *
+     * @return $this
+     */
+    public function setDisconnected(bool $disconnected): static
+    {
+        if (is_null($disconnected)) {
+            throw new InvalidArgumentException('non-nullable disconnected cannot be null');
+        }
+        $this->container['disconnected'] = $disconnected;
+
+        return $this;
+    }
+
+    /**
+     * Gets provider
      *
      * @return string
      */
-    public function getStatus(): string
+    public function getProvider(): string
     {
-        return $this->container['status'];
+        return $this->container['provider'];
     }
 
     /**
-     * Sets status
+     * Sets provider
      *
-     * @param string $status `importing` — listings_booking row exists but rooms not yet imported. `ready` — rooms imported, awaiting mapping. `completed` — session already finished.
+     * @param string $provider The provider the account belonged to.
      *
      * @return $this
      */
-    public function setStatus(string $status): static
+    public function setProvider(string $provider): static
     {
-        if (is_null($status)) {
-            throw new InvalidArgumentException('non-nullable status cannot be null');
+        if (is_null($provider)) {
+            throw new InvalidArgumentException('non-nullable provider cannot be null');
         }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['status'] = $status;
+        $this->container['provider'] = $provider;
 
         return $this;
     }
 
     /**
-     * Gets session_id
+     * Gets account_id
      *
-     * @return string
+     * @return string|null
      */
-    public function getSessionId(): string
+    public function getAccountId(): ?string
     {
-        return $this->container['session_id'];
+        return $this->container['account_id'];
     }
 
     /**
-     * Sets session_id
+     * Sets account_id
      *
-     * @param string $session_id session_id
+     * @param string|null $account_id The account that was disconnected. `null` only when the workspace had a stale connection record with no account to name, which was cleared.
      *
      * @return $this
      */
-    public function setSessionId(string $session_id): static
+    public function setAccountId(?string $account_id): static
     {
-        if (is_null($session_id)) {
-            throw new InvalidArgumentException('non-nullable session_id cannot be null');
+        if (is_null($account_id)) {
+            array_push($this->openAPINullablesSetToNull, 'account_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('account_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['session_id'] = $session_id;
+        $this->container['account_id'] = $account_id;
 
         return $this;
     }
 
     /**
-     * Gets hotel_id
+     * Gets listings_deactivated
      *
-     * @return string
+     * @return string[]
      */
-    public function getHotelId(): string
+    public function getListingsDeactivated(): array
     {
-        return $this->container['hotel_id'];
+        return $this->container['listings_deactivated'];
     }
 
     /**
-     * Sets hotel_id
+     * Sets listings_deactivated
      *
-     * @param string $hotel_id hotel_id
+     * @param string[] $listings_deactivated Ids of the listings this call deactivated. Listings still connected through another account or channel are not included and stay active.
      *
      * @return $this
      */
-    public function setHotelId(string $hotel_id): static
+    public function setListingsDeactivated(array $listings_deactivated): static
     {
-        if (is_null($hotel_id)) {
-            throw new InvalidArgumentException('non-nullable hotel_id cannot be null');
+        if (is_null($listings_deactivated)) {
+            throw new InvalidArgumentException('non-nullable listings_deactivated cannot be null');
         }
-        $this->container['hotel_id'] = $hotel_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets rooms
-     *
-     * @return \Repull\Model\BookingConnectRoom[]
-     */
-    public function getRooms(): array
-    {
-        return $this->container['rooms'];
-    }
-
-    /**
-     * Sets rooms
-     *
-     * @param \Repull\Model\BookingConnectRoom[] $rooms rooms
-     *
-     * @return $this
-     */
-    public function setRooms(array $rooms): static
-    {
-        if (is_null($rooms)) {
-            throw new InvalidArgumentException('non-nullable rooms cannot be null');
-        }
-        $this->container['rooms'] = $rooms;
-
-        return $this;
-    }
-
-    /**
-     * Gets listing_options
-     *
-     * @return \Repull\Model\BookingConnectListingOption[]
-     */
-    public function getListingOptions(): array
-    {
-        return $this->container['listing_options'];
-    }
-
-    /**
-     * Sets listing_options
-     *
-     * @param \Repull\Model\BookingConnectListingOption[] $listing_options listing_options
-     *
-     * @return $this
-     */
-    public function setListingOptions(array $listing_options): static
-    {
-        if (is_null($listing_options)) {
-            throw new InvalidArgumentException('non-nullable listing_options cannot be null');
-        }
-        $this->container['listing_options'] = $listing_options;
-
-        return $this;
-    }
-
-    /**
-     * Gets missing_capabilities
-     *
-     * @return string[]|null
-     */
-    public function getMissingCapabilities(): ?array
-    {
-        return $this->container['missing_capabilities'];
-    }
-
-    /**
-     * Sets missing_capabilities
-     *
-     * @param string[]|null $missing_capabilities Capabilities Booking.com explicitly refused for this property, usually empty. `content` means reservations, availability and messaging sync normally, but the Content API was never granted — so room names and photos are placeholders, and nightly prices cannot be published until the grant is added (the currency is unknown and is never guessed).
-     *
-     * @return $this
-     */
-    public function setMissingCapabilities(?array $missing_capabilities): static
-    {
-        if (is_null($missing_capabilities)) {
-            throw new InvalidArgumentException('non-nullable missing_capabilities cannot be null');
-        }
-        $allowedValues = self::getMissingCapabilitiesAllowableValues();
-        if (array_diff($missing_capabilities, $allowedValues)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    "Invalid value for 'missing_capabilities', must be one of '%s'",
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
-        $this->container['missing_capabilities'] = $missing_capabilities;
+        $this->container['listings_deactivated'] = $listings_deactivated;
 
         return $this;
     }

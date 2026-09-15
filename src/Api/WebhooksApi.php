@@ -1282,7 +1282,7 @@ class WebhooksApi
      * @param  string $id id (required)
      * @param  int|null $limit limit (optional, default to 25)
      * @param  string|null $cursor cursor (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  string|null $status status (optional, default to 'all')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listWebhookDeliveries'] to see the possible values for this operation
      *
@@ -1311,7 +1311,7 @@ class WebhooksApi
      * @param  string $id (required)
      * @param  int|null $limit (optional, default to 25)
      * @param  string|null $cursor (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  string|null $status (optional, default to 'all')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listWebhookDeliveries'] to see the possible values for this operation
      *
@@ -1404,7 +1404,7 @@ class WebhooksApi
      * @param  string $id (required)
      * @param  int|null $limit (optional, default to 25)
      * @param  string|null $cursor (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  string|null $status (optional, default to 'all')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listWebhookDeliveries'] to see the possible values for this operation
      *
@@ -1436,7 +1436,7 @@ class WebhooksApi
      * @param  string $id (required)
      * @param  int|null $limit (optional, default to 25)
      * @param  string|null $cursor (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  string|null $status (optional, default to 'all')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listWebhookDeliveries'] to see the possible values for this operation
      *
@@ -1497,7 +1497,7 @@ class WebhooksApi
      * @param  string $id (required)
      * @param  int|null $limit (optional, default to 25)
      * @param  string|null $cursor (optional)
-     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.next_cursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  string|null $status (optional, default to 'all')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listWebhookDeliveries'] to see the possible values for this operation
      *
@@ -2412,15 +2412,16 @@ class WebhooksApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return void
+     * @return \Repull\Model\Error|null
      */
     public function replayWebhookDelivery(
         string $id,
         string $delivery_id,
         string $contentType = self::contentTypes['replayWebhookDelivery'][0]
-    ): void
+    ): ?\Repull\Model\Error
     {
-        $this->replayWebhookDeliveryWithHttpInfo($id, $delivery_id, $contentType);
+        list($response) = $this->replayWebhookDeliveryWithHttpInfo($id, $delivery_id, $contentType);
+        return $response;
     }
 
     /**
@@ -2470,6 +2471,14 @@ class WebhooksApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -2606,7 +2615,7 @@ class WebhooksApi
 
 
         $headers = $this->headerSelector->selectHeaders(
-            [],
+            ['application/json', ],
             $contentType,
             $multipart
         );

@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * AirbnbReservationListResponse Class Doc Comment
  *
- * @description Cursor-paginated Airbnb reservation list. Pass &#x60;pagination.next_cursor&#x60; back as &#x60;?cursor&#x3D;&#x60; to fetch the next page; stop when &#x60;pagination.has_more&#x60; is &#x60;false&#x60;.
+ * @description Cursor-paginated Airbnb reservation list. Pass &#x60;pagination.nextCursor&#x60; back as &#x60;?cursor&#x3D;&#x60; to fetch the next page; stop when &#x60;pagination.hasMore&#x60; is &#x60;false&#x60;.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

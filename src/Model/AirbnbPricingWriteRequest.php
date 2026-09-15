@@ -64,7 +64,7 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
         'operations' => '\Repull\Model\AirbnbCalendarOperation[]',
         'model_type' => 'string',
         'settings' => 'array<string,mixed>',
-        'records' => 'array<string,mixed>[]',
+        'records' => '\Repull\Model\AirbnbPricingWriteRequestRecordsInner[]',
         'currency' => 'string',
         'rule' => 'array<string,mixed>'
     ];
@@ -254,6 +254,9 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
     public const TYPE_CURRENCY = 'currency';
     public const TYPE_RULE = 'rule';
     public const TYPE_CALENDAR = 'calendar';
+    public const MODEL_TYPE_STANDARD = 'STANDARD';
+    public const MODEL_TYPE_LOS_RECORD = 'LOS_RECORD';
+    public const MODEL_TYPE_RATE_PLAN = 'RATE_PLAN';
 
     /**
      * Gets allowable values of the enum
@@ -271,6 +274,20 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
             self::TYPE_CURRENCY,
             self::TYPE_RULE,
             self::TYPE_CALENDAR,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getModelTypeAllowableValues()
+    {
+        return [
+            self::MODEL_TYPE_STANDARD,
+            self::MODEL_TYPE_LOS_RECORD,
+            self::MODEL_TYPE_RATE_PLAN,
         ];
     }
 
@@ -332,6 +349,27 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
                 $this->container['type'],
                 implode("', '", $allowedValues)
             );
+        }
+
+        if (!is_null($this->container['operations']) && (count($this->container['operations']) < 1)) {
+            $invalidProperties[] = "invalid value for 'operations', number of items must be greater than or equal to 1.";
+        }
+
+        $allowedValues = self::getModelTypeAllowableValues();
+        if (!is_null($this->container['model_type']) && !in_array($this->container['model_type'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'model_type', must be one of '%s'",
+                $this->container['model_type'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        if (!is_null($this->container['records']) && (count($this->container['records']) < 1)) {
+            $invalidProperties[] = "invalid value for 'records', number of items must be greater than or equal to 1.";
+        }
+
+        if (!is_null($this->container['currency']) && !preg_match("/^[A-Z]{3}$/", $this->container['currency'])) {
+            $invalidProperties[] = "invalid value for 'currency', must be conform to the pattern /^[A-Z]{3}$/.";
         }
 
         return $invalidProperties;
@@ -396,6 +434,11 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
         if (is_null($operations)) {
             throw new InvalidArgumentException('non-nullable operations cannot be null');
         }
+
+
+        if ((count($operations) < 1)) {
+            throw new InvalidArgumentException('invalid length for $operations when calling AirbnbPricingWriteRequest., number of items must be greater than or equal to 1.');
+        }
         $this->container['operations'] = $operations;
 
         return $this;
@@ -430,6 +473,7 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
+        // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['model_type'] = $model_type;
 
         return $this;
@@ -472,7 +516,7 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Gets records
      *
-     * @return array<string,mixed>[]|null
+     * @return \Repull\Model\AirbnbPricingWriteRequestRecordsInner[]|null
      */
     public function getRecords(): ?array
     {
@@ -482,7 +526,7 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets records
      *
-     * @param array<string,mixed>[]|null $records Required for `type: \"los\"` — length-of-stay records.
+     * @param \Repull\Model\AirbnbPricingWriteRequestRecordsInner[]|null $records Required for `type: \"los\"` — length-of-stay records.
      *
      * @return $this
      */
@@ -497,6 +541,11 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
+        }
+
+
+        if (!is_null($records) && (count($records) < 1)) {
+            throw new InvalidArgumentException('invalid length for $records when calling AirbnbPricingWriteRequest., number of items must be greater than or equal to 1.');
         }
         $this->container['records'] = $records;
 
@@ -516,7 +565,7 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets currency
      *
-     * @param string|null $currency Required for `type: \"currency\"` — ISO 4217 code.
+     * @param string|null $currency Required for `type: \"currency\"` — ISO 4217 code in capitals, e.g. `USD`.
      *
      * @return $this
      */
@@ -532,6 +581,11 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
+
+        if (!is_null($currency) && (!preg_match("/^[A-Z]{3}$/", ObjectSerializer::toString($currency)))) {
+            throw new InvalidArgumentException("invalid value for \$currency when calling AirbnbPricingWriteRequest., must conform to the pattern /^[A-Z]{3}$/.");
+        }
+
         $this->container['currency'] = $currency;
 
         return $this;
