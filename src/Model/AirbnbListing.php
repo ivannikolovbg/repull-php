@@ -63,6 +63,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
         'listing_id' => 'string',
         'name' => 'string',
         'city' => 'string',
+        'thumbnail_url' => 'string',
         'connections' => '\Repull\Model\AirbnbConnection[]'
     ];
 
@@ -75,6 +76,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
         'listing_id' => null,
         'name' => null,
         'city' => null,
+        'thumbnail_url' => 'uri',
         'connections' => null
     ];
 
@@ -87,6 +89,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
         'listing_id' => false,
         'name' => false,
         'city' => true,
+        'thumbnail_url' => true,
         'connections' => false
     ];
 
@@ -169,6 +172,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
         'listing_id' => 'listingId',
         'name' => 'name',
         'city' => 'city',
+        'thumbnail_url' => 'thumbnailUrl',
         'connections' => 'connections'
     ];
 
@@ -181,6 +185,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
         'listing_id' => 'setListingId',
         'name' => 'setName',
         'city' => 'setCity',
+        'thumbnail_url' => 'setThumbnailUrl',
         'connections' => 'setConnections'
     ];
 
@@ -193,6 +198,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
         'listing_id' => 'getListingId',
         'name' => 'getName',
         'city' => 'getCity',
+        'thumbnail_url' => 'getThumbnailUrl',
         'connections' => 'getConnections'
     ];
 
@@ -246,6 +252,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
         $this->setIfExists('city', $data ?? [], null);
+        $this->setIfExists('thumbnail_url', $data ?? [], null);
         $this->setIfExists('connections', $data ?? [], null);
     }
 
@@ -370,6 +377,40 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['city'] = $city;
+
+        return $this;
+    }
+
+    /**
+     * Gets thumbnail_url
+     *
+     * @return string|null
+     */
+    public function getThumbnailUrl(): ?string
+    {
+        return $this->container['thumbnail_url'];
+    }
+
+    /**
+     * Sets thumbnail_url
+     *
+     * @param string|null $thumbnail_url Cover photo URL for the Vanio listing. **Only present when the caller passes `?include=thumbnail`.** `null` when the listing has no cover photo stored — the listing is still returned.
+     *
+     * @return $this
+     */
+    public function setThumbnailUrl(?string $thumbnail_url): static
+    {
+        if (is_null($thumbnail_url)) {
+            array_push($this->openAPINullablesSetToNull, 'thumbnail_url');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('thumbnail_url', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['thumbnail_url'] = $thumbnail_url;
 
         return $this;
     }

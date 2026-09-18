@@ -60,12 +60,14 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
+        'locale' => 'string',
         'title' => 'string',
         'name' => 'string',
         'description' => 'string',
         'summary' => 'string',
         'amenities' => '\Repull\Model\ListingContentUpdateRequestAmenities',
         'address' => '\Repull\Model\ListingContentUpdateRequestAddress',
+        'details' => '\Repull\Model\ListingContentUpdateRequestDetails',
         'occupancy' => '\Repull\Model\ListingContentUpdateRequestOccupancy',
         'policies' => '\Repull\Model\ListingContentUpdateRequestPolicies',
         'photos' => '\Repull\Model\ListingContentUpdateRequestPhotosInner[]',
@@ -78,12 +80,14 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
+        'locale' => null,
         'title' => null,
         'name' => null,
         'description' => null,
         'summary' => null,
         'amenities' => null,
         'address' => null,
+        'details' => null,
         'occupancy' => null,
         'policies' => null,
         'photos' => null,
@@ -96,12 +100,14 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
+        'locale' => false,
         'title' => true,
         'name' => true,
         'description' => true,
         'summary' => true,
         'amenities' => false,
         'address' => false,
+        'details' => false,
         'occupancy' => false,
         'policies' => false,
         'photos' => false,
@@ -184,12 +190,14 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $attributeMap = [
+        'locale' => 'locale',
         'title' => 'title',
         'name' => 'name',
         'description' => 'description',
         'summary' => 'summary',
         'amenities' => 'amenities',
         'address' => 'address',
+        'details' => 'details',
         'occupancy' => 'occupancy',
         'policies' => 'policies',
         'photos' => 'photos',
@@ -202,12 +210,14 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $setters = [
+        'locale' => 'setLocale',
         'title' => 'setTitle',
         'name' => 'setName',
         'description' => 'setDescription',
         'summary' => 'setSummary',
         'amenities' => 'setAmenities',
         'address' => 'setAddress',
+        'details' => 'setDetails',
         'occupancy' => 'setOccupancy',
         'policies' => 'setPolicies',
         'photos' => 'setPhotos',
@@ -220,12 +230,14 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $getters = [
+        'locale' => 'getLocale',
         'title' => 'getTitle',
         'name' => 'getName',
         'description' => 'getDescription',
         'summary' => 'getSummary',
         'amenities' => 'getAmenities',
         'address' => 'getAddress',
+        'details' => 'getDetails',
         'occupancy' => 'getOccupancy',
         'policies' => 'getPolicies',
         'photos' => 'getPhotos',
@@ -294,12 +306,14 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('locale', $data ?? [], null);
         $this->setIfExists('title', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
         $this->setIfExists('description', $data ?? [], null);
         $this->setIfExists('summary', $data ?? [], null);
         $this->setIfExists('amenities', $data ?? [], null);
         $this->setIfExists('address', $data ?? [], null);
+        $this->setIfExists('details', $data ?? [], null);
         $this->setIfExists('occupancy', $data ?? [], null);
         $this->setIfExists('policies', $data ?? [], null);
         $this->setIfExists('photos', $data ?? [], null);
@@ -353,6 +367,33 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
 
 
     /**
+     * Gets locale
+     *
+     * @return string|null
+     */
+    public function getLocale(): ?string
+    {
+        return $this->container['locale'];
+    }
+
+    /**
+     * Sets locale
+     *
+     * @param string|null $locale Which language the `title` / `description` / `summary` / `policies.houseRules` in THIS request are written in. Defaults to `en`. Canonical content is stored per locale — one row per (listing, locale) — so sending Italian copy with `locale: \"it\"` creates or updates the Italian row instead of overwriting the English one. Distribution of a non-primary locale to Airbnb is a separate call: `PUT /v1/channels/airbnb/listings/{id}/descriptions`.
+     *
+     * @return $this
+     */
+    public function setLocale(?string $locale): static
+    {
+        if (is_null($locale)) {
+            throw new InvalidArgumentException('non-nullable locale cannot be null');
+        }
+        $this->container['locale'] = $locale;
+
+        return $this;
+    }
+
+    /**
      * Gets title
      *
      * @return string|null
@@ -365,7 +406,7 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Sets title
      *
-     * @param string|null $title Guest-facing title. Written to the listing name and the `en` description.
+     * @param string|null $title Guest-facing title. Written to the listing name and the description row for `locale`.
      *
      * @return $this
      */
@@ -538,6 +579,33 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
             throw new InvalidArgumentException('non-nullable address cannot be null');
         }
         $this->container['address'] = $address;
+
+        return $this;
+    }
+
+    /**
+     * Gets details
+     *
+     * @return \Repull\Model\ListingContentUpdateRequestDetails|null
+     */
+    public function getDetails(): ?\Repull\Model\ListingContentUpdateRequestDetails
+    {
+        return $this->container['details'];
+    }
+
+    /**
+     * Sets details
+     *
+     * @param \Repull\Model\ListingContentUpdateRequestDetails|null $details details
+     *
+     * @return $this
+     */
+    public function setDetails(?\Repull\Model\ListingContentUpdateRequestDetails $details): static
+    {
+        if (is_null($details)) {
+            throw new InvalidArgumentException('non-nullable details cannot be null');
+        }
+        $this->container['details'] = $details;
 
         return $this;
     }

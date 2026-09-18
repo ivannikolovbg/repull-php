@@ -61,7 +61,8 @@ class AirbnbReservationListResponse implements ModelInterface, ArrayAccess, Json
      */
     protected static array $openAPITypes = [
         'data' => '\Repull\Model\AirbnbReservation[]',
-        'pagination' => '\Repull\Model\Pagination'
+        'pagination' => '\Repull\Model\Pagination',
+        'data_freshness' => '\Repull\Model\AirbnbDataFreshness'
     ];
 
     /**
@@ -71,7 +72,8 @@ class AirbnbReservationListResponse implements ModelInterface, ArrayAccess, Json
      */
     protected static array $openAPIFormats = [
         'data' => null,
-        'pagination' => null
+        'pagination' => null,
+        'data_freshness' => null
     ];
 
     /**
@@ -81,7 +83,8 @@ class AirbnbReservationListResponse implements ModelInterface, ArrayAccess, Json
      */
     protected static array $openAPINullables = [
         'data' => false,
-        'pagination' => false
+        'pagination' => false,
+        'data_freshness' => false
     ];
 
     /**
@@ -161,7 +164,8 @@ class AirbnbReservationListResponse implements ModelInterface, ArrayAccess, Json
      */
     protected static array $attributeMap = [
         'data' => 'data',
-        'pagination' => 'pagination'
+        'pagination' => 'pagination',
+        'data_freshness' => 'dataFreshness'
     ];
 
     /**
@@ -171,7 +175,8 @@ class AirbnbReservationListResponse implements ModelInterface, ArrayAccess, Json
      */
     protected static array $setters = [
         'data' => 'setData',
-        'pagination' => 'setPagination'
+        'pagination' => 'setPagination',
+        'data_freshness' => 'setDataFreshness'
     ];
 
     /**
@@ -181,7 +186,8 @@ class AirbnbReservationListResponse implements ModelInterface, ArrayAccess, Json
      */
     protected static array $getters = [
         'data' => 'getData',
-        'pagination' => 'getPagination'
+        'pagination' => 'getPagination',
+        'data_freshness' => 'getDataFreshness'
     ];
 
     /**
@@ -233,6 +239,7 @@ class AirbnbReservationListResponse implements ModelInterface, ArrayAccess, Json
     {
         $this->setIfExists('data', $data ?? [], null);
         $this->setIfExists('pagination', $data ?? [], null);
+        $this->setIfExists('data_freshness', $data ?? [], null);
     }
 
     /**
@@ -322,6 +329,33 @@ class AirbnbReservationListResponse implements ModelInterface, ArrayAccess, Json
             throw new InvalidArgumentException('non-nullable pagination cannot be null');
         }
         $this->container['pagination'] = $pagination;
+
+        return $this;
+    }
+
+    /**
+     * Gets data_freshness
+     *
+     * @return \Repull\Model\AirbnbDataFreshness|null
+     */
+    public function getDataFreshness(): ?\Repull\Model\AirbnbDataFreshness
+    {
+        return $this->container['data_freshness'];
+    }
+
+    /**
+     * Sets data_freshness
+     *
+     * @param \Repull\Model\AirbnbDataFreshness|null $data_freshness data_freshness
+     *
+     * @return $this
+     */
+    public function setDataFreshness(?\Repull\Model\AirbnbDataFreshness $data_freshness): static
+    {
+        if (is_null($data_freshness)) {
+            throw new InvalidArgumentException('non-nullable data_freshness cannot be null');
+        }
+        $this->container['data_freshness'] = $data_freshness;
 
         return $this;
     }

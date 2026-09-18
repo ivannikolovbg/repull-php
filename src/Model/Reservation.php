@@ -65,6 +65,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'guest_id' => 'string',
         'check_in' => '\DateTime',
         'check_out' => '\DateTime',
+        'check_in_time' => 'string',
+        'check_out_time' => 'string',
         'status' => 'string',
         'source' => 'string',
         'platform' => 'string',
@@ -92,6 +94,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'guest_id' => null,
         'check_in' => 'date',
         'check_out' => 'date',
+        'check_in_time' => null,
+        'check_out_time' => null,
         'status' => null,
         'source' => null,
         'platform' => null,
@@ -119,6 +123,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'guest_id' => false,
         'check_in' => false,
         'check_out' => false,
+        'check_in_time' => true,
+        'check_out_time' => true,
         'status' => false,
         'source' => true,
         'platform' => true,
@@ -216,6 +222,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'guest_id' => 'guestId',
         'check_in' => 'checkIn',
         'check_out' => 'checkOut',
+        'check_in_time' => 'checkInTime',
+        'check_out_time' => 'checkOutTime',
         'status' => 'status',
         'source' => 'source',
         'platform' => 'platform',
@@ -243,6 +251,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'guest_id' => 'setGuestId',
         'check_in' => 'setCheckIn',
         'check_out' => 'setCheckOut',
+        'check_in_time' => 'setCheckInTime',
+        'check_out_time' => 'setCheckOutTime',
         'status' => 'setStatus',
         'source' => 'setSource',
         'platform' => 'setPlatform',
@@ -270,6 +280,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'guest_id' => 'getGuestId',
         'check_in' => 'getCheckIn',
         'check_out' => 'getCheckOut',
+        'check_in_time' => 'getCheckInTime',
+        'check_out_time' => 'getCheckOutTime',
         'status' => 'getStatus',
         'source' => 'getSource',
         'platform' => 'getPlatform',
@@ -407,6 +419,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('guest_id', $data ?? [], null);
         $this->setIfExists('check_in', $data ?? [], null);
         $this->setIfExists('check_out', $data ?? [], null);
+        $this->setIfExists('check_in_time', $data ?? [], null);
+        $this->setIfExists('check_out_time', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('source', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
@@ -644,6 +658,74 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable check_out cannot be null');
         }
         $this->container['check_out'] = $check_out;
+
+        return $this;
+    }
+
+    /**
+     * Gets check_in_time
+     *
+     * @return string|null
+     */
+    public function getCheckInTime(): ?string
+    {
+        return $this->container['check_in_time'];
+    }
+
+    /**
+     * Sets check_in_time
+     *
+     * @param string|null $check_in_time Local check-in time for this stay, `HH:MM` on a 24-hour clock in the **property's own timezone** — not UTC. Usually inherited from the listing policy, overridden per reservation where an early check-in was agreed. `null` when unknown. This is the same field `PATCH /v1/reservations/{id}` writes.
+     *
+     * @return $this
+     */
+    public function setCheckInTime(?string $check_in_time): static
+    {
+        if (is_null($check_in_time)) {
+            array_push($this->openAPINullablesSetToNull, 'check_in_time');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('check_in_time', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['check_in_time'] = $check_in_time;
+
+        return $this;
+    }
+
+    /**
+     * Gets check_out_time
+     *
+     * @return string|null
+     */
+    public function getCheckOutTime(): ?string
+    {
+        return $this->container['check_out_time'];
+    }
+
+    /**
+     * Sets check_out_time
+     *
+     * @param string|null $check_out_time Local check-out time for this stay, `HH:MM` on a 24-hour clock in the property's own timezone. Pair with `checkOut` to schedule the turnover clean. `null` when unknown. This is the same field `PATCH /v1/reservations/{id}` writes.
+     *
+     * @return $this
+     */
+    public function setCheckOutTime(?string $check_out_time): static
+    {
+        if (is_null($check_out_time)) {
+            array_push($this->openAPINullablesSetToNull, 'check_out_time');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('check_out_time', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['check_out_time'] = $check_out_time;
 
         return $this;
     }

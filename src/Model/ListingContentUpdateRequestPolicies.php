@@ -69,7 +69,12 @@ class ListingContentUpdateRequestPolicies implements ModelInterface, ArrayAccess
         'allows_infants' => 'bool',
         'allows_pets' => 'bool',
         'allows_smoking' => 'bool',
-        'allows_events' => 'bool'
+        'allows_events' => 'bool',
+        'quiet_hours_start' => 'string',
+        'quiet_hours_end' => 'string',
+        'check_in_method' => 'string',
+        'check_in_instruction' => 'string',
+        'guest_safety_disclosures' => '\Repull\Model\AirbnbSafetyDisclosure[]'
     ];
 
     /**
@@ -88,7 +93,12 @@ class ListingContentUpdateRequestPolicies implements ModelInterface, ArrayAccess
         'allows_infants' => null,
         'allows_pets' => null,
         'allows_smoking' => null,
-        'allows_events' => null
+        'allows_events' => null,
+        'quiet_hours_start' => null,
+        'quiet_hours_end' => null,
+        'check_in_method' => null,
+        'check_in_instruction' => null,
+        'guest_safety_disclosures' => null
     ];
 
     /**
@@ -107,7 +117,12 @@ class ListingContentUpdateRequestPolicies implements ModelInterface, ArrayAccess
         'allows_infants' => true,
         'allows_pets' => true,
         'allows_smoking' => true,
-        'allows_events' => true
+        'allows_events' => true,
+        'quiet_hours_start' => true,
+        'quiet_hours_end' => true,
+        'check_in_method' => true,
+        'check_in_instruction' => true,
+        'guest_safety_disclosures' => true
     ];
 
     /**
@@ -196,7 +211,12 @@ class ListingContentUpdateRequestPolicies implements ModelInterface, ArrayAccess
         'allows_infants' => 'allowsInfants',
         'allows_pets' => 'allowsPets',
         'allows_smoking' => 'allowsSmoking',
-        'allows_events' => 'allowsEvents'
+        'allows_events' => 'allowsEvents',
+        'quiet_hours_start' => 'quietHoursStart',
+        'quiet_hours_end' => 'quietHoursEnd',
+        'check_in_method' => 'checkInMethod',
+        'check_in_instruction' => 'checkInInstruction',
+        'guest_safety_disclosures' => 'guestSafetyDisclosures'
     ];
 
     /**
@@ -215,7 +235,12 @@ class ListingContentUpdateRequestPolicies implements ModelInterface, ArrayAccess
         'allows_infants' => 'setAllowsInfants',
         'allows_pets' => 'setAllowsPets',
         'allows_smoking' => 'setAllowsSmoking',
-        'allows_events' => 'setAllowsEvents'
+        'allows_events' => 'setAllowsEvents',
+        'quiet_hours_start' => 'setQuietHoursStart',
+        'quiet_hours_end' => 'setQuietHoursEnd',
+        'check_in_method' => 'setCheckInMethod',
+        'check_in_instruction' => 'setCheckInInstruction',
+        'guest_safety_disclosures' => 'setGuestSafetyDisclosures'
     ];
 
     /**
@@ -234,7 +259,12 @@ class ListingContentUpdateRequestPolicies implements ModelInterface, ArrayAccess
         'allows_infants' => 'getAllowsInfants',
         'allows_pets' => 'getAllowsPets',
         'allows_smoking' => 'getAllowsSmoking',
-        'allows_events' => 'getAllowsEvents'
+        'allows_events' => 'getAllowsEvents',
+        'quiet_hours_start' => 'getQuietHoursStart',
+        'quiet_hours_end' => 'getQuietHoursEnd',
+        'check_in_method' => 'getCheckInMethod',
+        'check_in_instruction' => 'getCheckInInstruction',
+        'guest_safety_disclosures' => 'getGuestSafetyDisclosures'
     ];
 
     /**
@@ -269,6 +299,29 @@ class ListingContentUpdateRequestPolicies implements ModelInterface, ArrayAccess
         return self::$openAPIModelName;
     }
 
+    public const CHECK_IN_METHOD_LOCKBOX = 'lockbox';
+    public const CHECK_IN_METHOD_SMARTLOCK = 'smartlock';
+    public const CHECK_IN_METHOD_KEYPAD = 'keypad';
+    public const CHECK_IN_METHOD_HOST_CHECKIN = 'host_checkin';
+    public const CHECK_IN_METHOD_DOORMAN_ENTRY = 'doorman_entry';
+    public const CHECK_IN_METHOD_OTHER_CHECKIN = 'other_checkin';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getCheckInMethodAllowableValues()
+    {
+        return [
+            self::CHECK_IN_METHOD_LOCKBOX,
+            self::CHECK_IN_METHOD_SMARTLOCK,
+            self::CHECK_IN_METHOD_KEYPAD,
+            self::CHECK_IN_METHOD_HOST_CHECKIN,
+            self::CHECK_IN_METHOD_DOORMAN_ENTRY,
+            self::CHECK_IN_METHOD_OTHER_CHECKIN,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -295,6 +348,11 @@ class ListingContentUpdateRequestPolicies implements ModelInterface, ArrayAccess
         $this->setIfExists('allows_pets', $data ?? [], null);
         $this->setIfExists('allows_smoking', $data ?? [], null);
         $this->setIfExists('allows_events', $data ?? [], null);
+        $this->setIfExists('quiet_hours_start', $data ?? [], null);
+        $this->setIfExists('quiet_hours_end', $data ?? [], null);
+        $this->setIfExists('check_in_method', $data ?? [], null);
+        $this->setIfExists('check_in_instruction', $data ?? [], null);
+        $this->setIfExists('guest_safety_disclosures', $data ?? [], null);
     }
 
     /**
@@ -321,6 +379,15 @@ class ListingContentUpdateRequestPolicies implements ModelInterface, ArrayAccess
     public function listInvalidProperties(): array
     {
         $invalidProperties = [];
+
+        $allowedValues = self::getCheckInMethodAllowableValues();
+        if (!is_null($this->container['check_in_method']) && !in_array($this->container['check_in_method'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'check_in_method', must be one of '%s'",
+                $this->container['check_in_method'],
+                implode("', '", $allowedValues)
+            );
+        }
 
         return $invalidProperties;
     }
@@ -704,6 +771,177 @@ class ListingContentUpdateRequestPolicies implements ModelInterface, ArrayAccess
             }
         }
         $this->container['allows_events'] = $allows_events;
+
+        return $this;
+    }
+
+    /**
+     * Gets quiet_hours_start
+     *
+     * @return string|null
+     */
+    public function getQuietHoursStart(): ?string
+    {
+        return $this->container['quiet_hours_start'];
+    }
+
+    /**
+     * Sets quiet_hours_start
+     *
+     * @param string|null $quiet_hours_start Quiet-hours window start, e.g. \"22:00\". Distributed to Airbnb by the publish path.
+     *
+     * @return $this
+     */
+    public function setQuietHoursStart(?string $quiet_hours_start): static
+    {
+        if (is_null($quiet_hours_start)) {
+            array_push($this->openAPINullablesSetToNull, 'quiet_hours_start');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('quiet_hours_start', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['quiet_hours_start'] = $quiet_hours_start;
+
+        return $this;
+    }
+
+    /**
+     * Gets quiet_hours_end
+     *
+     * @return string|null
+     */
+    public function getQuietHoursEnd(): ?string
+    {
+        return $this->container['quiet_hours_end'];
+    }
+
+    /**
+     * Sets quiet_hours_end
+     *
+     * @param string|null $quiet_hours_end quiet_hours_end
+     *
+     * @return $this
+     */
+    public function setQuietHoursEnd(?string $quiet_hours_end): static
+    {
+        if (is_null($quiet_hours_end)) {
+            array_push($this->openAPINullablesSetToNull, 'quiet_hours_end');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('quiet_hours_end', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['quiet_hours_end'] = $quiet_hours_end;
+
+        return $this;
+    }
+
+    /**
+     * Gets check_in_method
+     *
+     * @return string|null
+     */
+    public function getCheckInMethod(): ?string
+    {
+        return $this->container['check_in_method'];
+    }
+
+    /**
+     * Sets check_in_method
+     *
+     * @param string|null $check_in_method How the guest lets themselves in. Canonical storage only — distributing it to Airbnb is `PUT /v1/channels/airbnb/listings/{id}/details` with `check_in_option`.
+     *
+     * @return $this
+     */
+    public function setCheckInMethod(?string $check_in_method): static
+    {
+        if (is_null($check_in_method)) {
+            array_push($this->openAPINullablesSetToNull, 'check_in_method');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('check_in_method', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['check_in_method'] = $check_in_method;
+
+        return $this;
+    }
+
+    /**
+     * Gets check_in_instruction
+     *
+     * @return string|null
+     */
+    public function getCheckInInstruction(): ?string
+    {
+        return $this->container['check_in_instruction'];
+    }
+
+    /**
+     * Sets check_in_instruction
+     *
+     * @param string|null $check_in_instruction Instruction shown with the check-in method.
+     *
+     * @return $this
+     */
+    public function setCheckInInstruction(?string $check_in_instruction): static
+    {
+        if (is_null($check_in_instruction)) {
+            array_push($this->openAPINullablesSetToNull, 'check_in_instruction');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('check_in_instruction', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['check_in_instruction'] = $check_in_instruction;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest_safety_disclosures
+     *
+     * @return \Repull\Model\AirbnbSafetyDisclosure[]|null
+     */
+    public function getGuestSafetyDisclosures(): ?array
+    {
+        return $this->container['guest_safety_disclosures'];
+    }
+
+    /**
+     * Sets guest_safety_disclosures
+     *
+     * @param \Repull\Model\AirbnbSafetyDisclosure[]|null $guest_safety_disclosures Guest-safety disclosures — exterior cameras, noise monitors, stairs, pets, an unfenced pool. FULL replacement of the canonical set: omit to leave untouched, send `[]` to clear. Canonical storage only — distributing them to Airbnb is `PUT /v1/channels/airbnb/listings/{id}/safety-disclosures`, which merges rather than replaces.
+     *
+     * @return $this
+     */
+    public function setGuestSafetyDisclosures(?array $guest_safety_disclosures): static
+    {
+        if (is_null($guest_safety_disclosures)) {
+            array_push($this->openAPINullablesSetToNull, 'guest_safety_disclosures');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('guest_safety_disclosures', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['guest_safety_disclosures'] = $guest_safety_disclosures;
 
         return $this;
     }

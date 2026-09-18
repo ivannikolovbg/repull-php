@@ -66,6 +66,8 @@ class AirbnbTransaction implements ModelInterface, ArrayAccess, JsonSerializable
         'date' => '\DateTime',
         'confirmation_code' => 'string',
         'reservation_id' => 'int',
+        'account_id' => 'string',
+        'account_name' => 'string',
         'listing_id' => 'string',
         'thread_id' => 'string',
         'nights' => 'int',
@@ -101,6 +103,8 @@ class AirbnbTransaction implements ModelInterface, ArrayAccess, JsonSerializable
         'date' => 'date',
         'confirmation_code' => null,
         'reservation_id' => null,
+        'account_id' => null,
+        'account_name' => null,
         'listing_id' => null,
         'thread_id' => null,
         'nights' => null,
@@ -136,6 +140,8 @@ class AirbnbTransaction implements ModelInterface, ArrayAccess, JsonSerializable
         'date' => true,
         'confirmation_code' => true,
         'reservation_id' => true,
+        'account_id' => true,
+        'account_name' => true,
         'listing_id' => true,
         'thread_id' => true,
         'nights' => true,
@@ -241,6 +247,8 @@ class AirbnbTransaction implements ModelInterface, ArrayAccess, JsonSerializable
         'date' => 'date',
         'confirmation_code' => 'confirmation_code',
         'reservation_id' => 'reservation_id',
+        'account_id' => 'account_id',
+        'account_name' => 'account_name',
         'listing_id' => 'listing_id',
         'thread_id' => 'thread_id',
         'nights' => 'nights',
@@ -276,6 +284,8 @@ class AirbnbTransaction implements ModelInterface, ArrayAccess, JsonSerializable
         'date' => 'setDate',
         'confirmation_code' => 'setConfirmationCode',
         'reservation_id' => 'setReservationId',
+        'account_id' => 'setAccountId',
+        'account_name' => 'setAccountName',
         'listing_id' => 'setListingId',
         'thread_id' => 'setThreadId',
         'nights' => 'setNights',
@@ -311,6 +321,8 @@ class AirbnbTransaction implements ModelInterface, ArrayAccess, JsonSerializable
         'date' => 'getDate',
         'confirmation_code' => 'getConfirmationCode',
         'reservation_id' => 'getReservationId',
+        'account_id' => 'getAccountId',
+        'account_name' => 'getAccountName',
         'listing_id' => 'getListingId',
         'thread_id' => 'getThreadId',
         'nights' => 'getNights',
@@ -419,6 +431,8 @@ class AirbnbTransaction implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('date', $data ?? [], null);
         $this->setIfExists('confirmation_code', $data ?? [], null);
         $this->setIfExists('reservation_id', $data ?? [], null);
+        $this->setIfExists('account_id', $data ?? [], null);
+        $this->setIfExists('account_name', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('thread_id', $data ?? [], null);
         $this->setIfExists('nights', $data ?? [], null);
@@ -706,6 +720,74 @@ class AirbnbTransaction implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['reservation_id'] = $reservation_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets account_id
+     *
+     * @return string|null
+     */
+    public function getAccountId(): ?string
+    {
+        return $this->container['account_id'];
+    }
+
+    /**
+     * Sets account_id
+     *
+     * @param string|null $account_id Which connected Airbnb account this transaction belongs to — the Airbnb host id, as a string (they exceed 2^53). `null` on rows that name no listing (payouts).
+     *
+     * @return $this
+     */
+    public function setAccountId(?string $account_id): static
+    {
+        if (is_null($account_id)) {
+            array_push($this->openAPINullablesSetToNull, 'account_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('account_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['account_id'] = $account_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets account_name
+     *
+     * @return string|null
+     */
+    public function getAccountName(): ?string
+    {
+        return $this->container['account_name'];
+    }
+
+    /**
+     * Sets account_name
+     *
+     * @param string|null $account_name Display name of that connected Airbnb account.
+     *
+     * @return $this
+     */
+    public function setAccountName(?string $account_name): static
+    {
+        if (is_null($account_name)) {
+            array_push($this->openAPINullablesSetToNull, 'account_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('account_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['account_name'] = $account_name;
 
         return $this;
     }

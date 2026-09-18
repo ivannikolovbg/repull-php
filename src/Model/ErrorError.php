@@ -71,6 +71,9 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'endpoint' => 'string',
         'did_you_mean' => 'string',
         'listing_ids' => 'string[]',
+        'listing_id' => 'string',
+        'airbnb_listing_id' => 'string',
+        'sync_category' => 'string',
         'retry_after' => 'int',
         'support' => '\Repull\Model\ErrorErrorSupport'
     ];
@@ -93,6 +96,9 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'endpoint' => null,
         'did_you_mean' => null,
         'listing_ids' => null,
+        'listing_id' => null,
+        'airbnb_listing_id' => null,
+        'sync_category' => null,
         'retry_after' => null,
         'support' => null
     ];
@@ -115,6 +121,9 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'endpoint' => false,
         'did_you_mean' => false,
         'listing_ids' => false,
+        'listing_id' => false,
+        'airbnb_listing_id' => false,
+        'sync_category' => false,
         'retry_after' => false,
         'support' => false
     ];
@@ -207,6 +216,9 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'endpoint' => 'endpoint',
         'did_you_mean' => 'did_you_mean',
         'listing_ids' => 'listing_ids',
+        'listing_id' => 'listing_id',
+        'airbnb_listing_id' => 'airbnb_listing_id',
+        'sync_category' => 'sync_category',
         'retry_after' => 'retry_after',
         'support' => 'support'
     ];
@@ -229,6 +241,9 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'endpoint' => 'setEndpoint',
         'did_you_mean' => 'setDidYouMean',
         'listing_ids' => 'setListingIds',
+        'listing_id' => 'setListingId',
+        'airbnb_listing_id' => 'setAirbnbListingId',
+        'sync_category' => 'setSyncCategory',
         'retry_after' => 'setRetryAfter',
         'support' => 'setSupport'
     ];
@@ -251,6 +266,9 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'endpoint' => 'getEndpoint',
         'did_you_mean' => 'getDidYouMean',
         'listing_ids' => 'getListingIds',
+        'listing_id' => 'getListingId',
+        'airbnb_listing_id' => 'getAirbnbListingId',
+        'sync_category' => 'getSyncCategory',
         'retry_after' => 'getRetryAfter',
         'support' => 'getSupport'
     ];
@@ -314,6 +332,9 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('endpoint', $data ?? [], null);
         $this->setIfExists('did_you_mean', $data ?? [], null);
         $this->setIfExists('listing_ids', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('airbnb_listing_id', $data ?? [], null);
+        $this->setIfExists('sync_category', $data ?? [], null);
         $this->setIfExists('retry_after', $data ?? [], null);
         $this->setIfExists('support', $data ?? [], null);
     }
@@ -697,6 +718,87 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable listing_ids cannot be null');
         }
         $this->container['listing_ids'] = $listing_ids;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_id
+     *
+     * @return string|null
+     */
+    public function getListingId(): ?string
+    {
+        return $this->container['listing_id'];
+    }
+
+    /**
+     * Sets listing_id
+     *
+     * @param string|null $listing_id The single Repull listing the error is about. Present on `code: \"listing_not_api_connected\"` (HTTP 403).
+     *
+     * @return $this
+     */
+    public function setListingId(?string $listing_id): static
+    {
+        if (is_null($listing_id)) {
+            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
+        }
+        $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets airbnb_listing_id
+     *
+     * @return string|null
+     */
+    public function getAirbnbListingId(): ?string
+    {
+        return $this->container['airbnb_listing_id'];
+    }
+
+    /**
+     * Sets airbnb_listing_id
+     *
+     * @param string|null $airbnb_listing_id Airbnb's own id for that listing, so the host can find it in Airbnb. Present on `code: \"listing_not_api_connected\"` (HTTP 403).
+     *
+     * @return $this
+     */
+    public function setAirbnbListingId(?string $airbnb_listing_id): static
+    {
+        if (is_null($airbnb_listing_id)) {
+            throw new InvalidArgumentException('non-nullable airbnb_listing_id cannot be null');
+        }
+        $this->container['airbnb_listing_id'] = $airbnb_listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets sync_category
+     *
+     * @return string|null
+     */
+    public function getSyncCategory(): ?string
+    {
+        return $this->container['sync_category'];
+    }
+
+    /**
+     * Sets sync_category
+     *
+     * @param string|null $sync_category The listing's current Airbnb API sync category — why the write was refused. Present on `code: \"listing_not_api_connected\"` (HTTP 403).
+     *
+     * @return $this
+     */
+    public function setSyncCategory(?string $sync_category): static
+    {
+        if (is_null($sync_category)) {
+            throw new InvalidArgumentException('non-nullable sync_category cannot be null');
+        }
+        $this->container['sync_category'] = $sync_category;
 
         return $this;
     }

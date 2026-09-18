@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * AirbnbDataFreshness Class Doc Comment
  *
- * @description Top-level freshness indicator for any DB-backed Airbnb read. Tells consumers WHY a column may be &#x60;null&#x60; or stale without sprinkling per-row error envelopes through the response. The endpoint always returns 200 + DB data; this field is the single signal for \&quot;should I prompt the user to reconnect / wait for sync?\&quot;.
+ * @description Top-level freshness indicator for any DB-backed Airbnb read. Tells consumers WHY a column may be &#x60;null&#x60; or stale without sprinkling per-row error envelopes through the response. The endpoint always returns 200 + DB data; this field is the single signal for \&quot;should I prompt the user to reconnect / wait for sync?\&quot;.  A workspace can connect several Airbnb accounts, so the answer has two levels. &#x60;accounts[]&#x60; carries the verdict per account; the top-level fields aggregate it. Scope a request with &#x60;?account_id&#x3D;&#x60; and &#x60;accounts[]&#x60; holds exactly that account, with the top-level fields mirroring it.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -63,7 +63,8 @@ class AirbnbDataFreshness implements ModelInterface, ArrayAccess, JsonSerializab
         'last_synced_at' => '\DateTime',
         'stale' => 'bool',
         'reason' => 'string',
-        'fix_url' => 'string'
+        'fix_url' => 'string',
+        'accounts' => '\Repull\Model\AirbnbAccountFreshness[]'
     ];
 
     /**
@@ -75,7 +76,8 @@ class AirbnbDataFreshness implements ModelInterface, ArrayAccess, JsonSerializab
         'last_synced_at' => 'date-time',
         'stale' => null,
         'reason' => null,
-        'fix_url' => 'uri'
+        'fix_url' => 'uri',
+        'accounts' => null
     ];
 
     /**
@@ -87,7 +89,8 @@ class AirbnbDataFreshness implements ModelInterface, ArrayAccess, JsonSerializab
         'last_synced_at' => true,
         'stale' => false,
         'reason' => true,
-        'fix_url' => true
+        'fix_url' => true,
+        'accounts' => false
     ];
 
     /**
@@ -169,7 +172,8 @@ class AirbnbDataFreshness implements ModelInterface, ArrayAccess, JsonSerializab
         'last_synced_at' => 'lastSyncedAt',
         'stale' => 'stale',
         'reason' => 'reason',
-        'fix_url' => 'fixUrl'
+        'fix_url' => 'fixUrl',
+        'accounts' => 'accounts'
     ];
 
     /**
@@ -181,7 +185,8 @@ class AirbnbDataFreshness implements ModelInterface, ArrayAccess, JsonSerializab
         'last_synced_at' => 'setLastSyncedAt',
         'stale' => 'setStale',
         'reason' => 'setReason',
-        'fix_url' => 'setFixUrl'
+        'fix_url' => 'setFixUrl',
+        'accounts' => 'setAccounts'
     ];
 
     /**
@@ -193,7 +198,8 @@ class AirbnbDataFreshness implements ModelInterface, ArrayAccess, JsonSerializab
         'last_synced_at' => 'getLastSyncedAt',
         'stale' => 'getStale',
         'reason' => 'getReason',
-        'fix_url' => 'getFixUrl'
+        'fix_url' => 'getFixUrl',
+        'accounts' => 'getAccounts'
     ];
 
     /**
@@ -247,6 +253,7 @@ class AirbnbDataFreshness implements ModelInterface, ArrayAccess, JsonSerializab
         $this->setIfExists('stale', $data ?? [], null);
         $this->setIfExists('reason', $data ?? [], null);
         $this->setIfExists('fix_url', $data ?? [], null);
+        $this->setIfExists('accounts', $data ?? [], null);
     }
 
     /**
@@ -305,7 +312,7 @@ class AirbnbDataFreshness implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets last_synced_at
      *
-     * @param \DateTime|null $last_synced_at Most recent sync timestamp across the rows in the response. `null` when nothing has ever synced for this customer.
+     * @param \DateTime|null $last_synced_at The most recent Airbnb import COMPLETED by any account in scope. `null` when none of them ever has. A run that failed or was rate-limited does not move it.
      *
      * @return $this
      */
@@ -339,7 +346,7 @@ class AirbnbDataFreshness implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets stale
      *
-     * @param bool $stale `true` when any host is disconnected, when the local cache is empty, or when the cache hasn't been refreshed in 24h+. `false` when hosts are healthy and sync is fresh.
+     * @param bool $stale `true` only when EVERY connected Airbnb account is stale — nothing in this response can be trusted to be current. With one account (the common case) that is the same as it has always been. With several, one disconnected host no longer condemns the other's rows: `stale` stays `false` and `reason` becomes `partial_account_staleness`. Read `accounts[]` for which is which.
      *
      * @return $this
      */
@@ -366,7 +373,7 @@ class AirbnbDataFreshness implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets reason
      *
-     * @param string|null $reason Why the data is stale. One of `host_disconnected_since_<iso>`, `sync_lag_>_24h`, `never_synced`. Omitted when `stale` is `false`.
+     * @param string|null $reason Why the data is stale. One of `host_disconnected_since_<iso>`, `host_not_activated`, `sync_lag_>_24h`, `never_synced`, `host_disconnected`, or `partial_account_staleness`. The last one appears WITH `stale: false`: the response is usable, but at least one connected account needs attention — deliberately surfaced so a consumer reading only the aggregate is never told everything is fine while an account is down.
      *
      * @return $this
      */
@@ -400,7 +407,7 @@ class AirbnbDataFreshness implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets fix_url
      *
-     * @param string|null $fix_url Dashboard URL the consumer can open to resolve the staleness (typically the Airbnb reconnect screen). Omitted when `stale` is `false`.
+     * @param string|null $fix_url Dashboard URL the consumer can open to resolve the staleness (the Airbnb connections screen). Present whenever `reason` is, including on `partial_account_staleness`.
      *
      * @return $this
      */
@@ -417,6 +424,33 @@ class AirbnbDataFreshness implements ModelInterface, ArrayAccess, JsonSerializab
             }
         }
         $this->container['fix_url'] = $fix_url;
+
+        return $this;
+    }
+
+    /**
+     * Gets accounts
+     *
+     * @return \Repull\Model\AirbnbAccountFreshness[]|null
+     */
+    public function getAccounts(): ?array
+    {
+        return $this->container['accounts'];
+    }
+
+    /**
+     * Sets accounts
+     *
+     * @param \Repull\Model\AirbnbAccountFreshness[]|null $accounts Per-account freshness, sorted by `accountId`. Omitted on responses that have no connected account to attribute (e.g. a workspace that has never connected Airbnb).
+     *
+     * @return $this
+     */
+    public function setAccounts(?array $accounts): static
+    {
+        if (is_null($accounts)) {
+            throw new InvalidArgumentException('non-nullable accounts cannot be null');
+        }
+        $this->container['accounts'] = $accounts;
 
         return $this;
     }

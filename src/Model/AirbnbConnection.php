@@ -62,12 +62,18 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPITypes = [
         'id' => 'string',
         'airbnb_id' => 'string',
+        'account_id' => 'string',
+        'account_name' => 'string',
         'host_id' => 'string',
+        'host_name' => 'string',
         'active' => 'bool',
         'sync_enabled' => 'bool',
         'primary' => 'bool',
         'markup' => 'string',
+        'sync_category' => 'string',
+        'writable' => 'bool',
         'created_at' => '\DateTime',
+        'locked_fields' => 'string[]',
         'amenities' => '\Repull\Model\AirbnbConnectionAmenitiesInner[]',
         'accessibility_amenities' => '\Repull\Model\AirbnbConnectionAccessibilityAmenitiesInner[]'
     ];
@@ -80,12 +86,18 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPIFormats = [
         'id' => null,
         'airbnb_id' => null,
+        'account_id' => null,
+        'account_name' => null,
         'host_id' => null,
+        'host_name' => null,
         'active' => null,
         'sync_enabled' => null,
         'primary' => null,
         'markup' => null,
+        'sync_category' => null,
+        'writable' => null,
         'created_at' => 'date-time',
+        'locked_fields' => null,
         'amenities' => null,
         'accessibility_amenities' => null
     ];
@@ -98,12 +110,18 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPINullables = [
         'id' => false,
         'airbnb_id' => false,
-        'host_id' => false,
+        'account_id' => true,
+        'account_name' => true,
+        'host_id' => true,
+        'host_name' => true,
         'active' => false,
         'sync_enabled' => false,
         'primary' => false,
         'markup' => true,
+        'sync_category' => true,
+        'writable' => false,
         'created_at' => false,
+        'locked_fields' => false,
         'amenities' => true,
         'accessibility_amenities' => true
     ];
@@ -186,12 +204,18 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $attributeMap = [
         'id' => 'id',
         'airbnb_id' => 'airbnbId',
+        'account_id' => 'accountId',
+        'account_name' => 'accountName',
         'host_id' => 'hostId',
+        'host_name' => 'hostName',
         'active' => 'active',
         'sync_enabled' => 'syncEnabled',
         'primary' => 'primary',
         'markup' => 'markup',
+        'sync_category' => 'syncCategory',
+        'writable' => 'writable',
         'created_at' => 'createdAt',
+        'locked_fields' => 'lockedFields',
         'amenities' => 'amenities',
         'accessibility_amenities' => 'accessibility_amenities'
     ];
@@ -204,12 +228,18 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $setters = [
         'id' => 'setId',
         'airbnb_id' => 'setAirbnbId',
+        'account_id' => 'setAccountId',
+        'account_name' => 'setAccountName',
         'host_id' => 'setHostId',
+        'host_name' => 'setHostName',
         'active' => 'setActive',
         'sync_enabled' => 'setSyncEnabled',
         'primary' => 'setPrimary',
         'markup' => 'setMarkup',
+        'sync_category' => 'setSyncCategory',
+        'writable' => 'setWritable',
         'created_at' => 'setCreatedAt',
+        'locked_fields' => 'setLockedFields',
         'amenities' => 'setAmenities',
         'accessibility_amenities' => 'setAccessibilityAmenities'
     ];
@@ -222,12 +252,18 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $getters = [
         'id' => 'getId',
         'airbnb_id' => 'getAirbnbId',
+        'account_id' => 'getAccountId',
+        'account_name' => 'getAccountName',
         'host_id' => 'getHostId',
+        'host_name' => 'getHostName',
         'active' => 'getActive',
         'sync_enabled' => 'getSyncEnabled',
         'primary' => 'getPrimary',
         'markup' => 'getMarkup',
+        'sync_category' => 'getSyncCategory',
+        'writable' => 'getWritable',
         'created_at' => 'getCreatedAt',
+        'locked_fields' => 'getLockedFields',
         'amenities' => 'getAmenities',
         'accessibility_amenities' => 'getAccessibilityAmenities'
     ];
@@ -264,6 +300,23 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
         return self::$openAPIModelName;
     }
 
+    public const SYNC_CATEGORY_SYNC_ALL = 'sync_all';
+    public const SYNC_CATEGORY_SYNC_RATES_AND_AVAILABILITY = 'sync_rates_and_availability';
+    public const SYNC_CATEGORY_NONE = 'none';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getSyncCategoryAllowableValues()
+    {
+        return [
+            self::SYNC_CATEGORY_SYNC_ALL,
+            self::SYNC_CATEGORY_SYNC_RATES_AND_AVAILABILITY,
+            self::SYNC_CATEGORY_NONE,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -281,12 +334,18 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('airbnb_id', $data ?? [], null);
+        $this->setIfExists('account_id', $data ?? [], null);
+        $this->setIfExists('account_name', $data ?? [], null);
         $this->setIfExists('host_id', $data ?? [], null);
+        $this->setIfExists('host_name', $data ?? [], null);
         $this->setIfExists('active', $data ?? [], null);
         $this->setIfExists('sync_enabled', $data ?? [], null);
         $this->setIfExists('primary', $data ?? [], null);
         $this->setIfExists('markup', $data ?? [], null);
+        $this->setIfExists('sync_category', $data ?? [], null);
+        $this->setIfExists('writable', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('locked_fields', $data ?? [], null);
         $this->setIfExists('amenities', $data ?? [], null);
         $this->setIfExists('accessibility_amenities', $data ?? [], null);
     }
@@ -315,6 +374,15 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
     public function listInvalidProperties(): array
     {
         $invalidProperties = [];
+
+        $allowedValues = self::getSyncCategoryAllowableValues();
+        if (!is_null($this->container['sync_category']) && !in_array($this->container['sync_category'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'sync_category', must be one of '%s'",
+                $this->container['sync_category'],
+                implode("', '", $allowedValues)
+            );
+        }
 
         return $invalidProperties;
     }
@@ -383,6 +451,74 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Gets account_id
+     *
+     * @return string|null
+     */
+    public function getAccountId(): ?string
+    {
+        return $this->container['account_id'];
+    }
+
+    /**
+     * Sets account_id
+     *
+     * @param string|null $account_id Which connected Airbnb account this row belongs to — the Airbnb host id, as a string (they exceed 2^53). The same value `?account_id=` accepts and `GET /v1/connect/airbnb` returns as `accounts[].externalAccountId`.
+     *
+     * @return $this
+     */
+    public function setAccountId(?string $account_id): static
+    {
+        if (is_null($account_id)) {
+            array_push($this->openAPINullablesSetToNull, 'account_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('account_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['account_id'] = $account_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets account_name
+     *
+     * @return string|null
+     */
+    public function getAccountName(): ?string
+    {
+        return $this->container['account_name'];
+    }
+
+    /**
+     * Sets account_name
+     *
+     * @param string|null $account_name Display name of that connected Airbnb account.
+     *
+     * @return $this
+     */
+    public function setAccountName(?string $account_name): static
+    {
+        if (is_null($account_name)) {
+            array_push($this->openAPINullablesSetToNull, 'account_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('account_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['account_name'] = $account_name;
+
+        return $this;
+    }
+
+    /**
      * Gets host_id
      *
      * @return string|null
@@ -395,16 +531,57 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets host_id
      *
-     * @param string|null $host_id Airbnb host user id
+     * @param string|null $host_id Alias of `accountId`, kept for compatibility — same Airbnb host id, same string.
      *
      * @return $this
      */
     public function setHostId(?string $host_id): static
     {
         if (is_null($host_id)) {
-            throw new InvalidArgumentException('non-nullable host_id cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'host_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('host_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['host_id'] = $host_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets host_name
+     *
+     * @return string|null
+     */
+    public function getHostName(): ?string
+    {
+        return $this->container['host_name'];
+    }
+
+    /**
+     * Sets host_name
+     *
+     * @param string|null $host_name Alias of `accountName`, kept for compatibility.
+     *
+     * @return $this
+     */
+    public function setHostName(?string $host_name): static
+    {
+        if (is_null($host_name)) {
+            array_push($this->openAPINullablesSetToNull, 'host_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('host_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['host_name'] = $host_name;
 
         return $this;
     }
@@ -525,6 +702,68 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Gets sync_category
+     *
+     * @return string|null
+     */
+    public function getSyncCategory(): ?string
+    {
+        return $this->container['sync_category'];
+    }
+
+    /**
+     * Sets sync_category
+     *
+     * @param string|null $sync_category Airbnb's own API sync decision for THIS listing, as Airbnb reports it. Airbnb authorises sync one listing at a time, so a connected account can still contain listings it will not accept writes for.  - `sync_all` — Repull manages content, rates and availability. - `sync_rates_and_availability` — Repull manages rates and availability; listing content is managed by the host on Airbnb. - `none` — the listing is **not** connected to Repull on Airbnb's side. Every write to it is refused with `403 listing_not_api_connected`; reconnecting the Airbnb account does not change this, the host must switch the listing on in Airbnb.  `null` when the listing has not synced yet. Not to be confused with `syncEnabled`, which is a Repull-side flag and says nothing about what Airbnb accepts.
+     *
+     * @return $this
+     */
+    public function setSyncCategory(?string $sync_category): static
+    {
+        if (is_null($sync_category)) {
+            array_push($this->openAPINullablesSetToNull, 'sync_category');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('sync_category', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['sync_category'] = $sync_category;
+
+        return $this;
+    }
+
+    /**
+     * Gets writable
+     *
+     * @return bool|null
+     */
+    public function getWritable(): ?bool
+    {
+        return $this->container['writable'];
+    }
+
+    /**
+     * Sets writable
+     *
+     * @param bool|null $writable Whether Repull will send a write for this listing to Airbnb. `false` exactly when `syncCategory` is `none` — such a write is refused with `403 listing_not_api_connected` before anything reaches Airbnb. Check this before a portfolio-wide push instead of discovering it one 403 at a time.
+     *
+     * @return $this
+     */
+    public function setWritable(?bool $writable): static
+    {
+        if (is_null($writable)) {
+            throw new InvalidArgumentException('non-nullable writable cannot be null');
+        }
+        $this->container['writable'] = $writable;
+
+        return $this;
+    }
+
+    /**
      * Gets created_at
      *
      * @return \DateTime|null
@@ -547,6 +786,33 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable created_at cannot be null');
         }
         $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets locked_fields
+     *
+     * @return string[]|null
+     */
+    public function getLockedFields(): ?array
+    {
+        return $this->container['locked_fields'];
+    }
+
+    /**
+     * Sets locked_fields
+     *
+     * @param string[]|null $locked_fields Fields Airbnb will NOT let you change on this listing — `property_type_category`, `name`, `check_in_option`, `summary`, `space`, individual amenities, … Airbnb does not refuse a write to a locked field: it returns 200, reports the field as locked, and applies nothing. Check this before a content write; `[]` means nothing is known to be locked. Recorded at sync time, so a lock added on Airbnb since the last sync will show up on the write instead (as `blockedFields` in the response).
+     *
+     * @return $this
+     */
+    public function setLockedFields(?array $locked_fields): static
+    {
+        if (is_null($locked_fields)) {
+            throw new InvalidArgumentException('non-nullable locked_fields cannot be null');
+        }
+        $this->container['locked_fields'] = $locked_fields;
 
         return $this;
     }

@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * AirbnbAlteration Class Doc Comment
  *
- * @description An Airbnb reservation alteration request (date change, guest-count change, or price change), mirrored locally in &#x60;reservation_alterations&#x60;. Fields prefixed &#x60;original*&#x60; describe the reservation as it stands today; &#x60;new*&#x60; fields describe the proposed change. Compare them to render a diff and decide whether to accept (&#x60;POST .../{id}/accept&#x60;) or decline (&#x60;POST .../{id}/decline&#x60;).
+ * @description An Airbnb reservation alteration request (date change, guest-count change, price change, or a move to another listing), mirrored locally in &#x60;reservation_alterations&#x60;. Fields prefixed &#x60;original*&#x60; describe the reservation as it stands today; &#x60;new*&#x60; fields describe the proposed change. Compare them to render a diff and decide whether to accept (&#x60;POST .../{id}/accept&#x60;) or decline (&#x60;POST .../{id}/decline&#x60;) — or, for one you proposed yourself, to withdraw it (&#x60;POST .../{id}/cancel&#x60;).
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -63,6 +63,8 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'string',
         'alteration_id' => 'string',
         'reservation_id' => 'string',
+        'account_id' => 'string',
+        'account_name' => 'string',
         'platform' => 'string',
         'status' => 'string',
         'initiator' => 'string',
@@ -76,6 +78,8 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
         'new_check_out' => '\DateTime',
         'new_guest_count' => 'int',
         'new_total_price' => 'string',
+        'new_listing_id' => 'string',
+        'new_airbnb_listing_id' => 'string',
         'created_at' => '\DateTime',
         'updated_at' => '\DateTime'
     ];
@@ -89,6 +93,8 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => null,
         'alteration_id' => null,
         'reservation_id' => null,
+        'account_id' => null,
+        'account_name' => null,
         'platform' => null,
         'status' => null,
         'initiator' => null,
@@ -102,6 +108,8 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
         'new_check_out' => 'date-time',
         'new_guest_count' => null,
         'new_total_price' => null,
+        'new_listing_id' => null,
+        'new_airbnb_listing_id' => null,
         'created_at' => 'date-time',
         'updated_at' => 'date-time'
     ];
@@ -115,6 +123,8 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => false,
         'alteration_id' => true,
         'reservation_id' => true,
+        'account_id' => true,
+        'account_name' => true,
         'platform' => false,
         'status' => true,
         'initiator' => true,
@@ -128,6 +138,8 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
         'new_check_out' => true,
         'new_guest_count' => true,
         'new_total_price' => true,
+        'new_listing_id' => true,
+        'new_airbnb_listing_id' => true,
         'created_at' => true,
         'updated_at' => true
     ];
@@ -211,6 +223,8 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'id',
         'alteration_id' => 'alterationId',
         'reservation_id' => 'reservationId',
+        'account_id' => 'accountId',
+        'account_name' => 'accountName',
         'platform' => 'platform',
         'status' => 'status',
         'initiator' => 'initiator',
@@ -224,6 +238,8 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
         'new_check_out' => 'newCheckOut',
         'new_guest_count' => 'newGuestCount',
         'new_total_price' => 'newTotalPrice',
+        'new_listing_id' => 'newListingId',
+        'new_airbnb_listing_id' => 'newAirbnbListingId',
         'created_at' => 'createdAt',
         'updated_at' => 'updatedAt'
     ];
@@ -237,6 +253,8 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'setId',
         'alteration_id' => 'setAlterationId',
         'reservation_id' => 'setReservationId',
+        'account_id' => 'setAccountId',
+        'account_name' => 'setAccountName',
         'platform' => 'setPlatform',
         'status' => 'setStatus',
         'initiator' => 'setInitiator',
@@ -250,6 +268,8 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
         'new_check_out' => 'setNewCheckOut',
         'new_guest_count' => 'setNewGuestCount',
         'new_total_price' => 'setNewTotalPrice',
+        'new_listing_id' => 'setNewListingId',
+        'new_airbnb_listing_id' => 'setNewAirbnbListingId',
         'created_at' => 'setCreatedAt',
         'updated_at' => 'setUpdatedAt'
     ];
@@ -263,6 +283,8 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'getId',
         'alteration_id' => 'getAlterationId',
         'reservation_id' => 'getReservationId',
+        'account_id' => 'getAccountId',
+        'account_name' => 'getAccountName',
         'platform' => 'getPlatform',
         'status' => 'getStatus',
         'initiator' => 'getInitiator',
@@ -276,6 +298,8 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
         'new_check_out' => 'getNewCheckOut',
         'new_guest_count' => 'getNewGuestCount',
         'new_total_price' => 'getNewTotalPrice',
+        'new_listing_id' => 'getNewListingId',
+        'new_airbnb_listing_id' => 'getNewAirbnbListingId',
         'created_at' => 'getCreatedAt',
         'updated_at' => 'getUpdatedAt'
     ];
@@ -330,6 +354,8 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('alteration_id', $data ?? [], null);
         $this->setIfExists('reservation_id', $data ?? [], null);
+        $this->setIfExists('account_id', $data ?? [], null);
+        $this->setIfExists('account_name', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('initiator', $data ?? [], null);
@@ -343,6 +369,8 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('new_check_out', $data ?? [], null);
         $this->setIfExists('new_guest_count', $data ?? [], null);
         $this->setIfExists('new_total_price', $data ?? [], null);
+        $this->setIfExists('new_listing_id', $data ?? [], null);
+        $this->setIfExists('new_airbnb_listing_id', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
         $this->setIfExists('updated_at', $data ?? [], null);
     }
@@ -475,6 +503,74 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['reservation_id'] = $reservation_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets account_id
+     *
+     * @return string|null
+     */
+    public function getAccountId(): ?string
+    {
+        return $this->container['account_id'];
+    }
+
+    /**
+     * Sets account_id
+     *
+     * @param string|null $account_id Which connected Airbnb account this row belongs to — the Airbnb host id, as a string (they exceed 2^53). The same value `?account_id=` accepts and `GET /v1/connect/airbnb` returns as `accounts[].externalAccountId`.
+     *
+     * @return $this
+     */
+    public function setAccountId(?string $account_id): static
+    {
+        if (is_null($account_id)) {
+            array_push($this->openAPINullablesSetToNull, 'account_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('account_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['account_id'] = $account_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets account_name
+     *
+     * @return string|null
+     */
+    public function getAccountName(): ?string
+    {
+        return $this->container['account_name'];
+    }
+
+    /**
+     * Sets account_name
+     *
+     * @param string|null $account_name Display name of that connected Airbnb account.
+     *
+     * @return $this
+     */
+    public function setAccountName(?string $account_name): static
+    {
+        if (is_null($account_name)) {
+            array_push($this->openAPINullablesSetToNull, 'account_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('account_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['account_name'] = $account_name;
 
         return $this;
     }
@@ -910,6 +1006,74 @@ class AirbnbAlteration implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['new_total_price'] = $new_total_price;
+
+        return $this;
+    }
+
+    /**
+     * Gets new_listing_id
+     *
+     * @return string|null
+     */
+    public function getNewListingId(): ?string
+    {
+        return $this->container['new_listing_id'];
+    }
+
+    /**
+     * Sets new_listing_id
+     *
+     * @param string|null $new_listing_id Repull listing id the alteration moves the reservation to — a **listing transfer**. `null` when the alteration does not change the listing, which is the usual case. Compare it with the reservation's current `listingId` to render the move. Like every id on this API it is a string.
+     *
+     * @return $this
+     */
+    public function setNewListingId(?string $new_listing_id): static
+    {
+        if (is_null($new_listing_id)) {
+            array_push($this->openAPINullablesSetToNull, 'new_listing_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('new_listing_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['new_listing_id'] = $new_listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets new_airbnb_listing_id
+     *
+     * @return string|null
+     */
+    public function getNewAirbnbListingId(): ?string
+    {
+        return $this->container['new_airbnb_listing_id'];
+    }
+
+    /**
+     * Sets new_airbnb_listing_id
+     *
+     * @param string|null $new_airbnb_listing_id The same transfer target as Airbnb spells it (the Airbnb listing id). Present alongside `newListingId`; it is also the only one of the two that is set when the destination listing has not been imported into this workspace.
+     *
+     * @return $this
+     */
+    public function setNewAirbnbListingId(?string $new_airbnb_listing_id): static
+    {
+        if (is_null($new_airbnb_listing_id)) {
+            array_push($this->openAPINullablesSetToNull, 'new_airbnb_listing_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('new_airbnb_listing_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['new_airbnb_listing_id'] = $new_airbnb_listing_id;
 
         return $this;
     }

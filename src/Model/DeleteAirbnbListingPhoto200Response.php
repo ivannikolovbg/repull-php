@@ -59,7 +59,8 @@ class DeleteAirbnbListingPhoto200Response implements ModelInterface, ArrayAccess
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'deleted' => 'bool'
+        'deleted' => 'bool',
+        'stored' => 'bool'
     ];
 
     /**
@@ -68,7 +69,8 @@ class DeleteAirbnbListingPhoto200Response implements ModelInterface, ArrayAccess
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'deleted' => null
+        'deleted' => null,
+        'stored' => null
     ];
 
     /**
@@ -77,7 +79,8 @@ class DeleteAirbnbListingPhoto200Response implements ModelInterface, ArrayAccess
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'deleted' => false
+        'deleted' => false,
+        'stored' => false
     ];
 
     /**
@@ -156,7 +159,8 @@ class DeleteAirbnbListingPhoto200Response implements ModelInterface, ArrayAccess
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'deleted' => 'deleted'
+        'deleted' => 'deleted',
+        'stored' => 'stored'
     ];
 
     /**
@@ -165,7 +169,8 @@ class DeleteAirbnbListingPhoto200Response implements ModelInterface, ArrayAccess
      * @var array<string, string>
      */
     protected static array $setters = [
-        'deleted' => 'setDeleted'
+        'deleted' => 'setDeleted',
+        'stored' => 'setStored'
     ];
 
     /**
@@ -174,7 +179,8 @@ class DeleteAirbnbListingPhoto200Response implements ModelInterface, ArrayAccess
      * @var array<string, string>
      */
     protected static array $getters = [
-        'deleted' => 'getDeleted'
+        'deleted' => 'getDeleted',
+        'stored' => 'getStored'
     ];
 
     /**
@@ -225,6 +231,7 @@ class DeleteAirbnbListingPhoto200Response implements ModelInterface, ArrayAccess
     public function __construct(?array $data = null)
     {
         $this->setIfExists('deleted', $data ?? [], null);
+        $this->setIfExists('stored', $data ?? [], null);
     }
 
     /**
@@ -287,6 +294,33 @@ class DeleteAirbnbListingPhoto200Response implements ModelInterface, ArrayAccess
             throw new InvalidArgumentException('non-nullable deleted cannot be null');
         }
         $this->container['deleted'] = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Gets stored
+     *
+     * @return bool|null
+     */
+    public function getStored(): ?bool
+    {
+        return $this->container['stored'];
+    }
+
+    /**
+     * Sets stored
+     *
+     * @param bool|null $stored Whether our own copy dropped the photo too.
+     *
+     * @return $this
+     */
+    public function setStored(?bool $stored): static
+    {
+        if (is_null($stored)) {
+            throw new InvalidArgumentException('non-nullable stored cannot be null');
+        }
+        $this->container['stored'] = $stored;
 
         return $this;
     }

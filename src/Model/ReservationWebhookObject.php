@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * ReservationWebhookObject Class Doc Comment
  *
- * @description Lightweight reservation snapshot delivered as &#x60;data.object&#x60; on every reservation webhook event. Stable across &#x60;reservation.created&#x60;, &#x60;reservation.updated&#x60;, and &#x60;reservation.cancelled&#x60;. Fetch the full reservation via &#x60;GET /v1/reservations/{id}&#x60; if you need pricing, guest contact info, or audit history — those are deliberately omitted to keep deliveries small.
+ * @description Lightweight reservation snapshot delivered as &#x60;data.object&#x60; on every reservation webhook event. Stable across &#x60;reservation.created&#x60;, &#x60;reservation.updated&#x60;, and &#x60;reservation.cancelled&#x60;. Fetch the full reservation via &#x60;GET /v1/reservations/{id}&#x60; if you need pricing, guest contact info, or audit history — those are deliberately omitted to keep deliveries small.  **Stay terms are the one exception to that rule.** &#x60;cancellationPolicy&#x60;, &#x60;checkInTime&#x60; and &#x60;checkOutTime&#x60; ride on every delivery, because the decisions they drive — is a refund owed, when can housekeeping turn the unit over — are made at the moment the webhook lands, not on a follow-up fetch. They are operational parameters of the booking, not contact or payment data. Guest email, payment method and payment reference stay off the snapshot; see &#x60;GET /v1/reservations/{id}&#x60;.  All three are &#x60;null&#x60; when the source channel did not supply them. They are never defaulted: a fabricated policy is worse than a missing one.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -67,7 +67,10 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
         'customer_id' => 'int',
         'checkin_date' => '\DateTime',
         'checkout_date' => '\DateTime',
-        'status' => 'string'
+        'status' => 'string',
+        'cancellation_policy' => 'string',
+        'check_in_time' => 'string',
+        'check_out_time' => 'string'
     ];
 
     /**
@@ -83,7 +86,10 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
         'customer_id' => null,
         'checkin_date' => 'date',
         'checkout_date' => 'date',
-        'status' => null
+        'status' => null,
+        'cancellation_policy' => null,
+        'check_in_time' => null,
+        'check_out_time' => null
     ];
 
     /**
@@ -99,7 +105,10 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
         'customer_id' => false,
         'checkin_date' => false,
         'checkout_date' => false,
-        'status' => false
+        'status' => false,
+        'cancellation_policy' => true,
+        'check_in_time' => true,
+        'check_out_time' => true
     ];
 
     /**
@@ -185,7 +194,10 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
         'customer_id' => 'customerId',
         'checkin_date' => 'checkinDate',
         'checkout_date' => 'checkoutDate',
-        'status' => 'status'
+        'status' => 'status',
+        'cancellation_policy' => 'cancellationPolicy',
+        'check_in_time' => 'checkInTime',
+        'check_out_time' => 'checkOutTime'
     ];
 
     /**
@@ -201,7 +213,10 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
         'customer_id' => 'setCustomerId',
         'checkin_date' => 'setCheckinDate',
         'checkout_date' => 'setCheckoutDate',
-        'status' => 'setStatus'
+        'status' => 'setStatus',
+        'cancellation_policy' => 'setCancellationPolicy',
+        'check_in_time' => 'setCheckInTime',
+        'check_out_time' => 'setCheckOutTime'
     ];
 
     /**
@@ -217,7 +232,10 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
         'customer_id' => 'getCustomerId',
         'checkin_date' => 'getCheckinDate',
         'checkout_date' => 'getCheckoutDate',
-        'status' => 'getStatus'
+        'status' => 'getStatus',
+        'cancellation_policy' => 'getCancellationPolicy',
+        'check_in_time' => 'getCheckInTime',
+        'check_out_time' => 'getCheckOutTime'
     ];
 
     /**
@@ -275,6 +293,9 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
         $this->setIfExists('checkin_date', $data ?? [], null);
         $this->setIfExists('checkout_date', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('cancellation_policy', $data ?? [], null);
+        $this->setIfExists('check_in_time', $data ?? [], null);
+        $this->setIfExists('check_out_time', $data ?? [], null);
     }
 
     /**
@@ -550,6 +571,108 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
             throw new InvalidArgumentException('non-nullable status cannot be null');
         }
         $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets cancellation_policy
+     *
+     * @return string|null
+     */
+    public function getCancellationPolicy(): ?string
+    {
+        return $this->container['cancellation_policy'];
+    }
+
+    /**
+     * Sets cancellation_policy
+     *
+     * @param string|null $cancellation_policy Cancellation policy the booking was made under, **verbatim from the source channel** — not normalised, because the codes do not mean the same thing across channels.  - Airbnb, Vrbo, direct and owner bookings carry a named code: `flexible`, `moderate`, `firm_14`, `strict_14_with_grace_period`, `better_strict_with_grace_period`, `super_strict_30`, `super_strict_60`, `tiered_pricing_non_refundable`, `long_term_flexible`, `flexible_new`. - **Booking.com carries its numeric policy id as a string** (`\"1\"`, `\"74\"`, `\"121\"`). It is not self-describing — resolve it against the property's policy set on Booking.com.  `null` when the channel supplied none (iCal-imported bookings, some legacy direct rows).
+     *
+     * @return $this
+     */
+    public function setCancellationPolicy(?string $cancellation_policy): static
+    {
+        if (is_null($cancellation_policy)) {
+            array_push($this->openAPINullablesSetToNull, 'cancellation_policy');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('cancellation_policy', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['cancellation_policy'] = $cancellation_policy;
+
+        return $this;
+    }
+
+    /**
+     * Gets check_in_time
+     *
+     * @return string|null
+     */
+    public function getCheckInTime(): ?string
+    {
+        return $this->container['check_in_time'];
+    }
+
+    /**
+     * Sets check_in_time
+     *
+     * @param string|null $check_in_time Local check-in time, `HH:MM` on a 24-hour clock in the **property's own timezone** — not UTC, and not the subscriber's. Usually inherited from the listing policy, but per-reservation where the channel or an agreed early check-in overrides it. `null` when unknown.
+     *
+     * @return $this
+     */
+    public function setCheckInTime(?string $check_in_time): static
+    {
+        if (is_null($check_in_time)) {
+            array_push($this->openAPINullablesSetToNull, 'check_in_time');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('check_in_time', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['check_in_time'] = $check_in_time;
+
+        return $this;
+    }
+
+    /**
+     * Gets check_out_time
+     *
+     * @return string|null
+     */
+    public function getCheckOutTime(): ?string
+    {
+        return $this->container['check_out_time'];
+    }
+
+    /**
+     * Sets check_out_time
+     *
+     * @param string|null $check_out_time Local check-out time, `HH:MM` on a 24-hour clock in the property's own timezone. Pair it with `checkoutDate` to schedule the turnover. `null` when unknown.
+     *
+     * @return $this
+     */
+    public function setCheckOutTime(?string $check_out_time): static
+    {
+        if (is_null($check_out_time)) {
+            array_push($this->openAPINullablesSetToNull, 'check_out_time');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('check_out_time', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['check_out_time'] = $check_out_time;
 
         return $this;
     }

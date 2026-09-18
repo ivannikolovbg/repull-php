@@ -1,6 +1,6 @@
 <?php
 /**
- * CreateAirbnbAlterationRequest
+ * AirbnbAccountFreshness
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * CreateAirbnbAlterationRequest Class Doc Comment
+ * AirbnbAccountFreshness Class Doc Comment
  *
+ * @description Freshness of ONE connected Airbnb account. Freshness is a property of an account, not of a workspace: one host&#39;s token expiring says nothing about another host&#39;s data.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class CreateAirbnbAlterationRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class AirbnbAccountFreshness implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class CreateAirbnbAlterationRequest implements ModelInterface, ArrayAccess, Json
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'create_airbnb_alteration_request';
+    protected static string $openAPIModelName = 'AirbnbAccountFreshness';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,10 +60,12 @@ class CreateAirbnbAlterationRequest implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'confirmation_code' => 'string',
-        'check_in' => '\DateTime',
-        'check_out' => '\DateTime',
-        'number_of_guests' => 'int'
+        'account_id' => 'string',
+        'account_name' => 'string',
+        'last_synced_at' => '\DateTime',
+        'stale' => 'bool',
+        'reason' => 'string',
+        'fix_url' => 'string'
     ];
 
     /**
@@ -71,10 +74,12 @@ class CreateAirbnbAlterationRequest implements ModelInterface, ArrayAccess, Json
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'confirmation_code' => null,
-        'check_in' => 'date',
-        'check_out' => 'date',
-        'number_of_guests' => null
+        'account_id' => null,
+        'account_name' => null,
+        'last_synced_at' => 'date-time',
+        'stale' => null,
+        'reason' => null,
+        'fix_url' => 'uri'
     ];
 
     /**
@@ -83,10 +88,12 @@ class CreateAirbnbAlterationRequest implements ModelInterface, ArrayAccess, Json
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'confirmation_code' => false,
-        'check_in' => false,
-        'check_out' => false,
-        'number_of_guests' => false
+        'account_id' => false,
+        'account_name' => true,
+        'last_synced_at' => true,
+        'stale' => false,
+        'reason' => true,
+        'fix_url' => true
     ];
 
     /**
@@ -165,10 +172,12 @@ class CreateAirbnbAlterationRequest implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'confirmation_code' => 'confirmation_code',
-        'check_in' => 'check_in',
-        'check_out' => 'check_out',
-        'number_of_guests' => 'number_of_guests'
+        'account_id' => 'accountId',
+        'account_name' => 'accountName',
+        'last_synced_at' => 'lastSyncedAt',
+        'stale' => 'stale',
+        'reason' => 'reason',
+        'fix_url' => 'fixUrl'
     ];
 
     /**
@@ -177,10 +186,12 @@ class CreateAirbnbAlterationRequest implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $setters = [
-        'confirmation_code' => 'setConfirmationCode',
-        'check_in' => 'setCheckIn',
-        'check_out' => 'setCheckOut',
-        'number_of_guests' => 'setNumberOfGuests'
+        'account_id' => 'setAccountId',
+        'account_name' => 'setAccountName',
+        'last_synced_at' => 'setLastSyncedAt',
+        'stale' => 'setStale',
+        'reason' => 'setReason',
+        'fix_url' => 'setFixUrl'
     ];
 
     /**
@@ -189,10 +200,12 @@ class CreateAirbnbAlterationRequest implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $getters = [
-        'confirmation_code' => 'getConfirmationCode',
-        'check_in' => 'getCheckIn',
-        'check_out' => 'getCheckOut',
-        'number_of_guests' => 'getNumberOfGuests'
+        'account_id' => 'getAccountId',
+        'account_name' => 'getAccountName',
+        'last_synced_at' => 'getLastSyncedAt',
+        'stale' => 'getStale',
+        'reason' => 'getReason',
+        'fix_url' => 'getFixUrl'
     ];
 
     /**
@@ -242,10 +255,12 @@ class CreateAirbnbAlterationRequest implements ModelInterface, ArrayAccess, Json
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('confirmation_code', $data ?? [], null);
-        $this->setIfExists('check_in', $data ?? [], null);
-        $this->setIfExists('check_out', $data ?? [], null);
-        $this->setIfExists('number_of_guests', $data ?? [], null);
+        $this->setIfExists('account_id', $data ?? [], null);
+        $this->setIfExists('account_name', $data ?? [], null);
+        $this->setIfExists('last_synced_at', $data ?? [], null);
+        $this->setIfExists('stale', $data ?? [], null);
+        $this->setIfExists('reason', $data ?? [], null);
+        $this->setIfExists('fix_url', $data ?? [], null);
     }
 
     /**
@@ -273,8 +288,14 @@ class CreateAirbnbAlterationRequest implements ModelInterface, ArrayAccess, Json
     {
         $invalidProperties = [];
 
-        if ($this->container['confirmation_code'] === null) {
-            $invalidProperties[] = "'confirmation_code' can't be null";
+        if ($this->container['account_id'] === null) {
+            $invalidProperties[] = "'account_id' can't be null";
+        }
+        if ($this->container['last_synced_at'] === null && !$this->isNullableSetToNull('last_synced_at')) {
+            $invalidProperties[] = "'last_synced_at' is required";
+        }
+        if ($this->container['stale'] === null) {
+            $invalidProperties[] = "'stale' can't be null";
         }
         return $invalidProperties;
     }
@@ -289,109 +310,191 @@ class CreateAirbnbAlterationRequest implements ModelInterface, ArrayAccess, Json
 
 
     /**
-     * Gets confirmation_code
+     * Gets account_id
      *
      * @return string
      */
-    public function getConfirmationCode(): string
+    public function getAccountId(): string
     {
-        return $this->container['confirmation_code'];
+        return $this->container['account_id'];
     }
 
     /**
-     * Sets confirmation_code
+     * Sets account_id
      *
-     * @param string $confirmation_code Airbnb confirmation code of the reservation to alter.
+     * @param string $account_id Airbnb host id, as a string (they exceed 2^53). The same value `?account_id=` accepts and `GET /v1/connect/airbnb` returns as `accounts[].externalAccountId`.
      *
      * @return $this
      */
-    public function setConfirmationCode(string $confirmation_code): static
+    public function setAccountId(string $account_id): static
     {
-        if (is_null($confirmation_code)) {
-            throw new InvalidArgumentException('non-nullable confirmation_code cannot be null');
+        if (is_null($account_id)) {
+            throw new InvalidArgumentException('non-nullable account_id cannot be null');
         }
-        $this->container['confirmation_code'] = $confirmation_code;
+        $this->container['account_id'] = $account_id;
 
         return $this;
     }
 
     /**
-     * Gets check_in
+     * Gets account_name
+     *
+     * @return string|null
+     */
+    public function getAccountName(): ?string
+    {
+        return $this->container['account_name'];
+    }
+
+    /**
+     * Sets account_name
+     *
+     * @param string|null $account_name Display name of the connected account.
+     *
+     * @return $this
+     */
+    public function setAccountName(?string $account_name): static
+    {
+        if (is_null($account_name)) {
+            array_push($this->openAPINullablesSetToNull, 'account_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('account_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['account_name'] = $account_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets last_synced_at
      *
      * @return \DateTime|null
      */
-    public function getCheckIn(): ?\DateTime
+    public function getLastSyncedAt(): ?\DateTime
     {
-        return $this->container['check_in'];
+        return $this->container['last_synced_at'];
     }
 
     /**
-     * Sets check_in
+     * Sets last_synced_at
      *
-     * @param \DateTime|null $check_in New check-in date (YYYY-MM-DD).
+     * @param \DateTime|null $last_synced_at When this account last COMPLETED an Airbnb import. `null` when it never has. A run that failed or was rate-limited does not move it.
      *
      * @return $this
      */
-    public function setCheckIn(?\DateTime $check_in): static
+    public function setLastSyncedAt(?\DateTime $last_synced_at): static
     {
-        if (is_null($check_in)) {
-            throw new InvalidArgumentException('non-nullable check_in cannot be null');
+        if (is_null($last_synced_at)) {
+            array_push($this->openAPINullablesSetToNull, 'last_synced_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('last_synced_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['check_in'] = $check_in;
+        $this->container['last_synced_at'] = $last_synced_at;
 
         return $this;
     }
 
     /**
-     * Gets check_out
+     * Gets stale
      *
-     * @return \DateTime|null
+     * @return bool
      */
-    public function getCheckOut(): ?\DateTime
+    public function getStale(): bool
     {
-        return $this->container['check_out'];
+        return $this->container['stale'];
     }
 
     /**
-     * Sets check_out
+     * Sets stale
      *
-     * @param \DateTime|null $check_out New check-out date (YYYY-MM-DD).
+     * @param bool $stale `true` when this account is disconnected, has never synced, or has not refreshed in 24h+.
      *
      * @return $this
      */
-    public function setCheckOut(?\DateTime $check_out): static
+    public function setStale(bool $stale): static
     {
-        if (is_null($check_out)) {
-            throw new InvalidArgumentException('non-nullable check_out cannot be null');
+        if (is_null($stale)) {
+            throw new InvalidArgumentException('non-nullable stale cannot be null');
         }
-        $this->container['check_out'] = $check_out;
+        $this->container['stale'] = $stale;
 
         return $this;
     }
 
     /**
-     * Gets number_of_guests
+     * Gets reason
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getNumberOfGuests(): ?int
+    public function getReason(): ?string
     {
-        return $this->container['number_of_guests'];
+        return $this->container['reason'];
     }
 
     /**
-     * Sets number_of_guests
+     * Sets reason
      *
-     * @param int|null $number_of_guests New guest count.
+     * @param string|null $reason Why THIS account is stale. Omitted when it is fresh.
      *
      * @return $this
      */
-    public function setNumberOfGuests(?int $number_of_guests): static
+    public function setReason(?string $reason): static
     {
-        if (is_null($number_of_guests)) {
-            throw new InvalidArgumentException('non-nullable number_of_guests cannot be null');
+        if (is_null($reason)) {
+            array_push($this->openAPINullablesSetToNull, 'reason');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('reason', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['number_of_guests'] = $number_of_guests;
+        $this->container['reason'] = $reason;
+
+        return $this;
+    }
+
+    /**
+     * Gets fix_url
+     *
+     * @return string|null
+     */
+    public function getFixUrl(): ?string
+    {
+        return $this->container['fix_url'];
+    }
+
+    /**
+     * Sets fix_url
+     *
+     * @param string|null $fix_url Where to reconnect this account. Omitted when it is fresh.
+     *
+     * @return $this
+     */
+    public function setFixUrl(?string $fix_url): static
+    {
+        if (is_null($fix_url)) {
+            array_push($this->openAPINullablesSetToNull, 'fix_url');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('fix_url', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['fix_url'] = $fix_url;
 
         return $this;
     }

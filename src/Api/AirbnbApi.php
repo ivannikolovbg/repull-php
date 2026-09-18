@@ -84,6 +84,9 @@ class AirbnbApi
         'airbnbReservationAction' => [
             'application/json',
         ],
+        'cancelAirbnbAlteration' => [
+            'application/json',
+        ],
         'createAirbnbAlteration' => [
             'application/json',
         ],
@@ -108,6 +111,9 @@ class AirbnbApi
         'getAirbnbAlteration' => [
             'application/json',
         ],
+        'getAirbnbBookingSettings' => [
+            'application/json',
+        ],
         'getAirbnbCheckinGuide' => [
             'application/json',
         ],
@@ -121,6 +127,9 @@ class AirbnbApi
             'application/json',
         ],
         'getAirbnbListingAvailability' => [
+            'application/json',
+        ],
+        'getAirbnbListingDetails' => [
             'application/json',
         ],
         'getAirbnbListingPricing' => [
@@ -147,10 +156,16 @@ class AirbnbApi
         'listAirbnbListingDescriptions' => [
             'application/json',
         ],
+        'listAirbnbListingPermits' => [
+            'application/json',
+        ],
         'listAirbnbListingPhotos' => [
             'application/json',
         ],
         'listAirbnbListingRooms' => [
+            'application/json',
+        ],
+        'listAirbnbListingSafetyDisclosures' => [
             'application/json',
         ],
         'listAirbnbListings' => [
@@ -174,6 +189,9 @@ class AirbnbApi
         'mapAirbnbListing' => [
             'application/json',
         ],
+        'reorderAirbnbListingPhotos' => [
+            'application/json',
+        ],
         'respondAirbnbReview' => [
             'application/json',
         ],
@@ -183,16 +201,43 @@ class AirbnbApi
         'sendAirbnbMessage' => [
             'application/json',
         ],
+        'setAirbnbListingCoverPhoto' => [
+            'application/json',
+        ],
         'syncAirbnbTransactions' => [
+            'application/json',
+        ],
+        'updateAirbnbBookingSettings' => [
             'application/json',
         ],
         'updateAirbnbCheckinGuide' => [
             'application/json',
         ],
+        'updateAirbnbListingAmenities' => [
+            'application/json',
+        ],
         'updateAirbnbListingAvailability' => [
             'application/json',
         ],
+        'updateAirbnbListingDescription' => [
+            'application/json',
+        ],
+        'updateAirbnbListingDetails' => [
+            'application/json',
+        ],
+        'updateAirbnbListingPermits' => [
+            'application/json',
+        ],
+        'updateAirbnbListingPhoto' => [
+            'application/json',
+        ],
         'updateAirbnbListingPricing' => [
+            'application/json',
+        ],
+        'updateAirbnbListingRoom' => [
+            'application/json',
+        ],
+        'updateAirbnbListingSafetyDisclosures' => [
             'application/json',
         ],
         'updateAirbnbMessage' => [
@@ -542,46 +587,50 @@ class AirbnbApi
     /**
      * Operation airbnbListingAction
      *
-     * Listing action (delete/push/publish)
+     * Listing action (delete/push/publish/unlist/relist)
      *
      * @param  string $id id (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
      * @param  \Repull\Model\AirbnbListingActionRequest|null $airbnb_listing_action_request airbnb_listing_action_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbListingAction'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\Error|null
+     * @return \Repull\Model\AirbnbListingAction200Response|\Repull\Model\Error
      */
     public function airbnbListingAction(
         string $id,
+        ?string $idempotency_key = null,
         ?\Repull\Model\AirbnbListingActionRequest $airbnb_listing_action_request = null,
         string $contentType = self::contentTypes['airbnbListingAction'][0]
-    ): ?\Repull\Model\Error
+    ): \Repull\Model\AirbnbListingAction200Response|\Repull\Model\Error
     {
-        list($response) = $this->airbnbListingActionWithHttpInfo($id, $airbnb_listing_action_request, $contentType);
+        list($response) = $this->airbnbListingActionWithHttpInfo($id, $idempotency_key, $airbnb_listing_action_request, $contentType);
         return $response;
     }
 
     /**
      * Operation airbnbListingActionWithHttpInfo
      *
-     * Listing action (delete/push/publish)
+     * Listing action (delete/push/publish/unlist/relist)
      *
      * @param  string $id (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
      * @param  \Repull\Model\AirbnbListingActionRequest|null $airbnb_listing_action_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbListingAction'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbListingAction200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function airbnbListingActionWithHttpInfo(
         string $id,
+        ?string $idempotency_key = null,
         ?\Repull\Model\AirbnbListingActionRequest $airbnb_listing_action_request = null,
         string $contentType = self::contentTypes['airbnbListingAction'][0]
     ): array
     {
-        $request = $this->airbnbListingActionRequest($id, $airbnb_listing_action_request, $contentType);
+        $request = $this->airbnbListingActionRequest($id, $idempotency_key, $airbnb_listing_action_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -605,10 +654,74 @@ class AirbnbApi
 
             $statusCode = $response->getStatusCode();
 
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\AirbnbListingAction200Response',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
 
-            return [null, $statusCode, $response->getHeaders()];
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\AirbnbListingAction200Response',
+                $request,
+                $response,
+            );
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\AirbnbListingAction200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -617,7 +730,31 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -634,9 +771,10 @@ class AirbnbApi
     /**
      * Operation airbnbListingActionAsync
      *
-     * Listing action (delete/push/publish)
+     * Listing action (delete/push/publish/unlist/relist)
      *
      * @param  string $id (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
      * @param  \Repull\Model\AirbnbListingActionRequest|null $airbnb_listing_action_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbListingAction'] to see the possible values for this operation
      *
@@ -645,11 +783,12 @@ class AirbnbApi
      */
     public function airbnbListingActionAsync(
         string $id,
+        ?string $idempotency_key = null,
         ?\Repull\Model\AirbnbListingActionRequest $airbnb_listing_action_request = null,
         string $contentType = self::contentTypes['airbnbListingAction'][0]
     ): PromiseInterface
     {
-        return $this->airbnbListingActionAsyncWithHttpInfo($id, $airbnb_listing_action_request, $contentType)
+        return $this->airbnbListingActionAsyncWithHttpInfo($id, $idempotency_key, $airbnb_listing_action_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -660,9 +799,10 @@ class AirbnbApi
     /**
      * Operation airbnbListingActionAsyncWithHttpInfo
      *
-     * Listing action (delete/push/publish)
+     * Listing action (delete/push/publish/unlist/relist)
      *
      * @param  string $id (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
      * @param  \Repull\Model\AirbnbListingActionRequest|null $airbnb_listing_action_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbListingAction'] to see the possible values for this operation
      *
@@ -671,18 +811,32 @@ class AirbnbApi
      */
     public function airbnbListingActionAsyncWithHttpInfo(
         string $id,
+        ?string $idempotency_key = null,
         ?\Repull\Model\AirbnbListingActionRequest $airbnb_listing_action_request = null,
         string $contentType = self::contentTypes['airbnbListingAction'][0]
     ): PromiseInterface
     {
-        $returnType = '';
-        $request = $this->airbnbListingActionRequest($id, $airbnb_listing_action_request, $contentType);
+        $returnType = '\Repull\Model\AirbnbListingAction200Response';
+        $request = $this->airbnbListingActionRequest($id, $idempotency_key, $airbnb_listing_action_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 },
                 function ($exception) {
                     $response = $exception->getResponse();
@@ -705,6 +859,7 @@ class AirbnbApi
      * Create request for operation 'airbnbListingAction'
      *
      * @param  string $id (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
      * @param  \Repull\Model\AirbnbListingActionRequest|null $airbnb_listing_action_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbListingAction'] to see the possible values for this operation
      *
@@ -713,6 +868,7 @@ class AirbnbApi
      */
     public function airbnbListingActionRequest(
         string $id,
+        ?string $idempotency_key = null,
         ?\Repull\Model\AirbnbListingActionRequest $airbnb_listing_action_request = null,
         string $contentType = self::contentTypes['airbnbListingAction'][0]
     ): Request
@@ -725,6 +881,10 @@ class AirbnbApi
             );
         }
 
+        if ($idempotency_key !== null && strlen($idempotency_key) > 255) {
+            throw new InvalidArgumentException('invalid length for "$idempotency_key" when calling AirbnbApi.airbnbListingAction, must be smaller than or equal to 255.');
+        }
+        
 
 
         $resourcePath = '/v1/channels/airbnb/listings/{id}';
@@ -735,6 +895,10 @@ class AirbnbApi
         $multipart = false;
 
 
+        // header params
+        if ($idempotency_key !== null) {
+            $headerParams['Idempotency-Key'] = ObjectSerializer::toHeaderValue($idempotency_key);
+        }
 
         // path params
         if ($id !== null) {
@@ -1056,44 +1220,48 @@ class AirbnbApi
     }
 
     /**
-     * Operation createAirbnbAlteration
+     * Operation cancelAirbnbAlteration
      *
-     * Create Airbnb alteration
+     * Cancel Airbnb alteration
      *
-     * @param  \Repull\Model\CreateAirbnbAlterationRequest $create_airbnb_alteration_request create_airbnb_alteration_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbAlteration'] to see the possible values for this operation
+     * @param  string $id Airbnb alteration id (the &#x60;alterationId&#x60; from a &#x60;GET /v1/channels/airbnb/alterations&#x60; row). (required)
+     * @param  object|null $body body (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelAirbnbAlteration'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
      * @return \Repull\Model\Error|null
      */
-    public function createAirbnbAlteration(
-        \Repull\Model\CreateAirbnbAlterationRequest $create_airbnb_alteration_request,
-        string $contentType = self::contentTypes['createAirbnbAlteration'][0]
+    public function cancelAirbnbAlteration(
+        string $id,
+        ?array $body = null,
+        string $contentType = self::contentTypes['cancelAirbnbAlteration'][0]
     ): ?\Repull\Model\Error
     {
-        list($response) = $this->createAirbnbAlterationWithHttpInfo($create_airbnb_alteration_request, $contentType);
+        list($response) = $this->cancelAirbnbAlterationWithHttpInfo($id, $body, $contentType);
         return $response;
     }
 
     /**
-     * Operation createAirbnbAlterationWithHttpInfo
+     * Operation cancelAirbnbAlterationWithHttpInfo
      *
-     * Create Airbnb alteration
+     * Cancel Airbnb alteration
      *
-     * @param  \Repull\Model\CreateAirbnbAlterationRequest $create_airbnb_alteration_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbAlteration'] to see the possible values for this operation
+     * @param  string $id Airbnb alteration id (the &#x60;alterationId&#x60; from a &#x60;GET /v1/channels/airbnb/alterations&#x60; row). (required)
+     * @param  object|null $body (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelAirbnbAlteration'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
      */
-    public function createAirbnbAlterationWithHttpInfo(
-        \Repull\Model\CreateAirbnbAlterationRequest $create_airbnb_alteration_request,
-        string $contentType = self::contentTypes['createAirbnbAlteration'][0]
+    public function cancelAirbnbAlterationWithHttpInfo(
+        string $id,
+        ?array $body = null,
+        string $contentType = self::contentTypes['cancelAirbnbAlteration'][0]
     ): array
     {
-        $request = $this->createAirbnbAlterationRequest($create_airbnb_alteration_request, $contentType);
+        $request = $this->cancelAirbnbAlterationRequest($id, $body, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1160,22 +1328,24 @@ class AirbnbApi
     }
 
     /**
-     * Operation createAirbnbAlterationAsync
+     * Operation cancelAirbnbAlterationAsync
      *
-     * Create Airbnb alteration
+     * Cancel Airbnb alteration
      *
-     * @param  \Repull\Model\CreateAirbnbAlterationRequest $create_airbnb_alteration_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbAlteration'] to see the possible values for this operation
+     * @param  string $id Airbnb alteration id (the &#x60;alterationId&#x60; from a &#x60;GET /v1/channels/airbnb/alterations&#x60; row). (required)
+     * @param  object|null $body (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelAirbnbAlteration'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function createAirbnbAlterationAsync(
-        \Repull\Model\CreateAirbnbAlterationRequest $create_airbnb_alteration_request,
-        string $contentType = self::contentTypes['createAirbnbAlteration'][0]
+    public function cancelAirbnbAlterationAsync(
+        string $id,
+        ?array $body = null,
+        string $contentType = self::contentTypes['cancelAirbnbAlteration'][0]
     ): PromiseInterface
     {
-        return $this->createAirbnbAlterationAsyncWithHttpInfo($create_airbnb_alteration_request, $contentType)
+        return $this->cancelAirbnbAlterationAsyncWithHttpInfo($id, $body, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1184,23 +1354,25 @@ class AirbnbApi
     }
 
     /**
-     * Operation createAirbnbAlterationAsyncWithHttpInfo
+     * Operation cancelAirbnbAlterationAsyncWithHttpInfo
      *
-     * Create Airbnb alteration
+     * Cancel Airbnb alteration
      *
-     * @param  \Repull\Model\CreateAirbnbAlterationRequest $create_airbnb_alteration_request (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbAlteration'] to see the possible values for this operation
+     * @param  string $id Airbnb alteration id (the &#x60;alterationId&#x60; from a &#x60;GET /v1/channels/airbnb/alterations&#x60; row). (required)
+     * @param  object|null $body (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelAirbnbAlteration'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function createAirbnbAlterationAsyncWithHttpInfo(
-        \Repull\Model\CreateAirbnbAlterationRequest $create_airbnb_alteration_request,
-        string $contentType = self::contentTypes['createAirbnbAlteration'][0]
+    public function cancelAirbnbAlterationAsyncWithHttpInfo(
+        string $id,
+        ?array $body = null,
+        string $contentType = self::contentTypes['cancelAirbnbAlteration'][0]
     ): PromiseInterface
     {
         $returnType = '';
-        $request = $this->createAirbnbAlterationRequest($create_airbnb_alteration_request, $contentType);
+        $request = $this->cancelAirbnbAlterationRequest($id, $body, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1226,24 +1398,416 @@ class AirbnbApi
     }
 
     /**
+     * Create request for operation 'cancelAirbnbAlteration'
+     *
+     * @param  string $id Airbnb alteration id (the &#x60;alterationId&#x60; from a &#x60;GET /v1/channels/airbnb/alterations&#x60; row). (required)
+     * @param  object|null $body (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelAirbnbAlteration'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function cancelAirbnbAlterationRequest(
+        string $id,
+        ?array $body = null,
+        string $contentType = self::contentTypes['cancelAirbnbAlteration'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling cancelAirbnbAlteration'
+            );
+        }
+
+
+
+        $resourcePath = '/v1/channels/airbnb/alterations/{id}/cancel';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($body)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($body));
+            } else {
+                $httpBody = $body;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation createAirbnbAlteration
+     *
+     * Create Airbnb alteration
+     *
+     * @param  \Repull\Model\AirbnbAlterationCreateRequest $airbnb_alteration_create_request airbnb_alteration_create_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbAlteration'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\AirbnbAlteration|\Repull\Model\Error
+     */
+    public function createAirbnbAlteration(
+        \Repull\Model\AirbnbAlterationCreateRequest $airbnb_alteration_create_request,
+        string $contentType = self::contentTypes['createAirbnbAlteration'][0]
+    ): \Repull\Model\AirbnbAlteration|\Repull\Model\Error
+    {
+        list($response) = $this->createAirbnbAlterationWithHttpInfo($airbnb_alteration_create_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation createAirbnbAlterationWithHttpInfo
+     *
+     * Create Airbnb alteration
+     *
+     * @param  \Repull\Model\AirbnbAlterationCreateRequest $airbnb_alteration_create_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbAlteration'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\AirbnbAlteration|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function createAirbnbAlterationWithHttpInfo(
+        \Repull\Model\AirbnbAlterationCreateRequest $airbnb_alteration_create_request,
+        string $contentType = self::contentTypes['createAirbnbAlteration'][0]
+    ): array
+    {
+        $request = $this->createAirbnbAlterationRequest($airbnb_alteration_create_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 201:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\AirbnbAlteration',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\AirbnbAlteration',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 201:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\AirbnbAlteration',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation createAirbnbAlterationAsync
+     *
+     * Create Airbnb alteration
+     *
+     * @param  \Repull\Model\AirbnbAlterationCreateRequest $airbnb_alteration_create_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbAlteration'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function createAirbnbAlterationAsync(
+        \Repull\Model\AirbnbAlterationCreateRequest $airbnb_alteration_create_request,
+        string $contentType = self::contentTypes['createAirbnbAlteration'][0]
+    ): PromiseInterface
+    {
+        return $this->createAirbnbAlterationAsyncWithHttpInfo($airbnb_alteration_create_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation createAirbnbAlterationAsyncWithHttpInfo
+     *
+     * Create Airbnb alteration
+     *
+     * @param  \Repull\Model\AirbnbAlterationCreateRequest $airbnb_alteration_create_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbAlteration'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function createAirbnbAlterationAsyncWithHttpInfo(
+        \Repull\Model\AirbnbAlterationCreateRequest $airbnb_alteration_create_request,
+        string $contentType = self::contentTypes['createAirbnbAlteration'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\AirbnbAlteration';
+        $request = $this->createAirbnbAlterationRequest($airbnb_alteration_create_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
      * Create request for operation 'createAirbnbAlteration'
      *
-     * @param  \Repull\Model\CreateAirbnbAlterationRequest $create_airbnb_alteration_request (required)
+     * @param  \Repull\Model\AirbnbAlterationCreateRequest $airbnb_alteration_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbAlteration'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function createAirbnbAlterationRequest(
-        \Repull\Model\CreateAirbnbAlterationRequest $create_airbnb_alteration_request,
+        \Repull\Model\AirbnbAlterationCreateRequest $airbnb_alteration_create_request,
         string $contentType = self::contentTypes['createAirbnbAlteration'][0]
     ): Request
     {
 
-        // verify the required parameter 'create_airbnb_alteration_request' is set
-        if ($create_airbnb_alteration_request === null || (is_array($create_airbnb_alteration_request) && count($create_airbnb_alteration_request) === 0)) {
+        // verify the required parameter 'airbnb_alteration_create_request' is set
+        if ($airbnb_alteration_create_request === null || (is_array($airbnb_alteration_create_request) && count($airbnb_alteration_create_request) === 0)) {
             throw new InvalidArgumentException(
-                'Missing the required parameter $create_airbnb_alteration_request when calling createAirbnbAlteration'
+                'Missing the required parameter $airbnb_alteration_create_request when calling createAirbnbAlteration'
             );
         }
 
@@ -1266,12 +1830,12 @@ class AirbnbApi
         );
 
         // for model (json/xml)
-        if (isset($create_airbnb_alteration_request)) {
+        if (isset($airbnb_alteration_create_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($create_airbnb_alteration_request));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($airbnb_alteration_create_request));
             } else {
-                $httpBody = $create_airbnb_alteration_request;
+                $httpBody = $airbnb_alteration_create_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -1329,7 +1893,7 @@ class AirbnbApi
      * Create an Airbnb room
      *
      * @param  string $id Repull listing id (numeric string). (required)
-     * @param  array<string,mixed> $request_body request_body (required)
+     * @param  \Repull\Model\CreateAirbnbListingRoomRequest $create_airbnb_listing_room_request create_airbnb_listing_room_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbListingRoom'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -1338,11 +1902,11 @@ class AirbnbApi
      */
     public function createAirbnbListingRoom(
         string $id,
-        array $request_body,
+        \Repull\Model\CreateAirbnbListingRoomRequest $create_airbnb_listing_room_request,
         string $contentType = self::contentTypes['createAirbnbListingRoom'][0]
     ): ?\Repull\Model\Error
     {
-        list($response) = $this->createAirbnbListingRoomWithHttpInfo($id, $request_body, $contentType);
+        list($response) = $this->createAirbnbListingRoomWithHttpInfo($id, $create_airbnb_listing_room_request, $contentType);
         return $response;
     }
 
@@ -1352,7 +1916,7 @@ class AirbnbApi
      * Create an Airbnb room
      *
      * @param  string $id Repull listing id (numeric string). (required)
-     * @param  array<string,mixed> $request_body (required)
+     * @param  \Repull\Model\CreateAirbnbListingRoomRequest $create_airbnb_listing_room_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbListingRoom'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -1361,11 +1925,11 @@ class AirbnbApi
      */
     public function createAirbnbListingRoomWithHttpInfo(
         string $id,
-        array $request_body,
+        \Repull\Model\CreateAirbnbListingRoomRequest $create_airbnb_listing_room_request,
         string $contentType = self::contentTypes['createAirbnbListingRoom'][0]
     ): array
     {
-        $request = $this->createAirbnbListingRoomRequest($id, $request_body, $contentType);
+        $request = $this->createAirbnbListingRoomRequest($id, $create_airbnb_listing_room_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1437,7 +2001,7 @@ class AirbnbApi
      * Create an Airbnb room
      *
      * @param  string $id Repull listing id (numeric string). (required)
-     * @param  array<string,mixed> $request_body (required)
+     * @param  \Repull\Model\CreateAirbnbListingRoomRequest $create_airbnb_listing_room_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbListingRoom'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1445,11 +2009,11 @@ class AirbnbApi
      */
     public function createAirbnbListingRoomAsync(
         string $id,
-        array $request_body,
+        \Repull\Model\CreateAirbnbListingRoomRequest $create_airbnb_listing_room_request,
         string $contentType = self::contentTypes['createAirbnbListingRoom'][0]
     ): PromiseInterface
     {
-        return $this->createAirbnbListingRoomAsyncWithHttpInfo($id, $request_body, $contentType)
+        return $this->createAirbnbListingRoomAsyncWithHttpInfo($id, $create_airbnb_listing_room_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1463,7 +2027,7 @@ class AirbnbApi
      * Create an Airbnb room
      *
      * @param  string $id Repull listing id (numeric string). (required)
-     * @param  array<string,mixed> $request_body (required)
+     * @param  \Repull\Model\CreateAirbnbListingRoomRequest $create_airbnb_listing_room_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbListingRoom'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1471,12 +2035,12 @@ class AirbnbApi
      */
     public function createAirbnbListingRoomAsyncWithHttpInfo(
         string $id,
-        array $request_body,
+        \Repull\Model\CreateAirbnbListingRoomRequest $create_airbnb_listing_room_request,
         string $contentType = self::contentTypes['createAirbnbListingRoom'][0]
     ): PromiseInterface
     {
         $returnType = '';
-        $request = $this->createAirbnbListingRoomRequest($id, $request_body, $contentType);
+        $request = $this->createAirbnbListingRoomRequest($id, $create_airbnb_listing_room_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1505,7 +2069,7 @@ class AirbnbApi
      * Create request for operation 'createAirbnbListingRoom'
      *
      * @param  string $id Repull listing id (numeric string). (required)
-     * @param  array<string,mixed> $request_body (required)
+     * @param  \Repull\Model\CreateAirbnbListingRoomRequest $create_airbnb_listing_room_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbListingRoom'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1513,7 +2077,7 @@ class AirbnbApi
      */
     public function createAirbnbListingRoomRequest(
         string $id,
-        array $request_body,
+        \Repull\Model\CreateAirbnbListingRoomRequest $create_airbnb_listing_room_request,
         string $contentType = self::contentTypes['createAirbnbListingRoom'][0]
     ): Request
     {
@@ -1525,10 +2089,10 @@ class AirbnbApi
             );
         }
 
-        // verify the required parameter 'request_body' is set
-        if ($request_body === null || (is_array($request_body) && count($request_body) === 0)) {
+        // verify the required parameter 'create_airbnb_listing_room_request' is set
+        if ($create_airbnb_listing_room_request === null || (is_array($create_airbnb_listing_room_request) && count($create_airbnb_listing_room_request) === 0)) {
             throw new InvalidArgumentException(
-                'Missing the required parameter $request_body when calling createAirbnbListingRoom'
+                'Missing the required parameter $create_airbnb_listing_room_request when calling createAirbnbListingRoom'
             );
         }
 
@@ -1559,12 +2123,12 @@ class AirbnbApi
         );
 
         // for model (json/xml)
-        if (isset($request_body)) {
+        if (isset($create_airbnb_listing_room_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($request_body));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($create_airbnb_listing_room_request));
             } else {
-                $httpBody = $request_body;
+                $httpBody = $create_airbnb_listing_room_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -2556,13 +3120,13 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\DeleteAirbnbListingPhoto200Response|\Repull\Model\Error
+     * @return \Repull\Model\DeleteAirbnbListingRoom200Response|\Repull\Model\Error
      */
     public function deleteAirbnbListingRoom(
         string $id,
         string $room_id,
         string $contentType = self::contentTypes['deleteAirbnbListingRoom'][0]
-    ): \Repull\Model\DeleteAirbnbListingPhoto200Response|\Repull\Model\Error
+    ): \Repull\Model\DeleteAirbnbListingRoom200Response|\Repull\Model\Error
     {
         list($response) = $this->deleteAirbnbListingRoomWithHttpInfo($id, $room_id, $contentType);
         return $response;
@@ -2579,7 +3143,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\DeleteAirbnbListingPhoto200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\DeleteAirbnbListingRoom200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function deleteAirbnbListingRoomWithHttpInfo(
         string $id,
@@ -2614,7 +3178,7 @@ class AirbnbApi
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Repull\Model\DeleteAirbnbListingPhoto200Response',
+                        '\Repull\Model\DeleteAirbnbListingRoom200Response',
                         $request,
                         $response,
                     );
@@ -2665,7 +3229,7 @@ class AirbnbApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Repull\Model\DeleteAirbnbListingPhoto200Response',
+                '\Repull\Model\DeleteAirbnbListingRoom200Response',
                 $request,
                 $response,
             );
@@ -2674,7 +3238,7 @@ class AirbnbApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Repull\Model\DeleteAirbnbListingPhoto200Response',
+                        '\Repull\Model\DeleteAirbnbListingRoom200Response',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -2769,7 +3333,7 @@ class AirbnbApi
         string $contentType = self::contentTypes['deleteAirbnbListingRoom'][0]
     ): PromiseInterface
     {
-        $returnType = '\Repull\Model\DeleteAirbnbListingPhoto200Response';
+        $returnType = '\Repull\Model\DeleteAirbnbListingRoom200Response';
         $request = $this->deleteAirbnbListingRoomRequest($id, $room_id, $contentType);
 
         return $this->client
@@ -3568,6 +4132,360 @@ class AirbnbApi
 
 
         $resourcePath = '/v1/channels/airbnb/alterations/{id}';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getAirbnbBookingSettings
+     *
+     * Get Airbnb booking settings
+     *
+     * @param  string $id Repull listing id (numeric string), not the Airbnb listing id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbBookingSettings'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\GetAirbnbBookingSettings200Response|\Repull\Model\Error
+     */
+    public function getAirbnbBookingSettings(
+        string $id,
+        string $contentType = self::contentTypes['getAirbnbBookingSettings'][0]
+    ): \Repull\Model\GetAirbnbBookingSettings200Response|\Repull\Model\Error
+    {
+        list($response) = $this->getAirbnbBookingSettingsWithHttpInfo($id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getAirbnbBookingSettingsWithHttpInfo
+     *
+     * Get Airbnb booking settings
+     *
+     * @param  string $id Repull listing id (numeric string), not the Airbnb listing id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbBookingSettings'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\GetAirbnbBookingSettings200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getAirbnbBookingSettingsWithHttpInfo(
+        string $id,
+        string $contentType = self::contentTypes['getAirbnbBookingSettings'][0]
+    ): array
+    {
+        $request = $this->getAirbnbBookingSettingsRequest($id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\GetAirbnbBookingSettings200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\GetAirbnbBookingSettings200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\GetAirbnbBookingSettings200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getAirbnbBookingSettingsAsync
+     *
+     * Get Airbnb booking settings
+     *
+     * @param  string $id Repull listing id (numeric string), not the Airbnb listing id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbBookingSettings'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getAirbnbBookingSettingsAsync(
+        string $id,
+        string $contentType = self::contentTypes['getAirbnbBookingSettings'][0]
+    ): PromiseInterface
+    {
+        return $this->getAirbnbBookingSettingsAsyncWithHttpInfo($id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getAirbnbBookingSettingsAsyncWithHttpInfo
+     *
+     * Get Airbnb booking settings
+     *
+     * @param  string $id Repull listing id (numeric string), not the Airbnb listing id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbBookingSettings'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getAirbnbBookingSettingsAsyncWithHttpInfo(
+        string $id,
+        string $contentType = self::contentTypes['getAirbnbBookingSettings'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\GetAirbnbBookingSettings200Response';
+        $request = $this->getAirbnbBookingSettingsRequest($id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getAirbnbBookingSettings'
+     *
+     * @param  string $id Repull listing id (numeric string), not the Airbnb listing id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbBookingSettings'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getAirbnbBookingSettingsRequest(
+        string $id,
+        string $contentType = self::contentTypes['getAirbnbBookingSettings'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling getAirbnbBookingSettings'
+            );
+        }
+
+
+        $resourcePath = '/v1/channels/airbnb/listings/{id}/booking-settings';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -5146,6 +6064,360 @@ class AirbnbApi
 
 
         $resourcePath = '/v1/channels/airbnb/listings/{id}/availability';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getAirbnbListingDetails
+     *
+     * Get Airbnb listing details
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbListingDetails'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\GetAirbnbListingDetails200Response|\Repull\Model\Error
+     */
+    public function getAirbnbListingDetails(
+        string $id,
+        string $contentType = self::contentTypes['getAirbnbListingDetails'][0]
+    ): \Repull\Model\GetAirbnbListingDetails200Response|\Repull\Model\Error
+    {
+        list($response) = $this->getAirbnbListingDetailsWithHttpInfo($id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getAirbnbListingDetailsWithHttpInfo
+     *
+     * Get Airbnb listing details
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbListingDetails'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\GetAirbnbListingDetails200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getAirbnbListingDetailsWithHttpInfo(
+        string $id,
+        string $contentType = self::contentTypes['getAirbnbListingDetails'][0]
+    ): array
+    {
+        $request = $this->getAirbnbListingDetailsRequest($id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\GetAirbnbListingDetails200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\GetAirbnbListingDetails200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\GetAirbnbListingDetails200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getAirbnbListingDetailsAsync
+     *
+     * Get Airbnb listing details
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbListingDetails'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getAirbnbListingDetailsAsync(
+        string $id,
+        string $contentType = self::contentTypes['getAirbnbListingDetails'][0]
+    ): PromiseInterface
+    {
+        return $this->getAirbnbListingDetailsAsyncWithHttpInfo($id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getAirbnbListingDetailsAsyncWithHttpInfo
+     *
+     * Get Airbnb listing details
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbListingDetails'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getAirbnbListingDetailsAsyncWithHttpInfo(
+        string $id,
+        string $contentType = self::contentTypes['getAirbnbListingDetails'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\GetAirbnbListingDetails200Response';
+        $request = $this->getAirbnbListingDetailsRequest($id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getAirbnbListingDetails'
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbListingDetails'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getAirbnbListingDetailsRequest(
+        string $id,
+        string $contentType = self::contentTypes['getAirbnbListingDetails'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling getAirbnbListingDetails'
+            );
+        }
+
+
+        $resourcePath = '/v1/channels/airbnb/listings/{id}/details';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -6857,6 +8129,7 @@ class AirbnbApi
      *
      * List Airbnb alterations
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $type Scope: &#x60;pending&#x60; (default) returns only alterations awaiting a decision; &#x60;all&#x60; returns every alteration. (optional, default to 'pending')
      * @param  string|null $reservation_code Airbnb confirmation code — restricts results to a single reservation. Returns an empty array when no reservation matches within your workspace. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbAlterations'] to see the possible values for this operation
@@ -6866,12 +8139,13 @@ class AirbnbApi
      * @return \Repull\Model\ListAirbnbAlterations200Response|\Repull\Model\Error
      */
     public function listAirbnbAlterations(
+        ?string $account_id = null,
         ?string $type = 'pending',
         ?string $reservation_code = null,
         string $contentType = self::contentTypes['listAirbnbAlterations'][0]
     ): \Repull\Model\ListAirbnbAlterations200Response|\Repull\Model\Error
     {
-        list($response) = $this->listAirbnbAlterationsWithHttpInfo($type, $reservation_code, $contentType);
+        list($response) = $this->listAirbnbAlterationsWithHttpInfo($account_id, $type, $reservation_code, $contentType);
         return $response;
     }
 
@@ -6880,21 +8154,23 @@ class AirbnbApi
      *
      * List Airbnb alterations
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $type Scope: &#x60;pending&#x60; (default) returns only alterations awaiting a decision; &#x60;all&#x60; returns every alteration. (optional, default to 'pending')
      * @param  string|null $reservation_code Airbnb confirmation code — restricts results to a single reservation. Returns an empty array when no reservation matches within your workspace. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbAlterations'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListAirbnbAlterations200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListAirbnbAlterations200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbAlterationsWithHttpInfo(
+        ?string $account_id = null,
         ?string $type = 'pending',
         ?string $reservation_code = null,
         string $contentType = self::contentTypes['listAirbnbAlterations'][0]
     ): array
     {
-        $request = $this->listAirbnbAlterationsRequest($type, $reservation_code, $contentType);
+        $request = $this->listAirbnbAlterationsRequest($account_id, $type, $reservation_code, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -6932,6 +8208,12 @@ class AirbnbApi
                         $response,
                     );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -6990,6 +8272,14 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -7009,6 +8299,7 @@ class AirbnbApi
      *
      * List Airbnb alterations
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $type Scope: &#x60;pending&#x60; (default) returns only alterations awaiting a decision; &#x60;all&#x60; returns every alteration. (optional, default to 'pending')
      * @param  string|null $reservation_code Airbnb confirmation code — restricts results to a single reservation. Returns an empty array when no reservation matches within your workspace. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbAlterations'] to see the possible values for this operation
@@ -7017,12 +8308,13 @@ class AirbnbApi
      * @return PromiseInterface
      */
     public function listAirbnbAlterationsAsync(
+        ?string $account_id = null,
         ?string $type = 'pending',
         ?string $reservation_code = null,
         string $contentType = self::contentTypes['listAirbnbAlterations'][0]
     ): PromiseInterface
     {
-        return $this->listAirbnbAlterationsAsyncWithHttpInfo($type, $reservation_code, $contentType)
+        return $this->listAirbnbAlterationsAsyncWithHttpInfo($account_id, $type, $reservation_code, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -7035,6 +8327,7 @@ class AirbnbApi
      *
      * List Airbnb alterations
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $type Scope: &#x60;pending&#x60; (default) returns only alterations awaiting a decision; &#x60;all&#x60; returns every alteration. (optional, default to 'pending')
      * @param  string|null $reservation_code Airbnb confirmation code — restricts results to a single reservation. Returns an empty array when no reservation matches within your workspace. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbAlterations'] to see the possible values for this operation
@@ -7043,13 +8336,14 @@ class AirbnbApi
      * @return PromiseInterface
      */
     public function listAirbnbAlterationsAsyncWithHttpInfo(
+        ?string $account_id = null,
         ?string $type = 'pending',
         ?string $reservation_code = null,
         string $contentType = self::contentTypes['listAirbnbAlterations'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ListAirbnbAlterations200Response';
-        $request = $this->listAirbnbAlterationsRequest($type, $reservation_code, $contentType);
+        $request = $this->listAirbnbAlterationsRequest($account_id, $type, $reservation_code, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -7090,6 +8384,7 @@ class AirbnbApi
     /**
      * Create request for operation 'listAirbnbAlterations'
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $type Scope: &#x60;pending&#x60; (default) returns only alterations awaiting a decision; &#x60;all&#x60; returns every alteration. (optional, default to 'pending')
      * @param  string|null $reservation_code Airbnb confirmation code — restricts results to a single reservation. Returns an empty array when no reservation matches within your workspace. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbAlterations'] to see the possible values for this operation
@@ -7098,11 +8393,13 @@ class AirbnbApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listAirbnbAlterationsRequest(
+        ?string $account_id = null,
         ?string $type = 'pending',
         ?string $reservation_code = null,
         string $contentType = self::contentTypes['listAirbnbAlterations'][0]
     ): Request
     {
+
 
 
 
@@ -7114,6 +8411,15 @@ class AirbnbApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $account_id,
+            'account_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $type,
@@ -7942,6 +9248,394 @@ class AirbnbApi
     }
 
     /**
+     * Operation listAirbnbListingPermits
+     *
+     * List Airbnb permits and licences
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string|null $source &#x60;cache&#x60; (default) reads the local mirror only. &#x60;live&#x60; additionally asks Airbnb for the permit questions. (optional, default to 'cache')
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListingPermits'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\ListAirbnbListingPermits200Response|\Repull\Model\Error
+     */
+    public function listAirbnbListingPermits(
+        string $id,
+        ?string $source = 'cache',
+        string $contentType = self::contentTypes['listAirbnbListingPermits'][0]
+    ): \Repull\Model\ListAirbnbListingPermits200Response|\Repull\Model\Error
+    {
+        list($response) = $this->listAirbnbListingPermitsWithHttpInfo($id, $source, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation listAirbnbListingPermitsWithHttpInfo
+     *
+     * List Airbnb permits and licences
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string|null $source &#x60;cache&#x60; (default) reads the local mirror only. &#x60;live&#x60; additionally asks Airbnb for the permit questions. (optional, default to 'cache')
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListingPermits'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\ListAirbnbListingPermits200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function listAirbnbListingPermitsWithHttpInfo(
+        string $id,
+        ?string $source = 'cache',
+        string $contentType = self::contentTypes['listAirbnbListingPermits'][0]
+    ): array
+    {
+        $request = $this->listAirbnbListingPermitsRequest($id, $source, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\ListAirbnbListingPermits200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\ListAirbnbListingPermits200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\ListAirbnbListingPermits200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation listAirbnbListingPermitsAsync
+     *
+     * List Airbnb permits and licences
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string|null $source &#x60;cache&#x60; (default) reads the local mirror only. &#x60;live&#x60; additionally asks Airbnb for the permit questions. (optional, default to 'cache')
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListingPermits'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function listAirbnbListingPermitsAsync(
+        string $id,
+        ?string $source = 'cache',
+        string $contentType = self::contentTypes['listAirbnbListingPermits'][0]
+    ): PromiseInterface
+    {
+        return $this->listAirbnbListingPermitsAsyncWithHttpInfo($id, $source, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation listAirbnbListingPermitsAsyncWithHttpInfo
+     *
+     * List Airbnb permits and licences
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string|null $source &#x60;cache&#x60; (default) reads the local mirror only. &#x60;live&#x60; additionally asks Airbnb for the permit questions. (optional, default to 'cache')
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListingPermits'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function listAirbnbListingPermitsAsyncWithHttpInfo(
+        string $id,
+        ?string $source = 'cache',
+        string $contentType = self::contentTypes['listAirbnbListingPermits'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\ListAirbnbListingPermits200Response';
+        $request = $this->listAirbnbListingPermitsRequest($id, $source, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'listAirbnbListingPermits'
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string|null $source &#x60;cache&#x60; (default) reads the local mirror only. &#x60;live&#x60; additionally asks Airbnb for the permit questions. (optional, default to 'cache')
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListingPermits'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function listAirbnbListingPermitsRequest(
+        string $id,
+        ?string $source = 'cache',
+        string $contentType = self::contentTypes['listAirbnbListingPermits'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling listAirbnbListingPermits'
+            );
+        }
+
+
+
+        $resourcePath = '/v1/channels/airbnb/listings/{id}/permits';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $source,
+            'source', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation listAirbnbListingPhotos
      *
      * List Airbnb photos
@@ -8541,23 +10235,379 @@ class AirbnbApi
     }
 
     /**
+     * Operation listAirbnbListingSafetyDisclosures
+     *
+     * List guest-safety disclosures
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListingSafetyDisclosures'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\ListAirbnbListingSafetyDisclosures200Response|\Repull\Model\Error
+     */
+    public function listAirbnbListingSafetyDisclosures(
+        string $id,
+        string $contentType = self::contentTypes['listAirbnbListingSafetyDisclosures'][0]
+    ): \Repull\Model\ListAirbnbListingSafetyDisclosures200Response|\Repull\Model\Error
+    {
+        list($response) = $this->listAirbnbListingSafetyDisclosuresWithHttpInfo($id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation listAirbnbListingSafetyDisclosuresWithHttpInfo
+     *
+     * List guest-safety disclosures
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListingSafetyDisclosures'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\ListAirbnbListingSafetyDisclosures200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function listAirbnbListingSafetyDisclosuresWithHttpInfo(
+        string $id,
+        string $contentType = self::contentTypes['listAirbnbListingSafetyDisclosures'][0]
+    ): array
+    {
+        $request = $this->listAirbnbListingSafetyDisclosuresRequest($id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\ListAirbnbListingSafetyDisclosures200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\ListAirbnbListingSafetyDisclosures200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\ListAirbnbListingSafetyDisclosures200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation listAirbnbListingSafetyDisclosuresAsync
+     *
+     * List guest-safety disclosures
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListingSafetyDisclosures'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function listAirbnbListingSafetyDisclosuresAsync(
+        string $id,
+        string $contentType = self::contentTypes['listAirbnbListingSafetyDisclosures'][0]
+    ): PromiseInterface
+    {
+        return $this->listAirbnbListingSafetyDisclosuresAsyncWithHttpInfo($id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation listAirbnbListingSafetyDisclosuresAsyncWithHttpInfo
+     *
+     * List guest-safety disclosures
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListingSafetyDisclosures'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function listAirbnbListingSafetyDisclosuresAsyncWithHttpInfo(
+        string $id,
+        string $contentType = self::contentTypes['listAirbnbListingSafetyDisclosures'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\ListAirbnbListingSafetyDisclosures200Response';
+        $request = $this->listAirbnbListingSafetyDisclosuresRequest($id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'listAirbnbListingSafetyDisclosures'
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListingSafetyDisclosures'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function listAirbnbListingSafetyDisclosuresRequest(
+        string $id,
+        string $contentType = self::contentTypes['listAirbnbListingSafetyDisclosures'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling listAirbnbListingSafetyDisclosures'
+            );
+        }
+
+
+        $resourcePath = '/v1/channels/airbnb/listings/{id}/safety-disclosures';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation listAirbnbListings
      *
      * List Airbnb listings
      *
-     * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache). (optional)
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
+     * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache) and &#x60;thumbnail&#x60; (adds &#x60;thumbnailUrl&#x60; to each listing). Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListings'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\AirbnbListingListResponse
+     * @return \Repull\Model\AirbnbListingListResponse|\Repull\Model\Error
      */
     public function listAirbnbListings(
+        ?string $account_id = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listAirbnbListings'][0]
-    ): \Repull\Model\AirbnbListingListResponse
+    ): \Repull\Model\AirbnbListingListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listAirbnbListingsWithHttpInfo($include, $contentType);
+        list($response) = $this->listAirbnbListingsWithHttpInfo($account_id, $include, $contentType);
         return $response;
     }
 
@@ -8566,19 +10616,21 @@ class AirbnbApi
      *
      * List Airbnb listings
      *
-     * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache). (optional)
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
+     * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache) and &#x60;thumbnail&#x60; (adds &#x60;thumbnailUrl&#x60; to each listing). Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListings'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AirbnbListingListResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbListingListResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbListingsWithHttpInfo(
+        ?string $account_id = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listAirbnbListings'][0]
     ): array
     {
-        $request = $this->listAirbnbListingsRequest($include, $contentType);
+        $request = $this->listAirbnbListingsRequest($account_id, $include, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -8606,6 +10658,18 @@ class AirbnbApi
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\AirbnbListingListResponse',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
                         $request,
                         $response,
                     );
@@ -8640,6 +10704,22 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -8651,18 +10731,20 @@ class AirbnbApi
      *
      * List Airbnb listings
      *
-     * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache). (optional)
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
+     * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache) and &#x60;thumbnail&#x60; (adds &#x60;thumbnailUrl&#x60; to each listing). Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListings'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function listAirbnbListingsAsync(
+        ?string $account_id = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listAirbnbListings'][0]
     ): PromiseInterface
     {
-        return $this->listAirbnbListingsAsyncWithHttpInfo($include, $contentType)
+        return $this->listAirbnbListingsAsyncWithHttpInfo($account_id, $include, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -8675,19 +10757,21 @@ class AirbnbApi
      *
      * List Airbnb listings
      *
-     * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache). (optional)
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
+     * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache) and &#x60;thumbnail&#x60; (adds &#x60;thumbnailUrl&#x60; to each listing). Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListings'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function listAirbnbListingsAsyncWithHttpInfo(
+        ?string $account_id = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listAirbnbListings'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\AirbnbListingListResponse';
-        $request = $this->listAirbnbListingsRequest($include, $contentType);
+        $request = $this->listAirbnbListingsRequest($account_id, $include, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -8728,17 +10812,20 @@ class AirbnbApi
     /**
      * Create request for operation 'listAirbnbListings'
      *
-     * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache). (optional)
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
+     * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache) and &#x60;thumbnail&#x60; (adds &#x60;thumbnailUrl&#x60; to each listing). Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListings'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listAirbnbListingsRequest(
+        ?string $account_id = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listAirbnbListings'][0]
     ): Request
     {
+
 
 
 
@@ -8749,6 +10836,15 @@ class AirbnbApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $account_id,
+            'account_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $include,
@@ -8824,6 +10920,7 @@ class AirbnbApi
      *
      * List Airbnb reservations
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
@@ -8839,6 +10936,7 @@ class AirbnbApi
      * @return \Repull\Model\AirbnbReservationListResponse|\Repull\Model\Error
      */
     public function listAirbnbReservations(
+        ?string $account_id = null,
         ?string $cursor = null,
         ?int $offset = 0,
         ?int $limit = 50,
@@ -8850,7 +10948,7 @@ class AirbnbApi
         string $contentType = self::contentTypes['listAirbnbReservations'][0]
     ): \Repull\Model\AirbnbReservationListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listAirbnbReservationsWithHttpInfo($cursor, $offset, $limit, $listing_id, $status, $start_date, $end_date, $include_total, $contentType);
+        list($response) = $this->listAirbnbReservationsWithHttpInfo($account_id, $cursor, $offset, $limit, $listing_id, $status, $start_date, $end_date, $include_total, $contentType);
         return $response;
     }
 
@@ -8859,6 +10957,7 @@ class AirbnbApi
      *
      * List Airbnb reservations
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
@@ -8871,9 +10970,10 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AirbnbReservationListResponse|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbReservationListResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbReservationsWithHttpInfo(
+        ?string $account_id = null,
         ?string $cursor = null,
         ?int $offset = 0,
         ?int $limit = 50,
@@ -8885,7 +10985,7 @@ class AirbnbApi
         string $contentType = self::contentTypes['listAirbnbReservations'][0]
     ): array
     {
-        $request = $this->listAirbnbReservationsRequest($cursor, $offset, $limit, $listing_id, $status, $start_date, $end_date, $include_total, $contentType);
+        $request = $this->listAirbnbReservationsRequest($account_id, $cursor, $offset, $limit, $listing_id, $status, $start_date, $end_date, $include_total, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -8917,6 +11017,12 @@ class AirbnbApi
                         $response,
                     );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -8961,6 +11067,14 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -8972,6 +11086,7 @@ class AirbnbApi
      *
      * List Airbnb reservations
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
@@ -8986,6 +11101,7 @@ class AirbnbApi
      * @return PromiseInterface
      */
     public function listAirbnbReservationsAsync(
+        ?string $account_id = null,
         ?string $cursor = null,
         ?int $offset = 0,
         ?int $limit = 50,
@@ -8997,7 +11113,7 @@ class AirbnbApi
         string $contentType = self::contentTypes['listAirbnbReservations'][0]
     ): PromiseInterface
     {
-        return $this->listAirbnbReservationsAsyncWithHttpInfo($cursor, $offset, $limit, $listing_id, $status, $start_date, $end_date, $include_total, $contentType)
+        return $this->listAirbnbReservationsAsyncWithHttpInfo($account_id, $cursor, $offset, $limit, $listing_id, $status, $start_date, $end_date, $include_total, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -9010,6 +11126,7 @@ class AirbnbApi
      *
      * List Airbnb reservations
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
@@ -9024,6 +11141,7 @@ class AirbnbApi
      * @return PromiseInterface
      */
     public function listAirbnbReservationsAsyncWithHttpInfo(
+        ?string $account_id = null,
         ?string $cursor = null,
         ?int $offset = 0,
         ?int $limit = 50,
@@ -9036,7 +11154,7 @@ class AirbnbApi
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\AirbnbReservationListResponse';
-        $request = $this->listAirbnbReservationsRequest($cursor, $offset, $limit, $listing_id, $status, $start_date, $end_date, $include_total, $contentType);
+        $request = $this->listAirbnbReservationsRequest($account_id, $cursor, $offset, $limit, $listing_id, $status, $start_date, $end_date, $include_total, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -9077,6 +11195,7 @@ class AirbnbApi
     /**
      * Create request for operation 'listAirbnbReservations'
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
@@ -9091,6 +11210,7 @@ class AirbnbApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listAirbnbReservationsRequest(
+        ?string $account_id = null,
         ?string $cursor = null,
         ?int $offset = 0,
         ?int $limit = 50,
@@ -9102,6 +11222,7 @@ class AirbnbApi
         string $contentType = self::contentTypes['listAirbnbReservations'][0]
     ): Request
     {
+
 
 
         if ($offset !== null && $offset > 10000) {
@@ -9131,6 +11252,15 @@ class AirbnbApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $account_id,
+            'account_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $cursor,
@@ -9269,6 +11399,7 @@ class AirbnbApi
      *
      * List Airbnb reviews
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbReviews'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -9276,10 +11407,11 @@ class AirbnbApi
      * @return \Repull\Model\AirbnbReviewListResponse|\Repull\Model\Error
      */
     public function listAirbnbReviews(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbReviews'][0]
     ): \Repull\Model\AirbnbReviewListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listAirbnbReviewsWithHttpInfo($contentType);
+        list($response) = $this->listAirbnbReviewsWithHttpInfo($account_id, $contentType);
         return $response;
     }
 
@@ -9288,17 +11420,19 @@ class AirbnbApi
      *
      * List Airbnb reviews
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbReviews'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AirbnbReviewListResponse|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbReviewListResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbReviewsWithHttpInfo(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbReviews'][0]
     ): array
     {
-        $request = $this->listAirbnbReviewsRequest($contentType);
+        $request = $this->listAirbnbReviewsRequest($account_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -9330,6 +11464,12 @@ class AirbnbApi
                         $response,
                     );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -9374,6 +11514,14 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -9385,16 +11533,18 @@ class AirbnbApi
      *
      * List Airbnb reviews
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbReviews'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function listAirbnbReviewsAsync(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbReviews'][0]
     ): PromiseInterface
     {
-        return $this->listAirbnbReviewsAsyncWithHttpInfo($contentType)
+        return $this->listAirbnbReviewsAsyncWithHttpInfo($account_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -9407,17 +11557,19 @@ class AirbnbApi
      *
      * List Airbnb reviews
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbReviews'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function listAirbnbReviewsAsyncWithHttpInfo(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbReviews'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\AirbnbReviewListResponse';
-        $request = $this->listAirbnbReviewsRequest($contentType);
+        $request = $this->listAirbnbReviewsRequest($account_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -9458,15 +11610,18 @@ class AirbnbApi
     /**
      * Create request for operation 'listAirbnbReviews'
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbReviews'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listAirbnbReviewsRequest(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbReviews'][0]
     ): Request
     {
+
 
 
         $resourcePath = '/v1/channels/airbnb/reviews';
@@ -9476,6 +11631,15 @@ class AirbnbApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $account_id,
+            'account_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 
@@ -9840,6 +12004,7 @@ class AirbnbApi
      *
      * List Airbnb message threads
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbThreads'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -9847,10 +12012,11 @@ class AirbnbApi
      * @return \Repull\Model\AirbnbThreadListResponse|\Repull\Model\Error
      */
     public function listAirbnbThreads(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbThreads'][0]
     ): \Repull\Model\AirbnbThreadListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listAirbnbThreadsWithHttpInfo($contentType);
+        list($response) = $this->listAirbnbThreadsWithHttpInfo($account_id, $contentType);
         return $response;
     }
 
@@ -9859,17 +12025,19 @@ class AirbnbApi
      *
      * List Airbnb message threads
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbThreads'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AirbnbThreadListResponse|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbThreadListResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbThreadsWithHttpInfo(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbThreads'][0]
     ): array
     {
-        $request = $this->listAirbnbThreadsRequest($contentType);
+        $request = $this->listAirbnbThreadsRequest($account_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -9901,6 +12069,12 @@ class AirbnbApi
                         $response,
                     );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -9945,6 +12119,14 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -9956,16 +12138,18 @@ class AirbnbApi
      *
      * List Airbnb message threads
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbThreads'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function listAirbnbThreadsAsync(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbThreads'][0]
     ): PromiseInterface
     {
-        return $this->listAirbnbThreadsAsyncWithHttpInfo($contentType)
+        return $this->listAirbnbThreadsAsyncWithHttpInfo($account_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -9978,17 +12162,19 @@ class AirbnbApi
      *
      * List Airbnb message threads
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbThreads'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function listAirbnbThreadsAsyncWithHttpInfo(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbThreads'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\AirbnbThreadListResponse';
-        $request = $this->listAirbnbThreadsRequest($contentType);
+        $request = $this->listAirbnbThreadsRequest($account_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -10029,15 +12215,18 @@ class AirbnbApi
     /**
      * Create request for operation 'listAirbnbThreads'
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbThreads'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listAirbnbThreadsRequest(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbThreads'][0]
     ): Request
     {
+
 
 
         $resourcePath = '/v1/channels/airbnb/messaging';
@@ -10047,6 +12236,15 @@ class AirbnbApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $account_id,
+            'account_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 
@@ -10113,6 +12311,7 @@ class AirbnbApi
      *
      * List Airbnb transactions
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbTransactions'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -10120,10 +12319,11 @@ class AirbnbApi
      * @return \Repull\Model\ListAirbnbTransactions200Response|\Repull\Model\Error
      */
     public function listAirbnbTransactions(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbTransactions'][0]
     ): \Repull\Model\ListAirbnbTransactions200Response|\Repull\Model\Error
     {
-        list($response) = $this->listAirbnbTransactionsWithHttpInfo($contentType);
+        list($response) = $this->listAirbnbTransactionsWithHttpInfo($account_id, $contentType);
         return $response;
     }
 
@@ -10132,17 +12332,19 @@ class AirbnbApi
      *
      * List Airbnb transactions
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbTransactions'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListAirbnbTransactions200Response|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListAirbnbTransactions200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbTransactionsWithHttpInfo(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbTransactions'][0]
     ): array
     {
-        $request = $this->listAirbnbTransactionsRequest($contentType);
+        $request = $this->listAirbnbTransactionsRequest($account_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -10174,6 +12376,12 @@ class AirbnbApi
                         $response,
                     );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -10224,6 +12432,14 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -10243,16 +12459,18 @@ class AirbnbApi
      *
      * List Airbnb transactions
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbTransactions'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function listAirbnbTransactionsAsync(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbTransactions'][0]
     ): PromiseInterface
     {
-        return $this->listAirbnbTransactionsAsyncWithHttpInfo($contentType)
+        return $this->listAirbnbTransactionsAsyncWithHttpInfo($account_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -10265,17 +12483,19 @@ class AirbnbApi
      *
      * List Airbnb transactions
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbTransactions'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function listAirbnbTransactionsAsyncWithHttpInfo(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbTransactions'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ListAirbnbTransactions200Response';
-        $request = $this->listAirbnbTransactionsRequest($contentType);
+        $request = $this->listAirbnbTransactionsRequest($account_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -10316,15 +12536,18 @@ class AirbnbApi
     /**
      * Create request for operation 'listAirbnbTransactions'
      *
+     * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbTransactions'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listAirbnbTransactionsRequest(
+        ?string $account_id = null,
         string $contentType = self::contentTypes['listAirbnbTransactions'][0]
     ): Request
     {
+
 
 
         $resourcePath = '/v1/channels/airbnb/transactions';
@@ -10334,6 +12557,15 @@ class AirbnbApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $account_id,
+            'account_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 
@@ -10728,6 +12960,398 @@ class AirbnbApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation reorderAirbnbListingPhotos
+     *
+     * Reorder the Airbnb photo tour
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\ReorderAirbnbListingPhotosRequest $reorder_airbnb_listing_photos_request reorder_airbnb_listing_photos_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['reorderAirbnbListingPhotos'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\ReorderAirbnbListingPhotos200Response|\Repull\Model\Error
+     */
+    public function reorderAirbnbListingPhotos(
+        string $id,
+        \Repull\Model\ReorderAirbnbListingPhotosRequest $reorder_airbnb_listing_photos_request,
+        string $contentType = self::contentTypes['reorderAirbnbListingPhotos'][0]
+    ): \Repull\Model\ReorderAirbnbListingPhotos200Response|\Repull\Model\Error
+    {
+        list($response) = $this->reorderAirbnbListingPhotosWithHttpInfo($id, $reorder_airbnb_listing_photos_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation reorderAirbnbListingPhotosWithHttpInfo
+     *
+     * Reorder the Airbnb photo tour
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\ReorderAirbnbListingPhotosRequest $reorder_airbnb_listing_photos_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['reorderAirbnbListingPhotos'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\ReorderAirbnbListingPhotos200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function reorderAirbnbListingPhotosWithHttpInfo(
+        string $id,
+        \Repull\Model\ReorderAirbnbListingPhotosRequest $reorder_airbnb_listing_photos_request,
+        string $contentType = self::contentTypes['reorderAirbnbListingPhotos'][0]
+    ): array
+    {
+        $request = $this->reorderAirbnbListingPhotosRequest($id, $reorder_airbnb_listing_photos_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\ReorderAirbnbListingPhotos200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\ReorderAirbnbListingPhotos200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\ReorderAirbnbListingPhotos200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation reorderAirbnbListingPhotosAsync
+     *
+     * Reorder the Airbnb photo tour
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\ReorderAirbnbListingPhotosRequest $reorder_airbnb_listing_photos_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['reorderAirbnbListingPhotos'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function reorderAirbnbListingPhotosAsync(
+        string $id,
+        \Repull\Model\ReorderAirbnbListingPhotosRequest $reorder_airbnb_listing_photos_request,
+        string $contentType = self::contentTypes['reorderAirbnbListingPhotos'][0]
+    ): PromiseInterface
+    {
+        return $this->reorderAirbnbListingPhotosAsyncWithHttpInfo($id, $reorder_airbnb_listing_photos_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation reorderAirbnbListingPhotosAsyncWithHttpInfo
+     *
+     * Reorder the Airbnb photo tour
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\ReorderAirbnbListingPhotosRequest $reorder_airbnb_listing_photos_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['reorderAirbnbListingPhotos'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function reorderAirbnbListingPhotosAsyncWithHttpInfo(
+        string $id,
+        \Repull\Model\ReorderAirbnbListingPhotosRequest $reorder_airbnb_listing_photos_request,
+        string $contentType = self::contentTypes['reorderAirbnbListingPhotos'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\ReorderAirbnbListingPhotos200Response';
+        $request = $this->reorderAirbnbListingPhotosRequest($id, $reorder_airbnb_listing_photos_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'reorderAirbnbListingPhotos'
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\ReorderAirbnbListingPhotosRequest $reorder_airbnb_listing_photos_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['reorderAirbnbListingPhotos'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function reorderAirbnbListingPhotosRequest(
+        string $id,
+        \Repull\Model\ReorderAirbnbListingPhotosRequest $reorder_airbnb_listing_photos_request,
+        string $contentType = self::contentTypes['reorderAirbnbListingPhotos'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling reorderAirbnbListingPhotos'
+            );
+        }
+
+        // verify the required parameter 'reorder_airbnb_listing_photos_request' is set
+        if ($reorder_airbnb_listing_photos_request === null || (is_array($reorder_airbnb_listing_photos_request) && count($reorder_airbnb_listing_photos_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $reorder_airbnb_listing_photos_request when calling reorderAirbnbListingPhotos'
+            );
+        }
+
+
+        $resourcePath = '/v1/channels/airbnb/listings/{id}/photos/order';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($reorder_airbnb_listing_photos_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($reorder_airbnb_listing_photos_request));
+            } else {
+                $httpBody = $reorder_airbnb_listing_photos_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
@@ -11631,6 +14255,398 @@ class AirbnbApi
     }
 
     /**
+     * Operation setAirbnbListingCoverPhoto
+     *
+     * Set the Airbnb cover photo
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\SetAirbnbListingCoverPhotoRequest $set_airbnb_listing_cover_photo_request set_airbnb_listing_cover_photo_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setAirbnbListingCoverPhoto'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\SetAirbnbListingCoverPhoto200Response|\Repull\Model\Error
+     */
+    public function setAirbnbListingCoverPhoto(
+        string $id,
+        \Repull\Model\SetAirbnbListingCoverPhotoRequest $set_airbnb_listing_cover_photo_request,
+        string $contentType = self::contentTypes['setAirbnbListingCoverPhoto'][0]
+    ): \Repull\Model\SetAirbnbListingCoverPhoto200Response|\Repull\Model\Error
+    {
+        list($response) = $this->setAirbnbListingCoverPhotoWithHttpInfo($id, $set_airbnb_listing_cover_photo_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation setAirbnbListingCoverPhotoWithHttpInfo
+     *
+     * Set the Airbnb cover photo
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\SetAirbnbListingCoverPhotoRequest $set_airbnb_listing_cover_photo_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setAirbnbListingCoverPhoto'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\SetAirbnbListingCoverPhoto200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function setAirbnbListingCoverPhotoWithHttpInfo(
+        string $id,
+        \Repull\Model\SetAirbnbListingCoverPhotoRequest $set_airbnb_listing_cover_photo_request,
+        string $contentType = self::contentTypes['setAirbnbListingCoverPhoto'][0]
+    ): array
+    {
+        $request = $this->setAirbnbListingCoverPhotoRequest($id, $set_airbnb_listing_cover_photo_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SetAirbnbListingCoverPhoto200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SetAirbnbListingCoverPhoto200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SetAirbnbListingCoverPhoto200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation setAirbnbListingCoverPhotoAsync
+     *
+     * Set the Airbnb cover photo
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\SetAirbnbListingCoverPhotoRequest $set_airbnb_listing_cover_photo_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setAirbnbListingCoverPhoto'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function setAirbnbListingCoverPhotoAsync(
+        string $id,
+        \Repull\Model\SetAirbnbListingCoverPhotoRequest $set_airbnb_listing_cover_photo_request,
+        string $contentType = self::contentTypes['setAirbnbListingCoverPhoto'][0]
+    ): PromiseInterface
+    {
+        return $this->setAirbnbListingCoverPhotoAsyncWithHttpInfo($id, $set_airbnb_listing_cover_photo_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation setAirbnbListingCoverPhotoAsyncWithHttpInfo
+     *
+     * Set the Airbnb cover photo
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\SetAirbnbListingCoverPhotoRequest $set_airbnb_listing_cover_photo_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setAirbnbListingCoverPhoto'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function setAirbnbListingCoverPhotoAsyncWithHttpInfo(
+        string $id,
+        \Repull\Model\SetAirbnbListingCoverPhotoRequest $set_airbnb_listing_cover_photo_request,
+        string $contentType = self::contentTypes['setAirbnbListingCoverPhoto'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\SetAirbnbListingCoverPhoto200Response';
+        $request = $this->setAirbnbListingCoverPhotoRequest($id, $set_airbnb_listing_cover_photo_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'setAirbnbListingCoverPhoto'
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\SetAirbnbListingCoverPhotoRequest $set_airbnb_listing_cover_photo_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setAirbnbListingCoverPhoto'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function setAirbnbListingCoverPhotoRequest(
+        string $id,
+        \Repull\Model\SetAirbnbListingCoverPhotoRequest $set_airbnb_listing_cover_photo_request,
+        string $contentType = self::contentTypes['setAirbnbListingCoverPhoto'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling setAirbnbListingCoverPhoto'
+            );
+        }
+
+        // verify the required parameter 'set_airbnb_listing_cover_photo_request' is set
+        if ($set_airbnb_listing_cover_photo_request === null || (is_array($set_airbnb_listing_cover_photo_request) && count($set_airbnb_listing_cover_photo_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $set_airbnb_listing_cover_photo_request when calling setAirbnbListingCoverPhoto'
+            );
+        }
+
+
+        $resourcePath = '/v1/channels/airbnb/listings/{id}/photos/cover';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($set_airbnb_listing_cover_photo_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($set_airbnb_listing_cover_photo_request));
+            } else {
+                $httpBody = $set_airbnb_listing_cover_photo_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation syncAirbnbTransactions
      *
      * Sync Airbnb transactions
@@ -11950,6 +14966,398 @@ class AirbnbApi
     }
 
     /**
+     * Operation updateAirbnbBookingSettings
+     *
+     * Update Airbnb booking settings
+     *
+     * @param  string $id Repull listing id (numeric string), not the Airbnb listing id. (required)
+     * @param  \Repull\Model\UpdateAirbnbBookingSettingsRequest $update_airbnb_booking_settings_request update_airbnb_booking_settings_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbBookingSettings'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\UpdateAirbnbBookingSettings200Response|\Repull\Model\Error
+     */
+    public function updateAirbnbBookingSettings(
+        string $id,
+        \Repull\Model\UpdateAirbnbBookingSettingsRequest $update_airbnb_booking_settings_request,
+        string $contentType = self::contentTypes['updateAirbnbBookingSettings'][0]
+    ): \Repull\Model\UpdateAirbnbBookingSettings200Response|\Repull\Model\Error
+    {
+        list($response) = $this->updateAirbnbBookingSettingsWithHttpInfo($id, $update_airbnb_booking_settings_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation updateAirbnbBookingSettingsWithHttpInfo
+     *
+     * Update Airbnb booking settings
+     *
+     * @param  string $id Repull listing id (numeric string), not the Airbnb listing id. (required)
+     * @param  \Repull\Model\UpdateAirbnbBookingSettingsRequest $update_airbnb_booking_settings_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbBookingSettings'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\UpdateAirbnbBookingSettings200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function updateAirbnbBookingSettingsWithHttpInfo(
+        string $id,
+        \Repull\Model\UpdateAirbnbBookingSettingsRequest $update_airbnb_booking_settings_request,
+        string $contentType = self::contentTypes['updateAirbnbBookingSettings'][0]
+    ): array
+    {
+        $request = $this->updateAirbnbBookingSettingsRequest($id, $update_airbnb_booking_settings_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\UpdateAirbnbBookingSettings200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\UpdateAirbnbBookingSettings200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\UpdateAirbnbBookingSettings200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation updateAirbnbBookingSettingsAsync
+     *
+     * Update Airbnb booking settings
+     *
+     * @param  string $id Repull listing id (numeric string), not the Airbnb listing id. (required)
+     * @param  \Repull\Model\UpdateAirbnbBookingSettingsRequest $update_airbnb_booking_settings_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbBookingSettings'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbBookingSettingsAsync(
+        string $id,
+        \Repull\Model\UpdateAirbnbBookingSettingsRequest $update_airbnb_booking_settings_request,
+        string $contentType = self::contentTypes['updateAirbnbBookingSettings'][0]
+    ): PromiseInterface
+    {
+        return $this->updateAirbnbBookingSettingsAsyncWithHttpInfo($id, $update_airbnb_booking_settings_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation updateAirbnbBookingSettingsAsyncWithHttpInfo
+     *
+     * Update Airbnb booking settings
+     *
+     * @param  string $id Repull listing id (numeric string), not the Airbnb listing id. (required)
+     * @param  \Repull\Model\UpdateAirbnbBookingSettingsRequest $update_airbnb_booking_settings_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbBookingSettings'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbBookingSettingsAsyncWithHttpInfo(
+        string $id,
+        \Repull\Model\UpdateAirbnbBookingSettingsRequest $update_airbnb_booking_settings_request,
+        string $contentType = self::contentTypes['updateAirbnbBookingSettings'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\UpdateAirbnbBookingSettings200Response';
+        $request = $this->updateAirbnbBookingSettingsRequest($id, $update_airbnb_booking_settings_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'updateAirbnbBookingSettings'
+     *
+     * @param  string $id Repull listing id (numeric string), not the Airbnb listing id. (required)
+     * @param  \Repull\Model\UpdateAirbnbBookingSettingsRequest $update_airbnb_booking_settings_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbBookingSettings'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function updateAirbnbBookingSettingsRequest(
+        string $id,
+        \Repull\Model\UpdateAirbnbBookingSettingsRequest $update_airbnb_booking_settings_request,
+        string $contentType = self::contentTypes['updateAirbnbBookingSettings'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling updateAirbnbBookingSettings'
+            );
+        }
+
+        // verify the required parameter 'update_airbnb_booking_settings_request' is set
+        if ($update_airbnb_booking_settings_request === null || (is_array($update_airbnb_booking_settings_request) && count($update_airbnb_booking_settings_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $update_airbnb_booking_settings_request when calling updateAirbnbBookingSettings'
+            );
+        }
+
+
+        $resourcePath = '/v1/channels/airbnb/listings/{id}/booking-settings';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($update_airbnb_booking_settings_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($update_airbnb_booking_settings_request));
+            } else {
+                $httpBody = $update_airbnb_booking_settings_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation updateAirbnbCheckinGuide
      *
      * Upsert Airbnb check-in guide
@@ -12189,6 +15597,398 @@ class AirbnbApi
 
         // for model (json/xml)
         if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation updateAirbnbListingAmenities
+     *
+     * Update Airbnb amenities
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\UpdateAirbnbListingAmenitiesRequest $update_airbnb_listing_amenities_request update_airbnb_listing_amenities_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingAmenities'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\UpdateAirbnbListingAmenities200Response|\Repull\Model\Error
+     */
+    public function updateAirbnbListingAmenities(
+        string $id,
+        \Repull\Model\UpdateAirbnbListingAmenitiesRequest $update_airbnb_listing_amenities_request,
+        string $contentType = self::contentTypes['updateAirbnbListingAmenities'][0]
+    ): \Repull\Model\UpdateAirbnbListingAmenities200Response|\Repull\Model\Error
+    {
+        list($response) = $this->updateAirbnbListingAmenitiesWithHttpInfo($id, $update_airbnb_listing_amenities_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation updateAirbnbListingAmenitiesWithHttpInfo
+     *
+     * Update Airbnb amenities
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\UpdateAirbnbListingAmenitiesRequest $update_airbnb_listing_amenities_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingAmenities'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\UpdateAirbnbListingAmenities200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function updateAirbnbListingAmenitiesWithHttpInfo(
+        string $id,
+        \Repull\Model\UpdateAirbnbListingAmenitiesRequest $update_airbnb_listing_amenities_request,
+        string $contentType = self::contentTypes['updateAirbnbListingAmenities'][0]
+    ): array
+    {
+        $request = $this->updateAirbnbListingAmenitiesRequest($id, $update_airbnb_listing_amenities_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\UpdateAirbnbListingAmenities200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\UpdateAirbnbListingAmenities200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\UpdateAirbnbListingAmenities200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation updateAirbnbListingAmenitiesAsync
+     *
+     * Update Airbnb amenities
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\UpdateAirbnbListingAmenitiesRequest $update_airbnb_listing_amenities_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingAmenities'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbListingAmenitiesAsync(
+        string $id,
+        \Repull\Model\UpdateAirbnbListingAmenitiesRequest $update_airbnb_listing_amenities_request,
+        string $contentType = self::contentTypes['updateAirbnbListingAmenities'][0]
+    ): PromiseInterface
+    {
+        return $this->updateAirbnbListingAmenitiesAsyncWithHttpInfo($id, $update_airbnb_listing_amenities_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation updateAirbnbListingAmenitiesAsyncWithHttpInfo
+     *
+     * Update Airbnb amenities
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\UpdateAirbnbListingAmenitiesRequest $update_airbnb_listing_amenities_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingAmenities'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbListingAmenitiesAsyncWithHttpInfo(
+        string $id,
+        \Repull\Model\UpdateAirbnbListingAmenitiesRequest $update_airbnb_listing_amenities_request,
+        string $contentType = self::contentTypes['updateAirbnbListingAmenities'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\UpdateAirbnbListingAmenities200Response';
+        $request = $this->updateAirbnbListingAmenitiesRequest($id, $update_airbnb_listing_amenities_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'updateAirbnbListingAmenities'
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\UpdateAirbnbListingAmenitiesRequest $update_airbnb_listing_amenities_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingAmenities'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function updateAirbnbListingAmenitiesRequest(
+        string $id,
+        \Repull\Model\UpdateAirbnbListingAmenitiesRequest $update_airbnb_listing_amenities_request,
+        string $contentType = self::contentTypes['updateAirbnbListingAmenities'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling updateAirbnbListingAmenities'
+            );
+        }
+
+        // verify the required parameter 'update_airbnb_listing_amenities_request' is set
+        if ($update_airbnb_listing_amenities_request === null || (is_array($update_airbnb_listing_amenities_request) && count($update_airbnb_listing_amenities_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $update_airbnb_listing_amenities_request when calling updateAirbnbListingAmenities'
+            );
+        }
+
+
+        $resourcePath = '/v1/channels/airbnb/listings/{id}/amenities';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($update_airbnb_listing_amenities_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($update_airbnb_listing_amenities_request));
+            } else {
+                $httpBody = $update_airbnb_listing_amenities_request;
+            }
+        } elseif (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -12540,6 +16340,1656 @@ class AirbnbApi
     }
 
     /**
+     * Operation updateAirbnbListingDescription
+     *
+     * Update an Airbnb description for one locale
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request airbnb_description_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDescription'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\AirbnbContentWriteResponse|\Repull\Model\Error
+     */
+    public function updateAirbnbListingDescription(
+        string $id,
+        \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingDescription'][0]
+    ): \Repull\Model\AirbnbContentWriteResponse|\Repull\Model\Error
+    {
+        list($response) = $this->updateAirbnbListingDescriptionWithHttpInfo($id, $airbnb_description_write_request, $idempotency_key, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation updateAirbnbListingDescriptionWithHttpInfo
+     *
+     * Update an Airbnb description for one locale
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDescription'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\AirbnbContentWriteResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function updateAirbnbListingDescriptionWithHttpInfo(
+        string $id,
+        \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingDescription'][0]
+    ): array
+    {
+        $request = $this->updateAirbnbListingDescriptionRequest($id, $airbnb_description_write_request, $idempotency_key, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\AirbnbContentWriteResponse',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\AirbnbContentWriteResponse',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\AirbnbContentWriteResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation updateAirbnbListingDescriptionAsync
+     *
+     * Update an Airbnb description for one locale
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDescription'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbListingDescriptionAsync(
+        string $id,
+        \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingDescription'][0]
+    ): PromiseInterface
+    {
+        return $this->updateAirbnbListingDescriptionAsyncWithHttpInfo($id, $airbnb_description_write_request, $idempotency_key, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation updateAirbnbListingDescriptionAsyncWithHttpInfo
+     *
+     * Update an Airbnb description for one locale
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDescription'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbListingDescriptionAsyncWithHttpInfo(
+        string $id,
+        \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingDescription'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\AirbnbContentWriteResponse';
+        $request = $this->updateAirbnbListingDescriptionRequest($id, $airbnb_description_write_request, $idempotency_key, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'updateAirbnbListingDescription'
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDescription'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function updateAirbnbListingDescriptionRequest(
+        string $id,
+        \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingDescription'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling updateAirbnbListingDescription'
+            );
+        }
+
+        // verify the required parameter 'airbnb_description_write_request' is set
+        if ($airbnb_description_write_request === null || (is_array($airbnb_description_write_request) && count($airbnb_description_write_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $airbnb_description_write_request when calling updateAirbnbListingDescription'
+            );
+        }
+
+        if ($idempotency_key !== null && strlen($idempotency_key) > 255) {
+            throw new InvalidArgumentException('invalid length for "$idempotency_key" when calling AirbnbApi.updateAirbnbListingDescription, must be smaller than or equal to 255.');
+        }
+        
+
+        $resourcePath = '/v1/channels/airbnb/listings/{id}/descriptions';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // header params
+        if ($idempotency_key !== null) {
+            $headerParams['Idempotency-Key'] = ObjectSerializer::toHeaderValue($idempotency_key);
+        }
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($airbnb_description_write_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($airbnb_description_write_request));
+            } else {
+                $httpBody = $airbnb_description_write_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation updateAirbnbListingDetails
+     *
+     * Update property type, room type, quiet hours or check-in method
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request airbnb_listing_details_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDetails'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\AirbnbContentWriteResponse|\Repull\Model\Error
+     */
+    public function updateAirbnbListingDetails(
+        string $id,
+        \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingDetails'][0]
+    ): \Repull\Model\AirbnbContentWriteResponse|\Repull\Model\Error
+    {
+        list($response) = $this->updateAirbnbListingDetailsWithHttpInfo($id, $airbnb_listing_details_write_request, $idempotency_key, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation updateAirbnbListingDetailsWithHttpInfo
+     *
+     * Update property type, room type, quiet hours or check-in method
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDetails'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\AirbnbContentWriteResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function updateAirbnbListingDetailsWithHttpInfo(
+        string $id,
+        \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingDetails'][0]
+    ): array
+    {
+        $request = $this->updateAirbnbListingDetailsRequest($id, $airbnb_listing_details_write_request, $idempotency_key, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\AirbnbContentWriteResponse',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\AirbnbContentWriteResponse',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\AirbnbContentWriteResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation updateAirbnbListingDetailsAsync
+     *
+     * Update property type, room type, quiet hours or check-in method
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDetails'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbListingDetailsAsync(
+        string $id,
+        \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingDetails'][0]
+    ): PromiseInterface
+    {
+        return $this->updateAirbnbListingDetailsAsyncWithHttpInfo($id, $airbnb_listing_details_write_request, $idempotency_key, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation updateAirbnbListingDetailsAsyncWithHttpInfo
+     *
+     * Update property type, room type, quiet hours or check-in method
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDetails'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbListingDetailsAsyncWithHttpInfo(
+        string $id,
+        \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingDetails'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\AirbnbContentWriteResponse';
+        $request = $this->updateAirbnbListingDetailsRequest($id, $airbnb_listing_details_write_request, $idempotency_key, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'updateAirbnbListingDetails'
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDetails'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function updateAirbnbListingDetailsRequest(
+        string $id,
+        \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingDetails'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling updateAirbnbListingDetails'
+            );
+        }
+
+        // verify the required parameter 'airbnb_listing_details_write_request' is set
+        if ($airbnb_listing_details_write_request === null || (is_array($airbnb_listing_details_write_request) && count($airbnb_listing_details_write_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $airbnb_listing_details_write_request when calling updateAirbnbListingDetails'
+            );
+        }
+
+        if ($idempotency_key !== null && strlen($idempotency_key) > 255) {
+            throw new InvalidArgumentException('invalid length for "$idempotency_key" when calling AirbnbApi.updateAirbnbListingDetails, must be smaller than or equal to 255.');
+        }
+        
+
+        $resourcePath = '/v1/channels/airbnb/listings/{id}/details';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // header params
+        if ($idempotency_key !== null) {
+            $headerParams['Idempotency-Key'] = ObjectSerializer::toHeaderValue($idempotency_key);
+        }
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($airbnb_listing_details_write_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($airbnb_listing_details_write_request));
+            } else {
+                $httpBody = $airbnb_listing_details_write_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation updateAirbnbListingPermits
+     *
+     * Answer Airbnb permit questions
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request airbnb_permits_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPermits'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\UpdateAirbnbListingPermits200Response|\Repull\Model\Error
+     */
+    public function updateAirbnbListingPermits(
+        string $id,
+        \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingPermits'][0]
+    ): \Repull\Model\UpdateAirbnbListingPermits200Response|\Repull\Model\Error
+    {
+        list($response) = $this->updateAirbnbListingPermitsWithHttpInfo($id, $airbnb_permits_write_request, $idempotency_key, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation updateAirbnbListingPermitsWithHttpInfo
+     *
+     * Answer Airbnb permit questions
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPermits'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\UpdateAirbnbListingPermits200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function updateAirbnbListingPermitsWithHttpInfo(
+        string $id,
+        \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingPermits'][0]
+    ): array
+    {
+        $request = $this->updateAirbnbListingPermitsRequest($id, $airbnb_permits_write_request, $idempotency_key, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\UpdateAirbnbListingPermits200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\UpdateAirbnbListingPermits200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\UpdateAirbnbListingPermits200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation updateAirbnbListingPermitsAsync
+     *
+     * Answer Airbnb permit questions
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPermits'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbListingPermitsAsync(
+        string $id,
+        \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingPermits'][0]
+    ): PromiseInterface
+    {
+        return $this->updateAirbnbListingPermitsAsyncWithHttpInfo($id, $airbnb_permits_write_request, $idempotency_key, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation updateAirbnbListingPermitsAsyncWithHttpInfo
+     *
+     * Answer Airbnb permit questions
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPermits'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbListingPermitsAsyncWithHttpInfo(
+        string $id,
+        \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingPermits'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\UpdateAirbnbListingPermits200Response';
+        $request = $this->updateAirbnbListingPermitsRequest($id, $airbnb_permits_write_request, $idempotency_key, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'updateAirbnbListingPermits'
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPermits'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function updateAirbnbListingPermitsRequest(
+        string $id,
+        \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingPermits'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling updateAirbnbListingPermits'
+            );
+        }
+
+        // verify the required parameter 'airbnb_permits_write_request' is set
+        if ($airbnb_permits_write_request === null || (is_array($airbnb_permits_write_request) && count($airbnb_permits_write_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $airbnb_permits_write_request when calling updateAirbnbListingPermits'
+            );
+        }
+
+        if ($idempotency_key !== null && strlen($idempotency_key) > 255) {
+            throw new InvalidArgumentException('invalid length for "$idempotency_key" when calling AirbnbApi.updateAirbnbListingPermits, must be smaller than or equal to 255.');
+        }
+        
+
+        $resourcePath = '/v1/channels/airbnb/listings/{id}/permits';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // header params
+        if ($idempotency_key !== null) {
+            $headerParams['Idempotency-Key'] = ObjectSerializer::toHeaderValue($idempotency_key);
+        }
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($airbnb_permits_write_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($airbnb_permits_write_request));
+            } else {
+                $httpBody = $airbnb_permits_write_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation updateAirbnbListingPhoto
+     *
+     * Update an Airbnb photo
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\UpdateAirbnbListingPhotoRequest $update_airbnb_listing_photo_request update_airbnb_listing_photo_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPhoto'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\UpdateAirbnbListingPhoto200Response|\Repull\Model\Error
+     */
+    public function updateAirbnbListingPhoto(
+        string $id,
+        \Repull\Model\UpdateAirbnbListingPhotoRequest $update_airbnb_listing_photo_request,
+        string $contentType = self::contentTypes['updateAirbnbListingPhoto'][0]
+    ): \Repull\Model\UpdateAirbnbListingPhoto200Response|\Repull\Model\Error
+    {
+        list($response) = $this->updateAirbnbListingPhotoWithHttpInfo($id, $update_airbnb_listing_photo_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation updateAirbnbListingPhotoWithHttpInfo
+     *
+     * Update an Airbnb photo
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\UpdateAirbnbListingPhotoRequest $update_airbnb_listing_photo_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPhoto'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\UpdateAirbnbListingPhoto200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function updateAirbnbListingPhotoWithHttpInfo(
+        string $id,
+        \Repull\Model\UpdateAirbnbListingPhotoRequest $update_airbnb_listing_photo_request,
+        string $contentType = self::contentTypes['updateAirbnbListingPhoto'][0]
+    ): array
+    {
+        $request = $this->updateAirbnbListingPhotoRequest($id, $update_airbnb_listing_photo_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\UpdateAirbnbListingPhoto200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\UpdateAirbnbListingPhoto200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\UpdateAirbnbListingPhoto200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation updateAirbnbListingPhotoAsync
+     *
+     * Update an Airbnb photo
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\UpdateAirbnbListingPhotoRequest $update_airbnb_listing_photo_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPhoto'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbListingPhotoAsync(
+        string $id,
+        \Repull\Model\UpdateAirbnbListingPhotoRequest $update_airbnb_listing_photo_request,
+        string $contentType = self::contentTypes['updateAirbnbListingPhoto'][0]
+    ): PromiseInterface
+    {
+        return $this->updateAirbnbListingPhotoAsyncWithHttpInfo($id, $update_airbnb_listing_photo_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation updateAirbnbListingPhotoAsyncWithHttpInfo
+     *
+     * Update an Airbnb photo
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\UpdateAirbnbListingPhotoRequest $update_airbnb_listing_photo_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPhoto'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbListingPhotoAsyncWithHttpInfo(
+        string $id,
+        \Repull\Model\UpdateAirbnbListingPhotoRequest $update_airbnb_listing_photo_request,
+        string $contentType = self::contentTypes['updateAirbnbListingPhoto'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\UpdateAirbnbListingPhoto200Response';
+        $request = $this->updateAirbnbListingPhotoRequest($id, $update_airbnb_listing_photo_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'updateAirbnbListingPhoto'
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\UpdateAirbnbListingPhotoRequest $update_airbnb_listing_photo_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPhoto'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function updateAirbnbListingPhotoRequest(
+        string $id,
+        \Repull\Model\UpdateAirbnbListingPhotoRequest $update_airbnb_listing_photo_request,
+        string $contentType = self::contentTypes['updateAirbnbListingPhoto'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling updateAirbnbListingPhoto'
+            );
+        }
+
+        // verify the required parameter 'update_airbnb_listing_photo_request' is set
+        if ($update_airbnb_listing_photo_request === null || (is_array($update_airbnb_listing_photo_request) && count($update_airbnb_listing_photo_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $update_airbnb_listing_photo_request when calling updateAirbnbListingPhoto'
+            );
+        }
+
+
+        $resourcePath = '/v1/channels/airbnb/listings/{id}/photos';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($update_airbnb_listing_photo_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($update_airbnb_listing_photo_request));
+            } else {
+                $httpBody = $update_airbnb_listing_photo_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PATCH',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation updateAirbnbListingPricing
      *
      * Update Airbnb pricing
@@ -12789,6 +18239,848 @@ class AirbnbApi
                 $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($airbnb_pricing_write_request));
             } else {
                 $httpBody = $airbnb_pricing_write_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation updateAirbnbListingRoom
+     *
+     * Update an Airbnb room
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $room_id Airbnb-side room id to update. (required)
+     * @param  \Repull\Model\UpdateAirbnbListingRoomRequest $update_airbnb_listing_room_request update_airbnb_listing_room_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingRoom'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\UpdateAirbnbListingRoom200Response|\Repull\Model\Error
+     */
+    public function updateAirbnbListingRoom(
+        string $id,
+        string $room_id,
+        \Repull\Model\UpdateAirbnbListingRoomRequest $update_airbnb_listing_room_request,
+        string $contentType = self::contentTypes['updateAirbnbListingRoom'][0]
+    ): \Repull\Model\UpdateAirbnbListingRoom200Response|\Repull\Model\Error
+    {
+        list($response) = $this->updateAirbnbListingRoomWithHttpInfo($id, $room_id, $update_airbnb_listing_room_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation updateAirbnbListingRoomWithHttpInfo
+     *
+     * Update an Airbnb room
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $room_id Airbnb-side room id to update. (required)
+     * @param  \Repull\Model\UpdateAirbnbListingRoomRequest $update_airbnb_listing_room_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingRoom'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\UpdateAirbnbListingRoom200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function updateAirbnbListingRoomWithHttpInfo(
+        string $id,
+        string $room_id,
+        \Repull\Model\UpdateAirbnbListingRoomRequest $update_airbnb_listing_room_request,
+        string $contentType = self::contentTypes['updateAirbnbListingRoom'][0]
+    ): array
+    {
+        $request = $this->updateAirbnbListingRoomRequest($id, $room_id, $update_airbnb_listing_room_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\UpdateAirbnbListingRoom200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\UpdateAirbnbListingRoom200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\UpdateAirbnbListingRoom200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation updateAirbnbListingRoomAsync
+     *
+     * Update an Airbnb room
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $room_id Airbnb-side room id to update. (required)
+     * @param  \Repull\Model\UpdateAirbnbListingRoomRequest $update_airbnb_listing_room_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingRoom'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbListingRoomAsync(
+        string $id,
+        string $room_id,
+        \Repull\Model\UpdateAirbnbListingRoomRequest $update_airbnb_listing_room_request,
+        string $contentType = self::contentTypes['updateAirbnbListingRoom'][0]
+    ): PromiseInterface
+    {
+        return $this->updateAirbnbListingRoomAsyncWithHttpInfo($id, $room_id, $update_airbnb_listing_room_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation updateAirbnbListingRoomAsyncWithHttpInfo
+     *
+     * Update an Airbnb room
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $room_id Airbnb-side room id to update. (required)
+     * @param  \Repull\Model\UpdateAirbnbListingRoomRequest $update_airbnb_listing_room_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingRoom'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbListingRoomAsyncWithHttpInfo(
+        string $id,
+        string $room_id,
+        \Repull\Model\UpdateAirbnbListingRoomRequest $update_airbnb_listing_room_request,
+        string $contentType = self::contentTypes['updateAirbnbListingRoom'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\UpdateAirbnbListingRoom200Response';
+        $request = $this->updateAirbnbListingRoomRequest($id, $room_id, $update_airbnb_listing_room_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'updateAirbnbListingRoom'
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  string $room_id Airbnb-side room id to update. (required)
+     * @param  \Repull\Model\UpdateAirbnbListingRoomRequest $update_airbnb_listing_room_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingRoom'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function updateAirbnbListingRoomRequest(
+        string $id,
+        string $room_id,
+        \Repull\Model\UpdateAirbnbListingRoomRequest $update_airbnb_listing_room_request,
+        string $contentType = self::contentTypes['updateAirbnbListingRoom'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling updateAirbnbListingRoom'
+            );
+        }
+
+        // verify the required parameter 'room_id' is set
+        if ($room_id === null || (is_array($room_id) && count($room_id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $room_id when calling updateAirbnbListingRoom'
+            );
+        }
+
+        // verify the required parameter 'update_airbnb_listing_room_request' is set
+        if ($update_airbnb_listing_room_request === null || (is_array($update_airbnb_listing_room_request) && count($update_airbnb_listing_room_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $update_airbnb_listing_room_request when calling updateAirbnbListingRoom'
+            );
+        }
+
+
+        $resourcePath = '/v1/channels/airbnb/listings/{id}/rooms';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $room_id,
+            'roomId', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($update_airbnb_listing_room_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($update_airbnb_listing_room_request));
+            } else {
+                $httpBody = $update_airbnb_listing_room_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation updateAirbnbListingSafetyDisclosures
+     *
+     * Update guest-safety disclosures
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request airbnb_safety_disclosures_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingSafetyDisclosures'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\UpdateAirbnbListingSafetyDisclosures200Response|\Repull\Model\Error
+     */
+    public function updateAirbnbListingSafetyDisclosures(
+        string $id,
+        \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingSafetyDisclosures'][0]
+    ): \Repull\Model\UpdateAirbnbListingSafetyDisclosures200Response|\Repull\Model\Error
+    {
+        list($response) = $this->updateAirbnbListingSafetyDisclosuresWithHttpInfo($id, $airbnb_safety_disclosures_write_request, $idempotency_key, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation updateAirbnbListingSafetyDisclosuresWithHttpInfo
+     *
+     * Update guest-safety disclosures
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingSafetyDisclosures'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\UpdateAirbnbListingSafetyDisclosures200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function updateAirbnbListingSafetyDisclosuresWithHttpInfo(
+        string $id,
+        \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingSafetyDisclosures'][0]
+    ): array
+    {
+        $request = $this->updateAirbnbListingSafetyDisclosuresRequest($id, $airbnb_safety_disclosures_write_request, $idempotency_key, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\UpdateAirbnbListingSafetyDisclosures200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\UpdateAirbnbListingSafetyDisclosures200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\UpdateAirbnbListingSafetyDisclosures200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation updateAirbnbListingSafetyDisclosuresAsync
+     *
+     * Update guest-safety disclosures
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingSafetyDisclosures'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbListingSafetyDisclosuresAsync(
+        string $id,
+        \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingSafetyDisclosures'][0]
+    ): PromiseInterface
+    {
+        return $this->updateAirbnbListingSafetyDisclosuresAsyncWithHttpInfo($id, $airbnb_safety_disclosures_write_request, $idempotency_key, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation updateAirbnbListingSafetyDisclosuresAsyncWithHttpInfo
+     *
+     * Update guest-safety disclosures
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingSafetyDisclosures'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateAirbnbListingSafetyDisclosuresAsyncWithHttpInfo(
+        string $id,
+        \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingSafetyDisclosures'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\UpdateAirbnbListingSafetyDisclosures200Response';
+        $request = $this->updateAirbnbListingSafetyDisclosuresRequest($id, $airbnb_safety_disclosures_write_request, $idempotency_key, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'updateAirbnbListingSafetyDisclosures'
+     *
+     * @param  string $id Repull listing id (numeric string). (required)
+     * @param  \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingSafetyDisclosures'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function updateAirbnbListingSafetyDisclosuresRequest(
+        string $id,
+        \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request,
+        ?string $idempotency_key = null,
+        string $contentType = self::contentTypes['updateAirbnbListingSafetyDisclosures'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling updateAirbnbListingSafetyDisclosures'
+            );
+        }
+
+        // verify the required parameter 'airbnb_safety_disclosures_write_request' is set
+        if ($airbnb_safety_disclosures_write_request === null || (is_array($airbnb_safety_disclosures_write_request) && count($airbnb_safety_disclosures_write_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $airbnb_safety_disclosures_write_request when calling updateAirbnbListingSafetyDisclosures'
+            );
+        }
+
+        if ($idempotency_key !== null && strlen($idempotency_key) > 255) {
+            throw new InvalidArgumentException('invalid length for "$idempotency_key" when calling AirbnbApi.updateAirbnbListingSafetyDisclosures, must be smaller than or equal to 255.');
+        }
+        
+
+        $resourcePath = '/v1/channels/airbnb/listings/{id}/safety-disclosures';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // header params
+        if ($idempotency_key !== null) {
+            $headerParams['Idempotency-Key'] = ObjectSerializer::toHeaderValue($idempotency_key);
+        }
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($airbnb_safety_disclosures_write_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($airbnb_safety_disclosures_write_request));
+            } else {
+                $httpBody = $airbnb_safety_disclosures_write_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -13172,6 +19464,7 @@ class AirbnbApi
      * Upload photos to Airbnb
      *
      * @param  string $id id (required)
+     * @param  \Repull\Model\UploadAirbnbListingPhotosRequest $upload_airbnb_listing_photos_request upload_airbnb_listing_photos_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadAirbnbListingPhotos'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -13180,10 +19473,11 @@ class AirbnbApi
      */
     public function uploadAirbnbListingPhotos(
         string $id,
+        \Repull\Model\UploadAirbnbListingPhotosRequest $upload_airbnb_listing_photos_request,
         string $contentType = self::contentTypes['uploadAirbnbListingPhotos'][0]
     ): ?\Repull\Model\Error
     {
-        list($response) = $this->uploadAirbnbListingPhotosWithHttpInfo($id, $contentType);
+        list($response) = $this->uploadAirbnbListingPhotosWithHttpInfo($id, $upload_airbnb_listing_photos_request, $contentType);
         return $response;
     }
 
@@ -13193,6 +19487,7 @@ class AirbnbApi
      * Upload photos to Airbnb
      *
      * @param  string $id (required)
+     * @param  \Repull\Model\UploadAirbnbListingPhotosRequest $upload_airbnb_listing_photos_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadAirbnbListingPhotos'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -13201,10 +19496,11 @@ class AirbnbApi
      */
     public function uploadAirbnbListingPhotosWithHttpInfo(
         string $id,
+        \Repull\Model\UploadAirbnbListingPhotosRequest $upload_airbnb_listing_photos_request,
         string $contentType = self::contentTypes['uploadAirbnbListingPhotos'][0]
     ): array
     {
-        $request = $this->uploadAirbnbListingPhotosRequest($id, $contentType);
+        $request = $this->uploadAirbnbListingPhotosRequest($id, $upload_airbnb_listing_photos_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -13232,7 +19528,39 @@ class AirbnbApi
             return [null, $statusCode, $response->getHeaders()];
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -13252,6 +19580,7 @@ class AirbnbApi
      * Upload photos to Airbnb
      *
      * @param  string $id (required)
+     * @param  \Repull\Model\UploadAirbnbListingPhotosRequest $upload_airbnb_listing_photos_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadAirbnbListingPhotos'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -13259,10 +19588,11 @@ class AirbnbApi
      */
     public function uploadAirbnbListingPhotosAsync(
         string $id,
+        \Repull\Model\UploadAirbnbListingPhotosRequest $upload_airbnb_listing_photos_request,
         string $contentType = self::contentTypes['uploadAirbnbListingPhotos'][0]
     ): PromiseInterface
     {
-        return $this->uploadAirbnbListingPhotosAsyncWithHttpInfo($id, $contentType)
+        return $this->uploadAirbnbListingPhotosAsyncWithHttpInfo($id, $upload_airbnb_listing_photos_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -13276,6 +19606,7 @@ class AirbnbApi
      * Upload photos to Airbnb
      *
      * @param  string $id (required)
+     * @param  \Repull\Model\UploadAirbnbListingPhotosRequest $upload_airbnb_listing_photos_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadAirbnbListingPhotos'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -13283,11 +19614,12 @@ class AirbnbApi
      */
     public function uploadAirbnbListingPhotosAsyncWithHttpInfo(
         string $id,
+        \Repull\Model\UploadAirbnbListingPhotosRequest $upload_airbnb_listing_photos_request,
         string $contentType = self::contentTypes['uploadAirbnbListingPhotos'][0]
     ): PromiseInterface
     {
         $returnType = '';
-        $request = $this->uploadAirbnbListingPhotosRequest($id, $contentType);
+        $request = $this->uploadAirbnbListingPhotosRequest($id, $upload_airbnb_listing_photos_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -13316,6 +19648,7 @@ class AirbnbApi
      * Create request for operation 'uploadAirbnbListingPhotos'
      *
      * @param  string $id (required)
+     * @param  \Repull\Model\UploadAirbnbListingPhotosRequest $upload_airbnb_listing_photos_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadAirbnbListingPhotos'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -13323,6 +19656,7 @@ class AirbnbApi
      */
     public function uploadAirbnbListingPhotosRequest(
         string $id,
+        \Repull\Model\UploadAirbnbListingPhotosRequest $upload_airbnb_listing_photos_request,
         string $contentType = self::contentTypes['uploadAirbnbListingPhotos'][0]
     ): Request
     {
@@ -13331,6 +19665,13 @@ class AirbnbApi
         if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new InvalidArgumentException(
                 'Missing the required parameter $id when calling uploadAirbnbListingPhotos'
+            );
+        }
+
+        // verify the required parameter 'upload_airbnb_listing_photos_request' is set
+        if ($upload_airbnb_listing_photos_request === null || (is_array($upload_airbnb_listing_photos_request) && count($upload_airbnb_listing_photos_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $upload_airbnb_listing_photos_request when calling uploadAirbnbListingPhotos'
             );
         }
 
@@ -13361,7 +19702,14 @@ class AirbnbApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if (isset($upload_airbnb_listing_photos_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($upload_airbnb_listing_photos_request));
+            } else {
+                $httpBody = $upload_airbnb_listing_photos_request;
+            }
+        } elseif (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {

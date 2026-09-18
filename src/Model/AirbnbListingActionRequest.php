@@ -231,6 +231,8 @@ class AirbnbListingActionRequest implements ModelInterface, ArrayAccess, JsonSer
     public const ACTION_DELETE = 'delete';
     public const ACTION_PUSH = 'push';
     public const ACTION_PUBLISH = 'publish';
+    public const ACTION_UNLIST = 'unlist';
+    public const ACTION_RELIST = 'relist';
 
     /**
      * Gets allowable values of the enum
@@ -243,6 +245,8 @@ class AirbnbListingActionRequest implements ModelInterface, ArrayAccess, JsonSer
             self::ACTION_DELETE,
             self::ACTION_PUSH,
             self::ACTION_PUBLISH,
+            self::ACTION_UNLIST,
+            self::ACTION_RELIST,
         ];
     }
 
@@ -328,7 +332,7 @@ class AirbnbListingActionRequest implements ModelInterface, ArrayAccess, JsonSer
     /**
      * Sets action
      *
-     * @param string $action `delete` deactivates the Repull record. `push`/`publish` push content to Airbnb.
+     * @param string $action `delete` deactivates the REPULL RECORD — billing and API visibility — and never calls Airbnb. `push`/`publish` push content to Airbnb. `unlist` takes the LIVE AIRBNB LISTING down so it stops taking bookings; `relist` puts it back up. Deactivating and unlisting are different operations with different blast radii and are deliberately different action names.
      *
      * @return $this
      */
@@ -356,7 +360,7 @@ class AirbnbListingActionRequest implements ModelInterface, ArrayAccess, JsonSer
     /**
      * Sets airbnb_connection_id
      *
-     * @param string|null $airbnb_connection_id For `push`/`publish`: the Airbnb connection to update (from `GET /v1/channels/airbnb/listings/{id}`). Pass this OR `hostId`.
+     * @param string|null $airbnb_connection_id For `push`/`publish`: the Airbnb connection to update (from `GET /v1/channels/airbnb/listings/{id}`). Pass this OR `hostId`. REQUIRED for `unlist`/`relist`: a listing can be connected to more than one Airbnb listing and the wrong one cannot be un-taken-down through this API.
      *
      * @return $this
      */

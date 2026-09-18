@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * Listing Class Doc Comment
  *
- * @description A vacation rental listing in your Repull workspace.  An **inactive** listing appears only in &#x60;GET /v1/listings&#x60;, and only when &#x60;?status&#x3D;&#x60; asks for it. Such a row carries identity fields only — &#x60;id&#x60;, &#x60;name&#x60;, &#x60;status&#x60;, &#x60;channels&#x60; — so &#x60;address&#x60;, &#x60;thumbnailUrl&#x60;, &#x60;content&#x60;, &#x60;details&#x60;, &#x60;createdAt&#x60; and &#x60;updatedAt&#x60; are absent until the listing is activated. &#x60;GET /v1/listings/{id}&#x60; and every other listing endpoint answer &#x60;403 listing_inactive&#x60; for it.
+ * @description A vacation rental listing in your Repull workspace.  An **inactive** listing appears only in &#x60;GET /v1/listings&#x60;, and only when &#x60;?status&#x3D;&#x60; asks for it. Such a row carries identity fields only — &#x60;id&#x60;, &#x60;name&#x60;, &#x60;status&#x60;, &#x60;channels&#x60; — so &#x60;address&#x60;, &#x60;content&#x60;, &#x60;details&#x60;, &#x60;createdAt&#x60; and &#x60;updatedAt&#x60; are absent until the listing is activated. &#x60;GET /v1/listings/{id}&#x60; and every other listing endpoint answer &#x60;403 listing_inactive&#x60; for it. The one field you can add back is &#x60;thumbnailUrl&#x60;, by passing &#x60;?include&#x3D;thumbnail&#x60; — enough to render an activate/deactivate picker with pictures from a single request.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -455,7 +455,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets thumbnail_url
      *
-     * @param string|null $thumbnail_url thumbnail_url
+     * @param string|null $thumbnail_url Cover photo URL. Always present on an active listing. On an **inactive** one it is present only when the caller passes `?include=thumbnail`; `null` means the listing has no cover photo stored, absent means the expansion was not requested.
      *
      * @return $this
      */

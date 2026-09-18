@@ -61,6 +61,7 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPITypes = [
         'title' => 'string',
+        'name' => 'string',
         'summary' => 'string',
         'description' => 'string',
         'space' => 'string',
@@ -82,6 +83,7 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPIFormats = [
         'title' => null,
+        'name' => null,
         'summary' => null,
         'description' => null,
         'space' => null,
@@ -103,6 +105,7 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPINullables = [
         'title' => true,
+        'name' => true,
         'summary' => true,
         'description' => true,
         'space' => true,
@@ -194,6 +197,7 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $attributeMap = [
         'title' => 'title',
+        'name' => 'name',
         'summary' => 'summary',
         'description' => 'description',
         'space' => 'space',
@@ -215,6 +219,7 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $setters = [
         'title' => 'setTitle',
+        'name' => 'setName',
         'summary' => 'setSummary',
         'description' => 'setDescription',
         'space' => 'setSpace',
@@ -236,6 +241,7 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $getters = [
         'title' => 'getTitle',
+        'name' => 'getName',
         'summary' => 'getSummary',
         'description' => 'getDescription',
         'space' => 'getSpace',
@@ -298,6 +304,7 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
     public function __construct(?array $data = null)
     {
         $this->setIfExists('title', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
         $this->setIfExists('summary', $data ?? [], null);
         $this->setIfExists('description', $data ?? [], null);
         $this->setIfExists('space', $data ?? [], null);
@@ -366,7 +373,7 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets title
      *
-     * @param string|null $title Public listing title. Populated only by `generate-content`; not stored on `listings_descriptions`.
+     * @param string|null $title Public listing title as proposed by `POST /v1/listings/{id}/generate-content`. The STORED title is `name` — read that one.
      *
      * @return $this
      */
@@ -387,6 +394,40 @@ class ListingContent implements ModelInterface, ArrayAccess, JsonSerializable
         }
 
         $this->container['title'] = $title;
+
+        return $this;
+    }
+
+    /**
+     * Gets name
+     *
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->container['name'];
+    }
+
+    /**
+     * Sets name
+     *
+     * @param string|null $name The listing's stored public title, and the one a channel pull writes — after `POST /v1/listings/{id}/pull/airbnb` this is the title as it stands on Airbnb.
+     *
+     * @return $this
+     */
+    public function setName(?string $name): static
+    {
+        if (is_null($name)) {
+            array_push($this->openAPINullablesSetToNull, 'name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['name'] = $name;
 
         return $this;
     }

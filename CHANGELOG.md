@@ -5,6 +5,39 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.16] - 2026-09-18
+
+### Added
+Regenerated against the live spec (175 → 191 operations, 16 new):
+- **Airbnb listing content write surface.** `AirbnbApi` gains matched get/set pairs for every content section Airbnb accepts writes on:
+  - `getAirbnbBookingSettings` / `updateAirbnbBookingSettings` (`GET`/`PUT /v1/channels/airbnb/listings/{id}/booking-settings`) — cancellation policy (incl. non-refundable), instant book, advance notice, booking window, check-in/check-out windows, preparation time.
+  - `getAirbnbListingDetails` / `updateAirbnbListingDetails` (`.../details`) — property type, room type, quiet hours, check-in method.
+  - `listAirbnbListingPermits` / `updateAirbnbListingPermits` (`.../permits`).
+  - `listAirbnbListingSafetyDisclosures` / `updateAirbnbListingSafetyDisclosures` (`.../safety-disclosures`).
+  - `updateAirbnbListingPhoto` (`PATCH .../photos`), `reorderAirbnbListingPhotos` (`PUT .../photos/order`), `setAirbnbListingCoverPhoto` (`PUT .../photos/cover`).
+  - `updateAirbnbListingRoom` (`PUT .../rooms`), `updateAirbnbListingAmenities` (`PUT .../amenities`), `updateAirbnbListingDescription` (`PUT .../descriptions`, per-locale).
+  - Every write response carries a typed publish result (`lockedFields` — fields Airbnb won't let this API change).
+  - ~50 new request/response models back these calls (e.g. `UpdateAirbnbBookingSettingsRequest*`, `AirbnbListingDetailsWriteRequest*`, `AirbnbPermitsWriteRequest*`, `AirbnbSafetyDisclosuresWriteRequest`, `UpdateAirbnbListingRoomRequest*`, `UpdateAirbnbListingAmenitiesRequest*`, `AirbnbDescriptionWriteRequest*`, `AirbnbPublishResult`, `AirbnbContentWriteResponse`).
+- **`AirbnbApi::cancelAirbnbAlteration`** (`POST /v1/channels/airbnb/alterations/{id}/cancel`) — cancel a pending alteration Repull created (`AirbnbAlterationCreateRequest` renamed, see Breaking below).
+- **`ListingsApi::pullListingFromAirbnb`** (`POST /v1/listings/{id}/pull/airbnb`) — force a refresh from Airbnb for one or more content sections. New `ListingPullAirbnbRequest` (`sections[]`) and `ListingPullResponse` (`listingId`, `channel`, `connectionId`, `externalId`, `refreshedFromChannel`, `sections[]`, `pulledAt`, `nextPullAvailableAt`, `minIntervalSeconds`).
+- **`?include=thumbnail`** on `GET /v1/listings`, `GET /v1/properties`, and the Airbnb listing/connection list-and-detail endpoints — adds `thumbnailUrl` to each row (`Listing`, `AirbnbListing`) without a second request; the only expansion that also applies to inactive listings.
+- **`?account_id=`** query param on `listAirbnbAlterations`, `listAirbnbListings`, `listAirbnbReservations`, `listAirbnbReviews`, `listAirbnbThreads` — scope results to one connected Airbnb account.
+- **`AirbnbDataFreshness::$accounts`** (`AirbnbAccountFreshness[]`) — per-account freshness/staleness, alongside the existing aggregate fields.
+- **`AirbnbConnection`** gains `accountId`, `accountName`, `hostName`, `syncCategory`, and `lockedFields[]`.
+- **`AirbnbListingActionRequest::$action`** gains `unlist` / `relist` (`ACTION_UNLIST`, `ACTION_RELIST`) — take a live Airbnb listing down / bring it back, distinct from `delete` (which only deactivates the Repull record).
+- **Reservation stay terms.** `Reservation` gains `checkInTime`/`checkOutTime`; `ReservationWebhookObject` gains `cancellationPolicy`, `checkInTime`, `checkOutTime`, `status`.
+- **New error codes**: `listing_not_api_connected` (403 — `ErrorError` gains `listingId`, `airbnbListingId`, `syncCategory` for this code), `airbnb_rejected`, `connection_reauth_required`, `airbnb_rate_limited`.
+
+### Changed
+- `ListingContentUpdateRequest` / `ListingContentUpdateRequestPolicies` expanded for the new cancellation-policy/non-refundable fields; new `ListingContentUpdateRequestDetails` (property type, room type, quiet hours, check-in method).
+- `ListingContent`, `ListingContentUpdateResponse`, `ListingPublishResponse` reshaped alongside the new `PublishSectionError` / `ListingPublishAirbnbResponse` typed publish-result models.
+
+### Breaking
+- **Model renamed**: `CreateAirbnbAlterationRequest` → `AirbnbAlterationCreateRequest`. The live spec moved this request body from an inline anonymous schema to a named component (`#/components/schemas/AirbnbAlterationCreateRequest`), so the generator picked a new class name. Used as the parameter type on `AirbnbApi::createAirbnbAlteration()` / `createAirbnbAlterationAsync()` / `createAirbnbAlterationAsyncWithHttpInfo()` / `createAirbnbAlterationWithHttpInfo()` / `createAirbnbAlterationRequest()`. Update any `use Repull\Model\CreateAirbnbAlterationRequest;` to `use Repull\Model\AirbnbAlterationCreateRequest;` — field shape is unchanged.
+
+### Notes
+- Regenerated with `php-nextgen`; `scripts/relax-enums.php` re-applied (99 files).
+
 ## [0.2.15] - 2026-09-15
 
 ### Added
