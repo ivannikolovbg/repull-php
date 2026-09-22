@@ -245,6 +245,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     public const EVENT_AI_OPERATION_COMPLETED = 'ai.operation.completed';
     public const EVENT_AI_OPERATION_FAILED = 'ai.operation.failed';
     public const EVENT_CALENDAR_UPDATED = 'calendar.updated';
+    public const EVENT_INQUIRY_CREATED = 'inquiry.created';
+    public const EVENT_INQUIRY_UPDATED = 'inquiry.updated';
     public const EVENT_LISTING_CREATED = 'listing.created';
     public const EVENT_LISTING_DELETED = 'listing.deleted';
     public const EVENT_LISTING_REACTIVATED = 'listing.reactivated';
@@ -258,6 +260,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     public const EVENT_RESERVATION_CANCELLED = 'reservation.cancelled';
     public const EVENT_RESERVATION_CREATED = 'reservation.created';
     public const EVENT_RESERVATION_MESSAGE_RECEIVED = 'reservation.message.received';
+    public const EVENT_RESERVATION_REQUEST_CREATED = 'reservation.request.created';
+    public const EVENT_RESERVATION_REQUEST_UPDATED = 'reservation.request.updated';
     public const EVENT_RESERVATION_UPDATED = 'reservation.updated';
     public const EVENT_REVIEW_CREATED = 'review.created';
     public const EVENT_REVIEW_RESPONDED = 'review.responded';
@@ -276,6 +280,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
             self::EVENT_AI_OPERATION_COMPLETED,
             self::EVENT_AI_OPERATION_FAILED,
             self::EVENT_CALENDAR_UPDATED,
+            self::EVENT_INQUIRY_CREATED,
+            self::EVENT_INQUIRY_UPDATED,
             self::EVENT_LISTING_CREATED,
             self::EVENT_LISTING_DELETED,
             self::EVENT_LISTING_REACTIVATED,
@@ -289,6 +295,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
             self::EVENT_RESERVATION_CANCELLED,
             self::EVENT_RESERVATION_CREATED,
             self::EVENT_RESERVATION_MESSAGE_RECEIVED,
+            self::EVENT_RESERVATION_REQUEST_CREATED,
+            self::EVENT_RESERVATION_REQUEST_UPDATED,
             self::EVENT_RESERVATION_UPDATED,
             self::EVENT_REVIEW_CREATED,
             self::EVENT_REVIEW_RESPONDED,

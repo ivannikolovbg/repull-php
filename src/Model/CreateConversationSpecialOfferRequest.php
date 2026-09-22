@@ -1,6 +1,6 @@
 <?php
 /**
- * SendMessageRequest
+ * CreateConversationSpecialOfferRequest
  *
  * PHP version 8.1
  *
@@ -35,15 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * SendMessageRequest Class Doc Comment
+ * CreateConversationSpecialOfferRequest Class Doc Comment
  *
- * @description &#x60;message&#x60;, &#x60;attachments&#x60;, or both. Per-channel limits for &#x60;attachments&#x60;:  | Channel | Accepted types | Per file | Per request | Text | |---|---|---|---|---| | Airbnb | JPEG, PNG, GIF, WebP (sent as JPEG), MP4, QuickTime | 10 MB | 5 | optional — each file is sent as its own message, then the text | | Booking.com | JPEG, PNG | 10 MB | 5 | **required** — all files ride on the one text message | | SMS, email, direct-booking site chat | — | — | — | &#x60;422 attachments_not_supported&#x60;; nothing is sent |
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class CreateConversationSpecialOfferRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +51,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'SendMessageRequest';
+    protected static string $openAPIModelName = 'create_conversation_special_offer_request';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,9 +59,11 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'message' => 'string',
-        'channel' => 'string',
-        'attachments' => '\Repull\Model\SendMessageAttachment[]'
+        'listing_id' => 'int',
+        'check_in' => '\DateTime',
+        'check_out' => '\DateTime',
+        'guests' => '\Repull\Model\CreateConversationSpecialOfferRequestGuests',
+        'total_price' => 'float'
     ];
 
     /**
@@ -71,9 +72,11 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'message' => null,
-        'channel' => null,
-        'attachments' => null
+        'listing_id' => null,
+        'check_in' => 'date',
+        'check_out' => 'date',
+        'guests' => null,
+        'total_price' => null
     ];
 
     /**
@@ -82,9 +85,11 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'message' => false,
-        'channel' => false,
-        'attachments' => false
+        'listing_id' => false,
+        'check_in' => false,
+        'check_out' => false,
+        'guests' => false,
+        'total_price' => false
     ];
 
     /**
@@ -163,9 +168,11 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'message' => 'message',
-        'channel' => 'channel',
-        'attachments' => 'attachments'
+        'listing_id' => 'listingId',
+        'check_in' => 'checkIn',
+        'check_out' => 'checkOut',
+        'guests' => 'guests',
+        'total_price' => 'totalPrice'
     ];
 
     /**
@@ -174,9 +181,11 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $setters = [
-        'message' => 'setMessage',
-        'channel' => 'setChannel',
-        'attachments' => 'setAttachments'
+        'listing_id' => 'setListingId',
+        'check_in' => 'setCheckIn',
+        'check_out' => 'setCheckOut',
+        'guests' => 'setGuests',
+        'total_price' => 'setTotalPrice'
     ];
 
     /**
@@ -185,9 +194,11 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $getters = [
-        'message' => 'getMessage',
-        'channel' => 'getChannel',
-        'attachments' => 'getAttachments'
+        'listing_id' => 'getListingId',
+        'check_in' => 'getCheckIn',
+        'check_out' => 'getCheckOut',
+        'guests' => 'getGuests',
+        'total_price' => 'getTotalPrice'
     ];
 
     /**
@@ -222,27 +233,6 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         return self::$openAPIModelName;
     }
 
-    public const CHANNEL_AIRBNB = 'airbnb';
-    public const CHANNEL_BOOKING = 'booking';
-    public const CHANNEL_SMS = 'sms';
-    public const CHANNEL_EMAIL = 'email';
-    public const CHANNEL_WEBSITE = 'website';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getChannelAllowableValues()
-    {
-        return [
-            self::CHANNEL_AIRBNB,
-            self::CHANNEL_BOOKING,
-            self::CHANNEL_SMS,
-            self::CHANNEL_EMAIL,
-            self::CHANNEL_WEBSITE,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -258,9 +248,11 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('message', $data ?? [], null);
-        $this->setIfExists('channel', $data ?? [], null);
-        $this->setIfExists('attachments', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('check_in', $data ?? [], null);
+        $this->setIfExists('check_out', $data ?? [], null);
+        $this->setIfExists('guests', $data ?? [], null);
+        $this->setIfExists('total_price', $data ?? [], null);
     }
 
     /**
@@ -288,25 +280,20 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     {
         $invalidProperties = [];
 
-        if (!is_null($this->container['message']) && (mb_strlen($this->container['message']) > 4000)) {
-            $invalidProperties[] = "invalid value for 'message', the character length must be smaller than or equal to 4000.";
+        if ($this->container['check_in'] === null) {
+            $invalidProperties[] = "'check_in' can't be null";
         }
-
-        $allowedValues = self::getChannelAllowableValues();
-        if (!is_null($this->container['channel']) && !in_array($this->container['channel'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'channel', must be one of '%s'",
-                $this->container['channel'],
-                implode("', '", $allowedValues)
-            );
+        if ($this->container['check_out'] === null) {
+            $invalidProperties[] = "'check_out' can't be null";
         }
-
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) > 5)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be less than or equal to 5.";
+        if ($this->container['guests'] === null) {
+            $invalidProperties[] = "'guests' can't be null";
         }
-
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) < 1)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be greater than or equal to 1.";
+        if ($this->container['total_price'] === null) {
+            $invalidProperties[] = "'total_price' can't be null";
+        }
+        if (($this->container['total_price'] <= 0)) {
+            $invalidProperties[] = "invalid value for 'total_price', must be bigger than 0.";
         }
 
         return $invalidProperties;
@@ -322,94 +309,141 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
 
 
     /**
-     * Gets message
+     * Gets listing_id
      *
-     * @return string|null
+     * @return int|null
      */
-    public function getMessage(): ?string
+    public function getListingId(): ?int
     {
-        return $this->container['message'];
+        return $this->container['listing_id'];
     }
 
     /**
-     * Sets message
+     * Sets listing_id
      *
-     * @param string|null $message The text to send the guest. Required unless `attachments` is present.
+     * @param int|null $listing_id Repull listing id to offer. Defaults to the listing the conversation is about.
      *
      * @return $this
      */
-    public function setMessage(?string $message): static
+    public function setListingId(?int $listing_id): static
     {
-        if (is_null($message)) {
-            throw new InvalidArgumentException('non-nullable message cannot be null');
+        if (is_null($listing_id)) {
+            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
         }
-        if ((mb_strlen($message) > 4000)) {
-            throw new InvalidArgumentException('invalid length for $message when calling SendMessageRequest., must be smaller than or equal to 4000.');
-        }
-
-        $this->container['message'] = $message;
+        $this->container['listing_id'] = $listing_id;
 
         return $this;
     }
 
     /**
-     * Gets channel
+     * Gets check_in
      *
-     * @return string|null
+     * @return \DateTime
      */
-    public function getChannel(): ?string
+    public function getCheckIn(): \DateTime
     {
-        return $this->container['channel'];
+        return $this->container['check_in'];
     }
 
     /**
-     * Sets channel
+     * Sets check_in
      *
-     * @param string|null $channel Force a channel. Omit to send on whichever channel the conversation already uses, which is the right default.
+     * @param \DateTime $check_in check_in
      *
      * @return $this
      */
-    public function setChannel(?string $channel): static
+    public function setCheckIn(\DateTime $check_in): static
     {
-        if (is_null($channel)) {
-            throw new InvalidArgumentException('non-nullable channel cannot be null');
+        if (is_null($check_in)) {
+            throw new InvalidArgumentException('non-nullable check_in cannot be null');
         }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['channel'] = $channel;
+        $this->container['check_in'] = $check_in;
 
         return $this;
     }
 
     /**
-     * Gets attachments
+     * Gets check_out
      *
-     * @return \Repull\Model\SendMessageAttachment[]|null
+     * @return \DateTime
      */
-    public function getAttachments(): ?array
+    public function getCheckOut(): \DateTime
     {
-        return $this->container['attachments'];
+        return $this->container['check_out'];
     }
 
     /**
-     * Sets attachments
+     * Sets check_out
      *
-     * @param \Repull\Model\SendMessageAttachment[]|null $attachments Files to send. See the per-channel table above.
+     * @param \DateTime $check_out Must be after `checkIn`.
      *
      * @return $this
      */
-    public function setAttachments(?array $attachments): static
+    public function setCheckOut(\DateTime $check_out): static
     {
-        if (is_null($attachments)) {
-            throw new InvalidArgumentException('non-nullable attachments cannot be null');
+        if (is_null($check_out)) {
+            throw new InvalidArgumentException('non-nullable check_out cannot be null');
+        }
+        $this->container['check_out'] = $check_out;
+
+        return $this;
+    }
+
+    /**
+     * Gets guests
+     *
+     * @return \Repull\Model\CreateConversationSpecialOfferRequestGuests
+     */
+    public function getGuests(): \Repull\Model\CreateConversationSpecialOfferRequestGuests
+    {
+        return $this->container['guests'];
+    }
+
+    /**
+     * Sets guests
+     *
+     * @param \Repull\Model\CreateConversationSpecialOfferRequestGuests $guests guests
+     *
+     * @return $this
+     */
+    public function setGuests(\Repull\Model\CreateConversationSpecialOfferRequestGuests $guests): static
+    {
+        if (is_null($guests)) {
+            throw new InvalidArgumentException('non-nullable guests cannot be null');
+        }
+        $this->container['guests'] = $guests;
+
+        return $this;
+    }
+
+    /**
+     * Gets total_price
+     *
+     * @return float
+     */
+    public function getTotalPrice(): float
+    {
+        return $this->container['total_price'];
+    }
+
+    /**
+     * Sets total_price
+     *
+     * @param float $total_price Total the guest pays for the whole stay, in the listing’s Airbnb currency.
+     *
+     * @return $this
+     */
+    public function setTotalPrice(float $total_price): static
+    {
+        if (is_null($total_price)) {
+            throw new InvalidArgumentException('non-nullable total_price cannot be null');
         }
 
-        if ((count($attachments) > 5)) {
-            throw new InvalidArgumentException('invalid value for $attachments when calling SendMessageRequest., number of items must be less than or equal to 5.');
+        if (($total_price <= 0)) {
+            throw new InvalidArgumentException('invalid value for $total_price when calling CreateConversationSpecialOfferRequest., must be bigger than 0.');
         }
-        if ((count($attachments) < 1)) {
-            throw new InvalidArgumentException('invalid length for $attachments when calling SendMessageRequest., number of items must be greater than or equal to 1.');
-        }
-        $this->container['attachments'] = $attachments;
+
+        $this->container['total_price'] = $total_price;
 
         return $this;
     }

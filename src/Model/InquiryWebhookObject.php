@@ -1,6 +1,6 @@
 <?php
 /**
- * Message
+ * InquiryWebhookObject
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * Message Class Doc Comment
+ * InquiryWebhookObject Class Doc Comment
  *
- * @description A single message inside a conversation thread. Returned by &#x60;GET /v1/conversations/{id}/messages&#x60;. &#x60;direction&#x60; is normalized to &#x60;inbound&#x60; (from the guest) / &#x60;outbound&#x60; (from the host or an automation).
+ * @description An inquiry — a guest asking about dates before booking — exactly as &#x60;GET /v1/inquiries&#x60; returns it. Delivered as &#x60;data.object&#x60; on &#x60;inquiry.*&#x60; events.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class Message implements ModelInterface, ArrayAccess, JsonSerializable
+class InquiryWebhookObject implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'Message';
+    protected static string $openAPIModelName = 'InquiryWebhookObject';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -61,20 +61,20 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPITypes = [
         'id' => 'string',
-        'external_message_id' => 'string',
-        'direction' => 'string',
-        'sender_type' => 'string',
-        'sender_name' => 'string',
-        'sender_avatar' => 'string',
+        'conversation_id' => 'string',
+        'listing_id' => 'string',
         'channel' => 'string',
-        'body' => 'string',
-        'translated_body' => 'string',
-        'attachments' => '\Repull\Model\ConversationMessageAttachment[]',
-        'is_automated' => 'bool',
-        'ai_generated' => 'bool',
-        'sent_at' => '\DateTime',
-        'delivered_at' => '\DateTime',
-        'read_at' => '\DateTime'
+        'status' => 'string',
+        'check_in' => '\DateTime',
+        'check_out' => '\DateTime',
+        'guests' => '\Repull\Model\InquiryWebhookObjectGuests',
+        'expected_payout' => '\Repull\Model\InquiryWebhookObjectExpectedPayout',
+        'reservation_id' => 'string',
+        'relayed_by' => 'string',
+        'respond_by' => '\DateTime',
+        'responded_at' => '\DateTime',
+        'created_at' => '\DateTime',
+        'updated_at' => '\DateTime'
     ];
 
     /**
@@ -84,20 +84,20 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPIFormats = [
         'id' => null,
-        'external_message_id' => null,
-        'direction' => null,
-        'sender_type' => null,
-        'sender_name' => null,
-        'sender_avatar' => 'uri',
+        'conversation_id' => null,
+        'listing_id' => null,
         'channel' => null,
-        'body' => null,
-        'translated_body' => null,
-        'attachments' => null,
-        'is_automated' => null,
-        'ai_generated' => null,
-        'sent_at' => 'date-time',
-        'delivered_at' => 'date-time',
-        'read_at' => 'date-time'
+        'status' => null,
+        'check_in' => 'date',
+        'check_out' => 'date',
+        'guests' => null,
+        'expected_payout' => null,
+        'reservation_id' => null,
+        'relayed_by' => null,
+        'respond_by' => 'date-time',
+        'responded_at' => 'date-time',
+        'created_at' => 'date-time',
+        'updated_at' => 'date-time'
     ];
 
     /**
@@ -107,20 +107,20 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPINullables = [
         'id' => false,
-        'external_message_id' => true,
-        'direction' => false,
-        'sender_type' => true,
-        'sender_name' => false,
-        'sender_avatar' => true,
-        'channel' => true,
-        'body' => false,
-        'translated_body' => true,
-        'attachments' => false,
-        'is_automated' => false,
-        'ai_generated' => false,
-        'sent_at' => false,
-        'delivered_at' => false,
-        'read_at' => true
+        'conversation_id' => true,
+        'listing_id' => true,
+        'channel' => false,
+        'status' => false,
+        'check_in' => true,
+        'check_out' => true,
+        'guests' => false,
+        'expected_payout' => false,
+        'reservation_id' => true,
+        'relayed_by' => true,
+        'respond_by' => true,
+        'responded_at' => true,
+        'created_at' => true,
+        'updated_at' => true
     ];
 
     /**
@@ -200,20 +200,20 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $attributeMap = [
         'id' => 'id',
-        'external_message_id' => 'externalMessageId',
-        'direction' => 'direction',
-        'sender_type' => 'senderType',
-        'sender_name' => 'senderName',
-        'sender_avatar' => 'senderAvatar',
+        'conversation_id' => 'conversationId',
+        'listing_id' => 'listingId',
         'channel' => 'channel',
-        'body' => 'body',
-        'translated_body' => 'translatedBody',
-        'attachments' => 'attachments',
-        'is_automated' => 'isAutomated',
-        'ai_generated' => 'aiGenerated',
-        'sent_at' => 'sentAt',
-        'delivered_at' => 'deliveredAt',
-        'read_at' => 'readAt'
+        'status' => 'status',
+        'check_in' => 'checkIn',
+        'check_out' => 'checkOut',
+        'guests' => 'guests',
+        'expected_payout' => 'expectedPayout',
+        'reservation_id' => 'reservationId',
+        'relayed_by' => 'relayedBy',
+        'respond_by' => 'respondBy',
+        'responded_at' => 'respondedAt',
+        'created_at' => 'createdAt',
+        'updated_at' => 'updatedAt'
     ];
 
     /**
@@ -223,20 +223,20 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $setters = [
         'id' => 'setId',
-        'external_message_id' => 'setExternalMessageId',
-        'direction' => 'setDirection',
-        'sender_type' => 'setSenderType',
-        'sender_name' => 'setSenderName',
-        'sender_avatar' => 'setSenderAvatar',
+        'conversation_id' => 'setConversationId',
+        'listing_id' => 'setListingId',
         'channel' => 'setChannel',
-        'body' => 'setBody',
-        'translated_body' => 'setTranslatedBody',
-        'attachments' => 'setAttachments',
-        'is_automated' => 'setIsAutomated',
-        'ai_generated' => 'setAiGenerated',
-        'sent_at' => 'setSentAt',
-        'delivered_at' => 'setDeliveredAt',
-        'read_at' => 'setReadAt'
+        'status' => 'setStatus',
+        'check_in' => 'setCheckIn',
+        'check_out' => 'setCheckOut',
+        'guests' => 'setGuests',
+        'expected_payout' => 'setExpectedPayout',
+        'reservation_id' => 'setReservationId',
+        'relayed_by' => 'setRelayedBy',
+        'respond_by' => 'setRespondBy',
+        'responded_at' => 'setRespondedAt',
+        'created_at' => 'setCreatedAt',
+        'updated_at' => 'setUpdatedAt'
     ];
 
     /**
@@ -246,20 +246,20 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $getters = [
         'id' => 'getId',
-        'external_message_id' => 'getExternalMessageId',
-        'direction' => 'getDirection',
-        'sender_type' => 'getSenderType',
-        'sender_name' => 'getSenderName',
-        'sender_avatar' => 'getSenderAvatar',
+        'conversation_id' => 'getConversationId',
+        'listing_id' => 'getListingId',
         'channel' => 'getChannel',
-        'body' => 'getBody',
-        'translated_body' => 'getTranslatedBody',
-        'attachments' => 'getAttachments',
-        'is_automated' => 'getIsAutomated',
-        'ai_generated' => 'getAiGenerated',
-        'sent_at' => 'getSentAt',
-        'delivered_at' => 'getDeliveredAt',
-        'read_at' => 'getReadAt'
+        'status' => 'getStatus',
+        'check_in' => 'getCheckIn',
+        'check_out' => 'getCheckOut',
+        'guests' => 'getGuests',
+        'expected_payout' => 'getExpectedPayout',
+        'reservation_id' => 'getReservationId',
+        'relayed_by' => 'getRelayedBy',
+        'respond_by' => 'getRespondBy',
+        'responded_at' => 'getRespondedAt',
+        'created_at' => 'getCreatedAt',
+        'updated_at' => 'getUpdatedAt'
     ];
 
     /**
@@ -294,19 +294,29 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         return self::$openAPIModelName;
     }
 
-    public const DIRECTION_INBOUND = 'inbound';
-    public const DIRECTION_OUTBOUND = 'outbound';
+    public const STATUS_OPEN = 'open';
+    public const STATUS_PRE_APPROVED = 'pre_approved';
+    public const STATUS_SPECIAL_OFFER_SENT = 'special_offer_sent';
+    public const STATUS_BOOKED = 'booked';
+    public const STATUS_EXPIRED = 'expired';
+    public const STATUS_DECLINED = 'declined';
+    public const STATUS_NOT_POSSIBLE = 'not_possible';
 
     /**
      * Gets allowable values of the enum
      *
      * @return string[]
      */
-    public static function getDirectionAllowableValues()
+    public static function getStatusAllowableValues()
     {
         return [
-            self::DIRECTION_INBOUND,
-            self::DIRECTION_OUTBOUND,
+            self::STATUS_OPEN,
+            self::STATUS_PRE_APPROVED,
+            self::STATUS_SPECIAL_OFFER_SENT,
+            self::STATUS_BOOKED,
+            self::STATUS_EXPIRED,
+            self::STATUS_DECLINED,
+            self::STATUS_NOT_POSSIBLE,
         ];
     }
 
@@ -325,20 +335,20 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     public function __construct(?array $data = null)
     {
         $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('external_message_id', $data ?? [], null);
-        $this->setIfExists('direction', $data ?? [], null);
-        $this->setIfExists('sender_type', $data ?? [], null);
-        $this->setIfExists('sender_name', $data ?? [], null);
-        $this->setIfExists('sender_avatar', $data ?? [], null);
+        $this->setIfExists('conversation_id', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('channel', $data ?? [], null);
-        $this->setIfExists('body', $data ?? [], null);
-        $this->setIfExists('translated_body', $data ?? [], null);
-        $this->setIfExists('attachments', $data ?? [], null);
-        $this->setIfExists('is_automated', $data ?? [], null);
-        $this->setIfExists('ai_generated', $data ?? [], null);
-        $this->setIfExists('sent_at', $data ?? [], null);
-        $this->setIfExists('delivered_at', $data ?? [], null);
-        $this->setIfExists('read_at', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('check_in', $data ?? [], null);
+        $this->setIfExists('check_out', $data ?? [], null);
+        $this->setIfExists('guests', $data ?? [], null);
+        $this->setIfExists('expected_payout', $data ?? [], null);
+        $this->setIfExists('reservation_id', $data ?? [], null);
+        $this->setIfExists('relayed_by', $data ?? [], null);
+        $this->setIfExists('respond_by', $data ?? [], null);
+        $this->setIfExists('responded_at', $data ?? [], null);
+        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('updated_at', $data ?? [], null);
     }
 
     /**
@@ -366,11 +376,17 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
-        $allowedValues = self::getDirectionAllowableValues();
-        if (!is_null($this->container['direction']) && !in_array($this->container['direction'], $allowedValues, true)) {
+        if ($this->container['id'] === null) {
+            $invalidProperties[] = "'id' can't be null";
+        }
+        if ($this->container['status'] === null) {
+            $invalidProperties[] = "'status' can't be null";
+        }
+        $allowedValues = self::getStatusAllowableValues();
+        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'direction', must be one of '%s'",
-                $this->container['direction'],
+                "invalid value '%s' for 'status', must be one of '%s'",
+                $this->container['status'],
                 implode("', '", $allowedValues)
             );
         }
@@ -390,9 +406,9 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets id
      *
-     * @return string|null
+     * @return string
      */
-    public function getId(): ?string
+    public function getId(): string
     {
         return $this->container['id'];
     }
@@ -400,11 +416,11 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets id
      *
-     * @param string|null $id id
+     * @param string $id Repull inquiry id.
      *
      * @return $this
      */
-    public function setId(?string $id): static
+    public function setId(string $id): static
     {
         if (is_null($id)) {
             throw new InvalidArgumentException('non-nullable id cannot be null');
@@ -415,158 +431,69 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
-     * Gets external_message_id
+     * Gets conversation_id
      *
      * @return string|null
      */
-    public function getExternalMessageId(): ?string
+    public function getConversationId(): ?string
     {
-        return $this->container['external_message_id'];
+        return $this->container['conversation_id'];
     }
 
     /**
-     * Sets external_message_id
+     * Sets conversation_id
      *
-     * @param string|null $external_message_id ID assigned by the source channel (Airbnb message id, Booking message id, etc.). Stable across syncs.
+     * @param string|null $conversation_id Pass to `POST /v1/conversations/{id}/pre-approval` or `/special-offers`.
      *
      * @return $this
      */
-    public function setExternalMessageId(?string $external_message_id): static
+    public function setConversationId(?string $conversation_id): static
     {
-        if (is_null($external_message_id)) {
-            array_push($this->openAPINullablesSetToNull, 'external_message_id');
+        if (is_null($conversation_id)) {
+            array_push($this->openAPINullablesSetToNull, 'conversation_id');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('external_message_id', $nullablesSetToNull);
+            $index = array_search('conversation_id', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['external_message_id'] = $external_message_id;
+        $this->container['conversation_id'] = $conversation_id;
 
         return $this;
     }
 
     /**
-     * Gets direction
+     * Gets listing_id
      *
      * @return string|null
      */
-    public function getDirection(): ?string
+    public function getListingId(): ?string
     {
-        return $this->container['direction'];
+        return $this->container['listing_id'];
     }
 
     /**
-     * Sets direction
+     * Sets listing_id
      *
-     * @param string|null $direction direction
+     * @param string|null $listing_id listing_id
      *
      * @return $this
      */
-    public function setDirection(?string $direction): static
+    public function setListingId(?string $listing_id): static
     {
-        if (is_null($direction)) {
-            throw new InvalidArgumentException('non-nullable direction cannot be null');
-        }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['direction'] = $direction;
-
-        return $this;
-    }
-
-    /**
-     * Gets sender_type
-     *
-     * @return string|null
-     */
-    public function getSenderType(): ?string
-    {
-        return $this->container['sender_type'];
-    }
-
-    /**
-     * Sets sender_type
-     *
-     * @param string|null $sender_type Free-form sender role from the channel (e.g. `guest`, `host`, `system`, `airbnb`). Use `direction` for binary inbound/outbound logic.
-     *
-     * @return $this
-     */
-    public function setSenderType(?string $sender_type): static
-    {
-        if (is_null($sender_type)) {
-            array_push($this->openAPINullablesSetToNull, 'sender_type');
+        if (is_null($listing_id)) {
+            array_push($this->openAPINullablesSetToNull, 'listing_id');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('sender_type', $nullablesSetToNull);
+            $index = array_search('listing_id', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['sender_type'] = $sender_type;
-
-        return $this;
-    }
-
-    /**
-     * Gets sender_name
-     *
-     * @return string|null
-     */
-    public function getSenderName(): ?string
-    {
-        return $this->container['sender_name'];
-    }
-
-    /**
-     * Sets sender_name
-     *
-     * @param string|null $sender_name sender_name
-     *
-     * @return $this
-     */
-    public function setSenderName(?string $sender_name): static
-    {
-        if (is_null($sender_name)) {
-            throw new InvalidArgumentException('non-nullable sender_name cannot be null');
-        }
-        $this->container['sender_name'] = $sender_name;
-
-        return $this;
-    }
-
-    /**
-     * Gets sender_avatar
-     *
-     * @return string|null
-     */
-    public function getSenderAvatar(): ?string
-    {
-        return $this->container['sender_avatar'];
-    }
-
-    /**
-     * Sets sender_avatar
-     *
-     * @param string|null $sender_avatar sender_avatar
-     *
-     * @return $this
-     */
-    public function setSenderAvatar(?string $sender_avatar): static
-    {
-        if (is_null($sender_avatar)) {
-            array_push($this->openAPINullablesSetToNull, 'sender_avatar');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('sender_avatar', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['sender_avatar'] = $sender_avatar;
+        $this->container['listing_id'] = $listing_id;
 
         return $this;
     }
@@ -584,21 +511,14 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets channel
      *
-     * @param string|null $channel Delivery channel — `airbnb`, `booking`, `sms`, `email`, etc.
+     * @param string|null $channel channel
      *
      * @return $this
      */
     public function setChannel(?string $channel): static
     {
         if (is_null($channel)) {
-            array_push($this->openAPINullablesSetToNull, 'channel');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('channel', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+            throw new InvalidArgumentException('non-nullable channel cannot be null');
         }
         $this->container['channel'] = $channel;
 
@@ -606,231 +526,355 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
-     * Gets body
+     * Gets status
      *
-     * @return string|null
+     * @return string
      */
-    public function getBody(): ?string
+    public function getStatus(): string
     {
-        return $this->container['body'];
+        return $this->container['status'];
     }
 
     /**
-     * Sets body
+     * Sets status
      *
-     * @param string|null $body Message body in the original language.
+     * @param string $status Same vocabulary as `GET /v1/inquiries`: `open` needs an answer; `booked` means the guest booked (`reservationId`).
      *
      * @return $this
      */
-    public function setBody(?string $body): static
+    public function setStatus(string $status): static
     {
-        if (is_null($body)) {
-            throw new InvalidArgumentException('non-nullable body cannot be null');
+        if (is_null($status)) {
+            throw new InvalidArgumentException('non-nullable status cannot be null');
         }
-        $this->container['body'] = $body;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['status'] = $status;
 
         return $this;
     }
 
     /**
-     * Gets translated_body
+     * Gets check_in
      *
-     * @return string|null
+     * @return \DateTime|null
      */
-    public function getTranslatedBody(): ?string
+    public function getCheckIn(): ?\DateTime
     {
-        return $this->container['translated_body'];
+        return $this->container['check_in'];
     }
 
     /**
-     * Sets translated_body
+     * Sets check_in
      *
-     * @param string|null $translated_body English translation when the original language is non-English and a translation has been computed.
+     * @param \DateTime|null $check_in check_in
      *
      * @return $this
      */
-    public function setTranslatedBody(?string $translated_body): static
+    public function setCheckIn(?\DateTime $check_in): static
     {
-        if (is_null($translated_body)) {
-            array_push($this->openAPINullablesSetToNull, 'translated_body');
+        if (is_null($check_in)) {
+            array_push($this->openAPINullablesSetToNull, 'check_in');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('translated_body', $nullablesSetToNull);
+            $index = array_search('check_in', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['translated_body'] = $translated_body;
+        $this->container['check_in'] = $check_in;
 
         return $this;
     }
 
     /**
-     * Gets attachments
-     *
-     * @return \Repull\Model\ConversationMessageAttachment[]|null
-     */
-    public function getAttachments(): ?array
-    {
-        return $this->container['attachments'];
-    }
-
-    /**
-     * Sets attachments
-     *
-     * @param \Repull\Model\ConversationMessageAttachment[]|null $attachments Files on this message, inbound or outbound. Empty array when there are none. A file-only message has an empty `body`.
-     *
-     * @return $this
-     */
-    public function setAttachments(?array $attachments): static
-    {
-        if (is_null($attachments)) {
-            throw new InvalidArgumentException('non-nullable attachments cannot be null');
-        }
-        $this->container['attachments'] = $attachments;
-
-        return $this;
-    }
-
-    /**
-     * Gets is_automated
-     *
-     * @return bool|null
-     */
-    public function getIsAutomated(): ?bool
-    {
-        return $this->container['is_automated'];
-    }
-
-    /**
-     * Sets is_automated
-     *
-     * @param bool|null $is_automated `true` when the message was sent by a Vanio automation (template, schedule, etc.).
-     *
-     * @return $this
-     */
-    public function setIsAutomated(?bool $is_automated): static
-    {
-        if (is_null($is_automated)) {
-            throw new InvalidArgumentException('non-nullable is_automated cannot be null');
-        }
-        $this->container['is_automated'] = $is_automated;
-
-        return $this;
-    }
-
-    /**
-     * Gets ai_generated
-     *
-     * @return bool|null
-     */
-    public function getAiGenerated(): ?bool
-    {
-        return $this->container['ai_generated'];
-    }
-
-    /**
-     * Sets ai_generated
-     *
-     * @param bool|null $ai_generated `true` when the body was authored by Vanio AI (autopilot, draft).
-     *
-     * @return $this
-     */
-    public function setAiGenerated(?bool $ai_generated): static
-    {
-        if (is_null($ai_generated)) {
-            throw new InvalidArgumentException('non-nullable ai_generated cannot be null');
-        }
-        $this->container['ai_generated'] = $ai_generated;
-
-        return $this;
-    }
-
-    /**
-     * Gets sent_at
+     * Gets check_out
      *
      * @return \DateTime|null
      */
-    public function getSentAt(): ?\DateTime
+    public function getCheckOut(): ?\DateTime
     {
-        return $this->container['sent_at'];
+        return $this->container['check_out'];
     }
 
     /**
-     * Sets sent_at
+     * Sets check_out
      *
-     * @param \DateTime|null $sent_at sent_at
+     * @param \DateTime|null $check_out check_out
      *
      * @return $this
      */
-    public function setSentAt(?\DateTime $sent_at): static
+    public function setCheckOut(?\DateTime $check_out): static
     {
-        if (is_null($sent_at)) {
-            throw new InvalidArgumentException('non-nullable sent_at cannot be null');
-        }
-        $this->container['sent_at'] = $sent_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets delivered_at
-     *
-     * @return \DateTime|null
-     */
-    public function getDeliveredAt(): ?\DateTime
-    {
-        return $this->container['delivered_at'];
-    }
-
-    /**
-     * Sets delivered_at
-     *
-     * @param \DateTime|null $delivered_at delivered_at
-     *
-     * @return $this
-     */
-    public function setDeliveredAt(?\DateTime $delivered_at): static
-    {
-        if (is_null($delivered_at)) {
-            throw new InvalidArgumentException('non-nullable delivered_at cannot be null');
-        }
-        $this->container['delivered_at'] = $delivered_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets read_at
-     *
-     * @return \DateTime|null
-     */
-    public function getReadAt(): ?\DateTime
-    {
-        return $this->container['read_at'];
-    }
-
-    /**
-     * Sets read_at
-     *
-     * @param \DateTime|null $read_at read_at
-     *
-     * @return $this
-     */
-    public function setReadAt(?\DateTime $read_at): static
-    {
-        if (is_null($read_at)) {
-            array_push($this->openAPINullablesSetToNull, 'read_at');
+        if (is_null($check_out)) {
+            array_push($this->openAPINullablesSetToNull, 'check_out');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('read_at', $nullablesSetToNull);
+            $index = array_search('check_out', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['read_at'] = $read_at;
+        $this->container['check_out'] = $check_out;
+
+        return $this;
+    }
+
+    /**
+     * Gets guests
+     *
+     * @return \Repull\Model\InquiryWebhookObjectGuests|null
+     */
+    public function getGuests(): ?\Repull\Model\InquiryWebhookObjectGuests
+    {
+        return $this->container['guests'];
+    }
+
+    /**
+     * Sets guests
+     *
+     * @param \Repull\Model\InquiryWebhookObjectGuests|null $guests guests
+     *
+     * @return $this
+     */
+    public function setGuests(?\Repull\Model\InquiryWebhookObjectGuests $guests): static
+    {
+        if (is_null($guests)) {
+            throw new InvalidArgumentException('non-nullable guests cannot be null');
+        }
+        $this->container['guests'] = $guests;
+
+        return $this;
+    }
+
+    /**
+     * Gets expected_payout
+     *
+     * @return \Repull\Model\InquiryWebhookObjectExpectedPayout|null
+     */
+    public function getExpectedPayout(): ?\Repull\Model\InquiryWebhookObjectExpectedPayout
+    {
+        return $this->container['expected_payout'];
+    }
+
+    /**
+     * Sets expected_payout
+     *
+     * @param \Repull\Model\InquiryWebhookObjectExpectedPayout|null $expected_payout expected_payout
+     *
+     * @return $this
+     */
+    public function setExpectedPayout(?\Repull\Model\InquiryWebhookObjectExpectedPayout $expected_payout): static
+    {
+        if (is_null($expected_payout)) {
+            throw new InvalidArgumentException('non-nullable expected_payout cannot be null');
+        }
+        $this->container['expected_payout'] = $expected_payout;
+
+        return $this;
+    }
+
+    /**
+     * Gets reservation_id
+     *
+     * @return string|null
+     */
+    public function getReservationId(): ?string
+    {
+        return $this->container['reservation_id'];
+    }
+
+    /**
+     * Sets reservation_id
+     *
+     * @param string|null $reservation_id The reservation the inquiry became, once booked.
+     *
+     * @return $this
+     */
+    public function setReservationId(?string $reservation_id): static
+    {
+        if (is_null($reservation_id)) {
+            array_push($this->openAPINullablesSetToNull, 'reservation_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('reservation_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['reservation_id'] = $reservation_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets relayed_by
+     *
+     * @return string|null
+     */
+    public function getRelayedBy(): ?string
+    {
+        return $this->container['relayed_by'];
+    }
+
+    /**
+     * Sets relayed_by
+     *
+     * @param string|null $relayed_by A PMS that relays this inquiry; when set, answer it in that PMS.
+     *
+     * @return $this
+     */
+    public function setRelayedBy(?string $relayed_by): static
+    {
+        if (is_null($relayed_by)) {
+            array_push($this->openAPINullablesSetToNull, 'relayed_by');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('relayed_by', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['relayed_by'] = $relayed_by;
+
+        return $this;
+    }
+
+    /**
+     * Gets respond_by
+     *
+     * @return \DateTime|null
+     */
+    public function getRespondBy(): ?\DateTime
+    {
+        return $this->container['respond_by'];
+    }
+
+    /**
+     * Sets respond_by
+     *
+     * @param \DateTime|null $respond_by respond_by
+     *
+     * @return $this
+     */
+    public function setRespondBy(?\DateTime $respond_by): static
+    {
+        if (is_null($respond_by)) {
+            array_push($this->openAPINullablesSetToNull, 'respond_by');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('respond_by', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['respond_by'] = $respond_by;
+
+        return $this;
+    }
+
+    /**
+     * Gets responded_at
+     *
+     * @return \DateTime|null
+     */
+    public function getRespondedAt(): ?\DateTime
+    {
+        return $this->container['responded_at'];
+    }
+
+    /**
+     * Sets responded_at
+     *
+     * @param \DateTime|null $responded_at responded_at
+     *
+     * @return $this
+     */
+    public function setRespondedAt(?\DateTime $responded_at): static
+    {
+        if (is_null($responded_at)) {
+            array_push($this->openAPINullablesSetToNull, 'responded_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('responded_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['responded_at'] = $responded_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets created_at
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->container['created_at'];
+    }
+
+    /**
+     * Sets created_at
+     *
+     * @param \DateTime|null $created_at created_at
+     *
+     * @return $this
+     */
+    public function setCreatedAt(?\DateTime $created_at): static
+    {
+        if (is_null($created_at)) {
+            array_push($this->openAPINullablesSetToNull, 'created_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('created_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets updated_at
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->container['updated_at'];
+    }
+
+    /**
+     * Sets updated_at
+     *
+     * @param \DateTime|null $updated_at updated_at
+     *
+     * @return $this
+     */
+    public function setUpdatedAt(?\DateTime $updated_at): static
+    {
+        if (is_null($updated_at)) {
+            array_push($this->openAPINullablesSetToNull, 'updated_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('updated_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['updated_at'] = $updated_at;
 
         return $this;
     }

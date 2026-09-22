@@ -5,6 +5,24 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.17] - 2026-09-22
+
+### Added
+Regenerated against the live spec (191 → 199 operations, none removed):
+- **Inquiries** — `ConversationsApi::listInquiries` (`GET /v1/inquiries`; `status` defaults to `open`, `all` for every state).
+- **Pre-approval** — `ConversationsApi::preapproveConversation` (`POST /v1/conversations/{id}/pre-approval`, optional `blockInstantBooking`).
+- **Special offers** — `ConversationsApi::createConversationSpecialOffer` / `getConversationSpecialOffer` / `withdrawConversationSpecialOffer` (`POST`/`GET`/`DELETE /v1/conversations/{id}/special-offers[/{offerId}]`), plus `AirbnbApi::getAirbnbOffer` (`GET /v1/channels/airbnb/offers?offerId=`).
+- **Booking requests** — `ReservationsApi::acceptReservationRequest` / `declineReservationRequest` (`POST /v1/reservations/{id}/accept|decline`).
+- **Message attachments** — `SendMessageRequest::setAttachments()` (1–5 `SendMessageAttachment`s by public `https://` URL) on `ConversationsApi::sendConversationMessage`; the response carries `SentAttachment`s.
+- **Webhooks** — `WebhookEventType` gains `reservation.request.created`, `reservation.request.updated`, `inquiry.created`, `inquiry.updated`; models `ReservationRequestCreatedEvent`, `ReservationRequestUpdatedEvent`, `InquiryCreatedEvent`, `InquiryUpdatedEvent`, `InquiryWebhookObject`.
+- `Reservation` gains `statusDetail` (`request_expired`) and `respondBy`.
+
+### Changed
+- `AirbnbApi::airbnbReservationAction($code, $airbnb_reservation_action_request, ?$idempotency_key)` — the spec now declares the action body the API always required, and the method returns `AirbnbReservationAction200Response`.
+- `AirbnbApi::createAirbnbOffer` gains an optional `$idempotency_key` and now returns a typed `GetAirbnbOffer200Response`; `withdrawAirbnbOffer` and `sendAirbnbMessage` also return typed responses instead of `null`.
+- `AirbnbApi::listAirbnbThreadMessages` gains optional `$cursor` / `$all` and returns `ListAirbnbThreadMessages200Response`.
+- Callers passing `$contentType` positionally to those methods must move it after the new optional arguments.
+
 ## [0.2.16] - 2026-09-18
 
 ### Added

@@ -1,6 +1,6 @@
 <?php
 /**
- * SendMessageRequest
+ * ListAirbnbThreadMessages200ResponsePagination
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * SendMessageRequest Class Doc Comment
+ * ListAirbnbThreadMessages200ResponsePagination Class Doc Comment
  *
- * @description &#x60;message&#x60;, &#x60;attachments&#x60;, or both. Per-channel limits for &#x60;attachments&#x60;:  | Channel | Accepted types | Per file | Per request | Text | |---|---|---|---|---| | Airbnb | JPEG, PNG, GIF, WebP (sent as JPEG), MP4, QuickTime | 10 MB | 5 | optional — each file is sent as its own message, then the text | | Booking.com | JPEG, PNG | 10 MB | 5 | **required** — all files ride on the one text message | | SMS, email, direct-booking site chat | — | — | — | &#x60;422 attachments_not_supported&#x60;; nothing is sent |
+ * @description Absent when &#x60;?all&#x3D;true&#x60;.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class ListAirbnbThreadMessages200ResponsePagination implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'SendMessageRequest';
+    protected static string $openAPIModelName = 'list_airbnb_thread_messages_200_response_pagination';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,9 +60,8 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'message' => 'string',
-        'channel' => 'string',
-        'attachments' => '\Repull\Model\SendMessageAttachment[]'
+        'next_cursor' => 'string',
+        'has_more' => 'bool'
     ];
 
     /**
@@ -71,9 +70,8 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'message' => null,
-        'channel' => null,
-        'attachments' => null
+        'next_cursor' => null,
+        'has_more' => null
     ];
 
     /**
@@ -82,9 +80,8 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'message' => false,
-        'channel' => false,
-        'attachments' => false
+        'next_cursor' => true,
+        'has_more' => false
     ];
 
     /**
@@ -163,9 +160,8 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'message' => 'message',
-        'channel' => 'channel',
-        'attachments' => 'attachments'
+        'next_cursor' => 'nextCursor',
+        'has_more' => 'hasMore'
     ];
 
     /**
@@ -174,9 +170,8 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $setters = [
-        'message' => 'setMessage',
-        'channel' => 'setChannel',
-        'attachments' => 'setAttachments'
+        'next_cursor' => 'setNextCursor',
+        'has_more' => 'setHasMore'
     ];
 
     /**
@@ -185,9 +180,8 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $getters = [
-        'message' => 'getMessage',
-        'channel' => 'getChannel',
-        'attachments' => 'getAttachments'
+        'next_cursor' => 'getNextCursor',
+        'has_more' => 'getHasMore'
     ];
 
     /**
@@ -222,27 +216,6 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         return self::$openAPIModelName;
     }
 
-    public const CHANNEL_AIRBNB = 'airbnb';
-    public const CHANNEL_BOOKING = 'booking';
-    public const CHANNEL_SMS = 'sms';
-    public const CHANNEL_EMAIL = 'email';
-    public const CHANNEL_WEBSITE = 'website';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getChannelAllowableValues()
-    {
-        return [
-            self::CHANNEL_AIRBNB,
-            self::CHANNEL_BOOKING,
-            self::CHANNEL_SMS,
-            self::CHANNEL_EMAIL,
-            self::CHANNEL_WEBSITE,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -258,9 +231,8 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('message', $data ?? [], null);
-        $this->setIfExists('channel', $data ?? [], null);
-        $this->setIfExists('attachments', $data ?? [], null);
+        $this->setIfExists('next_cursor', $data ?? [], null);
+        $this->setIfExists('has_more', $data ?? [], null);
     }
 
     /**
@@ -288,27 +260,6 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     {
         $invalidProperties = [];
 
-        if (!is_null($this->container['message']) && (mb_strlen($this->container['message']) > 4000)) {
-            $invalidProperties[] = "invalid value for 'message', the character length must be smaller than or equal to 4000.";
-        }
-
-        $allowedValues = self::getChannelAllowableValues();
-        if (!is_null($this->container['channel']) && !in_array($this->container['channel'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'channel', must be one of '%s'",
-                $this->container['channel'],
-                implode("', '", $allowedValues)
-            );
-        }
-
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) > 5)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be less than or equal to 5.";
-        }
-
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) < 1)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be greater than or equal to 1.";
-        }
-
         return $invalidProperties;
     }
 
@@ -322,94 +273,62 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
 
 
     /**
-     * Gets message
+     * Gets next_cursor
      *
      * @return string|null
      */
-    public function getMessage(): ?string
+    public function getNextCursor(): ?string
     {
-        return $this->container['message'];
+        return $this->container['next_cursor'];
     }
 
     /**
-     * Sets message
+     * Sets next_cursor
      *
-     * @param string|null $message The text to send the guest. Required unless `attachments` is present.
+     * @param string|null $next_cursor next_cursor
      *
      * @return $this
      */
-    public function setMessage(?string $message): static
+    public function setNextCursor(?string $next_cursor): static
     {
-        if (is_null($message)) {
-            throw new InvalidArgumentException('non-nullable message cannot be null');
+        if (is_null($next_cursor)) {
+            array_push($this->openAPINullablesSetToNull, 'next_cursor');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('next_cursor', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        if ((mb_strlen($message) > 4000)) {
-            throw new InvalidArgumentException('invalid length for $message when calling SendMessageRequest., must be smaller than or equal to 4000.');
-        }
-
-        $this->container['message'] = $message;
+        $this->container['next_cursor'] = $next_cursor;
 
         return $this;
     }
 
     /**
-     * Gets channel
+     * Gets has_more
      *
-     * @return string|null
+     * @return bool|null
      */
-    public function getChannel(): ?string
+    public function getHasMore(): ?bool
     {
-        return $this->container['channel'];
+        return $this->container['has_more'];
     }
 
     /**
-     * Sets channel
+     * Sets has_more
      *
-     * @param string|null $channel Force a channel. Omit to send on whichever channel the conversation already uses, which is the right default.
+     * @param bool|null $has_more has_more
      *
      * @return $this
      */
-    public function setChannel(?string $channel): static
+    public function setHasMore(?bool $has_more): static
     {
-        if (is_null($channel)) {
-            throw new InvalidArgumentException('non-nullable channel cannot be null');
+        if (is_null($has_more)) {
+            throw new InvalidArgumentException('non-nullable has_more cannot be null');
         }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['channel'] = $channel;
-
-        return $this;
-    }
-
-    /**
-     * Gets attachments
-     *
-     * @return \Repull\Model\SendMessageAttachment[]|null
-     */
-    public function getAttachments(): ?array
-    {
-        return $this->container['attachments'];
-    }
-
-    /**
-     * Sets attachments
-     *
-     * @param \Repull\Model\SendMessageAttachment[]|null $attachments Files to send. See the per-channel table above.
-     *
-     * @return $this
-     */
-    public function setAttachments(?array $attachments): static
-    {
-        if (is_null($attachments)) {
-            throw new InvalidArgumentException('non-nullable attachments cannot be null');
-        }
-
-        if ((count($attachments) > 5)) {
-            throw new InvalidArgumentException('invalid value for $attachments when calling SendMessageRequest., number of items must be less than or equal to 5.');
-        }
-        if ((count($attachments) < 1)) {
-            throw new InvalidArgumentException('invalid length for $attachments when calling SendMessageRequest., number of items must be greater than or equal to 1.');
-        }
-        $this->container['attachments'] = $attachments;
+        $this->container['has_more'] = $has_more;
 
         return $this;
     }

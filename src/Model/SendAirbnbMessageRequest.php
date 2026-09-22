@@ -37,6 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * SendAirbnbMessageRequest Class Doc Comment
  *
+ * @description &#x60;message&#x60;, &#x60;mediaUrl&#x60;, or both.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -266,9 +267,6 @@ class SendAirbnbMessageRequest implements ModelInterface, ArrayAccess, JsonSeria
     {
         $invalidProperties = [];
 
-        if ($this->container['message'] === null) {
-            $invalidProperties[] = "'message' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -284,9 +282,9 @@ class SendAirbnbMessageRequest implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Gets message
      *
-     * @return string
+     * @return string|null
      */
-    public function getMessage(): string
+    public function getMessage(): ?string
     {
         return $this->container['message'];
     }
@@ -294,11 +292,11 @@ class SendAirbnbMessageRequest implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets message
      *
-     * @param string $message Message body to send to the guest.
+     * @param string|null $message Message body to send to the guest. Optional when `mediaUrl` is set (it is then sent as a separate message after the file).
      *
      * @return $this
      */
-    public function setMessage(string $message): static
+    public function setMessage(?string $message): static
     {
         if (is_null($message)) {
             throw new InvalidArgumentException('non-nullable message cannot be null');
@@ -321,7 +319,7 @@ class SendAirbnbMessageRequest implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets media_url
      *
-     * @param string|null $media_url Optional URL of an image/media attachment to send with the message.
+     * @param string|null $media_url Public https URL of one image or video to send (JPEG/PNG/GIF/WebP/MP4/QuickTime, up to 10 MB). Repull uploads it to Airbnb for you.
      *
      * @return $this
      */
@@ -355,7 +353,7 @@ class SendAirbnbMessageRequest implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets media_type
      *
-     * @param string|null $media_type Optional MIME/media type hint for `mediaUrl` (e.g. `image/jpeg`).
+     * @param string|null $media_type Optional MIME type hint for `mediaUrl` (e.g. `image/jpeg`). The type is read from the file itself; this never overrides it.
      *
      * @return $this
      */

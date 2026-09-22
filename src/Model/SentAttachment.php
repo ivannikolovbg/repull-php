@@ -1,6 +1,6 @@
 <?php
 /**
- * SendMessageRequest
+ * SentAttachment
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * SendMessageRequest Class Doc Comment
+ * SentAttachment Class Doc Comment
  *
- * @description &#x60;message&#x60;, &#x60;attachments&#x60;, or both. Per-channel limits for &#x60;attachments&#x60;:  | Channel | Accepted types | Per file | Per request | Text | |---|---|---|---|---| | Airbnb | JPEG, PNG, GIF, WebP (sent as JPEG), MP4, QuickTime | 10 MB | 5 | optional — each file is sent as its own message, then the text | | Booking.com | JPEG, PNG | 10 MB | 5 | **required** — all files ride on the one text message | | SMS, email, direct-booking site chat | — | — | — | &#x60;422 attachments_not_supported&#x60;; nothing is sent |
+ * @description A file as delivered.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class SentAttachment implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'SendMessageRequest';
+    protected static string $openAPIModelName = 'SentAttachment';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,9 +60,12 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'message' => 'string',
-        'channel' => 'string',
-        'attachments' => '\Repull\Model\SendMessageAttachment[]'
+        'url' => 'string',
+        'type' => 'string',
+        'content_type' => 'string',
+        'filename' => 'string',
+        'size_bytes' => 'int',
+        'source_url' => 'string'
     ];
 
     /**
@@ -71,9 +74,12 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'message' => null,
-        'channel' => null,
-        'attachments' => null
+        'url' => 'uri',
+        'type' => null,
+        'content_type' => null,
+        'filename' => null,
+        'size_bytes' => null,
+        'source_url' => 'uri'
     ];
 
     /**
@@ -82,9 +88,12 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'message' => false,
-        'channel' => false,
-        'attachments' => false
+        'url' => false,
+        'type' => false,
+        'content_type' => false,
+        'filename' => false,
+        'size_bytes' => false,
+        'source_url' => false
     ];
 
     /**
@@ -163,9 +172,12 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'message' => 'message',
-        'channel' => 'channel',
-        'attachments' => 'attachments'
+        'url' => 'url',
+        'type' => 'type',
+        'content_type' => 'contentType',
+        'filename' => 'filename',
+        'size_bytes' => 'sizeBytes',
+        'source_url' => 'sourceUrl'
     ];
 
     /**
@@ -174,9 +186,12 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $setters = [
-        'message' => 'setMessage',
-        'channel' => 'setChannel',
-        'attachments' => 'setAttachments'
+        'url' => 'setUrl',
+        'type' => 'setType',
+        'content_type' => 'setContentType',
+        'filename' => 'setFilename',
+        'size_bytes' => 'setSizeBytes',
+        'source_url' => 'setSourceUrl'
     ];
 
     /**
@@ -185,9 +200,12 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $getters = [
-        'message' => 'getMessage',
-        'channel' => 'getChannel',
-        'attachments' => 'getAttachments'
+        'url' => 'getUrl',
+        'type' => 'getType',
+        'content_type' => 'getContentType',
+        'filename' => 'getFilename',
+        'size_bytes' => 'getSizeBytes',
+        'source_url' => 'getSourceUrl'
     ];
 
     /**
@@ -222,25 +240,19 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         return self::$openAPIModelName;
     }
 
-    public const CHANNEL_AIRBNB = 'airbnb';
-    public const CHANNEL_BOOKING = 'booking';
-    public const CHANNEL_SMS = 'sms';
-    public const CHANNEL_EMAIL = 'email';
-    public const CHANNEL_WEBSITE = 'website';
+    public const TYPE_IMAGE = 'image';
+    public const TYPE_VIDEO = 'video';
 
     /**
      * Gets allowable values of the enum
      *
      * @return string[]
      */
-    public static function getChannelAllowableValues()
+    public static function getTypeAllowableValues()
     {
         return [
-            self::CHANNEL_AIRBNB,
-            self::CHANNEL_BOOKING,
-            self::CHANNEL_SMS,
-            self::CHANNEL_EMAIL,
-            self::CHANNEL_WEBSITE,
+            self::TYPE_IMAGE,
+            self::TYPE_VIDEO,
         ];
     }
 
@@ -258,9 +270,12 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('message', $data ?? [], null);
-        $this->setIfExists('channel', $data ?? [], null);
-        $this->setIfExists('attachments', $data ?? [], null);
+        $this->setIfExists('url', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
+        $this->setIfExists('content_type', $data ?? [], null);
+        $this->setIfExists('filename', $data ?? [], null);
+        $this->setIfExists('size_bytes', $data ?? [], null);
+        $this->setIfExists('source_url', $data ?? [], null);
     }
 
     /**
@@ -288,25 +303,13 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     {
         $invalidProperties = [];
 
-        if (!is_null($this->container['message']) && (mb_strlen($this->container['message']) > 4000)) {
-            $invalidProperties[] = "invalid value for 'message', the character length must be smaller than or equal to 4000.";
-        }
-
-        $allowedValues = self::getChannelAllowableValues();
-        if (!is_null($this->container['channel']) && !in_array($this->container['channel'], $allowedValues, true)) {
+        $allowedValues = self::getTypeAllowableValues();
+        if (!is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'channel', must be one of '%s'",
-                $this->container['channel'],
+                "invalid value '%s' for 'type', must be one of '%s'",
+                $this->container['type'],
                 implode("', '", $allowedValues)
             );
-        }
-
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) > 5)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be less than or equal to 5.";
-        }
-
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) < 1)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be greater than or equal to 1.";
         }
 
         return $invalidProperties;
@@ -322,94 +325,164 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
 
 
     /**
-     * Gets message
+     * Gets url
      *
      * @return string|null
      */
-    public function getMessage(): ?string
+    public function getUrl(): ?string
     {
-        return $this->container['message'];
+        return $this->container['url'];
     }
 
     /**
-     * Sets message
+     * Sets url
      *
-     * @param string|null $message The text to send the guest. Required unless `attachments` is present.
+     * @param string|null $url Durable stored copy — the same `url` the message's `attachments` will show when read back.
      *
      * @return $this
      */
-    public function setMessage(?string $message): static
+    public function setUrl(?string $url): static
     {
-        if (is_null($message)) {
-            throw new InvalidArgumentException('non-nullable message cannot be null');
+        if (is_null($url)) {
+            throw new InvalidArgumentException('non-nullable url cannot be null');
         }
-        if ((mb_strlen($message) > 4000)) {
-            throw new InvalidArgumentException('invalid length for $message when calling SendMessageRequest., must be smaller than or equal to 4000.');
-        }
-
-        $this->container['message'] = $message;
+        $this->container['url'] = $url;
 
         return $this;
     }
 
     /**
-     * Gets channel
+     * Gets type
      *
      * @return string|null
      */
-    public function getChannel(): ?string
+    public function getType(): ?string
     {
-        return $this->container['channel'];
+        return $this->container['type'];
     }
 
     /**
-     * Sets channel
+     * Sets type
      *
-     * @param string|null $channel Force a channel. Omit to send on whichever channel the conversation already uses, which is the right default.
+     * @param string|null $type type
      *
      * @return $this
      */
-    public function setChannel(?string $channel): static
+    public function setType(?string $type): static
     {
-        if (is_null($channel)) {
-            throw new InvalidArgumentException('non-nullable channel cannot be null');
+        if (is_null($type)) {
+            throw new InvalidArgumentException('non-nullable type cannot be null');
         }
         // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['channel'] = $channel;
+        $this->container['type'] = $type;
 
         return $this;
     }
 
     /**
-     * Gets attachments
+     * Gets content_type
      *
-     * @return \Repull\Model\SendMessageAttachment[]|null
+     * @return string|null
      */
-    public function getAttachments(): ?array
+    public function getContentType(): ?string
     {
-        return $this->container['attachments'];
+        return $this->container['content_type'];
     }
 
     /**
-     * Sets attachments
+     * Sets content_type
      *
-     * @param \Repull\Model\SendMessageAttachment[]|null $attachments Files to send. See the per-channel table above.
+     * @param string|null $content_type Type read from the file's bytes.
      *
      * @return $this
      */
-    public function setAttachments(?array $attachments): static
+    public function setContentType(?string $content_type): static
     {
-        if (is_null($attachments)) {
-            throw new InvalidArgumentException('non-nullable attachments cannot be null');
+        if (is_null($content_type)) {
+            throw new InvalidArgumentException('non-nullable content_type cannot be null');
         }
+        $this->container['content_type'] = $content_type;
 
-        if ((count($attachments) > 5)) {
-            throw new InvalidArgumentException('invalid value for $attachments when calling SendMessageRequest., number of items must be less than or equal to 5.');
+        return $this;
+    }
+
+    /**
+     * Gets filename
+     *
+     * @return string|null
+     */
+    public function getFilename(): ?string
+    {
+        return $this->container['filename'];
+    }
+
+    /**
+     * Sets filename
+     *
+     * @param string|null $filename filename
+     *
+     * @return $this
+     */
+    public function setFilename(?string $filename): static
+    {
+        if (is_null($filename)) {
+            throw new InvalidArgumentException('non-nullable filename cannot be null');
         }
-        if ((count($attachments) < 1)) {
-            throw new InvalidArgumentException('invalid length for $attachments when calling SendMessageRequest., number of items must be greater than or equal to 1.');
+        $this->container['filename'] = $filename;
+
+        return $this;
+    }
+
+    /**
+     * Gets size_bytes
+     *
+     * @return int|null
+     */
+    public function getSizeBytes(): ?int
+    {
+        return $this->container['size_bytes'];
+    }
+
+    /**
+     * Sets size_bytes
+     *
+     * @param int|null $size_bytes size_bytes
+     *
+     * @return $this
+     */
+    public function setSizeBytes(?int $size_bytes): static
+    {
+        if (is_null($size_bytes)) {
+            throw new InvalidArgumentException('non-nullable size_bytes cannot be null');
         }
-        $this->container['attachments'] = $attachments;
+        $this->container['size_bytes'] = $size_bytes;
+
+        return $this;
+    }
+
+    /**
+     * Gets source_url
+     *
+     * @return string|null
+     */
+    public function getSourceUrl(): ?string
+    {
+        return $this->container['source_url'];
+    }
+
+    /**
+     * Sets source_url
+     *
+     * @param string|null $source_url The URL you sent.
+     *
+     * @return $this
+     */
+    public function setSourceUrl(?string $source_url): static
+    {
+        if (is_null($source_url)) {
+            throw new InvalidArgumentException('non-nullable source_url cannot be null');
+        }
+        $this->container['source_url'] = $source_url;
 
         return $this;
     }

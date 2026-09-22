@@ -1,6 +1,6 @@
 <?php
 /**
- * SendMessageRequest
+ * GetAirbnbOffer200Response
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * SendMessageRequest Class Doc Comment
+ * GetAirbnbOffer200Response Class Doc Comment
  *
- * @description &#x60;message&#x60;, &#x60;attachments&#x60;, or both. Per-channel limits for &#x60;attachments&#x60;:  | Channel | Accepted types | Per file | Per request | Text | |---|---|---|---|---| | Airbnb | JPEG, PNG, GIF, WebP (sent as JPEG), MP4, QuickTime | 10 MB | 5 | optional — each file is sent as its own message, then the text | | Booking.com | JPEG, PNG | 10 MB | 5 | **required** — all files ride on the one text message | | SMS, email, direct-booking site chat | — | — | — | &#x60;422 attachments_not_supported&#x60;; nothing is sent |
+ * @description Airbnb’s special-offer object as Airbnb returns it (keys camelCased). Fields vary by &#x60;offerType&#x60;; a pre-approval carries only the thread, status and expiry.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class GetAirbnbOffer200Response implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'SendMessageRequest';
+    protected static string $openAPIModelName = 'get_airbnb_offer_200_response';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,9 +60,17 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'message' => 'string',
-        'channel' => 'string',
-        'attachments' => '\Repull\Model\SendMessageAttachment[]'
+        'id' => 'string',
+        'thread_id' => 'string',
+        'offer_type' => 'string',
+        'status' => 'string',
+        'listing_id' => 'string',
+        'start_date' => '\DateTime',
+        'nights' => 'int',
+        'total_price' => 'float',
+        'guest_details' => 'array<string,mixed>',
+        'created_at' => '\DateTime',
+        'expires_at' => '\DateTime'
     ];
 
     /**
@@ -71,9 +79,17 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'message' => null,
-        'channel' => null,
-        'attachments' => null
+        'id' => null,
+        'thread_id' => null,
+        'offer_type' => null,
+        'status' => null,
+        'listing_id' => null,
+        'start_date' => 'date',
+        'nights' => null,
+        'total_price' => null,
+        'guest_details' => null,
+        'created_at' => 'date-time',
+        'expires_at' => 'date-time'
     ];
 
     /**
@@ -82,9 +98,17 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'message' => false,
-        'channel' => false,
-        'attachments' => false
+        'id' => false,
+        'thread_id' => false,
+        'offer_type' => false,
+        'status' => false,
+        'listing_id' => false,
+        'start_date' => false,
+        'nights' => false,
+        'total_price' => false,
+        'guest_details' => false,
+        'created_at' => false,
+        'expires_at' => false
     ];
 
     /**
@@ -163,9 +187,17 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'message' => 'message',
-        'channel' => 'channel',
-        'attachments' => 'attachments'
+        'id' => 'id',
+        'thread_id' => 'threadId',
+        'offer_type' => 'offerType',
+        'status' => 'status',
+        'listing_id' => 'listingId',
+        'start_date' => 'startDate',
+        'nights' => 'nights',
+        'total_price' => 'totalPrice',
+        'guest_details' => 'guestDetails',
+        'created_at' => 'createdAt',
+        'expires_at' => 'expiresAt'
     ];
 
     /**
@@ -174,9 +206,17 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $setters = [
-        'message' => 'setMessage',
-        'channel' => 'setChannel',
-        'attachments' => 'setAttachments'
+        'id' => 'setId',
+        'thread_id' => 'setThreadId',
+        'offer_type' => 'setOfferType',
+        'status' => 'setStatus',
+        'listing_id' => 'setListingId',
+        'start_date' => 'setStartDate',
+        'nights' => 'setNights',
+        'total_price' => 'setTotalPrice',
+        'guest_details' => 'setGuestDetails',
+        'created_at' => 'setCreatedAt',
+        'expires_at' => 'setExpiresAt'
     ];
 
     /**
@@ -185,9 +225,17 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $getters = [
-        'message' => 'getMessage',
-        'channel' => 'getChannel',
-        'attachments' => 'getAttachments'
+        'id' => 'getId',
+        'thread_id' => 'getThreadId',
+        'offer_type' => 'getOfferType',
+        'status' => 'getStatus',
+        'listing_id' => 'getListingId',
+        'start_date' => 'getStartDate',
+        'nights' => 'getNights',
+        'total_price' => 'getTotalPrice',
+        'guest_details' => 'getGuestDetails',
+        'created_at' => 'getCreatedAt',
+        'expires_at' => 'getExpiresAt'
     ];
 
     /**
@@ -222,25 +270,42 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         return self::$openAPIModelName;
     }
 
-    public const CHANNEL_AIRBNB = 'airbnb';
-    public const CHANNEL_BOOKING = 'booking';
-    public const CHANNEL_SMS = 'sms';
-    public const CHANNEL_EMAIL = 'email';
-    public const CHANNEL_WEBSITE = 'website';
+    public const OFFER_TYPE_PREAPPROVAL = 'preapproval';
+    public const OFFER_TYPE_SPECIAL_OFFER = 'special_offer';
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_ACCEPTED = 'accepted';
+    public const STATUS_DECLINED = 'declined';
+    public const STATUS_EXPIRED = 'expired';
+    public const STATUS_VOIDED = 'voided';
 
     /**
      * Gets allowable values of the enum
      *
      * @return string[]
      */
-    public static function getChannelAllowableValues()
+    public static function getOfferTypeAllowableValues()
     {
         return [
-            self::CHANNEL_AIRBNB,
-            self::CHANNEL_BOOKING,
-            self::CHANNEL_SMS,
-            self::CHANNEL_EMAIL,
-            self::CHANNEL_WEBSITE,
+            self::OFFER_TYPE_PREAPPROVAL,
+            self::OFFER_TYPE_SPECIAL_OFFER,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getStatusAllowableValues()
+    {
+        return [
+            self::STATUS_ACTIVE,
+            self::STATUS_PENDING,
+            self::STATUS_ACCEPTED,
+            self::STATUS_DECLINED,
+            self::STATUS_EXPIRED,
+            self::STATUS_VOIDED,
         ];
     }
 
@@ -258,9 +323,17 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('message', $data ?? [], null);
-        $this->setIfExists('channel', $data ?? [], null);
-        $this->setIfExists('attachments', $data ?? [], null);
+        $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('thread_id', $data ?? [], null);
+        $this->setIfExists('offer_type', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('start_date', $data ?? [], null);
+        $this->setIfExists('nights', $data ?? [], null);
+        $this->setIfExists('total_price', $data ?? [], null);
+        $this->setIfExists('guest_details', $data ?? [], null);
+        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('expires_at', $data ?? [], null);
     }
 
     /**
@@ -288,25 +361,22 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     {
         $invalidProperties = [];
 
-        if (!is_null($this->container['message']) && (mb_strlen($this->container['message']) > 4000)) {
-            $invalidProperties[] = "invalid value for 'message', the character length must be smaller than or equal to 4000.";
-        }
-
-        $allowedValues = self::getChannelAllowableValues();
-        if (!is_null($this->container['channel']) && !in_array($this->container['channel'], $allowedValues, true)) {
+        $allowedValues = self::getOfferTypeAllowableValues();
+        if (!is_null($this->container['offer_type']) && !in_array($this->container['offer_type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'channel', must be one of '%s'",
-                $this->container['channel'],
+                "invalid value '%s' for 'offer_type', must be one of '%s'",
+                $this->container['offer_type'],
                 implode("', '", $allowedValues)
             );
         }
 
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) > 5)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be less than or equal to 5.";
-        }
-
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) < 1)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be greater than or equal to 1.";
+        $allowedValues = self::getStatusAllowableValues();
+        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'status', must be one of '%s'",
+                $this->container['status'],
+                implode("', '", $allowedValues)
+            );
         }
 
         return $invalidProperties;
@@ -322,94 +392,300 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
 
 
     /**
-     * Gets message
+     * Gets id
      *
      * @return string|null
      */
-    public function getMessage(): ?string
+    public function getId(): ?string
     {
-        return $this->container['message'];
+        return $this->container['id'];
     }
 
     /**
-     * Sets message
+     * Sets id
      *
-     * @param string|null $message The text to send the guest. Required unless `attachments` is present.
+     * @param string|null $id Airbnb special-offer id.
      *
      * @return $this
      */
-    public function setMessage(?string $message): static
+    public function setId(?string $id): static
     {
-        if (is_null($message)) {
-            throw new InvalidArgumentException('non-nullable message cannot be null');
+        if (is_null($id)) {
+            throw new InvalidArgumentException('non-nullable id cannot be null');
         }
-        if ((mb_strlen($message) > 4000)) {
-            throw new InvalidArgumentException('invalid length for $message when calling SendMessageRequest., must be smaller than or equal to 4000.');
-        }
-
-        $this->container['message'] = $message;
+        $this->container['id'] = $id;
 
         return $this;
     }
 
     /**
-     * Gets channel
+     * Gets thread_id
      *
      * @return string|null
      */
-    public function getChannel(): ?string
+    public function getThreadId(): ?string
     {
-        return $this->container['channel'];
+        return $this->container['thread_id'];
     }
 
     /**
-     * Sets channel
+     * Sets thread_id
      *
-     * @param string|null $channel Force a channel. Omit to send on whichever channel the conversation already uses, which is the right default.
+     * @param string|null $thread_id Airbnb thread id the offer was sent on.
      *
      * @return $this
      */
-    public function setChannel(?string $channel): static
+    public function setThreadId(?string $thread_id): static
     {
-        if (is_null($channel)) {
-            throw new InvalidArgumentException('non-nullable channel cannot be null');
+        if (is_null($thread_id)) {
+            throw new InvalidArgumentException('non-nullable thread_id cannot be null');
+        }
+        $this->container['thread_id'] = $thread_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets offer_type
+     *
+     * @return string|null
+     */
+    public function getOfferType(): ?string
+    {
+        return $this->container['offer_type'];
+    }
+
+    /**
+     * Sets offer_type
+     *
+     * @param string|null $offer_type offer_type
+     *
+     * @return $this
+     */
+    public function setOfferType(?string $offer_type): static
+    {
+        if (is_null($offer_type)) {
+            throw new InvalidArgumentException('non-nullable offer_type cannot be null');
         }
         // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['channel'] = $channel;
+        $this->container['offer_type'] = $offer_type;
 
         return $this;
     }
 
     /**
-     * Gets attachments
+     * Gets status
      *
-     * @return \Repull\Model\SendMessageAttachment[]|null
+     * @return string|null
      */
-    public function getAttachments(): ?array
+    public function getStatus(): ?string
     {
-        return $this->container['attachments'];
+        return $this->container['status'];
     }
 
     /**
-     * Sets attachments
+     * Sets status
      *
-     * @param \Repull\Model\SendMessageAttachment[]|null $attachments Files to send. See the per-channel table above.
+     * @param string|null $status status
      *
      * @return $this
      */
-    public function setAttachments(?array $attachments): static
+    public function setStatus(?string $status): static
     {
-        if (is_null($attachments)) {
-            throw new InvalidArgumentException('non-nullable attachments cannot be null');
+        if (is_null($status)) {
+            throw new InvalidArgumentException('non-nullable status cannot be null');
         }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['status'] = $status;
 
-        if ((count($attachments) > 5)) {
-            throw new InvalidArgumentException('invalid value for $attachments when calling SendMessageRequest., number of items must be less than or equal to 5.');
+        return $this;
+    }
+
+    /**
+     * Gets listing_id
+     *
+     * @return string|null
+     */
+    public function getListingId(): ?string
+    {
+        return $this->container['listing_id'];
+    }
+
+    /**
+     * Sets listing_id
+     *
+     * @param string|null $listing_id Airbnb listing id (special offers only).
+     *
+     * @return $this
+     */
+    public function setListingId(?string $listing_id): static
+    {
+        if (is_null($listing_id)) {
+            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
         }
-        if ((count($attachments) < 1)) {
-            throw new InvalidArgumentException('invalid length for $attachments when calling SendMessageRequest., number of items must be greater than or equal to 1.');
+        $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets start_date
+     *
+     * @return \DateTime|null
+     */
+    public function getStartDate(): ?\DateTime
+    {
+        return $this->container['start_date'];
+    }
+
+    /**
+     * Sets start_date
+     *
+     * @param \DateTime|null $start_date start_date
+     *
+     * @return $this
+     */
+    public function setStartDate(?\DateTime $start_date): static
+    {
+        if (is_null($start_date)) {
+            throw new InvalidArgumentException('non-nullable start_date cannot be null');
         }
-        $this->container['attachments'] = $attachments;
+        $this->container['start_date'] = $start_date;
+
+        return $this;
+    }
+
+    /**
+     * Gets nights
+     *
+     * @return int|null
+     */
+    public function getNights(): ?int
+    {
+        return $this->container['nights'];
+    }
+
+    /**
+     * Sets nights
+     *
+     * @param int|null $nights nights
+     *
+     * @return $this
+     */
+    public function setNights(?int $nights): static
+    {
+        if (is_null($nights)) {
+            throw new InvalidArgumentException('non-nullable nights cannot be null');
+        }
+        $this->container['nights'] = $nights;
+
+        return $this;
+    }
+
+    /**
+     * Gets total_price
+     *
+     * @return float|null
+     */
+    public function getTotalPrice(): ?float
+    {
+        return $this->container['total_price'];
+    }
+
+    /**
+     * Sets total_price
+     *
+     * @param float|null $total_price total_price
+     *
+     * @return $this
+     */
+    public function setTotalPrice(?float $total_price): static
+    {
+        if (is_null($total_price)) {
+            throw new InvalidArgumentException('non-nullable total_price cannot be null');
+        }
+        $this->container['total_price'] = $total_price;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest_details
+     *
+     * @return array<string,mixed>|null
+     */
+    public function getGuestDetails(): ?array
+    {
+        return $this->container['guest_details'];
+    }
+
+    /**
+     * Sets guest_details
+     *
+     * @param array<string,mixed>|null $guest_details guest_details
+     *
+     * @return $this
+     */
+    public function setGuestDetails(?array $guest_details): static
+    {
+        if (is_null($guest_details)) {
+            throw new InvalidArgumentException('non-nullable guest_details cannot be null');
+        }
+        $this->container['guest_details'] = $guest_details;
+
+        return $this;
+    }
+
+    /**
+     * Gets created_at
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->container['created_at'];
+    }
+
+    /**
+     * Sets created_at
+     *
+     * @param \DateTime|null $created_at created_at
+     *
+     * @return $this
+     */
+    public function setCreatedAt(?\DateTime $created_at): static
+    {
+        if (is_null($created_at)) {
+            throw new InvalidArgumentException('non-nullable created_at cannot be null');
+        }
+        $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets expires_at
+     *
+     * @return \DateTime|null
+     */
+    public function getExpiresAt(): ?\DateTime
+    {
+        return $this->container['expires_at'];
+    }
+
+    /**
+     * Sets expires_at
+     *
+     * @param \DateTime|null $expires_at expires_at
+     *
+     * @return $this
+     */
+    public function setExpiresAt(?\DateTime $expires_at): static
+    {
+        if (is_null($expires_at)) {
+            throw new InvalidArgumentException('non-nullable expires_at cannot be null');
+        }
+        $this->container['expires_at'] = $expires_at;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * SendMessageResponse
+ * ListInquiries200ResponseDataInner
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * SendMessageResponse Class Doc Comment
+ * ListInquiries200ResponseDataInner Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class ListInquiries200ResponseDataInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'SendMessageResponse';
+    protected static string $openAPIModelName = 'list_inquiries_200_response_data_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,17 +60,20 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
      */
     protected static array $openAPITypes = [
         'id' => 'string',
-        'conversation_id' => 'int',
-        'external_message_id' => 'string',
+        'conversation_id' => 'string',
+        'listing_id' => 'string',
         'channel' => 'string',
         'status' => 'string',
-        'direction' => 'string',
-        'content_rewritten' => 'bool',
-        'submitted_content' => 'string',
-        'delivered_content' => 'string',
-        'status_reason' => 'string',
-        'attachments' => '\Repull\Model\SentAttachment[]',
-        'parts' => '\Repull\Model\SendMessagePart[]'
+        'check_in' => '\DateTime',
+        'check_out' => '\DateTime',
+        'guests' => '\Repull\Model\ListInquiries200ResponseDataInnerGuests',
+        'expected_payout' => '\Repull\Model\ListInquiries200ResponseDataInnerExpectedPayout',
+        'reservation_id' => 'string',
+        'relayed_by' => 'string',
+        'respond_by' => '\DateTime',
+        'responded_at' => '\DateTime',
+        'created_at' => '\DateTime',
+        'updated_at' => '\DateTime'
     ];
 
     /**
@@ -81,16 +84,19 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     protected static array $openAPIFormats = [
         'id' => null,
         'conversation_id' => null,
-        'external_message_id' => null,
+        'listing_id' => null,
         'channel' => null,
         'status' => null,
-        'direction' => null,
-        'content_rewritten' => null,
-        'submitted_content' => null,
-        'delivered_content' => null,
-        'status_reason' => null,
-        'attachments' => null,
-        'parts' => null
+        'check_in' => 'date',
+        'check_out' => 'date',
+        'guests' => null,
+        'expected_payout' => null,
+        'reservation_id' => null,
+        'relayed_by' => null,
+        'respond_by' => 'date-time',
+        'responded_at' => 'date-time',
+        'created_at' => 'date-time',
+        'updated_at' => 'date-time'
     ];
 
     /**
@@ -99,18 +105,21 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => true,
-        'conversation_id' => false,
-        'external_message_id' => true,
-        'channel' => true,
+        'id' => false,
+        'conversation_id' => true,
+        'listing_id' => true,
+        'channel' => false,
         'status' => false,
-        'direction' => false,
-        'content_rewritten' => false,
-        'submitted_content' => true,
-        'delivered_content' => true,
-        'status_reason' => true,
-        'attachments' => false,
-        'parts' => false
+        'check_in' => true,
+        'check_out' => true,
+        'guests' => false,
+        'expected_payout' => false,
+        'reservation_id' => true,
+        'relayed_by' => true,
+        'respond_by' => true,
+        'responded_at' => true,
+        'created_at' => true,
+        'updated_at' => true
     ];
 
     /**
@@ -191,16 +200,19 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     protected static array $attributeMap = [
         'id' => 'id',
         'conversation_id' => 'conversationId',
-        'external_message_id' => 'externalMessageId',
+        'listing_id' => 'listingId',
         'channel' => 'channel',
         'status' => 'status',
-        'direction' => 'direction',
-        'content_rewritten' => 'contentRewritten',
-        'submitted_content' => 'submittedContent',
-        'delivered_content' => 'deliveredContent',
-        'status_reason' => 'statusReason',
-        'attachments' => 'attachments',
-        'parts' => 'parts'
+        'check_in' => 'checkIn',
+        'check_out' => 'checkOut',
+        'guests' => 'guests',
+        'expected_payout' => 'expectedPayout',
+        'reservation_id' => 'reservationId',
+        'relayed_by' => 'relayedBy',
+        'respond_by' => 'respondBy',
+        'responded_at' => 'respondedAt',
+        'created_at' => 'createdAt',
+        'updated_at' => 'updatedAt'
     ];
 
     /**
@@ -211,16 +223,19 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     protected static array $setters = [
         'id' => 'setId',
         'conversation_id' => 'setConversationId',
-        'external_message_id' => 'setExternalMessageId',
+        'listing_id' => 'setListingId',
         'channel' => 'setChannel',
         'status' => 'setStatus',
-        'direction' => 'setDirection',
-        'content_rewritten' => 'setContentRewritten',
-        'submitted_content' => 'setSubmittedContent',
-        'delivered_content' => 'setDeliveredContent',
-        'status_reason' => 'setStatusReason',
-        'attachments' => 'setAttachments',
-        'parts' => 'setParts'
+        'check_in' => 'setCheckIn',
+        'check_out' => 'setCheckOut',
+        'guests' => 'setGuests',
+        'expected_payout' => 'setExpectedPayout',
+        'reservation_id' => 'setReservationId',
+        'relayed_by' => 'setRelayedBy',
+        'respond_by' => 'setRespondBy',
+        'responded_at' => 'setRespondedAt',
+        'created_at' => 'setCreatedAt',
+        'updated_at' => 'setUpdatedAt'
     ];
 
     /**
@@ -231,16 +246,19 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     protected static array $getters = [
         'id' => 'getId',
         'conversation_id' => 'getConversationId',
-        'external_message_id' => 'getExternalMessageId',
+        'listing_id' => 'getListingId',
         'channel' => 'getChannel',
         'status' => 'getStatus',
-        'direction' => 'getDirection',
-        'content_rewritten' => 'getContentRewritten',
-        'submitted_content' => 'getSubmittedContent',
-        'delivered_content' => 'getDeliveredContent',
-        'status_reason' => 'getStatusReason',
-        'attachments' => 'getAttachments',
-        'parts' => 'getParts'
+        'check_in' => 'getCheckIn',
+        'check_out' => 'getCheckOut',
+        'guests' => 'getGuests',
+        'expected_payout' => 'getExpectedPayout',
+        'reservation_id' => 'getReservationId',
+        'relayed_by' => 'getRelayedBy',
+        'respond_by' => 'getRespondBy',
+        'responded_at' => 'getRespondedAt',
+        'created_at' => 'getCreatedAt',
+        'updated_at' => 'getUpdatedAt'
     ];
 
     /**
@@ -275,17 +293,29 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
         return self::$openAPIModelName;
     }
 
-    public const DIRECTION_OUTBOUND = 'outbound';
+    public const STATUS_OPEN = 'open';
+    public const STATUS_PRE_APPROVED = 'pre_approved';
+    public const STATUS_SPECIAL_OFFER_SENT = 'special_offer_sent';
+    public const STATUS_BOOKED = 'booked';
+    public const STATUS_EXPIRED = 'expired';
+    public const STATUS_DECLINED = 'declined';
+    public const STATUS_NOT_POSSIBLE = 'not_possible';
 
     /**
      * Gets allowable values of the enum
      *
      * @return string[]
      */
-    public static function getDirectionAllowableValues()
+    public static function getStatusAllowableValues()
     {
         return [
-            self::DIRECTION_OUTBOUND,
+            self::STATUS_OPEN,
+            self::STATUS_PRE_APPROVED,
+            self::STATUS_SPECIAL_OFFER_SENT,
+            self::STATUS_BOOKED,
+            self::STATUS_EXPIRED,
+            self::STATUS_DECLINED,
+            self::STATUS_NOT_POSSIBLE,
         ];
     }
 
@@ -305,16 +335,19 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     {
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('conversation_id', $data ?? [], null);
-        $this->setIfExists('external_message_id', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('channel', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
-        $this->setIfExists('direction', $data ?? [], null);
-        $this->setIfExists('content_rewritten', $data ?? [], null);
-        $this->setIfExists('submitted_content', $data ?? [], null);
-        $this->setIfExists('delivered_content', $data ?? [], null);
-        $this->setIfExists('status_reason', $data ?? [], null);
-        $this->setIfExists('attachments', $data ?? [], null);
-        $this->setIfExists('parts', $data ?? [], null);
+        $this->setIfExists('check_in', $data ?? [], null);
+        $this->setIfExists('check_out', $data ?? [], null);
+        $this->setIfExists('guests', $data ?? [], null);
+        $this->setIfExists('expected_payout', $data ?? [], null);
+        $this->setIfExists('reservation_id', $data ?? [], null);
+        $this->setIfExists('relayed_by', $data ?? [], null);
+        $this->setIfExists('respond_by', $data ?? [], null);
+        $this->setIfExists('responded_at', $data ?? [], null);
+        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('updated_at', $data ?? [], null);
     }
 
     /**
@@ -342,15 +375,60 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     {
         $invalidProperties = [];
 
-        $allowedValues = self::getDirectionAllowableValues();
-        if (!is_null($this->container['direction']) && !in_array($this->container['direction'], $allowedValues, true)) {
+        if ($this->container['id'] === null) {
+            $invalidProperties[] = "'id' can't be null";
+        }
+        if ($this->container['conversation_id'] === null && !$this->isNullableSetToNull('conversation_id')) {
+            $invalidProperties[] = "'conversation_id' is required";
+        }
+        if ($this->container['listing_id'] === null && !$this->isNullableSetToNull('listing_id')) {
+            $invalidProperties[] = "'listing_id' is required";
+        }
+        if ($this->container['channel'] === null) {
+            $invalidProperties[] = "'channel' can't be null";
+        }
+        if ($this->container['status'] === null) {
+            $invalidProperties[] = "'status' can't be null";
+        }
+        $allowedValues = self::getStatusAllowableValues();
+        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'direction', must be one of '%s'",
-                $this->container['direction'],
+                "invalid value '%s' for 'status', must be one of '%s'",
+                $this->container['status'],
                 implode("', '", $allowedValues)
             );
         }
 
+        if ($this->container['check_in'] === null && !$this->isNullableSetToNull('check_in')) {
+            $invalidProperties[] = "'check_in' is required";
+        }
+        if ($this->container['check_out'] === null && !$this->isNullableSetToNull('check_out')) {
+            $invalidProperties[] = "'check_out' is required";
+        }
+        if ($this->container['guests'] === null) {
+            $invalidProperties[] = "'guests' can't be null";
+        }
+        if ($this->container['expected_payout'] === null) {
+            $invalidProperties[] = "'expected_payout' can't be null";
+        }
+        if ($this->container['reservation_id'] === null && !$this->isNullableSetToNull('reservation_id')) {
+            $invalidProperties[] = "'reservation_id' is required";
+        }
+        if ($this->container['relayed_by'] === null && !$this->isNullableSetToNull('relayed_by')) {
+            $invalidProperties[] = "'relayed_by' is required";
+        }
+        if ($this->container['respond_by'] === null && !$this->isNullableSetToNull('respond_by')) {
+            $invalidProperties[] = "'respond_by' is required";
+        }
+        if ($this->container['responded_at'] === null && !$this->isNullableSetToNull('responded_at')) {
+            $invalidProperties[] = "'responded_at' is required";
+        }
+        if ($this->container['created_at'] === null && !$this->isNullableSetToNull('created_at')) {
+            $invalidProperties[] = "'created_at' is required";
+        }
+        if ($this->container['updated_at'] === null && !$this->isNullableSetToNull('updated_at')) {
+            $invalidProperties[] = "'updated_at' is required";
+        }
         return $invalidProperties;
     }
 
@@ -366,9 +444,9 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Gets id
      *
-     * @return string|null
+     * @return string
      */
-    public function getId(): ?string
+    public function getId(): string
     {
         return $this->container['id'];
     }
@@ -376,21 +454,14 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets id
      *
-     * @param string|null $id Repull message id for the row that was recorded.
+     * @param string $id Repull inquiry id.
      *
      * @return $this
      */
-    public function setId(?string $id): static
+    public function setId(string $id): static
     {
         if (is_null($id)) {
-            array_push($this->openAPINullablesSetToNull, 'id');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('id', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+            throw new InvalidArgumentException('non-nullable id cannot be null');
         }
         $this->container['id'] = $id;
 
@@ -400,9 +471,9 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Gets conversation_id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getConversationId(): ?int
+    public function getConversationId(): ?string
     {
         return $this->container['conversation_id'];
     }
@@ -410,14 +481,21 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets conversation_id
      *
-     * @param int|null $conversation_id conversation_id
+     * @param string|null $conversation_id Repull conversation id — pass it to `POST /v1/conversations/{id}/pre-approval` or `/special-offers`.
      *
      * @return $this
      */
-    public function setConversationId(?int $conversation_id): static
+    public function setConversationId(?string $conversation_id): static
     {
         if (is_null($conversation_id)) {
-            throw new InvalidArgumentException('non-nullable conversation_id cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'conversation_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('conversation_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['conversation_id'] = $conversation_id;
 
@@ -425,35 +503,35 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     }
 
     /**
-     * Gets external_message_id
+     * Gets listing_id
      *
      * @return string|null
      */
-    public function getExternalMessageId(): ?string
+    public function getListingId(): ?string
     {
-        return $this->container['external_message_id'];
+        return $this->container['listing_id'];
     }
 
     /**
-     * Sets external_message_id
+     * Sets listing_id
      *
-     * @param string|null $external_message_id The channel's own message id, when it returns one.
+     * @param string|null $listing_id listing_id
      *
      * @return $this
      */
-    public function setExternalMessageId(?string $external_message_id): static
+    public function setListingId(?string $listing_id): static
     {
-        if (is_null($external_message_id)) {
-            array_push($this->openAPINullablesSetToNull, 'external_message_id');
+        if (is_null($listing_id)) {
+            array_push($this->openAPINullablesSetToNull, 'listing_id');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('external_message_id', $nullablesSetToNull);
+            $index = array_search('listing_id', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['external_message_id'] = $external_message_id;
+        $this->container['listing_id'] = $listing_id;
 
         return $this;
     }
@@ -461,9 +539,9 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Gets channel
      *
-     * @return string|null
+     * @return string
      */
-    public function getChannel(): ?string
+    public function getChannel(): string
     {
         return $this->container['channel'];
     }
@@ -471,21 +549,14 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets channel
      *
-     * @param string|null $channel The channel the message actually went out on.
+     * @param string $channel channel
      *
      * @return $this
      */
-    public function setChannel(?string $channel): static
+    public function setChannel(string $channel): static
     {
         if (is_null($channel)) {
-            array_push($this->openAPINullablesSetToNull, 'channel');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('channel', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+            throw new InvalidArgumentException('non-nullable channel cannot be null');
         }
         $this->container['channel'] = $channel;
 
@@ -495,9 +566,9 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Gets status
      *
-     * @return string|null
+     * @return string
      */
-    public function getStatus(): ?string
+    public function getStatus(): string
     {
         return $this->container['status'];
     }
@@ -505,227 +576,343 @@ class SendMessageResponse implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets status
      *
-     * @param string|null $status status
+     * @param string $status `open` — nobody has answered and the stay is still ahead; `pre_approved`; `special_offer_sent` (from the API, Vanio, or Airbnb’s own app); `booked` — the guest booked (`reservationId`); `expired` — the stay has started or Airbnb expired it; `declined`; `not_possible` — Airbnb says the dates cannot be booked.
      *
      * @return $this
      */
-    public function setStatus(?string $status): static
+    public function setStatus(string $status): static
     {
         if (is_null($status)) {
             throw new InvalidArgumentException('non-nullable status cannot be null');
         }
+        // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['status'] = $status;
 
         return $this;
     }
 
     /**
-     * Gets direction
+     * Gets check_in
      *
-     * @return string|null
+     * @return \DateTime|null
      */
-    public function getDirection(): ?string
+    public function getCheckIn(): ?\DateTime
     {
-        return $this->container['direction'];
+        return $this->container['check_in'];
     }
 
     /**
-     * Sets direction
+     * Sets check_in
      *
-     * @param string|null $direction direction
+     * @param \DateTime|null $check_in check_in
      *
      * @return $this
      */
-    public function setDirection(?string $direction): static
+    public function setCheckIn(?\DateTime $check_in): static
     {
-        if (is_null($direction)) {
-            throw new InvalidArgumentException('non-nullable direction cannot be null');
-        }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['direction'] = $direction;
-
-        return $this;
-    }
-
-    /**
-     * Gets content_rewritten
-     *
-     * @return bool|null
-     */
-    public function getContentRewritten(): ?bool
-    {
-        return $this->container['content_rewritten'];
-    }
-
-    /**
-     * Sets content_rewritten
-     *
-     * @param bool|null $content_rewritten TRUE when the channel altered the text before delivery — today that means Airbnb stripped a link, an email address or a phone number and the remainder was re-sent. When true, the guest did NOT receive `submittedContent`; they received `deliveredContent`.
-     *
-     * @return $this
-     */
-    public function setContentRewritten(?bool $content_rewritten): static
-    {
-        if (is_null($content_rewritten)) {
-            throw new InvalidArgumentException('non-nullable content_rewritten cannot be null');
-        }
-        $this->container['content_rewritten'] = $content_rewritten;
-
-        return $this;
-    }
-
-    /**
-     * Gets submitted_content
-     *
-     * @return string|null
-     */
-    public function getSubmittedContent(): ?string
-    {
-        return $this->container['submitted_content'];
-    }
-
-    /**
-     * Sets submitted_content
-     *
-     * @param string|null $submitted_content The text you sent.
-     *
-     * @return $this
-     */
-    public function setSubmittedContent(?string $submitted_content): static
-    {
-        if (is_null($submitted_content)) {
-            array_push($this->openAPINullablesSetToNull, 'submitted_content');
+        if (is_null($check_in)) {
+            array_push($this->openAPINullablesSetToNull, 'check_in');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('submitted_content', $nullablesSetToNull);
+            $index = array_search('check_in', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['submitted_content'] = $submitted_content;
+        $this->container['check_in'] = $check_in;
 
         return $this;
     }
 
     /**
-     * Gets delivered_content
+     * Gets check_out
      *
-     * @return string|null
+     * @return \DateTime|null
      */
-    public function getDeliveredContent(): ?string
+    public function getCheckOut(): ?\DateTime
     {
-        return $this->container['delivered_content'];
+        return $this->container['check_out'];
     }
 
     /**
-     * Sets delivered_content
+     * Sets check_out
      *
-     * @param string|null $delivered_content The text the guest actually received. Differs from `submittedContent` exactly when `contentRewritten` is true.
+     * @param \DateTime|null $check_out check_out
      *
      * @return $this
      */
-    public function setDeliveredContent(?string $delivered_content): static
+    public function setCheckOut(?\DateTime $check_out): static
     {
-        if (is_null($delivered_content)) {
-            array_push($this->openAPINullablesSetToNull, 'delivered_content');
+        if (is_null($check_out)) {
+            array_push($this->openAPINullablesSetToNull, 'check_out');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('delivered_content', $nullablesSetToNull);
+            $index = array_search('check_out', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['delivered_content'] = $delivered_content;
+        $this->container['check_out'] = $check_out;
 
         return $this;
     }
 
     /**
-     * Gets status_reason
+     * Gets guests
      *
-     * @return string|null
+     * @return \Repull\Model\ListInquiries200ResponseDataInnerGuests
      */
-    public function getStatusReason(): ?string
+    public function getGuests(): \Repull\Model\ListInquiries200ResponseDataInnerGuests
     {
-        return $this->container['status_reason'];
+        return $this->container['guests'];
     }
 
     /**
-     * Sets status_reason
+     * Sets guests
      *
-     * @param string|null $status_reason The channel's verbatim note, when it gave one — including the refusal that triggered a rewrite.
+     * @param \Repull\Model\ListInquiries200ResponseDataInnerGuests $guests guests
      *
      * @return $this
      */
-    public function setStatusReason(?string $status_reason): static
+    public function setGuests(\Repull\Model\ListInquiries200ResponseDataInnerGuests $guests): static
     {
-        if (is_null($status_reason)) {
-            array_push($this->openAPINullablesSetToNull, 'status_reason');
+        if (is_null($guests)) {
+            throw new InvalidArgumentException('non-nullable guests cannot be null');
+        }
+        $this->container['guests'] = $guests;
+
+        return $this;
+    }
+
+    /**
+     * Gets expected_payout
+     *
+     * @return \Repull\Model\ListInquiries200ResponseDataInnerExpectedPayout
+     */
+    public function getExpectedPayout(): \Repull\Model\ListInquiries200ResponseDataInnerExpectedPayout
+    {
+        return $this->container['expected_payout'];
+    }
+
+    /**
+     * Sets expected_payout
+     *
+     * @param \Repull\Model\ListInquiries200ResponseDataInnerExpectedPayout $expected_payout expected_payout
+     *
+     * @return $this
+     */
+    public function setExpectedPayout(\Repull\Model\ListInquiries200ResponseDataInnerExpectedPayout $expected_payout): static
+    {
+        if (is_null($expected_payout)) {
+            throw new InvalidArgumentException('non-nullable expected_payout cannot be null');
+        }
+        $this->container['expected_payout'] = $expected_payout;
+
+        return $this;
+    }
+
+    /**
+     * Gets reservation_id
+     *
+     * @return string|null
+     */
+    public function getReservationId(): ?string
+    {
+        return $this->container['reservation_id'];
+    }
+
+    /**
+     * Sets reservation_id
+     *
+     * @param string|null $reservation_id The reservation the inquiry became, once booked.
+     *
+     * @return $this
+     */
+    public function setReservationId(?string $reservation_id): static
+    {
+        if (is_null($reservation_id)) {
+            array_push($this->openAPINullablesSetToNull, 'reservation_id');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('status_reason', $nullablesSetToNull);
+            $index = array_search('reservation_id', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['status_reason'] = $status_reason;
+        $this->container['reservation_id'] = $reservation_id;
 
         return $this;
     }
 
     /**
-     * Gets attachments
+     * Gets relayed_by
      *
-     * @return \Repull\Model\SentAttachment[]|null
+     * @return string|null
      */
-    public function getAttachments(): ?array
+    public function getRelayedBy(): ?string
     {
-        return $this->container['attachments'];
+        return $this->container['relayed_by'];
     }
 
     /**
-     * Sets attachments
+     * Sets relayed_by
      *
-     * @param \Repull\Model\SentAttachment[]|null $attachments The files delivered, in request order. Empty array for a text-only send.
+     * @param string|null $relayed_by A PMS (e.g. `hostaway`, `guesty`) this inquiry arrives through. When set, it cannot be pre-approved or offered from Repull — act on it in that PMS.
      *
      * @return $this
      */
-    public function setAttachments(?array $attachments): static
+    public function setRelayedBy(?string $relayed_by): static
     {
-        if (is_null($attachments)) {
-            throw new InvalidArgumentException('non-nullable attachments cannot be null');
+        if (is_null($relayed_by)) {
+            array_push($this->openAPINullablesSetToNull, 'relayed_by');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('relayed_by', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['attachments'] = $attachments;
+        $this->container['relayed_by'] = $relayed_by;
 
         return $this;
     }
 
     /**
-     * Gets parts
+     * Gets respond_by
      *
-     * @return \Repull\Model\SendMessagePart[]|null
+     * @return \DateTime|null
      */
-    public function getParts(): ?array
+    public function getRespondBy(): ?\DateTime
     {
-        return $this->container['parts'];
+        return $this->container['respond_by'];
     }
 
     /**
-     * Sets parts
+     * Sets respond_by
      *
-     * @param \Repull\Model\SendMessagePart[]|null $parts Present only when `attachments` were sent: one entry per channel message, in delivery order. `id` is the text message (or the last file message when there is no text).
+     * @param \DateTime|null $respond_by Airbnb’s response deadline for the host (it counts toward response rate).
      *
      * @return $this
      */
-    public function setParts(?array $parts): static
+    public function setRespondBy(?\DateTime $respond_by): static
     {
-        if (is_null($parts)) {
-            throw new InvalidArgumentException('non-nullable parts cannot be null');
+        if (is_null($respond_by)) {
+            array_push($this->openAPINullablesSetToNull, 'respond_by');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('respond_by', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['parts'] = $parts;
+        $this->container['respond_by'] = $respond_by;
+
+        return $this;
+    }
+
+    /**
+     * Gets responded_at
+     *
+     * @return \DateTime|null
+     */
+    public function getRespondedAt(): ?\DateTime
+    {
+        return $this->container['responded_at'];
+    }
+
+    /**
+     * Sets responded_at
+     *
+     * @param \DateTime|null $responded_at responded_at
+     *
+     * @return $this
+     */
+    public function setRespondedAt(?\DateTime $responded_at): static
+    {
+        if (is_null($responded_at)) {
+            array_push($this->openAPINullablesSetToNull, 'responded_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('responded_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['responded_at'] = $responded_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets created_at
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->container['created_at'];
+    }
+
+    /**
+     * Sets created_at
+     *
+     * @param \DateTime|null $created_at created_at
+     *
+     * @return $this
+     */
+    public function setCreatedAt(?\DateTime $created_at): static
+    {
+        if (is_null($created_at)) {
+            array_push($this->openAPINullablesSetToNull, 'created_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('created_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets updated_at
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->container['updated_at'];
+    }
+
+    /**
+     * Sets updated_at
+     *
+     * @param \DateTime|null $updated_at updated_at
+     *
+     * @return $this
+     */
+    public function setUpdatedAt(?\DateTime $updated_at): static
+    {
+        if (is_null($updated_at)) {
+            array_push($this->openAPINullablesSetToNull, 'updated_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('updated_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['updated_at'] = $updated_at;
 
         return $this;
     }

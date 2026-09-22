@@ -64,7 +64,8 @@ class ReservationMessageReceivedPayload implements ModelInterface, ArrayAccess, 
         'thread_id' => 'string',
         'from' => '\Repull\Model\ReservationMessageReceivedPayloadFrom',
         'body' => 'string',
-        'sent_at' => '\DateTime'
+        'sent_at' => '\DateTime',
+        'attachments' => '\Repull\Model\ConversationMessageAttachment[]'
     ];
 
     /**
@@ -77,7 +78,8 @@ class ReservationMessageReceivedPayload implements ModelInterface, ArrayAccess, 
         'thread_id' => null,
         'from' => null,
         'body' => null,
-        'sent_at' => 'date-time'
+        'sent_at' => 'date-time',
+        'attachments' => null
     ];
 
     /**
@@ -90,7 +92,8 @@ class ReservationMessageReceivedPayload implements ModelInterface, ArrayAccess, 
         'thread_id' => false,
         'from' => false,
         'body' => false,
-        'sent_at' => false
+        'sent_at' => false,
+        'attachments' => false
     ];
 
     /**
@@ -173,7 +176,8 @@ class ReservationMessageReceivedPayload implements ModelInterface, ArrayAccess, 
         'thread_id' => 'threadId',
         'from' => 'from',
         'body' => 'body',
-        'sent_at' => 'sentAt'
+        'sent_at' => 'sentAt',
+        'attachments' => 'attachments'
     ];
 
     /**
@@ -186,7 +190,8 @@ class ReservationMessageReceivedPayload implements ModelInterface, ArrayAccess, 
         'thread_id' => 'setThreadId',
         'from' => 'setFrom',
         'body' => 'setBody',
-        'sent_at' => 'setSentAt'
+        'sent_at' => 'setSentAt',
+        'attachments' => 'setAttachments'
     ];
 
     /**
@@ -199,7 +204,8 @@ class ReservationMessageReceivedPayload implements ModelInterface, ArrayAccess, 
         'thread_id' => 'getThreadId',
         'from' => 'getFrom',
         'body' => 'getBody',
-        'sent_at' => 'getSentAt'
+        'sent_at' => 'getSentAt',
+        'attachments' => 'getAttachments'
     ];
 
     /**
@@ -254,6 +260,7 @@ class ReservationMessageReceivedPayload implements ModelInterface, ArrayAccess, 
         $this->setIfExists('from', $data ?? [], null);
         $this->setIfExists('body', $data ?? [], null);
         $this->setIfExists('sent_at', $data ?? [], null);
+        $this->setIfExists('attachments', $data ?? [], null);
     }
 
     /**
@@ -387,7 +394,7 @@ class ReservationMessageReceivedPayload implements ModelInterface, ArrayAccess, 
     /**
      * Sets body
      *
-     * @param string|null $body body
+     * @param string|null $body Empty when the guest sent only a file.
      *
      * @return $this
      */
@@ -424,6 +431,33 @@ class ReservationMessageReceivedPayload implements ModelInterface, ArrayAccess, 
             throw new InvalidArgumentException('non-nullable sent_at cannot be null');
         }
         $this->container['sent_at'] = $sent_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets attachments
+     *
+     * @return \Repull\Model\ConversationMessageAttachment[]|null
+     */
+    public function getAttachments(): ?array
+    {
+        return $this->container['attachments'];
+    }
+
+    /**
+     * Sets attachments
+     *
+     * @param \Repull\Model\ConversationMessageAttachment[]|null $attachments Files the guest sent (photos, videos, documents), same shape as `GET /v1/conversations/{id}/messages`. Empty array when there are none.
+     *
+     * @return $this
+     */
+    public function setAttachments(?array $attachments): static
+    {
+        if (is_null($attachments)) {
+            throw new InvalidArgumentException('non-nullable attachments cannot be null');
+        }
+        $this->container['attachments'] = $attachments;
 
         return $this;
     }

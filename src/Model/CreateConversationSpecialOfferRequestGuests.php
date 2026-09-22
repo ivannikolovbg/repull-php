@@ -1,6 +1,6 @@
 <?php
 /**
- * SendMessageRequest
+ * CreateConversationSpecialOfferRequestGuests
  *
  * PHP version 8.1
  *
@@ -35,15 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * SendMessageRequest Class Doc Comment
+ * CreateConversationSpecialOfferRequestGuests Class Doc Comment
  *
- * @description &#x60;message&#x60;, &#x60;attachments&#x60;, or both. Per-channel limits for &#x60;attachments&#x60;:  | Channel | Accepted types | Per file | Per request | Text | |---|---|---|---|---| | Airbnb | JPEG, PNG, GIF, WebP (sent as JPEG), MP4, QuickTime | 10 MB | 5 | optional — each file is sent as its own message, then the text | | Booking.com | JPEG, PNG | 10 MB | 5 | **required** — all files ride on the one text message | | SMS, email, direct-booking site chat | — | — | — | &#x60;422 attachments_not_supported&#x60;; nothing is sent |
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class CreateConversationSpecialOfferRequestGuests implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +51,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'SendMessageRequest';
+    protected static string $openAPIModelName = 'create_conversation_special_offer_request_guests';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,9 +59,10 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'message' => 'string',
-        'channel' => 'string',
-        'attachments' => '\Repull\Model\SendMessageAttachment[]'
+        'adults' => 'int',
+        'children' => 'int',
+        'infants' => 'int',
+        'pets' => 'int'
     ];
 
     /**
@@ -71,9 +71,10 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'message' => null,
-        'channel' => null,
-        'attachments' => null
+        'adults' => null,
+        'children' => null,
+        'infants' => null,
+        'pets' => null
     ];
 
     /**
@@ -82,9 +83,10 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'message' => false,
-        'channel' => false,
-        'attachments' => false
+        'adults' => false,
+        'children' => false,
+        'infants' => false,
+        'pets' => false
     ];
 
     /**
@@ -163,9 +165,10 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'message' => 'message',
-        'channel' => 'channel',
-        'attachments' => 'attachments'
+        'adults' => 'adults',
+        'children' => 'children',
+        'infants' => 'infants',
+        'pets' => 'pets'
     ];
 
     /**
@@ -174,9 +177,10 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $setters = [
-        'message' => 'setMessage',
-        'channel' => 'setChannel',
-        'attachments' => 'setAttachments'
+        'adults' => 'setAdults',
+        'children' => 'setChildren',
+        'infants' => 'setInfants',
+        'pets' => 'setPets'
     ];
 
     /**
@@ -185,9 +189,10 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $getters = [
-        'message' => 'getMessage',
-        'channel' => 'getChannel',
-        'attachments' => 'getAttachments'
+        'adults' => 'getAdults',
+        'children' => 'getChildren',
+        'infants' => 'getInfants',
+        'pets' => 'getPets'
     ];
 
     /**
@@ -222,27 +227,6 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         return self::$openAPIModelName;
     }
 
-    public const CHANNEL_AIRBNB = 'airbnb';
-    public const CHANNEL_BOOKING = 'booking';
-    public const CHANNEL_SMS = 'sms';
-    public const CHANNEL_EMAIL = 'email';
-    public const CHANNEL_WEBSITE = 'website';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getChannelAllowableValues()
-    {
-        return [
-            self::CHANNEL_AIRBNB,
-            self::CHANNEL_BOOKING,
-            self::CHANNEL_SMS,
-            self::CHANNEL_EMAIL,
-            self::CHANNEL_WEBSITE,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -258,9 +242,10 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('message', $data ?? [], null);
-        $this->setIfExists('channel', $data ?? [], null);
-        $this->setIfExists('attachments', $data ?? [], null);
+        $this->setIfExists('adults', $data ?? [], null);
+        $this->setIfExists('children', $data ?? [], 0);
+        $this->setIfExists('infants', $data ?? [], 0);
+        $this->setIfExists('pets', $data ?? [], 0);
     }
 
     /**
@@ -288,25 +273,23 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     {
         $invalidProperties = [];
 
-        if (!is_null($this->container['message']) && (mb_strlen($this->container['message']) > 4000)) {
-            $invalidProperties[] = "invalid value for 'message', the character length must be smaller than or equal to 4000.";
+        if ($this->container['adults'] === null) {
+            $invalidProperties[] = "'adults' can't be null";
+        }
+        if (($this->container['adults'] < 1)) {
+            $invalidProperties[] = "invalid value for 'adults', must be bigger than or equal to 1.";
         }
 
-        $allowedValues = self::getChannelAllowableValues();
-        if (!is_null($this->container['channel']) && !in_array($this->container['channel'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'channel', must be one of '%s'",
-                $this->container['channel'],
-                implode("', '", $allowedValues)
-            );
+        if (!is_null($this->container['children']) && ($this->container['children'] < 0)) {
+            $invalidProperties[] = "invalid value for 'children', must be bigger than or equal to 0.";
         }
 
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) > 5)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be less than or equal to 5.";
+        if (!is_null($this->container['infants']) && ($this->container['infants'] < 0)) {
+            $invalidProperties[] = "invalid value for 'infants', must be bigger than or equal to 0.";
         }
 
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) < 1)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be greater than or equal to 1.";
+        if (!is_null($this->container['pets']) && ($this->container['pets'] < 0)) {
+            $invalidProperties[] = "invalid value for 'pets', must be bigger than or equal to 0.";
         }
 
         return $invalidProperties;
@@ -322,94 +305,129 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
 
 
     /**
-     * Gets message
+     * Gets adults
      *
-     * @return string|null
+     * @return int
      */
-    public function getMessage(): ?string
+    public function getAdults(): int
     {
-        return $this->container['message'];
+        return $this->container['adults'];
     }
 
     /**
-     * Sets message
+     * Sets adults
      *
-     * @param string|null $message The text to send the guest. Required unless `attachments` is present.
+     * @param int $adults adults
      *
      * @return $this
      */
-    public function setMessage(?string $message): static
+    public function setAdults(int $adults): static
     {
-        if (is_null($message)) {
-            throw new InvalidArgumentException('non-nullable message cannot be null');
-        }
-        if ((mb_strlen($message) > 4000)) {
-            throw new InvalidArgumentException('invalid length for $message when calling SendMessageRequest., must be smaller than or equal to 4000.');
+        if (is_null($adults)) {
+            throw new InvalidArgumentException('non-nullable adults cannot be null');
         }
 
-        $this->container['message'] = $message;
+        if (($adults < 1)) {
+            throw new InvalidArgumentException('invalid value for $adults when calling CreateConversationSpecialOfferRequestGuests., must be bigger than or equal to 1.');
+        }
+
+        $this->container['adults'] = $adults;
 
         return $this;
     }
 
     /**
-     * Gets channel
+     * Gets children
      *
-     * @return string|null
+     * @return int|null
      */
-    public function getChannel(): ?string
+    public function getChildren(): ?int
     {
-        return $this->container['channel'];
+        return $this->container['children'];
     }
 
     /**
-     * Sets channel
+     * Sets children
      *
-     * @param string|null $channel Force a channel. Omit to send on whichever channel the conversation already uses, which is the right default.
+     * @param int|null $children children
      *
      * @return $this
      */
-    public function setChannel(?string $channel): static
+    public function setChildren(?int $children): static
     {
-        if (is_null($channel)) {
-            throw new InvalidArgumentException('non-nullable channel cannot be null');
+        if (is_null($children)) {
+            throw new InvalidArgumentException('non-nullable children cannot be null');
         }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['channel'] = $channel;
+
+        if (($children < 0)) {
+            throw new InvalidArgumentException('invalid value for $children when calling CreateConversationSpecialOfferRequestGuests., must be bigger than or equal to 0.');
+        }
+
+        $this->container['children'] = $children;
 
         return $this;
     }
 
     /**
-     * Gets attachments
+     * Gets infants
      *
-     * @return \Repull\Model\SendMessageAttachment[]|null
+     * @return int|null
      */
-    public function getAttachments(): ?array
+    public function getInfants(): ?int
     {
-        return $this->container['attachments'];
+        return $this->container['infants'];
     }
 
     /**
-     * Sets attachments
+     * Sets infants
      *
-     * @param \Repull\Model\SendMessageAttachment[]|null $attachments Files to send. See the per-channel table above.
+     * @param int|null $infants infants
      *
      * @return $this
      */
-    public function setAttachments(?array $attachments): static
+    public function setInfants(?int $infants): static
     {
-        if (is_null($attachments)) {
-            throw new InvalidArgumentException('non-nullable attachments cannot be null');
+        if (is_null($infants)) {
+            throw new InvalidArgumentException('non-nullable infants cannot be null');
         }
 
-        if ((count($attachments) > 5)) {
-            throw new InvalidArgumentException('invalid value for $attachments when calling SendMessageRequest., number of items must be less than or equal to 5.');
+        if (($infants < 0)) {
+            throw new InvalidArgumentException('invalid value for $infants when calling CreateConversationSpecialOfferRequestGuests., must be bigger than or equal to 0.');
         }
-        if ((count($attachments) < 1)) {
-            throw new InvalidArgumentException('invalid length for $attachments when calling SendMessageRequest., number of items must be greater than or equal to 1.');
+
+        $this->container['infants'] = $infants;
+
+        return $this;
+    }
+
+    /**
+     * Gets pets
+     *
+     * @return int|null
+     */
+    public function getPets(): ?int
+    {
+        return $this->container['pets'];
+    }
+
+    /**
+     * Sets pets
+     *
+     * @param int|null $pets pets
+     *
+     * @return $this
+     */
+    public function setPets(?int $pets): static
+    {
+        if (is_null($pets)) {
+            throw new InvalidArgumentException('non-nullable pets cannot be null');
         }
-        $this->container['attachments'] = $attachments;
+
+        if (($pets < 0)) {
+            throw new InvalidArgumentException('invalid value for $pets when calling CreateConversationSpecialOfferRequestGuests., must be bigger than or equal to 0.');
+        }
+
+        $this->container['pets'] = $pets;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Message
+ * CreateConversationSpecialOffer201Response
  *
  * PHP version 8.1
  *
@@ -35,15 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * Message Class Doc Comment
+ * CreateConversationSpecialOffer201Response Class Doc Comment
  *
- * @description A single message inside a conversation thread. Returned by &#x60;GET /v1/conversations/{id}/messages&#x60;. &#x60;direction&#x60; is normalized to &#x60;inbound&#x60; (from the guest) / &#x60;outbound&#x60; (from the host or an automation).
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class Message implements ModelInterface, ArrayAccess, JsonSerializable
+class CreateConversationSpecialOffer201Response implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +51,7 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'Message';
+    protected static string $openAPIModelName = 'create_conversation_special_offer_201_response';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -61,20 +60,17 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPITypes = [
         'id' => 'string',
-        'external_message_id' => 'string',
-        'direction' => 'string',
-        'sender_type' => 'string',
-        'sender_name' => 'string',
-        'sender_avatar' => 'string',
-        'channel' => 'string',
-        'body' => 'string',
-        'translated_body' => 'string',
-        'attachments' => '\Repull\Model\ConversationMessageAttachment[]',
-        'is_automated' => 'bool',
-        'ai_generated' => 'bool',
-        'sent_at' => '\DateTime',
-        'delivered_at' => '\DateTime',
-        'read_at' => '\DateTime'
+        'conversation_id' => 'string',
+        'status' => 'string',
+        'listing_id' => 'string',
+        'airbnb_listing_id' => 'string',
+        'check_in' => '\DateTime',
+        'check_out' => '\DateTime',
+        'nights' => 'int',
+        'guests' => '\Repull\Model\CreateConversationSpecialOffer201ResponseGuests',
+        'total_price' => 'float',
+        'created_at' => '\DateTime',
+        'expires_at' => '\DateTime'
     ];
 
     /**
@@ -84,20 +80,17 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPIFormats = [
         'id' => null,
-        'external_message_id' => null,
-        'direction' => null,
-        'sender_type' => null,
-        'sender_name' => null,
-        'sender_avatar' => 'uri',
-        'channel' => null,
-        'body' => null,
-        'translated_body' => null,
-        'attachments' => null,
-        'is_automated' => null,
-        'ai_generated' => null,
-        'sent_at' => 'date-time',
-        'delivered_at' => 'date-time',
-        'read_at' => 'date-time'
+        'conversation_id' => null,
+        'status' => null,
+        'listing_id' => null,
+        'airbnb_listing_id' => null,
+        'check_in' => 'date',
+        'check_out' => 'date',
+        'nights' => null,
+        'guests' => null,
+        'total_price' => null,
+        'created_at' => 'date-time',
+        'expires_at' => 'date-time'
     ];
 
     /**
@@ -106,21 +99,18 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => false,
-        'external_message_id' => true,
-        'direction' => false,
-        'sender_type' => true,
-        'sender_name' => false,
-        'sender_avatar' => true,
-        'channel' => true,
-        'body' => false,
-        'translated_body' => true,
-        'attachments' => false,
-        'is_automated' => false,
-        'ai_generated' => false,
-        'sent_at' => false,
-        'delivered_at' => false,
-        'read_at' => true
+        'id' => true,
+        'conversation_id' => false,
+        'status' => true,
+        'listing_id' => true,
+        'airbnb_listing_id' => true,
+        'check_in' => true,
+        'check_out' => true,
+        'nights' => true,
+        'guests' => true,
+        'total_price' => true,
+        'created_at' => true,
+        'expires_at' => true
     ];
 
     /**
@@ -200,20 +190,17 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $attributeMap = [
         'id' => 'id',
-        'external_message_id' => 'externalMessageId',
-        'direction' => 'direction',
-        'sender_type' => 'senderType',
-        'sender_name' => 'senderName',
-        'sender_avatar' => 'senderAvatar',
-        'channel' => 'channel',
-        'body' => 'body',
-        'translated_body' => 'translatedBody',
-        'attachments' => 'attachments',
-        'is_automated' => 'isAutomated',
-        'ai_generated' => 'aiGenerated',
-        'sent_at' => 'sentAt',
-        'delivered_at' => 'deliveredAt',
-        'read_at' => 'readAt'
+        'conversation_id' => 'conversationId',
+        'status' => 'status',
+        'listing_id' => 'listingId',
+        'airbnb_listing_id' => 'airbnbListingId',
+        'check_in' => 'checkIn',
+        'check_out' => 'checkOut',
+        'nights' => 'nights',
+        'guests' => 'guests',
+        'total_price' => 'totalPrice',
+        'created_at' => 'createdAt',
+        'expires_at' => 'expiresAt'
     ];
 
     /**
@@ -223,20 +210,17 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $setters = [
         'id' => 'setId',
-        'external_message_id' => 'setExternalMessageId',
-        'direction' => 'setDirection',
-        'sender_type' => 'setSenderType',
-        'sender_name' => 'setSenderName',
-        'sender_avatar' => 'setSenderAvatar',
-        'channel' => 'setChannel',
-        'body' => 'setBody',
-        'translated_body' => 'setTranslatedBody',
-        'attachments' => 'setAttachments',
-        'is_automated' => 'setIsAutomated',
-        'ai_generated' => 'setAiGenerated',
-        'sent_at' => 'setSentAt',
-        'delivered_at' => 'setDeliveredAt',
-        'read_at' => 'setReadAt'
+        'conversation_id' => 'setConversationId',
+        'status' => 'setStatus',
+        'listing_id' => 'setListingId',
+        'airbnb_listing_id' => 'setAirbnbListingId',
+        'check_in' => 'setCheckIn',
+        'check_out' => 'setCheckOut',
+        'nights' => 'setNights',
+        'guests' => 'setGuests',
+        'total_price' => 'setTotalPrice',
+        'created_at' => 'setCreatedAt',
+        'expires_at' => 'setExpiresAt'
     ];
 
     /**
@@ -246,20 +230,17 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $getters = [
         'id' => 'getId',
-        'external_message_id' => 'getExternalMessageId',
-        'direction' => 'getDirection',
-        'sender_type' => 'getSenderType',
-        'sender_name' => 'getSenderName',
-        'sender_avatar' => 'getSenderAvatar',
-        'channel' => 'getChannel',
-        'body' => 'getBody',
-        'translated_body' => 'getTranslatedBody',
-        'attachments' => 'getAttachments',
-        'is_automated' => 'getIsAutomated',
-        'ai_generated' => 'getAiGenerated',
-        'sent_at' => 'getSentAt',
-        'delivered_at' => 'getDeliveredAt',
-        'read_at' => 'getReadAt'
+        'conversation_id' => 'getConversationId',
+        'status' => 'getStatus',
+        'listing_id' => 'getListingId',
+        'airbnb_listing_id' => 'getAirbnbListingId',
+        'check_in' => 'getCheckIn',
+        'check_out' => 'getCheckOut',
+        'nights' => 'getNights',
+        'guests' => 'getGuests',
+        'total_price' => 'getTotalPrice',
+        'created_at' => 'getCreatedAt',
+        'expires_at' => 'getExpiresAt'
     ];
 
     /**
@@ -294,21 +275,6 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         return self::$openAPIModelName;
     }
 
-    public const DIRECTION_INBOUND = 'inbound';
-    public const DIRECTION_OUTBOUND = 'outbound';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getDirectionAllowableValues()
-    {
-        return [
-            self::DIRECTION_INBOUND,
-            self::DIRECTION_OUTBOUND,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -325,20 +291,17 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     public function __construct(?array $data = null)
     {
         $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('external_message_id', $data ?? [], null);
-        $this->setIfExists('direction', $data ?? [], null);
-        $this->setIfExists('sender_type', $data ?? [], null);
-        $this->setIfExists('sender_name', $data ?? [], null);
-        $this->setIfExists('sender_avatar', $data ?? [], null);
-        $this->setIfExists('channel', $data ?? [], null);
-        $this->setIfExists('body', $data ?? [], null);
-        $this->setIfExists('translated_body', $data ?? [], null);
-        $this->setIfExists('attachments', $data ?? [], null);
-        $this->setIfExists('is_automated', $data ?? [], null);
-        $this->setIfExists('ai_generated', $data ?? [], null);
-        $this->setIfExists('sent_at', $data ?? [], null);
-        $this->setIfExists('delivered_at', $data ?? [], null);
-        $this->setIfExists('read_at', $data ?? [], null);
+        $this->setIfExists('conversation_id', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('airbnb_listing_id', $data ?? [], null);
+        $this->setIfExists('check_in', $data ?? [], null);
+        $this->setIfExists('check_out', $data ?? [], null);
+        $this->setIfExists('nights', $data ?? [], null);
+        $this->setIfExists('guests', $data ?? [], null);
+        $this->setIfExists('total_price', $data ?? [], null);
+        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('expires_at', $data ?? [], null);
     }
 
     /**
@@ -366,15 +329,27 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
-        $allowedValues = self::getDirectionAllowableValues();
-        if (!is_null($this->container['direction']) && !in_array($this->container['direction'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'direction', must be one of '%s'",
-                $this->container['direction'],
-                implode("', '", $allowedValues)
-            );
+        if ($this->container['id'] === null && !$this->isNullableSetToNull('id')) {
+            $invalidProperties[] = "'id' is required";
         }
-
+        if ($this->container['conversation_id'] === null) {
+            $invalidProperties[] = "'conversation_id' can't be null";
+        }
+        if ($this->container['status'] === null && !$this->isNullableSetToNull('status')) {
+            $invalidProperties[] = "'status' is required";
+        }
+        if ($this->container['check_in'] === null && !$this->isNullableSetToNull('check_in')) {
+            $invalidProperties[] = "'check_in' is required";
+        }
+        if ($this->container['check_out'] === null && !$this->isNullableSetToNull('check_out')) {
+            $invalidProperties[] = "'check_out' is required";
+        }
+        if ($this->container['nights'] === null && !$this->isNullableSetToNull('nights')) {
+            $invalidProperties[] = "'nights' is required";
+        }
+        if ($this->container['total_price'] === null && !$this->isNullableSetToNull('total_price')) {
+            $invalidProperties[] = "'total_price' is required";
+        }
         return $invalidProperties;
     }
 
@@ -400,14 +375,21 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets id
      *
-     * @param string|null $id id
+     * @param string|null $id Airbnb special-offer id. Use it to read or withdraw the offer.
      *
      * @return $this
      */
     public function setId(?string $id): static
     {
         if (is_null($id)) {
-            throw new InvalidArgumentException('non-nullable id cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['id'] = $id;
 
@@ -415,422 +397,368 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
-     * Gets external_message_id
+     * Gets conversation_id
      *
-     * @return string|null
+     * @return string
      */
-    public function getExternalMessageId(): ?string
+    public function getConversationId(): string
     {
-        return $this->container['external_message_id'];
+        return $this->container['conversation_id'];
     }
 
     /**
-     * Sets external_message_id
+     * Sets conversation_id
      *
-     * @param string|null $external_message_id ID assigned by the source channel (Airbnb message id, Booking message id, etc.). Stable across syncs.
+     * @param string $conversation_id Repull conversation id the offer was sent on.
      *
      * @return $this
      */
-    public function setExternalMessageId(?string $external_message_id): static
+    public function setConversationId(string $conversation_id): static
     {
-        if (is_null($external_message_id)) {
-            array_push($this->openAPINullablesSetToNull, 'external_message_id');
+        if (is_null($conversation_id)) {
+            throw new InvalidArgumentException('non-nullable conversation_id cannot be null');
+        }
+        $this->container['conversation_id'] = $conversation_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets status
+     *
+     * @return string|null
+     */
+    public function getStatus(): ?string
+    {
+        return $this->container['status'];
+    }
+
+    /**
+     * Sets status
+     *
+     * @param string|null $status Airbnb’s status for the offer: `active` (the guest can book it), `accepted`, `declined`, `expired` or `voided` (withdrawn).
+     *
+     * @return $this
+     */
+    public function setStatus(?string $status): static
+    {
+        if (is_null($status)) {
+            array_push($this->openAPINullablesSetToNull, 'status');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('external_message_id', $nullablesSetToNull);
+            $index = array_search('status', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['external_message_id'] = $external_message_id;
+        $this->container['status'] = $status;
 
         return $this;
     }
 
     /**
-     * Gets direction
+     * Gets listing_id
      *
      * @return string|null
      */
-    public function getDirection(): ?string
+    public function getListingId(): ?string
     {
-        return $this->container['direction'];
+        return $this->container['listing_id'];
     }
 
     /**
-     * Sets direction
+     * Sets listing_id
      *
-     * @param string|null $direction direction
+     * @param string|null $listing_id Repull listing id, when known.
      *
      * @return $this
      */
-    public function setDirection(?string $direction): static
+    public function setListingId(?string $listing_id): static
     {
-        if (is_null($direction)) {
-            throw new InvalidArgumentException('non-nullable direction cannot be null');
-        }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['direction'] = $direction;
-
-        return $this;
-    }
-
-    /**
-     * Gets sender_type
-     *
-     * @return string|null
-     */
-    public function getSenderType(): ?string
-    {
-        return $this->container['sender_type'];
-    }
-
-    /**
-     * Sets sender_type
-     *
-     * @param string|null $sender_type Free-form sender role from the channel (e.g. `guest`, `host`, `system`, `airbnb`). Use `direction` for binary inbound/outbound logic.
-     *
-     * @return $this
-     */
-    public function setSenderType(?string $sender_type): static
-    {
-        if (is_null($sender_type)) {
-            array_push($this->openAPINullablesSetToNull, 'sender_type');
+        if (is_null($listing_id)) {
+            array_push($this->openAPINullablesSetToNull, 'listing_id');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('sender_type', $nullablesSetToNull);
+            $index = array_search('listing_id', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['sender_type'] = $sender_type;
+        $this->container['listing_id'] = $listing_id;
 
         return $this;
     }
 
     /**
-     * Gets sender_name
+     * Gets airbnb_listing_id
      *
      * @return string|null
      */
-    public function getSenderName(): ?string
+    public function getAirbnbListingId(): ?string
     {
-        return $this->container['sender_name'];
+        return $this->container['airbnb_listing_id'];
     }
 
     /**
-     * Sets sender_name
+     * Sets airbnb_listing_id
      *
-     * @param string|null $sender_name sender_name
+     * @param string|null $airbnb_listing_id Airbnb listing id the offer is for (a string — it exceeds 2^53).
      *
      * @return $this
      */
-    public function setSenderName(?string $sender_name): static
+    public function setAirbnbListingId(?string $airbnb_listing_id): static
     {
-        if (is_null($sender_name)) {
-            throw new InvalidArgumentException('non-nullable sender_name cannot be null');
-        }
-        $this->container['sender_name'] = $sender_name;
-
-        return $this;
-    }
-
-    /**
-     * Gets sender_avatar
-     *
-     * @return string|null
-     */
-    public function getSenderAvatar(): ?string
-    {
-        return $this->container['sender_avatar'];
-    }
-
-    /**
-     * Sets sender_avatar
-     *
-     * @param string|null $sender_avatar sender_avatar
-     *
-     * @return $this
-     */
-    public function setSenderAvatar(?string $sender_avatar): static
-    {
-        if (is_null($sender_avatar)) {
-            array_push($this->openAPINullablesSetToNull, 'sender_avatar');
+        if (is_null($airbnb_listing_id)) {
+            array_push($this->openAPINullablesSetToNull, 'airbnb_listing_id');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('sender_avatar', $nullablesSetToNull);
+            $index = array_search('airbnb_listing_id', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['sender_avatar'] = $sender_avatar;
+        $this->container['airbnb_listing_id'] = $airbnb_listing_id;
 
         return $this;
     }
 
     /**
-     * Gets channel
-     *
-     * @return string|null
-     */
-    public function getChannel(): ?string
-    {
-        return $this->container['channel'];
-    }
-
-    /**
-     * Sets channel
-     *
-     * @param string|null $channel Delivery channel — `airbnb`, `booking`, `sms`, `email`, etc.
-     *
-     * @return $this
-     */
-    public function setChannel(?string $channel): static
-    {
-        if (is_null($channel)) {
-            array_push($this->openAPINullablesSetToNull, 'channel');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('channel', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['channel'] = $channel;
-
-        return $this;
-    }
-
-    /**
-     * Gets body
-     *
-     * @return string|null
-     */
-    public function getBody(): ?string
-    {
-        return $this->container['body'];
-    }
-
-    /**
-     * Sets body
-     *
-     * @param string|null $body Message body in the original language.
-     *
-     * @return $this
-     */
-    public function setBody(?string $body): static
-    {
-        if (is_null($body)) {
-            throw new InvalidArgumentException('non-nullable body cannot be null');
-        }
-        $this->container['body'] = $body;
-
-        return $this;
-    }
-
-    /**
-     * Gets translated_body
-     *
-     * @return string|null
-     */
-    public function getTranslatedBody(): ?string
-    {
-        return $this->container['translated_body'];
-    }
-
-    /**
-     * Sets translated_body
-     *
-     * @param string|null $translated_body English translation when the original language is non-English and a translation has been computed.
-     *
-     * @return $this
-     */
-    public function setTranslatedBody(?string $translated_body): static
-    {
-        if (is_null($translated_body)) {
-            array_push($this->openAPINullablesSetToNull, 'translated_body');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('translated_body', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['translated_body'] = $translated_body;
-
-        return $this;
-    }
-
-    /**
-     * Gets attachments
-     *
-     * @return \Repull\Model\ConversationMessageAttachment[]|null
-     */
-    public function getAttachments(): ?array
-    {
-        return $this->container['attachments'];
-    }
-
-    /**
-     * Sets attachments
-     *
-     * @param \Repull\Model\ConversationMessageAttachment[]|null $attachments Files on this message, inbound or outbound. Empty array when there are none. A file-only message has an empty `body`.
-     *
-     * @return $this
-     */
-    public function setAttachments(?array $attachments): static
-    {
-        if (is_null($attachments)) {
-            throw new InvalidArgumentException('non-nullable attachments cannot be null');
-        }
-        $this->container['attachments'] = $attachments;
-
-        return $this;
-    }
-
-    /**
-     * Gets is_automated
-     *
-     * @return bool|null
-     */
-    public function getIsAutomated(): ?bool
-    {
-        return $this->container['is_automated'];
-    }
-
-    /**
-     * Sets is_automated
-     *
-     * @param bool|null $is_automated `true` when the message was sent by a Vanio automation (template, schedule, etc.).
-     *
-     * @return $this
-     */
-    public function setIsAutomated(?bool $is_automated): static
-    {
-        if (is_null($is_automated)) {
-            throw new InvalidArgumentException('non-nullable is_automated cannot be null');
-        }
-        $this->container['is_automated'] = $is_automated;
-
-        return $this;
-    }
-
-    /**
-     * Gets ai_generated
-     *
-     * @return bool|null
-     */
-    public function getAiGenerated(): ?bool
-    {
-        return $this->container['ai_generated'];
-    }
-
-    /**
-     * Sets ai_generated
-     *
-     * @param bool|null $ai_generated `true` when the body was authored by Vanio AI (autopilot, draft).
-     *
-     * @return $this
-     */
-    public function setAiGenerated(?bool $ai_generated): static
-    {
-        if (is_null($ai_generated)) {
-            throw new InvalidArgumentException('non-nullable ai_generated cannot be null');
-        }
-        $this->container['ai_generated'] = $ai_generated;
-
-        return $this;
-    }
-
-    /**
-     * Gets sent_at
+     * Gets check_in
      *
      * @return \DateTime|null
      */
-    public function getSentAt(): ?\DateTime
+    public function getCheckIn(): ?\DateTime
     {
-        return $this->container['sent_at'];
+        return $this->container['check_in'];
     }
 
     /**
-     * Sets sent_at
+     * Sets check_in
      *
-     * @param \DateTime|null $sent_at sent_at
+     * @param \DateTime|null $check_in check_in
      *
      * @return $this
      */
-    public function setSentAt(?\DateTime $sent_at): static
+    public function setCheckIn(?\DateTime $check_in): static
     {
-        if (is_null($sent_at)) {
-            throw new InvalidArgumentException('non-nullable sent_at cannot be null');
-        }
-        $this->container['sent_at'] = $sent_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets delivered_at
-     *
-     * @return \DateTime|null
-     */
-    public function getDeliveredAt(): ?\DateTime
-    {
-        return $this->container['delivered_at'];
-    }
-
-    /**
-     * Sets delivered_at
-     *
-     * @param \DateTime|null $delivered_at delivered_at
-     *
-     * @return $this
-     */
-    public function setDeliveredAt(?\DateTime $delivered_at): static
-    {
-        if (is_null($delivered_at)) {
-            throw new InvalidArgumentException('non-nullable delivered_at cannot be null');
-        }
-        $this->container['delivered_at'] = $delivered_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets read_at
-     *
-     * @return \DateTime|null
-     */
-    public function getReadAt(): ?\DateTime
-    {
-        return $this->container['read_at'];
-    }
-
-    /**
-     * Sets read_at
-     *
-     * @param \DateTime|null $read_at read_at
-     *
-     * @return $this
-     */
-    public function setReadAt(?\DateTime $read_at): static
-    {
-        if (is_null($read_at)) {
-            array_push($this->openAPINullablesSetToNull, 'read_at');
+        if (is_null($check_in)) {
+            array_push($this->openAPINullablesSetToNull, 'check_in');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('read_at', $nullablesSetToNull);
+            $index = array_search('check_in', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['read_at'] = $read_at;
+        $this->container['check_in'] = $check_in;
+
+        return $this;
+    }
+
+    /**
+     * Gets check_out
+     *
+     * @return \DateTime|null
+     */
+    public function getCheckOut(): ?\DateTime
+    {
+        return $this->container['check_out'];
+    }
+
+    /**
+     * Sets check_out
+     *
+     * @param \DateTime|null $check_out check_out
+     *
+     * @return $this
+     */
+    public function setCheckOut(?\DateTime $check_out): static
+    {
+        if (is_null($check_out)) {
+            array_push($this->openAPINullablesSetToNull, 'check_out');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('check_out', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['check_out'] = $check_out;
+
+        return $this;
+    }
+
+    /**
+     * Gets nights
+     *
+     * @return int|null
+     */
+    public function getNights(): ?int
+    {
+        return $this->container['nights'];
+    }
+
+    /**
+     * Sets nights
+     *
+     * @param int|null $nights nights
+     *
+     * @return $this
+     */
+    public function setNights(?int $nights): static
+    {
+        if (is_null($nights)) {
+            array_push($this->openAPINullablesSetToNull, 'nights');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('nights', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['nights'] = $nights;
+
+        return $this;
+    }
+
+    /**
+     * Gets guests
+     *
+     * @return \Repull\Model\CreateConversationSpecialOffer201ResponseGuests|null
+     */
+    public function getGuests(): ?\Repull\Model\CreateConversationSpecialOffer201ResponseGuests
+    {
+        return $this->container['guests'];
+    }
+
+    /**
+     * Sets guests
+     *
+     * @param \Repull\Model\CreateConversationSpecialOffer201ResponseGuests|null $guests guests
+     *
+     * @return $this
+     */
+    public function setGuests(?\Repull\Model\CreateConversationSpecialOffer201ResponseGuests $guests): static
+    {
+        if (is_null($guests)) {
+            array_push($this->openAPINullablesSetToNull, 'guests');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('guests', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['guests'] = $guests;
+
+        return $this;
+    }
+
+    /**
+     * Gets total_price
+     *
+     * @return float|null
+     */
+    public function getTotalPrice(): ?float
+    {
+        return $this->container['total_price'];
+    }
+
+    /**
+     * Sets total_price
+     *
+     * @param float|null $total_price Total for the stay, in the listing’s Airbnb currency.
+     *
+     * @return $this
+     */
+    public function setTotalPrice(?float $total_price): static
+    {
+        if (is_null($total_price)) {
+            array_push($this->openAPINullablesSetToNull, 'total_price');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('total_price', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['total_price'] = $total_price;
+
+        return $this;
+    }
+
+    /**
+     * Gets created_at
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->container['created_at'];
+    }
+
+    /**
+     * Sets created_at
+     *
+     * @param \DateTime|null $created_at created_at
+     *
+     * @return $this
+     */
+    public function setCreatedAt(?\DateTime $created_at): static
+    {
+        if (is_null($created_at)) {
+            array_push($this->openAPINullablesSetToNull, 'created_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('created_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets expires_at
+     *
+     * @return \DateTime|null
+     */
+    public function getExpiresAt(): ?\DateTime
+    {
+        return $this->container['expires_at'];
+    }
+
+    /**
+     * Sets expires_at
+     *
+     * @param \DateTime|null $expires_at When the guest can no longer book the offer (Airbnb gives them 24 hours).
+     *
+     * @return $this
+     */
+    public function setExpiresAt(?\DateTime $expires_at): static
+    {
+        if (is_null($expires_at)) {
+            array_push($this->openAPINullablesSetToNull, 'expires_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('expires_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['expires_at'] = $expires_at;
 
         return $this;
     }

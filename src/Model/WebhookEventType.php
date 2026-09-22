@@ -50,6 +50,14 @@ enum WebhookEventType: string
 
     case RESERVATION_ALTERATION_RESPONDED = 'reservation.alteration.responded';
 
+    case RESERVATION_REQUEST_CREATED = 'reservation.request.created';
+
+    case RESERVATION_REQUEST_UPDATED = 'reservation.request.updated';
+
+    case INQUIRY_CREATED = 'inquiry.created';
+
+    case INQUIRY_UPDATED = 'inquiry.updated';
+
     case LISTING_CREATED = 'listing.created';
 
     case LISTING_UPDATED = 'listing.updated';

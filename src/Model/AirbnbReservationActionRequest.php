@@ -1,6 +1,6 @@
 <?php
 /**
- * SendMessageRequest
+ * AirbnbReservationActionRequest
  *
  * PHP version 8.1
  *
@@ -35,15 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * SendMessageRequest Class Doc Comment
+ * AirbnbReservationActionRequest Class Doc Comment
  *
- * @description &#x60;message&#x60;, &#x60;attachments&#x60;, or both. Per-channel limits for &#x60;attachments&#x60;:  | Channel | Accepted types | Per file | Per request | Text | |---|---|---|---|---| | Airbnb | JPEG, PNG, GIF, WebP (sent as JPEG), MP4, QuickTime | 10 MB | 5 | optional — each file is sent as its own message, then the text | | Booking.com | JPEG, PNG | 10 MB | 5 | **required** — all files ride on the one text message | | SMS, email, direct-booking site chat | — | — | — | &#x60;422 attachments_not_supported&#x60;; nothing is sent |
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class AirbnbReservationActionRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +51,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'SendMessageRequest';
+    protected static string $openAPIModelName = 'airbnb_reservation_action_request';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,9 +59,9 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'message' => 'string',
-        'channel' => 'string',
-        'attachments' => '\Repull\Model\SendMessageAttachment[]'
+        'action' => 'string',
+        'reason' => 'string',
+        'message' => 'string'
     ];
 
     /**
@@ -71,9 +70,9 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'message' => null,
-        'channel' => null,
-        'attachments' => null
+        'action' => null,
+        'reason' => null,
+        'message' => null
     ];
 
     /**
@@ -82,9 +81,9 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'message' => false,
-        'channel' => false,
-        'attachments' => false
+        'action' => false,
+        'reason' => false,
+        'message' => false
     ];
 
     /**
@@ -163,9 +162,9 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'message' => 'message',
-        'channel' => 'channel',
-        'attachments' => 'attachments'
+        'action' => 'action',
+        'reason' => 'reason',
+        'message' => 'message'
     ];
 
     /**
@@ -174,9 +173,9 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $setters = [
-        'message' => 'setMessage',
-        'channel' => 'setChannel',
-        'attachments' => 'setAttachments'
+        'action' => 'setAction',
+        'reason' => 'setReason',
+        'message' => 'setMessage'
     ];
 
     /**
@@ -185,9 +184,9 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $getters = [
-        'message' => 'getMessage',
-        'channel' => 'getChannel',
-        'attachments' => 'getAttachments'
+        'action' => 'getAction',
+        'reason' => 'getReason',
+        'message' => 'getMessage'
     ];
 
     /**
@@ -222,25 +221,50 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         return self::$openAPIModelName;
     }
 
-    public const CHANNEL_AIRBNB = 'airbnb';
-    public const CHANNEL_BOOKING = 'booking';
-    public const CHANNEL_SMS = 'sms';
-    public const CHANNEL_EMAIL = 'email';
-    public const CHANNEL_WEBSITE = 'website';
+    public const ACTION_ACCEPT = 'accept';
+    public const ACTION_DECLINE = 'decline';
+    public const ACTION_CANCEL = 'cancel';
+    public const REASON_DATES_NOT_AVAILABLE = 'dates_not_available';
+    public const REASON_NOT_COMFORTABLE = 'not_comfortable';
+    public const REASON_LISTING_NOT_READY = 'listing_not_ready';
+    public const REASON_DIFFERENT_DATES_NEEDED = 'different_dates_needed';
+    public const REASON_SPAM = 'spam';
+    public const REASON_CALENDAR_CONFLICT = 'calendar_conflict';
+    public const REASON_MAINTENANCE_ISSUE = 'maintenance_issue';
+    public const REASON_UNABLE_TO_HOST = 'unable_to_host';
+    public const REASON_OTHER = 'other';
 
     /**
      * Gets allowable values of the enum
      *
      * @return string[]
      */
-    public static function getChannelAllowableValues()
+    public static function getActionAllowableValues()
     {
         return [
-            self::CHANNEL_AIRBNB,
-            self::CHANNEL_BOOKING,
-            self::CHANNEL_SMS,
-            self::CHANNEL_EMAIL,
-            self::CHANNEL_WEBSITE,
+            self::ACTION_ACCEPT,
+            self::ACTION_DECLINE,
+            self::ACTION_CANCEL,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getReasonAllowableValues()
+    {
+        return [
+            self::REASON_DATES_NOT_AVAILABLE,
+            self::REASON_NOT_COMFORTABLE,
+            self::REASON_LISTING_NOT_READY,
+            self::REASON_DIFFERENT_DATES_NEEDED,
+            self::REASON_SPAM,
+            self::REASON_CALENDAR_CONFLICT,
+            self::REASON_MAINTENANCE_ISSUE,
+            self::REASON_UNABLE_TO_HOST,
+            self::REASON_OTHER,
         ];
     }
 
@@ -258,9 +282,9 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('action', $data ?? [], null);
+        $this->setIfExists('reason', $data ?? [], null);
         $this->setIfExists('message', $data ?? [], null);
-        $this->setIfExists('channel', $data ?? [], null);
-        $this->setIfExists('attachments', $data ?? [], null);
     }
 
     /**
@@ -288,25 +312,33 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     {
         $invalidProperties = [];
 
-        if (!is_null($this->container['message']) && (mb_strlen($this->container['message']) > 4000)) {
-            $invalidProperties[] = "invalid value for 'message', the character length must be smaller than or equal to 4000.";
+        if ($this->container['action'] === null) {
+            $invalidProperties[] = "'action' can't be null";
         }
-
-        $allowedValues = self::getChannelAllowableValues();
-        if (!is_null($this->container['channel']) && !in_array($this->container['channel'], $allowedValues, true)) {
+        $allowedValues = self::getActionAllowableValues();
+        if (!is_null($this->container['action']) && !in_array($this->container['action'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'channel', must be one of '%s'",
-                $this->container['channel'],
+                "invalid value '%s' for 'action', must be one of '%s'",
+                $this->container['action'],
                 implode("', '", $allowedValues)
             );
         }
 
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) > 5)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be less than or equal to 5.";
+        $allowedValues = self::getReasonAllowableValues();
+        if (!is_null($this->container['reason']) && !in_array($this->container['reason'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'reason', must be one of '%s'",
+                $this->container['reason'],
+                implode("', '", $allowedValues)
+            );
         }
 
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) < 1)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be greater than or equal to 1.";
+        if (!is_null($this->container['message']) && (mb_strlen($this->container['message']) > 500)) {
+            $invalidProperties[] = "invalid value for 'message', the character length must be smaller than or equal to 500.";
+        }
+
+        if (!is_null($this->container['message']) && (mb_strlen($this->container['message']) < 1)) {
+            $invalidProperties[] = "invalid value for 'message', the character length must be bigger than or equal to 1.";
         }
 
         return $invalidProperties;
@@ -322,6 +354,62 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
 
 
     /**
+     * Gets action
+     *
+     * @return string
+     */
+    public function getAction(): string
+    {
+        return $this->container['action'];
+    }
+
+    /**
+     * Sets action
+     *
+     * @param string $action action
+     *
+     * @return $this
+     */
+    public function setAction(string $action): static
+    {
+        if (is_null($action)) {
+            throw new InvalidArgumentException('non-nullable action cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['action'] = $action;
+
+        return $this;
+    }
+
+    /**
+     * Gets reason
+     *
+     * @return string|null
+     */
+    public function getReason(): ?string
+    {
+        return $this->container['reason'];
+    }
+
+    /**
+     * Sets reason
+     *
+     * @param string|null $reason Required for `decline` and `cancel`; not accepted for `accept`. `decline` takes `dates_not_available`, `not_comfortable`, `listing_not_ready`, `different_dates_needed`, `spam` or `other`. `cancel` takes `calendar_conflict`, `maintenance_issue`, `unable_to_host` or `other`.
+     *
+     * @return $this
+     */
+    public function setReason(?string $reason): static
+    {
+        if (is_null($reason)) {
+            throw new InvalidArgumentException('non-nullable reason cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['reason'] = $reason;
+
+        return $this;
+    }
+
+    /**
      * Gets message
      *
      * @return string|null
@@ -334,7 +422,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Sets message
      *
-     * @param string|null $message The text to send the guest. Required unless `attachments` is present.
+     * @param string|null $message Required for `decline` only: sent to the guest by Airbnb.
      *
      * @return $this
      */
@@ -343,73 +431,14 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         if (is_null($message)) {
             throw new InvalidArgumentException('non-nullable message cannot be null');
         }
-        if ((mb_strlen($message) > 4000)) {
-            throw new InvalidArgumentException('invalid length for $message when calling SendMessageRequest., must be smaller than or equal to 4000.');
+        if ((mb_strlen($message) > 500)) {
+            throw new InvalidArgumentException('invalid length for $message when calling AirbnbReservationActionRequest., must be smaller than or equal to 500.');
+        }
+        if ((mb_strlen($message) < 1)) {
+            throw new InvalidArgumentException('invalid length for $message when calling AirbnbReservationActionRequest., must be bigger than or equal to 1.');
         }
 
         $this->container['message'] = $message;
-
-        return $this;
-    }
-
-    /**
-     * Gets channel
-     *
-     * @return string|null
-     */
-    public function getChannel(): ?string
-    {
-        return $this->container['channel'];
-    }
-
-    /**
-     * Sets channel
-     *
-     * @param string|null $channel Force a channel. Omit to send on whichever channel the conversation already uses, which is the right default.
-     *
-     * @return $this
-     */
-    public function setChannel(?string $channel): static
-    {
-        if (is_null($channel)) {
-            throw new InvalidArgumentException('non-nullable channel cannot be null');
-        }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['channel'] = $channel;
-
-        return $this;
-    }
-
-    /**
-     * Gets attachments
-     *
-     * @return \Repull\Model\SendMessageAttachment[]|null
-     */
-    public function getAttachments(): ?array
-    {
-        return $this->container['attachments'];
-    }
-
-    /**
-     * Sets attachments
-     *
-     * @param \Repull\Model\SendMessageAttachment[]|null $attachments Files to send. See the per-channel table above.
-     *
-     * @return $this
-     */
-    public function setAttachments(?array $attachments): static
-    {
-        if (is_null($attachments)) {
-            throw new InvalidArgumentException('non-nullable attachments cannot be null');
-        }
-
-        if ((count($attachments) > 5)) {
-            throw new InvalidArgumentException('invalid value for $attachments when calling SendMessageRequest., number of items must be less than or equal to 5.');
-        }
-        if ((count($attachments) < 1)) {
-            throw new InvalidArgumentException('invalid length for $attachments when calling SendMessageRequest., number of items must be greater than or equal to 1.');
-        }
-        $this->container['attachments'] = $attachments;
 
         return $this;
     }

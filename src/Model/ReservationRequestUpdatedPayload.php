@@ -1,6 +1,6 @@
 <?php
 /**
- * SendMessageRequest
+ * ReservationRequestUpdatedPayload
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * SendMessageRequest Class Doc Comment
+ * ReservationRequestUpdatedPayload Class Doc Comment
  *
- * @description &#x60;message&#x60;, &#x60;attachments&#x60;, or both. Per-channel limits for &#x60;attachments&#x60;:  | Channel | Accepted types | Per file | Per request | Text | |---|---|---|---|---| | Airbnb | JPEG, PNG, GIF, WebP (sent as JPEG), MP4, QuickTime | 10 MB | 5 | optional — each file is sent as its own message, then the text | | Booking.com | JPEG, PNG | 10 MB | 5 | **required** — all files ride on the one text message | | SMS, email, direct-booking site chat | — | — | — | &#x60;422 attachments_not_supported&#x60;; nothing is sent |
+ * @description Payload for &#x60;reservation.request.updated&#x60;. A booking request stopped waiting on the host. &#x60;requestStatus&#x60; says how; &#x60;data.object&#x60; is the reservation after the change (&#x60;status&#x60; &#x60;confirmed&#x60; once accepted, &#x60;cancelled&#x60; otherwise). An accepted request also fires &#x60;reservation.created&#x60;. Fires when the channel reports the outcome, whoever acted — the API, the Vanio dashboard or the channel&#39;s own app.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class ReservationRequestUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'SendMessageRequest';
+    protected static string $openAPIModelName = 'ReservationRequestUpdatedPayload';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,9 +60,12 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'message' => 'string',
-        'channel' => 'string',
-        'attachments' => '\Repull\Model\SendMessageAttachment[]'
+        'object' => '\Repull\Model\ReservationWebhookObject',
+        'request_status' => 'string',
+        'previous_attributes' => 'array<string,mixed>',
+        'source_status' => 'string',
+        'occurred_at' => '\DateTime',
+        'revision' => '\DateTime'
     ];
 
     /**
@@ -71,9 +74,12 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'message' => null,
-        'channel' => null,
-        'attachments' => null
+        'object' => null,
+        'request_status' => null,
+        'previous_attributes' => null,
+        'source_status' => null,
+        'occurred_at' => 'date-time',
+        'revision' => 'date-time'
     ];
 
     /**
@@ -82,9 +88,12 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'message' => false,
-        'channel' => false,
-        'attachments' => false
+        'object' => false,
+        'request_status' => false,
+        'previous_attributes' => false,
+        'source_status' => true,
+        'occurred_at' => false,
+        'revision' => true
     ];
 
     /**
@@ -163,9 +172,12 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'message' => 'message',
-        'channel' => 'channel',
-        'attachments' => 'attachments'
+        'object' => 'object',
+        'request_status' => 'requestStatus',
+        'previous_attributes' => 'previousAttributes',
+        'source_status' => 'sourceStatus',
+        'occurred_at' => 'occurredAt',
+        'revision' => 'revision'
     ];
 
     /**
@@ -174,9 +186,12 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $setters = [
-        'message' => 'setMessage',
-        'channel' => 'setChannel',
-        'attachments' => 'setAttachments'
+        'object' => 'setObject',
+        'request_status' => 'setRequestStatus',
+        'previous_attributes' => 'setPreviousAttributes',
+        'source_status' => 'setSourceStatus',
+        'occurred_at' => 'setOccurredAt',
+        'revision' => 'setRevision'
     ];
 
     /**
@@ -185,9 +200,12 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $getters = [
-        'message' => 'getMessage',
-        'channel' => 'getChannel',
-        'attachments' => 'getAttachments'
+        'object' => 'getObject',
+        'request_status' => 'getRequestStatus',
+        'previous_attributes' => 'getPreviousAttributes',
+        'source_status' => 'getSourceStatus',
+        'occurred_at' => 'getOccurredAt',
+        'revision' => 'getRevision'
     ];
 
     /**
@@ -222,25 +240,23 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         return self::$openAPIModelName;
     }
 
-    public const CHANNEL_AIRBNB = 'airbnb';
-    public const CHANNEL_BOOKING = 'booking';
-    public const CHANNEL_SMS = 'sms';
-    public const CHANNEL_EMAIL = 'email';
-    public const CHANNEL_WEBSITE = 'website';
+    public const REQUEST_STATUS_ACCEPTED = 'accepted';
+    public const REQUEST_STATUS_DECLINED = 'declined';
+    public const REQUEST_STATUS_EXPIRED = 'expired';
+    public const REQUEST_STATUS_VOIDED = 'voided';
 
     /**
      * Gets allowable values of the enum
      *
      * @return string[]
      */
-    public static function getChannelAllowableValues()
+    public static function getRequestStatusAllowableValues()
     {
         return [
-            self::CHANNEL_AIRBNB,
-            self::CHANNEL_BOOKING,
-            self::CHANNEL_SMS,
-            self::CHANNEL_EMAIL,
-            self::CHANNEL_WEBSITE,
+            self::REQUEST_STATUS_ACCEPTED,
+            self::REQUEST_STATUS_DECLINED,
+            self::REQUEST_STATUS_EXPIRED,
+            self::REQUEST_STATUS_VOIDED,
         ];
     }
 
@@ -258,9 +274,12 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('message', $data ?? [], null);
-        $this->setIfExists('channel', $data ?? [], null);
-        $this->setIfExists('attachments', $data ?? [], null);
+        $this->setIfExists('object', $data ?? [], null);
+        $this->setIfExists('request_status', $data ?? [], null);
+        $this->setIfExists('previous_attributes', $data ?? [], null);
+        $this->setIfExists('source_status', $data ?? [], null);
+        $this->setIfExists('occurred_at', $data ?? [], null);
+        $this->setIfExists('revision', $data ?? [], null);
     }
 
     /**
@@ -288,27 +307,24 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     {
         $invalidProperties = [];
 
-        if (!is_null($this->container['message']) && (mb_strlen($this->container['message']) > 4000)) {
-            $invalidProperties[] = "invalid value for 'message', the character length must be smaller than or equal to 4000.";
+        if ($this->container['object'] === null) {
+            $invalidProperties[] = "'object' can't be null";
         }
-
-        $allowedValues = self::getChannelAllowableValues();
-        if (!is_null($this->container['channel']) && !in_array($this->container['channel'], $allowedValues, true)) {
+        if ($this->container['request_status'] === null) {
+            $invalidProperties[] = "'request_status' can't be null";
+        }
+        $allowedValues = self::getRequestStatusAllowableValues();
+        if (!is_null($this->container['request_status']) && !in_array($this->container['request_status'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'channel', must be one of '%s'",
-                $this->container['channel'],
+                "invalid value '%s' for 'request_status', must be one of '%s'",
+                $this->container['request_status'],
                 implode("', '", $allowedValues)
             );
         }
 
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) > 5)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be less than or equal to 5.";
+        if ($this->container['previous_attributes'] === null) {
+            $invalidProperties[] = "'previous_attributes' can't be null";
         }
-
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) < 1)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be greater than or equal to 1.";
-        }
-
         return $invalidProperties;
     }
 
@@ -322,94 +338,178 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
 
 
     /**
-     * Gets message
+     * Gets object
      *
-     * @return string|null
+     * @return \Repull\Model\ReservationWebhookObject
      */
-    public function getMessage(): ?string
+    public function getObject(): \Repull\Model\ReservationWebhookObject
     {
-        return $this->container['message'];
+        return $this->container['object'];
     }
 
     /**
-     * Sets message
+     * Sets object
      *
-     * @param string|null $message The text to send the guest. Required unless `attachments` is present.
+     * @param \Repull\Model\ReservationWebhookObject $object object
      *
      * @return $this
      */
-    public function setMessage(?string $message): static
+    public function setObject(\Repull\Model\ReservationWebhookObject $object): static
     {
-        if (is_null($message)) {
-            throw new InvalidArgumentException('non-nullable message cannot be null');
+        if (is_null($object)) {
+            throw new InvalidArgumentException('non-nullable object cannot be null');
         }
-        if ((mb_strlen($message) > 4000)) {
-            throw new InvalidArgumentException('invalid length for $message when calling SendMessageRequest., must be smaller than or equal to 4000.');
-        }
-
-        $this->container['message'] = $message;
+        $this->container['object'] = $object;
 
         return $this;
     }
 
     /**
-     * Gets channel
+     * Gets request_status
      *
-     * @return string|null
+     * @return string
      */
-    public function getChannel(): ?string
+    public function getRequestStatus(): string
     {
-        return $this->container['channel'];
+        return $this->container['request_status'];
     }
 
     /**
-     * Sets channel
+     * Sets request_status
      *
-     * @param string|null $channel Force a channel. Omit to send on whichever channel the conversation already uses, which is the right default.
+     * @param string $request_status `accepted` — it is a booking now; `declined` — by the host; `expired` — nobody answered in time; `voided` — withdrawn by the guest, or voided by the channel (for example the guest failed verification).
      *
      * @return $this
      */
-    public function setChannel(?string $channel): static
+    public function setRequestStatus(string $request_status): static
     {
-        if (is_null($channel)) {
-            throw new InvalidArgumentException('non-nullable channel cannot be null');
+        if (is_null($request_status)) {
+            throw new InvalidArgumentException('non-nullable request_status cannot be null');
         }
         // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['channel'] = $channel;
+        $this->container['request_status'] = $request_status;
 
         return $this;
     }
 
     /**
-     * Gets attachments
+     * Gets previous_attributes
      *
-     * @return \Repull\Model\SendMessageAttachment[]|null
+     * @return array<string,mixed>
      */
-    public function getAttachments(): ?array
+    public function getPreviousAttributes(): array
     {
-        return $this->container['attachments'];
+        return $this->container['previous_attributes'];
     }
 
     /**
-     * Sets attachments
+     * Sets previous_attributes
      *
-     * @param \Repull\Model\SendMessageAttachment[]|null $attachments Files to send. See the per-channel table above.
+     * @param array<string,mixed> $previous_attributes Fields of `object` that moved, with their prior values — always `{ \"status\": \"pending\" }` here.
      *
      * @return $this
      */
-    public function setAttachments(?array $attachments): static
+    public function setPreviousAttributes(array $previous_attributes): static
     {
-        if (is_null($attachments)) {
-            throw new InvalidArgumentException('non-nullable attachments cannot be null');
+        if (is_null($previous_attributes)) {
+            throw new InvalidArgumentException('non-nullable previous_attributes cannot be null');
         }
+        $this->container['previous_attributes'] = $previous_attributes;
 
-        if ((count($attachments) > 5)) {
-            throw new InvalidArgumentException('invalid value for $attachments when calling SendMessageRequest., number of items must be less than or equal to 5.');
+        return $this;
+    }
+
+    /**
+     * Gets source_status
+     *
+     * @return string|null
+     */
+    public function getSourceStatus(): ?string
+    {
+        return $this->container['source_status'];
+    }
+
+    /**
+     * Sets source_status
+     *
+     * @param string|null $source_status The channel's own status value, unmapped (Airbnb: `accept`, `deny`, `timeout`, `pending_voided`, …) — for reconciling against the channel.
+     *
+     * @return $this
+     */
+    public function setSourceStatus(?string $source_status): static
+    {
+        if (is_null($source_status)) {
+            array_push($this->openAPINullablesSetToNull, 'source_status');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('source_status', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        if ((count($attachments) < 1)) {
-            throw new InvalidArgumentException('invalid length for $attachments when calling SendMessageRequest., number of items must be greater than or equal to 1.');
+        $this->container['source_status'] = $source_status;
+
+        return $this;
+    }
+
+    /**
+     * Gets occurred_at
+     *
+     * @return \DateTime|null
+     */
+    public function getOccurredAt(): ?\DateTime
+    {
+        return $this->container['occurred_at'];
+    }
+
+    /**
+     * Sets occurred_at
+     *
+     * @param \DateTime|null $occurred_at occurred_at
+     *
+     * @return $this
+     */
+    public function setOccurredAt(?\DateTime $occurred_at): static
+    {
+        if (is_null($occurred_at)) {
+            throw new InvalidArgumentException('non-nullable occurred_at cannot be null');
         }
-        $this->container['attachments'] = $attachments;
+        $this->container['occurred_at'] = $occurred_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets revision
+     *
+     * @return \DateTime|null
+     */
+    public function getRevision(): ?\DateTime
+    {
+        return $this->container['revision'];
+    }
+
+    /**
+     * Sets revision
+     *
+     * @param \DateTime|null $revision revision
+     *
+     * @return $this
+     */
+    public function setRevision(?\DateTime $revision): static
+    {
+        if (is_null($revision)) {
+            array_push($this->openAPINullablesSetToNull, 'revision');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('revision', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['revision'] = $revision;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * SendMessageRequest
+ * SendAirbnbMessage201Response
  *
  * PHP version 8.1
  *
@@ -35,15 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * SendMessageRequest Class Doc Comment
+ * SendAirbnbMessage201Response Class Doc Comment
  *
- * @description &#x60;message&#x60;, &#x60;attachments&#x60;, or both. Per-channel limits for &#x60;attachments&#x60;:  | Channel | Accepted types | Per file | Per request | Text | |---|---|---|---|---| | Airbnb | JPEG, PNG, GIF, WebP (sent as JPEG), MP4, QuickTime | 10 MB | 5 | optional — each file is sent as its own message, then the text | | Booking.com | JPEG, PNG | 10 MB | 5 | **required** — all files ride on the one text message | | SMS, email, direct-booking site chat | — | — | — | &#x60;422 attachments_not_supported&#x60;; nothing is sent |
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class SendAirbnbMessage201Response implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +51,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'SendMessageRequest';
+    protected static string $openAPIModelName = 'send_airbnb_message_201_response';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,9 +59,18 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'message' => 'string',
+        'id' => 'string',
+        'conversation_id' => 'int',
+        'external_message_id' => 'string',
         'channel' => 'string',
-        'attachments' => '\Repull\Model\SendMessageAttachment[]'
+        'status' => 'string',
+        'direction' => 'string',
+        'content_rewritten' => 'bool',
+        'submitted_content' => 'string',
+        'delivered_content' => 'string',
+        'status_reason' => 'string',
+        'attachments' => '\Repull\Model\SentAttachment[]',
+        'parts' => '\Repull\Model\SendMessagePart[]'
     ];
 
     /**
@@ -71,9 +79,18 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'message' => null,
+        'id' => null,
+        'conversation_id' => null,
+        'external_message_id' => null,
         'channel' => null,
-        'attachments' => null
+        'status' => null,
+        'direction' => null,
+        'content_rewritten' => null,
+        'submitted_content' => null,
+        'delivered_content' => null,
+        'status_reason' => null,
+        'attachments' => null,
+        'parts' => null
     ];
 
     /**
@@ -82,9 +99,18 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'message' => false,
-        'channel' => false,
-        'attachments' => false
+        'id' => true,
+        'conversation_id' => false,
+        'external_message_id' => true,
+        'channel' => true,
+        'status' => false,
+        'direction' => false,
+        'content_rewritten' => false,
+        'submitted_content' => true,
+        'delivered_content' => true,
+        'status_reason' => true,
+        'attachments' => false,
+        'parts' => false
     ];
 
     /**
@@ -163,9 +189,18 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'message' => 'message',
+        'id' => 'id',
+        'conversation_id' => 'conversationId',
+        'external_message_id' => 'externalMessageId',
         'channel' => 'channel',
-        'attachments' => 'attachments'
+        'status' => 'status',
+        'direction' => 'direction',
+        'content_rewritten' => 'contentRewritten',
+        'submitted_content' => 'submittedContent',
+        'delivered_content' => 'deliveredContent',
+        'status_reason' => 'statusReason',
+        'attachments' => 'attachments',
+        'parts' => 'parts'
     ];
 
     /**
@@ -174,9 +209,18 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $setters = [
-        'message' => 'setMessage',
+        'id' => 'setId',
+        'conversation_id' => 'setConversationId',
+        'external_message_id' => 'setExternalMessageId',
         'channel' => 'setChannel',
-        'attachments' => 'setAttachments'
+        'status' => 'setStatus',
+        'direction' => 'setDirection',
+        'content_rewritten' => 'setContentRewritten',
+        'submitted_content' => 'setSubmittedContent',
+        'delivered_content' => 'setDeliveredContent',
+        'status_reason' => 'setStatusReason',
+        'attachments' => 'setAttachments',
+        'parts' => 'setParts'
     ];
 
     /**
@@ -185,9 +229,18 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $getters = [
-        'message' => 'getMessage',
+        'id' => 'getId',
+        'conversation_id' => 'getConversationId',
+        'external_message_id' => 'getExternalMessageId',
         'channel' => 'getChannel',
-        'attachments' => 'getAttachments'
+        'status' => 'getStatus',
+        'direction' => 'getDirection',
+        'content_rewritten' => 'getContentRewritten',
+        'submitted_content' => 'getSubmittedContent',
+        'delivered_content' => 'getDeliveredContent',
+        'status_reason' => 'getStatusReason',
+        'attachments' => 'getAttachments',
+        'parts' => 'getParts'
     ];
 
     /**
@@ -222,25 +275,17 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         return self::$openAPIModelName;
     }
 
-    public const CHANNEL_AIRBNB = 'airbnb';
-    public const CHANNEL_BOOKING = 'booking';
-    public const CHANNEL_SMS = 'sms';
-    public const CHANNEL_EMAIL = 'email';
-    public const CHANNEL_WEBSITE = 'website';
+    public const DIRECTION_OUTBOUND = 'outbound';
 
     /**
      * Gets allowable values of the enum
      *
      * @return string[]
      */
-    public static function getChannelAllowableValues()
+    public static function getDirectionAllowableValues()
     {
         return [
-            self::CHANNEL_AIRBNB,
-            self::CHANNEL_BOOKING,
-            self::CHANNEL_SMS,
-            self::CHANNEL_EMAIL,
-            self::CHANNEL_WEBSITE,
+            self::DIRECTION_OUTBOUND,
         ];
     }
 
@@ -258,9 +303,18 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('message', $data ?? [], null);
+        $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('conversation_id', $data ?? [], null);
+        $this->setIfExists('external_message_id', $data ?? [], null);
         $this->setIfExists('channel', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('direction', $data ?? [], null);
+        $this->setIfExists('content_rewritten', $data ?? [], null);
+        $this->setIfExists('submitted_content', $data ?? [], null);
+        $this->setIfExists('delivered_content', $data ?? [], null);
+        $this->setIfExists('status_reason', $data ?? [], null);
         $this->setIfExists('attachments', $data ?? [], null);
+        $this->setIfExists('parts', $data ?? [], null);
     }
 
     /**
@@ -288,25 +342,13 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     {
         $invalidProperties = [];
 
-        if (!is_null($this->container['message']) && (mb_strlen($this->container['message']) > 4000)) {
-            $invalidProperties[] = "invalid value for 'message', the character length must be smaller than or equal to 4000.";
-        }
-
-        $allowedValues = self::getChannelAllowableValues();
-        if (!is_null($this->container['channel']) && !in_array($this->container['channel'], $allowedValues, true)) {
+        $allowedValues = self::getDirectionAllowableValues();
+        if (!is_null($this->container['direction']) && !in_array($this->container['direction'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'channel', must be one of '%s'",
-                $this->container['channel'],
+                "invalid value '%s' for 'direction', must be one of '%s'",
+                $this->container['direction'],
                 implode("', '", $allowedValues)
             );
-        }
-
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) > 5)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be less than or equal to 5.";
-        }
-
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) < 1)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be greater than or equal to 1.";
         }
 
         return $invalidProperties;
@@ -322,32 +364,96 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
 
 
     /**
-     * Gets message
+     * Gets id
      *
      * @return string|null
      */
-    public function getMessage(): ?string
+    public function getId(): ?string
     {
-        return $this->container['message'];
+        return $this->container['id'];
     }
 
     /**
-     * Sets message
+     * Sets id
      *
-     * @param string|null $message The text to send the guest. Required unless `attachments` is present.
+     * @param string|null $id Repull message id for the row that was recorded.
      *
      * @return $this
      */
-    public function setMessage(?string $message): static
+    public function setId(?string $id): static
     {
-        if (is_null($message)) {
-            throw new InvalidArgumentException('non-nullable message cannot be null');
+        if (is_null($id)) {
+            array_push($this->openAPINullablesSetToNull, 'id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        if ((mb_strlen($message) > 4000)) {
-            throw new InvalidArgumentException('invalid length for $message when calling SendMessageRequest., must be smaller than or equal to 4000.');
-        }
+        $this->container['id'] = $id;
 
-        $this->container['message'] = $message;
+        return $this;
+    }
+
+    /**
+     * Gets conversation_id
+     *
+     * @return int|null
+     */
+    public function getConversationId(): ?int
+    {
+        return $this->container['conversation_id'];
+    }
+
+    /**
+     * Sets conversation_id
+     *
+     * @param int|null $conversation_id conversation_id
+     *
+     * @return $this
+     */
+    public function setConversationId(?int $conversation_id): static
+    {
+        if (is_null($conversation_id)) {
+            throw new InvalidArgumentException('non-nullable conversation_id cannot be null');
+        }
+        $this->container['conversation_id'] = $conversation_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets external_message_id
+     *
+     * @return string|null
+     */
+    public function getExternalMessageId(): ?string
+    {
+        return $this->container['external_message_id'];
+    }
+
+    /**
+     * Sets external_message_id
+     *
+     * @param string|null $external_message_id The channel's own message id, when it returns one.
+     *
+     * @return $this
+     */
+    public function setExternalMessageId(?string $external_message_id): static
+    {
+        if (is_null($external_message_id)) {
+            array_push($this->openAPINullablesSetToNull, 'external_message_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('external_message_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['external_message_id'] = $external_message_id;
 
         return $this;
     }
@@ -365,17 +471,207 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Sets channel
      *
-     * @param string|null $channel Force a channel. Omit to send on whichever channel the conversation already uses, which is the right default.
+     * @param string|null $channel The channel the message actually went out on.
      *
      * @return $this
      */
     public function setChannel(?string $channel): static
     {
         if (is_null($channel)) {
-            throw new InvalidArgumentException('non-nullable channel cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'channel');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('channel', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['channel'] = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Gets status
+     *
+     * @return string|null
+     */
+    public function getStatus(): ?string
+    {
+        return $this->container['status'];
+    }
+
+    /**
+     * Sets status
+     *
+     * @param string|null $status status
+     *
+     * @return $this
+     */
+    public function setStatus(?string $status): static
+    {
+        if (is_null($status)) {
+            throw new InvalidArgumentException('non-nullable status cannot be null');
+        }
+        $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets direction
+     *
+     * @return string|null
+     */
+    public function getDirection(): ?string
+    {
+        return $this->container['direction'];
+    }
+
+    /**
+     * Sets direction
+     *
+     * @param string|null $direction direction
+     *
+     * @return $this
+     */
+    public function setDirection(?string $direction): static
+    {
+        if (is_null($direction)) {
+            throw new InvalidArgumentException('non-nullable direction cannot be null');
         }
         // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['channel'] = $channel;
+        $this->container['direction'] = $direction;
+
+        return $this;
+    }
+
+    /**
+     * Gets content_rewritten
+     *
+     * @return bool|null
+     */
+    public function getContentRewritten(): ?bool
+    {
+        return $this->container['content_rewritten'];
+    }
+
+    /**
+     * Sets content_rewritten
+     *
+     * @param bool|null $content_rewritten TRUE when the channel altered the text before delivery — today that means Airbnb stripped a link, an email address or a phone number and the remainder was re-sent. When true, the guest did NOT receive `submittedContent`; they received `deliveredContent`.
+     *
+     * @return $this
+     */
+    public function setContentRewritten(?bool $content_rewritten): static
+    {
+        if (is_null($content_rewritten)) {
+            throw new InvalidArgumentException('non-nullable content_rewritten cannot be null');
+        }
+        $this->container['content_rewritten'] = $content_rewritten;
+
+        return $this;
+    }
+
+    /**
+     * Gets submitted_content
+     *
+     * @return string|null
+     */
+    public function getSubmittedContent(): ?string
+    {
+        return $this->container['submitted_content'];
+    }
+
+    /**
+     * Sets submitted_content
+     *
+     * @param string|null $submitted_content The text you sent.
+     *
+     * @return $this
+     */
+    public function setSubmittedContent(?string $submitted_content): static
+    {
+        if (is_null($submitted_content)) {
+            array_push($this->openAPINullablesSetToNull, 'submitted_content');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('submitted_content', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['submitted_content'] = $submitted_content;
+
+        return $this;
+    }
+
+    /**
+     * Gets delivered_content
+     *
+     * @return string|null
+     */
+    public function getDeliveredContent(): ?string
+    {
+        return $this->container['delivered_content'];
+    }
+
+    /**
+     * Sets delivered_content
+     *
+     * @param string|null $delivered_content The text the guest actually received. Differs from `submittedContent` exactly when `contentRewritten` is true.
+     *
+     * @return $this
+     */
+    public function setDeliveredContent(?string $delivered_content): static
+    {
+        if (is_null($delivered_content)) {
+            array_push($this->openAPINullablesSetToNull, 'delivered_content');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('delivered_content', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['delivered_content'] = $delivered_content;
+
+        return $this;
+    }
+
+    /**
+     * Gets status_reason
+     *
+     * @return string|null
+     */
+    public function getStatusReason(): ?string
+    {
+        return $this->container['status_reason'];
+    }
+
+    /**
+     * Sets status_reason
+     *
+     * @param string|null $status_reason The channel's verbatim note, when it gave one — including the refusal that triggered a rewrite.
+     *
+     * @return $this
+     */
+    public function setStatusReason(?string $status_reason): static
+    {
+        if (is_null($status_reason)) {
+            array_push($this->openAPINullablesSetToNull, 'status_reason');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('status_reason', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['status_reason'] = $status_reason;
 
         return $this;
     }
@@ -383,7 +679,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Gets attachments
      *
-     * @return \Repull\Model\SendMessageAttachment[]|null
+     * @return \Repull\Model\SentAttachment[]|null
      */
     public function getAttachments(): ?array
     {
@@ -393,7 +689,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Sets attachments
      *
-     * @param \Repull\Model\SendMessageAttachment[]|null $attachments Files to send. See the per-channel table above.
+     * @param \Repull\Model\SentAttachment[]|null $attachments The files delivered, in request order. Empty array for a text-only send.
      *
      * @return $this
      */
@@ -402,14 +698,34 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         if (is_null($attachments)) {
             throw new InvalidArgumentException('non-nullable attachments cannot be null');
         }
-
-        if ((count($attachments) > 5)) {
-            throw new InvalidArgumentException('invalid value for $attachments when calling SendMessageRequest., number of items must be less than or equal to 5.');
-        }
-        if ((count($attachments) < 1)) {
-            throw new InvalidArgumentException('invalid length for $attachments when calling SendMessageRequest., number of items must be greater than or equal to 1.');
-        }
         $this->container['attachments'] = $attachments;
+
+        return $this;
+    }
+
+    /**
+     * Gets parts
+     *
+     * @return \Repull\Model\SendMessagePart[]|null
+     */
+    public function getParts(): ?array
+    {
+        return $this->container['parts'];
+    }
+
+    /**
+     * Sets parts
+     *
+     * @param \Repull\Model\SendMessagePart[]|null $parts Present only when `attachments` were sent: one entry per channel message, in delivery order. `id` is the text message (or the last file message when there is no text).
+     *
+     * @return $this
+     */
+    public function setParts(?array $parts): static
+    {
+        if (is_null($parts)) {
+            throw new InvalidArgumentException('non-nullable parts cannot be null');
+        }
+        $this->container['parts'] = $parts;
 
         return $this;
     }

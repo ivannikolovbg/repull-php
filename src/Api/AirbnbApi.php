@@ -141,6 +141,9 @@ class AirbnbApi
         'getAirbnbListingSettings' => [
             'application/json',
         ],
+        'getAirbnbOffer' => [
+            'application/json',
+        ],
         'getAirbnbReservation' => [
             'application/json',
         ],
@@ -590,7 +593,7 @@ class AirbnbApi
      * Listing action (delete/push/publish/unlist/relist)
      *
      * @param  string $id id (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  \Repull\Model\AirbnbListingActionRequest|null $airbnb_listing_action_request airbnb_listing_action_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbListingAction'] to see the possible values for this operation
      *
@@ -615,7 +618,7 @@ class AirbnbApi
      * Listing action (delete/push/publish/unlist/relist)
      *
      * @param  string $id (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  \Repull\Model\AirbnbListingActionRequest|null $airbnb_listing_action_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbListingAction'] to see the possible values for this operation
      *
@@ -774,7 +777,7 @@ class AirbnbApi
      * Listing action (delete/push/publish/unlist/relist)
      *
      * @param  string $id (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  \Repull\Model\AirbnbListingActionRequest|null $airbnb_listing_action_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbListingAction'] to see the possible values for this operation
      *
@@ -802,7 +805,7 @@ class AirbnbApi
      * Listing action (delete/push/publish/unlist/relist)
      *
      * @param  string $id (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  \Repull\Model\AirbnbListingActionRequest|null $airbnb_listing_action_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbListingAction'] to see the possible values for this operation
      *
@@ -859,7 +862,7 @@ class AirbnbApi
      * Create request for operation 'airbnbListingAction'
      *
      * @param  string $id (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  \Repull\Model\AirbnbListingActionRequest|null $airbnb_listing_action_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbListingAction'] to see the possible values for this operation
      *
@@ -977,42 +980,50 @@ class AirbnbApi
     /**
      * Operation airbnbReservationAction
      *
-     * Accept/decline/cancel Airbnb reservation
+     * Accept, decline or cancel an Airbnb reservation
      *
-     * @param  string $code code (required)
+     * @param  string $code Airbnb confirmation code, e.g. &#x60;HM9J2MFR3W&#x60;. (required)
+     * @param  \Repull\Model\AirbnbReservationActionRequest $airbnb_reservation_action_request airbnb_reservation_action_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbReservationAction'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\Error|null
+     * @return \Repull\Model\AirbnbReservationAction200Response|\Repull\Model\Error
      */
     public function airbnbReservationAction(
         string $code,
+        \Repull\Model\AirbnbReservationActionRequest $airbnb_reservation_action_request,
+        ?string $idempotency_key = null,
         string $contentType = self::contentTypes['airbnbReservationAction'][0]
-    ): ?\Repull\Model\Error
+    ): \Repull\Model\AirbnbReservationAction200Response|\Repull\Model\Error
     {
-        list($response) = $this->airbnbReservationActionWithHttpInfo($code, $contentType);
+        list($response) = $this->airbnbReservationActionWithHttpInfo($code, $airbnb_reservation_action_request, $idempotency_key, $contentType);
         return $response;
     }
 
     /**
      * Operation airbnbReservationActionWithHttpInfo
      *
-     * Accept/decline/cancel Airbnb reservation
+     * Accept, decline or cancel an Airbnb reservation
      *
-     * @param  string $code (required)
+     * @param  string $code Airbnb confirmation code, e.g. &#x60;HM9J2MFR3W&#x60;. (required)
+     * @param  \Repull\Model\AirbnbReservationActionRequest $airbnb_reservation_action_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbReservationAction'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbReservationAction200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function airbnbReservationActionWithHttpInfo(
         string $code,
+        \Repull\Model\AirbnbReservationActionRequest $airbnb_reservation_action_request,
+        ?string $idempotency_key = null,
         string $contentType = self::contentTypes['airbnbReservationAction'][0]
     ): array
     {
-        $request = $this->airbnbReservationActionRequest($code, $contentType);
+        $request = $this->airbnbReservationActionRequest($code, $airbnb_reservation_action_request, $idempotency_key, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1036,11 +1047,135 @@ class AirbnbApi
 
             $statusCode = $response->getStatusCode();
 
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\AirbnbReservationAction200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
 
-            return [null, $statusCode, $response->getHeaders()];
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\AirbnbReservationAction200Response',
+                $request,
+                $response,
+            );
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\AirbnbReservationAction200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -1057,9 +1192,11 @@ class AirbnbApi
     /**
      * Operation airbnbReservationActionAsync
      *
-     * Accept/decline/cancel Airbnb reservation
+     * Accept, decline or cancel an Airbnb reservation
      *
-     * @param  string $code (required)
+     * @param  string $code Airbnb confirmation code, e.g. &#x60;HM9J2MFR3W&#x60;. (required)
+     * @param  \Repull\Model\AirbnbReservationActionRequest $airbnb_reservation_action_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbReservationAction'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1067,10 +1204,12 @@ class AirbnbApi
      */
     public function airbnbReservationActionAsync(
         string $code,
+        \Repull\Model\AirbnbReservationActionRequest $airbnb_reservation_action_request,
+        ?string $idempotency_key = null,
         string $contentType = self::contentTypes['airbnbReservationAction'][0]
     ): PromiseInterface
     {
-        return $this->airbnbReservationActionAsyncWithHttpInfo($code, $contentType)
+        return $this->airbnbReservationActionAsyncWithHttpInfo($code, $airbnb_reservation_action_request, $idempotency_key, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1081,9 +1220,11 @@ class AirbnbApi
     /**
      * Operation airbnbReservationActionAsyncWithHttpInfo
      *
-     * Accept/decline/cancel Airbnb reservation
+     * Accept, decline or cancel an Airbnb reservation
      *
-     * @param  string $code (required)
+     * @param  string $code Airbnb confirmation code, e.g. &#x60;HM9J2MFR3W&#x60;. (required)
+     * @param  \Repull\Model\AirbnbReservationActionRequest $airbnb_reservation_action_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbReservationAction'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1091,17 +1232,32 @@ class AirbnbApi
      */
     public function airbnbReservationActionAsyncWithHttpInfo(
         string $code,
+        \Repull\Model\AirbnbReservationActionRequest $airbnb_reservation_action_request,
+        ?string $idempotency_key = null,
         string $contentType = self::contentTypes['airbnbReservationAction'][0]
     ): PromiseInterface
     {
-        $returnType = '';
-        $request = $this->airbnbReservationActionRequest($code, $contentType);
+        $returnType = '\Repull\Model\AirbnbReservationAction200Response';
+        $request = $this->airbnbReservationActionRequest($code, $airbnb_reservation_action_request, $idempotency_key, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 },
                 function ($exception) {
                     $response = $exception->getResponse();
@@ -1123,7 +1279,9 @@ class AirbnbApi
     /**
      * Create request for operation 'airbnbReservationAction'
      *
-     * @param  string $code (required)
+     * @param  string $code Airbnb confirmation code, e.g. &#x60;HM9J2MFR3W&#x60;. (required)
+     * @param  \Repull\Model\AirbnbReservationActionRequest $airbnb_reservation_action_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['airbnbReservationAction'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1131,6 +1289,8 @@ class AirbnbApi
      */
     public function airbnbReservationActionRequest(
         string $code,
+        \Repull\Model\AirbnbReservationActionRequest $airbnb_reservation_action_request,
+        ?string $idempotency_key = null,
         string $contentType = self::contentTypes['airbnbReservationAction'][0]
     ): Request
     {
@@ -1142,6 +1302,17 @@ class AirbnbApi
             );
         }
 
+        // verify the required parameter 'airbnb_reservation_action_request' is set
+        if ($airbnb_reservation_action_request === null || (is_array($airbnb_reservation_action_request) && count($airbnb_reservation_action_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $airbnb_reservation_action_request when calling airbnbReservationAction'
+            );
+        }
+
+        if ($idempotency_key !== null && strlen($idempotency_key) > 255) {
+            throw new InvalidArgumentException('invalid length for "$idempotency_key" when calling AirbnbApi.airbnbReservationAction, must be smaller than or equal to 255.');
+        }
+        
 
         $resourcePath = '/v1/channels/airbnb/reservations/{code}';
         $formParams = [];
@@ -1151,6 +1322,10 @@ class AirbnbApi
         $multipart = false;
 
 
+        // header params
+        if ($idempotency_key !== null) {
+            $headerParams['Idempotency-Key'] = ObjectSerializer::toHeaderValue($idempotency_key);
+        }
 
         // path params
         if ($code !== null) {
@@ -1169,7 +1344,14 @@ class AirbnbApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if (isset($airbnb_reservation_action_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($airbnb_reservation_action_request));
+            } else {
+                $httpBody = $airbnb_reservation_action_request;
+            }
+        } elseif (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -2186,18 +2368,20 @@ class AirbnbApi
      * Create Airbnb special offer or pre-approval
      *
      * @param  \Repull\Model\CreateAirbnbOfferRequest $create_airbnb_offer_request create_airbnb_offer_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbOffer'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\Error|null
+     * @return \Repull\Model\GetAirbnbOffer200Response|\Repull\Model\Error
      */
     public function createAirbnbOffer(
         \Repull\Model\CreateAirbnbOfferRequest $create_airbnb_offer_request,
+        ?string $idempotency_key = null,
         string $contentType = self::contentTypes['createAirbnbOffer'][0]
-    ): ?\Repull\Model\Error
+    ): \Repull\Model\GetAirbnbOffer200Response|\Repull\Model\Error
     {
-        list($response) = $this->createAirbnbOfferWithHttpInfo($create_airbnb_offer_request, $contentType);
+        list($response) = $this->createAirbnbOfferWithHttpInfo($create_airbnb_offer_request, $idempotency_key, $contentType);
         return $response;
     }
 
@@ -2207,18 +2391,20 @@ class AirbnbApi
      * Create Airbnb special offer or pre-approval
      *
      * @param  \Repull\Model\CreateAirbnbOfferRequest $create_airbnb_offer_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbOffer'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\GetAirbnbOffer200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function createAirbnbOfferWithHttpInfo(
         \Repull\Model\CreateAirbnbOfferRequest $create_airbnb_offer_request,
+        ?string $idempotency_key = null,
         string $contentType = self::contentTypes['createAirbnbOffer'][0]
     ): array
     {
-        $request = $this->createAirbnbOfferRequest($create_airbnb_offer_request, $contentType);
+        $request = $this->createAirbnbOfferRequest($create_airbnb_offer_request, $idempotency_key, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2242,10 +2428,86 @@ class AirbnbApi
 
             $statusCode = $response->getStatusCode();
 
+            switch($statusCode) {
+                case 201:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\GetAirbnbOffer200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
 
-            return [null, $statusCode, $response->getHeaders()];
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\GetAirbnbOffer200Response',
+                $request,
+                $response,
+            );
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 201:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\GetAirbnbOffer200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -2270,6 +2532,14 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -2278,7 +2548,15 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
-                case 500:
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -2298,6 +2576,7 @@ class AirbnbApi
      * Create Airbnb special offer or pre-approval
      *
      * @param  \Repull\Model\CreateAirbnbOfferRequest $create_airbnb_offer_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbOffer'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -2305,10 +2584,11 @@ class AirbnbApi
      */
     public function createAirbnbOfferAsync(
         \Repull\Model\CreateAirbnbOfferRequest $create_airbnb_offer_request,
+        ?string $idempotency_key = null,
         string $contentType = self::contentTypes['createAirbnbOffer'][0]
     ): PromiseInterface
     {
-        return $this->createAirbnbOfferAsyncWithHttpInfo($create_airbnb_offer_request, $contentType)
+        return $this->createAirbnbOfferAsyncWithHttpInfo($create_airbnb_offer_request, $idempotency_key, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2322,6 +2602,7 @@ class AirbnbApi
      * Create Airbnb special offer or pre-approval
      *
      * @param  \Repull\Model\CreateAirbnbOfferRequest $create_airbnb_offer_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbOffer'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -2329,17 +2610,31 @@ class AirbnbApi
      */
     public function createAirbnbOfferAsyncWithHttpInfo(
         \Repull\Model\CreateAirbnbOfferRequest $create_airbnb_offer_request,
+        ?string $idempotency_key = null,
         string $contentType = self::contentTypes['createAirbnbOffer'][0]
     ): PromiseInterface
     {
-        $returnType = '';
-        $request = $this->createAirbnbOfferRequest($create_airbnb_offer_request, $contentType);
+        $returnType = '\Repull\Model\GetAirbnbOffer200Response';
+        $request = $this->createAirbnbOfferRequest($create_airbnb_offer_request, $idempotency_key, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 },
                 function ($exception) {
                     $response = $exception->getResponse();
@@ -2362,6 +2657,7 @@ class AirbnbApi
      * Create request for operation 'createAirbnbOffer'
      *
      * @param  \Repull\Model\CreateAirbnbOfferRequest $create_airbnb_offer_request (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createAirbnbOffer'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -2369,6 +2665,7 @@ class AirbnbApi
      */
     public function createAirbnbOfferRequest(
         \Repull\Model\CreateAirbnbOfferRequest $create_airbnb_offer_request,
+        ?string $idempotency_key = null,
         string $contentType = self::contentTypes['createAirbnbOffer'][0]
     ): Request
     {
@@ -2380,6 +2677,10 @@ class AirbnbApi
             );
         }
 
+        if ($idempotency_key !== null && strlen($idempotency_key) > 255) {
+            throw new InvalidArgumentException('invalid length for "$idempotency_key" when calling AirbnbApi.createAirbnbOffer, must be smaller than or equal to 255.');
+        }
+        
 
         $resourcePath = '/v1/channels/airbnb/offers';
         $formParams = [];
@@ -2389,6 +2690,10 @@ class AirbnbApi
         $multipart = false;
 
 
+        // header params
+        if ($idempotency_key !== null) {
+            $headerParams['Idempotency-Key'] = ObjectSerializer::toHeaderValue($idempotency_key);
+        }
 
 
 
@@ -7487,6 +7792,375 @@ class AirbnbApi
     }
 
     /**
+     * Operation getAirbnbOffer
+     *
+     * Get Airbnb special offer
+     *
+     * @param  string $offer_id Airbnb special-offer id (the &#x60;id&#x60; Airbnb returned when the offer was created). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbOffer'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\GetAirbnbOffer200Response|\Repull\Model\Error
+     */
+    public function getAirbnbOffer(
+        string $offer_id,
+        string $contentType = self::contentTypes['getAirbnbOffer'][0]
+    ): \Repull\Model\GetAirbnbOffer200Response|\Repull\Model\Error
+    {
+        list($response) = $this->getAirbnbOfferWithHttpInfo($offer_id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getAirbnbOfferWithHttpInfo
+     *
+     * Get Airbnb special offer
+     *
+     * @param  string $offer_id Airbnb special-offer id (the &#x60;id&#x60; Airbnb returned when the offer was created). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbOffer'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\GetAirbnbOffer200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getAirbnbOfferWithHttpInfo(
+        string $offer_id,
+        string $contentType = self::contentTypes['getAirbnbOffer'][0]
+    ): array
+    {
+        $request = $this->getAirbnbOfferRequest($offer_id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\GetAirbnbOffer200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\GetAirbnbOffer200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\GetAirbnbOffer200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getAirbnbOfferAsync
+     *
+     * Get Airbnb special offer
+     *
+     * @param  string $offer_id Airbnb special-offer id (the &#x60;id&#x60; Airbnb returned when the offer was created). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbOffer'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getAirbnbOfferAsync(
+        string $offer_id,
+        string $contentType = self::contentTypes['getAirbnbOffer'][0]
+    ): PromiseInterface
+    {
+        return $this->getAirbnbOfferAsyncWithHttpInfo($offer_id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getAirbnbOfferAsyncWithHttpInfo
+     *
+     * Get Airbnb special offer
+     *
+     * @param  string $offer_id Airbnb special-offer id (the &#x60;id&#x60; Airbnb returned when the offer was created). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbOffer'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getAirbnbOfferAsyncWithHttpInfo(
+        string $offer_id,
+        string $contentType = self::contentTypes['getAirbnbOffer'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\GetAirbnbOffer200Response';
+        $request = $this->getAirbnbOfferRequest($offer_id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getAirbnbOffer'
+     *
+     * @param  string $offer_id Airbnb special-offer id (the &#x60;id&#x60; Airbnb returned when the offer was created). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAirbnbOffer'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getAirbnbOfferRequest(
+        string $offer_id,
+        string $contentType = self::contentTypes['getAirbnbOffer'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'offer_id' is set
+        if ($offer_id === null || (is_array($offer_id) && count($offer_id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $offer_id when calling getAirbnbOffer'
+            );
+        }
+
+
+        $resourcePath = '/v1/channels/airbnb/offers';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $offer_id,
+            'offerId', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation getAirbnbReservation
      *
      * Get Airbnb reservation
@@ -11707,18 +12381,22 @@ class AirbnbApi
      * Get Airbnb messages
      *
      * @param  string $thread_id thread_id (required)
+     * @param  string|null $cursor &#x60;pagination.nextCursor&#x60; from the previous page. (optional)
+     * @param  bool|null $all &#x60;true&#x60; returns up to 1000 messages oldest-first in one response, without &#x60;pagination&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbThreadMessages'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\MessageListResponse|\Repull\Model\Error
+     * @return \Repull\Model\ListAirbnbThreadMessages200Response|\Repull\Model\Error
      */
     public function listAirbnbThreadMessages(
         string $thread_id,
+        ?string $cursor = null,
+        ?bool $all = null,
         string $contentType = self::contentTypes['listAirbnbThreadMessages'][0]
-    ): \Repull\Model\MessageListResponse|\Repull\Model\Error
+    ): \Repull\Model\ListAirbnbThreadMessages200Response|\Repull\Model\Error
     {
-        list($response) = $this->listAirbnbThreadMessagesWithHttpInfo($thread_id, $contentType);
+        list($response) = $this->listAirbnbThreadMessagesWithHttpInfo($thread_id, $cursor, $all, $contentType);
         return $response;
     }
 
@@ -11728,18 +12406,22 @@ class AirbnbApi
      * Get Airbnb messages
      *
      * @param  string $thread_id (required)
+     * @param  string|null $cursor &#x60;pagination.nextCursor&#x60; from the previous page. (optional)
+     * @param  bool|null $all &#x60;true&#x60; returns up to 1000 messages oldest-first in one response, without &#x60;pagination&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbThreadMessages'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\MessageListResponse|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListAirbnbThreadMessages200Response|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbThreadMessagesWithHttpInfo(
         string $thread_id,
+        ?string $cursor = null,
+        ?bool $all = null,
         string $contentType = self::contentTypes['listAirbnbThreadMessages'][0]
     ): array
     {
-        $request = $this->listAirbnbThreadMessagesRequest($thread_id, $contentType);
+        $request = $this->listAirbnbThreadMessagesRequest($thread_id, $cursor, $all, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -11766,7 +12448,7 @@ class AirbnbApi
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Repull\Model\MessageListResponse',
+                        '\Repull\Model\ListAirbnbThreadMessages200Response',
                         $request,
                         $response,
                     );
@@ -11793,7 +12475,7 @@ class AirbnbApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Repull\Model\MessageListResponse',
+                '\Repull\Model\ListAirbnbThreadMessages200Response',
                 $request,
                 $response,
             );
@@ -11802,7 +12484,7 @@ class AirbnbApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Repull\Model\MessageListResponse',
+                        '\Repull\Model\ListAirbnbThreadMessages200Response',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -11827,6 +12509,8 @@ class AirbnbApi
      * Get Airbnb messages
      *
      * @param  string $thread_id (required)
+     * @param  string|null $cursor &#x60;pagination.nextCursor&#x60; from the previous page. (optional)
+     * @param  bool|null $all &#x60;true&#x60; returns up to 1000 messages oldest-first in one response, without &#x60;pagination&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbThreadMessages'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -11834,10 +12518,12 @@ class AirbnbApi
      */
     public function listAirbnbThreadMessagesAsync(
         string $thread_id,
+        ?string $cursor = null,
+        ?bool $all = null,
         string $contentType = self::contentTypes['listAirbnbThreadMessages'][0]
     ): PromiseInterface
     {
-        return $this->listAirbnbThreadMessagesAsyncWithHttpInfo($thread_id, $contentType)
+        return $this->listAirbnbThreadMessagesAsyncWithHttpInfo($thread_id, $cursor, $all, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -11851,6 +12537,8 @@ class AirbnbApi
      * Get Airbnb messages
      *
      * @param  string $thread_id (required)
+     * @param  string|null $cursor &#x60;pagination.nextCursor&#x60; from the previous page. (optional)
+     * @param  bool|null $all &#x60;true&#x60; returns up to 1000 messages oldest-first in one response, without &#x60;pagination&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbThreadMessages'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -11858,11 +12546,13 @@ class AirbnbApi
      */
     public function listAirbnbThreadMessagesAsyncWithHttpInfo(
         string $thread_id,
+        ?string $cursor = null,
+        ?bool $all = null,
         string $contentType = self::contentTypes['listAirbnbThreadMessages'][0]
     ): PromiseInterface
     {
-        $returnType = '\Repull\Model\MessageListResponse';
-        $request = $this->listAirbnbThreadMessagesRequest($thread_id, $contentType);
+        $returnType = '\Repull\Model\ListAirbnbThreadMessages200Response';
+        $request = $this->listAirbnbThreadMessagesRequest($thread_id, $cursor, $all, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -11904,6 +12594,8 @@ class AirbnbApi
      * Create request for operation 'listAirbnbThreadMessages'
      *
      * @param  string $thread_id (required)
+     * @param  string|null $cursor &#x60;pagination.nextCursor&#x60; from the previous page. (optional)
+     * @param  bool|null $all &#x60;true&#x60; returns up to 1000 messages oldest-first in one response, without &#x60;pagination&#x60;. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbThreadMessages'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -11911,6 +12603,8 @@ class AirbnbApi
      */
     public function listAirbnbThreadMessagesRequest(
         string $thread_id,
+        ?string $cursor = null,
+        ?bool $all = null,
         string $contentType = self::contentTypes['listAirbnbThreadMessages'][0]
     ): Request
     {
@@ -11923,6 +12617,8 @@ class AirbnbApi
         }
 
 
+
+
         $resourcePath = '/v1/channels/airbnb/messaging/{threadId}/messages';
         $formParams = [];
         $queryParams = [];
@@ -11930,6 +12626,24 @@ class AirbnbApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $cursor,
+            'cursor', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $all,
+            'all', // param base name
+            'boolean', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
         // path params
@@ -13972,13 +14686,13 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\Error|null
+     * @return \Repull\Model\SendAirbnbMessage201Response|\Repull\Model\Error
      */
     public function sendAirbnbMessage(
         string $thread_id,
         \Repull\Model\SendAirbnbMessageRequest $send_airbnb_message_request,
         string $contentType = self::contentTypes['sendAirbnbMessage'][0]
-    ): ?\Repull\Model\Error
+    ): \Repull\Model\SendAirbnbMessage201Response|\Repull\Model\Error
     {
         list($response) = $this->sendAirbnbMessageWithHttpInfo($thread_id, $send_airbnb_message_request, $contentType);
         return $response;
@@ -13995,7 +14709,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SendAirbnbMessage201Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function sendAirbnbMessageWithHttpInfo(
         string $thread_id,
@@ -14027,10 +14741,74 @@ class AirbnbApi
 
             $statusCode = $response->getStatusCode();
 
+            switch($statusCode) {
+                case 201:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SendAirbnbMessage201Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
 
-            return [null, $statusCode, $response->getHeaders()];
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SendAirbnbMessage201Response',
+                $request,
+                $response,
+            );
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 201:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SendAirbnbMessage201Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -14048,6 +14826,14 @@ class AirbnbApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -14113,14 +14899,27 @@ class AirbnbApi
         string $contentType = self::contentTypes['sendAirbnbMessage'][0]
     ): PromiseInterface
     {
-        $returnType = '';
+        $returnType = '\Repull\Model\SendAirbnbMessage201Response';
         $request = $this->sendAirbnbMessageRequest($thread_id, $send_airbnb_message_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 },
                 function ($exception) {
                     $response = $exception->getResponse();
@@ -16346,7 +17145,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request airbnb_description_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDescription'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -16371,7 +17170,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDescription'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -16558,7 +17357,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDescription'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -16586,7 +17385,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDescription'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -16643,7 +17442,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbDescriptionWriteRequest $airbnb_description_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDescription'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -16770,7 +17569,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request airbnb_listing_details_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDetails'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -16795,7 +17594,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDetails'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -16982,7 +17781,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDetails'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -17010,7 +17809,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDetails'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -17067,7 +17866,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingDetails'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -17194,7 +17993,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request airbnb_permits_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPermits'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -17219,7 +18018,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPermits'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -17406,7 +18205,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPermits'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -17434,7 +18233,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPermits'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -17491,7 +18290,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbPermitsWriteRequest $airbnb_permits_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingPermits'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -18715,7 +19514,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request airbnb_safety_disclosures_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingSafetyDisclosures'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -18740,7 +19539,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingSafetyDisclosures'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -18927,7 +19726,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingSafetyDisclosures'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -18955,7 +19754,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingSafetyDisclosures'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -19012,7 +19811,7 @@ class AirbnbApi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbSafetyDisclosuresWriteRequest $airbnb_safety_disclosures_write_request (required)
-     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Responses with status &gt;&#x3D; 500 are deliberately not stored, so a server error stays retryable. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbListingSafetyDisclosures'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -19764,17 +20563,17 @@ class AirbnbApi
      *
      * Withdraw Airbnb special offer
      *
-     * @param  string $offer_id Airbnb special-offer id to withdraw. (required)
+     * @param  string $offer_id Airbnb special-offer id (the &#x60;id&#x60; Airbnb returned when the offer was created). (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['withdrawAirbnbOffer'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\Error|null
+     * @return \Repull\Model\GetAirbnbOffer200Response|\Repull\Model\Error
      */
     public function withdrawAirbnbOffer(
         string $offer_id,
         string $contentType = self::contentTypes['withdrawAirbnbOffer'][0]
-    ): ?\Repull\Model\Error
+    ): \Repull\Model\GetAirbnbOffer200Response|\Repull\Model\Error
     {
         list($response) = $this->withdrawAirbnbOfferWithHttpInfo($offer_id, $contentType);
         return $response;
@@ -19785,12 +20584,12 @@ class AirbnbApi
      *
      * Withdraw Airbnb special offer
      *
-     * @param  string $offer_id Airbnb special-offer id to withdraw. (required)
+     * @param  string $offer_id Airbnb special-offer id (the &#x60;id&#x60; Airbnb returned when the offer was created). (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['withdrawAirbnbOffer'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\GetAirbnbOffer200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function withdrawAirbnbOfferWithHttpInfo(
         string $offer_id,
@@ -19821,11 +20620,95 @@ class AirbnbApi
 
             $statusCode = $response->getStatusCode();
 
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\GetAirbnbOffer200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
 
-            return [null, $statusCode, $response->getHeaders()];
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\GetAirbnbOffer200Response',
+                $request,
+                $response,
+            );
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\GetAirbnbOffer200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -19841,6 +20724,14 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -19849,7 +20740,15 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
-                case 500:
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -19868,7 +20767,7 @@ class AirbnbApi
      *
      * Withdraw Airbnb special offer
      *
-     * @param  string $offer_id Airbnb special-offer id to withdraw. (required)
+     * @param  string $offer_id Airbnb special-offer id (the &#x60;id&#x60; Airbnb returned when the offer was created). (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['withdrawAirbnbOffer'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -19892,7 +20791,7 @@ class AirbnbApi
      *
      * Withdraw Airbnb special offer
      *
-     * @param  string $offer_id Airbnb special-offer id to withdraw. (required)
+     * @param  string $offer_id Airbnb special-offer id (the &#x60;id&#x60; Airbnb returned when the offer was created). (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['withdrawAirbnbOffer'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -19903,14 +20802,27 @@ class AirbnbApi
         string $contentType = self::contentTypes['withdrawAirbnbOffer'][0]
     ): PromiseInterface
     {
-        $returnType = '';
+        $returnType = '\Repull\Model\GetAirbnbOffer200Response';
         $request = $this->withdrawAirbnbOfferRequest($offer_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 },
                 function ($exception) {
                     $response = $exception->getResponse();
@@ -19932,7 +20844,7 @@ class AirbnbApi
     /**
      * Create request for operation 'withdrawAirbnbOffer'
      *
-     * @param  string $offer_id Airbnb special-offer id to withdraw. (required)
+     * @param  string $offer_id Airbnb special-offer id (the &#x60;id&#x60; Airbnb returned when the offer was created). (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['withdrawAirbnbOffer'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException

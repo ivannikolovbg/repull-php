@@ -1,6 +1,6 @@
 <?php
 /**
- * SendMessageRequest
+ * CreateAirbnbOfferRequestGuestDetails
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * SendMessageRequest Class Doc Comment
+ * CreateAirbnbOfferRequestGuestDetails Class Doc Comment
  *
- * @description &#x60;message&#x60;, &#x60;attachments&#x60;, or both. Per-channel limits for &#x60;attachments&#x60;:  | Channel | Accepted types | Per file | Per request | Text | |---|---|---|---|---| | Airbnb | JPEG, PNG, GIF, WebP (sent as JPEG), MP4, QuickTime | 10 MB | 5 | optional — each file is sent as its own message, then the text | | Booking.com | JPEG, PNG | 10 MB | 5 | **required** — all files ride on the one text message | | SMS, email, direct-booking site chat | — | — | — | &#x60;422 attachments_not_supported&#x60;; nothing is sent |
+ * @description Offer only (required). &#x60;number_of_guests&#x60; is adults + children; if omitted it is computed from them.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class CreateAirbnbOfferRequestGuestDetails implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'SendMessageRequest';
+    protected static string $openAPIModelName = 'create_airbnb_offer_request_guest_details';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,9 +60,11 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'message' => 'string',
-        'channel' => 'string',
-        'attachments' => '\Repull\Model\SendMessageAttachment[]'
+        'number_of_guests' => 'int',
+        'number_of_adults' => 'int',
+        'number_of_children' => 'int',
+        'number_of_infants' => 'int',
+        'number_of_pets' => 'int'
     ];
 
     /**
@@ -71,9 +73,11 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'message' => null,
-        'channel' => null,
-        'attachments' => null
+        'number_of_guests' => null,
+        'number_of_adults' => null,
+        'number_of_children' => null,
+        'number_of_infants' => null,
+        'number_of_pets' => null
     ];
 
     /**
@@ -82,9 +86,11 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'message' => false,
-        'channel' => false,
-        'attachments' => false
+        'number_of_guests' => false,
+        'number_of_adults' => false,
+        'number_of_children' => false,
+        'number_of_infants' => false,
+        'number_of_pets' => false
     ];
 
     /**
@@ -163,9 +169,11 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'message' => 'message',
-        'channel' => 'channel',
-        'attachments' => 'attachments'
+        'number_of_guests' => 'number_of_guests',
+        'number_of_adults' => 'number_of_adults',
+        'number_of_children' => 'number_of_children',
+        'number_of_infants' => 'number_of_infants',
+        'number_of_pets' => 'number_of_pets'
     ];
 
     /**
@@ -174,9 +182,11 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $setters = [
-        'message' => 'setMessage',
-        'channel' => 'setChannel',
-        'attachments' => 'setAttachments'
+        'number_of_guests' => 'setNumberOfGuests',
+        'number_of_adults' => 'setNumberOfAdults',
+        'number_of_children' => 'setNumberOfChildren',
+        'number_of_infants' => 'setNumberOfInfants',
+        'number_of_pets' => 'setNumberOfPets'
     ];
 
     /**
@@ -185,9 +195,11 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      * @var array<string, string>
      */
     protected static array $getters = [
-        'message' => 'getMessage',
-        'channel' => 'getChannel',
-        'attachments' => 'getAttachments'
+        'number_of_guests' => 'getNumberOfGuests',
+        'number_of_adults' => 'getNumberOfAdults',
+        'number_of_children' => 'getNumberOfChildren',
+        'number_of_infants' => 'getNumberOfInfants',
+        'number_of_pets' => 'getNumberOfPets'
     ];
 
     /**
@@ -222,27 +234,6 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         return self::$openAPIModelName;
     }
 
-    public const CHANNEL_AIRBNB = 'airbnb';
-    public const CHANNEL_BOOKING = 'booking';
-    public const CHANNEL_SMS = 'sms';
-    public const CHANNEL_EMAIL = 'email';
-    public const CHANNEL_WEBSITE = 'website';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getChannelAllowableValues()
-    {
-        return [
-            self::CHANNEL_AIRBNB,
-            self::CHANNEL_BOOKING,
-            self::CHANNEL_SMS,
-            self::CHANNEL_EMAIL,
-            self::CHANNEL_WEBSITE,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -258,9 +249,11 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('message', $data ?? [], null);
-        $this->setIfExists('channel', $data ?? [], null);
-        $this->setIfExists('attachments', $data ?? [], null);
+        $this->setIfExists('number_of_guests', $data ?? [], null);
+        $this->setIfExists('number_of_adults', $data ?? [], null);
+        $this->setIfExists('number_of_children', $data ?? [], null);
+        $this->setIfExists('number_of_infants', $data ?? [], null);
+        $this->setIfExists('number_of_pets', $data ?? [], null);
     }
 
     /**
@@ -288,25 +281,24 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     {
         $invalidProperties = [];
 
-        if (!is_null($this->container['message']) && (mb_strlen($this->container['message']) > 4000)) {
-            $invalidProperties[] = "invalid value for 'message', the character length must be smaller than or equal to 4000.";
+        if (!is_null($this->container['number_of_guests']) && ($this->container['number_of_guests'] < 1)) {
+            $invalidProperties[] = "invalid value for 'number_of_guests', must be bigger than or equal to 1.";
         }
 
-        $allowedValues = self::getChannelAllowableValues();
-        if (!is_null($this->container['channel']) && !in_array($this->container['channel'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'channel', must be one of '%s'",
-                $this->container['channel'],
-                implode("', '", $allowedValues)
-            );
+        if (!is_null($this->container['number_of_adults']) && ($this->container['number_of_adults'] < 0)) {
+            $invalidProperties[] = "invalid value for 'number_of_adults', must be bigger than or equal to 0.";
         }
 
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) > 5)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be less than or equal to 5.";
+        if (!is_null($this->container['number_of_children']) && ($this->container['number_of_children'] < 0)) {
+            $invalidProperties[] = "invalid value for 'number_of_children', must be bigger than or equal to 0.";
         }
 
-        if (!is_null($this->container['attachments']) && (count($this->container['attachments']) < 1)) {
-            $invalidProperties[] = "invalid value for 'attachments', number of items must be greater than or equal to 1.";
+        if (!is_null($this->container['number_of_infants']) && ($this->container['number_of_infants'] < 0)) {
+            $invalidProperties[] = "invalid value for 'number_of_infants', must be bigger than or equal to 0.";
+        }
+
+        if (!is_null($this->container['number_of_pets']) && ($this->container['number_of_pets'] < 0)) {
+            $invalidProperties[] = "invalid value for 'number_of_pets', must be bigger than or equal to 0.";
         }
 
         return $invalidProperties;
@@ -322,94 +314,161 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
 
 
     /**
-     * Gets message
+     * Gets number_of_guests
      *
-     * @return string|null
+     * @return int|null
      */
-    public function getMessage(): ?string
+    public function getNumberOfGuests(): ?int
     {
-        return $this->container['message'];
+        return $this->container['number_of_guests'];
     }
 
     /**
-     * Sets message
+     * Sets number_of_guests
      *
-     * @param string|null $message The text to send the guest. Required unless `attachments` is present.
+     * @param int|null $number_of_guests number_of_guests
      *
      * @return $this
      */
-    public function setMessage(?string $message): static
+    public function setNumberOfGuests(?int $number_of_guests): static
     {
-        if (is_null($message)) {
-            throw new InvalidArgumentException('non-nullable message cannot be null');
-        }
-        if ((mb_strlen($message) > 4000)) {
-            throw new InvalidArgumentException('invalid length for $message when calling SendMessageRequest., must be smaller than or equal to 4000.');
+        if (is_null($number_of_guests)) {
+            throw new InvalidArgumentException('non-nullable number_of_guests cannot be null');
         }
 
-        $this->container['message'] = $message;
+        if (($number_of_guests < 1)) {
+            throw new InvalidArgumentException('invalid value for $number_of_guests when calling CreateAirbnbOfferRequestGuestDetails., must be bigger than or equal to 1.');
+        }
+
+        $this->container['number_of_guests'] = $number_of_guests;
 
         return $this;
     }
 
     /**
-     * Gets channel
+     * Gets number_of_adults
      *
-     * @return string|null
+     * @return int|null
      */
-    public function getChannel(): ?string
+    public function getNumberOfAdults(): ?int
     {
-        return $this->container['channel'];
+        return $this->container['number_of_adults'];
     }
 
     /**
-     * Sets channel
+     * Sets number_of_adults
      *
-     * @param string|null $channel Force a channel. Omit to send on whichever channel the conversation already uses, which is the right default.
+     * @param int|null $number_of_adults number_of_adults
      *
      * @return $this
      */
-    public function setChannel(?string $channel): static
+    public function setNumberOfAdults(?int $number_of_adults): static
     {
-        if (is_null($channel)) {
-            throw new InvalidArgumentException('non-nullable channel cannot be null');
+        if (is_null($number_of_adults)) {
+            throw new InvalidArgumentException('non-nullable number_of_adults cannot be null');
         }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['channel'] = $channel;
+
+        if (($number_of_adults < 0)) {
+            throw new InvalidArgumentException('invalid value for $number_of_adults when calling CreateAirbnbOfferRequestGuestDetails., must be bigger than or equal to 0.');
+        }
+
+        $this->container['number_of_adults'] = $number_of_adults;
 
         return $this;
     }
 
     /**
-     * Gets attachments
+     * Gets number_of_children
      *
-     * @return \Repull\Model\SendMessageAttachment[]|null
+     * @return int|null
      */
-    public function getAttachments(): ?array
+    public function getNumberOfChildren(): ?int
     {
-        return $this->container['attachments'];
+        return $this->container['number_of_children'];
     }
 
     /**
-     * Sets attachments
+     * Sets number_of_children
      *
-     * @param \Repull\Model\SendMessageAttachment[]|null $attachments Files to send. See the per-channel table above.
+     * @param int|null $number_of_children number_of_children
      *
      * @return $this
      */
-    public function setAttachments(?array $attachments): static
+    public function setNumberOfChildren(?int $number_of_children): static
     {
-        if (is_null($attachments)) {
-            throw new InvalidArgumentException('non-nullable attachments cannot be null');
+        if (is_null($number_of_children)) {
+            throw new InvalidArgumentException('non-nullable number_of_children cannot be null');
         }
 
-        if ((count($attachments) > 5)) {
-            throw new InvalidArgumentException('invalid value for $attachments when calling SendMessageRequest., number of items must be less than or equal to 5.');
+        if (($number_of_children < 0)) {
+            throw new InvalidArgumentException('invalid value for $number_of_children when calling CreateAirbnbOfferRequestGuestDetails., must be bigger than or equal to 0.');
         }
-        if ((count($attachments) < 1)) {
-            throw new InvalidArgumentException('invalid length for $attachments when calling SendMessageRequest., number of items must be greater than or equal to 1.');
+
+        $this->container['number_of_children'] = $number_of_children;
+
+        return $this;
+    }
+
+    /**
+     * Gets number_of_infants
+     *
+     * @return int|null
+     */
+    public function getNumberOfInfants(): ?int
+    {
+        return $this->container['number_of_infants'];
+    }
+
+    /**
+     * Sets number_of_infants
+     *
+     * @param int|null $number_of_infants number_of_infants
+     *
+     * @return $this
+     */
+    public function setNumberOfInfants(?int $number_of_infants): static
+    {
+        if (is_null($number_of_infants)) {
+            throw new InvalidArgumentException('non-nullable number_of_infants cannot be null');
         }
-        $this->container['attachments'] = $attachments;
+
+        if (($number_of_infants < 0)) {
+            throw new InvalidArgumentException('invalid value for $number_of_infants when calling CreateAirbnbOfferRequestGuestDetails., must be bigger than or equal to 0.');
+        }
+
+        $this->container['number_of_infants'] = $number_of_infants;
+
+        return $this;
+    }
+
+    /**
+     * Gets number_of_pets
+     *
+     * @return int|null
+     */
+    public function getNumberOfPets(): ?int
+    {
+        return $this->container['number_of_pets'];
+    }
+
+    /**
+     * Sets number_of_pets
+     *
+     * @param int|null $number_of_pets number_of_pets
+     *
+     * @return $this
+     */
+    public function setNumberOfPets(?int $number_of_pets): static
+    {
+        if (is_null($number_of_pets)) {
+            throw new InvalidArgumentException('non-nullable number_of_pets cannot be null');
+        }
+
+        if (($number_of_pets < 0)) {
+            throw new InvalidArgumentException('invalid value for $number_of_pets when calling CreateAirbnbOfferRequestGuestDetails., must be bigger than or equal to 0.');
+        }
+
+        $this->container['number_of_pets'] = $number_of_pets;
 
         return $this;
     }

@@ -37,6 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * ConversationMessageAttachment Class Doc Comment
  *
+ * @description A file on a message — a photo the guest sent, or a file sent to the guest. Files are copied to durable storage, so &#x60;url&#x60; keeps working after the channel&#39;s own link expires. Treat &#x60;url&#x60; as opaque.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -60,7 +61,9 @@ class ConversationMessageAttachment implements ModelInterface, ArrayAccess, Json
      */
     protected static array $openAPITypes = [
         'id' => 'string',
+        'url' => 'string',
         'image_url' => 'string',
+        'type' => 'string',
         'content_type' => 'string',
         'created_at' => '\DateTime'
     ];
@@ -72,7 +75,9 @@ class ConversationMessageAttachment implements ModelInterface, ArrayAccess, Json
      */
     protected static array $openAPIFormats = [
         'id' => null,
+        'url' => 'uri',
         'image_url' => 'uri',
+        'type' => null,
         'content_type' => null,
         'created_at' => 'date-time'
     ];
@@ -83,10 +88,12 @@ class ConversationMessageAttachment implements ModelInterface, ArrayAccess, Json
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => false,
-        'image_url' => false,
-        'content_type' => false,
-        'created_at' => false
+        'id' => true,
+        'url' => true,
+        'image_url' => true,
+        'type' => false,
+        'content_type' => true,
+        'created_at' => true
     ];
 
     /**
@@ -166,7 +173,9 @@ class ConversationMessageAttachment implements ModelInterface, ArrayAccess, Json
      */
     protected static array $attributeMap = [
         'id' => 'id',
+        'url' => 'url',
         'image_url' => 'imageUrl',
+        'type' => 'type',
         'content_type' => 'contentType',
         'created_at' => 'createdAt'
     ];
@@ -178,7 +187,9 @@ class ConversationMessageAttachment implements ModelInterface, ArrayAccess, Json
      */
     protected static array $setters = [
         'id' => 'setId',
+        'url' => 'setUrl',
         'image_url' => 'setImageUrl',
+        'type' => 'setType',
         'content_type' => 'setContentType',
         'created_at' => 'setCreatedAt'
     ];
@@ -190,7 +201,9 @@ class ConversationMessageAttachment implements ModelInterface, ArrayAccess, Json
      */
     protected static array $getters = [
         'id' => 'getId',
+        'url' => 'getUrl',
         'image_url' => 'getImageUrl',
+        'type' => 'getType',
         'content_type' => 'getContentType',
         'created_at' => 'getCreatedAt'
     ];
@@ -227,6 +240,25 @@ class ConversationMessageAttachment implements ModelInterface, ArrayAccess, Json
         return self::$openAPIModelName;
     }
 
+    public const TYPE_IMAGE = 'image';
+    public const TYPE_VIDEO = 'video';
+    public const TYPE_AUDIO = 'audio';
+    public const TYPE_FILE = 'file';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getTypeAllowableValues()
+    {
+        return [
+            self::TYPE_IMAGE,
+            self::TYPE_VIDEO,
+            self::TYPE_AUDIO,
+            self::TYPE_FILE,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -243,7 +275,9 @@ class ConversationMessageAttachment implements ModelInterface, ArrayAccess, Json
     public function __construct(?array $data = null)
     {
         $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('url', $data ?? [], null);
         $this->setIfExists('image_url', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('content_type', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
     }
@@ -272,6 +306,15 @@ class ConversationMessageAttachment implements ModelInterface, ArrayAccess, Json
     public function listInvalidProperties(): array
     {
         $invalidProperties = [];
+
+        $allowedValues = self::getTypeAllowableValues();
+        if (!is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'type', must be one of '%s'",
+                $this->container['type'],
+                implode("', '", $allowedValues)
+            );
+        }
 
         return $invalidProperties;
     }
@@ -305,9 +348,50 @@ class ConversationMessageAttachment implements ModelInterface, ArrayAccess, Json
     public function setId(?string $id): static
     {
         if (is_null($id)) {
-            throw new InvalidArgumentException('non-nullable id cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['id'] = $id;
+
+        return $this;
+    }
+
+    /**
+     * Gets url
+     *
+     * @return string|null
+     */
+    public function getUrl(): ?string
+    {
+        return $this->container['url'];
+    }
+
+    /**
+     * Sets url
+     *
+     * @param string|null $url Where to download the file.
+     *
+     * @return $this
+     */
+    public function setUrl(?string $url): static
+    {
+        if (is_null($url)) {
+            array_push($this->openAPINullablesSetToNull, 'url');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('url', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['url'] = $url;
 
         return $this;
     }
@@ -316,6 +400,7 @@ class ConversationMessageAttachment implements ModelInterface, ArrayAccess, Json
      * Gets image_url
      *
      * @return string|null
+     * @deprecated
      */
     public function getImageUrl(): ?string
     {
@@ -325,16 +410,52 @@ class ConversationMessageAttachment implements ModelInterface, ArrayAccess, Json
     /**
      * Sets image_url
      *
-     * @param string|null $image_url image_url
+     * @param string|null $image_url Same value as `url` (kept for older clients; it is not image-only). Use `url`.
      *
      * @return $this
+     * @deprecated
      */
     public function setImageUrl(?string $image_url): static
     {
         if (is_null($image_url)) {
-            throw new InvalidArgumentException('non-nullable image_url cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'image_url');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('image_url', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['image_url'] = $image_url;
+
+        return $this;
+    }
+
+    /**
+     * Gets type
+     *
+     * @return string|null
+     */
+    public function getType(): ?string
+    {
+        return $this->container['type'];
+    }
+
+    /**
+     * Sets type
+     *
+     * @param string|null $type Coarse kind, derived from `contentType`.
+     *
+     * @return $this
+     */
+    public function setType(?string $type): static
+    {
+        if (is_null($type)) {
+            throw new InvalidArgumentException('non-nullable type cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['type'] = $type;
 
         return $this;
     }
@@ -359,7 +480,14 @@ class ConversationMessageAttachment implements ModelInterface, ArrayAccess, Json
     public function setContentType(?string $content_type): static
     {
         if (is_null($content_type)) {
-            throw new InvalidArgumentException('non-nullable content_type cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'content_type');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('content_type', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['content_type'] = $content_type;
 
@@ -386,7 +514,14 @@ class ConversationMessageAttachment implements ModelInterface, ArrayAccess, Json
     public function setCreatedAt(?\DateTime $created_at): static
     {
         if (is_null($created_at)) {
-            throw new InvalidArgumentException('non-nullable created_at cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'created_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('created_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['created_at'] = $created_at;
 

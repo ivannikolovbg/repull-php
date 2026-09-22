@@ -61,7 +61,12 @@ class CreateAirbnbOfferRequest implements ModelInterface, ArrayAccess, JsonSeria
     protected static array $openAPITypes = [
         'type' => 'string',
         'thread_id' => 'string',
-        'block_instant_booking' => 'bool'
+        'block_instant_booking' => 'bool',
+        'listing_id' => 'string',
+        'start_date' => '\DateTime',
+        'nights' => 'int',
+        'total_price' => 'float',
+        'guest_details' => '\Repull\Model\CreateAirbnbOfferRequestGuestDetails'
     ];
 
     /**
@@ -72,7 +77,12 @@ class CreateAirbnbOfferRequest implements ModelInterface, ArrayAccess, JsonSeria
     protected static array $openAPIFormats = [
         'type' => null,
         'thread_id' => null,
-        'block_instant_booking' => null
+        'block_instant_booking' => null,
+        'listing_id' => null,
+        'start_date' => 'date',
+        'nights' => null,
+        'total_price' => null,
+        'guest_details' => null
     ];
 
     /**
@@ -83,7 +93,12 @@ class CreateAirbnbOfferRequest implements ModelInterface, ArrayAccess, JsonSeria
     protected static array $openAPINullables = [
         'type' => false,
         'thread_id' => false,
-        'block_instant_booking' => false
+        'block_instant_booking' => false,
+        'listing_id' => false,
+        'start_date' => false,
+        'nights' => false,
+        'total_price' => false,
+        'guest_details' => false
     ];
 
     /**
@@ -163,8 +178,13 @@ class CreateAirbnbOfferRequest implements ModelInterface, ArrayAccess, JsonSeria
      */
     protected static array $attributeMap = [
         'type' => 'type',
-        'thread_id' => 'threadId',
-        'block_instant_booking' => 'blockInstantBooking'
+        'thread_id' => 'thread_id',
+        'block_instant_booking' => 'block_instant_booking',
+        'listing_id' => 'listing_id',
+        'start_date' => 'start_date',
+        'nights' => 'nights',
+        'total_price' => 'total_price',
+        'guest_details' => 'guest_details'
     ];
 
     /**
@@ -175,7 +195,12 @@ class CreateAirbnbOfferRequest implements ModelInterface, ArrayAccess, JsonSeria
     protected static array $setters = [
         'type' => 'setType',
         'thread_id' => 'setThreadId',
-        'block_instant_booking' => 'setBlockInstantBooking'
+        'block_instant_booking' => 'setBlockInstantBooking',
+        'listing_id' => 'setListingId',
+        'start_date' => 'setStartDate',
+        'nights' => 'setNights',
+        'total_price' => 'setTotalPrice',
+        'guest_details' => 'setGuestDetails'
     ];
 
     /**
@@ -186,7 +211,12 @@ class CreateAirbnbOfferRequest implements ModelInterface, ArrayAccess, JsonSeria
     protected static array $getters = [
         'type' => 'getType',
         'thread_id' => 'getThreadId',
-        'block_instant_booking' => 'getBlockInstantBooking'
+        'block_instant_booking' => 'getBlockInstantBooking',
+        'listing_id' => 'getListingId',
+        'start_date' => 'getStartDate',
+        'nights' => 'getNights',
+        'total_price' => 'getTotalPrice',
+        'guest_details' => 'getGuestDetails'
     ];
 
     /**
@@ -254,6 +284,11 @@ class CreateAirbnbOfferRequest implements ModelInterface, ArrayAccess, JsonSeria
         $this->setIfExists('type', $data ?? [], null);
         $this->setIfExists('thread_id', $data ?? [], null);
         $this->setIfExists('block_instant_booking', $data ?? [], false);
+        $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('start_date', $data ?? [], null);
+        $this->setIfExists('nights', $data ?? [], null);
+        $this->setIfExists('total_price', $data ?? [], null);
+        $this->setIfExists('guest_details', $data ?? [], null);
     }
 
     /**
@@ -293,6 +328,13 @@ class CreateAirbnbOfferRequest implements ModelInterface, ArrayAccess, JsonSeria
             );
         }
 
+        if ($this->container['thread_id'] === null) {
+            $invalidProperties[] = "'thread_id' can't be null";
+        }
+        if (!is_null($this->container['nights']) && ($this->container['nights'] < 1)) {
+            $invalidProperties[] = "invalid value for 'nights', must be bigger than or equal to 1.";
+        }
+
         return $invalidProperties;
     }
 
@@ -318,7 +360,7 @@ class CreateAirbnbOfferRequest implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets type
      *
-     * @param string $type Which kind of offer to create.
+     * @param string $type What to create.
      *
      * @return $this
      */
@@ -336,9 +378,9 @@ class CreateAirbnbOfferRequest implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Gets thread_id
      *
-     * @return string|null
+     * @return string
      */
-    public function getThreadId(): ?string
+    public function getThreadId(): string
     {
         return $this->container['thread_id'];
     }
@@ -346,11 +388,11 @@ class CreateAirbnbOfferRequest implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets thread_id
      *
-     * @param string|null $thread_id Airbnb thread id. Required when `type` is `preapproval`.
+     * @param string $thread_id Airbnb message-thread id the offer answers. (`threadId` is accepted too.)
      *
      * @return $this
      */
-    public function setThreadId(?string $thread_id): static
+    public function setThreadId(string $thread_id): static
     {
         if (is_null($thread_id)) {
             throw new InvalidArgumentException('non-nullable thread_id cannot be null');
@@ -373,7 +415,7 @@ class CreateAirbnbOfferRequest implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets block_instant_booking
      *
-     * @param bool|null $block_instant_booking For `preapproval` — whether to block instant booking.
+     * @param bool|null $block_instant_booking Pre-approval only: require the guest to book through the pre-approval rather than Instant Book. (`blockInstantBooking` is accepted too.)
      *
      * @return $this
      */
@@ -383,6 +425,146 @@ class CreateAirbnbOfferRequest implements ModelInterface, ArrayAccess, JsonSeria
             throw new InvalidArgumentException('non-nullable block_instant_booking cannot be null');
         }
         $this->container['block_instant_booking'] = $block_instant_booking;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_id
+     *
+     * @return string|null
+     */
+    public function getListingId(): ?string
+    {
+        return $this->container['listing_id'];
+    }
+
+    /**
+     * Sets listing_id
+     *
+     * @param string|null $listing_id Offer only (required): the AIRBNB listing id, as a string.
+     *
+     * @return $this
+     */
+    public function setListingId(?string $listing_id): static
+    {
+        if (is_null($listing_id)) {
+            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
+        }
+        $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets start_date
+     *
+     * @return \DateTime|null
+     */
+    public function getStartDate(): ?\DateTime
+    {
+        return $this->container['start_date'];
+    }
+
+    /**
+     * Sets start_date
+     *
+     * @param \DateTime|null $start_date Offer only (required): first night.
+     *
+     * @return $this
+     */
+    public function setStartDate(?\DateTime $start_date): static
+    {
+        if (is_null($start_date)) {
+            throw new InvalidArgumentException('non-nullable start_date cannot be null');
+        }
+        $this->container['start_date'] = $start_date;
+
+        return $this;
+    }
+
+    /**
+     * Gets nights
+     *
+     * @return int|null
+     */
+    public function getNights(): ?int
+    {
+        return $this->container['nights'];
+    }
+
+    /**
+     * Sets nights
+     *
+     * @param int|null $nights Offer only (required).
+     *
+     * @return $this
+     */
+    public function setNights(?int $nights): static
+    {
+        if (is_null($nights)) {
+            throw new InvalidArgumentException('non-nullable nights cannot be null');
+        }
+
+        if (($nights < 1)) {
+            throw new InvalidArgumentException('invalid value for $nights when calling CreateAirbnbOfferRequest., must be bigger than or equal to 1.');
+        }
+
+        $this->container['nights'] = $nights;
+
+        return $this;
+    }
+
+    /**
+     * Gets total_price
+     *
+     * @return float|null
+     */
+    public function getTotalPrice(): ?float
+    {
+        return $this->container['total_price'];
+    }
+
+    /**
+     * Sets total_price
+     *
+     * @param float|null $total_price Offer only (required): total for the stay, in the listing’s Airbnb currency.
+     *
+     * @return $this
+     */
+    public function setTotalPrice(?float $total_price): static
+    {
+        if (is_null($total_price)) {
+            throw new InvalidArgumentException('non-nullable total_price cannot be null');
+        }
+        $this->container['total_price'] = $total_price;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest_details
+     *
+     * @return \Repull\Model\CreateAirbnbOfferRequestGuestDetails|null
+     */
+    public function getGuestDetails(): ?\Repull\Model\CreateAirbnbOfferRequestGuestDetails
+    {
+        return $this->container['guest_details'];
+    }
+
+    /**
+     * Sets guest_details
+     *
+     * @param \Repull\Model\CreateAirbnbOfferRequestGuestDetails|null $guest_details guest_details
+     *
+     * @return $this
+     */
+    public function setGuestDetails(?\Repull\Model\CreateAirbnbOfferRequestGuestDetails $guest_details): static
+    {
+        if (is_null($guest_details)) {
+            throw new InvalidArgumentException('non-nullable guest_details cannot be null');
+        }
+        $this->container['guest_details'] = $guest_details;
 
         return $this;
     }

@@ -68,6 +68,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_in_time' => 'string',
         'check_out_time' => 'string',
         'status' => 'string',
+        'status_detail' => 'string',
+        'respond_by' => '\DateTime',
         'source' => 'string',
         'platform' => 'string',
         'confirmation_code' => 'string',
@@ -97,6 +99,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_in_time' => null,
         'check_out_time' => null,
         'status' => null,
+        'status_detail' => null,
+        'respond_by' => 'date-time',
         'source' => null,
         'platform' => null,
         'confirmation_code' => null,
@@ -126,6 +130,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_in_time' => true,
         'check_out_time' => true,
         'status' => false,
+        'status_detail' => false,
+        'respond_by' => false,
         'source' => true,
         'platform' => true,
         'confirmation_code' => false,
@@ -225,6 +231,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_in_time' => 'checkInTime',
         'check_out_time' => 'checkOutTime',
         'status' => 'status',
+        'status_detail' => 'statusDetail',
+        'respond_by' => 'respondBy',
         'source' => 'source',
         'platform' => 'platform',
         'confirmation_code' => 'confirmationCode',
@@ -254,6 +262,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_in_time' => 'setCheckInTime',
         'check_out_time' => 'setCheckOutTime',
         'status' => 'setStatus',
+        'status_detail' => 'setStatusDetail',
+        'respond_by' => 'setRespondBy',
         'source' => 'setSource',
         'platform' => 'setPlatform',
         'confirmation_code' => 'setConfirmationCode',
@@ -283,6 +293,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_in_time' => 'getCheckInTime',
         'check_out_time' => 'getCheckOutTime',
         'status' => 'getStatus',
+        'status_detail' => 'getStatusDetail',
+        'respond_by' => 'getRespondBy',
         'source' => 'getSource',
         'platform' => 'getPlatform',
         'confirmation_code' => 'getConfirmationCode',
@@ -334,6 +346,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     public const STATUS_PENDING = 'pending';
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_COMPLETED = 'completed';
+    public const STATUS_DETAIL_REQUEST_EXPIRED = 'request_expired';
     public const SOURCE_AIRBNB = 'airbnb';
     public const SOURCE_BOOKING_COM = 'booking.com';
     public const SOURCE_VRBO = 'vrbo';
@@ -361,6 +374,18 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
             self::STATUS_PENDING,
             self::STATUS_CANCELLED,
             self::STATUS_COMPLETED,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getStatusDetailAllowableValues()
+    {
+        return [
+            self::STATUS_DETAIL_REQUEST_EXPIRED,
         ];
     }
 
@@ -422,6 +447,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('check_in_time', $data ?? [], null);
         $this->setIfExists('check_out_time', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('status_detail', $data ?? [], null);
+        $this->setIfExists('respond_by', $data ?? [], null);
         $this->setIfExists('source', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
         $this->setIfExists('confirmation_code', $data ?? [], null);
@@ -482,6 +509,15 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'status', must be one of '%s'",
                 $this->container['status'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        $allowedValues = self::getStatusDetailAllowableValues();
+        if (!is_null($this->container['status_detail']) && !in_array($this->container['status_detail'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'status_detail', must be one of '%s'",
+                $this->container['status_detail'],
                 implode("', '", $allowedValues)
             );
         }
@@ -743,7 +779,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets status
      *
-     * @param string $status Lifecycle status. The API normalises a multi-decade internal taxonomy down to these four buckets, so the value you receive is always one of the enum constants. `completed` is derived from `checkOut < today`.
+     * @param string $status Lifecycle status. The API normalises a multi-decade internal taxonomy down to these four buckets, so the value you receive is always one of the enum constants. `completed` is derived from `checkOut < today`. A `pending` booking request the channel already let lapse — Airbnb expires an unanswered request 24 hours after the guest asks, and no request can be answered once its check-in has passed — is reported as `cancelled` with `statusDetail: \"request_expired\"`, even when the channel never told us.
      *
      * @return $this
      */
@@ -754,6 +790,61 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets status_detail
+     *
+     * @return string|null
+     */
+    public function getStatusDetail(): ?string
+    {
+        return $this->container['status_detail'];
+    }
+
+    /**
+     * Sets status_detail
+     *
+     * @param string|null $status_detail Present only when `status` was derived rather than reported by the channel. `request_expired` — a booking request nobody answered in time (Airbnb's 24-hour window passed, or the check-in did). Absent otherwise.
+     *
+     * @return $this
+     */
+    public function setStatusDetail(?string $status_detail): static
+    {
+        if (is_null($status_detail)) {
+            throw new InvalidArgumentException('non-nullable status_detail cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['status_detail'] = $status_detail;
+
+        return $this;
+    }
+
+    /**
+     * Gets respond_by
+     *
+     * @return \DateTime|null
+     */
+    public function getRespondBy(): ?\DateTime
+    {
+        return $this->container['respond_by'];
+    }
+
+    /**
+     * Sets respond_by
+     *
+     * @param \DateTime|null $respond_by On a `pending` Airbnb booking request that can still be answered: when it lapses (24 hours after the guest asked). Accept or decline before then with `POST /v1/reservations/{id}/accept` / `/decline`. Absent on every other reservation.
+     *
+     * @return $this
+     */
+    public function setRespondBy(?\DateTime $respond_by): static
+    {
+        if (is_null($respond_by)) {
+            throw new InvalidArgumentException('non-nullable respond_by cannot be null');
+        }
+        $this->container['respond_by'] = $respond_by;
 
         return $this;
     }
