@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * PaymentCompletedPayload Class Doc Comment
  *
- * @description Payload for &#x60;payment.completed&#x60;. A guest payment was successfully captured.
+ * @description Payload for &#x60;payment.completed&#x60;. Money moved and settled — a guest charge, a host payout, a tourist-tax pass-through or a resolution payout. Fires only on a completed movement; scheduled intent is not an event.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -60,12 +60,10 @@ class PaymentCompletedPayload implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'string',
-        'reservation_id' => 'int',
-        'amount' => 'string',
-        'currency' => 'string',
-        'method' => 'string',
-        'captured_at' => '\DateTime'
+        'object' => '\Repull\Model\PaymentWebhookObject',
+        'completed_at' => '\DateTime',
+        'reason' => 'string',
+        'revision' => '\DateTime'
     ];
 
     /**
@@ -74,12 +72,10 @@ class PaymentCompletedPayload implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'id' => null,
-        'reservation_id' => null,
-        'amount' => null,
-        'currency' => null,
-        'method' => null,
-        'captured_at' => 'date-time'
+        'object' => null,
+        'completed_at' => 'date-time',
+        'reason' => null,
+        'revision' => 'date-time'
     ];
 
     /**
@@ -88,12 +84,10 @@ class PaymentCompletedPayload implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => false,
-        'reservation_id' => false,
-        'amount' => false,
-        'currency' => false,
-        'method' => false,
-        'captured_at' => false
+        'object' => false,
+        'completed_at' => true,
+        'reason' => true,
+        'revision' => true
     ];
 
     /**
@@ -172,12 +166,10 @@ class PaymentCompletedPayload implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'id' => 'id',
-        'reservation_id' => 'reservationId',
-        'amount' => 'amount',
-        'currency' => 'currency',
-        'method' => 'method',
-        'captured_at' => 'capturedAt'
+        'object' => 'object',
+        'completed_at' => 'completedAt',
+        'reason' => 'reason',
+        'revision' => 'revision'
     ];
 
     /**
@@ -186,12 +178,10 @@ class PaymentCompletedPayload implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $setters = [
-        'id' => 'setId',
-        'reservation_id' => 'setReservationId',
-        'amount' => 'setAmount',
-        'currency' => 'setCurrency',
-        'method' => 'setMethod',
-        'captured_at' => 'setCapturedAt'
+        'object' => 'setObject',
+        'completed_at' => 'setCompletedAt',
+        'reason' => 'setReason',
+        'revision' => 'setRevision'
     ];
 
     /**
@@ -200,12 +190,10 @@ class PaymentCompletedPayload implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $getters = [
-        'id' => 'getId',
-        'reservation_id' => 'getReservationId',
-        'amount' => 'getAmount',
-        'currency' => 'getCurrency',
-        'method' => 'getMethod',
-        'captured_at' => 'getCapturedAt'
+        'object' => 'getObject',
+        'completed_at' => 'getCompletedAt',
+        'reason' => 'getReason',
+        'revision' => 'getRevision'
     ];
 
     /**
@@ -255,12 +243,10 @@ class PaymentCompletedPayload implements ModelInterface, ArrayAccess, JsonSerial
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('reservation_id', $data ?? [], null);
-        $this->setIfExists('amount', $data ?? [], null);
-        $this->setIfExists('currency', $data ?? [], null);
-        $this->setIfExists('method', $data ?? [], null);
-        $this->setIfExists('captured_at', $data ?? [], null);
+        $this->setIfExists('object', $data ?? [], null);
+        $this->setIfExists('completed_at', $data ?? [], null);
+        $this->setIfExists('reason', $data ?? [], null);
+        $this->setIfExists('revision', $data ?? [], null);
     }
 
     /**
@@ -288,6 +274,9 @@ class PaymentCompletedPayload implements ModelInterface, ArrayAccess, JsonSerial
     {
         $invalidProperties = [];
 
+        if ($this->container['object'] === null) {
+            $invalidProperties[] = "'object' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -301,163 +290,130 @@ class PaymentCompletedPayload implements ModelInterface, ArrayAccess, JsonSerial
 
 
     /**
-     * Gets id
+     * Gets object
      *
-     * @return string|null
+     * @return \Repull\Model\PaymentWebhookObject
      */
-    public function getId(): ?string
+    public function getObject(): \Repull\Model\PaymentWebhookObject
     {
-        return $this->container['id'];
+        return $this->container['object'];
     }
 
     /**
-     * Sets id
+     * Sets object
      *
-     * @param string|null $id id
+     * @param \Repull\Model\PaymentWebhookObject $object object
      *
      * @return $this
      */
-    public function setId(?string $id): static
+    public function setObject(\Repull\Model\PaymentWebhookObject $object): static
     {
-        if (is_null($id)) {
-            throw new InvalidArgumentException('non-nullable id cannot be null');
+        if (is_null($object)) {
+            throw new InvalidArgumentException('non-nullable object cannot be null');
         }
-        $this->container['id'] = $id;
+        $this->container['object'] = $object;
 
         return $this;
     }
 
     /**
-     * Gets reservation_id
-     *
-     * @return int|null
-     */
-    public function getReservationId(): ?int
-    {
-        return $this->container['reservation_id'];
-    }
-
-    /**
-     * Sets reservation_id
-     *
-     * @param int|null $reservation_id reservation_id
-     *
-     * @return $this
-     */
-    public function setReservationId(?int $reservation_id): static
-    {
-        if (is_null($reservation_id)) {
-            throw new InvalidArgumentException('non-nullable reservation_id cannot be null');
-        }
-        $this->container['reservation_id'] = $reservation_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets amount
-     *
-     * @return string|null
-     */
-    public function getAmount(): ?string
-    {
-        return $this->container['amount'];
-    }
-
-    /**
-     * Sets amount
-     *
-     * @param string|null $amount amount
-     *
-     * @return $this
-     */
-    public function setAmount(?string $amount): static
-    {
-        if (is_null($amount)) {
-            throw new InvalidArgumentException('non-nullable amount cannot be null');
-        }
-        $this->container['amount'] = $amount;
-
-        return $this;
-    }
-
-    /**
-     * Gets currency
-     *
-     * @return string|null
-     */
-    public function getCurrency(): ?string
-    {
-        return $this->container['currency'];
-    }
-
-    /**
-     * Sets currency
-     *
-     * @param string|null $currency currency
-     *
-     * @return $this
-     */
-    public function setCurrency(?string $currency): static
-    {
-        if (is_null($currency)) {
-            throw new InvalidArgumentException('non-nullable currency cannot be null');
-        }
-        $this->container['currency'] = $currency;
-
-        return $this;
-    }
-
-    /**
-     * Gets method
-     *
-     * @return string|null
-     */
-    public function getMethod(): ?string
-    {
-        return $this->container['method'];
-    }
-
-    /**
-     * Sets method
-     *
-     * @param string|null $method method
-     *
-     * @return $this
-     */
-    public function setMethod(?string $method): static
-    {
-        if (is_null($method)) {
-            throw new InvalidArgumentException('non-nullable method cannot be null');
-        }
-        $this->container['method'] = $method;
-
-        return $this;
-    }
-
-    /**
-     * Gets captured_at
+     * Gets completed_at
      *
      * @return \DateTime|null
      */
-    public function getCapturedAt(): ?\DateTime
+    public function getCompletedAt(): ?\DateTime
     {
-        return $this->container['captured_at'];
+        return $this->container['completed_at'];
     }
 
     /**
-     * Sets captured_at
+     * Sets completed_at
      *
-     * @param \DateTime|null $captured_at captured_at
+     * @param \DateTime|null $completed_at completed_at
      *
      * @return $this
      */
-    public function setCapturedAt(?\DateTime $captured_at): static
+    public function setCompletedAt(?\DateTime $completed_at): static
     {
-        if (is_null($captured_at)) {
-            throw new InvalidArgumentException('non-nullable captured_at cannot be null');
+        if (is_null($completed_at)) {
+            array_push($this->openAPINullablesSetToNull, 'completed_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('completed_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['captured_at'] = $captured_at;
+        $this->container['completed_at'] = $completed_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets reason
+     *
+     * @return string|null
+     */
+    public function getReason(): ?string
+    {
+        return $this->container['reason'];
+    }
+
+    /**
+     * Sets reason
+     *
+     * @param string|null $reason reason
+     *
+     * @return $this
+     */
+    public function setReason(?string $reason): static
+    {
+        if (is_null($reason)) {
+            array_push($this->openAPINullablesSetToNull, 'reason');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('reason', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['reason'] = $reason;
+
+        return $this;
+    }
+
+    /**
+     * Gets revision
+     *
+     * @return \DateTime|null
+     */
+    public function getRevision(): ?\DateTime
+    {
+        return $this->container['revision'];
+    }
+
+    /**
+     * Sets revision
+     *
+     * @param \DateTime|null $revision revision
+     *
+     * @return $this
+     */
+    public function setRevision(?\DateTime $revision): static
+    {
+        if (is_null($revision)) {
+            array_push($this->openAPINullablesSetToNull, 'revision');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('revision', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['revision'] = $revision;
 
         return $this;
     }

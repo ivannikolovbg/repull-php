@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * ListingUpdatedPayload Class Doc Comment
  *
- * @description Payload for &#x60;listing.updated&#x60;. Listing content, amenities, photos, or status changed.
+ * @description Payload for &#x60;listing.updated&#x60;. Something about the listing changed on the channel — content, pricing, booking settings, house rules, availability or sync settings.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -60,9 +60,10 @@ class ListingUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'int',
-        'changes' => 'array<string,mixed>',
-        'updated_at' => '\DateTime'
+        'object' => '\Repull\Model\ListingWebhookObject',
+        'area' => 'string',
+        'previous_attributes' => 'array<string,mixed>',
+        'revision' => '\DateTime'
     ];
 
     /**
@@ -71,9 +72,10 @@ class ListingUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'id' => null,
-        'changes' => null,
-        'updated_at' => 'date-time'
+        'object' => null,
+        'area' => null,
+        'previous_attributes' => null,
+        'revision' => 'date-time'
     ];
 
     /**
@@ -82,9 +84,10 @@ class ListingUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => false,
-        'changes' => false,
-        'updated_at' => false
+        'object' => false,
+        'area' => false,
+        'previous_attributes' => false,
+        'revision' => true
     ];
 
     /**
@@ -163,9 +166,10 @@ class ListingUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'id' => 'id',
-        'changes' => 'changes',
-        'updated_at' => 'updatedAt'
+        'object' => 'object',
+        'area' => 'area',
+        'previous_attributes' => 'previousAttributes',
+        'revision' => 'revision'
     ];
 
     /**
@@ -174,9 +178,10 @@ class ListingUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'id' => 'setId',
-        'changes' => 'setChanges',
-        'updated_at' => 'setUpdatedAt'
+        'object' => 'setObject',
+        'area' => 'setArea',
+        'previous_attributes' => 'setPreviousAttributes',
+        'revision' => 'setRevision'
     ];
 
     /**
@@ -185,9 +190,10 @@ class ListingUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'id' => 'getId',
-        'changes' => 'getChanges',
-        'updated_at' => 'getUpdatedAt'
+        'object' => 'getObject',
+        'area' => 'getArea',
+        'previous_attributes' => 'getPreviousAttributes',
+        'revision' => 'getRevision'
     ];
 
     /**
@@ -222,6 +228,29 @@ class ListingUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
         return self::$openAPIModelName;
     }
 
+    public const AREA_CONTENT = 'content';
+    public const AREA_PRICING = 'pricing';
+    public const AREA_BOOKING_SETTINGS = 'booking_settings';
+    public const AREA_RULES = 'rules';
+    public const AREA_AVAILABILITY = 'availability';
+    public const AREA_SYNC_SETTINGS = 'sync_settings';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getAreaAllowableValues()
+    {
+        return [
+            self::AREA_CONTENT,
+            self::AREA_PRICING,
+            self::AREA_BOOKING_SETTINGS,
+            self::AREA_RULES,
+            self::AREA_AVAILABILITY,
+            self::AREA_SYNC_SETTINGS,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -237,9 +266,10 @@ class ListingUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('changes', $data ?? [], null);
-        $this->setIfExists('updated_at', $data ?? [], null);
+        $this->setIfExists('object', $data ?? [], null);
+        $this->setIfExists('area', $data ?? [], null);
+        $this->setIfExists('previous_attributes', $data ?? [], null);
+        $this->setIfExists('revision', $data ?? [], null);
     }
 
     /**
@@ -267,6 +297,18 @@ class ListingUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
     {
         $invalidProperties = [];
 
+        if ($this->container['object'] === null) {
+            $invalidProperties[] = "'object' can't be null";
+        }
+        $allowedValues = self::getAreaAllowableValues();
+        if (!is_null($this->container['area']) && !in_array($this->container['area'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'area', must be one of '%s'",
+                $this->container['area'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -280,82 +322,117 @@ class ListingUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets id
+     * Gets object
      *
-     * @return int|null
+     * @return \Repull\Model\ListingWebhookObject
      */
-    public function getId(): ?int
+    public function getObject(): \Repull\Model\ListingWebhookObject
     {
-        return $this->container['id'];
+        return $this->container['object'];
     }
 
     /**
-     * Sets id
+     * Sets object
      *
-     * @param int|null $id id
+     * @param \Repull\Model\ListingWebhookObject $object object
      *
      * @return $this
      */
-    public function setId(?int $id): static
+    public function setObject(\Repull\Model\ListingWebhookObject $object): static
     {
-        if (is_null($id)) {
-            throw new InvalidArgumentException('non-nullable id cannot be null');
+        if (is_null($object)) {
+            throw new InvalidArgumentException('non-nullable object cannot be null');
         }
-        $this->container['id'] = $id;
+        $this->container['object'] = $object;
 
         return $this;
     }
 
     /**
-     * Gets changes
+     * Gets area
+     *
+     * @return string|null
+     */
+    public function getArea(): ?string
+    {
+        return $this->container['area'];
+    }
+
+    /**
+     * Sets area
+     *
+     * @param string|null $area Which part moved. Airbnb sends one notification per area rather than a diff, so this is the signal for what to re-read.
+     *
+     * @return $this
+     */
+    public function setArea(?string $area): static
+    {
+        if (is_null($area)) {
+            throw new InvalidArgumentException('non-nullable area cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['area'] = $area;
+
+        return $this;
+    }
+
+    /**
+     * Gets previous_attributes
      *
      * @return array<string,mixed>|null
      */
-    public function getChanges(): ?array
+    public function getPreviousAttributes(): ?array
     {
-        return $this->container['changes'];
+        return $this->container['previous_attributes'];
     }
 
     /**
-     * Sets changes
+     * Sets previous_attributes
      *
-     * @param array<string,mixed>|null $changes Map of `field` → `{ from, to }` pairs describing what changed.
+     * @param array<string,mixed>|null $previous_attributes Fields that changed and their prior values, when the source reports them.
      *
      * @return $this
      */
-    public function setChanges(?array $changes): static
+    public function setPreviousAttributes(?array $previous_attributes): static
     {
-        if (is_null($changes)) {
-            throw new InvalidArgumentException('non-nullable changes cannot be null');
+        if (is_null($previous_attributes)) {
+            throw new InvalidArgumentException('non-nullable previous_attributes cannot be null');
         }
-        $this->container['changes'] = $changes;
+        $this->container['previous_attributes'] = $previous_attributes;
 
         return $this;
     }
 
     /**
-     * Gets updated_at
+     * Gets revision
      *
      * @return \DateTime|null
      */
-    public function getUpdatedAt(): ?\DateTime
+    public function getRevision(): ?\DateTime
     {
-        return $this->container['updated_at'];
+        return $this->container['revision'];
     }
 
     /**
-     * Sets updated_at
+     * Sets revision
      *
-     * @param \DateTime|null $updated_at updated_at
+     * @param \DateTime|null $revision revision
      *
      * @return $this
      */
-    public function setUpdatedAt(?\DateTime $updated_at): static
+    public function setRevision(?\DateTime $revision): static
     {
-        if (is_null($updated_at)) {
-            throw new InvalidArgumentException('non-nullable updated_at cannot be null');
+        if (is_null($revision)) {
+            array_push($this->openAPINullablesSetToNull, 'revision');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('revision', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['updated_at'] = $updated_at;
+        $this->container['revision'] = $revision;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * WebhookEvent
+ * ListingWebhookObjectChannelsInner
  *
  * PHP version 8.1
  *
@@ -35,24 +35,23 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * WebhookEvent Class Doc Comment
+ * ListingWebhookObjectChannelsInner Class Doc Comment
  *
- * @description The full event envelope POSTed to your webhook URL. Discriminated on &#x60;type&#x60; — narrow &#x60;event.data&#x60; by switching on &#x60;event.type&#x60;. Use the matching &#x60;*Event&#x60; variant directly if your SDK lacks discriminator support. Events about an inactive listing (reservations, messages, alterations, reviews, payments, calendar and listing events) are not delivered. The data keeps syncing while the listing is inactive, but its events are never sent — including after you reactivate it; webhooks resume for events that happen from reactivation on. Account-level events are always delivered.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingWebhookObjectChannelsInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
-    public const DISCRIMINATOR = 'event';
+    public const DISCRIMINATOR = null;
 
     /**
      * The original name of the model.
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'WebhookEvent';
+    protected static string $openAPIModelName = 'ListingWebhookObject_channels_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,12 +59,11 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'event' => 'string',
-        'event_id' => 'string',
-        'api_version' => 'string',
-        'timestamp' => '\DateTime',
-        'account' => '\Repull\Model\WebhookEventAccount',
-        'data' => '\Repull\Model\UsageQuotaWarningPayload'
+        'platform' => 'string',
+        'external_id' => 'string',
+        'active' => 'bool',
+        'sync_enabled' => 'bool',
+        'sync_category' => 'string'
     ];
 
     /**
@@ -74,12 +72,11 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'event' => null,
-        'event_id' => 'uuid',
-        'api_version' => null,
-        'timestamp' => 'date-time',
-        'account' => null,
-        'data' => null
+        'platform' => null,
+        'external_id' => null,
+        'active' => null,
+        'sync_enabled' => null,
+        'sync_category' => null
     ];
 
     /**
@@ -88,12 +85,11 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'event' => false,
-        'event_id' => false,
-        'api_version' => false,
-        'timestamp' => false,
-        'account' => true,
-        'data' => false
+        'platform' => false,
+        'external_id' => false,
+        'active' => false,
+        'sync_enabled' => false,
+        'sync_category' => true
     ];
 
     /**
@@ -172,12 +168,11 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'event' => 'event',
-        'event_id' => 'eventId',
-        'api_version' => 'apiVersion',
-        'timestamp' => 'timestamp',
-        'account' => 'account',
-        'data' => 'data'
+        'platform' => 'platform',
+        'external_id' => 'externalId',
+        'active' => 'active',
+        'sync_enabled' => 'syncEnabled',
+        'sync_category' => 'syncCategory'
     ];
 
     /**
@@ -186,12 +181,11 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
-        'event' => 'setEvent',
-        'event_id' => 'setEventId',
-        'api_version' => 'setApiVersion',
-        'timestamp' => 'setTimestamp',
-        'account' => 'setAccount',
-        'data' => 'setData'
+        'platform' => 'setPlatform',
+        'external_id' => 'setExternalId',
+        'active' => 'setActive',
+        'sync_enabled' => 'setSyncEnabled',
+        'sync_category' => 'setSyncCategory'
     ];
 
     /**
@@ -200,12 +194,11 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
-        'event' => 'getEvent',
-        'event_id' => 'getEventId',
-        'api_version' => 'getApiVersion',
-        'timestamp' => 'getTimestamp',
-        'account' => 'getAccount',
-        'data' => 'getData'
+        'platform' => 'getPlatform',
+        'external_id' => 'getExternalId',
+        'active' => 'getActive',
+        'sync_enabled' => 'getSyncEnabled',
+        'sync_category' => 'getSyncCategory'
     ];
 
     /**
@@ -240,61 +233,6 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         return self::$openAPIModelName;
     }
 
-    public const EVENT_ACCOUNT_CREATED = 'account.created';
-    public const EVENT_ACCOUNT_DISCONNECTED = 'account.disconnected';
-    public const EVENT_AI_OPERATION_COMPLETED = 'ai.operation.completed';
-    public const EVENT_AI_OPERATION_FAILED = 'ai.operation.failed';
-    public const EVENT_CALENDAR_UPDATED = 'calendar.updated';
-    public const EVENT_LISTING_CREATED = 'listing.created';
-    public const EVENT_LISTING_DELETED = 'listing.deleted';
-    public const EVENT_LISTING_REACTIVATED = 'listing.reactivated';
-    public const EVENT_LISTING_SUSPENDED = 'listing.suspended';
-    public const EVENT_LISTING_UPDATED = 'listing.updated';
-    public const EVENT_PAYMENT_COMPLETED = 'payment.completed';
-    public const EVENT_PAYMENT_REFUNDED = 'payment.refunded';
-    public const EVENT_REPULL_PING = 'repull.ping';
-    public const EVENT_RESERVATION_ALTERATION_CREATED = 'reservation.alteration.created';
-    public const EVENT_RESERVATION_ALTERATION_RESPONDED = 'reservation.alteration.responded';
-    public const EVENT_RESERVATION_CANCELLED = 'reservation.cancelled';
-    public const EVENT_RESERVATION_CREATED = 'reservation.created';
-    public const EVENT_RESERVATION_MESSAGE_RECEIVED = 'reservation.message.received';
-    public const EVENT_RESERVATION_UPDATED = 'reservation.updated';
-    public const EVENT_REVIEW_CREATED = 'review.created';
-    public const EVENT_REVIEW_RESPONDED = 'review.responded';
-    public const EVENT_USAGE_QUOTA_WARNING = 'usage.quota.warning';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getEventAllowableValues()
-    {
-        return [
-            self::EVENT_ACCOUNT_CREATED,
-            self::EVENT_ACCOUNT_DISCONNECTED,
-            self::EVENT_AI_OPERATION_COMPLETED,
-            self::EVENT_AI_OPERATION_FAILED,
-            self::EVENT_CALENDAR_UPDATED,
-            self::EVENT_LISTING_CREATED,
-            self::EVENT_LISTING_DELETED,
-            self::EVENT_LISTING_REACTIVATED,
-            self::EVENT_LISTING_SUSPENDED,
-            self::EVENT_LISTING_UPDATED,
-            self::EVENT_PAYMENT_COMPLETED,
-            self::EVENT_PAYMENT_REFUNDED,
-            self::EVENT_REPULL_PING,
-            self::EVENT_RESERVATION_ALTERATION_CREATED,
-            self::EVENT_RESERVATION_ALTERATION_RESPONDED,
-            self::EVENT_RESERVATION_CANCELLED,
-            self::EVENT_RESERVATION_CREATED,
-            self::EVENT_RESERVATION_MESSAGE_RECEIVED,
-            self::EVENT_RESERVATION_UPDATED,
-            self::EVENT_REVIEW_CREATED,
-            self::EVENT_REVIEW_RESPONDED,
-            self::EVENT_USAGE_QUOTA_WARNING,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -310,15 +248,11 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        // Initialize discriminator property with the model name.
-        $this->container['event'] = static::$openAPIModelName;
-
-        $this->setIfExists('event', $data ?? [], null);
-        $this->setIfExists('event_id', $data ?? [], null);
-        $this->setIfExists('api_version', $data ?? [], null);
-        $this->setIfExists('timestamp', $data ?? [], null);
-        $this->setIfExists('account', $data ?? [], null);
-        $this->setIfExists('data', $data ?? [], null);
+        $this->setIfExists('platform', $data ?? [], null);
+        $this->setIfExists('external_id', $data ?? [], null);
+        $this->setIfExists('active', $data ?? [], null);
+        $this->setIfExists('sync_enabled', $data ?? [], null);
+        $this->setIfExists('sync_category', $data ?? [], null);
     }
 
     /**
@@ -346,30 +280,6 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['event'] === null) {
-            $invalidProperties[] = "'event' can't be null";
-        }
-        $allowedValues = self::getEventAllowableValues();
-        if (!is_null($this->container['event']) && !in_array($this->container['event'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'event', must be one of '%s'",
-                $this->container['event'],
-                implode("', '", $allowedValues)
-            );
-        }
-
-        if ($this->container['event_id'] === null) {
-            $invalidProperties[] = "'event_id' can't be null";
-        }
-        if ($this->container['api_version'] === null) {
-            $invalidProperties[] = "'api_version' can't be null";
-        }
-        if ($this->container['timestamp'] === null) {
-            $invalidProperties[] = "'timestamp' can't be null";
-        }
-        if ($this->container['data'] === null) {
-            $invalidProperties[] = "'data' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -383,171 +293,143 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
 
 
     /**
-     * Gets event
+     * Gets platform
      *
-     * @return string
+     * @return string|null
      */
-    public function getEvent(): string
+    public function getPlatform(): ?string
     {
-        return $this->container['event'];
+        return $this->container['platform'];
     }
 
     /**
-     * Sets event
+     * Sets platform
      *
-     * @param string $event The event name. This field is `event`, not `type`.
+     * @param string|null $platform platform
      *
      * @return $this
      */
-    public function setEvent(string $event): static
+    public function setPlatform(?string $platform): static
     {
-        if (is_null($event)) {
-            throw new InvalidArgumentException('non-nullable event cannot be null');
+        if (is_null($platform)) {
+            throw new InvalidArgumentException('non-nullable platform cannot be null');
         }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['event'] = $event;
+        $this->container['platform'] = $platform;
 
         return $this;
     }
 
     /**
-     * Gets event_id
+     * Gets external_id
      *
-     * @return string
+     * @return string|null
      */
-    public function getEventId(): string
+    public function getExternalId(): ?string
     {
-        return $this->container['event_id'];
+        return $this->container['external_id'];
     }
 
     /**
-     * Sets event_id
+     * Sets external_id
      *
-     * @param string $event_id Stable across every delivery and replay of this logical event — dedupe on it.
+     * @param string|null $external_id external_id
      *
      * @return $this
      */
-    public function setEventId(string $event_id): static
+    public function setExternalId(?string $external_id): static
     {
-        if (is_null($event_id)) {
-            throw new InvalidArgumentException('non-nullable event_id cannot be null');
+        if (is_null($external_id)) {
+            throw new InvalidArgumentException('non-nullable external_id cannot be null');
         }
-        $this->container['event_id'] = $event_id;
+        $this->container['external_id'] = $external_id;
 
         return $this;
     }
 
     /**
-     * Gets api_version
+     * Gets active
      *
-     * @return string
+     * @return bool|null
      */
-    public function getApiVersion(): string
+    public function getActive(): ?bool
     {
-        return $this->container['api_version'];
+        return $this->container['active'];
     }
 
     /**
-     * Sets api_version
+     * Sets active
      *
-     * @param string $api_version api_version
+     * @param bool|null $active active
      *
      * @return $this
      */
-    public function setApiVersion(string $api_version): static
+    public function setActive(?bool $active): static
     {
-        if (is_null($api_version)) {
-            throw new InvalidArgumentException('non-nullable api_version cannot be null');
+        if (is_null($active)) {
+            throw new InvalidArgumentException('non-nullable active cannot be null');
         }
-        $this->container['api_version'] = $api_version;
+        $this->container['active'] = $active;
 
         return $this;
     }
 
     /**
-     * Gets timestamp
+     * Gets sync_enabled
      *
-     * @return \DateTime
+     * @return bool|null
      */
-    public function getTimestamp(): \DateTime
+    public function getSyncEnabled(): ?bool
     {
-        return $this->container['timestamp'];
+        return $this->container['sync_enabled'];
     }
 
     /**
-     * Sets timestamp
+     * Sets sync_enabled
      *
-     * @param \DateTime $timestamp When this delivery was built.
+     * @param bool|null $sync_enabled sync_enabled
      *
      * @return $this
      */
-    public function setTimestamp(\DateTime $timestamp): static
+    public function setSyncEnabled(?bool $sync_enabled): static
     {
-        if (is_null($timestamp)) {
-            throw new InvalidArgumentException('non-nullable timestamp cannot be null');
+        if (is_null($sync_enabled)) {
+            throw new InvalidArgumentException('non-nullable sync_enabled cannot be null');
         }
-        $this->container['timestamp'] = $timestamp;
+        $this->container['sync_enabled'] = $sync_enabled;
 
         return $this;
     }
 
     /**
-     * Gets account
+     * Gets sync_category
      *
-     * @return \Repull\Model\WebhookEventAccount|null
+     * @return string|null
      */
-    public function getAccount(): ?\Repull\Model\WebhookEventAccount
+    public function getSyncCategory(): ?string
     {
-        return $this->container['account'];
+        return $this->container['sync_category'];
     }
 
     /**
-     * Sets account
+     * Sets sync_category
      *
-     * @param \Repull\Model\WebhookEventAccount|null $account account
+     * @param string|null $sync_category sync_category
      *
      * @return $this
      */
-    public function setAccount(?\Repull\Model\WebhookEventAccount $account): static
+    public function setSyncCategory(?string $sync_category): static
     {
-        if (is_null($account)) {
-            array_push($this->openAPINullablesSetToNull, 'account');
+        if (is_null($sync_category)) {
+            array_push($this->openAPINullablesSetToNull, 'sync_category');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('account', $nullablesSetToNull);
+            $index = array_search('sync_category', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['account'] = $account;
-
-        return $this;
-    }
-
-    /**
-     * Gets data
-     *
-     * @return \Repull\Model\UsageQuotaWarningPayload
-     */
-    public function getData(): \Repull\Model\UsageQuotaWarningPayload
-    {
-        return $this->container['data'];
-    }
-
-    /**
-     * Sets data
-     *
-     * @param \Repull\Model\UsageQuotaWarningPayload $data data
-     *
-     * @return $this
-     */
-    public function setData(\Repull\Model\UsageQuotaWarningPayload $data): static
-    {
-        if (is_null($data)) {
-            throw new InvalidArgumentException('non-nullable data cannot be null');
-        }
-        $this->container['data'] = $data;
+        $this->container['sync_category'] = $sync_category;
 
         return $this;
     }

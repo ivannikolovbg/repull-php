@@ -1,6 +1,6 @@
 <?php
 /**
- * WebhookEvent
+ * ListingReactivatedEvent
  *
  * PHP version 8.1
  *
@@ -35,24 +35,23 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * WebhookEvent Class Doc Comment
+ * ListingReactivatedEvent Class Doc Comment
  *
- * @description The full event envelope POSTed to your webhook URL. Discriminated on &#x60;type&#x60; — narrow &#x60;event.data&#x60; by switching on &#x60;event.type&#x60;. Use the matching &#x60;*Event&#x60; variant directly if your SDK lacks discriminator support. Events about an inactive listing (reservations, messages, alterations, reviews, payments, calendar and listing events) are not delivered. The data keeps syncing while the listing is inactive, but its events are never sent — including after you reactivate it; webhooks resume for events that happen from reactivation on. Account-level events are always delivered.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingReactivatedEvent implements ModelInterface, ArrayAccess, JsonSerializable
 {
-    public const DISCRIMINATOR = 'event';
+    public const DISCRIMINATOR = null;
 
     /**
      * The original name of the model.
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'WebhookEvent';
+    protected static string $openAPIModelName = 'ListingReactivatedEvent';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -65,7 +64,7 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         'api_version' => 'string',
         'timestamp' => '\DateTime',
         'account' => '\Repull\Model\WebhookEventAccount',
-        'data' => '\Repull\Model\UsageQuotaWarningPayload'
+        'data' => '\Repull\Model\ListingSuspensionPayload'
     ];
 
     /**
@@ -240,28 +239,7 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         return self::$openAPIModelName;
     }
 
-    public const EVENT_ACCOUNT_CREATED = 'account.created';
-    public const EVENT_ACCOUNT_DISCONNECTED = 'account.disconnected';
-    public const EVENT_AI_OPERATION_COMPLETED = 'ai.operation.completed';
-    public const EVENT_AI_OPERATION_FAILED = 'ai.operation.failed';
-    public const EVENT_CALENDAR_UPDATED = 'calendar.updated';
-    public const EVENT_LISTING_CREATED = 'listing.created';
-    public const EVENT_LISTING_DELETED = 'listing.deleted';
     public const EVENT_LISTING_REACTIVATED = 'listing.reactivated';
-    public const EVENT_LISTING_SUSPENDED = 'listing.suspended';
-    public const EVENT_LISTING_UPDATED = 'listing.updated';
-    public const EVENT_PAYMENT_COMPLETED = 'payment.completed';
-    public const EVENT_PAYMENT_REFUNDED = 'payment.refunded';
-    public const EVENT_REPULL_PING = 'repull.ping';
-    public const EVENT_RESERVATION_ALTERATION_CREATED = 'reservation.alteration.created';
-    public const EVENT_RESERVATION_ALTERATION_RESPONDED = 'reservation.alteration.responded';
-    public const EVENT_RESERVATION_CANCELLED = 'reservation.cancelled';
-    public const EVENT_RESERVATION_CREATED = 'reservation.created';
-    public const EVENT_RESERVATION_MESSAGE_RECEIVED = 'reservation.message.received';
-    public const EVENT_RESERVATION_UPDATED = 'reservation.updated';
-    public const EVENT_REVIEW_CREATED = 'review.created';
-    public const EVENT_REVIEW_RESPONDED = 'review.responded';
-    public const EVENT_USAGE_QUOTA_WARNING = 'usage.quota.warning';
 
     /**
      * Gets allowable values of the enum
@@ -271,28 +249,7 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     public static function getEventAllowableValues()
     {
         return [
-            self::EVENT_ACCOUNT_CREATED,
-            self::EVENT_ACCOUNT_DISCONNECTED,
-            self::EVENT_AI_OPERATION_COMPLETED,
-            self::EVENT_AI_OPERATION_FAILED,
-            self::EVENT_CALENDAR_UPDATED,
-            self::EVENT_LISTING_CREATED,
-            self::EVENT_LISTING_DELETED,
             self::EVENT_LISTING_REACTIVATED,
-            self::EVENT_LISTING_SUSPENDED,
-            self::EVENT_LISTING_UPDATED,
-            self::EVENT_PAYMENT_COMPLETED,
-            self::EVENT_PAYMENT_REFUNDED,
-            self::EVENT_REPULL_PING,
-            self::EVENT_RESERVATION_ALTERATION_CREATED,
-            self::EVENT_RESERVATION_ALTERATION_RESPONDED,
-            self::EVENT_RESERVATION_CANCELLED,
-            self::EVENT_RESERVATION_CREATED,
-            self::EVENT_RESERVATION_MESSAGE_RECEIVED,
-            self::EVENT_RESERVATION_UPDATED,
-            self::EVENT_REVIEW_CREATED,
-            self::EVENT_REVIEW_RESPONDED,
-            self::EVENT_USAGE_QUOTA_WARNING,
         ];
     }
 
@@ -310,9 +267,6 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        // Initialize discriminator property with the model name.
-        $this->container['event'] = static::$openAPIModelName;
-
         $this->setIfExists('event', $data ?? [], null);
         $this->setIfExists('event_id', $data ?? [], null);
         $this->setIfExists('api_version', $data ?? [], null);
@@ -528,9 +482,9 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets data
      *
-     * @return \Repull\Model\UsageQuotaWarningPayload
+     * @return \Repull\Model\ListingSuspensionPayload
      */
-    public function getData(): \Repull\Model\UsageQuotaWarningPayload
+    public function getData(): \Repull\Model\ListingSuspensionPayload
     {
         return $this->container['data'];
     }
@@ -538,11 +492,11 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets data
      *
-     * @param \Repull\Model\UsageQuotaWarningPayload $data data
+     * @param \Repull\Model\ListingSuspensionPayload $data data
      *
      * @return $this
      */
-    public function setData(\Repull\Model\UsageQuotaWarningPayload $data): static
+    public function setData(\Repull\Model\ListingSuspensionPayload $data): static
     {
         if (is_null($data)) {
             throw new InvalidArgumentException('non-nullable data cannot be null');

@@ -1,6 +1,6 @@
 <?php
 /**
- * WebhookEvent
+ * ListingWebhookObject
  *
  * PHP version 8.1
  *
@@ -35,24 +35,24 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * WebhookEvent Class Doc Comment
+ * ListingWebhookObject Class Doc Comment
  *
- * @description The full event envelope POSTed to your webhook URL. Discriminated on &#x60;type&#x60; — narrow &#x60;event.data&#x60; by switching on &#x60;event.type&#x60;. Use the matching &#x60;*Event&#x60; variant directly if your SDK lacks discriminator support. Events about an inactive listing (reservations, messages, alterations, reviews, payments, calendar and listing events) are not delivered. The data keeps syncing while the listing is inactive, but its events are never sent — including after you reactivate it; webhooks resume for events that happen from reactivation on. Account-level events are always delivered.
+ * @description The listing, in the shape &#x60;GET /v1/listings/{id}&#x60; returns. Hydrated at delivery, so a receiver gets the listing rather than a reason to fetch one.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingWebhookObject implements ModelInterface, ArrayAccess, JsonSerializable
 {
-    public const DISCRIMINATOR = 'event';
+    public const DISCRIMINATOR = null;
 
     /**
      * The original name of the model.
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'WebhookEvent';
+    protected static string $openAPIModelName = 'ListingWebhookObject';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,12 +60,18 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'event' => 'string',
-        'event_id' => 'string',
-        'api_version' => 'string',
-        'timestamp' => '\DateTime',
-        'account' => '\Repull\Model\WebhookEventAccount',
-        'data' => '\Repull\Model\UsageQuotaWarningPayload'
+        'id' => 'string',
+        'customer_id' => 'int',
+        'channel' => 'string',
+        'external_listing_id' => 'string',
+        'name' => 'string',
+        'active' => 'bool',
+        'status' => 'string',
+        'address' => '\Repull\Model\ListingWebhookObjectAddress',
+        'thumbnail_url' => 'string',
+        'channels' => '\Repull\Model\ListingWebhookObjectChannelsInner[]',
+        'created_at' => '\DateTime',
+        'updated_at' => '\DateTime'
     ];
 
     /**
@@ -74,12 +80,18 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'event' => null,
-        'event_id' => 'uuid',
-        'api_version' => null,
-        'timestamp' => 'date-time',
-        'account' => null,
-        'data' => null
+        'id' => null,
+        'customer_id' => null,
+        'channel' => null,
+        'external_listing_id' => null,
+        'name' => null,
+        'active' => null,
+        'status' => null,
+        'address' => null,
+        'thumbnail_url' => null,
+        'channels' => null,
+        'created_at' => 'date-time',
+        'updated_at' => 'date-time'
     ];
 
     /**
@@ -88,12 +100,18 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'event' => false,
-        'event_id' => false,
-        'api_version' => false,
-        'timestamp' => false,
-        'account' => true,
-        'data' => false
+        'id' => false,
+        'customer_id' => false,
+        'channel' => true,
+        'external_listing_id' => true,
+        'name' => true,
+        'active' => false,
+        'status' => false,
+        'address' => false,
+        'thumbnail_url' => true,
+        'channels' => false,
+        'created_at' => true,
+        'updated_at' => true
     ];
 
     /**
@@ -172,12 +190,18 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'event' => 'event',
-        'event_id' => 'eventId',
-        'api_version' => 'apiVersion',
-        'timestamp' => 'timestamp',
-        'account' => 'account',
-        'data' => 'data'
+        'id' => 'id',
+        'customer_id' => 'customerId',
+        'channel' => 'channel',
+        'external_listing_id' => 'externalListingId',
+        'name' => 'name',
+        'active' => 'active',
+        'status' => 'status',
+        'address' => 'address',
+        'thumbnail_url' => 'thumbnailUrl',
+        'channels' => 'channels',
+        'created_at' => 'createdAt',
+        'updated_at' => 'updatedAt'
     ];
 
     /**
@@ -186,12 +210,18 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
-        'event' => 'setEvent',
-        'event_id' => 'setEventId',
-        'api_version' => 'setApiVersion',
-        'timestamp' => 'setTimestamp',
-        'account' => 'setAccount',
-        'data' => 'setData'
+        'id' => 'setId',
+        'customer_id' => 'setCustomerId',
+        'channel' => 'setChannel',
+        'external_listing_id' => 'setExternalListingId',
+        'name' => 'setName',
+        'active' => 'setActive',
+        'status' => 'setStatus',
+        'address' => 'setAddress',
+        'thumbnail_url' => 'setThumbnailUrl',
+        'channels' => 'setChannels',
+        'created_at' => 'setCreatedAt',
+        'updated_at' => 'setUpdatedAt'
     ];
 
     /**
@@ -200,12 +230,18 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
-        'event' => 'getEvent',
-        'event_id' => 'getEventId',
-        'api_version' => 'getApiVersion',
-        'timestamp' => 'getTimestamp',
-        'account' => 'getAccount',
-        'data' => 'getData'
+        'id' => 'getId',
+        'customer_id' => 'getCustomerId',
+        'channel' => 'getChannel',
+        'external_listing_id' => 'getExternalListingId',
+        'name' => 'getName',
+        'active' => 'getActive',
+        'status' => 'getStatus',
+        'address' => 'getAddress',
+        'thumbnail_url' => 'getThumbnailUrl',
+        'channels' => 'getChannels',
+        'created_at' => 'getCreatedAt',
+        'updated_at' => 'getUpdatedAt'
     ];
 
     /**
@@ -240,61 +276,6 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         return self::$openAPIModelName;
     }
 
-    public const EVENT_ACCOUNT_CREATED = 'account.created';
-    public const EVENT_ACCOUNT_DISCONNECTED = 'account.disconnected';
-    public const EVENT_AI_OPERATION_COMPLETED = 'ai.operation.completed';
-    public const EVENT_AI_OPERATION_FAILED = 'ai.operation.failed';
-    public const EVENT_CALENDAR_UPDATED = 'calendar.updated';
-    public const EVENT_LISTING_CREATED = 'listing.created';
-    public const EVENT_LISTING_DELETED = 'listing.deleted';
-    public const EVENT_LISTING_REACTIVATED = 'listing.reactivated';
-    public const EVENT_LISTING_SUSPENDED = 'listing.suspended';
-    public const EVENT_LISTING_UPDATED = 'listing.updated';
-    public const EVENT_PAYMENT_COMPLETED = 'payment.completed';
-    public const EVENT_PAYMENT_REFUNDED = 'payment.refunded';
-    public const EVENT_REPULL_PING = 'repull.ping';
-    public const EVENT_RESERVATION_ALTERATION_CREATED = 'reservation.alteration.created';
-    public const EVENT_RESERVATION_ALTERATION_RESPONDED = 'reservation.alteration.responded';
-    public const EVENT_RESERVATION_CANCELLED = 'reservation.cancelled';
-    public const EVENT_RESERVATION_CREATED = 'reservation.created';
-    public const EVENT_RESERVATION_MESSAGE_RECEIVED = 'reservation.message.received';
-    public const EVENT_RESERVATION_UPDATED = 'reservation.updated';
-    public const EVENT_REVIEW_CREATED = 'review.created';
-    public const EVENT_REVIEW_RESPONDED = 'review.responded';
-    public const EVENT_USAGE_QUOTA_WARNING = 'usage.quota.warning';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getEventAllowableValues()
-    {
-        return [
-            self::EVENT_ACCOUNT_CREATED,
-            self::EVENT_ACCOUNT_DISCONNECTED,
-            self::EVENT_AI_OPERATION_COMPLETED,
-            self::EVENT_AI_OPERATION_FAILED,
-            self::EVENT_CALENDAR_UPDATED,
-            self::EVENT_LISTING_CREATED,
-            self::EVENT_LISTING_DELETED,
-            self::EVENT_LISTING_REACTIVATED,
-            self::EVENT_LISTING_SUSPENDED,
-            self::EVENT_LISTING_UPDATED,
-            self::EVENT_PAYMENT_COMPLETED,
-            self::EVENT_PAYMENT_REFUNDED,
-            self::EVENT_REPULL_PING,
-            self::EVENT_RESERVATION_ALTERATION_CREATED,
-            self::EVENT_RESERVATION_ALTERATION_RESPONDED,
-            self::EVENT_RESERVATION_CANCELLED,
-            self::EVENT_RESERVATION_CREATED,
-            self::EVENT_RESERVATION_MESSAGE_RECEIVED,
-            self::EVENT_RESERVATION_UPDATED,
-            self::EVENT_REVIEW_CREATED,
-            self::EVENT_REVIEW_RESPONDED,
-            self::EVENT_USAGE_QUOTA_WARNING,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -310,15 +291,18 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        // Initialize discriminator property with the model name.
-        $this->container['event'] = static::$openAPIModelName;
-
-        $this->setIfExists('event', $data ?? [], null);
-        $this->setIfExists('event_id', $data ?? [], null);
-        $this->setIfExists('api_version', $data ?? [], null);
-        $this->setIfExists('timestamp', $data ?? [], null);
-        $this->setIfExists('account', $data ?? [], null);
-        $this->setIfExists('data', $data ?? [], null);
+        $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('customer_id', $data ?? [], null);
+        $this->setIfExists('channel', $data ?? [], null);
+        $this->setIfExists('external_listing_id', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('active', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('address', $data ?? [], null);
+        $this->setIfExists('thumbnail_url', $data ?? [], null);
+        $this->setIfExists('channels', $data ?? [], null);
+        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('updated_at', $data ?? [], null);
     }
 
     /**
@@ -346,29 +330,11 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['event'] === null) {
-            $invalidProperties[] = "'event' can't be null";
+        if ($this->container['id'] === null) {
+            $invalidProperties[] = "'id' can't be null";
         }
-        $allowedValues = self::getEventAllowableValues();
-        if (!is_null($this->container['event']) && !in_array($this->container['event'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'event', must be one of '%s'",
-                $this->container['event'],
-                implode("', '", $allowedValues)
-            );
-        }
-
-        if ($this->container['event_id'] === null) {
-            $invalidProperties[] = "'event_id' can't be null";
-        }
-        if ($this->container['api_version'] === null) {
-            $invalidProperties[] = "'api_version' can't be null";
-        }
-        if ($this->container['timestamp'] === null) {
-            $invalidProperties[] = "'timestamp' can't be null";
-        }
-        if ($this->container['data'] === null) {
-            $invalidProperties[] = "'data' can't be null";
+        if ($this->container['customer_id'] === null) {
+            $invalidProperties[] = "'customer_id' can't be null";
         }
         return $invalidProperties;
     }
@@ -383,171 +349,367 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
 
 
     /**
-     * Gets event
+     * Gets id
      *
      * @return string
      */
-    public function getEvent(): string
+    public function getId(): string
     {
-        return $this->container['event'];
+        return $this->container['id'];
     }
 
     /**
-     * Sets event
+     * Sets id
      *
-     * @param string $event The event name. This field is `event`, not `type`.
+     * @param string $id id
      *
      * @return $this
      */
-    public function setEvent(string $event): static
+    public function setId(string $id): static
     {
-        if (is_null($event)) {
-            throw new InvalidArgumentException('non-nullable event cannot be null');
+        if (is_null($id)) {
+            throw new InvalidArgumentException('non-nullable id cannot be null');
         }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['event'] = $event;
+        $this->container['id'] = $id;
 
         return $this;
     }
 
     /**
-     * Gets event_id
+     * Gets customer_id
      *
-     * @return string
+     * @return int
      */
-    public function getEventId(): string
+    public function getCustomerId(): int
     {
-        return $this->container['event_id'];
+        return $this->container['customer_id'];
     }
 
     /**
-     * Sets event_id
+     * Sets customer_id
      *
-     * @param string $event_id Stable across every delivery and replay of this logical event — dedupe on it.
+     * @param int $customer_id customer_id
      *
      * @return $this
      */
-    public function setEventId(string $event_id): static
+    public function setCustomerId(int $customer_id): static
     {
-        if (is_null($event_id)) {
-            throw new InvalidArgumentException('non-nullable event_id cannot be null');
+        if (is_null($customer_id)) {
+            throw new InvalidArgumentException('non-nullable customer_id cannot be null');
         }
-        $this->container['event_id'] = $event_id;
+        $this->container['customer_id'] = $customer_id;
 
         return $this;
     }
 
     /**
-     * Gets api_version
+     * Gets channel
      *
-     * @return string
+     * @return string|null
      */
-    public function getApiVersion(): string
+    public function getChannel(): ?string
     {
-        return $this->container['api_version'];
+        return $this->container['channel'];
     }
 
     /**
-     * Sets api_version
+     * Sets channel
      *
-     * @param string $api_version api_version
+     * @param string|null $channel channel
      *
      * @return $this
      */
-    public function setApiVersion(string $api_version): static
+    public function setChannel(?string $channel): static
     {
-        if (is_null($api_version)) {
-            throw new InvalidArgumentException('non-nullable api_version cannot be null');
-        }
-        $this->container['api_version'] = $api_version;
-
-        return $this;
-    }
-
-    /**
-     * Gets timestamp
-     *
-     * @return \DateTime
-     */
-    public function getTimestamp(): \DateTime
-    {
-        return $this->container['timestamp'];
-    }
-
-    /**
-     * Sets timestamp
-     *
-     * @param \DateTime $timestamp When this delivery was built.
-     *
-     * @return $this
-     */
-    public function setTimestamp(\DateTime $timestamp): static
-    {
-        if (is_null($timestamp)) {
-            throw new InvalidArgumentException('non-nullable timestamp cannot be null');
-        }
-        $this->container['timestamp'] = $timestamp;
-
-        return $this;
-    }
-
-    /**
-     * Gets account
-     *
-     * @return \Repull\Model\WebhookEventAccount|null
-     */
-    public function getAccount(): ?\Repull\Model\WebhookEventAccount
-    {
-        return $this->container['account'];
-    }
-
-    /**
-     * Sets account
-     *
-     * @param \Repull\Model\WebhookEventAccount|null $account account
-     *
-     * @return $this
-     */
-    public function setAccount(?\Repull\Model\WebhookEventAccount $account): static
-    {
-        if (is_null($account)) {
-            array_push($this->openAPINullablesSetToNull, 'account');
+        if (is_null($channel)) {
+            array_push($this->openAPINullablesSetToNull, 'channel');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('account', $nullablesSetToNull);
+            $index = array_search('channel', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['account'] = $account;
+        $this->container['channel'] = $channel;
 
         return $this;
     }
 
     /**
-     * Gets data
+     * Gets external_listing_id
      *
-     * @return \Repull\Model\UsageQuotaWarningPayload
+     * @return string|null
      */
-    public function getData(): \Repull\Model\UsageQuotaWarningPayload
+    public function getExternalListingId(): ?string
     {
-        return $this->container['data'];
+        return $this->container['external_listing_id'];
     }
 
     /**
-     * Sets data
+     * Sets external_listing_id
      *
-     * @param \Repull\Model\UsageQuotaWarningPayload $data data
+     * @param string|null $external_listing_id The channel's own listing id. Airbnb's exceed 2^53, so always a string.
      *
      * @return $this
      */
-    public function setData(\Repull\Model\UsageQuotaWarningPayload $data): static
+    public function setExternalListingId(?string $external_listing_id): static
     {
-        if (is_null($data)) {
-            throw new InvalidArgumentException('non-nullable data cannot be null');
+        if (is_null($external_listing_id)) {
+            array_push($this->openAPINullablesSetToNull, 'external_listing_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('external_listing_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['data'] = $data;
+        $this->container['external_listing_id'] = $external_listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets name
+     *
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->container['name'];
+    }
+
+    /**
+     * Sets name
+     *
+     * @param string|null $name name
+     *
+     * @return $this
+     */
+    public function setName(?string $name): static
+    {
+        if (is_null($name)) {
+            array_push($this->openAPINullablesSetToNull, 'name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets active
+     *
+     * @return bool|null
+     */
+    public function getActive(): ?bool
+    {
+        return $this->container['active'];
+    }
+
+    /**
+     * Sets active
+     *
+     * @param bool|null $active active
+     *
+     * @return $this
+     */
+    public function setActive(?bool $active): static
+    {
+        if (is_null($active)) {
+            throw new InvalidArgumentException('non-nullable active cannot be null');
+        }
+        $this->container['active'] = $active;
+
+        return $this;
+    }
+
+    /**
+     * Gets status
+     *
+     * @return string|null
+     */
+    public function getStatus(): ?string
+    {
+        return $this->container['status'];
+    }
+
+    /**
+     * Sets status
+     *
+     * @param string|null $status status
+     *
+     * @return $this
+     */
+    public function setStatus(?string $status): static
+    {
+        if (is_null($status)) {
+            throw new InvalidArgumentException('non-nullable status cannot be null');
+        }
+        $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets address
+     *
+     * @return \Repull\Model\ListingWebhookObjectAddress|null
+     */
+    public function getAddress(): ?\Repull\Model\ListingWebhookObjectAddress
+    {
+        return $this->container['address'];
+    }
+
+    /**
+     * Sets address
+     *
+     * @param \Repull\Model\ListingWebhookObjectAddress|null $address address
+     *
+     * @return $this
+     */
+    public function setAddress(?\Repull\Model\ListingWebhookObjectAddress $address): static
+    {
+        if (is_null($address)) {
+            throw new InvalidArgumentException('non-nullable address cannot be null');
+        }
+        $this->container['address'] = $address;
+
+        return $this;
+    }
+
+    /**
+     * Gets thumbnail_url
+     *
+     * @return string|null
+     */
+    public function getThumbnailUrl(): ?string
+    {
+        return $this->container['thumbnail_url'];
+    }
+
+    /**
+     * Sets thumbnail_url
+     *
+     * @param string|null $thumbnail_url thumbnail_url
+     *
+     * @return $this
+     */
+    public function setThumbnailUrl(?string $thumbnail_url): static
+    {
+        if (is_null($thumbnail_url)) {
+            array_push($this->openAPINullablesSetToNull, 'thumbnail_url');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('thumbnail_url', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['thumbnail_url'] = $thumbnail_url;
+
+        return $this;
+    }
+
+    /**
+     * Gets channels
+     *
+     * @return \Repull\Model\ListingWebhookObjectChannelsInner[]|null
+     */
+    public function getChannels(): ?array
+    {
+        return $this->container['channels'];
+    }
+
+    /**
+     * Sets channels
+     *
+     * @param \Repull\Model\ListingWebhookObjectChannelsInner[]|null $channels Which channels this listing is on and whether each still accepts writes. `syncEnabled: false` means the channel refuses every write for this listing — the difference between a failing integration and a suspended listing.
+     *
+     * @return $this
+     */
+    public function setChannels(?array $channels): static
+    {
+        if (is_null($channels)) {
+            throw new InvalidArgumentException('non-nullable channels cannot be null');
+        }
+        $this->container['channels'] = $channels;
+
+        return $this;
+    }
+
+    /**
+     * Gets created_at
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->container['created_at'];
+    }
+
+    /**
+     * Sets created_at
+     *
+     * @param \DateTime|null $created_at created_at
+     *
+     * @return $this
+     */
+    public function setCreatedAt(?\DateTime $created_at): static
+    {
+        if (is_null($created_at)) {
+            array_push($this->openAPINullablesSetToNull, 'created_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('created_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets updated_at
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->container['updated_at'];
+    }
+
+    /**
+     * Sets updated_at
+     *
+     * @param \DateTime|null $updated_at updated_at
+     *
+     * @return $this
+     */
+    public function setUpdatedAt(?\DateTime $updated_at): static
+    {
+        if (is_null($updated_at)) {
+            array_push($this->openAPINullablesSetToNull, 'updated_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('updated_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['updated_at'] = $updated_at;
 
         return $this;
     }

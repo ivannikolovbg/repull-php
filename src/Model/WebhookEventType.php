@@ -56,6 +56,10 @@ enum WebhookEventType: string
 
     case LISTING_DELETED = 'listing.deleted';
 
+    case LISTING_SUSPENDED = 'listing.suspended';
+
+    case LISTING_REACTIVATED = 'listing.reactivated';
+
     case CALENDAR_UPDATED = 'calendar.updated';
 
     case ACCOUNT_CREATED = 'account.created';

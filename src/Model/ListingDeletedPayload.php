@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * ListingDeletedPayload Class Doc Comment
  *
- * @description Payload for &#x60;listing.deleted&#x60;. A property was removed from Repull or the upstream PMS.
+ * @description Payload for &#x60;listing.deleted&#x60;. The listing is no longer reachable on the channel — usually because the host unlinked it.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -60,9 +60,9 @@ class ListingDeletedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'int',
-        'deleted_at' => '\DateTime',
-        'reason' => 'string'
+        'object' => '\Repull\Model\ListingWebhookObject',
+        'reason' => 'string',
+        'deleted_at' => '\DateTime'
     ];
 
     /**
@@ -71,9 +71,9 @@ class ListingDeletedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'id' => null,
-        'deleted_at' => 'date-time',
-        'reason' => null
+        'object' => null,
+        'reason' => null,
+        'deleted_at' => 'date-time'
     ];
 
     /**
@@ -82,9 +82,9 @@ class ListingDeletedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => false,
-        'deleted_at' => false,
-        'reason' => true
+        'object' => false,
+        'reason' => true,
+        'deleted_at' => false
     ];
 
     /**
@@ -163,9 +163,9 @@ class ListingDeletedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'id' => 'id',
-        'deleted_at' => 'deletedAt',
-        'reason' => 'reason'
+        'object' => 'object',
+        'reason' => 'reason',
+        'deleted_at' => 'deletedAt'
     ];
 
     /**
@@ -174,9 +174,9 @@ class ListingDeletedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'id' => 'setId',
-        'deleted_at' => 'setDeletedAt',
-        'reason' => 'setReason'
+        'object' => 'setObject',
+        'reason' => 'setReason',
+        'deleted_at' => 'setDeletedAt'
     ];
 
     /**
@@ -185,9 +185,9 @@ class ListingDeletedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'id' => 'getId',
-        'deleted_at' => 'getDeletedAt',
-        'reason' => 'getReason'
+        'object' => 'getObject',
+        'reason' => 'getReason',
+        'deleted_at' => 'getDeletedAt'
     ];
 
     /**
@@ -237,9 +237,9 @@ class ListingDeletedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('deleted_at', $data ?? [], null);
+        $this->setIfExists('object', $data ?? [], null);
         $this->setIfExists('reason', $data ?? [], null);
+        $this->setIfExists('deleted_at', $data ?? [], null);
     }
 
     /**
@@ -267,6 +267,12 @@ class ListingDeletedPayload implements ModelInterface, ArrayAccess, JsonSerializ
     {
         $invalidProperties = [];
 
+        if ($this->container['object'] === null) {
+            $invalidProperties[] = "'object' can't be null";
+        }
+        if ($this->container['deleted_at'] === null) {
+            $invalidProperties[] = "'deleted_at' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -280,55 +286,28 @@ class ListingDeletedPayload implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets id
+     * Gets object
      *
-     * @return int|null
+     * @return \Repull\Model\ListingWebhookObject
      */
-    public function getId(): ?int
+    public function getObject(): \Repull\Model\ListingWebhookObject
     {
-        return $this->container['id'];
+        return $this->container['object'];
     }
 
     /**
-     * Sets id
+     * Sets object
      *
-     * @param int|null $id id
+     * @param \Repull\Model\ListingWebhookObject $object object
      *
      * @return $this
      */
-    public function setId(?int $id): static
+    public function setObject(\Repull\Model\ListingWebhookObject $object): static
     {
-        if (is_null($id)) {
-            throw new InvalidArgumentException('non-nullable id cannot be null');
+        if (is_null($object)) {
+            throw new InvalidArgumentException('non-nullable object cannot be null');
         }
-        $this->container['id'] = $id;
-
-        return $this;
-    }
-
-    /**
-     * Gets deleted_at
-     *
-     * @return \DateTime|null
-     */
-    public function getDeletedAt(): ?\DateTime
-    {
-        return $this->container['deleted_at'];
-    }
-
-    /**
-     * Sets deleted_at
-     *
-     * @param \DateTime|null $deleted_at deleted_at
-     *
-     * @return $this
-     */
-    public function setDeletedAt(?\DateTime $deleted_at): static
-    {
-        if (is_null($deleted_at)) {
-            throw new InvalidArgumentException('non-nullable deleted_at cannot be null');
-        }
-        $this->container['deleted_at'] = $deleted_at;
+        $this->container['object'] = $object;
 
         return $this;
     }
@@ -363,6 +342,33 @@ class ListingDeletedPayload implements ModelInterface, ArrayAccess, JsonSerializ
             }
         }
         $this->container['reason'] = $reason;
+
+        return $this;
+    }
+
+    /**
+     * Gets deleted_at
+     *
+     * @return \DateTime
+     */
+    public function getDeletedAt(): \DateTime
+    {
+        return $this->container['deleted_at'];
+    }
+
+    /**
+     * Sets deleted_at
+     *
+     * @param \DateTime $deleted_at deleted_at
+     *
+     * @return $this
+     */
+    public function setDeletedAt(\DateTime $deleted_at): static
+    {
+        if (is_null($deleted_at)) {
+            throw new InvalidArgumentException('non-nullable deleted_at cannot be null');
+        }
+        $this->container['deleted_at'] = $deleted_at;
 
         return $this;
     }
