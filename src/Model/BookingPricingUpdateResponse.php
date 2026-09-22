@@ -37,6 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * BookingPricingUpdateResponse Class Doc Comment
  *
+ * @description What a Booking.com rate write actually did. Returned by &#x60;PUT /v1/channels/booking/listings/{id}/pricing&#x60; and by &#x60;PUT /v1/channels/booking/availability&#x60; with &#x60;type: \&quot;rates\&quot;&#x60;.  Prices and restrictions are two writes on two of Booking.com&#39;s wires, and Booking.com can take one and refuse the other. The response says so: &#x60;price&#x60; and &#x60;restrictions&#x60; each carry their own state, their own read-back and — when refused — Booking.com&#39;s own reason. The top-level &#x60;applied&#x60; summarises them, and is &#x60;partial&#x60; when they disagree. A half that landed is never reported as a failure.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -61,10 +62,16 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPITypes = [
         'hotel_id' => 'string',
         'listing_id' => 'string',
-        'pushed' => 'int',
+        'property_id' => 'string',
         'requested' => 'int',
+        'occupancy' => '\Repull\Model\BookingRateWriteOccupancy[]',
+        'applied' => 'string',
+        'price' => '\Repull\Model\BookingRateWritePriceHalf',
+        'restrictions' => '\Repull\Model\BookingRateWriteRestrictionHalf',
+        'verification' => '\Repull\Model\BookingRateWriteVerification',
+        'booking' => 'array<string,mixed>',
         'errors' => 'array<string,mixed>[]',
-        'raw' => 'array<string,mixed>'
+        'rate_plan_read_error' => 'string'
     ];
 
     /**
@@ -75,10 +82,16 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPIFormats = [
         'hotel_id' => null,
         'listing_id' => null,
-        'pushed' => null,
+        'property_id' => null,
         'requested' => null,
+        'occupancy' => null,
+        'applied' => null,
+        'price' => null,
+        'restrictions' => null,
+        'verification' => null,
+        'booking' => null,
         'errors' => null,
-        'raw' => null
+        'rate_plan_read_error' => null
     ];
 
     /**
@@ -87,12 +100,18 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'hotel_id' => false,
-        'listing_id' => false,
-        'pushed' => false,
+        'hotel_id' => true,
+        'listing_id' => true,
+        'property_id' => true,
         'requested' => false,
+        'occupancy' => false,
+        'applied' => false,
+        'price' => false,
+        'restrictions' => false,
+        'verification' => false,
+        'booking' => false,
         'errors' => false,
-        'raw' => false
+        'rate_plan_read_error' => true
     ];
 
     /**
@@ -173,10 +192,16 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     protected static array $attributeMap = [
         'hotel_id' => 'hotelId',
         'listing_id' => 'listingId',
-        'pushed' => 'pushed',
+        'property_id' => 'propertyId',
         'requested' => 'requested',
+        'occupancy' => 'occupancy',
+        'applied' => 'applied',
+        'price' => 'price',
+        'restrictions' => 'restrictions',
+        'verification' => 'verification',
+        'booking' => 'booking',
         'errors' => 'errors',
-        'raw' => 'raw'
+        'rate_plan_read_error' => 'ratePlanReadError'
     ];
 
     /**
@@ -187,10 +212,16 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     protected static array $setters = [
         'hotel_id' => 'setHotelId',
         'listing_id' => 'setListingId',
-        'pushed' => 'setPushed',
+        'property_id' => 'setPropertyId',
         'requested' => 'setRequested',
+        'occupancy' => 'setOccupancy',
+        'applied' => 'setApplied',
+        'price' => 'setPrice',
+        'restrictions' => 'setRestrictions',
+        'verification' => 'setVerification',
+        'booking' => 'setBooking',
         'errors' => 'setErrors',
-        'raw' => 'setRaw'
+        'rate_plan_read_error' => 'setRatePlanReadError'
     ];
 
     /**
@@ -201,10 +232,16 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     protected static array $getters = [
         'hotel_id' => 'getHotelId',
         'listing_id' => 'getListingId',
-        'pushed' => 'getPushed',
+        'property_id' => 'getPropertyId',
         'requested' => 'getRequested',
+        'occupancy' => 'getOccupancy',
+        'applied' => 'getApplied',
+        'price' => 'getPrice',
+        'restrictions' => 'getRestrictions',
+        'verification' => 'getVerification',
+        'booking' => 'getBooking',
         'errors' => 'getErrors',
-        'raw' => 'getRaw'
+        'rate_plan_read_error' => 'getRatePlanReadError'
     ];
 
     /**
@@ -239,6 +276,27 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
         return self::$openAPIModelName;
     }
 
+    public const APPLIED_VERIFIED = 'verified';
+    public const APPLIED_MISMATCH = 'mismatch';
+    public const APPLIED_REJECTED = 'rejected';
+    public const APPLIED_UNVERIFIED = 'unverified';
+    public const APPLIED_PARTIAL = 'partial';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getAppliedAllowableValues()
+    {
+        return [
+            self::APPLIED_VERIFIED,
+            self::APPLIED_MISMATCH,
+            self::APPLIED_REJECTED,
+            self::APPLIED_UNVERIFIED,
+            self::APPLIED_PARTIAL,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -256,10 +314,16 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     {
         $this->setIfExists('hotel_id', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
-        $this->setIfExists('pushed', $data ?? [], null);
+        $this->setIfExists('property_id', $data ?? [], null);
         $this->setIfExists('requested', $data ?? [], null);
+        $this->setIfExists('occupancy', $data ?? [], null);
+        $this->setIfExists('applied', $data ?? [], null);
+        $this->setIfExists('price', $data ?? [], null);
+        $this->setIfExists('restrictions', $data ?? [], null);
+        $this->setIfExists('verification', $data ?? [], null);
+        $this->setIfExists('booking', $data ?? [], null);
         $this->setIfExists('errors', $data ?? [], null);
-        $this->setIfExists('raw', $data ?? [], null);
+        $this->setIfExists('rate_plan_read_error', $data ?? [], null);
     }
 
     /**
@@ -286,6 +350,15 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     public function listInvalidProperties(): array
     {
         $invalidProperties = [];
+
+        $allowedValues = self::getAppliedAllowableValues();
+        if (!is_null($this->container['applied']) && !in_array($this->container['applied'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'applied', must be one of '%s'",
+                $this->container['applied'],
+                implode("', '", $allowedValues)
+            );
+        }
 
         return $invalidProperties;
     }
@@ -319,7 +392,14 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     public function setHotelId(?string $hotel_id): static
     {
         if (is_null($hotel_id)) {
-            throw new InvalidArgumentException('non-nullable hotel_id cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'hotel_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('hotel_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['hotel_id'] = $hotel_id;
 
@@ -346,7 +426,14 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     public function setListingId(?string $listing_id): static
     {
         if (is_null($listing_id)) {
-            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'listing_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('listing_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['listing_id'] = $listing_id;
 
@@ -354,28 +441,35 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     }
 
     /**
-     * Gets pushed
+     * Gets property_id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getPushed(): ?int
+    public function getPropertyId(): ?string
     {
-        return $this->container['pushed'];
+        return $this->container['property_id'];
     }
 
     /**
-     * Sets pushed
+     * Sets property_id
      *
-     * @param int|null $pushed Number of updates Booking.com accepted as `success`. Falls back to total update count when Booking omits per-update status on full success.
+     * @param string|null $property_id Echoed back by `PUT /v1/channels/booking/availability`.
      *
      * @return $this
      */
-    public function setPushed(?int $pushed): static
+    public function setPropertyId(?string $property_id): static
     {
-        if (is_null($pushed)) {
-            throw new InvalidArgumentException('non-nullable pushed cannot be null');
+        if (is_null($property_id)) {
+            array_push($this->openAPINullablesSetToNull, 'property_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('property_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['pushed'] = $pushed;
+        $this->container['property_id'] = $property_id;
 
         return $this;
     }
@@ -393,7 +487,7 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     /**
      * Sets requested
      *
-     * @param int|null $requested requested
+     * @param int|null $requested How many updates were sent.
      *
      * @return $this
      */
@@ -403,6 +497,169 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
             throw new InvalidArgumentException('non-nullable requested cannot be null');
         }
         $this->container['requested'] = $requested;
+
+        return $this;
+    }
+
+    /**
+     * Gets occupancy
+     *
+     * @return \Repull\Model\BookingRateWriteOccupancy[]|null
+     */
+    public function getOccupancy(): ?array
+    {
+        return $this->container['occupancy'];
+    }
+
+    /**
+     * Sets occupancy
+     *
+     * @param \Repull\Model\BookingRateWriteOccupancy[]|null $occupancy occupancy
+     *
+     * @return $this
+     */
+    public function setOccupancy(?array $occupancy): static
+    {
+        if (is_null($occupancy)) {
+            throw new InvalidArgumentException('non-nullable occupancy cannot be null');
+        }
+        $this->container['occupancy'] = $occupancy;
+
+        return $this;
+    }
+
+    /**
+     * Gets applied
+     *
+     * @return string|null
+     */
+    public function getApplied(): ?string
+    {
+        return $this->container['applied'];
+    }
+
+    /**
+     * Sets applied
+     *
+     * @param string|null $applied What is known about the nights now. `verified` — read back, every night carries what was sent. `mismatch` — read back, some do not (`verification.rows` / `restrictions.verification.rows` name them). `rejected` — Booking.com refused everything that was sent. `partial` — one half landed and the other did not; read `price.applied` and `restrictions.applied` to see which, and `restrictions.rejection.message` for Booking.com's reason. `unverified` — Booking.com acknowledged the request and no read-back ran: an unknown, not a success. A bare acknowledgement is never reported as \"all applied\".
+     *
+     * @return $this
+     */
+    public function setApplied(?string $applied): static
+    {
+        if (is_null($applied)) {
+            throw new InvalidArgumentException('non-nullable applied cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['applied'] = $applied;
+
+        return $this;
+    }
+
+    /**
+     * Gets price
+     *
+     * @return \Repull\Model\BookingRateWritePriceHalf|null
+     */
+    public function getPrice(): ?\Repull\Model\BookingRateWritePriceHalf
+    {
+        return $this->container['price'];
+    }
+
+    /**
+     * Sets price
+     *
+     * @param \Repull\Model\BookingRateWritePriceHalf|null $price price
+     *
+     * @return $this
+     */
+    public function setPrice(?\Repull\Model\BookingRateWritePriceHalf $price): static
+    {
+        if (is_null($price)) {
+            throw new InvalidArgumentException('non-nullable price cannot be null');
+        }
+        $this->container['price'] = $price;
+
+        return $this;
+    }
+
+    /**
+     * Gets restrictions
+     *
+     * @return \Repull\Model\BookingRateWriteRestrictionHalf|null
+     */
+    public function getRestrictions(): ?\Repull\Model\BookingRateWriteRestrictionHalf
+    {
+        return $this->container['restrictions'];
+    }
+
+    /**
+     * Sets restrictions
+     *
+     * @param \Repull\Model\BookingRateWriteRestrictionHalf|null $restrictions restrictions
+     *
+     * @return $this
+     */
+    public function setRestrictions(?\Repull\Model\BookingRateWriteRestrictionHalf $restrictions): static
+    {
+        if (is_null($restrictions)) {
+            throw new InvalidArgumentException('non-nullable restrictions cannot be null');
+        }
+        $this->container['restrictions'] = $restrictions;
+
+        return $this;
+    }
+
+    /**
+     * Gets verification
+     *
+     * @return \Repull\Model\BookingRateWriteVerification|null
+     */
+    public function getVerification(): ?\Repull\Model\BookingRateWriteVerification
+    {
+        return $this->container['verification'];
+    }
+
+    /**
+     * Sets verification
+     *
+     * @param \Repull\Model\BookingRateWriteVerification|null $verification verification
+     *
+     * @return $this
+     */
+    public function setVerification(?\Repull\Model\BookingRateWriteVerification $verification): static
+    {
+        if (is_null($verification)) {
+            throw new InvalidArgumentException('non-nullable verification cannot be null');
+        }
+        $this->container['verification'] = $verification;
+
+        return $this;
+    }
+
+    /**
+     * Gets booking
+     *
+     * @return array<string,mixed>|null
+     */
+    public function getBooking(): ?array
+    {
+        return $this->container['booking'];
+    }
+
+    /**
+     * Sets booking
+     *
+     * @param array<string,mixed>|null $booking Booking.com's own answers, verbatim: `rates` (the rate-amount notification) and `restrictions` (the availability notification, when the updates carried any restriction).
+     *
+     * @return $this
+     */
+    public function setBooking(?array $booking): static
+    {
+        if (is_null($booking)) {
+            throw new InvalidArgumentException('non-nullable booking cannot be null');
+        }
+        $this->container['booking'] = $booking;
 
         return $this;
     }
@@ -420,7 +677,7 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     /**
      * Sets errors
      *
-     * @param array<string,mixed>[]|null $errors Per-update failure rows from Booking — shape mirrors the Booking rates API response.
+     * @param array<string,mixed>[]|null $errors Failures Booking.com named, across both wires. Empty means Booking.com named none — not that the nights changed; that is what `applied` is for.
      *
      * @return $this
      */
@@ -435,28 +692,35 @@ class BookingPricingUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     }
 
     /**
-     * Gets raw
+     * Gets rate_plan_read_error
      *
-     * @return array<string,mixed>|null
+     * @return string|null
      */
-    public function getRaw(): ?array
+    public function getRatePlanReadError(): ?string
     {
-        return $this->container['raw'];
+        return $this->container['rate_plan_read_error'];
     }
 
     /**
-     * Sets raw
+     * Sets rate_plan_read_error
      *
-     * @param array<string,mixed>|null $raw Verbatim Booking response envelope for debugging.
+     * @param string|null $rate_plan_read_error Present when Booking.com's rate-plan read did not complete, so an occupancy fell back to the room definition.
      *
      * @return $this
      */
-    public function setRaw(?array $raw): static
+    public function setRatePlanReadError(?string $rate_plan_read_error): static
     {
-        if (is_null($raw)) {
-            throw new InvalidArgumentException('non-nullable raw cannot be null');
+        if (is_null($rate_plan_read_error)) {
+            array_push($this->openAPINullablesSetToNull, 'rate_plan_read_error');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('rate_plan_read_error', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['raw'] = $raw;
+        $this->container['rate_plan_read_error'] = $rate_plan_read_error;
 
         return $this;
     }

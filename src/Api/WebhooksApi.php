@@ -2408,6 +2408,7 @@ class WebhooksApi
      *
      * @param  string $id id (required)
      * @param  string $delivery_id delivery_id (required)
+     * @param  \Repull\Model\ReplayWebhookDeliveryRequest|null $replay_webhook_delivery_request replay_webhook_delivery_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['replayWebhookDelivery'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -2417,10 +2418,11 @@ class WebhooksApi
     public function replayWebhookDelivery(
         string $id,
         string $delivery_id,
+        ?\Repull\Model\ReplayWebhookDeliveryRequest $replay_webhook_delivery_request = null,
         string $contentType = self::contentTypes['replayWebhookDelivery'][0]
     ): ?\Repull\Model\Error
     {
-        list($response) = $this->replayWebhookDeliveryWithHttpInfo($id, $delivery_id, $contentType);
+        list($response) = $this->replayWebhookDeliveryWithHttpInfo($id, $delivery_id, $replay_webhook_delivery_request, $contentType);
         return $response;
     }
 
@@ -2431,6 +2433,7 @@ class WebhooksApi
      *
      * @param  string $id (required)
      * @param  string $delivery_id (required)
+     * @param  \Repull\Model\ReplayWebhookDeliveryRequest|null $replay_webhook_delivery_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['replayWebhookDelivery'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -2440,10 +2443,11 @@ class WebhooksApi
     public function replayWebhookDeliveryWithHttpInfo(
         string $id,
         string $delivery_id,
+        ?\Repull\Model\ReplayWebhookDeliveryRequest $replay_webhook_delivery_request = null,
         string $contentType = self::contentTypes['replayWebhookDelivery'][0]
     ): array
     {
-        $request = $this->replayWebhookDeliveryRequest($id, $delivery_id, $contentType);
+        $request = $this->replayWebhookDeliveryRequest($id, $delivery_id, $replay_webhook_delivery_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2479,6 +2483,22 @@ class WebhooksApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -2492,6 +2512,7 @@ class WebhooksApi
      *
      * @param  string $id (required)
      * @param  string $delivery_id (required)
+     * @param  \Repull\Model\ReplayWebhookDeliveryRequest|null $replay_webhook_delivery_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['replayWebhookDelivery'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -2500,10 +2521,11 @@ class WebhooksApi
     public function replayWebhookDeliveryAsync(
         string $id,
         string $delivery_id,
+        ?\Repull\Model\ReplayWebhookDeliveryRequest $replay_webhook_delivery_request = null,
         string $contentType = self::contentTypes['replayWebhookDelivery'][0]
     ): PromiseInterface
     {
-        return $this->replayWebhookDeliveryAsyncWithHttpInfo($id, $delivery_id, $contentType)
+        return $this->replayWebhookDeliveryAsyncWithHttpInfo($id, $delivery_id, $replay_webhook_delivery_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2518,6 +2540,7 @@ class WebhooksApi
      *
      * @param  string $id (required)
      * @param  string $delivery_id (required)
+     * @param  \Repull\Model\ReplayWebhookDeliveryRequest|null $replay_webhook_delivery_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['replayWebhookDelivery'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -2526,11 +2549,12 @@ class WebhooksApi
     public function replayWebhookDeliveryAsyncWithHttpInfo(
         string $id,
         string $delivery_id,
+        ?\Repull\Model\ReplayWebhookDeliveryRequest $replay_webhook_delivery_request = null,
         string $contentType = self::contentTypes['replayWebhookDelivery'][0]
     ): PromiseInterface
     {
         $returnType = '';
-        $request = $this->replayWebhookDeliveryRequest($id, $delivery_id, $contentType);
+        $request = $this->replayWebhookDeliveryRequest($id, $delivery_id, $replay_webhook_delivery_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2560,6 +2584,7 @@ class WebhooksApi
      *
      * @param  string $id (required)
      * @param  string $delivery_id (required)
+     * @param  \Repull\Model\ReplayWebhookDeliveryRequest|null $replay_webhook_delivery_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['replayWebhookDelivery'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -2568,6 +2593,7 @@ class WebhooksApi
     public function replayWebhookDeliveryRequest(
         string $id,
         string $delivery_id,
+        ?\Repull\Model\ReplayWebhookDeliveryRequest $replay_webhook_delivery_request = null,
         string $contentType = self::contentTypes['replayWebhookDelivery'][0]
     ): Request
     {
@@ -2585,6 +2611,7 @@ class WebhooksApi
                 'Missing the required parameter $delivery_id when calling replayWebhookDelivery'
             );
         }
+
 
 
         $resourcePath = '/v1/webhooks/{id}/deliveries/{delivery_id}/replay';
@@ -2621,7 +2648,14 @@ class WebhooksApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if (isset($replay_webhook_delivery_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($replay_webhook_delivery_request));
+            } else {
+                $httpBody = $replay_webhook_delivery_request;
+            }
+        } elseif (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {

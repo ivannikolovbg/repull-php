@@ -61,6 +61,7 @@ class BookingRoomsRatesResponseRoomsInner implements ModelInterface, ArrayAccess
     protected static array $openAPITypes = [
         'room_id' => 'string',
         'room_name' => 'string',
+        'max_adults' => 'int',
         'rates' => '\Repull\Model\BookingRoomsRatesResponseRoomsInnerRatesInner[]'
     ];
 
@@ -72,6 +73,7 @@ class BookingRoomsRatesResponseRoomsInner implements ModelInterface, ArrayAccess
     protected static array $openAPIFormats = [
         'room_id' => null,
         'room_name' => null,
+        'max_adults' => null,
         'rates' => null
     ];
 
@@ -83,6 +85,7 @@ class BookingRoomsRatesResponseRoomsInner implements ModelInterface, ArrayAccess
     protected static array $openAPINullables = [
         'room_id' => true,
         'room_name' => true,
+        'max_adults' => true,
         'rates' => false
     ];
 
@@ -164,6 +167,7 @@ class BookingRoomsRatesResponseRoomsInner implements ModelInterface, ArrayAccess
     protected static array $attributeMap = [
         'room_id' => 'roomId',
         'room_name' => 'roomName',
+        'max_adults' => 'maxAdults',
         'rates' => 'rates'
     ];
 
@@ -175,6 +179,7 @@ class BookingRoomsRatesResponseRoomsInner implements ModelInterface, ArrayAccess
     protected static array $setters = [
         'room_id' => 'setRoomId',
         'room_name' => 'setRoomName',
+        'max_adults' => 'setMaxAdults',
         'rates' => 'setRates'
     ];
 
@@ -186,6 +191,7 @@ class BookingRoomsRatesResponseRoomsInner implements ModelInterface, ArrayAccess
     protected static array $getters = [
         'room_id' => 'getRoomId',
         'room_name' => 'getRoomName',
+        'max_adults' => 'getMaxAdults',
         'rates' => 'getRates'
     ];
 
@@ -238,6 +244,7 @@ class BookingRoomsRatesResponseRoomsInner implements ModelInterface, ArrayAccess
     {
         $this->setIfExists('room_id', $data ?? [], null);
         $this->setIfExists('room_name', $data ?? [], null);
+        $this->setIfExists('max_adults', $data ?? [], null);
         $this->setIfExists('rates', $data ?? [], null);
     }
 
@@ -342,6 +349,40 @@ class BookingRoomsRatesResponseRoomsInner implements ModelInterface, ArrayAccess
             }
         }
         $this->container['room_name'] = $room_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets max_adults
+     *
+     * @return int|null
+     */
+    public function getMaxAdults(): ?int
+    {
+        return $this->container['max_adults'];
+    }
+
+    /**
+     * Sets max_adults
+     *
+     * @param int|null $max_adults Booking.com's capacity for this room, as imported. The occupancy a rate write falls back to when the rate plan states no `maxPersons`. Null when Booking.com never stated one.
+     *
+     * @return $this
+     */
+    public function setMaxAdults(?int $max_adults): static
+    {
+        if (is_null($max_adults)) {
+            array_push($this->openAPINullablesSetToNull, 'max_adults');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('max_adults', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['max_adults'] = $max_adults;
 
         return $this;
     }

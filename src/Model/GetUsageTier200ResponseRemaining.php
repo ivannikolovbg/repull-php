@@ -60,6 +60,7 @@ class GetUsageTier200ResponseRemaining implements ModelInterface, ArrayAccess, J
      */
     protected static array $openAPITypes = [
         'monthly' => 'int',
+        'daily' => 'int',
         'daily_ai' => 'int',
         'dynamic_pricing_listings' => 'int'
     ];
@@ -71,6 +72,7 @@ class GetUsageTier200ResponseRemaining implements ModelInterface, ArrayAccess, J
      */
     protected static array $openAPIFormats = [
         'monthly' => null,
+        'daily' => null,
         'daily_ai' => null,
         'dynamic_pricing_listings' => null
     ];
@@ -82,6 +84,7 @@ class GetUsageTier200ResponseRemaining implements ModelInterface, ArrayAccess, J
      */
     protected static array $openAPINullables = [
         'monthly' => true,
+        'daily' => true,
         'daily_ai' => true,
         'dynamic_pricing_listings' => true
     ];
@@ -163,6 +166,7 @@ class GetUsageTier200ResponseRemaining implements ModelInterface, ArrayAccess, J
      */
     protected static array $attributeMap = [
         'monthly' => 'monthly',
+        'daily' => 'daily',
         'daily_ai' => 'dailyAi',
         'dynamic_pricing_listings' => 'dynamicPricingListings'
     ];
@@ -174,6 +178,7 @@ class GetUsageTier200ResponseRemaining implements ModelInterface, ArrayAccess, J
      */
     protected static array $setters = [
         'monthly' => 'setMonthly',
+        'daily' => 'setDaily',
         'daily_ai' => 'setDailyAi',
         'dynamic_pricing_listings' => 'setDynamicPricingListings'
     ];
@@ -185,6 +190,7 @@ class GetUsageTier200ResponseRemaining implements ModelInterface, ArrayAccess, J
      */
     protected static array $getters = [
         'monthly' => 'getMonthly',
+        'daily' => 'getDaily',
         'daily_ai' => 'getDailyAi',
         'dynamic_pricing_listings' => 'getDynamicPricingListings'
     ];
@@ -237,6 +243,7 @@ class GetUsageTier200ResponseRemaining implements ModelInterface, ArrayAccess, J
     public function __construct(?array $data = null)
     {
         $this->setIfExists('monthly', $data ?? [], null);
+        $this->setIfExists('daily', $data ?? [], null);
         $this->setIfExists('daily_ai', $data ?? [], null);
         $this->setIfExists('dynamic_pricing_listings', $data ?? [], null);
     }
@@ -308,6 +315,40 @@ class GetUsageTier200ResponseRemaining implements ModelInterface, ArrayAccess, J
             }
         }
         $this->container['monthly'] = $monthly;
+
+        return $this;
+    }
+
+    /**
+     * Gets daily
+     *
+     * @return int|null
+     */
+    public function getDaily(): ?int
+    {
+        return $this->container['daily'];
+    }
+
+    /**
+     * Sets daily
+     *
+     * @param int|null $daily daily
+     *
+     * @return $this
+     */
+    public function setDaily(?int $daily): static
+    {
+        if (is_null($daily)) {
+            array_push($this->openAPINullablesSetToNull, 'daily');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('daily', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['daily'] = $daily;
 
         return $this;
     }

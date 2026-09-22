@@ -60,6 +60,7 @@ class GetUsageTier200ResponseLimits implements ModelInterface, ArrayAccess, Json
      */
     protected static array $openAPITypes = [
         'monthly_requests' => 'int',
+        'daily_requests' => 'int',
         'daily_ai_requests' => 'int',
         'dynamic_pricing_listings' => 'int'
     ];
@@ -71,6 +72,7 @@ class GetUsageTier200ResponseLimits implements ModelInterface, ArrayAccess, Json
      */
     protected static array $openAPIFormats = [
         'monthly_requests' => null,
+        'daily_requests' => null,
         'daily_ai_requests' => null,
         'dynamic_pricing_listings' => null
     ];
@@ -82,6 +84,7 @@ class GetUsageTier200ResponseLimits implements ModelInterface, ArrayAccess, Json
      */
     protected static array $openAPINullables = [
         'monthly_requests' => true,
+        'daily_requests' => true,
         'daily_ai_requests' => true,
         'dynamic_pricing_listings' => true
     ];
@@ -163,6 +166,7 @@ class GetUsageTier200ResponseLimits implements ModelInterface, ArrayAccess, Json
      */
     protected static array $attributeMap = [
         'monthly_requests' => 'monthlyRequests',
+        'daily_requests' => 'dailyRequests',
         'daily_ai_requests' => 'dailyAiRequests',
         'dynamic_pricing_listings' => 'dynamicPricingListings'
     ];
@@ -174,6 +178,7 @@ class GetUsageTier200ResponseLimits implements ModelInterface, ArrayAccess, Json
      */
     protected static array $setters = [
         'monthly_requests' => 'setMonthlyRequests',
+        'daily_requests' => 'setDailyRequests',
         'daily_ai_requests' => 'setDailyAiRequests',
         'dynamic_pricing_listings' => 'setDynamicPricingListings'
     ];
@@ -185,6 +190,7 @@ class GetUsageTier200ResponseLimits implements ModelInterface, ArrayAccess, Json
      */
     protected static array $getters = [
         'monthly_requests' => 'getMonthlyRequests',
+        'daily_requests' => 'getDailyRequests',
         'daily_ai_requests' => 'getDailyAiRequests',
         'dynamic_pricing_listings' => 'getDynamicPricingListings'
     ];
@@ -237,6 +243,7 @@ class GetUsageTier200ResponseLimits implements ModelInterface, ArrayAccess, Json
     public function __construct(?array $data = null)
     {
         $this->setIfExists('monthly_requests', $data ?? [], null);
+        $this->setIfExists('daily_requests', $data ?? [], null);
         $this->setIfExists('daily_ai_requests', $data ?? [], null);
         $this->setIfExists('dynamic_pricing_listings', $data ?? [], null);
     }
@@ -308,6 +315,40 @@ class GetUsageTier200ResponseLimits implements ModelInterface, ArrayAccess, Json
             }
         }
         $this->container['monthly_requests'] = $monthly_requests;
+
+        return $this;
+    }
+
+    /**
+     * Gets daily_requests
+     *
+     * @return int|null
+     */
+    public function getDailyRequests(): ?int
+    {
+        return $this->container['daily_requests'];
+    }
+
+    /**
+     * Sets daily_requests
+     *
+     * @param int|null $daily_requests daily_requests
+     *
+     * @return $this
+     */
+    public function setDailyRequests(?int $daily_requests): static
+    {
+        if (is_null($daily_requests)) {
+            array_push($this->openAPINullablesSetToNull, 'daily_requests');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('daily_requests', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['daily_requests'] = $daily_requests;
 
         return $this;
     }

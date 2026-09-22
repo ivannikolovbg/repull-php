@@ -37,6 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * BookingPricingRateUpdateDateRange Class Doc Comment
  *
+ * @description The nights this update applies to. **Both ends are inclusive**: &#x60;{ \&quot;start\&quot;: \&quot;2026-11-04\&quot;, \&quot;end\&quot;: \&quot;2026-11-04\&quot; }&#x60; writes exactly one night.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -290,7 +291,7 @@ class BookingPricingRateUpdateDateRange implements ModelInterface, ArrayAccess, 
     /**
      * Sets start
      *
-     * @param \DateTime $start start
+     * @param \DateTime $start First night, YYYY-MM-DD.
      *
      * @return $this
      */
@@ -317,7 +318,7 @@ class BookingPricingRateUpdateDateRange implements ModelInterface, ArrayAccess, 
     /**
      * Sets end
      *
-     * @param \DateTime $end end
+     * @param \DateTime $end Last night, YYYY-MM-DD, inclusive — the same date as `start` for a single night.
      *
      * @return $this
      */

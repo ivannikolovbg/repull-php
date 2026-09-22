@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * BookingRoomsRatesResponse Class Doc Comment
  *
- * @description Returned by &#x60;GET /v1/channels/booking/properties/{id}/rooms&#x60;. Exposes the Booking.com room + rate-plan mapping ids for a listing so a caller can assemble a &#x60;PUT /v1/channels/booking/availability&#x60; restriction write (which requires &#x60;roomId&#x60; + &#x60;rateId&#x60; on every update). Sourced from Booking&#39;s B.XML roomrates feed.
+ * @description Returned by &#x60;GET /v1/channels/booking/properties/{id}/rooms&#x60;. Exposes the Booking.com room + rate-plan mapping ids for a listing so a caller can assemble a &#x60;PUT /v1/channels/booking/availability&#x60; restriction write (which requires &#x60;roomId&#x60; + &#x60;rateId&#x60; on every update). Read live from Booking&#39;s B.XML roomrates feed; &#x60;source&#x60; says so, and says when the answer came from the last import instead.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -61,7 +61,10 @@ class BookingRoomsRatesResponse implements ModelInterface, ArrayAccess, JsonSeri
      */
     protected static array $openAPITypes = [
         'hotel_id' => 'string',
-        'listing_id' => 'int',
+        'listing_id' => 'string',
+        'other_hotel_ids' => 'string[]',
+        'source' => 'string',
+        'mirror_reason' => 'string',
         'rooms' => '\Repull\Model\BookingRoomsRatesResponseRoomsInner[]'
     ];
 
@@ -73,6 +76,9 @@ class BookingRoomsRatesResponse implements ModelInterface, ArrayAccess, JsonSeri
     protected static array $openAPIFormats = [
         'hotel_id' => null,
         'listing_id' => null,
+        'other_hotel_ids' => null,
+        'source' => null,
+        'mirror_reason' => null,
         'rooms' => null
     ];
 
@@ -84,6 +90,9 @@ class BookingRoomsRatesResponse implements ModelInterface, ArrayAccess, JsonSeri
     protected static array $openAPINullables = [
         'hotel_id' => false,
         'listing_id' => false,
+        'other_hotel_ids' => false,
+        'source' => false,
+        'mirror_reason' => true,
         'rooms' => false
     ];
 
@@ -163,8 +172,11 @@ class BookingRoomsRatesResponse implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'hotel_id' => 'hotel_id',
-        'listing_id' => 'listing_id',
+        'hotel_id' => 'hotelId',
+        'listing_id' => 'listingId',
+        'other_hotel_ids' => 'otherHotelIds',
+        'source' => 'source',
+        'mirror_reason' => 'mirrorReason',
         'rooms' => 'rooms'
     ];
 
@@ -176,6 +188,9 @@ class BookingRoomsRatesResponse implements ModelInterface, ArrayAccess, JsonSeri
     protected static array $setters = [
         'hotel_id' => 'setHotelId',
         'listing_id' => 'setListingId',
+        'other_hotel_ids' => 'setOtherHotelIds',
+        'source' => 'setSource',
+        'mirror_reason' => 'setMirrorReason',
         'rooms' => 'setRooms'
     ];
 
@@ -187,6 +202,9 @@ class BookingRoomsRatesResponse implements ModelInterface, ArrayAccess, JsonSeri
     protected static array $getters = [
         'hotel_id' => 'getHotelId',
         'listing_id' => 'getListingId',
+        'other_hotel_ids' => 'getOtherHotelIds',
+        'source' => 'getSource',
+        'mirror_reason' => 'getMirrorReason',
         'rooms' => 'getRooms'
     ];
 
@@ -222,6 +240,21 @@ class BookingRoomsRatesResponse implements ModelInterface, ArrayAccess, JsonSeri
         return self::$openAPIModelName;
     }
 
+    public const SOURCE_BOOKING = 'booking';
+    public const SOURCE_MIRROR = 'mirror';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getSourceAllowableValues()
+    {
+        return [
+            self::SOURCE_BOOKING,
+            self::SOURCE_MIRROR,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -239,6 +272,9 @@ class BookingRoomsRatesResponse implements ModelInterface, ArrayAccess, JsonSeri
     {
         $this->setIfExists('hotel_id', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('other_hotel_ids', $data ?? [], null);
+        $this->setIfExists('source', $data ?? [], null);
+        $this->setIfExists('mirror_reason', $data ?? [], null);
         $this->setIfExists('rooms', $data ?? [], null);
     }
 
@@ -267,6 +303,15 @@ class BookingRoomsRatesResponse implements ModelInterface, ArrayAccess, JsonSeri
     {
         $invalidProperties = [];
 
+        $allowedValues = self::getSourceAllowableValues();
+        if (!is_null($this->container['source']) && !in_array($this->container['source'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'source', must be one of '%s'",
+                $this->container['source'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -292,7 +337,7 @@ class BookingRoomsRatesResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets hotel_id
      *
-     * @param string|null $hotel_id Booking.com hotel/property id the rooms belong to.
+     * @param string|null $hotel_id Booking.com hotel/property id the rooms belong to — the one the mapping resolved to.
      *
      * @return $this
      */
@@ -309,9 +354,9 @@ class BookingRoomsRatesResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Gets listing_id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getListingId(): ?int
+    public function getListingId(): ?string
     {
         return $this->container['listing_id'];
     }
@@ -319,16 +364,105 @@ class BookingRoomsRatesResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets listing_id
      *
-     * @param int|null $listing_id Vanio listing id echoed back.
+     * @param string|null $listing_id Repull listing id echoed back.
      *
      * @return $this
      */
-    public function setListingId(?int $listing_id): static
+    public function setListingId(?string $listing_id): static
     {
         if (is_null($listing_id)) {
             throw new InvalidArgumentException('non-nullable listing_id cannot be null');
         }
         $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets other_hotel_ids
+     *
+     * @return string[]|null
+     */
+    public function getOtherHotelIds(): ?array
+    {
+        return $this->container['other_hotel_ids'];
+    }
+
+    /**
+     * Sets other_hotel_ids
+     *
+     * @param string[]|null $other_hotel_ids Other Booking.com properties this listing is also published under. Empty in the normal case. Pass one as `?hotel_id=` to read its rooms instead.
+     *
+     * @return $this
+     */
+    public function setOtherHotelIds(?array $other_hotel_ids): static
+    {
+        if (is_null($other_hotel_ids)) {
+            throw new InvalidArgumentException('non-nullable other_hotel_ids cannot be null');
+        }
+        $this->container['other_hotel_ids'] = $other_hotel_ids;
+
+        return $this;
+    }
+
+    /**
+     * Gets source
+     *
+     * @return string|null
+     */
+    public function getSource(): ?string
+    {
+        return $this->container['source'];
+    }
+
+    /**
+     * Sets source
+     *
+     * @param string|null $source Where the rooms came from. `booking` — read live from Booking.com just now. `mirror` — Booking.com returned nothing usable, so these are the rooms and rate plans recorded at the last import; the ids are Booking.com's own and are safe to write against, but they can be stale and `maxPersons`, `policy`, `policyId`, `pricingType` and `isChildRate` come back `null` because only the live feed states them.
+     *
+     * @return $this
+     */
+    public function setSource(?string $source): static
+    {
+        if (is_null($source)) {
+            throw new InvalidArgumentException('non-nullable source cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['source'] = $source;
+
+        return $this;
+    }
+
+    /**
+     * Gets mirror_reason
+     *
+     * @return string|null
+     */
+    public function getMirrorReason(): ?string
+    {
+        return $this->container['mirror_reason'];
+    }
+
+    /**
+     * Sets mirror_reason
+     *
+     * @param string|null $mirror_reason Why the live read was not used. Null when `source` is `booking`.
+     *
+     * @return $this
+     */
+    public function setMirrorReason(?string $mirror_reason): static
+    {
+        if (is_null($mirror_reason)) {
+            array_push($this->openAPINullablesSetToNull, 'mirror_reason');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('mirror_reason', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['mirror_reason'] = $mirror_reason;
 
         return $this;
     }
@@ -346,7 +480,7 @@ class BookingRoomsRatesResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets rooms
      *
-     * @param \Repull\Model\BookingRoomsRatesResponseRoomsInner[]|null $rooms rooms
+     * @param \Repull\Model\BookingRoomsRatesResponseRoomsInner[]|null $rooms Empty only when Booking.com reports no rooms for this property AND nothing was recorded at the last import. A failed read is never an empty list — it is an error.
      *
      * @return $this
      */

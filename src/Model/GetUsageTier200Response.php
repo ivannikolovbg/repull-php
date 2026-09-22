@@ -63,6 +63,7 @@ class GetUsageTier200Response implements ModelInterface, ArrayAccess, JsonSerial
         'limits' => '\Repull\Model\GetUsageTier200ResponseLimits',
         'used' => '\Repull\Model\GetUsageTier200ResponseUsed',
         'remaining' => '\Repull\Model\GetUsageTier200ResponseRemaining',
+        'daily_resets_at' => '\DateTime',
         'resets_at' => '\DateTime'
     ];
 
@@ -76,6 +77,7 @@ class GetUsageTier200Response implements ModelInterface, ArrayAccess, JsonSerial
         'limits' => null,
         'used' => null,
         'remaining' => null,
+        'daily_resets_at' => 'date-time',
         'resets_at' => 'date-time'
     ];
 
@@ -89,6 +91,7 @@ class GetUsageTier200Response implements ModelInterface, ArrayAccess, JsonSerial
         'limits' => false,
         'used' => false,
         'remaining' => false,
+        'daily_resets_at' => false,
         'resets_at' => false
     ];
 
@@ -172,6 +175,7 @@ class GetUsageTier200Response implements ModelInterface, ArrayAccess, JsonSerial
         'limits' => 'limits',
         'used' => 'used',
         'remaining' => 'remaining',
+        'daily_resets_at' => 'dailyResetsAt',
         'resets_at' => 'resetsAt'
     ];
 
@@ -185,6 +189,7 @@ class GetUsageTier200Response implements ModelInterface, ArrayAccess, JsonSerial
         'limits' => 'setLimits',
         'used' => 'setUsed',
         'remaining' => 'setRemaining',
+        'daily_resets_at' => 'setDailyResetsAt',
         'resets_at' => 'setResetsAt'
     ];
 
@@ -198,6 +203,7 @@ class GetUsageTier200Response implements ModelInterface, ArrayAccess, JsonSerial
         'limits' => 'getLimits',
         'used' => 'getUsed',
         'remaining' => 'getRemaining',
+        'daily_resets_at' => 'getDailyResetsAt',
         'resets_at' => 'getResetsAt'
     ];
 
@@ -252,6 +258,7 @@ class GetUsageTier200Response implements ModelInterface, ArrayAccess, JsonSerial
         $this->setIfExists('limits', $data ?? [], null);
         $this->setIfExists('used', $data ?? [], null);
         $this->setIfExists('remaining', $data ?? [], null);
+        $this->setIfExists('daily_resets_at', $data ?? [], null);
         $this->setIfExists('resets_at', $data ?? [], null);
     }
 
@@ -396,6 +403,33 @@ class GetUsageTier200Response implements ModelInterface, ArrayAccess, JsonSerial
             throw new InvalidArgumentException('non-nullable remaining cannot be null');
         }
         $this->container['remaining'] = $remaining;
+
+        return $this;
+    }
+
+    /**
+     * Gets daily_resets_at
+     *
+     * @return \DateTime|null
+     */
+    public function getDailyResetsAt(): ?\DateTime
+    {
+        return $this->container['daily_resets_at'];
+    }
+
+    /**
+     * Sets daily_resets_at
+     *
+     * @param \DateTime|null $daily_resets_at daily_resets_at
+     *
+     * @return $this
+     */
+    public function setDailyResetsAt(?\DateTime $daily_resets_at): static
+    {
+        if (is_null($daily_resets_at)) {
+            throw new InvalidArgumentException('non-nullable daily_resets_at cannot be null');
+        }
+        $this->container['daily_resets_at'] = $daily_resets_at;
 
         return $this;
     }

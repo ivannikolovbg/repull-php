@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * BookingPricingRateUpdateRestrictions Class Doc Comment
  *
- * @description Optional length-of-stay / availability restrictions for one rate update. Every field here is forwarded verbatim into Booking.com&#39;s rates XML (&#x60;minimumstay&#x60;, &#x60;maximumstay&#x60;, &#x60;closedonarrival&#x60;, &#x60;closedondeparture&#x60;, …) — omit a field to leave that restriction untouched.
+ * @description Length-of-stay and arrival restrictions for the nights in this update. Omit a field to leave that restriction untouched — nothing you do not state is changed.  These are written on Booking.com&#39;s availability notification, which is the wire that carries a restriction when no inventory changes hands. Sending them alongside a price is supported: the prices and the restrictions are two writes, and the response reports each one separately (&#x60;price&#x60; and &#x60;restrictions&#x60;), so a half that lands is never reported as a failure and a half that is refused is never reported as applied.  Three restrictions are refused with &#x60;422 restriction_not_supported&#x60; naming the field: Booking.com&#39;s notification has no element for them, and dropping a restriction you stated would be worse than refusing it. Set those on the rate plan in the Booking.com Extranet.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -334,7 +334,7 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
     /**
      * Sets min_stay
      *
-     * @param int|null $min_stay Minimum length of stay (`minimumstay`).
+     * @param int|null $min_stay Minimum length of stay. Booking.com stores a 1-night minimum as no minimum at all, so `minStay: 1` reads back as `0` and is reported as applied.
      *
      * @return $this
      */
@@ -368,7 +368,7 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
     /**
      * Sets max_stay
      *
-     * @param int|null $max_stay Maximum length of stay (`maximumstay`).
+     * @param int|null $max_stay Maximum length of stay.
      *
      * @return $this
      */
@@ -402,7 +402,7 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
     /**
      * Sets closed_to_arrival
      *
-     * @param bool|null $closed_to_arrival Closed-to-arrival — guests may not check in on the affected dates (`closedonarrival`).
+     * @param bool|null $closed_to_arrival Closed-to-arrival — guests may not check in on these nights. `false` clears the flag; omit the field to leave it as it is.
      *
      * @return $this
      */
@@ -436,7 +436,7 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
     /**
      * Sets closed_to_departure
      *
-     * @param bool|null $closed_to_departure Closed-to-departure — guests may not check out on the affected dates (`closedondeparture`).
+     * @param bool|null $closed_to_departure Closed-to-departure — guests may not check out on these nights. `false` clears the flag; omit the field to leave it as it is.
      *
      * @return $this
      */
@@ -470,7 +470,7 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
     /**
      * Sets min_stay_arrival
      *
-     * @param int|null $min_stay_arrival Arrival-based minimum length of stay (`minimumstay_arrival`).
+     * @param int|null $min_stay_arrival Arrival-based minimum length of stay — applies to stays that START on these nights, rather than any stay covering them.
      *
      * @return $this
      */
@@ -504,7 +504,7 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
     /**
      * Sets max_stay_arrival
      *
-     * @param int|null $max_stay_arrival Arrival-based maximum length of stay (`maximumstay_arrival`).
+     * @param int|null $max_stay_arrival Arrival-based maximum length of stay.
      *
      * @return $this
      */
@@ -529,6 +529,7 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
      * Gets exact_stay_arrival
      *
      * @return int|null
+     * @deprecated
      */
     public function getExactStayArrival(): ?int
     {
@@ -538,9 +539,10 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
     /**
      * Sets exact_stay_arrival
      *
-     * @param int|null $exact_stay_arrival Arrival-based exact length of stay (`exactstay_arrival`).
+     * @param int|null $exact_stay_arrival Refused. Booking.com's restriction notification has no element for an exact arrival-based stay length, so it cannot be written through the API; sending it returns `422 restriction_not_supported` naming `updates[N].restrictions.exactStayArrival`. Set it on the rate plan in the Booking.com Extranet.
      *
      * @return $this
+     * @deprecated
      */
     public function setExactStayArrival(?int $exact_stay_arrival): static
     {
@@ -563,6 +565,7 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
      * Gets min_advance_res
      *
      * @return string|null
+     * @deprecated
      */
     public function getMinAdvanceRes(): ?string
     {
@@ -572,9 +575,10 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
     /**
      * Sets min_advance_res
      *
-     * @param string|null $min_advance_res Minimum advance-reservation window, format `XDY` (X days Y hours) — `min_advance_res`.
+     * @param string|null $min_advance_res Refused, for the same reason as `exactStayArrival` — returns `422 restriction_not_supported`. Set the minimum advance-reservation window on the rate plan in the Booking.com Extranet.
      *
      * @return $this
+     * @deprecated
      */
     public function setMinAdvanceRes(?string $min_advance_res): static
     {
@@ -597,6 +601,7 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
      * Gets max_advance_res
      *
      * @return string|null
+     * @deprecated
      */
     public function getMaxAdvanceRes(): ?string
     {
@@ -606,9 +611,10 @@ class BookingPricingRateUpdateRestrictions implements ModelInterface, ArrayAcces
     /**
      * Sets max_advance_res
      *
-     * @param string|null $max_advance_res Maximum advance-reservation window, format `XDY` (X days Y hours) — `max_advance_res`.
+     * @param string|null $max_advance_res Refused, for the same reason as `exactStayArrival` — returns `422 restriction_not_supported`. Set the maximum advance-reservation window on the rate plan in the Booking.com Extranet.
      *
      * @return $this
+     * @deprecated
      */
     public function setMaxAdvanceRes(?string $max_advance_res): static
     {

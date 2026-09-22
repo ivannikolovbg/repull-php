@@ -1,6 +1,6 @@
 <?php
 /**
- * BookingAvailabilityUpdate
+ * BookingRateWriteVerificationRow
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * BookingAvailabilityUpdate Class Doc Comment
+ * BookingRateWriteVerificationRow Class Doc Comment
  *
- * @description One (room, rate-plan, date-range) availability update. Carries inventory (&#x60;availableRooms&#x60;), the dedicated stop-sell flag (&#x60;closed&#x60;), and length-of-stay / arrival restrictions. Omit &#x60;availableRooms&#x60; and &#x60;closed&#x60; for a restriction-only write — inventory is then left untouched.
+ * @description One night, read back off Booking.com after the write.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSerializable
+class BookingRateWriteVerificationRow implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'BookingAvailabilityUpdate';
+    protected static string $openAPIModelName = 'BookingRateWriteVerificationRow';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -62,11 +62,10 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
     protected static array $openAPITypes = [
         'room_id' => 'string',
         'rate_id' => 'string',
-        'date_range' => '\Repull\Model\BookingAvailabilityUpdateDateRange',
-        'available_rooms' => 'int',
-        'status' => 'string',
-        'closed' => 'bool',
-        'restrictions' => '\Repull\Model\BookingPricingRateUpdateRestrictions'
+        'date' => '\DateTime',
+        'expected_price' => 'float',
+        'booking_price' => 'float',
+        'match' => 'bool'
     ];
 
     /**
@@ -77,11 +76,10 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
     protected static array $openAPIFormats = [
         'room_id' => null,
         'rate_id' => null,
-        'date_range' => null,
-        'available_rooms' => null,
-        'status' => null,
-        'closed' => null,
-        'restrictions' => null
+        'date' => 'date',
+        'expected_price' => null,
+        'booking_price' => null,
+        'match' => null
     ];
 
     /**
@@ -92,11 +90,10 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
     protected static array $openAPINullables = [
         'room_id' => false,
         'rate_id' => false,
-        'date_range' => false,
-        'available_rooms' => true,
-        'status' => true,
-        'closed' => true,
-        'restrictions' => false
+        'date' => false,
+        'expected_price' => false,
+        'booking_price' => true,
+        'match' => false
     ];
 
     /**
@@ -177,11 +174,10 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
     protected static array $attributeMap = [
         'room_id' => 'roomId',
         'rate_id' => 'rateId',
-        'date_range' => 'dateRange',
-        'available_rooms' => 'availableRooms',
-        'status' => 'status',
-        'closed' => 'closed',
-        'restrictions' => 'restrictions'
+        'date' => 'date',
+        'expected_price' => 'expectedPrice',
+        'booking_price' => 'bookingPrice',
+        'match' => 'match'
     ];
 
     /**
@@ -192,11 +188,10 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
     protected static array $setters = [
         'room_id' => 'setRoomId',
         'rate_id' => 'setRateId',
-        'date_range' => 'setDateRange',
-        'available_rooms' => 'setAvailableRooms',
-        'status' => 'setStatus',
-        'closed' => 'setClosed',
-        'restrictions' => 'setRestrictions'
+        'date' => 'setDate',
+        'expected_price' => 'setExpectedPrice',
+        'booking_price' => 'setBookingPrice',
+        'match' => 'setMatch'
     ];
 
     /**
@@ -207,11 +202,10 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
     protected static array $getters = [
         'room_id' => 'getRoomId',
         'rate_id' => 'getRateId',
-        'date_range' => 'getDateRange',
-        'available_rooms' => 'getAvailableRooms',
-        'status' => 'getStatus',
-        'closed' => 'getClosed',
-        'restrictions' => 'getRestrictions'
+        'date' => 'getDate',
+        'expected_price' => 'getExpectedPrice',
+        'booking_price' => 'getBookingPrice',
+        'match' => 'getMatch'
     ];
 
     /**
@@ -246,23 +240,6 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
         return self::$openAPIModelName;
     }
 
-    public const STATUS_AVAILABLE = 'available';
-    public const STATUS_UNAVAILABLE = 'unavailable';
-    public const STATUS_ON_REQUEST = 'on_request';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getStatusAllowableValues()
-    {
-        return [
-            self::STATUS_AVAILABLE,
-            self::STATUS_UNAVAILABLE,
-            self::STATUS_ON_REQUEST,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -280,11 +257,10 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
     {
         $this->setIfExists('room_id', $data ?? [], null);
         $this->setIfExists('rate_id', $data ?? [], null);
-        $this->setIfExists('date_range', $data ?? [], null);
-        $this->setIfExists('available_rooms', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
-        $this->setIfExists('closed', $data ?? [], null);
-        $this->setIfExists('restrictions', $data ?? [], null);
+        $this->setIfExists('date', $data ?? [], null);
+        $this->setIfExists('expected_price', $data ?? [], null);
+        $this->setIfExists('booking_price', $data ?? [], null);
+        $this->setIfExists('match', $data ?? [], null);
     }
 
     /**
@@ -312,24 +288,6 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
     {
         $invalidProperties = [];
 
-        if ($this->container['room_id'] === null) {
-            $invalidProperties[] = "'room_id' can't be null";
-        }
-        if ($this->container['rate_id'] === null) {
-            $invalidProperties[] = "'rate_id' can't be null";
-        }
-        if ($this->container['date_range'] === null) {
-            $invalidProperties[] = "'date_range' can't be null";
-        }
-        $allowedValues = self::getStatusAllowableValues();
-        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'status', must be one of '%s'",
-                $this->container['status'],
-                implode("', '", $allowedValues)
-            );
-        }
-
         return $invalidProperties;
     }
 
@@ -345,9 +303,9 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Gets room_id
      *
-     * @return string
+     * @return string|null
      */
-    public function getRoomId(): string
+    public function getRoomId(): ?string
     {
         return $this->container['room_id'];
     }
@@ -355,11 +313,11 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets room_id
      *
-     * @param string $room_id Booking.com room id.
+     * @param string|null $room_id room_id
      *
      * @return $this
      */
-    public function setRoomId(string $room_id): static
+    public function setRoomId(?string $room_id): static
     {
         if (is_null($room_id)) {
             throw new InvalidArgumentException('non-nullable room_id cannot be null');
@@ -372,9 +330,9 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Gets rate_id
      *
-     * @return string
+     * @return string|null
      */
-    public function getRateId(): string
+    public function getRateId(): ?string
     {
         return $this->container['rate_id'];
     }
@@ -382,11 +340,11 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets rate_id
      *
-     * @param string $rate_id Booking.com rate-plan id.
+     * @param string|null $rate_id rate_id
      *
      * @return $this
      */
-    public function setRateId(string $rate_id): static
+    public function setRateId(?string $rate_id): static
     {
         if (is_null($rate_id)) {
             throw new InvalidArgumentException('non-nullable rate_id cannot be null');
@@ -397,158 +355,116 @@ class BookingAvailabilityUpdate implements ModelInterface, ArrayAccess, JsonSeri
     }
 
     /**
-     * Gets date_range
+     * Gets date
      *
-     * @return \Repull\Model\BookingAvailabilityUpdateDateRange
+     * @return \DateTime|null
      */
-    public function getDateRange(): \Repull\Model\BookingAvailabilityUpdateDateRange
+    public function getDate(): ?\DateTime
     {
-        return $this->container['date_range'];
+        return $this->container['date'];
     }
 
     /**
-     * Sets date_range
+     * Sets date
      *
-     * @param \Repull\Model\BookingAvailabilityUpdateDateRange $date_range date_range
+     * @param \DateTime|null $date date
      *
      * @return $this
      */
-    public function setDateRange(\Repull\Model\BookingAvailabilityUpdateDateRange $date_range): static
+    public function setDate(?\DateTime $date): static
     {
-        if (is_null($date_range)) {
-            throw new InvalidArgumentException('non-nullable date_range cannot be null');
+        if (is_null($date)) {
+            throw new InvalidArgumentException('non-nullable date cannot be null');
         }
-        $this->container['date_range'] = $date_range;
+        $this->container['date'] = $date;
 
         return $this;
     }
 
     /**
-     * Gets available_rooms
+     * Gets expected_price
      *
-     * @return int|null
+     * @return float|null
      */
-    public function getAvailableRooms(): ?int
+    public function getExpectedPrice(): ?float
     {
-        return $this->container['available_rooms'];
+        return $this->container['expected_price'];
     }
 
     /**
-     * Sets available_rooms
+     * Sets expected_price
      *
-     * @param int|null $available_rooms Rooms to sell (`roomstosell`). `0` blocks the room for the range. Omit it to leave inventory alone — `0` is a stop-sell, not a no-op.
+     * @param float|null $expected_price The amount that was sent.
      *
      * @return $this
      */
-    public function setAvailableRooms(?int $available_rooms): static
+    public function setExpectedPrice(?float $expected_price): static
     {
-        if (is_null($available_rooms)) {
-            array_push($this->openAPINullablesSetToNull, 'available_rooms');
+        if (is_null($expected_price)) {
+            throw new InvalidArgumentException('non-nullable expected_price cannot be null');
+        }
+        $this->container['expected_price'] = $expected_price;
+
+        return $this;
+    }
+
+    /**
+     * Gets booking_price
+     *
+     * @return float|null
+     */
+    public function getBookingPrice(): ?float
+    {
+        return $this->container['booking_price'];
+    }
+
+    /**
+     * Sets booking_price
+     *
+     * @param float|null $booking_price The amount Booking.com holds for that night now; `null` when Booking.com reported nothing for it.
+     *
+     * @return $this
+     */
+    public function setBookingPrice(?float $booking_price): static
+    {
+        if (is_null($booking_price)) {
+            array_push($this->openAPINullablesSetToNull, 'booking_price');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('available_rooms', $nullablesSetToNull);
+            $index = array_search('booking_price', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['available_rooms'] = $available_rooms;
+        $this->container['booking_price'] = $booking_price;
 
         return $this;
     }
 
     /**
-     * Gets status
-     *
-     * @return string|null
-     */
-    public function getStatus(): ?string
-    {
-        return $this->container['status'];
-    }
-
-    /**
-     * Sets status
-     *
-     * @param string|null $status status
-     *
-     * @return $this
-     */
-    public function setStatus(?string $status): static
-    {
-        if (is_null($status)) {
-            array_push($this->openAPINullablesSetToNull, 'status');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('status', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['status'] = $status;
-
-        return $this;
-    }
-
-    /**
-     * Gets closed
+     * Gets match
      *
      * @return bool|null
      */
-    public function getClosed(): ?bool
+    public function getMatch(): ?bool
     {
-        return $this->container['closed'];
+        return $this->container['match'];
     }
 
     /**
-     * Sets closed
+     * Sets match
      *
-     * @param bool|null $closed Dedicated stop-sell flag (`<closed>` in Booking's XML). `true` fully stops sale for the room/date-range regardless of `availableRooms`.
+     * @param bool|null $match match
      *
      * @return $this
      */
-    public function setClosed(?bool $closed): static
+    public function setMatch(?bool $match): static
     {
-        if (is_null($closed)) {
-            array_push($this->openAPINullablesSetToNull, 'closed');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('closed', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($match)) {
+            throw new InvalidArgumentException('non-nullable match cannot be null');
         }
-        $this->container['closed'] = $closed;
-
-        return $this;
-    }
-
-    /**
-     * Gets restrictions
-     *
-     * @return \Repull\Model\BookingPricingRateUpdateRestrictions|null
-     */
-    public function getRestrictions(): ?\Repull\Model\BookingPricingRateUpdateRestrictions
-    {
-        return $this->container['restrictions'];
-    }
-
-    /**
-     * Sets restrictions
-     *
-     * @param \Repull\Model\BookingPricingRateUpdateRestrictions|null $restrictions restrictions
-     *
-     * @return $this
-     */
-    public function setRestrictions(?\Repull\Model\BookingPricingRateUpdateRestrictions $restrictions): static
-    {
-        if (is_null($restrictions)) {
-            throw new InvalidArgumentException('non-nullable restrictions cannot be null');
-        }
-        $this->container['restrictions'] = $restrictions;
+        $this->container['match'] = $match;
 
         return $this;
     }

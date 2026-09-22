@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * BookingAvailabilityUpdateRequest Class Doc Comment
  *
- * @description Body for &#x60;PUT /v1/channels/booking/availability&#x60;. Selects one of Booking&#39;s three ARI write paths via &#x60;type&#x60; and forwards &#x60;updates&#x60; verbatim to the connector.
+ * @description Body for &#x60;PUT /v1/channels/booking/availability&#x60;. &#x60;type&#x60; selects which of Booking.com&#39;s writes to perform. Date ranges are inclusive at both ends everywhere in this body.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -61,6 +61,7 @@ class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, J
      */
     protected static array $openAPITypes = [
         'type' => 'string',
+        'verify' => 'bool',
         'property_id' => '\Repull\Model\BookingAvailabilityUpdateRequestPropertyId',
         'updates' => '\Repull\Model\BookingAvailabilityUpdateRequestUpdatesInner[]'
     ];
@@ -72,6 +73,7 @@ class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, J
      */
     protected static array $openAPIFormats = [
         'type' => null,
+        'verify' => null,
         'property_id' => null,
         'updates' => null
     ];
@@ -83,6 +85,7 @@ class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, J
      */
     protected static array $openAPINullables = [
         'type' => false,
+        'verify' => true,
         'property_id' => false,
         'updates' => false
     ];
@@ -164,6 +167,7 @@ class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, J
      */
     protected static array $attributeMap = [
         'type' => 'type',
+        'verify' => 'verify',
         'property_id' => 'property_id',
         'updates' => 'updates'
     ];
@@ -175,6 +179,7 @@ class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, J
      */
     protected static array $setters = [
         'type' => 'setType',
+        'verify' => 'setVerify',
         'property_id' => 'setPropertyId',
         'updates' => 'setUpdates'
     ];
@@ -186,6 +191,7 @@ class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, J
      */
     protected static array $getters = [
         'type' => 'getType',
+        'verify' => 'getVerify',
         'property_id' => 'getPropertyId',
         'updates' => 'getUpdates'
     ];
@@ -255,6 +261,7 @@ class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, J
     public function __construct(?array $data = null)
     {
         $this->setIfExists('type', $data ?? [], null);
+        $this->setIfExists('verify', $data ?? [], null);
         $this->setIfExists('property_id', $data ?? [], null);
         $this->setIfExists('updates', $data ?? [], null);
     }
@@ -331,7 +338,7 @@ class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, J
     /**
      * Sets type
      *
-     * @param string $type `rates` → price + restrictions (`updateRates`); `availability` → inventory + stop-sell + restrictions (`updateAvailability`); `derived-pricing` → occupancy-derived pricing rules (`updateDerivedPricing`).
+     * @param string $type `rates` → nightly prices (+ any restrictions sent with them), written at an explicit `occupancy`; `availability` → inventory, stop-sell and restrictions; `derived-pricing` → occupancy-derived pricing rules. A rates update may not carry `roomsToSell`: inventory is an `availability` write.
      *
      * @return $this
      */
@@ -342,6 +349,40 @@ class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, J
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['type'] = $type;
+
+        return $this;
+    }
+
+    /**
+     * Gets verify
+     *
+     * @return bool|null
+     */
+    public function getVerify(): ?bool
+    {
+        return $this->container['verify'];
+    }
+
+    /**
+     * Sets verify
+     *
+     * @param bool|null $verify Only for `type: \"rates\"`. Default `true`: after the write the affected nights are read back off Booking.com so `applied` can say `verified` or `mismatch`. Send `false` to skip the read (one fewer Booking.com call); the response then reports `applied: \"unverified\"`.
+     *
+     * @return $this
+     */
+    public function setVerify(?bool $verify): static
+    {
+        if (is_null($verify)) {
+            array_push($this->openAPINullablesSetToNull, 'verify');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('verify', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['verify'] = $verify;
 
         return $this;
     }

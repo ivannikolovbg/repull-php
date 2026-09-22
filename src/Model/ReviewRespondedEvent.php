@@ -59,10 +59,11 @@ class ReviewRespondedEvent implements ModelInterface, ArrayAccess, JsonSerializa
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'string',
-        'type' => 'string',
-        'created_at' => '\DateTime',
+        'event' => 'string',
+        'event_id' => 'string',
         'api_version' => 'string',
+        'timestamp' => '\DateTime',
+        'account' => '\Repull\Model\WebhookEventAccount',
         'data' => '\Repull\Model\ReviewRespondedPayload'
     ];
 
@@ -72,10 +73,11 @@ class ReviewRespondedEvent implements ModelInterface, ArrayAccess, JsonSerializa
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'id' => 'uuid',
-        'type' => null,
-        'created_at' => 'date-time',
+        'event' => null,
+        'event_id' => 'uuid',
         'api_version' => null,
+        'timestamp' => 'date-time',
+        'account' => null,
         'data' => null
     ];
 
@@ -85,10 +87,11 @@ class ReviewRespondedEvent implements ModelInterface, ArrayAccess, JsonSerializa
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => false,
-        'type' => false,
-        'created_at' => false,
+        'event' => false,
+        'event_id' => false,
         'api_version' => false,
+        'timestamp' => false,
+        'account' => true,
         'data' => false
     ];
 
@@ -168,10 +171,11 @@ class ReviewRespondedEvent implements ModelInterface, ArrayAccess, JsonSerializa
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'id' => 'id',
-        'type' => 'type',
-        'created_at' => 'createdAt',
+        'event' => 'event',
+        'event_id' => 'eventId',
         'api_version' => 'apiVersion',
+        'timestamp' => 'timestamp',
+        'account' => 'account',
         'data' => 'data'
     ];
 
@@ -181,10 +185,11 @@ class ReviewRespondedEvent implements ModelInterface, ArrayAccess, JsonSerializa
      * @var array<string, string>
      */
     protected static array $setters = [
-        'id' => 'setId',
-        'type' => 'setType',
-        'created_at' => 'setCreatedAt',
+        'event' => 'setEvent',
+        'event_id' => 'setEventId',
         'api_version' => 'setApiVersion',
+        'timestamp' => 'setTimestamp',
+        'account' => 'setAccount',
         'data' => 'setData'
     ];
 
@@ -194,10 +199,11 @@ class ReviewRespondedEvent implements ModelInterface, ArrayAccess, JsonSerializa
      * @var array<string, string>
      */
     protected static array $getters = [
-        'id' => 'getId',
-        'type' => 'getType',
-        'created_at' => 'getCreatedAt',
+        'event' => 'getEvent',
+        'event_id' => 'getEventId',
         'api_version' => 'getApiVersion',
+        'timestamp' => 'getTimestamp',
+        'account' => 'getAccount',
         'data' => 'getData'
     ];
 
@@ -233,17 +239,17 @@ class ReviewRespondedEvent implements ModelInterface, ArrayAccess, JsonSerializa
         return self::$openAPIModelName;
     }
 
-    public const TYPE_REVIEW_RESPONDED = 'review.responded';
+    public const EVENT_REVIEW_RESPONDED = 'review.responded';
 
     /**
      * Gets allowable values of the enum
      *
      * @return string[]
      */
-    public static function getTypeAllowableValues()
+    public static function getEventAllowableValues()
     {
         return [
-            self::TYPE_REVIEW_RESPONDED,
+            self::EVENT_REVIEW_RESPONDED,
         ];
     }
 
@@ -261,10 +267,11 @@ class ReviewRespondedEvent implements ModelInterface, ArrayAccess, JsonSerializa
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('type', $data ?? [], null);
-        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('event', $data ?? [], null);
+        $this->setIfExists('event_id', $data ?? [], null);
         $this->setIfExists('api_version', $data ?? [], null);
+        $this->setIfExists('timestamp', $data ?? [], null);
+        $this->setIfExists('account', $data ?? [], null);
         $this->setIfExists('data', $data ?? [], null);
     }
 
@@ -293,18 +300,27 @@ class ReviewRespondedEvent implements ModelInterface, ArrayAccess, JsonSerializa
     {
         $invalidProperties = [];
 
-        if ($this->container['type'] === null) {
-            $invalidProperties[] = "'type' can't be null";
+        if ($this->container['event'] === null) {
+            $invalidProperties[] = "'event' can't be null";
         }
-        $allowedValues = self::getTypeAllowableValues();
-        if (!is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
+        $allowedValues = self::getEventAllowableValues();
+        if (!is_null($this->container['event']) && !in_array($this->container['event'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'type', must be one of '%s'",
-                $this->container['type'],
+                "invalid value '%s' for 'event', must be one of '%s'",
+                $this->container['event'],
                 implode("', '", $allowedValues)
             );
         }
 
+        if ($this->container['event_id'] === null) {
+            $invalidProperties[] = "'event_id' can't be null";
+        }
+        if ($this->container['api_version'] === null) {
+            $invalidProperties[] = "'api_version' can't be null";
+        }
+        if ($this->container['timestamp'] === null) {
+            $invalidProperties[] = "'timestamp' can't be null";
+        }
         if ($this->container['data'] === null) {
             $invalidProperties[] = "'data' can't be null";
         }
@@ -321,83 +337,56 @@ class ReviewRespondedEvent implements ModelInterface, ArrayAccess, JsonSerializa
 
 
     /**
-     * Gets id
-     *
-     * @return string|null
-     */
-    public function getId(): ?string
-    {
-        return $this->container['id'];
-    }
-
-    /**
-     * Sets id
-     *
-     * @param string|null $id id
-     *
-     * @return $this
-     */
-    public function setId(?string $id): static
-    {
-        if (is_null($id)) {
-            throw new InvalidArgumentException('non-nullable id cannot be null');
-        }
-        $this->container['id'] = $id;
-
-        return $this;
-    }
-
-    /**
-     * Gets type
+     * Gets event
      *
      * @return string
      */
-    public function getType(): string
+    public function getEvent(): string
     {
-        return $this->container['type'];
+        return $this->container['event'];
     }
 
     /**
-     * Sets type
+     * Sets event
      *
-     * @param string $type type
+     * @param string $event The event name. This field is `event`, not `type`.
      *
      * @return $this
      */
-    public function setType(string $type): static
+    public function setEvent(string $event): static
     {
-        if (is_null($type)) {
-            throw new InvalidArgumentException('non-nullable type cannot be null');
+        if (is_null($event)) {
+            throw new InvalidArgumentException('non-nullable event cannot be null');
         }
         // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['type'] = $type;
+        $this->container['event'] = $event;
 
         return $this;
     }
 
     /**
-     * Gets created_at
+     * Gets event_id
      *
-     * @return \DateTime|null
+     * @return string
      */
-    public function getCreatedAt(): ?\DateTime
+    public function getEventId(): string
     {
-        return $this->container['created_at'];
+        return $this->container['event_id'];
     }
 
     /**
-     * Sets created_at
+     * Sets event_id
      *
-     * @param \DateTime|null $created_at created_at
+     * @param string $event_id Stable across every delivery and replay of this logical event — dedupe on it.
      *
      * @return $this
      */
-    public function setCreatedAt(?\DateTime $created_at): static
+    public function setEventId(string $event_id): static
     {
-        if (is_null($created_at)) {
-            throw new InvalidArgumentException('non-nullable created_at cannot be null');
+        if (is_null($event_id)) {
+            throw new InvalidArgumentException('non-nullable event_id cannot be null');
         }
-        $this->container['created_at'] = $created_at;
+        $this->container['event_id'] = $event_id;
 
         return $this;
     }
@@ -405,9 +394,9 @@ class ReviewRespondedEvent implements ModelInterface, ArrayAccess, JsonSerializa
     /**
      * Gets api_version
      *
-     * @return string|null
+     * @return string
      */
-    public function getApiVersion(): ?string
+    public function getApiVersion(): string
     {
         return $this->container['api_version'];
     }
@@ -415,16 +404,77 @@ class ReviewRespondedEvent implements ModelInterface, ArrayAccess, JsonSerializa
     /**
      * Sets api_version
      *
-     * @param string|null $api_version api_version
+     * @param string $api_version api_version
      *
      * @return $this
      */
-    public function setApiVersion(?string $api_version): static
+    public function setApiVersion(string $api_version): static
     {
         if (is_null($api_version)) {
             throw new InvalidArgumentException('non-nullable api_version cannot be null');
         }
         $this->container['api_version'] = $api_version;
+
+        return $this;
+    }
+
+    /**
+     * Gets timestamp
+     *
+     * @return \DateTime
+     */
+    public function getTimestamp(): \DateTime
+    {
+        return $this->container['timestamp'];
+    }
+
+    /**
+     * Sets timestamp
+     *
+     * @param \DateTime $timestamp When this delivery was built.
+     *
+     * @return $this
+     */
+    public function setTimestamp(\DateTime $timestamp): static
+    {
+        if (is_null($timestamp)) {
+            throw new InvalidArgumentException('non-nullable timestamp cannot be null');
+        }
+        $this->container['timestamp'] = $timestamp;
+
+        return $this;
+    }
+
+    /**
+     * Gets account
+     *
+     * @return \Repull\Model\WebhookEventAccount|null
+     */
+    public function getAccount(): ?\Repull\Model\WebhookEventAccount
+    {
+        return $this->container['account'];
+    }
+
+    /**
+     * Sets account
+     *
+     * @param \Repull\Model\WebhookEventAccount|null $account account
+     *
+     * @return $this
+     */
+    public function setAccount(?\Repull\Model\WebhookEventAccount $account): static
+    {
+        if (is_null($account)) {
+            array_push($this->openAPINullablesSetToNull, 'account');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('account', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['account'] = $account;
 
         return $this;
     }

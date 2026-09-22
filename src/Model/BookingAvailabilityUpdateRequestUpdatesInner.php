@@ -61,7 +61,7 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
     protected static array $openAPITypes = [
         'room_id' => 'string',
         'rate_id' => 'string',
-        'date_range' => '\Repull\Model\BookingPricingRateUpdateDateRange',
+        'date_range' => '\Repull\Model\BookingAvailabilityUpdateDateRange',
         'price' => 'float',
         'currency' => 'string',
         'single_price' => 'float',
@@ -108,7 +108,7 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
         'occupancy' => true,
         'rooms_to_sell' => true,
         'restrictions' => false,
-        'available_rooms' => false,
+        'available_rooms' => true,
         'status' => true,
         'closed' => true
     ];
@@ -358,12 +358,17 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
         if ($this->container['price'] === null) {
             $invalidProperties[] = "'price' can't be null";
         }
+        if (($this->container['price'] < 0)) {
+            $invalidProperties[] = "invalid value for 'price', must be bigger than or equal to 0.";
+        }
+
         if ($this->container['currency'] === null) {
             $invalidProperties[] = "'currency' can't be null";
         }
-        if ($this->container['available_rooms'] === null) {
-            $invalidProperties[] = "'available_rooms' can't be null";
+        if (!is_null($this->container['occupancy']) && ($this->container['occupancy'] < 1)) {
+            $invalidProperties[] = "invalid value for 'occupancy', must be bigger than or equal to 1.";
         }
+
         $allowedValues = self::getStatusAllowableValues();
         if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -442,9 +447,9 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
     /**
      * Gets date_range
      *
-     * @return \Repull\Model\BookingPricingRateUpdateDateRange
+     * @return \Repull\Model\BookingAvailabilityUpdateDateRange
      */
-    public function getDateRange(): \Repull\Model\BookingPricingRateUpdateDateRange
+    public function getDateRange(): \Repull\Model\BookingAvailabilityUpdateDateRange
     {
         return $this->container['date_range'];
     }
@@ -452,11 +457,11 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
     /**
      * Sets date_range
      *
-     * @param \Repull\Model\BookingPricingRateUpdateDateRange $date_range date_range
+     * @param \Repull\Model\BookingAvailabilityUpdateDateRange $date_range date_range
      *
      * @return $this
      */
-    public function setDateRange(\Repull\Model\BookingPricingRateUpdateDateRange $date_range): static
+    public function setDateRange(\Repull\Model\BookingAvailabilityUpdateDateRange $date_range): static
     {
         if (is_null($date_range)) {
             throw new InvalidArgumentException('non-nullable date_range cannot be null');
@@ -479,7 +484,7 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
     /**
      * Sets price
      *
-     * @param float $price price
+     * @param float $price Nightly amount, in `currency`, for a party of `occupancy`.
      *
      * @return $this
      */
@@ -488,6 +493,11 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
         if (is_null($price)) {
             throw new InvalidArgumentException('non-nullable price cannot be null');
         }
+
+        if (($price < 0)) {
+            throw new InvalidArgumentException('invalid value for $price when calling BookingAvailabilityUpdateRequestUpdatesInner., must be bigger than or equal to 0.');
+        }
+
         $this->container['price'] = $price;
 
         return $this;
@@ -506,7 +516,7 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
     /**
      * Sets currency
      *
-     * @param string $currency currency
+     * @param string $currency Currency the rate plan is sold in.
      *
      * @return $this
      */
@@ -533,7 +543,7 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
     /**
      * Sets single_price
      *
-     * @param float|null $single_price single_price
+     * @param float|null $single_price Optional single-occupancy amount, written alongside the main amount.
      *
      * @return $this
      */
@@ -567,7 +577,7 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
     /**
      * Sets occupancy
      *
-     * @param int|null $occupancy occupancy
+     * @param int|null $occupancy The party size this rate plan prices — a key, not a preference. Booking.com stores the amount against this number: above the rate plan's own maximum it declines the price in silence and the night keeps its old value; below it, it answers 400 and the old price stays published. Omit it and Repull resolves it from Booking.com's own data for this (room, rate plan) and echoes the value and its source back in `occupancy[]`. When it cannot be resolved the write is refused with `422` naming `updates[N].occupancy` — a price is never sent at a guessed party size.
      *
      * @return $this
      */
@@ -583,6 +593,11 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
+
+        if (!is_null($occupancy) && ($occupancy < 1)) {
+            throw new InvalidArgumentException('invalid value for $occupancy when calling BookingAvailabilityUpdateRequestUpdatesInner., must be bigger than or equal to 1.');
+        }
+
         $this->container['occupancy'] = $occupancy;
 
         return $this;
@@ -592,6 +607,7 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
      * Gets rooms_to_sell
      *
      * @return int|null
+     * @deprecated
      */
     public function getRoomsToSell(): ?int
     {
@@ -601,9 +617,10 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
     /**
      * Sets rooms_to_sell
      *
-     * @param int|null $rooms_to_sell Rooms to sell for the date range. Set to `0` to stop-sell this room/rate on the rates endpoint (Booking's dedicated `<closed>` stop-sell flag lives on the availability endpoint — see `BookingAvailabilityUpdate.closed`).
+     * @param int|null $rooms_to_sell Refused. A rate update carries prices only; sending this returns `422 inventory_not_in_rate_update` naming `updates[N].roomsToSell`. Write inventory with `type: \"availability\"` and `availableRooms` (plus `closed: true` for a stop-sell).
      *
      * @return $this
+     * @deprecated
      */
     public function setRoomsToSell(?int $rooms_to_sell): static
     {
@@ -652,9 +669,9 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
     /**
      * Gets available_rooms
      *
-     * @return int
+     * @return int|null
      */
-    public function getAvailableRooms(): int
+    public function getAvailableRooms(): ?int
     {
         return $this->container['available_rooms'];
     }
@@ -662,14 +679,21 @@ class BookingAvailabilityUpdateRequestUpdatesInner implements ModelInterface, Ar
     /**
      * Sets available_rooms
      *
-     * @param int $available_rooms Rooms to sell (`roomstosell`). `0` blocks the room for the range.
+     * @param int|null $available_rooms Rooms to sell (`roomstosell`). `0` blocks the room for the range. Omit it to leave inventory alone — `0` is a stop-sell, not a no-op.
      *
      * @return $this
      */
-    public function setAvailableRooms(int $available_rooms): static
+    public function setAvailableRooms(?int $available_rooms): static
     {
         if (is_null($available_rooms)) {
-            throw new InvalidArgumentException('non-nullable available_rooms cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'available_rooms');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('available_rooms', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['available_rooms'] = $available_rooms;
 

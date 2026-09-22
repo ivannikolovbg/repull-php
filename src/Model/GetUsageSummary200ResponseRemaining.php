@@ -60,6 +60,7 @@ class GetUsageSummary200ResponseRemaining implements ModelInterface, ArrayAccess
      */
     protected static array $openAPITypes = [
         'monthly' => 'int',
+        'daily' => 'int',
         'daily_ai' => 'int'
     ];
 
@@ -70,6 +71,7 @@ class GetUsageSummary200ResponseRemaining implements ModelInterface, ArrayAccess
      */
     protected static array $openAPIFormats = [
         'monthly' => null,
+        'daily' => null,
         'daily_ai' => null
     ];
 
@@ -80,6 +82,7 @@ class GetUsageSummary200ResponseRemaining implements ModelInterface, ArrayAccess
      */
     protected static array $openAPINullables = [
         'monthly' => true,
+        'daily' => true,
         'daily_ai' => true
     ];
 
@@ -160,6 +163,7 @@ class GetUsageSummary200ResponseRemaining implements ModelInterface, ArrayAccess
      */
     protected static array $attributeMap = [
         'monthly' => 'monthly',
+        'daily' => 'daily',
         'daily_ai' => 'dailyAi'
     ];
 
@@ -170,6 +174,7 @@ class GetUsageSummary200ResponseRemaining implements ModelInterface, ArrayAccess
      */
     protected static array $setters = [
         'monthly' => 'setMonthly',
+        'daily' => 'setDaily',
         'daily_ai' => 'setDailyAi'
     ];
 
@@ -180,6 +185,7 @@ class GetUsageSummary200ResponseRemaining implements ModelInterface, ArrayAccess
      */
     protected static array $getters = [
         'monthly' => 'getMonthly',
+        'daily' => 'getDaily',
         'daily_ai' => 'getDailyAi'
     ];
 
@@ -231,6 +237,7 @@ class GetUsageSummary200ResponseRemaining implements ModelInterface, ArrayAccess
     public function __construct(?array $data = null)
     {
         $this->setIfExists('monthly', $data ?? [], null);
+        $this->setIfExists('daily', $data ?? [], null);
         $this->setIfExists('daily_ai', $data ?? [], null);
     }
 
@@ -301,6 +308,40 @@ class GetUsageSummary200ResponseRemaining implements ModelInterface, ArrayAccess
             }
         }
         $this->container['monthly'] = $monthly;
+
+        return $this;
+    }
+
+    /**
+     * Gets daily
+     *
+     * @return int|null
+     */
+    public function getDaily(): ?int
+    {
+        return $this->container['daily'];
+    }
+
+    /**
+     * Sets daily
+     *
+     * @param int|null $daily daily
+     *
+     * @return $this
+     */
+    public function setDaily(?int $daily): static
+    {
+        if (is_null($daily)) {
+            array_push($this->openAPINullablesSetToNull, 'daily');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('daily', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['daily'] = $daily;
 
         return $this;
     }

@@ -1289,7 +1289,7 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\BookingAvailabilityStateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\BookingAvailabilityStateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getBookingAvailabilityWithHttpInfo(
         string $property_id,
@@ -1361,6 +1361,12 @@ class BookingComApi
                         $request,
                         $response,
                     );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -1425,6 +1431,14 @@ class BookingComApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -2192,11 +2206,12 @@ class BookingComApi
      *
      * Get Booking.com pricing for a listing
      *
-     * @param  int $id Vanio listing ID — resolved to a Booking.com hotel ID via the workspace mapping. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. Resolved to a Booking.com hotel id via the workspace mapping. (required)
      * @param  \DateTime|null $start_date start_date (optional)
      * @param  int|null $number_of_days number_of_days (optional)
      * @param  string|null $room_id room_id (optional)
      * @param  bool|null $room_level When true, returns room-level (vs rate-plan-level) availability. (optional)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingListingPricing'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -2209,10 +2224,11 @@ class BookingComApi
         ?int $number_of_days = null,
         ?string $room_id = null,
         ?bool $room_level = null,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['getBookingListingPricing'][0]
     ): \Repull\Model\BookingPricingResponse|\Repull\Model\Error
     {
-        list($response) = $this->getBookingListingPricingWithHttpInfo($id, $start_date, $number_of_days, $room_id, $room_level, $contentType);
+        list($response) = $this->getBookingListingPricingWithHttpInfo($id, $start_date, $number_of_days, $room_id, $room_level, $hotel_id, $contentType);
         return $response;
     }
 
@@ -2221,16 +2237,17 @@ class BookingComApi
      *
      * Get Booking.com pricing for a listing
      *
-     * @param  int $id Vanio listing ID — resolved to a Booking.com hotel ID via the workspace mapping. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. Resolved to a Booking.com hotel id via the workspace mapping. (required)
      * @param  \DateTime|null $start_date (optional)
      * @param  int|null $number_of_days (optional)
      * @param  string|null $room_id (optional)
      * @param  bool|null $room_level When true, returns room-level (vs rate-plan-level) availability. (optional)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingListingPricing'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\BookingPricingResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\BookingPricingResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getBookingListingPricingWithHttpInfo(
         int $id,
@@ -2238,10 +2255,11 @@ class BookingComApi
         ?int $number_of_days = null,
         ?string $room_id = null,
         ?bool $room_level = null,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['getBookingListingPricing'][0]
     ): array
     {
-        $request = $this->getBookingListingPricingRequest($id, $start_date, $number_of_days, $room_id, $room_level, $contentType);
+        $request = $this->getBookingListingPricingRequest($id, $start_date, $number_of_days, $room_id, $room_level, $hotel_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2297,6 +2315,12 @@ class BookingComApi
                         $response,
                     );
                 case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -2373,6 +2397,14 @@ class BookingComApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -2384,11 +2416,12 @@ class BookingComApi
      *
      * Get Booking.com pricing for a listing
      *
-     * @param  int $id Vanio listing ID — resolved to a Booking.com hotel ID via the workspace mapping. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. Resolved to a Booking.com hotel id via the workspace mapping. (required)
      * @param  \DateTime|null $start_date (optional)
      * @param  int|null $number_of_days (optional)
      * @param  string|null $room_id (optional)
      * @param  bool|null $room_level When true, returns room-level (vs rate-plan-level) availability. (optional)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingListingPricing'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -2400,10 +2433,11 @@ class BookingComApi
         ?int $number_of_days = null,
         ?string $room_id = null,
         ?bool $room_level = null,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['getBookingListingPricing'][0]
     ): PromiseInterface
     {
-        return $this->getBookingListingPricingAsyncWithHttpInfo($id, $start_date, $number_of_days, $room_id, $room_level, $contentType)
+        return $this->getBookingListingPricingAsyncWithHttpInfo($id, $start_date, $number_of_days, $room_id, $room_level, $hotel_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2416,11 +2450,12 @@ class BookingComApi
      *
      * Get Booking.com pricing for a listing
      *
-     * @param  int $id Vanio listing ID — resolved to a Booking.com hotel ID via the workspace mapping. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. Resolved to a Booking.com hotel id via the workspace mapping. (required)
      * @param  \DateTime|null $start_date (optional)
      * @param  int|null $number_of_days (optional)
      * @param  string|null $room_id (optional)
      * @param  bool|null $room_level When true, returns room-level (vs rate-plan-level) availability. (optional)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingListingPricing'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -2432,11 +2467,12 @@ class BookingComApi
         ?int $number_of_days = null,
         ?string $room_id = null,
         ?bool $room_level = null,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['getBookingListingPricing'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\BookingPricingResponse';
-        $request = $this->getBookingListingPricingRequest($id, $start_date, $number_of_days, $room_id, $room_level, $contentType);
+        $request = $this->getBookingListingPricingRequest($id, $start_date, $number_of_days, $room_id, $room_level, $hotel_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2477,11 +2513,12 @@ class BookingComApi
     /**
      * Create request for operation 'getBookingListingPricing'
      *
-     * @param  int $id Vanio listing ID — resolved to a Booking.com hotel ID via the workspace mapping. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. Resolved to a Booking.com hotel id via the workspace mapping. (required)
      * @param  \DateTime|null $start_date (optional)
      * @param  int|null $number_of_days (optional)
      * @param  string|null $room_id (optional)
      * @param  bool|null $room_level When true, returns room-level (vs rate-plan-level) availability. (optional)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingListingPricing'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -2493,6 +2530,7 @@ class BookingComApi
         ?int $number_of_days = null,
         ?string $room_id = null,
         ?bool $room_level = null,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['getBookingListingPricing'][0]
     ): Request
     {
@@ -2503,6 +2541,7 @@ class BookingComApi
                 'Missing the required parameter $id when calling getBookingListingPricing'
             );
         }
+
 
 
 
@@ -2548,6 +2587,15 @@ class BookingComApi
             $room_level,
             'room_level', // param base name
             'boolean', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $hotel_id,
+            'hotel_id', // param base name
+            'string', // openApiType
             'form', // style
             true, // explode
             false // required
@@ -2626,7 +2674,7 @@ class BookingComApi
      *
      * Get Booking.com connection for a listing
      *
-     * @param  int $id Vanio listing ID. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingProperty'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -2647,7 +2695,7 @@ class BookingComApi
      *
      * Get Booking.com connection for a listing
      *
-     * @param  int $id Vanio listing ID. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingProperty'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -2738,7 +2786,7 @@ class BookingComApi
      *
      * Get Booking.com connection for a listing
      *
-     * @param  int $id Vanio listing ID. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingProperty'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -2762,7 +2810,7 @@ class BookingComApi
      *
      * Get Booking.com connection for a listing
      *
-     * @param  int $id Vanio listing ID. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingProperty'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -2802,7 +2850,7 @@ class BookingComApi
     /**
      * Create request for operation 'getBookingProperty'
      *
-     * @param  int $id Vanio listing ID. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingProperty'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -3449,7 +3497,8 @@ class BookingComApi
      *
      * List Booking.com rooms + rate-plan ids for a listing
      *
-     * @param  int $id Vanio listing id — resolved to a Booking.com hotel id via the workspace mapping. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. Resolved to a Booking.com hotel id via the workspace mapping. (required)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingPropertyRooms'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -3458,10 +3507,11 @@ class BookingComApi
      */
     public function listBookingPropertyRooms(
         int $id,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['listBookingPropertyRooms'][0]
     ): \Repull\Model\BookingRoomsRatesResponse|\Repull\Model\Error
     {
-        list($response) = $this->listBookingPropertyRoomsWithHttpInfo($id, $contentType);
+        list($response) = $this->listBookingPropertyRoomsWithHttpInfo($id, $hotel_id, $contentType);
         return $response;
     }
 
@@ -3470,7 +3520,8 @@ class BookingComApi
      *
      * List Booking.com rooms + rate-plan ids for a listing
      *
-     * @param  int $id Vanio listing id — resolved to a Booking.com hotel id via the workspace mapping. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. Resolved to a Booking.com hotel id via the workspace mapping. (required)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingPropertyRooms'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -3479,10 +3530,11 @@ class BookingComApi
      */
     public function listBookingPropertyRoomsWithHttpInfo(
         int $id,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['listBookingPropertyRooms'][0]
     ): array
     {
-        $request = $this->listBookingPropertyRoomsRequest($id, $contentType);
+        $request = $this->listBookingPropertyRoomsRequest($id, $hotel_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -3625,7 +3677,8 @@ class BookingComApi
      *
      * List Booking.com rooms + rate-plan ids for a listing
      *
-     * @param  int $id Vanio listing id — resolved to a Booking.com hotel id via the workspace mapping. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. Resolved to a Booking.com hotel id via the workspace mapping. (required)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingPropertyRooms'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -3633,10 +3686,11 @@ class BookingComApi
      */
     public function listBookingPropertyRoomsAsync(
         int $id,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['listBookingPropertyRooms'][0]
     ): PromiseInterface
     {
-        return $this->listBookingPropertyRoomsAsyncWithHttpInfo($id, $contentType)
+        return $this->listBookingPropertyRoomsAsyncWithHttpInfo($id, $hotel_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -3649,7 +3703,8 @@ class BookingComApi
      *
      * List Booking.com rooms + rate-plan ids for a listing
      *
-     * @param  int $id Vanio listing id — resolved to a Booking.com hotel id via the workspace mapping. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. Resolved to a Booking.com hotel id via the workspace mapping. (required)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingPropertyRooms'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -3657,11 +3712,12 @@ class BookingComApi
      */
     public function listBookingPropertyRoomsAsyncWithHttpInfo(
         int $id,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['listBookingPropertyRooms'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\BookingRoomsRatesResponse';
-        $request = $this->listBookingPropertyRoomsRequest($id, $contentType);
+        $request = $this->listBookingPropertyRoomsRequest($id, $hotel_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -3702,7 +3758,8 @@ class BookingComApi
     /**
      * Create request for operation 'listBookingPropertyRooms'
      *
-     * @param  int $id Vanio listing id — resolved to a Booking.com hotel id via the workspace mapping. (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. Resolved to a Booking.com hotel id via the workspace mapping. (required)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingPropertyRooms'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -3710,6 +3767,7 @@ class BookingComApi
      */
     public function listBookingPropertyRoomsRequest(
         int $id,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['listBookingPropertyRooms'][0]
     ): Request
     {
@@ -3722,6 +3780,7 @@ class BookingComApi
         }
 
 
+
         $resourcePath = '/v1/channels/booking/properties/{id}/rooms';
         $formParams = [];
         $queryParams = [];
@@ -3729,6 +3788,15 @@ class BookingComApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $hotel_id,
+            'hotel_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
         // path params
@@ -5329,12 +5397,12 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\Error|null
+     * @return \Repull\Model\BookingPricingUpdateResponse|\Repull\Model\Error
      */
     public function updateBookingAvailability(
         \Repull\Model\BookingAvailabilityUpdateRequest $booking_availability_update_request,
         string $contentType = self::contentTypes['updateBookingAvailability'][0]
-    ): ?\Repull\Model\Error
+    ): \Repull\Model\BookingPricingUpdateResponse|\Repull\Model\Error
     {
         list($response) = $this->updateBookingAvailabilityWithHttpInfo($booking_availability_update_request, $contentType);
         return $response;
@@ -5350,7 +5418,7 @@ class BookingComApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\BookingPricingUpdateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function updateBookingAvailabilityWithHttpInfo(
         \Repull\Model\BookingAvailabilityUpdateRequest $booking_availability_update_request,
@@ -5381,10 +5449,92 @@ class BookingComApi
 
             $statusCode = $response->getStatusCode();
 
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\BookingPricingUpdateResponse',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
 
-            return [null, $statusCode, $response->getHeaders()];
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\BookingPricingUpdateResponse',
+                $request,
+                $response,
+            );
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\BookingPricingUpdateResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -5417,7 +5567,31 @@ class BookingComApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -5471,14 +5645,27 @@ class BookingComApi
         string $contentType = self::contentTypes['updateBookingAvailability'][0]
     ): PromiseInterface
     {
-        $returnType = '';
+        $returnType = '\Repull\Model\BookingPricingUpdateResponse';
         $request = $this->updateBookingAvailabilityRequest($booking_availability_update_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 },
                 function ($exception) {
                     $response = $exception->getResponse();
@@ -6104,8 +6291,9 @@ class BookingComApi
      *
      * Update Booking.com pricing for a listing
      *
-     * @param  int $id id (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
      * @param  \Repull\Model\BookingPricingUpdateRequest $booking_pricing_update_request booking_pricing_update_request (required)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateBookingListingPricing'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -6115,10 +6303,11 @@ class BookingComApi
     public function updateBookingListingPricing(
         int $id,
         \Repull\Model\BookingPricingUpdateRequest $booking_pricing_update_request,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['updateBookingListingPricing'][0]
     ): \Repull\Model\BookingPricingUpdateResponse|\Repull\Model\Error
     {
-        list($response) = $this->updateBookingListingPricingWithHttpInfo($id, $booking_pricing_update_request, $contentType);
+        list($response) = $this->updateBookingListingPricingWithHttpInfo($id, $booking_pricing_update_request, $hotel_id, $contentType);
         return $response;
     }
 
@@ -6127,21 +6316,23 @@ class BookingComApi
      *
      * Update Booking.com pricing for a listing
      *
-     * @param  int $id (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
      * @param  \Repull\Model\BookingPricingUpdateRequest $booking_pricing_update_request (required)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateBookingListingPricing'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\BookingPricingUpdateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\BookingPricingUpdateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function updateBookingListingPricingWithHttpInfo(
         int $id,
         \Repull\Model\BookingPricingUpdateRequest $booking_pricing_update_request,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['updateBookingListingPricing'][0]
     ): array
     {
-        $request = $this->updateBookingListingPricingRequest($id, $booking_pricing_update_request, $contentType);
+        $request = $this->updateBookingListingPricingRequest($id, $booking_pricing_update_request, $hotel_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -6196,7 +6387,31 @@ class BookingComApi
                         $request,
                         $response,
                     );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
                 case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -6265,7 +6480,39 @@ class BookingComApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -6284,8 +6531,9 @@ class BookingComApi
      *
      * Update Booking.com pricing for a listing
      *
-     * @param  int $id (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
      * @param  \Repull\Model\BookingPricingUpdateRequest $booking_pricing_update_request (required)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateBookingListingPricing'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -6294,10 +6542,11 @@ class BookingComApi
     public function updateBookingListingPricingAsync(
         int $id,
         \Repull\Model\BookingPricingUpdateRequest $booking_pricing_update_request,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['updateBookingListingPricing'][0]
     ): PromiseInterface
     {
-        return $this->updateBookingListingPricingAsyncWithHttpInfo($id, $booking_pricing_update_request, $contentType)
+        return $this->updateBookingListingPricingAsyncWithHttpInfo($id, $booking_pricing_update_request, $hotel_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -6310,8 +6559,9 @@ class BookingComApi
      *
      * Update Booking.com pricing for a listing
      *
-     * @param  int $id (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
      * @param  \Repull\Model\BookingPricingUpdateRequest $booking_pricing_update_request (required)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateBookingListingPricing'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -6320,11 +6570,12 @@ class BookingComApi
     public function updateBookingListingPricingAsyncWithHttpInfo(
         int $id,
         \Repull\Model\BookingPricingUpdateRequest $booking_pricing_update_request,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['updateBookingListingPricing'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\BookingPricingUpdateResponse';
-        $request = $this->updateBookingListingPricingRequest($id, $booking_pricing_update_request, $contentType);
+        $request = $this->updateBookingListingPricingRequest($id, $booking_pricing_update_request, $hotel_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -6365,8 +6616,9 @@ class BookingComApi
     /**
      * Create request for operation 'updateBookingListingPricing'
      *
-     * @param  int $id (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
      * @param  \Repull\Model\BookingPricingUpdateRequest $booking_pricing_update_request (required)
+     * @param  string|null $hotel_id Booking.com hotel id, when this listing is published under more than one property. Omit it and a read uses the oldest mapping (reporting the rest in &#x60;otherHotelIds&#x60;), while a write is refused with &#x60;409 ambiguous_booking_mapping&#x60; rather than guess. &#x60;GET /v1/channels/booking/properties&#x60; lists the valid ids. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateBookingListingPricing'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -6375,6 +6627,7 @@ class BookingComApi
     public function updateBookingListingPricingRequest(
         int $id,
         \Repull\Model\BookingPricingUpdateRequest $booking_pricing_update_request,
+        ?string $hotel_id = null,
         string $contentType = self::contentTypes['updateBookingListingPricing'][0]
     ): Request
     {
@@ -6394,6 +6647,7 @@ class BookingComApi
         }
 
 
+
         $resourcePath = '/v1/channels/booking/listings/{id}/pricing';
         $formParams = [];
         $queryParams = [];
@@ -6401,6 +6655,15 @@ class BookingComApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $hotel_id,
+            'hotel_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
         // path params

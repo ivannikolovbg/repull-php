@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * BookingProperty Class Doc Comment
  *
- * @description A property registered in the Booking.com extranet for the connected hotel ID.
+ * @description A Booking.com property this workspace holds, with the Repull listings mapped under it. A property is a building; its rooms are what guests book, and each room maps to one Repull listing — so one property commonly carries many listings.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -60,11 +60,18 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'string',
-        'name' => 'string',
-        'status' => 'string',
-        'country' => 'string',
-        'city' => 'string'
+        'connection_id' => 'string',
+        'hotel_id' => 'string',
+        'active' => 'bool',
+        'sync_enabled' => 'bool',
+        'booking_url' => 'string',
+        'markup' => 'string',
+        'sync_category' => 'string',
+        'suspended_at' => '\DateTime',
+        'suspension_reason' => 'string',
+        'created_at' => '\DateTime',
+        'mapping_status' => 'string',
+        'listings' => '\Repull\Model\BookingPropertyListingsInner[]'
     ];
 
     /**
@@ -73,11 +80,18 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'id' => null,
-        'name' => null,
-        'status' => null,
-        'country' => null,
-        'city' => null
+        'connection_id' => null,
+        'hotel_id' => null,
+        'active' => null,
+        'sync_enabled' => null,
+        'booking_url' => null,
+        'markup' => null,
+        'sync_category' => null,
+        'suspended_at' => 'date-time',
+        'suspension_reason' => null,
+        'created_at' => 'date-time',
+        'mapping_status' => null,
+        'listings' => null
     ];
 
     /**
@@ -86,11 +100,18 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => false,
-        'name' => false,
-        'status' => true,
-        'country' => true,
-        'city' => true
+        'connection_id' => false,
+        'hotel_id' => false,
+        'active' => false,
+        'sync_enabled' => false,
+        'booking_url' => true,
+        'markup' => true,
+        'sync_category' => true,
+        'suspended_at' => true,
+        'suspension_reason' => true,
+        'created_at' => true,
+        'mapping_status' => false,
+        'listings' => false
     ];
 
     /**
@@ -169,11 +190,18 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'id' => 'id',
-        'name' => 'name',
-        'status' => 'status',
-        'country' => 'country',
-        'city' => 'city'
+        'connection_id' => 'connectionId',
+        'hotel_id' => 'hotelId',
+        'active' => 'active',
+        'sync_enabled' => 'syncEnabled',
+        'booking_url' => 'bookingUrl',
+        'markup' => 'markup',
+        'sync_category' => 'syncCategory',
+        'suspended_at' => 'suspendedAt',
+        'suspension_reason' => 'suspensionReason',
+        'created_at' => 'createdAt',
+        'mapping_status' => 'mappingStatus',
+        'listings' => 'listings'
     ];
 
     /**
@@ -182,11 +210,18 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
-        'id' => 'setId',
-        'name' => 'setName',
-        'status' => 'setStatus',
-        'country' => 'setCountry',
-        'city' => 'setCity'
+        'connection_id' => 'setConnectionId',
+        'hotel_id' => 'setHotelId',
+        'active' => 'setActive',
+        'sync_enabled' => 'setSyncEnabled',
+        'booking_url' => 'setBookingUrl',
+        'markup' => 'setMarkup',
+        'sync_category' => 'setSyncCategory',
+        'suspended_at' => 'setSuspendedAt',
+        'suspension_reason' => 'setSuspensionReason',
+        'created_at' => 'setCreatedAt',
+        'mapping_status' => 'setMappingStatus',
+        'listings' => 'setListings'
     ];
 
     /**
@@ -195,11 +230,18 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
-        'id' => 'getId',
-        'name' => 'getName',
-        'status' => 'getStatus',
-        'country' => 'getCountry',
-        'city' => 'getCity'
+        'connection_id' => 'getConnectionId',
+        'hotel_id' => 'getHotelId',
+        'active' => 'getActive',
+        'sync_enabled' => 'getSyncEnabled',
+        'booking_url' => 'getBookingUrl',
+        'markup' => 'getMarkup',
+        'sync_category' => 'getSyncCategory',
+        'suspended_at' => 'getSuspendedAt',
+        'suspension_reason' => 'getSuspensionReason',
+        'created_at' => 'getCreatedAt',
+        'mapping_status' => 'getMappingStatus',
+        'listings' => 'getListings'
     ];
 
     /**
@@ -234,6 +276,21 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
         return self::$openAPIModelName;
     }
 
+    public const MAPPING_STATUS_MAPPED = 'mapped';
+    public const MAPPING_STATUS_UNMAPPED = 'unmapped';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getMappingStatusAllowableValues()
+    {
+        return [
+            self::MAPPING_STATUS_MAPPED,
+            self::MAPPING_STATUS_UNMAPPED,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -249,11 +306,18 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('name', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
-        $this->setIfExists('country', $data ?? [], null);
-        $this->setIfExists('city', $data ?? [], null);
+        $this->setIfExists('connection_id', $data ?? [], null);
+        $this->setIfExists('hotel_id', $data ?? [], null);
+        $this->setIfExists('active', $data ?? [], null);
+        $this->setIfExists('sync_enabled', $data ?? [], null);
+        $this->setIfExists('booking_url', $data ?? [], null);
+        $this->setIfExists('markup', $data ?? [], null);
+        $this->setIfExists('sync_category', $data ?? [], null);
+        $this->setIfExists('suspended_at', $data ?? [], null);
+        $this->setIfExists('suspension_reason', $data ?? [], null);
+        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('mapping_status', $data ?? [], null);
+        $this->setIfExists('listings', $data ?? [], null);
     }
 
     /**
@@ -281,6 +345,15 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
+        $allowedValues = self::getMappingStatusAllowableValues();
+        if (!is_null($this->container['mapping_status']) && !in_array($this->container['mapping_status'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'mapping_status', must be one of '%s'",
+                $this->container['mapping_status'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -294,157 +367,368 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
 
 
     /**
-     * Gets id
+     * Gets connection_id
      *
      * @return string|null
      */
-    public function getId(): ?string
+    public function getConnectionId(): ?string
     {
-        return $this->container['id'];
+        return $this->container['connection_id'];
     }
 
     /**
-     * Sets id
+     * Sets connection_id
      *
-     * @param string|null $id Booking.com hotel/property ID
+     * @param string|null $connection_id Repull-side id for this Booking.com connection.
      *
      * @return $this
      */
-    public function setId(?string $id): static
+    public function setConnectionId(?string $connection_id): static
     {
-        if (is_null($id)) {
-            throw new InvalidArgumentException('non-nullable id cannot be null');
+        if (is_null($connection_id)) {
+            throw new InvalidArgumentException('non-nullable connection_id cannot be null');
         }
-        $this->container['id'] = $id;
+        $this->container['connection_id'] = $connection_id;
 
         return $this;
     }
 
     /**
-     * Gets name
+     * Gets hotel_id
      *
      * @return string|null
      */
-    public function getName(): ?string
+    public function getHotelId(): ?string
     {
-        return $this->container['name'];
+        return $this->container['hotel_id'];
     }
 
     /**
-     * Sets name
+     * Sets hotel_id
      *
-     * @param string|null $name name
+     * @param string|null $hotel_id Booking.com hotel/property id. This is what `/v1/channels/booking/availability` takes as `property_id`.
      *
      * @return $this
      */
-    public function setName(?string $name): static
+    public function setHotelId(?string $hotel_id): static
     {
-        if (is_null($name)) {
-            throw new InvalidArgumentException('non-nullable name cannot be null');
+        if (is_null($hotel_id)) {
+            throw new InvalidArgumentException('non-nullable hotel_id cannot be null');
         }
-        $this->container['name'] = $name;
+        $this->container['hotel_id'] = $hotel_id;
 
         return $this;
     }
 
     /**
-     * Gets status
+     * Gets active
      *
-     * @return string|null
+     * @return bool|null
      */
-    public function getStatus(): ?string
+    public function getActive(): ?bool
     {
-        return $this->container['status'];
+        return $this->container['active'];
     }
 
     /**
-     * Sets status
+     * Sets active
      *
-     * @param string|null $status status
+     * @param bool|null $active active
      *
      * @return $this
      */
-    public function setStatus(?string $status): static
+    public function setActive(?bool $active): static
     {
-        if (is_null($status)) {
-            array_push($this->openAPINullablesSetToNull, 'status');
+        if (is_null($active)) {
+            throw new InvalidArgumentException('non-nullable active cannot be null');
+        }
+        $this->container['active'] = $active;
+
+        return $this;
+    }
+
+    /**
+     * Gets sync_enabled
+     *
+     * @return bool|null
+     */
+    public function getSyncEnabled(): ?bool
+    {
+        return $this->container['sync_enabled'];
+    }
+
+    /**
+     * Sets sync_enabled
+     *
+     * @param bool|null $sync_enabled sync_enabled
+     *
+     * @return $this
+     */
+    public function setSyncEnabled(?bool $sync_enabled): static
+    {
+        if (is_null($sync_enabled)) {
+            throw new InvalidArgumentException('non-nullable sync_enabled cannot be null');
+        }
+        $this->container['sync_enabled'] = $sync_enabled;
+
+        return $this;
+    }
+
+    /**
+     * Gets booking_url
+     *
+     * @return string|null
+     */
+    public function getBookingUrl(): ?string
+    {
+        return $this->container['booking_url'];
+    }
+
+    /**
+     * Sets booking_url
+     *
+     * @param string|null $booking_url booking_url
+     *
+     * @return $this
+     */
+    public function setBookingUrl(?string $booking_url): static
+    {
+        if (is_null($booking_url)) {
+            array_push($this->openAPINullablesSetToNull, 'booking_url');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('status', $nullablesSetToNull);
+            $index = array_search('booking_url', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['status'] = $status;
+        $this->container['booking_url'] = $booking_url;
 
         return $this;
     }
 
     /**
-     * Gets country
+     * Gets markup
      *
      * @return string|null
      */
-    public function getCountry(): ?string
+    public function getMarkup(): ?string
     {
-        return $this->container['country'];
+        return $this->container['markup'];
     }
 
     /**
-     * Sets country
+     * Sets markup
      *
-     * @param string|null $country country
+     * @param string|null $markup markup
      *
      * @return $this
      */
-    public function setCountry(?string $country): static
+    public function setMarkup(?string $markup): static
     {
-        if (is_null($country)) {
-            array_push($this->openAPINullablesSetToNull, 'country');
+        if (is_null($markup)) {
+            array_push($this->openAPINullablesSetToNull, 'markup');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('country', $nullablesSetToNull);
+            $index = array_search('markup', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['country'] = $country;
+        $this->container['markup'] = $markup;
 
         return $this;
     }
 
     /**
-     * Gets city
+     * Gets sync_category
      *
      * @return string|null
      */
-    public function getCity(): ?string
+    public function getSyncCategory(): ?string
     {
-        return $this->container['city'];
+        return $this->container['sync_category'];
     }
 
     /**
-     * Sets city
+     * Sets sync_category
      *
-     * @param string|null $city city
+     * @param string|null $sync_category sync_category
      *
      * @return $this
      */
-    public function setCity(?string $city): static
+    public function setSyncCategory(?string $sync_category): static
     {
-        if (is_null($city)) {
-            array_push($this->openAPINullablesSetToNull, 'city');
+        if (is_null($sync_category)) {
+            array_push($this->openAPINullablesSetToNull, 'sync_category');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('city', $nullablesSetToNull);
+            $index = array_search('sync_category', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['city'] = $city;
+        $this->container['sync_category'] = $sync_category;
+
+        return $this;
+    }
+
+    /**
+     * Gets suspended_at
+     *
+     * @return \DateTime|null
+     */
+    public function getSuspendedAt(): ?\DateTime
+    {
+        return $this->container['suspended_at'];
+    }
+
+    /**
+     * Sets suspended_at
+     *
+     * @param \DateTime|null $suspended_at suspended_at
+     *
+     * @return $this
+     */
+    public function setSuspendedAt(?\DateTime $suspended_at): static
+    {
+        if (is_null($suspended_at)) {
+            array_push($this->openAPINullablesSetToNull, 'suspended_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('suspended_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['suspended_at'] = $suspended_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets suspension_reason
+     *
+     * @return string|null
+     */
+    public function getSuspensionReason(): ?string
+    {
+        return $this->container['suspension_reason'];
+    }
+
+    /**
+     * Sets suspension_reason
+     *
+     * @param string|null $suspension_reason suspension_reason
+     *
+     * @return $this
+     */
+    public function setSuspensionReason(?string $suspension_reason): static
+    {
+        if (is_null($suspension_reason)) {
+            array_push($this->openAPINullablesSetToNull, 'suspension_reason');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('suspension_reason', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['suspension_reason'] = $suspension_reason;
+
+        return $this;
+    }
+
+    /**
+     * Gets created_at
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->container['created_at'];
+    }
+
+    /**
+     * Sets created_at
+     *
+     * @param \DateTime|null $created_at created_at
+     *
+     * @return $this
+     */
+    public function setCreatedAt(?\DateTime $created_at): static
+    {
+        if (is_null($created_at)) {
+            array_push($this->openAPINullablesSetToNull, 'created_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('created_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets mapping_status
+     *
+     * @return string|null
+     */
+    public function getMappingStatus(): ?string
+    {
+        return $this->container['mapping_status'];
+    }
+
+    /**
+     * Sets mapping_status
+     *
+     * @param string|null $mapping_status `mapped` — at least one room points at a listing. `unmapped` — the property is claimed but its rooms are not mapped yet, so `listings` is empty; finish `POST /v1/connect/booking/map-rooms`. An unmapped property is listed rather than hidden, so a half-finished connection is visible instead of looking like no connection at all.
+     *
+     * @return $this
+     */
+    public function setMappingStatus(?string $mapping_status): static
+    {
+        if (is_null($mapping_status)) {
+            throw new InvalidArgumentException('non-nullable mapping_status cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['mapping_status'] = $mapping_status;
+
+        return $this;
+    }
+
+    /**
+     * Gets listings
+     *
+     * @return \Repull\Model\BookingPropertyListingsInner[]|null
+     */
+    public function getListings(): ?array
+    {
+        return $this->container['listings'];
+    }
+
+    /**
+     * Sets listings
+     *
+     * @param \Repull\Model\BookingPropertyListingsInner[]|null $listings The Repull listings mapped under this property. Empty when `mappingStatus` is `unmapped`. Inactive listings are left out.
+     *
+     * @return $this
+     */
+    public function setListings(?array $listings): static
+    {
+        if (is_null($listings)) {
+            throw new InvalidArgumentException('non-nullable listings cannot be null');
+        }
+        $this->container['listings'] = $listings;
 
         return $this;
     }

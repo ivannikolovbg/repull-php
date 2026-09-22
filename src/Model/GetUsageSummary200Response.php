@@ -63,6 +63,7 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
         'limits' => '\Repull\Model\GetUsageSummary200ResponseLimits',
         'used' => '\Repull\Model\GetUsageSummary200ResponseUsed',
         'remaining' => '\Repull\Model\GetUsageSummary200ResponseRemaining',
+        'daily_resets_at' => '\DateTime',
         'resets_at' => '\DateTime',
         'breakdown' => '\Repull\Model\GetUsageSummary200ResponseBreakdownInner[]',
         'timeline' => '\Repull\Model\GetUsageSummary200ResponseTimelineInner[]',
@@ -81,6 +82,7 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
         'limits' => null,
         'used' => null,
         'remaining' => null,
+        'daily_resets_at' => 'date-time',
         'resets_at' => 'date-time',
         'breakdown' => null,
         'timeline' => null,
@@ -99,6 +101,7 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
         'limits' => false,
         'used' => false,
         'remaining' => false,
+        'daily_resets_at' => false,
         'resets_at' => false,
         'breakdown' => false,
         'timeline' => false,
@@ -187,6 +190,7 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
         'limits' => 'limits',
         'used' => 'used',
         'remaining' => 'remaining',
+        'daily_resets_at' => 'dailyResetsAt',
         'resets_at' => 'resetsAt',
         'breakdown' => 'breakdown',
         'timeline' => 'timeline',
@@ -205,6 +209,7 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
         'limits' => 'setLimits',
         'used' => 'setUsed',
         'remaining' => 'setRemaining',
+        'daily_resets_at' => 'setDailyResetsAt',
         'resets_at' => 'setResetsAt',
         'breakdown' => 'setBreakdown',
         'timeline' => 'setTimeline',
@@ -223,6 +228,7 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
         'limits' => 'getLimits',
         'used' => 'getUsed',
         'remaining' => 'getRemaining',
+        'daily_resets_at' => 'getDailyResetsAt',
         'resets_at' => 'getResetsAt',
         'breakdown' => 'getBreakdown',
         'timeline' => 'getTimeline',
@@ -282,6 +288,7 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
         $this->setIfExists('limits', $data ?? [], null);
         $this->setIfExists('used', $data ?? [], null);
         $this->setIfExists('remaining', $data ?? [], null);
+        $this->setIfExists('daily_resets_at', $data ?? [], null);
         $this->setIfExists('resets_at', $data ?? [], null);
         $this->setIfExists('breakdown', $data ?? [], null);
         $this->setIfExists('timeline', $data ?? [], null);
@@ -431,6 +438,33 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
             throw new InvalidArgumentException('non-nullable remaining cannot be null');
         }
         $this->container['remaining'] = $remaining;
+
+        return $this;
+    }
+
+    /**
+     * Gets daily_resets_at
+     *
+     * @return \DateTime|null
+     */
+    public function getDailyResetsAt(): ?\DateTime
+    {
+        return $this->container['daily_resets_at'];
+    }
+
+    /**
+     * Sets daily_resets_at
+     *
+     * @param \DateTime|null $daily_resets_at daily_resets_at
+     *
+     * @return $this
+     */
+    public function setDailyResetsAt(?\DateTime $daily_resets_at): static
+    {
+        if (is_null($daily_resets_at)) {
+            throw new InvalidArgumentException('non-nullable daily_resets_at cannot be null');
+        }
+        $this->container['daily_resets_at'] = $daily_resets_at;
 
         return $this;
     }

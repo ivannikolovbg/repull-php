@@ -455,7 +455,7 @@ class BookingRoomsRatesResponseRoomsInnerRatesInner implements ModelInterface, A
     /**
      * Sets max_persons
      *
-     * @param int|null $max_persons max_persons
+     * @param int|null $max_persons The party size this rate plan prices. A rate amount must be written at this number: above it Booking.com declines the price in silence, below it answers 400. Null when `source` is `mirror`.
      *
      * @return $this
      */

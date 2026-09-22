@@ -75,6 +75,8 @@ enum WebhookEventType: string
     case PAYMENT_REFUNDED = 'payment.refunded';
 
     case REPULL_PING = 'repull.ping';
+
+    case USAGE_QUOTA_WARNING = 'usage.quota.warning';
 }
 
 

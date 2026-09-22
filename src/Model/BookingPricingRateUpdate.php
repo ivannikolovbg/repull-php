@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * BookingPricingRateUpdate Class Doc Comment
  *
- * @description A single (room, rate-plan, date-range) update pushed to Booking.com via the rates API.
+ * @description A single (room, rate-plan, date-range) price update. The amount is written against the party size in &#x60;occupancy&#x60;, for every night from &#x60;dateRange.start&#x60; to &#x60;dateRange.end&#x60; inclusive.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -321,9 +321,17 @@ class BookingPricingRateUpdate implements ModelInterface, ArrayAccess, JsonSeria
         if ($this->container['price'] === null) {
             $invalidProperties[] = "'price' can't be null";
         }
+        if (($this->container['price'] < 0)) {
+            $invalidProperties[] = "invalid value for 'price', must be bigger than or equal to 0.";
+        }
+
         if ($this->container['currency'] === null) {
             $invalidProperties[] = "'currency' can't be null";
         }
+        if (!is_null($this->container['occupancy']) && ($this->container['occupancy'] < 1)) {
+            $invalidProperties[] = "invalid value for 'occupancy', must be bigger than or equal to 1.";
+        }
+
         return $invalidProperties;
     }
 
@@ -349,7 +357,7 @@ class BookingPricingRateUpdate implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets room_id
      *
-     * @param string $room_id Booking.com room ID for the rate plan. Comes from `listings_booking_rooms` mapping.
+     * @param string $room_id Booking.com room id the rate plan sells. `GET /v1/channels/booking/properties/{id}/rooms` lists them.
      *
      * @return $this
      */
@@ -376,7 +384,7 @@ class BookingPricingRateUpdate implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets rate_id
      *
-     * @param string $rate_id Booking.com rate-plan ID.
+     * @param string $rate_id Booking.com rate-plan id.
      *
      * @return $this
      */
@@ -430,7 +438,7 @@ class BookingPricingRateUpdate implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets price
      *
-     * @param float $price price
+     * @param float $price Nightly amount, in `currency`, for a party of `occupancy`.
      *
      * @return $this
      */
@@ -439,6 +447,11 @@ class BookingPricingRateUpdate implements ModelInterface, ArrayAccess, JsonSeria
         if (is_null($price)) {
             throw new InvalidArgumentException('non-nullable price cannot be null');
         }
+
+        if (($price < 0)) {
+            throw new InvalidArgumentException('invalid value for $price when calling BookingPricingRateUpdate., must be bigger than or equal to 0.');
+        }
+
         $this->container['price'] = $price;
 
         return $this;
@@ -457,7 +470,7 @@ class BookingPricingRateUpdate implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets currency
      *
-     * @param string $currency currency
+     * @param string $currency Currency the rate plan is sold in.
      *
      * @return $this
      */
@@ -484,7 +497,7 @@ class BookingPricingRateUpdate implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets single_price
      *
-     * @param float|null $single_price single_price
+     * @param float|null $single_price Optional single-occupancy amount, written alongside the main amount.
      *
      * @return $this
      */
@@ -518,7 +531,7 @@ class BookingPricingRateUpdate implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets occupancy
      *
-     * @param int|null $occupancy occupancy
+     * @param int|null $occupancy The party size this rate plan prices — a key, not a preference. Booking.com stores the amount against this number: above the rate plan's own maximum it declines the price in silence and the night keeps its old value; below it, it answers 400 and the old price stays published. Omit it and Repull resolves it from Booking.com's own data for this (room, rate plan) and echoes the value and its source back in `occupancy[]`. When it cannot be resolved the write is refused with `422` naming `updates[N].occupancy` — a price is never sent at a guessed party size.
      *
      * @return $this
      */
@@ -534,6 +547,11 @@ class BookingPricingRateUpdate implements ModelInterface, ArrayAccess, JsonSeria
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
+
+        if (!is_null($occupancy) && ($occupancy < 1)) {
+            throw new InvalidArgumentException('invalid value for $occupancy when calling BookingPricingRateUpdate., must be bigger than or equal to 1.');
+        }
+
         $this->container['occupancy'] = $occupancy;
 
         return $this;
@@ -543,6 +561,7 @@ class BookingPricingRateUpdate implements ModelInterface, ArrayAccess, JsonSeria
      * Gets rooms_to_sell
      *
      * @return int|null
+     * @deprecated
      */
     public function getRoomsToSell(): ?int
     {
@@ -552,9 +571,10 @@ class BookingPricingRateUpdate implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets rooms_to_sell
      *
-     * @param int|null $rooms_to_sell Rooms to sell for the date range. Set to `0` to stop-sell this room/rate on the rates endpoint (Booking's dedicated `<closed>` stop-sell flag lives on the availability endpoint — see `BookingAvailabilityUpdate.closed`).
+     * @param int|null $rooms_to_sell Refused. A rate update carries prices only; sending this returns `422 inventory_not_in_rate_update` naming `updates[N].roomsToSell`. Write inventory with `type: \"availability\"` and `availableRooms` (plus `closed: true` for a stop-sell).
      *
      * @return $this
+     * @deprecated
      */
     public function setRoomsToSell(?int $rooms_to_sell): static
     {

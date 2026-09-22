@@ -61,7 +61,8 @@ class BookingPricingResponse implements ModelInterface, ArrayAccess, JsonSeriali
      */
     protected static array $openAPITypes = [
         'hotel_id' => 'string',
-        'listing_id' => 'string'
+        'listing_id' => 'string',
+        'other_hotel_ids' => 'string[]'
     ];
 
     /**
@@ -71,7 +72,8 @@ class BookingPricingResponse implements ModelInterface, ArrayAccess, JsonSeriali
      */
     protected static array $openAPIFormats = [
         'hotel_id' => null,
-        'listing_id' => null
+        'listing_id' => null,
+        'other_hotel_ids' => null
     ];
 
     /**
@@ -81,7 +83,8 @@ class BookingPricingResponse implements ModelInterface, ArrayAccess, JsonSeriali
      */
     protected static array $openAPINullables = [
         'hotel_id' => false,
-        'listing_id' => false
+        'listing_id' => false,
+        'other_hotel_ids' => false
     ];
 
     /**
@@ -161,7 +164,8 @@ class BookingPricingResponse implements ModelInterface, ArrayAccess, JsonSeriali
      */
     protected static array $attributeMap = [
         'hotel_id' => 'hotelId',
-        'listing_id' => 'listingId'
+        'listing_id' => 'listingId',
+        'other_hotel_ids' => 'otherHotelIds'
     ];
 
     /**
@@ -171,7 +175,8 @@ class BookingPricingResponse implements ModelInterface, ArrayAccess, JsonSeriali
      */
     protected static array $setters = [
         'hotel_id' => 'setHotelId',
-        'listing_id' => 'setListingId'
+        'listing_id' => 'setListingId',
+        'other_hotel_ids' => 'setOtherHotelIds'
     ];
 
     /**
@@ -181,7 +186,8 @@ class BookingPricingResponse implements ModelInterface, ArrayAccess, JsonSeriali
      */
     protected static array $getters = [
         'hotel_id' => 'getHotelId',
-        'listing_id' => 'getListingId'
+        'listing_id' => 'getListingId',
+        'other_hotel_ids' => 'getOtherHotelIds'
     ];
 
     /**
@@ -233,6 +239,7 @@ class BookingPricingResponse implements ModelInterface, ArrayAccess, JsonSeriali
     {
         $this->setIfExists('hotel_id', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('other_hotel_ids', $data ?? [], null);
     }
 
     /**
@@ -322,6 +329,33 @@ class BookingPricingResponse implements ModelInterface, ArrayAccess, JsonSeriali
             throw new InvalidArgumentException('non-nullable listing_id cannot be null');
         }
         $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets other_hotel_ids
+     *
+     * @return string[]|null
+     */
+    public function getOtherHotelIds(): ?array
+    {
+        return $this->container['other_hotel_ids'];
+    }
+
+    /**
+     * Sets other_hotel_ids
+     *
+     * @param string[]|null $other_hotel_ids Other Booking.com properties this listing is also published under. Empty in the normal case. Pass one as `?hotel_id=` to read its pricing instead.
+     *
+     * @return $this
+     */
+    public function setOtherHotelIds(?array $other_hotel_ids): static
+    {
+        if (is_null($other_hotel_ids)) {
+            throw new InvalidArgumentException('non-nullable other_hotel_ids cannot be null');
+        }
+        $this->container['other_hotel_ids'] = $other_hotel_ids;
 
         return $this;
     }
