@@ -37,6 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * ListingPublishStatusChannel Class Doc Comment
  *
+ * @description Sync activity for one channel. &#x60;pushStatus&#x60; says whether the last push landed; &#x60;pushError&#x60; says why it did not.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -61,6 +62,7 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
     protected static array $openAPITypes = [
         'platform' => 'string',
         'push_status' => 'string',
+        'push_error' => 'string',
         'last_pushed_at' => '\DateTime',
         'last_pulled_at' => '\DateTime',
         'dirty_fields' => 'string[]',
@@ -75,6 +77,7 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
     protected static array $openAPIFormats = [
         'platform' => null,
         'push_status' => null,
+        'push_error' => null,
         'last_pushed_at' => 'date-time',
         'last_pulled_at' => 'date-time',
         'dirty_fields' => null,
@@ -89,6 +92,7 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
     protected static array $openAPINullables = [
         'platform' => false,
         'push_status' => true,
+        'push_error' => true,
         'last_pushed_at' => true,
         'last_pulled_at' => true,
         'dirty_fields' => false,
@@ -173,6 +177,7 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
     protected static array $attributeMap = [
         'platform' => 'platform',
         'push_status' => 'pushStatus',
+        'push_error' => 'pushError',
         'last_pushed_at' => 'lastPushedAt',
         'last_pulled_at' => 'lastPulledAt',
         'dirty_fields' => 'dirtyFields',
@@ -187,6 +192,7 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
     protected static array $setters = [
         'platform' => 'setPlatform',
         'push_status' => 'setPushStatus',
+        'push_error' => 'setPushError',
         'last_pushed_at' => 'setLastPushedAt',
         'last_pulled_at' => 'setLastPulledAt',
         'dirty_fields' => 'setDirtyFields',
@@ -201,6 +207,7 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
     protected static array $getters = [
         'platform' => 'getPlatform',
         'push_status' => 'getPushStatus',
+        'push_error' => 'getPushError',
         'last_pushed_at' => 'getLastPushedAt',
         'last_pulled_at' => 'getLastPulledAt',
         'dirty_fields' => 'getDirtyFields',
@@ -275,6 +282,7 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
     {
         $this->setIfExists('platform', $data ?? [], null);
         $this->setIfExists('push_status', $data ?? [], null);
+        $this->setIfExists('push_error', $data ?? [], null);
         $this->setIfExists('last_pushed_at', $data ?? [], null);
         $this->setIfExists('last_pulled_at', $data ?? [], null);
         $this->setIfExists('dirty_fields', $data ?? [], null);
@@ -306,6 +314,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
     {
         $invalidProperties = [];
 
+        if ($this->container['platform'] === null) {
+            $invalidProperties[] = "'platform' can't be null";
+        }
         $allowedValues = self::getPushStatusAllowableValues();
         if (!is_null($this->container['push_status']) && !in_array($this->container['push_status'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -315,6 +326,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
             );
         }
 
+        if ($this->container['push_error'] === null && !$this->isNullableSetToNull('push_error')) {
+            $invalidProperties[] = "'push_error' is required";
+        }
         return $invalidProperties;
     }
 
@@ -330,9 +344,9 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Gets platform
      *
-     * @return string|null
+     * @return string
      */
-    public function getPlatform(): ?string
+    public function getPlatform(): string
     {
         return $this->container['platform'];
     }
@@ -340,11 +354,11 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Sets platform
      *
-     * @param string|null $platform platform
+     * @param string $platform platform
      *
      * @return $this
      */
-    public function setPlatform(?string $platform): static
+    public function setPlatform(string $platform): static
     {
         if (is_null($platform)) {
             throw new InvalidArgumentException('non-nullable platform cannot be null');
@@ -385,6 +399,40 @@ class ListingPublishStatusChannel implements ModelInterface, ArrayAccess, JsonSe
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['push_status'] = $push_status;
+
+        return $this;
+    }
+
+    /**
+     * Gets push_error
+     *
+     * @return string|null
+     */
+    public function getPushError(): ?string
+    {
+        return $this->container['push_error'];
+    }
+
+    /**
+     * Sets push_error
+     *
+     * @param string|null $push_error Why the last push failed — the channel's own reason, verbatim, sanitised for display.  This is the field to render when `pushStatus` is `error`. It carries what Airbnb or Booking.com actually objected to, which is almost always something the operator can fix in the listing content: `\"Airbnb error (400): We can't save your info yet. Links and contact info can't be shared.\"`, `\"Check-in start time must be before end time\"`, `\"property_type_group must be one of [apartments, houses, …]\"`, `\"Rate limited by provider\"`.  **Free text, not an enum.** It is written by the channel and changes without notice: show it to a human, log it, put it next to the retry button — but never parse it or branch on its contents. When a push fails for several reasons at once the reasons are joined with `; `.  `null` when the last push succeeded, and when no push has run yet — the two are told apart by `pushStatus` and `lastPushedAt`, not by this field.
+     *
+     * @return $this
+     */
+    public function setPushError(?string $push_error): static
+    {
+        if (is_null($push_error)) {
+            array_push($this->openAPINullablesSetToNull, 'push_error');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('push_error', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['push_error'] = $push_error;
 
         return $this;
     }

@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * AirbnbPublishResult Class Doc Comment
  *
- * @description A publish is not one call to Airbnb: it is up to eight independent ones (details, description, amenities, rooms, policies, photos, pricing, checkout_tasks), each of which can fail on its own. A PARTIAL publish is normal — what succeeded stays applied; there is no rollback.
+ * @description A publish is not one call to Airbnb: it is up to eight independent ones (details, description, amenities, rooms, policies, photos, pricing, checkout_tasks), each of which can fail on its own. A PARTIAL publish is normal — what succeeded stays applied; there is no rollback.  **Content landing and the listing being live are two different answers.** &#x60;published&#x60; is about content; &#x60;live&#x60; is about whether the listing takes bookings. Read both.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -61,8 +61,10 @@ class AirbnbPublishResult implements ModelInterface, ArrayAccess, JsonSerializab
      */
     protected static array $openAPITypes = [
         'published' => 'bool',
+        'live' => 'bool',
         'sections' => 'string[]',
         'errors' => '\Repull\Model\PublishSectionError[]',
+        'warnings' => 'string[]',
         'reason' => 'string',
         'locked_fields' => 'string[]'
     ];
@@ -74,8 +76,10 @@ class AirbnbPublishResult implements ModelInterface, ArrayAccess, JsonSerializab
      */
     protected static array $openAPIFormats = [
         'published' => null,
+        'live' => null,
         'sections' => null,
         'errors' => null,
+        'warnings' => null,
         'reason' => null,
         'locked_fields' => null
     ];
@@ -87,8 +91,10 @@ class AirbnbPublishResult implements ModelInterface, ArrayAccess, JsonSerializab
      */
     protected static array $openAPINullables = [
         'published' => false,
+        'live' => false,
         'sections' => false,
         'errors' => false,
+        'warnings' => false,
         'reason' => false,
         'locked_fields' => false
     ];
@@ -170,8 +176,10 @@ class AirbnbPublishResult implements ModelInterface, ArrayAccess, JsonSerializab
      */
     protected static array $attributeMap = [
         'published' => 'published',
+        'live' => 'live',
         'sections' => 'sections',
         'errors' => 'errors',
+        'warnings' => 'warnings',
         'reason' => 'reason',
         'locked_fields' => 'lockedFields'
     ];
@@ -183,8 +191,10 @@ class AirbnbPublishResult implements ModelInterface, ArrayAccess, JsonSerializab
      */
     protected static array $setters = [
         'published' => 'setPublished',
+        'live' => 'setLive',
         'sections' => 'setSections',
         'errors' => 'setErrors',
+        'warnings' => 'setWarnings',
         'reason' => 'setReason',
         'locked_fields' => 'setLockedFields'
     ];
@@ -196,8 +206,10 @@ class AirbnbPublishResult implements ModelInterface, ArrayAccess, JsonSerializab
      */
     protected static array $getters = [
         'published' => 'getPublished',
+        'live' => 'getLive',
         'sections' => 'getSections',
         'errors' => 'getErrors',
+        'warnings' => 'getWarnings',
         'reason' => 'getReason',
         'locked_fields' => 'getLockedFields'
     ];
@@ -250,8 +262,10 @@ class AirbnbPublishResult implements ModelInterface, ArrayAccess, JsonSerializab
     public function __construct(?array $data = null)
     {
         $this->setIfExists('published', $data ?? [], null);
+        $this->setIfExists('live', $data ?? [], null);
         $this->setIfExists('sections', $data ?? [], null);
         $this->setIfExists('errors', $data ?? [], null);
+        $this->setIfExists('warnings', $data ?? [], null);
         $this->setIfExists('reason', $data ?? [], null);
         $this->setIfExists('locked_fields', $data ?? [], null);
     }
@@ -289,6 +303,9 @@ class AirbnbPublishResult implements ModelInterface, ArrayAccess, JsonSerializab
         }
         if ($this->container['errors'] === null) {
             $invalidProperties[] = "'errors' can't be null";
+        }
+        if ($this->container['warnings'] === null) {
+            $invalidProperties[] = "'warnings' can't be null";
         }
         if ($this->container['locked_fields'] === null) {
             $invalidProperties[] = "'locked_fields' can't be null";
@@ -328,6 +345,33 @@ class AirbnbPublishResult implements ModelInterface, ArrayAccess, JsonSerializab
             throw new InvalidArgumentException('non-nullable published cannot be null');
         }
         $this->container['published'] = $published;
+
+        return $this;
+    }
+
+    /**
+     * Gets live
+     *
+     * @return bool|null
+     */
+    public function getLive(): ?bool
+    {
+        return $this->container['live'];
+    }
+
+    /**
+     * Sets live
+     *
+     * @param bool|null $live Whether the listing is active and bookable on Airbnb — that is, whether activation was actually performed and succeeded.  `published: true` with `live: false` is a real and common outcome: every content section landed, but the listing was never activated, because activation is skipped when instant-booking cannot be confirmed to be off. `warnings` says why.  **Absent is not `false`.** The field is omitted entirely when activation was never part of the operation — publishing to an already-mapped Airbnb listing updates content and activates nothing, so there is nothing to report. Only treat the listing as not-live when `live` is present and false.
+     *
+     * @return $this
+     */
+    public function setLive(?bool $live): static
+    {
+        if (is_null($live)) {
+            throw new InvalidArgumentException('non-nullable live cannot be null');
+        }
+        $this->container['live'] = $live;
 
         return $this;
     }
@@ -382,6 +426,33 @@ class AirbnbPublishResult implements ModelInterface, ArrayAccess, JsonSerializab
             throw new InvalidArgumentException('non-nullable errors cannot be null');
         }
         $this->container['errors'] = $errors;
+
+        return $this;
+    }
+
+    /**
+     * Gets warnings
+     *
+     * @return string[]
+     */
+    public function getWarnings(): array
+    {
+        return $this->container['warnings'];
+    }
+
+    /**
+     * Sets warnings
+     *
+     * @param string[] $warnings Steps that failed WITHOUT failing the publish — optional work the push carried on past, each in the push's own words. These used to be swallowed silently, so the only sign of one was a listing that was somehow not quite right afterwards. A publish can be `published: true` and still carry warnings; read them before concluding nothing needs doing.
+     *
+     * @return $this
+     */
+    public function setWarnings(array $warnings): static
+    {
+        if (is_null($warnings)) {
+            throw new InvalidArgumentException('non-nullable warnings cannot be null');
+        }
+        $this->container['warnings'] = $warnings;
 
         return $this;
     }

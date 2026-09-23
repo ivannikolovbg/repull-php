@@ -5,6 +5,21 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.18] - 2026-09-23
+
+### Added
+Regenerated against the live spec (199 → 202 operations, none removed):
+- **Market state** — `ListingsApi::takeListingOnline` / `takeListingOffline` (`POST /v1/listings/{id}/online|offline`). Takes a listing off sale, or puts it back, on every connected channel in one call. Not the same as deactivating in Repull: going offline stops the listing taking bookings but leaves billing, plan limits and API access untouched; `active: false` does the opposite. The answer is per channel item — check each `ChannelMarketStateItem::getOk()`, because channels fail independently and a partial result is the ordinary outcome. Models: `ListingMarketStateRequest`, `ListingMarketStateResponse`, `ChannelMarketStateItem`.
+- **Booking.com unlist / relist** — `BookingComApi::bookingPropertyAction` (`POST /v1/channels/booking/properties/{id}`; `id` is a Repull listing id, not a hotel id). Booking.com has no unlist, so `unlist` closes the mapped room across the forward window and `relist` re-syncs the true calendar rather than opening everything — genuinely blocked dates stay blocked. Pass `hotelId` when the listing maps to several properties or the call is refused with `409 ambiguous_booking_mapping` and nothing is written. Models: `BookingPropertyActionRequest`, `BookingPropertyActionResponse`.
+- **Booking.com setup actions** — `POST /v1/channels/booking/setup` gains `create-property`, `add-room`, `add-unit`, `advance`.
+- **Listing address + room type on create** — `ListingCreateRequest` gains `roomTypeCategory`, `propertyTypeCategory`, `postalCode` (plus the `zipcode` alias); `ListingContentUpdateRequestAddress` gains `state` and `postalCode`. Airbnb refuses to activate a listing that has not stated a room type.
+- **Publish diagnostics** — `ListingPublishStatusChannel::getPushError()` (the channel's own reason for the last failed push, verbatim), `ListingPublishStatusConnection::getLockedFields()`, and `ListingPublishStatusResponse::getAddressReadiness()` (`ListingAddressReadiness`).
+- **Publish results** — new `BookingPublishResult` / `BookingPublishSectionError`; `AirbnbPublishResult` gains `live` and `warnings`. `published: true` with `live: false` is a real and common outcome — content landed but activation never ran; `warnings` says why. Absent is not `false`.
+- **Errors** — the error envelope gains `previous_code`.
+
+### Changed
+- `ListingPublishResponse` is now `ListingPublishBookingResponse` (the model behind `POST /v1/listings/{id}/publish/booking`); the old class name is gone.
+
 ## [0.2.17] - 2026-09-22
 
 ### Added

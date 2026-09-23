@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * ListingContentUpdateRequestAddress Class Doc Comment
  *
- * @description Partial address. Only provided sub-fields are written.
+ * @description Partial address. Only provided sub-fields are written; the ones you omit keep their current value, and an explicit &#x60;null&#x60; clears one.  This is also the repair path for a listing that cannot be published: Airbnb requires &#x60;street&#x60; and &#x60;city&#x60; for every country and additionally &#x60;state&#x60; and &#x60;postalCode&#x60; for a **US** property — and a listing with no &#x60;countryCode&#x60; behaves as US. Send just the missing part, e.g. &#x60;{ \&quot;address\&quot;: { \&quot;state\&quot;: \&quot;FL\&quot; } }&#x60;. &#x60;GET /v1/listings/{id}/publish-status&#x60; names what is missing.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -62,6 +62,9 @@ class ListingContentUpdateRequestAddress implements ModelInterface, ArrayAccess,
     protected static array $openAPITypes = [
         'street' => 'string',
         'city' => 'string',
+        'state' => 'string',
+        'postal_code' => 'string',
+        'zipcode' => 'string',
         'country_code' => 'string',
         'lat' => 'float',
         'lng' => 'float'
@@ -75,6 +78,9 @@ class ListingContentUpdateRequestAddress implements ModelInterface, ArrayAccess,
     protected static array $openAPIFormats = [
         'street' => null,
         'city' => null,
+        'state' => null,
+        'postal_code' => null,
+        'zipcode' => null,
         'country_code' => null,
         'lat' => null,
         'lng' => null
@@ -88,6 +94,9 @@ class ListingContentUpdateRequestAddress implements ModelInterface, ArrayAccess,
     protected static array $openAPINullables = [
         'street' => true,
         'city' => true,
+        'state' => true,
+        'postal_code' => true,
+        'zipcode' => true,
         'country_code' => true,
         'lat' => true,
         'lng' => true
@@ -171,6 +180,9 @@ class ListingContentUpdateRequestAddress implements ModelInterface, ArrayAccess,
     protected static array $attributeMap = [
         'street' => 'street',
         'city' => 'city',
+        'state' => 'state',
+        'postal_code' => 'postalCode',
+        'zipcode' => 'zipcode',
         'country_code' => 'countryCode',
         'lat' => 'lat',
         'lng' => 'lng'
@@ -184,6 +196,9 @@ class ListingContentUpdateRequestAddress implements ModelInterface, ArrayAccess,
     protected static array $setters = [
         'street' => 'setStreet',
         'city' => 'setCity',
+        'state' => 'setState',
+        'postal_code' => 'setPostalCode',
+        'zipcode' => 'setZipcode',
         'country_code' => 'setCountryCode',
         'lat' => 'setLat',
         'lng' => 'setLng'
@@ -197,6 +212,9 @@ class ListingContentUpdateRequestAddress implements ModelInterface, ArrayAccess,
     protected static array $getters = [
         'street' => 'getStreet',
         'city' => 'getCity',
+        'state' => 'getState',
+        'postal_code' => 'getPostalCode',
+        'zipcode' => 'getZipcode',
         'country_code' => 'getCountryCode',
         'lat' => 'getLat',
         'lng' => 'getLng'
@@ -251,6 +269,9 @@ class ListingContentUpdateRequestAddress implements ModelInterface, ArrayAccess,
     {
         $this->setIfExists('street', $data ?? [], null);
         $this->setIfExists('city', $data ?? [], null);
+        $this->setIfExists('state', $data ?? [], null);
+        $this->setIfExists('postal_code', $data ?? [], null);
+        $this->setIfExists('zipcode', $data ?? [], null);
         $this->setIfExists('country_code', $data ?? [], null);
         $this->setIfExists('lat', $data ?? [], null);
         $this->setIfExists('lng', $data ?? [], null);
@@ -306,7 +327,7 @@ class ListingContentUpdateRequestAddress implements ModelInterface, ArrayAccess,
     /**
      * Sets street
      *
-     * @param string|null $street street
+     * @param string|null $street Street address including the number. Required by Airbnb for every country.
      *
      * @return $this
      */
@@ -340,7 +361,7 @@ class ListingContentUpdateRequestAddress implements ModelInterface, ArrayAccess,
     /**
      * Sets city
      *
-     * @param string|null $city city
+     * @param string|null $city City / town. Required by Airbnb for every country.
      *
      * @return $this
      */
@@ -362,6 +383,108 @@ class ListingContentUpdateRequestAddress implements ModelInterface, ArrayAccess,
     }
 
     /**
+     * Gets state
+     *
+     * @return string|null
+     */
+    public function getState(): ?string
+    {
+        return $this->container['state'];
+    }
+
+    /**
+     * Sets state
+     *
+     * @param string|null $state State, province or region. **Required for a US property**, and a listing with no `countryCode` counts as US.
+     *
+     * @return $this
+     */
+    public function setState(?string $state): static
+    {
+        if (is_null($state)) {
+            array_push($this->openAPINullablesSetToNull, 'state');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('state', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['state'] = $state;
+
+        return $this;
+    }
+
+    /**
+     * Gets postal_code
+     *
+     * @return string|null
+     */
+    public function getPostalCode(): ?string
+    {
+        return $this->container['postal_code'];
+    }
+
+    /**
+     * Sets postal_code
+     *
+     * @param string|null $postal_code Postal code — ZIP in the US, postcode in the UK, and so on. **Required for a US property**, and a listing with no `countryCode` counts as US. Send the complete code; a partial postcode is rejected downstream. Alias: `zipcode`.
+     *
+     * @return $this
+     */
+    public function setPostalCode(?string $postal_code): static
+    {
+        if (is_null($postal_code)) {
+            array_push($this->openAPINullablesSetToNull, 'postal_code');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('postal_code', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['postal_code'] = $postal_code;
+
+        return $this;
+    }
+
+    /**
+     * Gets zipcode
+     *
+     * @return string|null
+     */
+    public function getZipcode(): ?string
+    {
+        return $this->container['zipcode'];
+    }
+
+    /**
+     * Sets zipcode
+     *
+     * @param string|null $zipcode Alias for `postalCode`, accepted because it is the field name on the Airbnb mirror. `postalCode` wins if you send both.
+     *
+     * @return $this
+     */
+    public function setZipcode(?string $zipcode): static
+    {
+        if (is_null($zipcode)) {
+            array_push($this->openAPINullablesSetToNull, 'zipcode');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('zipcode', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['zipcode'] = $zipcode;
+
+        return $this;
+    }
+
+    /**
      * Gets country_code
      *
      * @return string|null
@@ -374,7 +497,7 @@ class ListingContentUpdateRequestAddress implements ModelInterface, ArrayAccess,
     /**
      * Sets country_code
      *
-     * @param string|null $country_code ISO-3166 alpha-2 country code.
+     * @param string|null $country_code ISO-3166 alpha-2 country code. **Send this for any non-US property.** Leaving it unset does not mean \"unknown\" — the publish path treats a listing with no country as US and then demands `state` and `postalCode`.
      *
      * @return $this
      */
@@ -408,7 +531,7 @@ class ListingContentUpdateRequestAddress implements ModelInterface, ArrayAccess,
     /**
      * Sets lat
      *
-     * @param float|null $lat lat
+     * @param float|null $lat Latitude. Never a substitute for the postal address — Airbnb rejects coordinates it cannot reconcile with a full address.
      *
      * @return $this
      */
@@ -442,7 +565,7 @@ class ListingContentUpdateRequestAddress implements ModelInterface, ArrayAccess,
     /**
      * Sets lng
      *
-     * @param float|null $lng lng
+     * @param float|null $lng Longitude. See `lat`.
      *
      * @return $this
      */

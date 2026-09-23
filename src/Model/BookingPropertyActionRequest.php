@@ -1,6 +1,6 @@
 <?php
 /**
- * InquiryUpdatedPayload
+ * BookingPropertyActionRequest
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * InquiryUpdatedPayload Class Doc Comment
+ * BookingPropertyActionRequest Class Doc Comment
  *
- * @description Payload for &#x60;inquiry.updated&#x60;. The inquiry&#39;s status, dates, guest count or the reservation it became changed. &#x60;previousAttributes&#x60; holds only what moved, with prior values. Fires whether the host acted through the API, a connected app or the Airbnb app. An inquiry whose dates simply pass is &#x60;expired&#x60; in &#x60;GET /v1/inquiries&#x60; but fires no event unless the channel reports it.
+ * @description Take this listing&#39;s Booking.com property off sale, or put it back.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializable
+class BookingPropertyActionRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'InquiryUpdatedPayload';
+    protected static string $openAPIModelName = 'BookingPropertyActionRequest';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,10 +60,8 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'object' => '\Repull\Model\InquiryWebhookObject',
-        'previous_attributes' => 'array<string,mixed>',
-        'occurred_at' => '\DateTime',
-        'revision' => '\DateTime'
+        'action' => 'string',
+        'hotel_id' => 'string'
     ];
 
     /**
@@ -72,10 +70,8 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'object' => null,
-        'previous_attributes' => null,
-        'occurred_at' => 'date-time',
-        'revision' => 'date-time'
+        'action' => null,
+        'hotel_id' => null
     ];
 
     /**
@@ -84,10 +80,8 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'object' => false,
-        'previous_attributes' => false,
-        'occurred_at' => false,
-        'revision' => true
+        'action' => false,
+        'hotel_id' => false
     ];
 
     /**
@@ -166,10 +160,8 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'object' => 'object',
-        'previous_attributes' => 'previousAttributes',
-        'occurred_at' => 'occurredAt',
-        'revision' => 'revision'
+        'action' => 'action',
+        'hotel_id' => 'hotelId'
     ];
 
     /**
@@ -178,10 +170,8 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'object' => 'setObject',
-        'previous_attributes' => 'setPreviousAttributes',
-        'occurred_at' => 'setOccurredAt',
-        'revision' => 'setRevision'
+        'action' => 'setAction',
+        'hotel_id' => 'setHotelId'
     ];
 
     /**
@@ -190,10 +180,8 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'object' => 'getObject',
-        'previous_attributes' => 'getPreviousAttributes',
-        'occurred_at' => 'getOccurredAt',
-        'revision' => 'getRevision'
+        'action' => 'getAction',
+        'hotel_id' => 'getHotelId'
     ];
 
     /**
@@ -228,6 +216,21 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
         return self::$openAPIModelName;
     }
 
+    public const ACTION_UNLIST = 'unlist';
+    public const ACTION_RELIST = 'relist';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getActionAllowableValues()
+    {
+        return [
+            self::ACTION_UNLIST,
+            self::ACTION_RELIST,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -243,10 +246,8 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('object', $data ?? [], null);
-        $this->setIfExists('previous_attributes', $data ?? [], null);
-        $this->setIfExists('occurred_at', $data ?? [], null);
-        $this->setIfExists('revision', $data ?? [], null);
+        $this->setIfExists('action', $data ?? [], null);
+        $this->setIfExists('hotel_id', $data ?? [], null);
     }
 
     /**
@@ -274,12 +275,18 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
     {
         $invalidProperties = [];
 
-        if ($this->container['object'] === null) {
-            $invalidProperties[] = "'object' can't be null";
+        if ($this->container['action'] === null) {
+            $invalidProperties[] = "'action' can't be null";
         }
-        if ($this->container['previous_attributes'] === null) {
-            $invalidProperties[] = "'previous_attributes' can't be null";
+        $allowedValues = self::getActionAllowableValues();
+        if (!is_null($this->container['action']) && !in_array($this->container['action'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'action', must be one of '%s'",
+                $this->container['action'],
+                implode("', '", $allowedValues)
+            );
         }
+
         return $invalidProperties;
     }
 
@@ -293,116 +300,56 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets object
+     * Gets action
      *
-     * @return \Repull\Model\InquiryWebhookObject
+     * @return string
      */
-    public function getObject(): \Repull\Model\InquiryWebhookObject
+    public function getAction(): string
     {
-        return $this->container['object'];
+        return $this->container['action'];
     }
 
     /**
-     * Sets object
+     * Sets action
      *
-     * @param \Repull\Model\InquiryWebhookObject $object object
+     * @param string $action `unlist` closes the room's availability across the whole forward window, so the property stops selling. `relist` re-syncs the real calendar: dates that are genuinely blocked (a reservation, an owner stay) stay blocked, and only the closure `unlist` wrote lifts. They are not mirror images, and that is deliberate.
      *
      * @return $this
      */
-    public function setObject(\Repull\Model\InquiryWebhookObject $object): static
+    public function setAction(string $action): static
     {
-        if (is_null($object)) {
-            throw new InvalidArgumentException('non-nullable object cannot be null');
+        if (is_null($action)) {
+            throw new InvalidArgumentException('non-nullable action cannot be null');
         }
-        $this->container['object'] = $object;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['action'] = $action;
 
         return $this;
     }
 
     /**
-     * Gets previous_attributes
+     * Gets hotel_id
      *
-     * @return array<string,mixed>
+     * @return string|null
      */
-    public function getPreviousAttributes(): array
+    public function getHotelId(): ?string
     {
-        return $this->container['previous_attributes'];
+        return $this->container['hotel_id'];
     }
 
     /**
-     * Sets previous_attributes
+     * Sets hotel_id
      *
-     * @param array<string,mixed> $previous_attributes Keys of `object` that moved (`status`, `checkIn`, `checkOut`, `guests`, `reservationId`), mapped to their prior values.
+     * @param string|null $hotel_id Booking.com property to act on, for a listing mapped to more than one. Without it the request is refused with `409 ambiguous_booking_mapping` and nothing is written. `?hotel_id=` means the same thing; the body wins if you send both.
      *
      * @return $this
      */
-    public function setPreviousAttributes(array $previous_attributes): static
+    public function setHotelId(?string $hotel_id): static
     {
-        if (is_null($previous_attributes)) {
-            throw new InvalidArgumentException('non-nullable previous_attributes cannot be null');
+        if (is_null($hotel_id)) {
+            throw new InvalidArgumentException('non-nullable hotel_id cannot be null');
         }
-        $this->container['previous_attributes'] = $previous_attributes;
-
-        return $this;
-    }
-
-    /**
-     * Gets occurred_at
-     *
-     * @return \DateTime|null
-     */
-    public function getOccurredAt(): ?\DateTime
-    {
-        return $this->container['occurred_at'];
-    }
-
-    /**
-     * Sets occurred_at
-     *
-     * @param \DateTime|null $occurred_at occurred_at
-     *
-     * @return $this
-     */
-    public function setOccurredAt(?\DateTime $occurred_at): static
-    {
-        if (is_null($occurred_at)) {
-            throw new InvalidArgumentException('non-nullable occurred_at cannot be null');
-        }
-        $this->container['occurred_at'] = $occurred_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets revision
-     *
-     * @return \DateTime|null
-     */
-    public function getRevision(): ?\DateTime
-    {
-        return $this->container['revision'];
-    }
-
-    /**
-     * Sets revision
-     *
-     * @param \DateTime|null $revision revision
-     *
-     * @return $this
-     */
-    public function setRevision(?\DateTime $revision): static
-    {
-        if (is_null($revision)) {
-            array_push($this->openAPINullablesSetToNull, 'revision');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('revision', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['revision'] = $revision;
+        $this->container['hotel_id'] = $hotel_id;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * InquiryUpdatedPayload
+ * BookingPublishResult
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * InquiryUpdatedPayload Class Doc Comment
+ * BookingPublishResult Class Doc Comment
  *
- * @description Payload for &#x60;inquiry.updated&#x60;. The inquiry&#39;s status, dates, guest count or the reservation it became changed. &#x60;previousAttributes&#x60; holds only what moved, with prior values. Fires whether the host acted through the API, a connected app or the Airbnb app. An inquiry whose dates simply pass is &#x60;expired&#x60; in &#x60;GET /v1/inquiries&#x60; but fires no event unless the channel reports it.
+ * @description A publish is not one call to Booking.com: it is several independent Content API calls (details, description, amenities, rooms, photos, pricing), each of which can fail on its own. A PARTIAL publish is normal — what succeeded stays applied; there is no rollback. Fix the failing sections and publish again; re-publishing an unchanged section is harmless.  A property whose Content API credentials do not cover a section answers 403 for that section alone — the rest still land, and the failure is reported here rather than swallowed.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializable
+class BookingPublishResult implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'InquiryUpdatedPayload';
+    protected static string $openAPIModelName = 'BookingPublishResult';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,10 +60,11 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'object' => '\Repull\Model\InquiryWebhookObject',
-        'previous_attributes' => 'array<string,mixed>',
-        'occurred_at' => '\DateTime',
-        'revision' => '\DateTime'
+        'published' => 'bool',
+        'sections' => 'string[]',
+        'errors' => '\Repull\Model\BookingPublishSectionError[]',
+        'reason' => 'string',
+        'hotel_id' => 'string'
     ];
 
     /**
@@ -72,10 +73,11 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'object' => null,
-        'previous_attributes' => null,
-        'occurred_at' => 'date-time',
-        'revision' => 'date-time'
+        'published' => null,
+        'sections' => null,
+        'errors' => null,
+        'reason' => null,
+        'hotel_id' => null
     ];
 
     /**
@@ -84,10 +86,11 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'object' => false,
-        'previous_attributes' => false,
-        'occurred_at' => false,
-        'revision' => true
+        'published' => false,
+        'sections' => false,
+        'errors' => false,
+        'reason' => false,
+        'hotel_id' => true
     ];
 
     /**
@@ -166,10 +169,11 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'object' => 'object',
-        'previous_attributes' => 'previousAttributes',
-        'occurred_at' => 'occurredAt',
-        'revision' => 'revision'
+        'published' => 'published',
+        'sections' => 'sections',
+        'errors' => 'errors',
+        'reason' => 'reason',
+        'hotel_id' => 'hotelId'
     ];
 
     /**
@@ -178,10 +182,11 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'object' => 'setObject',
-        'previous_attributes' => 'setPreviousAttributes',
-        'occurred_at' => 'setOccurredAt',
-        'revision' => 'setRevision'
+        'published' => 'setPublished',
+        'sections' => 'setSections',
+        'errors' => 'setErrors',
+        'reason' => 'setReason',
+        'hotel_id' => 'setHotelId'
     ];
 
     /**
@@ -190,10 +195,11 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'object' => 'getObject',
-        'previous_attributes' => 'getPreviousAttributes',
-        'occurred_at' => 'getOccurredAt',
-        'revision' => 'getRevision'
+        'published' => 'getPublished',
+        'sections' => 'getSections',
+        'errors' => 'getErrors',
+        'reason' => 'getReason',
+        'hotel_id' => 'getHotelId'
     ];
 
     /**
@@ -243,10 +249,11 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('object', $data ?? [], null);
-        $this->setIfExists('previous_attributes', $data ?? [], null);
-        $this->setIfExists('occurred_at', $data ?? [], null);
-        $this->setIfExists('revision', $data ?? [], null);
+        $this->setIfExists('published', $data ?? [], null);
+        $this->setIfExists('sections', $data ?? [], null);
+        $this->setIfExists('errors', $data ?? [], null);
+        $this->setIfExists('reason', $data ?? [], null);
+        $this->setIfExists('hotel_id', $data ?? [], null);
     }
 
     /**
@@ -274,11 +281,14 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
     {
         $invalidProperties = [];
 
-        if ($this->container['object'] === null) {
-            $invalidProperties[] = "'object' can't be null";
+        if ($this->container['published'] === null) {
+            $invalidProperties[] = "'published' can't be null";
         }
-        if ($this->container['previous_attributes'] === null) {
-            $invalidProperties[] = "'previous_attributes' can't be null";
+        if ($this->container['sections'] === null) {
+            $invalidProperties[] = "'sections' can't be null";
+        }
+        if ($this->container['errors'] === null) {
+            $invalidProperties[] = "'errors' can't be null";
         }
         return $invalidProperties;
     }
@@ -293,116 +303,143 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets object
+     * Gets published
      *
-     * @return \Repull\Model\InquiryWebhookObject
+     * @return bool
      */
-    public function getObject(): \Repull\Model\InquiryWebhookObject
+    public function getPublished(): bool
     {
-        return $this->container['object'];
+        return $this->container['published'];
     }
 
     /**
-     * Sets object
+     * Sets published
      *
-     * @param \Repull\Model\InquiryWebhookObject $object object
+     * @param bool $published True only when EVERY attempted section reached Booking.com.
      *
      * @return $this
      */
-    public function setObject(\Repull\Model\InquiryWebhookObject $object): static
+    public function setPublished(bool $published): static
     {
-        if (is_null($object)) {
-            throw new InvalidArgumentException('non-nullable object cannot be null');
+        if (is_null($published)) {
+            throw new InvalidArgumentException('non-nullable published cannot be null');
         }
-        $this->container['object'] = $object;
+        $this->container['published'] = $published;
 
         return $this;
     }
 
     /**
-     * Gets previous_attributes
+     * Gets sections
      *
-     * @return array<string,mixed>
+     * @return string[]
      */
-    public function getPreviousAttributes(): array
+    public function getSections(): array
     {
-        return $this->container['previous_attributes'];
+        return $this->container['sections'];
     }
 
     /**
-     * Sets previous_attributes
+     * Sets sections
      *
-     * @param array<string,mixed> $previous_attributes Keys of `object` that moved (`status`, `checkIn`, `checkOut`, `guests`, `reservationId`), mapped to their prior values.
+     * @param string[] $sections Sections that landed on Booking.com.
      *
      * @return $this
      */
-    public function setPreviousAttributes(array $previous_attributes): static
+    public function setSections(array $sections): static
     {
-        if (is_null($previous_attributes)) {
-            throw new InvalidArgumentException('non-nullable previous_attributes cannot be null');
+        if (is_null($sections)) {
+            throw new InvalidArgumentException('non-nullable sections cannot be null');
         }
-        $this->container['previous_attributes'] = $previous_attributes;
+        $this->container['sections'] = $sections;
 
         return $this;
     }
 
     /**
-     * Gets occurred_at
+     * Gets errors
      *
-     * @return \DateTime|null
+     * @return \Repull\Model\BookingPublishSectionError[]
      */
-    public function getOccurredAt(): ?\DateTime
+    public function getErrors(): array
     {
-        return $this->container['occurred_at'];
+        return $this->container['errors'];
     }
 
     /**
-     * Sets occurred_at
+     * Sets errors
      *
-     * @param \DateTime|null $occurred_at occurred_at
+     * @param \Repull\Model\BookingPublishSectionError[] $errors Per-section failures. Empty when `published` is true.
      *
      * @return $this
      */
-    public function setOccurredAt(?\DateTime $occurred_at): static
+    public function setErrors(array $errors): static
     {
-        if (is_null($occurred_at)) {
-            throw new InvalidArgumentException('non-nullable occurred_at cannot be null');
+        if (is_null($errors)) {
+            throw new InvalidArgumentException('non-nullable errors cannot be null');
         }
-        $this->container['occurred_at'] = $occurred_at;
+        $this->container['errors'] = $errors;
 
         return $this;
     }
 
     /**
-     * Gets revision
+     * Gets reason
      *
-     * @return \DateTime|null
+     * @return string|null
      */
-    public function getRevision(): ?\DateTime
+    public function getReason(): ?string
     {
-        return $this->container['revision'];
+        return $this->container['reason'];
     }
 
     /**
-     * Sets revision
+     * Sets reason
      *
-     * @param \DateTime|null $revision revision
+     * @param string|null $reason Set when the publish never started at all — most often because the listing is not mapped to any Booking.com property yet. Finish the Connect flow (`POST /v1/connect/booking/map-rooms`) and publish again.
      *
      * @return $this
      */
-    public function setRevision(?\DateTime $revision): static
+    public function setReason(?string $reason): static
     {
-        if (is_null($revision)) {
-            array_push($this->openAPINullablesSetToNull, 'revision');
+        if (is_null($reason)) {
+            throw new InvalidArgumentException('non-nullable reason cannot be null');
+        }
+        $this->container['reason'] = $reason;
+
+        return $this;
+    }
+
+    /**
+     * Gets hotel_id
+     *
+     * @return string|null
+     */
+    public function getHotelId(): ?string
+    {
+        return $this->container['hotel_id'];
+    }
+
+    /**
+     * Sets hotel_id
+     *
+     * @param string|null $hotel_id The Booking.com property this publish wrote into — resolved from the listing's mapping, or the one you named. Always read it back: a listing can be mapped to several properties, and this states which one actually received the content. Null when the listing is mapped to no property, in which case nothing was pushed.
+     *
+     * @return $this
+     */
+    public function setHotelId(?string $hotel_id): static
+    {
+        if (is_null($hotel_id)) {
+            array_push($this->openAPINullablesSetToNull, 'hotel_id');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('revision', $nullablesSetToNull);
+            $index = array_search('hotel_id', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['revision'] = $revision;
+        $this->container['hotel_id'] = $hotel_id;
 
         return $this;
     }

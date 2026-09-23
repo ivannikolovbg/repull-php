@@ -1,6 +1,6 @@
 <?php
 /**
- * InquiryUpdatedPayload
+ * BookingSetupRequestLegalEntity
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * InquiryUpdatedPayload Class Doc Comment
+ * BookingSetupRequestLegalEntity Class Doc Comment
  *
- * @description Payload for &#x60;inquiry.updated&#x60;. The inquiry&#39;s status, dates, guest count or the reservation it became changed. &#x60;previousAttributes&#x60; holds only what moved, with prior values. Fires whether the host acted through the API, a connected app or the Airbnb app. An inquiry whose dates simply pass is &#x60;expired&#x60; in &#x60;GET /v1/inquiries&#x60; but fires no event unless the channel reports it.
+ * @description Used by &#x60;create-property&#x60; ONLY when this workspace has no legal entity yet — one is registered with Booking.com from these details and used for the property. Ignored when the workspace already has one, so a second is never registered.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializable
+class BookingSetupRequestLegalEntity implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'InquiryUpdatedPayload';
+    protected static string $openAPIModelName = 'booking_setup_request_legal_entity';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,10 +60,11 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'object' => '\Repull\Model\InquiryWebhookObject',
-        'previous_attributes' => 'array<string,mixed>',
-        'occurred_at' => '\DateTime',
-        'revision' => '\DateTime'
+        'company_name' => 'string',
+        'legal_contact_name' => 'string',
+        'legal_contact_email' => 'string',
+        'country' => 'string',
+        'city' => 'string'
     ];
 
     /**
@@ -72,10 +73,11 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'object' => null,
-        'previous_attributes' => null,
-        'occurred_at' => 'date-time',
-        'revision' => 'date-time'
+        'company_name' => null,
+        'legal_contact_name' => null,
+        'legal_contact_email' => 'email',
+        'country' => null,
+        'city' => null
     ];
 
     /**
@@ -84,10 +86,11 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'object' => false,
-        'previous_attributes' => false,
-        'occurred_at' => false,
-        'revision' => true
+        'company_name' => false,
+        'legal_contact_name' => false,
+        'legal_contact_email' => false,
+        'country' => false,
+        'city' => false
     ];
 
     /**
@@ -166,10 +169,11 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'object' => 'object',
-        'previous_attributes' => 'previousAttributes',
-        'occurred_at' => 'occurredAt',
-        'revision' => 'revision'
+        'company_name' => 'company_name',
+        'legal_contact_name' => 'legal_contact_name',
+        'legal_contact_email' => 'legal_contact_email',
+        'country' => 'country',
+        'city' => 'city'
     ];
 
     /**
@@ -178,10 +182,11 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'object' => 'setObject',
-        'previous_attributes' => 'setPreviousAttributes',
-        'occurred_at' => 'setOccurredAt',
-        'revision' => 'setRevision'
+        'company_name' => 'setCompanyName',
+        'legal_contact_name' => 'setLegalContactName',
+        'legal_contact_email' => 'setLegalContactEmail',
+        'country' => 'setCountry',
+        'city' => 'setCity'
     ];
 
     /**
@@ -190,10 +195,11 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'object' => 'getObject',
-        'previous_attributes' => 'getPreviousAttributes',
-        'occurred_at' => 'getOccurredAt',
-        'revision' => 'getRevision'
+        'company_name' => 'getCompanyName',
+        'legal_contact_name' => 'getLegalContactName',
+        'legal_contact_email' => 'getLegalContactEmail',
+        'country' => 'getCountry',
+        'city' => 'getCity'
     ];
 
     /**
@@ -243,10 +249,11 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('object', $data ?? [], null);
-        $this->setIfExists('previous_attributes', $data ?? [], null);
-        $this->setIfExists('occurred_at', $data ?? [], null);
-        $this->setIfExists('revision', $data ?? [], null);
+        $this->setIfExists('company_name', $data ?? [], null);
+        $this->setIfExists('legal_contact_name', $data ?? [], null);
+        $this->setIfExists('legal_contact_email', $data ?? [], null);
+        $this->setIfExists('country', $data ?? [], null);
+        $this->setIfExists('city', $data ?? [], null);
     }
 
     /**
@@ -274,11 +281,14 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
     {
         $invalidProperties = [];
 
-        if ($this->container['object'] === null) {
-            $invalidProperties[] = "'object' can't be null";
+        if ($this->container['company_name'] === null) {
+            $invalidProperties[] = "'company_name' can't be null";
         }
-        if ($this->container['previous_attributes'] === null) {
-            $invalidProperties[] = "'previous_attributes' can't be null";
+        if ($this->container['legal_contact_name'] === null) {
+            $invalidProperties[] = "'legal_contact_name' can't be null";
+        }
+        if ($this->container['legal_contact_email'] === null) {
+            $invalidProperties[] = "'legal_contact_email' can't be null";
         }
         return $invalidProperties;
     }
@@ -293,116 +303,136 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets object
+     * Gets company_name
      *
-     * @return \Repull\Model\InquiryWebhookObject
+     * @return string
      */
-    public function getObject(): \Repull\Model\InquiryWebhookObject
+    public function getCompanyName(): string
     {
-        return $this->container['object'];
+        return $this->container['company_name'];
     }
 
     /**
-     * Sets object
+     * Sets company_name
      *
-     * @param \Repull\Model\InquiryWebhookObject $object object
+     * @param string $company_name company_name
      *
      * @return $this
      */
-    public function setObject(\Repull\Model\InquiryWebhookObject $object): static
+    public function setCompanyName(string $company_name): static
     {
-        if (is_null($object)) {
-            throw new InvalidArgumentException('non-nullable object cannot be null');
+        if (is_null($company_name)) {
+            throw new InvalidArgumentException('non-nullable company_name cannot be null');
         }
-        $this->container['object'] = $object;
+        $this->container['company_name'] = $company_name;
 
         return $this;
     }
 
     /**
-     * Gets previous_attributes
+     * Gets legal_contact_name
      *
-     * @return array<string,mixed>
+     * @return string
      */
-    public function getPreviousAttributes(): array
+    public function getLegalContactName(): string
     {
-        return $this->container['previous_attributes'];
+        return $this->container['legal_contact_name'];
     }
 
     /**
-     * Sets previous_attributes
+     * Sets legal_contact_name
      *
-     * @param array<string,mixed> $previous_attributes Keys of `object` that moved (`status`, `checkIn`, `checkOut`, `guests`, `reservationId`), mapped to their prior values.
+     * @param string $legal_contact_name legal_contact_name
      *
      * @return $this
      */
-    public function setPreviousAttributes(array $previous_attributes): static
+    public function setLegalContactName(string $legal_contact_name): static
     {
-        if (is_null($previous_attributes)) {
-            throw new InvalidArgumentException('non-nullable previous_attributes cannot be null');
+        if (is_null($legal_contact_name)) {
+            throw new InvalidArgumentException('non-nullable legal_contact_name cannot be null');
         }
-        $this->container['previous_attributes'] = $previous_attributes;
+        $this->container['legal_contact_name'] = $legal_contact_name;
 
         return $this;
     }
 
     /**
-     * Gets occurred_at
+     * Gets legal_contact_email
      *
-     * @return \DateTime|null
+     * @return string
      */
-    public function getOccurredAt(): ?\DateTime
+    public function getLegalContactEmail(): string
     {
-        return $this->container['occurred_at'];
+        return $this->container['legal_contact_email'];
     }
 
     /**
-     * Sets occurred_at
+     * Sets legal_contact_email
      *
-     * @param \DateTime|null $occurred_at occurred_at
+     * @param string $legal_contact_email legal_contact_email
      *
      * @return $this
      */
-    public function setOccurredAt(?\DateTime $occurred_at): static
+    public function setLegalContactEmail(string $legal_contact_email): static
     {
-        if (is_null($occurred_at)) {
-            throw new InvalidArgumentException('non-nullable occurred_at cannot be null');
+        if (is_null($legal_contact_email)) {
+            throw new InvalidArgumentException('non-nullable legal_contact_email cannot be null');
         }
-        $this->container['occurred_at'] = $occurred_at;
+        $this->container['legal_contact_email'] = $legal_contact_email;
 
         return $this;
     }
 
     /**
-     * Gets revision
+     * Gets country
      *
-     * @return \DateTime|null
+     * @return string|null
      */
-    public function getRevision(): ?\DateTime
+    public function getCountry(): ?string
     {
-        return $this->container['revision'];
+        return $this->container['country'];
     }
 
     /**
-     * Sets revision
+     * Sets country
      *
-     * @param \DateTime|null $revision revision
+     * @param string|null $country country
      *
      * @return $this
      */
-    public function setRevision(?\DateTime $revision): static
+    public function setCountry(?string $country): static
     {
-        if (is_null($revision)) {
-            array_push($this->openAPINullablesSetToNull, 'revision');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('revision', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($country)) {
+            throw new InvalidArgumentException('non-nullable country cannot be null');
         }
-        $this->container['revision'] = $revision;
+        $this->container['country'] = $country;
+
+        return $this;
+    }
+
+    /**
+     * Gets city
+     *
+     * @return string|null
+     */
+    public function getCity(): ?string
+    {
+        return $this->container['city'];
+    }
+
+    /**
+     * Sets city
+     *
+     * @param string|null $city city
+     *
+     * @return $this
+     */
+    public function setCity(?string $city): static
+    {
+        if (is_null($city)) {
+            throw new InvalidArgumentException('non-nullable city cannot be null');
+        }
+        $this->container['city'] = $city;
 
         return $this;
     }

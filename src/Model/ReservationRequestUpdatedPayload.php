@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * ReservationRequestUpdatedPayload Class Doc Comment
  *
- * @description Payload for &#x60;reservation.request.updated&#x60;. A booking request stopped waiting on the host. &#x60;requestStatus&#x60; says how; &#x60;data.object&#x60; is the reservation after the change (&#x60;status&#x60; &#x60;confirmed&#x60; once accepted, &#x60;cancelled&#x60; otherwise). An accepted request also fires &#x60;reservation.created&#x60;. Fires when the channel reports the outcome, whoever acted — the API, the Vanio dashboard or the channel&#39;s own app.
+ * @description Payload for &#x60;reservation.request.updated&#x60;. A booking request stopped waiting on the host. &#x60;requestStatus&#x60; says how; &#x60;data.object&#x60; is the reservation after the change (&#x60;status&#x60; &#x60;confirmed&#x60; once accepted, &#x60;cancelled&#x60; otherwise). An accepted request also fires &#x60;reservation.created&#x60;. Fires when the channel reports the outcome, whoever acted — the API, a connected app or the channel&#39;s own app.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

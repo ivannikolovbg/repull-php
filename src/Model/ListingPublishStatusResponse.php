@@ -60,6 +60,7 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPITypes = [
         'listing_id' => 'string',
+        'address_readiness' => 'array<string,\Repull\Model\ListingAddressReadiness>',
         'channels' => '\Repull\Model\ListingPublishStatusChannel[]',
         'connections' => '\Repull\Model\ListingPublishStatusConnection[]'
     ];
@@ -71,6 +72,7 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPIFormats = [
         'listing_id' => null,
+        'address_readiness' => null,
         'channels' => null,
         'connections' => null
     ];
@@ -82,6 +84,7 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPINullables = [
         'listing_id' => false,
+        'address_readiness' => false,
         'channels' => false,
         'connections' => false
     ];
@@ -163,6 +166,7 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $attributeMap = [
         'listing_id' => 'listingId',
+        'address_readiness' => 'addressReadiness',
         'channels' => 'channels',
         'connections' => 'connections'
     ];
@@ -174,6 +178,7 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $setters = [
         'listing_id' => 'setListingId',
+        'address_readiness' => 'setAddressReadiness',
         'channels' => 'setChannels',
         'connections' => 'setConnections'
     ];
@@ -185,6 +190,7 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $getters = [
         'listing_id' => 'getListingId',
+        'address_readiness' => 'getAddressReadiness',
         'channels' => 'getChannels',
         'connections' => 'getConnections'
     ];
@@ -237,6 +243,7 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
     public function __construct(?array $data = null)
     {
         $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('address_readiness', $data ?? [], null);
         $this->setIfExists('channels', $data ?? [], null);
         $this->setIfExists('connections', $data ?? [], null);
     }
@@ -301,6 +308,33 @@ class ListingPublishStatusResponse implements ModelInterface, ArrayAccess, JsonS
             throw new InvalidArgumentException('non-nullable listing_id cannot be null');
         }
         $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets address_readiness
+     *
+     * @return array<string,\Repull\Model\ListingAddressReadiness>|null
+     */
+    public function getAddressReadiness(): ?array
+    {
+        return $this->container['address_readiness'];
+    }
+
+    /**
+     * Sets address_readiness
+     *
+     * @param array<string,\Repull\Model\ListingAddressReadiness>|null $address_readiness Address readiness per channel, keyed by channel name (`airbnb` today). Airbnb requires `street` and `city` for every country and additionally `state` and `postalCode` for a **US** property — and a listing with no `countryCode` behaves as US. Check this BEFORE calling a publish endpoint: an incomplete address is refused at the create preflight and never reaches the channel.  It sits here rather than inside `channels[]` because `channels` reports sync activity and is empty for a listing that has never been pushed — exactly the listing whose address blocker you need to see. Repair a gap with `PUT /v1/listings/{id}/content`, sending only the missing parts under `address`. An empty object means readiness was not reported; it never means ready.
+     *
+     * @return $this
+     */
+    public function setAddressReadiness(?array $address_readiness): static
+    {
+        if (is_null($address_readiness)) {
+            throw new InvalidArgumentException('non-nullable address_readiness cannot be null');
+        }
+        $this->container['address_readiness'] = $address_readiness;
 
         return $this;
     }

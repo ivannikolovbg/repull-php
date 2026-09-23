@@ -60,7 +60,11 @@ class BookingSetupRequest implements ModelInterface, ArrayAccess, JsonSerializab
      */
     protected static array $openAPITypes = [
         'action' => 'string',
+        'listing_id' => 'int',
         'property_id' => 'string',
+        'room_id' => 'int',
+        'legal_entity_id' => 'int',
+        'legal_entity' => '\Repull\Model\BookingSetupRequestLegalEntity',
         'leid' => 'int',
         'contacts' => 'array<string,mixed>[]'
     ];
@@ -72,7 +76,11 @@ class BookingSetupRequest implements ModelInterface, ArrayAccess, JsonSerializab
      */
     protected static array $openAPIFormats = [
         'action' => null,
+        'listing_id' => null,
         'property_id' => null,
+        'room_id' => null,
+        'legal_entity_id' => null,
+        'legal_entity' => null,
         'leid' => null,
         'contacts' => null
     ];
@@ -84,7 +92,11 @@ class BookingSetupRequest implements ModelInterface, ArrayAccess, JsonSerializab
      */
     protected static array $openAPINullables = [
         'action' => false,
+        'listing_id' => false,
         'property_id' => false,
+        'room_id' => false,
+        'legal_entity_id' => false,
+        'legal_entity' => false,
         'leid' => false,
         'contacts' => false
     ];
@@ -166,7 +178,11 @@ class BookingSetupRequest implements ModelInterface, ArrayAccess, JsonSerializab
      */
     protected static array $attributeMap = [
         'action' => 'action',
+        'listing_id' => 'listing_id',
         'property_id' => 'property_id',
+        'room_id' => 'room_id',
+        'legal_entity_id' => 'legal_entity_id',
+        'legal_entity' => 'legal_entity',
         'leid' => 'leid',
         'contacts' => 'contacts'
     ];
@@ -178,7 +194,11 @@ class BookingSetupRequest implements ModelInterface, ArrayAccess, JsonSerializab
      */
     protected static array $setters = [
         'action' => 'setAction',
+        'listing_id' => 'setListingId',
         'property_id' => 'setPropertyId',
+        'room_id' => 'setRoomId',
+        'legal_entity_id' => 'setLegalEntityId',
+        'legal_entity' => 'setLegalEntity',
         'leid' => 'setLeid',
         'contacts' => 'setContacts'
     ];
@@ -190,7 +210,11 @@ class BookingSetupRequest implements ModelInterface, ArrayAccess, JsonSerializab
      */
     protected static array $getters = [
         'action' => 'getAction',
+        'listing_id' => 'getListingId',
         'property_id' => 'getPropertyId',
+        'room_id' => 'getRoomId',
+        'legal_entity_id' => 'getLegalEntityId',
+        'legal_entity' => 'getLegalEntity',
         'leid' => 'getLeid',
         'contacts' => 'getContacts'
     ];
@@ -227,6 +251,10 @@ class BookingSetupRequest implements ModelInterface, ArrayAccess, JsonSerializab
         return self::$openAPIModelName;
     }
 
+    public const ACTION_CREATE_PROPERTY = 'create-property';
+    public const ACTION_ADD_ROOM = 'add-room';
+    public const ACTION_ADD_UNIT = 'add-unit';
+    public const ACTION_ADVANCE = 'advance';
     public const ACTION_CREATE_LEGAL_ENTITY = 'create-legal-entity';
     public const ACTION_CHECK_LEGAL_STATUS = 'check-legal-status';
     public const ACTION_CHECK_READINESS = 'check-readiness';
@@ -242,6 +270,10 @@ class BookingSetupRequest implements ModelInterface, ArrayAccess, JsonSerializab
     public static function getActionAllowableValues()
     {
         return [
+            self::ACTION_CREATE_PROPERTY,
+            self::ACTION_ADD_ROOM,
+            self::ACTION_ADD_UNIT,
+            self::ACTION_ADVANCE,
             self::ACTION_CREATE_LEGAL_ENTITY,
             self::ACTION_CHECK_LEGAL_STATUS,
             self::ACTION_CHECK_READINESS,
@@ -266,7 +298,11 @@ class BookingSetupRequest implements ModelInterface, ArrayAccess, JsonSerializab
     public function __construct(?array $data = null)
     {
         $this->setIfExists('action', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('property_id', $data ?? [], null);
+        $this->setIfExists('room_id', $data ?? [], null);
+        $this->setIfExists('legal_entity_id', $data ?? [], null);
+        $this->setIfExists('legal_entity', $data ?? [], null);
         $this->setIfExists('leid', $data ?? [], null);
         $this->setIfExists('contacts', $data ?? [], null);
     }
@@ -349,6 +385,33 @@ class BookingSetupRequest implements ModelInterface, ArrayAccess, JsonSerializab
     }
 
     /**
+     * Gets listing_id
+     *
+     * @return int|null
+     */
+    public function getListingId(): ?int
+    {
+        return $this->container['listing_id'];
+    }
+
+    /**
+     * Sets listing_id
+     *
+     * @param int|null $listing_id Repull listing id — required for `create-property`, `add-room` and `add-unit`. NOT a Booking.com Hotel ID. `listingId` is accepted as an alias.
+     *
+     * @return $this
+     */
+    public function setListingId(?int $listing_id): static
+    {
+        if (is_null($listing_id)) {
+            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
+        }
+        $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
      * Gets property_id
      *
      * @return string|null
@@ -361,7 +424,7 @@ class BookingSetupRequest implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets property_id
      *
-     * @param string|null $property_id Booking.com property id — required for readiness/open/contacts/policies actions.
+     * @param string|null $property_id Booking.com Hotel ID — required for `add-room`, `add-unit`, `advance`, and the readiness/open/contacts/policies actions.
      *
      * @return $this
      */
@@ -371,6 +434,87 @@ class BookingSetupRequest implements ModelInterface, ArrayAccess, JsonSerializab
             throw new InvalidArgumentException('non-nullable property_id cannot be null');
         }
         $this->container['property_id'] = $property_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets room_id
+     *
+     * @return int|null
+     */
+    public function getRoomId(): ?int
+    {
+        return $this->container['room_id'];
+    }
+
+    /**
+     * Sets room_id
+     *
+     * @param int|null $room_id Booking.com room id — required for `add-unit`. `GET /v1/channels/booking/properties/{listingId}/rooms` lists them. `roomId` is accepted as an alias.
+     *
+     * @return $this
+     */
+    public function setRoomId(?int $room_id): static
+    {
+        if (is_null($room_id)) {
+            throw new InvalidArgumentException('non-nullable room_id cannot be null');
+        }
+        $this->container['room_id'] = $room_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets legal_entity_id
+     *
+     * @return int|null
+     */
+    public function getLegalEntityId(): ?int
+    {
+        return $this->container['legal_entity_id'];
+    }
+
+    /**
+     * Sets legal_entity_id
+     *
+     * @param int|null $legal_entity_id Optional override for `create-property`. Omit it: the legal entity this workspace already uses is resolved automatically. An id that carries another workspace's properties is refused with `403 legal_entity_not_yours`. `legalEntityId` is accepted as an alias.
+     *
+     * @return $this
+     */
+    public function setLegalEntityId(?int $legal_entity_id): static
+    {
+        if (is_null($legal_entity_id)) {
+            throw new InvalidArgumentException('non-nullable legal_entity_id cannot be null');
+        }
+        $this->container['legal_entity_id'] = $legal_entity_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets legal_entity
+     *
+     * @return \Repull\Model\BookingSetupRequestLegalEntity|null
+     */
+    public function getLegalEntity(): ?\Repull\Model\BookingSetupRequestLegalEntity
+    {
+        return $this->container['legal_entity'];
+    }
+
+    /**
+     * Sets legal_entity
+     *
+     * @param \Repull\Model\BookingSetupRequestLegalEntity|null $legal_entity legal_entity
+     *
+     * @return $this
+     */
+    public function setLegalEntity(?\Repull\Model\BookingSetupRequestLegalEntity $legal_entity): static
+    {
+        if (is_null($legal_entity)) {
+            throw new InvalidArgumentException('non-nullable legal_entity cannot be null');
+        }
+        $this->container['legal_entity'] = $legal_entity;
 
         return $this;
     }
@@ -388,7 +532,7 @@ class BookingSetupRequest implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets leid
      *
-     * @param int|null $leid Legal entity id — required for `check-legal-status`.
+     * @param int|null $leid Legal entity id — required for `check-legal-status`, which always answers 404.
      *
      * @return $this
      */

@@ -70,6 +70,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'valid_params' => 'string[]',
         'endpoint' => 'string',
         'did_you_mean' => 'string',
+        'previous_code' => 'string',
         'listing_ids' => 'string[]',
         'listing_id' => 'string',
         'airbnb_listing_id' => 'string',
@@ -95,6 +96,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'valid_params' => null,
         'endpoint' => null,
         'did_you_mean' => null,
+        'previous_code' => null,
         'listing_ids' => null,
         'listing_id' => null,
         'airbnb_listing_id' => null,
@@ -120,6 +122,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'valid_params' => false,
         'endpoint' => false,
         'did_you_mean' => false,
+        'previous_code' => false,
         'listing_ids' => false,
         'listing_id' => false,
         'airbnb_listing_id' => false,
@@ -215,6 +218,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'valid_params' => 'validParams',
         'endpoint' => 'endpoint',
         'did_you_mean' => 'did_you_mean',
+        'previous_code' => 'previous_code',
         'listing_ids' => 'listing_ids',
         'listing_id' => 'listing_id',
         'airbnb_listing_id' => 'airbnb_listing_id',
@@ -240,6 +244,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'valid_params' => 'setValidParams',
         'endpoint' => 'setEndpoint',
         'did_you_mean' => 'setDidYouMean',
+        'previous_code' => 'setPreviousCode',
         'listing_ids' => 'setListingIds',
         'listing_id' => 'setListingId',
         'airbnb_listing_id' => 'setAirbnbListingId',
@@ -265,6 +270,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'valid_params' => 'getValidParams',
         'endpoint' => 'getEndpoint',
         'did_you_mean' => 'getDidYouMean',
+        'previous_code' => 'getPreviousCode',
         'listing_ids' => 'getListingIds',
         'listing_id' => 'getListingId',
         'airbnb_listing_id' => 'getAirbnbListingId',
@@ -331,6 +337,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('valid_params', $data ?? [], null);
         $this->setIfExists('endpoint', $data ?? [], null);
         $this->setIfExists('did_you_mean', $data ?? [], null);
+        $this->setIfExists('previous_code', $data ?? [], null);
         $this->setIfExists('listing_ids', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('airbnb_listing_id', $data ?? [], null);
@@ -691,6 +698,35 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable did_you_mean cannot be null');
         }
         $this->container['did_you_mean'] = $did_you_mean;
+
+        return $this;
+    }
+
+    /**
+     * Gets previous_code
+     *
+     * @return string|null
+     * @deprecated
+     */
+    public function getPreviousCode(): ?string
+    {
+        return $this->container['previous_code'];
+    }
+
+    /**
+     * Sets previous_code
+     *
+     * @param string|null $previous_code The `code` THIS response used to carry, for callers whose branch still matches the old string. A migration aid with a deprecation window — **`code` is canonical, always match on that.**  Present only where an endpoint's classification actually changed, never as a permanent synonym, and it disappears from a response as soon as the canonical code and the old one agree.  The live case: the reviews, messaging, check-in-guide, alteration-answer and Airbnb-pull endpoints used to report EVERY Airbnb failure as `500 airbnb_error`, including refusals Airbnb will repeat forever. They now classify the same way every other Airbnb write does — an Airbnb 4xx is `422 airbnb_rejected` (fix the request), 5xx and timeouts stay `502 airbnb_error` (retry with backoff), and a dead grant is `403 connection_reauth_required`. Those responses carry `previous_code: \"airbnb_error\"`. **Removed in v2** — migrate your branches to `code` before then.
+     *
+     * @return $this
+     * @deprecated
+     */
+    public function setPreviousCode(?string $previous_code): static
+    {
+        if (is_null($previous_code)) {
+            throw new InvalidArgumentException('non-nullable previous_code cannot be null');
+        }
+        $this->container['previous_code'] = $previous_code;
 
         return $this;
     }

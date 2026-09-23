@@ -63,7 +63,8 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         'channel' => 'string',
         'connected' => 'bool',
         'sync_enabled' => 'bool',
-        'since' => '\DateTime'
+        'since' => '\DateTime',
+        'locked_fields' => 'string[]'
     ];
 
     /**
@@ -75,7 +76,8 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         'channel' => null,
         'connected' => null,
         'sync_enabled' => null,
-        'since' => 'date-time'
+        'since' => 'date-time',
+        'locked_fields' => null
     ];
 
     /**
@@ -87,7 +89,8 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         'channel' => false,
         'connected' => false,
         'sync_enabled' => false,
-        'since' => true
+        'since' => true,
+        'locked_fields' => false
     ];
 
     /**
@@ -169,7 +172,8 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         'channel' => 'channel',
         'connected' => 'connected',
         'sync_enabled' => 'syncEnabled',
-        'since' => 'since'
+        'since' => 'since',
+        'locked_fields' => 'lockedFields'
     ];
 
     /**
@@ -181,7 +185,8 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         'channel' => 'setChannel',
         'connected' => 'setConnected',
         'sync_enabled' => 'setSyncEnabled',
-        'since' => 'setSince'
+        'since' => 'setSince',
+        'locked_fields' => 'setLockedFields'
     ];
 
     /**
@@ -193,7 +198,8 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         'channel' => 'getChannel',
         'connected' => 'getConnected',
         'sync_enabled' => 'getSyncEnabled',
-        'since' => 'getSince'
+        'since' => 'getSince',
+        'locked_fields' => 'getLockedFields'
     ];
 
     /**
@@ -247,6 +253,7 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         $this->setIfExists('connected', $data ?? [], null);
         $this->setIfExists('sync_enabled', $data ?? [], null);
         $this->setIfExists('since', $data ?? [], null);
+        $this->setIfExists('locked_fields', $data ?? [], null);
     }
 
     /**
@@ -397,6 +404,33 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
             }
         }
         $this->container['since'] = $since;
+
+        return $this;
+    }
+
+    /**
+     * Gets locked_fields
+     *
+     * @return string[]|null
+     */
+    public function getLockedFields(): ?array
+    {
+        return $this->container['locked_fields'];
+    }
+
+    /**
+     * Sets locked_fields
+     *
+     * @param string[]|null $locked_fields Fields the channel will not let this listing change. **Airbnb only** — present on the `airbnb` entry and absent on every other channel, because no other channel has the concept.  Airbnb does not refuse a write to a locked field: the request returns 200, reports the field as locked, and applies nothing. So a write to one of these looks exactly like a write that worked. Read this before you let a user edit — it is here, rather than only on `GET /v1/channels/airbnb/listings/{id}`, because this is the endpoint a listing editor already calls.  Empty for a listing with nothing locked, and for one that has not synced since we began recording them — the two are not distinguished, because a caller acts the same way on both. This is what Airbnb last told us, not a promise: a lock can appear between syncs, which is why a publish result also reports `lockedFields`.
+     *
+     * @return $this
+     */
+    public function setLockedFields(?array $locked_fields): static
+    {
+        if (is_null($locked_fields)) {
+            throw new InvalidArgumentException('non-nullable locked_fields cannot be null');
+        }
+        $this->container['locked_fields'] = $locked_fields;
 
         return $this;
     }

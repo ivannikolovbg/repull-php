@@ -1,6 +1,6 @@
 <?php
 /**
- * ListingPublishResponse
+ * ListingAddressReadiness
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ListingPublishResponse Class Doc Comment
+ * ListingAddressReadiness Class Doc Comment
  *
+ * @description Whether one channel would accept this listing&#39;s postal address, answered WITHOUT attempting a publish.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ListingPublishResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingAddressReadiness implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class ListingPublishResponse implements ModelInterface, ArrayAccess, JsonSeriali
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ListingPublishResponse';
+    protected static string $openAPIModelName = 'ListingAddressReadiness';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,9 +60,9 @@ class ListingPublishResponse implements ModelInterface, ArrayAccess, JsonSeriali
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'listing_id' => 'string',
-        'channel' => 'string',
-        'result' => 'object'
+        'ready' => 'bool',
+        'missing' => 'string[]',
+        'have' => 'string'
     ];
 
     /**
@@ -70,9 +71,9 @@ class ListingPublishResponse implements ModelInterface, ArrayAccess, JsonSeriali
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'listing_id' => null,
-        'channel' => null,
-        'result' => null
+        'ready' => null,
+        'missing' => null,
+        'have' => null
     ];
 
     /**
@@ -81,9 +82,9 @@ class ListingPublishResponse implements ModelInterface, ArrayAccess, JsonSeriali
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'listing_id' => false,
-        'channel' => false,
-        'result' => false
+        'ready' => false,
+        'missing' => false,
+        'have' => false
     ];
 
     /**
@@ -162,9 +163,9 @@ class ListingPublishResponse implements ModelInterface, ArrayAccess, JsonSeriali
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'listing_id' => 'listingId',
-        'channel' => 'channel',
-        'result' => 'result'
+        'ready' => 'ready',
+        'missing' => 'missing',
+        'have' => 'have'
     ];
 
     /**
@@ -173,9 +174,9 @@ class ListingPublishResponse implements ModelInterface, ArrayAccess, JsonSeriali
      * @var array<string, string>
      */
     protected static array $setters = [
-        'listing_id' => 'setListingId',
-        'channel' => 'setChannel',
-        'result' => 'setResult'
+        'ready' => 'setReady',
+        'missing' => 'setMissing',
+        'have' => 'setHave'
     ];
 
     /**
@@ -184,9 +185,9 @@ class ListingPublishResponse implements ModelInterface, ArrayAccess, JsonSeriali
      * @var array<string, string>
      */
     protected static array $getters = [
-        'listing_id' => 'getListingId',
-        'channel' => 'getChannel',
-        'result' => 'getResult'
+        'ready' => 'getReady',
+        'missing' => 'getMissing',
+        'have' => 'getHave'
     ];
 
     /**
@@ -221,21 +222,6 @@ class ListingPublishResponse implements ModelInterface, ArrayAccess, JsonSeriali
         return self::$openAPIModelName;
     }
 
-    public const CHANNEL_AIRBNB = 'airbnb';
-    public const CHANNEL_BOOKING = 'booking';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getChannelAllowableValues()
-    {
-        return [
-            self::CHANNEL_AIRBNB,
-            self::CHANNEL_BOOKING,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -251,9 +237,9 @@ class ListingPublishResponse implements ModelInterface, ArrayAccess, JsonSeriali
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('listing_id', $data ?? [], null);
-        $this->setIfExists('channel', $data ?? [], null);
-        $this->setIfExists('result', $data ?? [], null);
+        $this->setIfExists('ready', $data ?? [], null);
+        $this->setIfExists('missing', $data ?? [], null);
+        $this->setIfExists('have', $data ?? [], null);
     }
 
     /**
@@ -281,15 +267,6 @@ class ListingPublishResponse implements ModelInterface, ArrayAccess, JsonSeriali
     {
         $invalidProperties = [];
 
-        $allowedValues = self::getChannelAllowableValues();
-        if (!is_null($this->container['channel']) && !in_array($this->container['channel'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'channel', must be one of '%s'",
-                $this->container['channel'],
-                implode("', '", $allowedValues)
-            );
-        }
-
         return $invalidProperties;
     }
 
@@ -303,83 +280,82 @@ class ListingPublishResponse implements ModelInterface, ArrayAccess, JsonSeriali
 
 
     /**
-     * Gets listing_id
+     * Gets ready
      *
-     * @return string|null
+     * @return bool|null
      */
-    public function getListingId(): ?string
+    public function getReady(): ?bool
     {
-        return $this->container['listing_id'];
+        return $this->container['ready'];
     }
 
     /**
-     * Sets listing_id
+     * Sets ready
      *
-     * @param string|null $listing_id listing_id
+     * @param bool|null $ready True when the address satisfies this channel's create preflight. False means a publish would be refused for the address alone.
      *
      * @return $this
      */
-    public function setListingId(?string $listing_id): static
+    public function setReady(?bool $ready): static
     {
-        if (is_null($listing_id)) {
-            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
+        if (is_null($ready)) {
+            throw new InvalidArgumentException('non-nullable ready cannot be null');
         }
-        $this->container['listing_id'] = $listing_id;
+        $this->container['ready'] = $ready;
 
         return $this;
     }
 
     /**
-     * Gets channel
+     * Gets missing
      *
-     * @return string|null
+     * @return string[]|null
      */
-    public function getChannel(): ?string
+    public function getMissing(): ?array
     {
-        return $this->container['channel'];
+        return $this->container['missing'];
     }
 
     /**
-     * Sets channel
+     * Sets missing
      *
-     * @param string|null $channel channel
+     * @param string[]|null $missing The address parts still needed, named as the REQUEST fields you send — `street`, `city`, `state`, `postalCode` — so the value can be acted on directly. Empty when `ready` is true.
      *
      * @return $this
      */
-    public function setChannel(?string $channel): static
+    public function setMissing(?array $missing): static
     {
-        if (is_null($channel)) {
-            throw new InvalidArgumentException('non-nullable channel cannot be null');
+        if (is_null($missing)) {
+            throw new InvalidArgumentException('non-nullable missing cannot be null');
         }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['channel'] = $channel;
+        $this->container['missing'] = $missing;
 
         return $this;
     }
 
     /**
-     * Gets result
+     * Gets have
      *
-     * @return object|null
+     * @return string|null
      */
-    public function getResult(): ?object
+    public function getHave(): ?string
     {
-        return $this->container['result'];
+        return $this->container['have'];
     }
 
     /**
-     * Sets result
+     * Sets have
      *
-     * @param object|null $result Channel-specific push result (sections pushed, errors, etc.)
+     * @param string|null $have The address as currently resolved, for debugging.
      *
      * @return $this
      */
-    public function setResult(?object $result): static
+    public function setHave(?string $have): static
     {
-        if (is_null($result)) {
-            throw new InvalidArgumentException('non-nullable result cannot be null');
+        if (is_null($have)) {
+            throw new InvalidArgumentException('non-nullable have cannot be null');
         }
-        $this->container['result'] = $result;
+        $this->container['have'] = $have;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * InquiryUpdatedPayload
+ * BookingPublishSectionError
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * InquiryUpdatedPayload Class Doc Comment
+ * BookingPublishSectionError Class Doc Comment
  *
- * @description Payload for &#x60;inquiry.updated&#x60;. The inquiry&#39;s status, dates, guest count or the reservation it became changed. &#x60;previousAttributes&#x60; holds only what moved, with prior values. Fires whether the host acted through the API, a connected app or the Airbnb app. An inquiry whose dates simply pass is &#x60;expired&#x60; in &#x60;GET /v1/inquiries&#x60; but fires no event unless the channel reports it.
+ * @description One section of a publish that did not reach Booking.com.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializable
+class BookingPublishSectionError implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'InquiryUpdatedPayload';
+    protected static string $openAPIModelName = 'BookingPublishSectionError';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,10 +60,9 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'object' => '\Repull\Model\InquiryWebhookObject',
-        'previous_attributes' => 'array<string,mixed>',
-        'occurred_at' => '\DateTime',
-        'revision' => '\DateTime'
+        'section' => 'string',
+        'message' => 'string',
+        'code' => 'string'
     ];
 
     /**
@@ -72,10 +71,9 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'object' => null,
-        'previous_attributes' => null,
-        'occurred_at' => 'date-time',
-        'revision' => 'date-time'
+        'section' => null,
+        'message' => null,
+        'code' => null
     ];
 
     /**
@@ -84,10 +82,9 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'object' => false,
-        'previous_attributes' => false,
-        'occurred_at' => false,
-        'revision' => true
+        'section' => false,
+        'message' => false,
+        'code' => false
     ];
 
     /**
@@ -166,10 +163,9 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'object' => 'object',
-        'previous_attributes' => 'previousAttributes',
-        'occurred_at' => 'occurredAt',
-        'revision' => 'revision'
+        'section' => 'section',
+        'message' => 'message',
+        'code' => 'code'
     ];
 
     /**
@@ -178,10 +174,9 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'object' => 'setObject',
-        'previous_attributes' => 'setPreviousAttributes',
-        'occurred_at' => 'setOccurredAt',
-        'revision' => 'setRevision'
+        'section' => 'setSection',
+        'message' => 'setMessage',
+        'code' => 'setCode'
     ];
 
     /**
@@ -190,10 +185,9 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'object' => 'getObject',
-        'previous_attributes' => 'getPreviousAttributes',
-        'occurred_at' => 'getOccurredAt',
-        'revision' => 'getRevision'
+        'section' => 'getSection',
+        'message' => 'getMessage',
+        'code' => 'getCode'
     ];
 
     /**
@@ -228,6 +222,21 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
         return self::$openAPIModelName;
     }
 
+    public const CODE_NO_CONTENT = 'no_content';
+    public const CODE_REJECTED = 'rejected';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getCodeAllowableValues()
+    {
+        return [
+            self::CODE_NO_CONTENT,
+            self::CODE_REJECTED,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -243,10 +252,9 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('object', $data ?? [], null);
-        $this->setIfExists('previous_attributes', $data ?? [], null);
-        $this->setIfExists('occurred_at', $data ?? [], null);
-        $this->setIfExists('revision', $data ?? [], null);
+        $this->setIfExists('section', $data ?? [], null);
+        $this->setIfExists('message', $data ?? [], null);
+        $this->setIfExists('code', $data ?? [], null);
     }
 
     /**
@@ -274,12 +282,24 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
     {
         $invalidProperties = [];
 
-        if ($this->container['object'] === null) {
-            $invalidProperties[] = "'object' can't be null";
+        if ($this->container['section'] === null) {
+            $invalidProperties[] = "'section' can't be null";
         }
-        if ($this->container['previous_attributes'] === null) {
-            $invalidProperties[] = "'previous_attributes' can't be null";
+        if ($this->container['message'] === null) {
+            $invalidProperties[] = "'message' can't be null";
         }
+        if ($this->container['code'] === null) {
+            $invalidProperties[] = "'code' can't be null";
+        }
+        $allowedValues = self::getCodeAllowableValues();
+        if (!is_null($this->container['code']) && !in_array($this->container['code'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'code', must be one of '%s'",
+                $this->container['code'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -293,116 +313,83 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets object
+     * Gets section
      *
-     * @return \Repull\Model\InquiryWebhookObject
+     * @return string
      */
-    public function getObject(): \Repull\Model\InquiryWebhookObject
+    public function getSection(): string
     {
-        return $this->container['object'];
+        return $this->container['section'];
     }
 
     /**
-     * Sets object
+     * Sets section
      *
-     * @param \Repull\Model\InquiryWebhookObject $object object
+     * @param string $section Which part of the listing this failure is about — e.g. `details`, `description`, `amenities`, `rooms`, `photos`, `pricing`.
      *
      * @return $this
      */
-    public function setObject(\Repull\Model\InquiryWebhookObject $object): static
+    public function setSection(string $section): static
     {
-        if (is_null($object)) {
-            throw new InvalidArgumentException('non-nullable object cannot be null');
+        if (is_null($section)) {
+            throw new InvalidArgumentException('non-nullable section cannot be null');
         }
-        $this->container['object'] = $object;
+        $this->container['section'] = $section;
 
         return $this;
     }
 
     /**
-     * Gets previous_attributes
+     * Gets message
      *
-     * @return array<string,mixed>
+     * @return string
      */
-    public function getPreviousAttributes(): array
+    public function getMessage(): string
     {
-        return $this->container['previous_attributes'];
+        return $this->container['message'];
     }
 
     /**
-     * Sets previous_attributes
+     * Sets message
      *
-     * @param array<string,mixed> $previous_attributes Keys of `object` that moved (`status`, `checkIn`, `checkOut`, `guests`, `reservationId`), mapped to their prior values.
+     * @param string $message Booking.com's own reason, verbatim, or ours when we refused to send an empty section.
      *
      * @return $this
      */
-    public function setPreviousAttributes(array $previous_attributes): static
+    public function setMessage(string $message): static
     {
-        if (is_null($previous_attributes)) {
-            throw new InvalidArgumentException('non-nullable previous_attributes cannot be null');
+        if (is_null($message)) {
+            throw new InvalidArgumentException('non-nullable message cannot be null');
         }
-        $this->container['previous_attributes'] = $previous_attributes;
+        $this->container['message'] = $message;
 
         return $this;
     }
 
     /**
-     * Gets occurred_at
+     * Gets code
      *
-     * @return \DateTime|null
+     * @return string
      */
-    public function getOccurredAt(): ?\DateTime
+    public function getCode(): string
     {
-        return $this->container['occurred_at'];
+        return $this->container['code'];
     }
 
     /**
-     * Sets occurred_at
+     * Sets code
      *
-     * @param \DateTime|null $occurred_at occurred_at
+     * @param string $code `no_content` — there was nothing canonical to send for this section; write the content, then publish again. `rejected` — Booking.com refused the section as sent; fix the content, or the property's Content API permissions, and publish again.  Airbnb's third code, `locked`, has no Booking.com counterpart and never appears here.
      *
      * @return $this
      */
-    public function setOccurredAt(?\DateTime $occurred_at): static
+    public function setCode(string $code): static
     {
-        if (is_null($occurred_at)) {
-            throw new InvalidArgumentException('non-nullable occurred_at cannot be null');
+        if (is_null($code)) {
+            throw new InvalidArgumentException('non-nullable code cannot be null');
         }
-        $this->container['occurred_at'] = $occurred_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets revision
-     *
-     * @return \DateTime|null
-     */
-    public function getRevision(): ?\DateTime
-    {
-        return $this->container['revision'];
-    }
-
-    /**
-     * Sets revision
-     *
-     * @param \DateTime|null $revision revision
-     *
-     * @return $this
-     */
-    public function setRevision(?\DateTime $revision): static
-    {
-        if (is_null($revision)) {
-            array_push($this->openAPINullablesSetToNull, 'revision');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('revision', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['revision'] = $revision;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['code'] = $code;
 
         return $this;
     }

@@ -114,6 +114,12 @@ class ListingsApi
         'setListingsStatus' => [
             'application/json',
         ],
+        'takeListingOffline' => [
+            'application/json',
+        ],
+        'takeListingOnline' => [
+            'application/json',
+        ],
         'updateListingActive' => [
             'application/json',
         ],
@@ -3381,7 +3387,7 @@ class ListingsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListingPublishAirbnbResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListingPublishAirbnbResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function publishListingToAirbnbWithHttpInfo(
         int $id,
@@ -3422,6 +3428,12 @@ class ListingsApi
                         $response,
                     );
                 case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 402:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -3471,6 +3483,14 @@ class ListingsApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 402:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -3711,19 +3731,23 @@ class ListingsApi
      *
      * Publish a listing to Booking.com
      *
-     * @param  int $id id (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
+     * @param  string|null $hotel_id Booking.com property to publish into, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;, accepted so this route reads the same as every other Booking listing-addressed route. The body wins when both are sent. (optional)
+     * @param  \Repull\Model\ListingPublishBookingRequest|null $listing_publish_booking_request listing_publish_booking_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['publishListingToBooking'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\ListingPublishResponse|\Repull\Model\Error
+     * @return \Repull\Model\ListingPublishBookingResponse|\Repull\Model\Error
      */
     public function publishListingToBooking(
         int $id,
+        ?string $hotel_id = null,
+        ?\Repull\Model\ListingPublishBookingRequest $listing_publish_booking_request = null,
         string $contentType = self::contentTypes['publishListingToBooking'][0]
-    ): \Repull\Model\ListingPublishResponse|\Repull\Model\Error
+    ): \Repull\Model\ListingPublishBookingResponse|\Repull\Model\Error
     {
-        list($response) = $this->publishListingToBookingWithHttpInfo($id, $contentType);
+        list($response) = $this->publishListingToBookingWithHttpInfo($id, $hotel_id, $listing_publish_booking_request, $contentType);
         return $response;
     }
 
@@ -3732,19 +3756,23 @@ class ListingsApi
      *
      * Publish a listing to Booking.com
      *
-     * @param  int $id (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
+     * @param  string|null $hotel_id Booking.com property to publish into, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;, accepted so this route reads the same as every other Booking listing-addressed route. The body wins when both are sent. (optional)
+     * @param  \Repull\Model\ListingPublishBookingRequest|null $listing_publish_booking_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['publishListingToBooking'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListingPublishResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListingPublishBookingResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function publishListingToBookingWithHttpInfo(
         int $id,
+        ?string $hotel_id = null,
+        ?\Repull\Model\ListingPublishBookingRequest $listing_publish_booking_request = null,
         string $contentType = self::contentTypes['publishListingToBooking'][0]
     ): array
     {
-        $request = $this->publishListingToBookingRequest($id, $contentType);
+        $request = $this->publishListingToBookingRequest($id, $hotel_id, $listing_publish_booking_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -3771,7 +3799,7 @@ class ListingsApi
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Repull\Model\ListingPublishResponse',
+                        '\Repull\Model\ListingPublishBookingResponse',
                         $request,
                         $response,
                     );
@@ -3781,7 +3809,25 @@ class ListingsApi
                         $request,
                         $response,
                     );
+                case 402:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
                 case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 409:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -3804,7 +3850,7 @@ class ListingsApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Repull\Model\ListingPublishResponse',
+                '\Repull\Model\ListingPublishBookingResponse',
                 $request,
                 $response,
             );
@@ -3813,7 +3859,7 @@ class ListingsApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Repull\Model\ListingPublishResponse',
+                        '\Repull\Model\ListingPublishBookingResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -3826,7 +3872,31 @@ class ListingsApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 402:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 409:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -3845,7 +3915,9 @@ class ListingsApi
      *
      * Publish a listing to Booking.com
      *
-     * @param  int $id (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
+     * @param  string|null $hotel_id Booking.com property to publish into, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;, accepted so this route reads the same as every other Booking listing-addressed route. The body wins when both are sent. (optional)
+     * @param  \Repull\Model\ListingPublishBookingRequest|null $listing_publish_booking_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['publishListingToBooking'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -3853,10 +3925,12 @@ class ListingsApi
      */
     public function publishListingToBookingAsync(
         int $id,
+        ?string $hotel_id = null,
+        ?\Repull\Model\ListingPublishBookingRequest $listing_publish_booking_request = null,
         string $contentType = self::contentTypes['publishListingToBooking'][0]
     ): PromiseInterface
     {
-        return $this->publishListingToBookingAsyncWithHttpInfo($id, $contentType)
+        return $this->publishListingToBookingAsyncWithHttpInfo($id, $hotel_id, $listing_publish_booking_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -3869,7 +3943,9 @@ class ListingsApi
      *
      * Publish a listing to Booking.com
      *
-     * @param  int $id (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
+     * @param  string|null $hotel_id Booking.com property to publish into, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;, accepted so this route reads the same as every other Booking listing-addressed route. The body wins when both are sent. (optional)
+     * @param  \Repull\Model\ListingPublishBookingRequest|null $listing_publish_booking_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['publishListingToBooking'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -3877,11 +3953,13 @@ class ListingsApi
      */
     public function publishListingToBookingAsyncWithHttpInfo(
         int $id,
+        ?string $hotel_id = null,
+        ?\Repull\Model\ListingPublishBookingRequest $listing_publish_booking_request = null,
         string $contentType = self::contentTypes['publishListingToBooking'][0]
     ): PromiseInterface
     {
-        $returnType = '\Repull\Model\ListingPublishResponse';
-        $request = $this->publishListingToBookingRequest($id, $contentType);
+        $returnType = '\Repull\Model\ListingPublishBookingResponse';
+        $request = $this->publishListingToBookingRequest($id, $hotel_id, $listing_publish_booking_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -3922,7 +4000,9 @@ class ListingsApi
     /**
      * Create request for operation 'publishListingToBooking'
      *
-     * @param  int $id (required)
+     * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
+     * @param  string|null $hotel_id Booking.com property to publish into, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;, accepted so this route reads the same as every other Booking listing-addressed route. The body wins when both are sent. (optional)
+     * @param  \Repull\Model\ListingPublishBookingRequest|null $listing_publish_booking_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['publishListingToBooking'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -3930,6 +4010,8 @@ class ListingsApi
      */
     public function publishListingToBookingRequest(
         int $id,
+        ?string $hotel_id = null,
+        ?\Repull\Model\ListingPublishBookingRequest $listing_publish_booking_request = null,
         string $contentType = self::contentTypes['publishListingToBooking'][0]
     ): Request
     {
@@ -3942,6 +4024,8 @@ class ListingsApi
         }
 
 
+
+
         $resourcePath = '/v1/listings/{id}/publish/booking';
         $formParams = [];
         $queryParams = [];
@@ -3949,6 +4033,15 @@ class ListingsApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $hotel_id,
+            'hotel_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
         // path params
@@ -3968,7 +4061,14 @@ class ListingsApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if (isset($listing_publish_booking_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($listing_publish_booking_request));
+            } else {
+                $httpBody = $listing_publish_booking_request;
+            }
+        } elseif (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -4052,7 +4152,7 @@ class ListingsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ListingPullResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ListingPullResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function pullListingFromAirbnbWithHttpInfo(
         int $id,
@@ -4116,6 +4216,12 @@ class ListingsApi
                         $response,
                     );
                 case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -4185,6 +4291,14 @@ class ListingsApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -4692,6 +4806,826 @@ class ListingsApi
                 $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($listing_status_batch_request));
             } else {
                 $httpBody = $listing_status_batch_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation takeListingOffline
+     *
+     * Take a listing off the market
+     *
+     * @param  int $id Repull listing id. (required)
+     * @param  string|null $hotel_id Booking.com property to act on, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;; the body wins when both are sent. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  \Repull\Model\ListingMarketStateRequest|null $listing_market_state_request listing_market_state_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['takeListingOffline'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\ListingMarketStateResponse|\Repull\Model\Error
+     */
+    public function takeListingOffline(
+        int $id,
+        ?string $hotel_id = null,
+        ?string $idempotency_key = null,
+        ?\Repull\Model\ListingMarketStateRequest $listing_market_state_request = null,
+        string $contentType = self::contentTypes['takeListingOffline'][0]
+    ): \Repull\Model\ListingMarketStateResponse|\Repull\Model\Error
+    {
+        list($response) = $this->takeListingOfflineWithHttpInfo($id, $hotel_id, $idempotency_key, $listing_market_state_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation takeListingOfflineWithHttpInfo
+     *
+     * Take a listing off the market
+     *
+     * @param  int $id Repull listing id. (required)
+     * @param  string|null $hotel_id Booking.com property to act on, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;; the body wins when both are sent. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  \Repull\Model\ListingMarketStateRequest|null $listing_market_state_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['takeListingOffline'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\ListingMarketStateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function takeListingOfflineWithHttpInfo(
+        int $id,
+        ?string $hotel_id = null,
+        ?string $idempotency_key = null,
+        ?\Repull\Model\ListingMarketStateRequest $listing_market_state_request = null,
+        string $contentType = self::contentTypes['takeListingOffline'][0]
+    ): array
+    {
+        $request = $this->takeListingOfflineRequest($id, $hotel_id, $idempotency_key, $listing_market_state_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\ListingMarketStateResponse',
+                        $request,
+                        $response,
+                    );
+                case 402:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\ListingMarketStateResponse',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\ListingMarketStateResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 402:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation takeListingOfflineAsync
+     *
+     * Take a listing off the market
+     *
+     * @param  int $id Repull listing id. (required)
+     * @param  string|null $hotel_id Booking.com property to act on, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;; the body wins when both are sent. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  \Repull\Model\ListingMarketStateRequest|null $listing_market_state_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['takeListingOffline'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function takeListingOfflineAsync(
+        int $id,
+        ?string $hotel_id = null,
+        ?string $idempotency_key = null,
+        ?\Repull\Model\ListingMarketStateRequest $listing_market_state_request = null,
+        string $contentType = self::contentTypes['takeListingOffline'][0]
+    ): PromiseInterface
+    {
+        return $this->takeListingOfflineAsyncWithHttpInfo($id, $hotel_id, $idempotency_key, $listing_market_state_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation takeListingOfflineAsyncWithHttpInfo
+     *
+     * Take a listing off the market
+     *
+     * @param  int $id Repull listing id. (required)
+     * @param  string|null $hotel_id Booking.com property to act on, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;; the body wins when both are sent. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  \Repull\Model\ListingMarketStateRequest|null $listing_market_state_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['takeListingOffline'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function takeListingOfflineAsyncWithHttpInfo(
+        int $id,
+        ?string $hotel_id = null,
+        ?string $idempotency_key = null,
+        ?\Repull\Model\ListingMarketStateRequest $listing_market_state_request = null,
+        string $contentType = self::contentTypes['takeListingOffline'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\ListingMarketStateResponse';
+        $request = $this->takeListingOfflineRequest($id, $hotel_id, $idempotency_key, $listing_market_state_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'takeListingOffline'
+     *
+     * @param  int $id Repull listing id. (required)
+     * @param  string|null $hotel_id Booking.com property to act on, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;; the body wins when both are sent. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  \Repull\Model\ListingMarketStateRequest|null $listing_market_state_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['takeListingOffline'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function takeListingOfflineRequest(
+        int $id,
+        ?string $hotel_id = null,
+        ?string $idempotency_key = null,
+        ?\Repull\Model\ListingMarketStateRequest $listing_market_state_request = null,
+        string $contentType = self::contentTypes['takeListingOffline'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling takeListingOffline'
+            );
+        }
+
+
+        if ($idempotency_key !== null && strlen($idempotency_key) > 255) {
+            throw new InvalidArgumentException('invalid length for "$idempotency_key" when calling ListingsApi.takeListingOffline, must be smaller than or equal to 255.');
+        }
+        
+
+
+        $resourcePath = '/v1/listings/{id}/offline';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $hotel_id,
+            'hotel_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+        // header params
+        if ($idempotency_key !== null) {
+            $headerParams['Idempotency-Key'] = ObjectSerializer::toHeaderValue($idempotency_key);
+        }
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($listing_market_state_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($listing_market_state_request));
+            } else {
+                $httpBody = $listing_market_state_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation takeListingOnline
+     *
+     * Put a listing back on the market
+     *
+     * @param  int $id Repull listing id. (required)
+     * @param  string|null $hotel_id Booking.com property to act on, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;; the body wins when both are sent. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  \Repull\Model\ListingMarketStateRequest|null $listing_market_state_request listing_market_state_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['takeListingOnline'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\ListingMarketStateResponse|\Repull\Model\Error
+     */
+    public function takeListingOnline(
+        int $id,
+        ?string $hotel_id = null,
+        ?string $idempotency_key = null,
+        ?\Repull\Model\ListingMarketStateRequest $listing_market_state_request = null,
+        string $contentType = self::contentTypes['takeListingOnline'][0]
+    ): \Repull\Model\ListingMarketStateResponse|\Repull\Model\Error
+    {
+        list($response) = $this->takeListingOnlineWithHttpInfo($id, $hotel_id, $idempotency_key, $listing_market_state_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation takeListingOnlineWithHttpInfo
+     *
+     * Put a listing back on the market
+     *
+     * @param  int $id Repull listing id. (required)
+     * @param  string|null $hotel_id Booking.com property to act on, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;; the body wins when both are sent. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  \Repull\Model\ListingMarketStateRequest|null $listing_market_state_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['takeListingOnline'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\ListingMarketStateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function takeListingOnlineWithHttpInfo(
+        int $id,
+        ?string $hotel_id = null,
+        ?string $idempotency_key = null,
+        ?\Repull\Model\ListingMarketStateRequest $listing_market_state_request = null,
+        string $contentType = self::contentTypes['takeListingOnline'][0]
+    ): array
+    {
+        $request = $this->takeListingOnlineRequest($id, $hotel_id, $idempotency_key, $listing_market_state_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\ListingMarketStateResponse',
+                        $request,
+                        $response,
+                    );
+                case 402:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\ListingMarketStateResponse',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\ListingMarketStateResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 402:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation takeListingOnlineAsync
+     *
+     * Put a listing back on the market
+     *
+     * @param  int $id Repull listing id. (required)
+     * @param  string|null $hotel_id Booking.com property to act on, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;; the body wins when both are sent. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  \Repull\Model\ListingMarketStateRequest|null $listing_market_state_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['takeListingOnline'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function takeListingOnlineAsync(
+        int $id,
+        ?string $hotel_id = null,
+        ?string $idempotency_key = null,
+        ?\Repull\Model\ListingMarketStateRequest $listing_market_state_request = null,
+        string $contentType = self::contentTypes['takeListingOnline'][0]
+    ): PromiseInterface
+    {
+        return $this->takeListingOnlineAsyncWithHttpInfo($id, $hotel_id, $idempotency_key, $listing_market_state_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation takeListingOnlineAsyncWithHttpInfo
+     *
+     * Put a listing back on the market
+     *
+     * @param  int $id Repull listing id. (required)
+     * @param  string|null $hotel_id Booking.com property to act on, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;; the body wins when both are sent. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  \Repull\Model\ListingMarketStateRequest|null $listing_market_state_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['takeListingOnline'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function takeListingOnlineAsyncWithHttpInfo(
+        int $id,
+        ?string $hotel_id = null,
+        ?string $idempotency_key = null,
+        ?\Repull\Model\ListingMarketStateRequest $listing_market_state_request = null,
+        string $contentType = self::contentTypes['takeListingOnline'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\ListingMarketStateResponse';
+        $request = $this->takeListingOnlineRequest($id, $hotel_id, $idempotency_key, $listing_market_state_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'takeListingOnline'
+     *
+     * @param  int $id Repull listing id. (required)
+     * @param  string|null $hotel_id Booking.com property to act on, for a listing mapped to more than one. The query-string spelling of the body&#39;s &#x60;hotelId&#x60;; the body wins when both are sent. (optional)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  \Repull\Model\ListingMarketStateRequest|null $listing_market_state_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['takeListingOnline'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function takeListingOnlineRequest(
+        int $id,
+        ?string $hotel_id = null,
+        ?string $idempotency_key = null,
+        ?\Repull\Model\ListingMarketStateRequest $listing_market_state_request = null,
+        string $contentType = self::contentTypes['takeListingOnline'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling takeListingOnline'
+            );
+        }
+
+
+        if ($idempotency_key !== null && strlen($idempotency_key) > 255) {
+            throw new InvalidArgumentException('invalid length for "$idempotency_key" when calling ListingsApi.takeListingOnline, must be smaller than or equal to 255.');
+        }
+        
+
+
+        $resourcePath = '/v1/listings/{id}/online';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $hotel_id,
+            'hotel_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+        // header params
+        if ($idempotency_key !== null) {
+            $headerParams['Idempotency-Key'] = ObjectSerializer::toHeaderValue($idempotency_key);
+        }
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($listing_market_state_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($listing_market_state_request));
+            } else {
+                $httpBody = $listing_market_state_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {

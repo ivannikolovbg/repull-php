@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * ListingCreateRequest Class Doc Comment
  *
- * @description Inputs for &#x60;POST /v1/listings&#x60;. Provide enough address detail (street + city + lat/lng) for downstream Airbnb publish to work.
+ * @description Inputs for &#x60;POST /v1/listings&#x60;.  **Address requirements — read this before you build the payload.** Publishing to Airbnb runs a create preflight that refuses the listing outright if the address is incomplete, and the refusal only surfaces later, at publish time. Airbnb requires &#x60;street&#x60; and &#x60;city&#x60; for every country. For a **US** property it additionally requires &#x60;state&#x60; and &#x60;postalCode&#x60;. Crucially, **omitting &#x60;countryCode&#x60; makes the listing behave as US**, so a listing created without a country needs &#x60;state&#x60; and &#x60;postalCode&#x60; too. Send &#x60;countryCode&#x60; explicitly for a non-US property. &#x60;lat&#x60;/&#x60;lng&#x60; alone are not enough — Airbnb rejects coordinates that are not backed by a full postal address. Use &#x60;GET /v1/listings/{id}/publish-status&#x60; to see which parts are still missing before you attempt a publish.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -62,9 +62,13 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     protected static array $openAPITypes = [
         'name' => 'string',
         'property_type' => 'string',
+        'room_type_category' => 'string',
+        'property_type_category' => 'string',
         'street' => 'string',
         'city' => 'string',
         'state' => 'string',
+        'postal_code' => 'string',
+        'zipcode' => 'string',
         'country_code' => 'string',
         'lat' => 'float',
         'lng' => 'float',
@@ -93,9 +97,13 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     protected static array $openAPIFormats = [
         'name' => null,
         'property_type' => null,
+        'room_type_category' => null,
+        'property_type_category' => null,
         'street' => null,
         'city' => null,
         'state' => null,
+        'postal_code' => null,
+        'zipcode' => null,
         'country_code' => null,
         'lat' => null,
         'lng' => null,
@@ -124,9 +132,13 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     protected static array $openAPINullables = [
         'name' => false,
         'property_type' => false,
+        'room_type_category' => false,
+        'property_type_category' => false,
         'street' => false,
         'city' => false,
         'state' => false,
+        'postal_code' => false,
+        'zipcode' => false,
         'country_code' => false,
         'lat' => false,
         'lng' => false,
@@ -225,9 +237,13 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     protected static array $attributeMap = [
         'name' => 'name',
         'property_type' => 'propertyType',
+        'room_type_category' => 'roomTypeCategory',
+        'property_type_category' => 'propertyTypeCategory',
         'street' => 'street',
         'city' => 'city',
         'state' => 'state',
+        'postal_code' => 'postalCode',
+        'zipcode' => 'zipcode',
         'country_code' => 'countryCode',
         'lat' => 'lat',
         'lng' => 'lng',
@@ -256,9 +272,13 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     protected static array $setters = [
         'name' => 'setName',
         'property_type' => 'setPropertyType',
+        'room_type_category' => 'setRoomTypeCategory',
+        'property_type_category' => 'setPropertyTypeCategory',
         'street' => 'setStreet',
         'city' => 'setCity',
         'state' => 'setState',
+        'postal_code' => 'setPostalCode',
+        'zipcode' => 'setZipcode',
         'country_code' => 'setCountryCode',
         'lat' => 'setLat',
         'lng' => 'setLng',
@@ -287,9 +307,13 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     protected static array $getters = [
         'name' => 'getName',
         'property_type' => 'getPropertyType',
+        'room_type_category' => 'getRoomTypeCategory',
+        'property_type_category' => 'getPropertyTypeCategory',
         'street' => 'getStreet',
         'city' => 'getCity',
         'state' => 'getState',
+        'postal_code' => 'getPostalCode',
+        'zipcode' => 'getZipcode',
         'country_code' => 'getCountryCode',
         'lat' => 'getLat',
         'lng' => 'getLng',
@@ -342,10 +366,29 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
         return self::$openAPIModelName;
     }
 
+    public const ROOM_TYPE_CATEGORY_ENTIRE_HOME = 'entire_home';
+    public const ROOM_TYPE_CATEGORY_PRIVATE_ROOM = 'private_room';
+    public const ROOM_TYPE_CATEGORY_SHARED_ROOM = 'shared_room';
+    public const ROOM_TYPE_CATEGORY_HOTEL_ROOM = 'hotel_room';
     public const CANCELLATION_POLICY_FLEXIBLE = 'flexible';
     public const CANCELLATION_POLICY_MODERATE = 'moderate';
     public const CANCELLATION_POLICY_STRICT = 'strict';
     public const CANCELLATION_POLICY_SUPER_STRICT = 'super_strict';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getRoomTypeCategoryAllowableValues()
+    {
+        return [
+            self::ROOM_TYPE_CATEGORY_ENTIRE_HOME,
+            self::ROOM_TYPE_CATEGORY_PRIVATE_ROOM,
+            self::ROOM_TYPE_CATEGORY_SHARED_ROOM,
+            self::ROOM_TYPE_CATEGORY_HOTEL_ROOM,
+        ];
+    }
 
     /**
      * Gets allowable values of the enum
@@ -378,9 +421,13 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     {
         $this->setIfExists('name', $data ?? [], null);
         $this->setIfExists('property_type', $data ?? [], null);
+        $this->setIfExists('room_type_category', $data ?? [], null);
+        $this->setIfExists('property_type_category', $data ?? [], null);
         $this->setIfExists('street', $data ?? [], null);
         $this->setIfExists('city', $data ?? [], null);
         $this->setIfExists('state', $data ?? [], null);
+        $this->setIfExists('postal_code', $data ?? [], null);
+        $this->setIfExists('zipcode', $data ?? [], null);
         $this->setIfExists('country_code', $data ?? [], null);
         $this->setIfExists('lat', $data ?? [], null);
         $this->setIfExists('lng', $data ?? [], null);
@@ -429,6 +476,15 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
         if ($this->container['name'] === null) {
             $invalidProperties[] = "'name' can't be null";
         }
+        $allowedValues = self::getRoomTypeCategoryAllowableValues();
+        if (!is_null($this->container['room_type_category']) && !in_array($this->container['room_type_category'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'room_type_category', must be one of '%s'",
+                $this->container['room_type_category'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         $allowedValues = self::getCancellationPolicyAllowableValues();
         if (!is_null($this->container['cancellation_policy']) && !in_array($this->container['cancellation_policy'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -505,6 +561,61 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     }
 
     /**
+     * Gets room_type_category
+     *
+     * @return string|null
+     */
+    public function getRoomTypeCategory(): ?string
+    {
+        return $this->container['room_type_category'];
+    }
+
+    /**
+     * Sets room_type_category
+     *
+     * @param string|null $room_type_category What the guest actually gets. Airbnb refuses to activate a listing that has not stated one, answering \"Please specify a valid room type\" — which reads like a beds problem and is not. It is never defaulted: most listings are an entire home, but hundreds are a private or hotel room, and publishing one of those as an entire home is a false claim about someone's property. Settable later with `PUT /v1/listings/{id}/content` under `details`.
+     *
+     * @return $this
+     */
+    public function setRoomTypeCategory(?string $room_type_category): static
+    {
+        if (is_null($room_type_category)) {
+            throw new InvalidArgumentException('non-nullable room_type_category cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['room_type_category'] = $room_type_category;
+
+        return $this;
+    }
+
+    /**
+     * Gets property_type_category
+     *
+     * @return string|null
+     */
+    public function getPropertyTypeCategory(): ?string
+    {
+        return $this->container['property_type_category'];
+    }
+
+    /**
+     * Sets property_type_category
+     *
+     * @param string|null $property_type_category Airbnb's finer property-type category, when you know it. Optional.
+     *
+     * @return $this
+     */
+    public function setPropertyTypeCategory(?string $property_type_category): static
+    {
+        if (is_null($property_type_category)) {
+            throw new InvalidArgumentException('non-nullable property_type_category cannot be null');
+        }
+        $this->container['property_type_category'] = $property_type_category;
+
+        return $this;
+    }
+
+    /**
      * Gets street
      *
      * @return string|null
@@ -517,7 +628,7 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     /**
      * Sets street
      *
-     * @param string|null $street street
+     * @param string|null $street Street address including the number. Required by Airbnb for every country — a publish is refused without it.
      *
      * @return $this
      */
@@ -544,7 +655,7 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     /**
      * Sets city
      *
-     * @param string|null $city city
+     * @param string|null $city City / town. Required by Airbnb for every country — a publish is refused without it.
      *
      * @return $this
      */
@@ -571,7 +682,7 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     /**
      * Sets state
      *
-     * @param string|null $state state
+     * @param string|null $state State, province or region. **Required for a US property**, and a listing with no `countryCode` counts as US. Optional elsewhere, but stored and used wherever the channel carries it.
      *
      * @return $this
      */
@@ -581,6 +692,60 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
             throw new InvalidArgumentException('non-nullable state cannot be null');
         }
         $this->container['state'] = $state;
+
+        return $this;
+    }
+
+    /**
+     * Gets postal_code
+     *
+     * @return string|null
+     */
+    public function getPostalCode(): ?string
+    {
+        return $this->container['postal_code'];
+    }
+
+    /**
+     * Sets postal_code
+     *
+     * @param string|null $postal_code Postal code — ZIP in the US, postcode in the UK, and so on. **Required for a US property**, and a listing with no `countryCode` counts as US. Send the complete code: Booking.com rejects a partial postcode such as `SW6` where the full value is `SW6 1EP`. Alias: `zipcode`.
+     *
+     * @return $this
+     */
+    public function setPostalCode(?string $postal_code): static
+    {
+        if (is_null($postal_code)) {
+            throw new InvalidArgumentException('non-nullable postal_code cannot be null');
+        }
+        $this->container['postal_code'] = $postal_code;
+
+        return $this;
+    }
+
+    /**
+     * Gets zipcode
+     *
+     * @return string|null
+     */
+    public function getZipcode(): ?string
+    {
+        return $this->container['zipcode'];
+    }
+
+    /**
+     * Sets zipcode
+     *
+     * @param string|null $zipcode Alias for `postalCode`, accepted because it is the field name on the Airbnb mirror. `postalCode` wins if you send both. Prefer `postalCode` — the field holds non-US postcodes too.
+     *
+     * @return $this
+     */
+    public function setZipcode(?string $zipcode): static
+    {
+        if (is_null($zipcode)) {
+            throw new InvalidArgumentException('non-nullable zipcode cannot be null');
+        }
+        $this->container['zipcode'] = $zipcode;
 
         return $this;
     }
@@ -598,7 +763,7 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     /**
      * Sets country_code
      *
-     * @param string|null $country_code country_code
+     * @param string|null $country_code ISO-3166 alpha-2 country code. **Send this for any non-US property.** Omitting it does not mean \"unknown\" — the publish path treats a listing with no country as US, which then requires `state` and `postalCode` and will refuse the listing when they are absent.
      *
      * @return $this
      */
@@ -625,7 +790,7 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     /**
      * Sets lat
      *
-     * @param float|null $lat lat
+     * @param float|null $lat Latitude. Useful for map search, but never a substitute for the postal address — Airbnb rejects coordinates it cannot reconcile with a full address.
      *
      * @return $this
      */
@@ -652,7 +817,7 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     /**
      * Sets lng
      *
-     * @param float|null $lng lng
+     * @param float|null $lng Longitude. See `lat`.
      *
      * @return $this
      */

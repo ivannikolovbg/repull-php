@@ -1,6 +1,6 @@
 <?php
 /**
- * InquiryUpdatedPayload
+ * ChannelMarketStateItem
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * InquiryUpdatedPayload Class Doc Comment
+ * ChannelMarketStateItem Class Doc Comment
  *
- * @description Payload for &#x60;inquiry.updated&#x60;. The inquiry&#39;s status, dates, guest count or the reservation it became changed. &#x60;previousAttributes&#x60; holds only what moved, with prior values. Fires whether the host acted through the API, a connected app or the Airbnb app. An inquiry whose dates simply pass is &#x60;expired&#x60; in &#x60;GET /v1/inquiries&#x60; but fires no event unless the channel reports it.
+ * @description What happened on ONE channel item — one Airbnb connection, or one Booking.com property. A listing can carry several Airbnb connections (a re-list, or a move between host accounts) and each gets its own entry.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializable
+class ChannelMarketStateItem implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'InquiryUpdatedPayload';
+    protected static string $openAPIModelName = 'ChannelMarketStateItem';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,10 +60,16 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'object' => '\Repull\Model\InquiryWebhookObject',
-        'previous_attributes' => 'array<string,mixed>',
-        'occurred_at' => '\DateTime',
-        'revision' => '\DateTime'
+        'channel' => 'string',
+        'state' => 'string',
+        'ok' => 'bool',
+        'connection_id' => 'string',
+        'hotel_id' => 'string',
+        'code' => 'string',
+        'previous_code' => 'string',
+        'message' => 'string',
+        'fix' => 'string',
+        'verified' => 'bool'
     ];
 
     /**
@@ -72,10 +78,16 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'object' => null,
-        'previous_attributes' => null,
-        'occurred_at' => 'date-time',
-        'revision' => 'date-time'
+        'channel' => null,
+        'state' => null,
+        'ok' => null,
+        'connection_id' => null,
+        'hotel_id' => null,
+        'code' => null,
+        'previous_code' => null,
+        'message' => null,
+        'fix' => null,
+        'verified' => null
     ];
 
     /**
@@ -84,10 +96,16 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'object' => false,
-        'previous_attributes' => false,
-        'occurred_at' => false,
-        'revision' => true
+        'channel' => false,
+        'state' => false,
+        'ok' => false,
+        'connection_id' => true,
+        'hotel_id' => true,
+        'code' => false,
+        'previous_code' => false,
+        'message' => false,
+        'fix' => false,
+        'verified' => false
     ];
 
     /**
@@ -166,10 +184,16 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'object' => 'object',
-        'previous_attributes' => 'previousAttributes',
-        'occurred_at' => 'occurredAt',
-        'revision' => 'revision'
+        'channel' => 'channel',
+        'state' => 'state',
+        'ok' => 'ok',
+        'connection_id' => 'connectionId',
+        'hotel_id' => 'hotelId',
+        'code' => 'code',
+        'previous_code' => 'previousCode',
+        'message' => 'message',
+        'fix' => 'fix',
+        'verified' => 'verified'
     ];
 
     /**
@@ -178,10 +202,16 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'object' => 'setObject',
-        'previous_attributes' => 'setPreviousAttributes',
-        'occurred_at' => 'setOccurredAt',
-        'revision' => 'setRevision'
+        'channel' => 'setChannel',
+        'state' => 'setState',
+        'ok' => 'setOk',
+        'connection_id' => 'setConnectionId',
+        'hotel_id' => 'setHotelId',
+        'code' => 'setCode',
+        'previous_code' => 'setPreviousCode',
+        'message' => 'setMessage',
+        'fix' => 'setFix',
+        'verified' => 'setVerified'
     ];
 
     /**
@@ -190,10 +220,16 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'object' => 'getObject',
-        'previous_attributes' => 'getPreviousAttributes',
-        'occurred_at' => 'getOccurredAt',
-        'revision' => 'getRevision'
+        'channel' => 'getChannel',
+        'state' => 'getState',
+        'ok' => 'getOk',
+        'connection_id' => 'getConnectionId',
+        'hotel_id' => 'getHotelId',
+        'code' => 'getCode',
+        'previous_code' => 'getPreviousCode',
+        'message' => 'getMessage',
+        'fix' => 'getFix',
+        'verified' => 'getVerified'
     ];
 
     /**
@@ -228,6 +264,38 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
         return self::$openAPIModelName;
     }
 
+    public const CHANNEL_AIRBNB = 'airbnb';
+    public const CHANNEL_BOOKING = 'booking';
+    public const STATE_ONLINE = 'online';
+    public const STATE_OFFLINE = 'offline';
+    public const STATE_UNCHANGED = 'unchanged';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getChannelAllowableValues()
+    {
+        return [
+            self::CHANNEL_AIRBNB,
+            self::CHANNEL_BOOKING,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getStateAllowableValues()
+    {
+        return [
+            self::STATE_ONLINE,
+            self::STATE_OFFLINE,
+            self::STATE_UNCHANGED,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -243,10 +311,16 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('object', $data ?? [], null);
-        $this->setIfExists('previous_attributes', $data ?? [], null);
-        $this->setIfExists('occurred_at', $data ?? [], null);
-        $this->setIfExists('revision', $data ?? [], null);
+        $this->setIfExists('channel', $data ?? [], null);
+        $this->setIfExists('state', $data ?? [], null);
+        $this->setIfExists('ok', $data ?? [], null);
+        $this->setIfExists('connection_id', $data ?? [], null);
+        $this->setIfExists('hotel_id', $data ?? [], null);
+        $this->setIfExists('code', $data ?? [], null);
+        $this->setIfExists('previous_code', $data ?? [], null);
+        $this->setIfExists('message', $data ?? [], null);
+        $this->setIfExists('fix', $data ?? [], null);
+        $this->setIfExists('verified', $data ?? [], null);
     }
 
     /**
@@ -274,11 +348,32 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
     {
         $invalidProperties = [];
 
-        if ($this->container['object'] === null) {
-            $invalidProperties[] = "'object' can't be null";
+        if ($this->container['channel'] === null) {
+            $invalidProperties[] = "'channel' can't be null";
         }
-        if ($this->container['previous_attributes'] === null) {
-            $invalidProperties[] = "'previous_attributes' can't be null";
+        $allowedValues = self::getChannelAllowableValues();
+        if (!is_null($this->container['channel']) && !in_array($this->container['channel'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'channel', must be one of '%s'",
+                $this->container['channel'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        if ($this->container['state'] === null) {
+            $invalidProperties[] = "'state' can't be null";
+        }
+        $allowedValues = self::getStateAllowableValues();
+        if (!is_null($this->container['state']) && !in_array($this->container['state'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'state', must be one of '%s'",
+                $this->container['state'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        if ($this->container['ok'] === null) {
+            $invalidProperties[] = "'ok' can't be null";
         }
         return $invalidProperties;
     }
@@ -293,116 +388,289 @@ class InquiryUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets object
+     * Gets channel
      *
-     * @return \Repull\Model\InquiryWebhookObject
+     * @return string
      */
-    public function getObject(): \Repull\Model\InquiryWebhookObject
+    public function getChannel(): string
     {
-        return $this->container['object'];
+        return $this->container['channel'];
     }
 
     /**
-     * Sets object
+     * Sets channel
      *
-     * @param \Repull\Model\InquiryWebhookObject $object object
+     * @param string $channel channel
      *
      * @return $this
      */
-    public function setObject(\Repull\Model\InquiryWebhookObject $object): static
+    public function setChannel(string $channel): static
     {
-        if (is_null($object)) {
-            throw new InvalidArgumentException('non-nullable object cannot be null');
+        if (is_null($channel)) {
+            throw new InvalidArgumentException('non-nullable channel cannot be null');
         }
-        $this->container['object'] = $object;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['channel'] = $channel;
 
         return $this;
     }
 
     /**
-     * Gets previous_attributes
+     * Gets state
      *
-     * @return array<string,mixed>
+     * @return string
      */
-    public function getPreviousAttributes(): array
+    public function getState(): string
     {
-        return $this->container['previous_attributes'];
+        return $this->container['state'];
     }
 
     /**
-     * Sets previous_attributes
+     * Sets state
      *
-     * @param array<string,mixed> $previous_attributes Keys of `object` that moved (`status`, `checkIn`, `checkOut`, `guests`, `reservationId`), mapped to their prior values.
+     * @param string $state **What is now true of this item**, not what you asked for.  `offline` — it is off the market. `online` — it is back on. `unchanged` — nothing was sent, or what was sent did not take; `code` and `message` say why.  `unchanged` never means \"it was already like that\": it means we did not put it there, and it is still in whatever state it was in before the call.
      *
      * @return $this
      */
-    public function setPreviousAttributes(array $previous_attributes): static
+    public function setState(string $state): static
     {
-        if (is_null($previous_attributes)) {
-            throw new InvalidArgumentException('non-nullable previous_attributes cannot be null');
+        if (is_null($state)) {
+            throw new InvalidArgumentException('non-nullable state cannot be null');
         }
-        $this->container['previous_attributes'] = $previous_attributes;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['state'] = $state;
 
         return $this;
     }
 
     /**
-     * Gets occurred_at
+     * Gets ok
      *
-     * @return \DateTime|null
+     * @return bool
      */
-    public function getOccurredAt(): ?\DateTime
+    public function getOk(): bool
     {
-        return $this->container['occurred_at'];
+        return $this->container['ok'];
     }
 
     /**
-     * Sets occurred_at
+     * Sets ok
      *
-     * @param \DateTime|null $occurred_at occurred_at
+     * @param bool $ok True only when the channel confirmed the change.
      *
      * @return $this
      */
-    public function setOccurredAt(?\DateTime $occurred_at): static
+    public function setOk(bool $ok): static
     {
-        if (is_null($occurred_at)) {
-            throw new InvalidArgumentException('non-nullable occurred_at cannot be null');
+        if (is_null($ok)) {
+            throw new InvalidArgumentException('non-nullable ok cannot be null');
         }
-        $this->container['occurred_at'] = $occurred_at;
+        $this->container['ok'] = $ok;
 
         return $this;
     }
 
     /**
-     * Gets revision
+     * Gets connection_id
      *
-     * @return \DateTime|null
+     * @return string|null
      */
-    public function getRevision(): ?\DateTime
+    public function getConnectionId(): ?string
     {
-        return $this->container['revision'];
+        return $this->container['connection_id'];
     }
 
     /**
-     * Sets revision
+     * Sets connection_id
      *
-     * @param \DateTime|null $revision revision
+     * @param string|null $connection_id Airbnb connection row id — the `id` from `GET /v1/channels/airbnb/listings/{id}`. Present on Airbnb items.
      *
      * @return $this
      */
-    public function setRevision(?\DateTime $revision): static
+    public function setConnectionId(?string $connection_id): static
     {
-        if (is_null($revision)) {
-            array_push($this->openAPINullablesSetToNull, 'revision');
+        if (is_null($connection_id)) {
+            array_push($this->openAPINullablesSetToNull, 'connection_id');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('revision', $nullablesSetToNull);
+            $index = array_search('connection_id', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['revision'] = $revision;
+        $this->container['connection_id'] = $connection_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets hotel_id
+     *
+     * @return string|null
+     */
+    public function getHotelId(): ?string
+    {
+        return $this->container['hotel_id'];
+    }
+
+    /**
+     * Sets hotel_id
+     *
+     * @param string|null $hotel_id The Booking.com property acted on. Present on Booking.com items; null when the property could not be resolved.
+     *
+     * @return $this
+     */
+    public function setHotelId(?string $hotel_id): static
+    {
+        if (is_null($hotel_id)) {
+            array_push($this->openAPINullablesSetToNull, 'hotel_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('hotel_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['hotel_id'] = $hotel_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets code
+     *
+     * @return string|null
+     */
+    public function getCode(): ?string
+    {
+        return $this->container['code'];
+    }
+
+    /**
+     * Sets code
+     *
+     * @param string|null $code Error code when `ok` is false — the SAME code the channel-specific endpoint returns for this failure, so one vocabulary covers both surfaces. Absent when `ok` is true.  The channel codes come in pairs, and the pair is the retryable split — the most useful bit in the whole item:  - `airbnb_rejected` / `booking_rejected` — the channel refused the request AS SENT. `message` carries its own reason. Correct it and send again; resending the same thing is refused again. - `airbnb_error` / `booking_error` — the channel did not complete the request (outage, timeout, server error). Nothing about the request needs to change: retry with backoff.  Plus `ambiguous_booking_mapping` (name the property with `hotelId`) and `payment_required` (a billing refusal, which keeps its own code rather than being buried under a channel one).
+     *
+     * @return $this
+     */
+    public function setCode(?string $code): static
+    {
+        if (is_null($code)) {
+            throw new InvalidArgumentException('non-nullable code cannot be null');
+        }
+        $this->container['code'] = $code;
+
+        return $this;
+    }
+
+    /**
+     * Gets previous_code
+     *
+     * @return string|null
+     * @deprecated
+     */
+    public function getPreviousCode(): ?string
+    {
+        return $this->container['previous_code'];
+    }
+
+    /**
+     * Sets previous_code
+     *
+     * @param string|null $previous_code The `code` this item used to carry, for callers still branching on the old string. A migration aid with a deprecation window — **`code` is canonical.**  This fan-out reaches Airbnb through an internal hop that flattens a refusal into its own 500, so an unambiguous Airbnb 400 (\"Please specify a valid room type\") was reported as `airbnb_error` — whose published advice is to retry with backoff, forever, for something Airbnb will never accept. It now reads Airbnb's real status and answers `airbnb_rejected`, and the classification covers the whole 4xx range rather than only `400`. Items whose code changed carry `previousCode`. **Removed in v2.**
+     *
+     * @return $this
+     * @deprecated
+     */
+    public function setPreviousCode(?string $previous_code): static
+    {
+        if (is_null($previous_code)) {
+            throw new InvalidArgumentException('non-nullable previous_code cannot be null');
+        }
+        $this->container['previous_code'] = $previous_code;
+
+        return $this;
+    }
+
+    /**
+     * Gets message
+     *
+     * @return string|null
+     */
+    public function getMessage(): ?string
+    {
+        return $this->container['message'];
+    }
+
+    /**
+     * Sets message
+     *
+     * @param string|null $message The channel's own reason, verbatim. Absent when `ok` is true.
+     *
+     * @return $this
+     */
+    public function setMessage(?string $message): static
+    {
+        if (is_null($message)) {
+            throw new InvalidArgumentException('non-nullable message cannot be null');
+        }
+        $this->container['message'] = $message;
+
+        return $this;
+    }
+
+    /**
+     * Gets fix
+     *
+     * @return string|null
+     */
+    public function getFix(): ?string
+    {
+        return $this->container['fix'];
+    }
+
+    /**
+     * Sets fix
+     *
+     * @param string|null $fix What to do about it, phrased for the direction you asked for — \"still live and taking bookings\" and \"still down\" call for different reactions. Absent when `ok` is true.
+     *
+     * @return $this
+     */
+    public function setFix(?string $fix): static
+    {
+        if (is_null($fix)) {
+            throw new InvalidArgumentException('non-nullable fix cannot be null');
+        }
+        $this->container['fix'] = $fix;
+
+        return $this;
+    }
+
+    /**
+     * Gets verified
+     *
+     * @return bool|null
+     */
+    public function getVerified(): ?bool
+    {
+        return $this->container['verified'];
+    }
+
+    /**
+     * Sets verified
+     *
+     * @param bool|null $verified Airbnb only, and only when going offline: the listing was READ BACK after the deactivation and confirmed down. Airbnb accepts a deactivation and leaves some listings live, so \"we sent the request\" is a weaker claim than this one and is never reported as success.
+     *
+     * @return $this
+     */
+    public function setVerified(?bool $verified): static
+    {
+        if (is_null($verified)) {
+            throw new InvalidArgumentException('non-nullable verified cannot be null');
+        }
+        $this->container['verified'] = $verified;
 
         return $this;
     }
