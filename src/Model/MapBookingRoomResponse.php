@@ -1,6 +1,6 @@
 <?php
 /**
- * ListingContentUpdateRequestPricing
+ * MapBookingRoomResponse
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ListingContentUpdateRequestPricing Class Doc Comment
+ * MapBookingRoomResponse Class Doc Comment
  *
- * @description The listing&#39;s standing rates. Partial like every other section: only the fields you send are written, and &#x60;null&#x60; clears one.  Changing &#x60;defaultDailyPrice&#x60; or &#x60;weekendPrice&#x60; also moves the nights on the calendar that still carry the old rate and were written by us — a night you or a channel priced yourself is never touched, and neither is a blocked or reserved one. So a price change reaches the calendar without overwriting anyone&#39;s work.  This is still a local write. Publish to send the new rates to a channel.
+ * @description Id fields are strings (API-wide convention — bigint ids are stringified to avoid 53-bit JS-number precision loss).
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ListingContentUpdateRequestPricing implements ModelInterface, ArrayAccess, JsonSerializable
+class MapBookingRoomResponse implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class ListingContentUpdateRequestPricing implements ModelInterface, ArrayAccess,
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ListingContentUpdateRequest_pricing';
+    protected static string $openAPIModelName = 'MapBookingRoomResponse';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,15 +60,16 @@ class ListingContentUpdateRequestPricing implements ModelInterface, ArrayAccess,
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'default_daily_price' => 'float',
-        'weekend_price' => 'float',
-        'cleaning_fee' => 'float',
-        'price_per_extra_guest' => 'float',
-        'security_deposit' => 'float',
-        'weekly_discount' => 'float',
-        'monthly_discount' => 'float',
-        'guests_included' => 'int',
-        'currency' => 'string'
+        'success' => 'bool',
+        'already_mapped' => 'bool',
+        'room_booking_id' => 'string',
+        'listing_id' => 'string',
+        'previous_listing_id' => 'string',
+        'hotel_id' => 'string',
+        'room_id' => 'string',
+        'room_name' => 'string',
+        'platform_link_id' => 'string',
+        'reservations_imported' => 'int'
     ];
 
     /**
@@ -77,15 +78,16 @@ class ListingContentUpdateRequestPricing implements ModelInterface, ArrayAccess,
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'default_daily_price' => null,
-        'weekend_price' => null,
-        'cleaning_fee' => null,
-        'price_per_extra_guest' => null,
-        'security_deposit' => null,
-        'weekly_discount' => null,
-        'monthly_discount' => null,
-        'guests_included' => null,
-        'currency' => null
+        'success' => null,
+        'already_mapped' => null,
+        'room_booking_id' => null,
+        'listing_id' => null,
+        'previous_listing_id' => null,
+        'hotel_id' => null,
+        'room_id' => null,
+        'room_name' => null,
+        'platform_link_id' => null,
+        'reservations_imported' => null
     ];
 
     /**
@@ -94,15 +96,16 @@ class ListingContentUpdateRequestPricing implements ModelInterface, ArrayAccess,
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'default_daily_price' => true,
-        'weekend_price' => true,
-        'cleaning_fee' => true,
-        'price_per_extra_guest' => true,
-        'security_deposit' => true,
-        'weekly_discount' => true,
-        'monthly_discount' => true,
-        'guests_included' => true,
-        'currency' => true
+        'success' => false,
+        'already_mapped' => false,
+        'room_booking_id' => true,
+        'listing_id' => true,
+        'previous_listing_id' => true,
+        'hotel_id' => false,
+        'room_id' => false,
+        'room_name' => true,
+        'platform_link_id' => true,
+        'reservations_imported' => true
     ];
 
     /**
@@ -181,15 +184,16 @@ class ListingContentUpdateRequestPricing implements ModelInterface, ArrayAccess,
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'default_daily_price' => 'defaultDailyPrice',
-        'weekend_price' => 'weekendPrice',
-        'cleaning_fee' => 'cleaningFee',
-        'price_per_extra_guest' => 'pricePerExtraGuest',
-        'security_deposit' => 'securityDeposit',
-        'weekly_discount' => 'weeklyDiscount',
-        'monthly_discount' => 'monthlyDiscount',
-        'guests_included' => 'guestsIncluded',
-        'currency' => 'currency'
+        'success' => 'success',
+        'already_mapped' => 'alreadyMapped',
+        'room_booking_id' => 'roomBookingId',
+        'listing_id' => 'listingId',
+        'previous_listing_id' => 'previousListingId',
+        'hotel_id' => 'hotelId',
+        'room_id' => 'roomId',
+        'room_name' => 'roomName',
+        'platform_link_id' => 'platformLinkId',
+        'reservations_imported' => 'reservationsImported'
     ];
 
     /**
@@ -198,15 +202,16 @@ class ListingContentUpdateRequestPricing implements ModelInterface, ArrayAccess,
      * @var array<string, string>
      */
     protected static array $setters = [
-        'default_daily_price' => 'setDefaultDailyPrice',
-        'weekend_price' => 'setWeekendPrice',
-        'cleaning_fee' => 'setCleaningFee',
-        'price_per_extra_guest' => 'setPricePerExtraGuest',
-        'security_deposit' => 'setSecurityDeposit',
-        'weekly_discount' => 'setWeeklyDiscount',
-        'monthly_discount' => 'setMonthlyDiscount',
-        'guests_included' => 'setGuestsIncluded',
-        'currency' => 'setCurrency'
+        'success' => 'setSuccess',
+        'already_mapped' => 'setAlreadyMapped',
+        'room_booking_id' => 'setRoomBookingId',
+        'listing_id' => 'setListingId',
+        'previous_listing_id' => 'setPreviousListingId',
+        'hotel_id' => 'setHotelId',
+        'room_id' => 'setRoomId',
+        'room_name' => 'setRoomName',
+        'platform_link_id' => 'setPlatformLinkId',
+        'reservations_imported' => 'setReservationsImported'
     ];
 
     /**
@@ -215,15 +220,16 @@ class ListingContentUpdateRequestPricing implements ModelInterface, ArrayAccess,
      * @var array<string, string>
      */
     protected static array $getters = [
-        'default_daily_price' => 'getDefaultDailyPrice',
-        'weekend_price' => 'getWeekendPrice',
-        'cleaning_fee' => 'getCleaningFee',
-        'price_per_extra_guest' => 'getPricePerExtraGuest',
-        'security_deposit' => 'getSecurityDeposit',
-        'weekly_discount' => 'getWeeklyDiscount',
-        'monthly_discount' => 'getMonthlyDiscount',
-        'guests_included' => 'getGuestsIncluded',
-        'currency' => 'getCurrency'
+        'success' => 'getSuccess',
+        'already_mapped' => 'getAlreadyMapped',
+        'room_booking_id' => 'getRoomBookingId',
+        'listing_id' => 'getListingId',
+        'previous_listing_id' => 'getPreviousListingId',
+        'hotel_id' => 'getHotelId',
+        'room_id' => 'getRoomId',
+        'room_name' => 'getRoomName',
+        'platform_link_id' => 'getPlatformLinkId',
+        'reservations_imported' => 'getReservationsImported'
     ];
 
     /**
@@ -273,15 +279,16 @@ class ListingContentUpdateRequestPricing implements ModelInterface, ArrayAccess,
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('default_daily_price', $data ?? [], null);
-        $this->setIfExists('weekend_price', $data ?? [], null);
-        $this->setIfExists('cleaning_fee', $data ?? [], null);
-        $this->setIfExists('price_per_extra_guest', $data ?? [], null);
-        $this->setIfExists('security_deposit', $data ?? [], null);
-        $this->setIfExists('weekly_discount', $data ?? [], null);
-        $this->setIfExists('monthly_discount', $data ?? [], null);
-        $this->setIfExists('guests_included', $data ?? [], null);
-        $this->setIfExists('currency', $data ?? [], null);
+        $this->setIfExists('success', $data ?? [], null);
+        $this->setIfExists('already_mapped', $data ?? [], null);
+        $this->setIfExists('room_booking_id', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('previous_listing_id', $data ?? [], null);
+        $this->setIfExists('hotel_id', $data ?? [], null);
+        $this->setIfExists('room_id', $data ?? [], null);
+        $this->setIfExists('room_name', $data ?? [], null);
+        $this->setIfExists('platform_link_id', $data ?? [], null);
+        $this->setIfExists('reservations_imported', $data ?? [], null);
     }
 
     /**
@@ -309,22 +316,24 @@ class ListingContentUpdateRequestPricing implements ModelInterface, ArrayAccess,
     {
         $invalidProperties = [];
 
-        if (!is_null($this->container['weekly_discount']) && ($this->container['weekly_discount'] > 99)) {
-            $invalidProperties[] = "invalid value for 'weekly_discount', must be smaller than or equal to 99.";
+        if ($this->container['success'] === null) {
+            $invalidProperties[] = "'success' can't be null";
         }
-
-        if (!is_null($this->container['weekly_discount']) && ($this->container['weekly_discount'] < 0)) {
-            $invalidProperties[] = "invalid value for 'weekly_discount', must be bigger than or equal to 0.";
+        if ($this->container['already_mapped'] === null) {
+            $invalidProperties[] = "'already_mapped' can't be null";
         }
-
-        if (!is_null($this->container['monthly_discount']) && ($this->container['monthly_discount'] > 99)) {
-            $invalidProperties[] = "invalid value for 'monthly_discount', must be smaller than or equal to 99.";
+        if ($this->container['room_booking_id'] === null && !$this->isNullableSetToNull('room_booking_id')) {
+            $invalidProperties[] = "'room_booking_id' is required";
         }
-
-        if (!is_null($this->container['monthly_discount']) && ($this->container['monthly_discount'] < 0)) {
-            $invalidProperties[] = "invalid value for 'monthly_discount', must be bigger than or equal to 0.";
+        if ($this->container['listing_id'] === null && !$this->isNullableSetToNull('listing_id')) {
+            $invalidProperties[] = "'listing_id' is required";
         }
-
+        if ($this->container['hotel_id'] === null) {
+            $invalidProperties[] = "'hotel_id' can't be null";
+        }
+        if ($this->container['room_id'] === null) {
+            $invalidProperties[] = "'room_id' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -338,323 +347,313 @@ class ListingContentUpdateRequestPricing implements ModelInterface, ArrayAccess,
 
 
     /**
-     * Gets default_daily_price
+     * Gets success
      *
-     * @return float|null
+     * @return bool
      */
-    public function getDefaultDailyPrice(): ?float
+    public function getSuccess(): bool
     {
-        return $this->container['default_daily_price'];
+        return $this->container['success'];
     }
 
     /**
-     * Sets default_daily_price
+     * Sets success
      *
-     * @param float|null $default_daily_price Nightly rate for every night that is not a weekend night.
+     * @param bool $success success
      *
      * @return $this
      */
-    public function setDefaultDailyPrice(?float $default_daily_price): static
+    public function setSuccess(bool $success): static
     {
-        if (is_null($default_daily_price)) {
-            array_push($this->openAPINullablesSetToNull, 'default_daily_price');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('default_daily_price', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($success)) {
+            throw new InvalidArgumentException('non-nullable success cannot be null');
         }
-        $this->container['default_daily_price'] = $default_daily_price;
+        $this->container['success'] = $success;
 
         return $this;
     }
 
     /**
-     * Gets weekend_price
+     * Gets already_mapped
      *
-     * @return float|null
+     * @return bool
      */
-    public function getWeekendPrice(): ?float
+    public function getAlreadyMapped(): bool
     {
-        return $this->container['weekend_price'];
+        return $this->container['already_mapped'];
     }
 
     /**
-     * Sets weekend_price
+     * Sets already_mapped
      *
-     * @param float|null $weekend_price Nightly rate for Saturday and Sunday nights (UTC).
+     * @param bool $already_mapped True when the room already pointed at this listing (or was already unmapped) and its channel link agreed. Nothing was written.
      *
      * @return $this
      */
-    public function setWeekendPrice(?float $weekend_price): static
+    public function setAlreadyMapped(bool $already_mapped): static
     {
-        if (is_null($weekend_price)) {
-            array_push($this->openAPINullablesSetToNull, 'weekend_price');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('weekend_price', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($already_mapped)) {
+            throw new InvalidArgumentException('non-nullable already_mapped cannot be null');
         }
-        $this->container['weekend_price'] = $weekend_price;
+        $this->container['already_mapped'] = $already_mapped;
 
         return $this;
     }
 
     /**
-     * Gets cleaning_fee
-     *
-     * @return float|null
-     */
-    public function getCleaningFee(): ?float
-    {
-        return $this->container['cleaning_fee'];
-    }
-
-    /**
-     * Sets cleaning_fee
-     *
-     * @param float|null $cleaning_fee cleaning_fee
-     *
-     * @return $this
-     */
-    public function setCleaningFee(?float $cleaning_fee): static
-    {
-        if (is_null($cleaning_fee)) {
-            array_push($this->openAPINullablesSetToNull, 'cleaning_fee');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('cleaning_fee', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['cleaning_fee'] = $cleaning_fee;
-
-        return $this;
-    }
-
-    /**
-     * Gets price_per_extra_guest
-     *
-     * @return float|null
-     */
-    public function getPricePerExtraGuest(): ?float
-    {
-        return $this->container['price_per_extra_guest'];
-    }
-
-    /**
-     * Sets price_per_extra_guest
-     *
-     * @param float|null $price_per_extra_guest price_per_extra_guest
-     *
-     * @return $this
-     */
-    public function setPricePerExtraGuest(?float $price_per_extra_guest): static
-    {
-        if (is_null($price_per_extra_guest)) {
-            array_push($this->openAPINullablesSetToNull, 'price_per_extra_guest');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('price_per_extra_guest', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['price_per_extra_guest'] = $price_per_extra_guest;
-
-        return $this;
-    }
-
-    /**
-     * Gets security_deposit
-     *
-     * @return float|null
-     */
-    public function getSecurityDeposit(): ?float
-    {
-        return $this->container['security_deposit'];
-    }
-
-    /**
-     * Sets security_deposit
-     *
-     * @param float|null $security_deposit security_deposit
-     *
-     * @return $this
-     */
-    public function setSecurityDeposit(?float $security_deposit): static
-    {
-        if (is_null($security_deposit)) {
-            array_push($this->openAPINullablesSetToNull, 'security_deposit');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('security_deposit', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['security_deposit'] = $security_deposit;
-
-        return $this;
-    }
-
-    /**
-     * Gets weekly_discount
-     *
-     * @return float|null
-     */
-    public function getWeeklyDiscount(): ?float
-    {
-        return $this->container['weekly_discount'];
-    }
-
-    /**
-     * Sets weekly_discount
-     *
-     * @param float|null $weekly_discount A percentage, not a fraction: `10` is 10% off a stay of a week or more. A value between 0 and 1 is refused (it would publish as a fraction of one percent) — send `10`, not `0.1`. `0` clears it.
-     *
-     * @return $this
-     */
-    public function setWeeklyDiscount(?float $weekly_discount): static
-    {
-        if (is_null($weekly_discount)) {
-            array_push($this->openAPINullablesSetToNull, 'weekly_discount');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('weekly_discount', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-
-        if (!is_null($weekly_discount) && ($weekly_discount > 99)) {
-            throw new InvalidArgumentException('invalid value for $weekly_discount when calling ListingContentUpdateRequestPricing., must be smaller than or equal to 99.');
-        }
-        if (!is_null($weekly_discount) && ($weekly_discount < 0)) {
-            throw new InvalidArgumentException('invalid value for $weekly_discount when calling ListingContentUpdateRequestPricing., must be bigger than or equal to 0.');
-        }
-
-        $this->container['weekly_discount'] = $weekly_discount;
-
-        return $this;
-    }
-
-    /**
-     * Gets monthly_discount
-     *
-     * @return float|null
-     */
-    public function getMonthlyDiscount(): ?float
-    {
-        return $this->container['monthly_discount'];
-    }
-
-    /**
-     * Sets monthly_discount
-     *
-     * @param float|null $monthly_discount A percentage, not a fraction: `20` is 20% off a stay of 28 nights or more. Values between 0 and 1 are refused, as for `weeklyDiscount`.
-     *
-     * @return $this
-     */
-    public function setMonthlyDiscount(?float $monthly_discount): static
-    {
-        if (is_null($monthly_discount)) {
-            array_push($this->openAPINullablesSetToNull, 'monthly_discount');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('monthly_discount', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-
-        if (!is_null($monthly_discount) && ($monthly_discount > 99)) {
-            throw new InvalidArgumentException('invalid value for $monthly_discount when calling ListingContentUpdateRequestPricing., must be smaller than or equal to 99.');
-        }
-        if (!is_null($monthly_discount) && ($monthly_discount < 0)) {
-            throw new InvalidArgumentException('invalid value for $monthly_discount when calling ListingContentUpdateRequestPricing., must be bigger than or equal to 0.');
-        }
-
-        $this->container['monthly_discount'] = $monthly_discount;
-
-        return $this;
-    }
-
-    /**
-     * Gets guests_included
-     *
-     * @return int|null
-     */
-    public function getGuestsIncluded(): ?int
-    {
-        return $this->container['guests_included'];
-    }
-
-    /**
-     * Sets guests_included
-     *
-     * @param int|null $guests_included Guests covered by the nightly rate before `pricePerExtraGuest` applies.
-     *
-     * @return $this
-     */
-    public function setGuestsIncluded(?int $guests_included): static
-    {
-        if (is_null($guests_included)) {
-            array_push($this->openAPINullablesSetToNull, 'guests_included');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('guests_included', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['guests_included'] = $guests_included;
-
-        return $this;
-    }
-
-    /**
-     * Gets currency
+     * Gets room_booking_id
      *
      * @return string|null
      */
-    public function getCurrency(): ?string
+    public function getRoomBookingId(): ?string
     {
-        return $this->container['currency'];
+        return $this->container['room_booking_id'];
     }
 
     /**
-     * Sets currency
+     * Sets room_booking_id
      *
-     * @param string|null $currency ISO 4217, e.g. `USD`.
+     * @param string|null $room_booking_id Booking.com's room id, as recorded for this room.
      *
      * @return $this
      */
-    public function setCurrency(?string $currency): static
+    public function setRoomBookingId(?string $room_booking_id): static
     {
-        if (is_null($currency)) {
-            array_push($this->openAPINullablesSetToNull, 'currency');
+        if (is_null($room_booking_id)) {
+            array_push($this->openAPINullablesSetToNull, 'room_booking_id');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('currency', $nullablesSetToNull);
+            $index = array_search('room_booking_id', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['currency'] = $currency;
+        $this->container['room_booking_id'] = $room_booking_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_id
+     *
+     * @return string|null
+     */
+    public function getListingId(): ?string
+    {
+        return $this->container['listing_id'];
+    }
+
+    /**
+     * Sets listing_id
+     *
+     * @param string|null $listing_id The listing the room now points at. Null after an unmap.
+     *
+     * @return $this
+     */
+    public function setListingId(?string $listing_id): static
+    {
+        if (is_null($listing_id)) {
+            array_push($this->openAPINullablesSetToNull, 'listing_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('listing_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets previous_listing_id
+     *
+     * @return string|null
+     */
+    public function getPreviousListingId(): ?string
+    {
+        return $this->container['previous_listing_id'];
+    }
+
+    /**
+     * Sets previous_listing_id
+     *
+     * @param string|null $previous_listing_id The listing the room pointed at before this call; null when it was unmapped. Omitted on a no-op.
+     *
+     * @return $this
+     */
+    public function setPreviousListingId(?string $previous_listing_id): static
+    {
+        if (is_null($previous_listing_id)) {
+            array_push($this->openAPINullablesSetToNull, 'previous_listing_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('previous_listing_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['previous_listing_id'] = $previous_listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets hotel_id
+     *
+     * @return string
+     */
+    public function getHotelId(): string
+    {
+        return $this->container['hotel_id'];
+    }
+
+    /**
+     * Sets hotel_id
+     *
+     * @param string $hotel_id The Booking.com property the room belongs to.
+     *
+     * @return $this
+     */
+    public function setHotelId(string $hotel_id): static
+    {
+        if (is_null($hotel_id)) {
+            throw new InvalidArgumentException('non-nullable hotel_id cannot be null');
+        }
+        $this->container['hotel_id'] = $hotel_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets room_id
+     *
+     * @return string
+     */
+    public function getRoomId(): string
+    {
+        return $this->container['room_id'];
+    }
+
+    /**
+     * Sets room_id
+     *
+     * @param string $room_id Repull-side id of the room record — the `roomId` the Connect room-mapping flow takes.
+     *
+     * @return $this
+     */
+    public function setRoomId(string $room_id): static
+    {
+        if (is_null($room_id)) {
+            throw new InvalidArgumentException('non-nullable room_id cannot be null');
+        }
+        $this->container['room_id'] = $room_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets room_name
+     *
+     * @return string|null
+     */
+    public function getRoomName(): ?string
+    {
+        return $this->container['room_name'];
+    }
+
+    /**
+     * Sets room_name
+     *
+     * @param string|null $room_name room_name
+     *
+     * @return $this
+     */
+    public function setRoomName(?string $room_name): static
+    {
+        if (is_null($room_name)) {
+            array_push($this->openAPINullablesSetToNull, 'room_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('room_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['room_name'] = $room_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets platform_link_id
+     *
+     * @return string|null
+     */
+    public function getPlatformLinkId(): ?string
+    {
+        return $this->container['platform_link_id'];
+    }
+
+    /**
+     * Sets platform_link_id
+     *
+     * @param string|null $platform_link_id Id of the resulting channel-link row. Null after an unmap, and for a room Booking.com has given us no room id for.
+     *
+     * @return $this
+     */
+    public function setPlatformLinkId(?string $platform_link_id): static
+    {
+        if (is_null($platform_link_id)) {
+            array_push($this->openAPINullablesSetToNull, 'platform_link_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('platform_link_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['platform_link_id'] = $platform_link_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets reservations_imported
+     *
+     * @return int|null
+     */
+    public function getReservationsImported(): ?int
+    {
+        return $this->container['reservations_imported'];
+    }
+
+    /**
+     * Sets reservations_imported
+     *
+     * @param int|null $reservations_imported Reservations Booking.com returned for the property and ran through the import after the room was mapped — the property's active bookings, which would otherwise never reach the listing. A reservation already present is left as it is, so this counts what was processed, not what was new, and re-sending never duplicates. Runs on every successful map, including a re-map to the same listing, so re-sending retries an import that did not run. `null` means the mapping succeeded but the import could not run; the room is still mapped. Absent after an unmap, when there is nothing to pull.
+     *
+     * @return $this
+     */
+    public function setReservationsImported(?int $reservations_imported): static
+    {
+        if (is_null($reservations_imported)) {
+            array_push($this->openAPINullablesSetToNull, 'reservations_imported');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('reservations_imported', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['reservations_imported'] = $reservations_imported;
 
         return $this;
     }

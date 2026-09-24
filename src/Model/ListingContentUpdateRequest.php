@@ -69,6 +69,8 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
         'address' => '\Repull\Model\ListingContentUpdateRequestAddress',
         'details' => '\Repull\Model\ListingContentUpdateRequestDetails',
         'occupancy' => '\Repull\Model\ListingContentUpdateRequestOccupancy',
+        'rooms' => '\Repull\Model\ListingContentUpdateRequestRoomsInner[]',
+        'checkout_tasks' => '\Repull\Model\ListingContentUpdateRequestCheckoutTasksInner[]',
         'pricing' => '\Repull\Model\ListingContentUpdateRequestPricing',
         'policies' => '\Repull\Model\ListingContentUpdateRequestPolicies',
         'photos' => '\Repull\Model\ListingContentUpdateRequestPhotosInner[]',
@@ -90,6 +92,8 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
         'address' => null,
         'details' => null,
         'occupancy' => null,
+        'rooms' => null,
+        'checkout_tasks' => null,
         'pricing' => null,
         'policies' => null,
         'photos' => null,
@@ -111,6 +115,8 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
         'address' => false,
         'details' => false,
         'occupancy' => false,
+        'rooms' => true,
+        'checkout_tasks' => true,
         'pricing' => false,
         'policies' => false,
         'photos' => false,
@@ -202,6 +208,8 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
         'address' => 'address',
         'details' => 'details',
         'occupancy' => 'occupancy',
+        'rooms' => 'rooms',
+        'checkout_tasks' => 'checkoutTasks',
         'pricing' => 'pricing',
         'policies' => 'policies',
         'photos' => 'photos',
@@ -223,6 +231,8 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
         'address' => 'setAddress',
         'details' => 'setDetails',
         'occupancy' => 'setOccupancy',
+        'rooms' => 'setRooms',
+        'checkout_tasks' => 'setCheckoutTasks',
         'pricing' => 'setPricing',
         'policies' => 'setPolicies',
         'photos' => 'setPhotos',
@@ -244,6 +254,8 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
         'address' => 'getAddress',
         'details' => 'getDetails',
         'occupancy' => 'getOccupancy',
+        'rooms' => 'getRooms',
+        'checkout_tasks' => 'getCheckoutTasks',
         'pricing' => 'getPricing',
         'policies' => 'getPolicies',
         'photos' => 'getPhotos',
@@ -321,6 +333,8 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
         $this->setIfExists('address', $data ?? [], null);
         $this->setIfExists('details', $data ?? [], null);
         $this->setIfExists('occupancy', $data ?? [], null);
+        $this->setIfExists('rooms', $data ?? [], null);
+        $this->setIfExists('checkout_tasks', $data ?? [], null);
         $this->setIfExists('pricing', $data ?? [], null);
         $this->setIfExists('policies', $data ?? [], null);
         $this->setIfExists('photos', $data ?? [], null);
@@ -640,6 +654,74 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
             throw new InvalidArgumentException('non-nullable occupancy cannot be null');
         }
         $this->container['occupancy'] = $occupancy;
+
+        return $this;
+    }
+
+    /**
+     * Gets rooms
+     *
+     * @return \Repull\Model\ListingContentUpdateRequestRoomsInner[]|null
+     */
+    public function getRooms(): ?array
+    {
+        return $this->container['rooms'];
+    }
+
+    /**
+     * Sets rooms
+     *
+     * @param \Repull\Model\ListingContentUpdateRequestRoomsInner[]|null $rooms The listing's rooms and the beds in each — what Airbnb shows as the sleeping arrangements and needs before a listing can go live. FULL replacement: the rooms you send become the whole set. Omit to leave rooms untouched; send `[]` to clear them.  Every entry is checked before anything is written, so a bad entry refuses the whole request with `422 invalid_params` naming it (e.g. `rooms[1].beds[0].quantity`) — a listing is never left with half its rooms.  Values use Airbnb's vocabulary, which Booking.com room mapping also reads. This is a local write; publish to send it to a channel.
+     *
+     * @return $this
+     */
+    public function setRooms(?array $rooms): static
+    {
+        if (is_null($rooms)) {
+            array_push($this->openAPINullablesSetToNull, 'rooms');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('rooms', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['rooms'] = $rooms;
+
+        return $this;
+    }
+
+    /**
+     * Gets checkout_tasks
+     *
+     * @return \Repull\Model\ListingContentUpdateRequestCheckoutTasksInner[]|null
+     */
+    public function getCheckoutTasks(): ?array
+    {
+        return $this->container['checkout_tasks'];
+    }
+
+    /**
+     * Sets checkout_tasks
+     *
+     * @param \Repull\Model\ListingContentUpdateRequestCheckoutTasksInner[]|null $checkout_tasks What the guest is asked to do before leaving. FULL replacement: omit to leave untouched; send `[]` to clear. An unknown `taskType` refuses the whole request with `422 invalid_params`.  Published to Airbnb, which is the only channel with checkout tasks. Airbnb accepts them only from partner apps it has certified for the feature; until then the publish result reports Airbnb's own refusal for this section and every other section still lands.
+     *
+     * @return $this
+     */
+    public function setCheckoutTasks(?array $checkout_tasks): static
+    {
+        if (is_null($checkout_tasks)) {
+            array_push($this->openAPINullablesSetToNull, 'checkout_tasks');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('checkout_tasks', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['checkout_tasks'] = $checkout_tasks;
 
         return $this;
     }
