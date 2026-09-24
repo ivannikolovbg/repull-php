@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * CheckMigrationCutoverRequest
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * CheckMigrationCutoverRequest Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class CheckMigrationCutoverRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'checkMigrationCutover_request';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'reservations' => '\Repull\Model\CheckMigrationCutoverRequestReservationsInner[]'
     ];
 
     /**
@@ -69,8 +68,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'reservations' => null
     ];
 
     /**
@@ -79,8 +77,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'reservations' => false
     ];
 
     /**
@@ -159,8 +156,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'reservations' => 'reservations'
     ];
 
     /**
@@ -169,8 +165,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'reservations' => 'setReservations'
     ];
 
     /**
@@ -179,8 +174,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'reservations' => 'getReservations'
     ];
 
     /**
@@ -230,8 +224,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('reservations', $data ?? [], null);
     }
 
     /**
@@ -259,6 +252,13 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
     {
         $invalidProperties = [];
 
+        if ($this->container['reservations'] === null) {
+            $invalidProperties[] = "'reservations' can't be null";
+        }
+        if ((count($this->container['reservations']) > 10000)) {
+            $invalidProperties[] = "invalid value for 'reservations', number of items must be less than or equal to 10000.";
+        }
+
         return $invalidProperties;
     }
 
@@ -272,62 +272,32 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets reservations
      *
-     * @return array<string,mixed>[]|null
+     * @return \Repull\Model\CheckMigrationCutoverRequestReservationsInner[]
      */
-    public function getPermits(): ?array
+    public function getReservations(): array
     {
-        return $this->container['permits'];
+        return $this->container['reservations'];
     }
 
     /**
-     * Sets permits
+     * Sets reservations
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param \Repull\Model\CheckMigrationCutoverRequestReservationsInner[] $reservations reservations
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setReservations(array $reservations): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($reservations)) {
+            throw new InvalidArgumentException('non-nullable reservations cannot be null');
         }
-        $this->container['permits'] = $permits;
 
-        return $this;
-    }
-
-    /**
-     * Gets cached
-     *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
-     */
-    public function getCached(): ?array
-    {
-        return $this->container['cached'];
-    }
-
-    /**
-     * Sets cached
-     *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
-     *
-     * @return $this
-     */
-    public function setCached(?array $cached): static
-    {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if ((count($reservations) > 10000)) {
+            throw new InvalidArgumentException('invalid value for $reservations when calling CheckMigrationCutoverRequest., number of items must be less than or equal to 10000.');
         }
-        $this->container['cached'] = $cached;
+        $this->container['reservations'] = $reservations;
 
         return $this;
     }

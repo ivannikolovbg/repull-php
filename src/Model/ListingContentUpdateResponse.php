@@ -318,7 +318,7 @@ class ListingContentUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     /**
      * Sets changed
      *
-     * @param string[]|null $changed Content slabs that were actually written, e.g. [\"title\",\"occupancy\",\"amenities\"]. A non-English write also reports `locale:<tag>` so you can see which row was written.
+     * @param string[]|null $changed Content slabs that were actually written, e.g. [\"title\",\"occupancy\",\"amenities\"]. A non-English write also reports `locale:<tag>` so you can see which row was written. A rate change reports `pricing`, and `calendar` as well when nights on the calendar moved to the new rate.
      *
      * @return $this
      */

@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * RunMigrationImport202ResponseDataQueuedInner
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * RunMigrationImport202ResponseDataQueuedInner Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class RunMigrationImport202ResponseDataQueuedInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'runMigrationImport_202_response_data_queued_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,10 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'connection_id' => 'string',
+        'provider' => 'string',
+        'queued' => 'bool',
+        'error' => 'string'
     ];
 
     /**
@@ -69,8 +71,10 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'connection_id' => null,
+        'provider' => null,
+        'queued' => null,
+        'error' => null
     ];
 
     /**
@@ -79,8 +83,10 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'connection_id' => false,
+        'provider' => false,
+        'queued' => false,
+        'error' => false
     ];
 
     /**
@@ -159,8 +165,10 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'connection_id' => 'connectionId',
+        'provider' => 'provider',
+        'queued' => 'queued',
+        'error' => 'error'
     ];
 
     /**
@@ -169,8 +177,10 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'connection_id' => 'setConnectionId',
+        'provider' => 'setProvider',
+        'queued' => 'setQueued',
+        'error' => 'setError'
     ];
 
     /**
@@ -179,8 +189,10 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'connection_id' => 'getConnectionId',
+        'provider' => 'getProvider',
+        'queued' => 'getQueued',
+        'error' => 'getError'
     ];
 
     /**
@@ -230,8 +242,10 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('connection_id', $data ?? [], null);
+        $this->setIfExists('provider', $data ?? [], null);
+        $this->setIfExists('queued', $data ?? [], null);
+        $this->setIfExists('error', $data ?? [], null);
     }
 
     /**
@@ -272,62 +286,109 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets connection_id
      *
-     * @return array<string,mixed>[]|null
+     * @return string|null
      */
-    public function getPermits(): ?array
+    public function getConnectionId(): ?string
     {
-        return $this->container['permits'];
+        return $this->container['connection_id'];
     }
 
     /**
-     * Sets permits
+     * Sets connection_id
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param string|null $connection_id connection_id
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setConnectionId(?string $connection_id): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($connection_id)) {
+            throw new InvalidArgumentException('non-nullable connection_id cannot be null');
         }
-        $this->container['permits'] = $permits;
+        $this->container['connection_id'] = $connection_id;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets provider
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return string|null
      */
-    public function getCached(): ?array
+    public function getProvider(): ?string
     {
-        return $this->container['cached'];
+        return $this->container['provider'];
     }
 
     /**
-     * Sets cached
+     * Sets provider
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param string|null $provider provider
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setProvider(?string $provider): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($provider)) {
+            throw new InvalidArgumentException('non-nullable provider cannot be null');
         }
-        $this->container['cached'] = $cached;
+        $this->container['provider'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * Gets queued
+     *
+     * @return bool|null
+     */
+    public function getQueued(): ?bool
+    {
+        return $this->container['queued'];
+    }
+
+    /**
+     * Sets queued
+     *
+     * @param bool|null $queued queued
+     *
+     * @return $this
+     */
+    public function setQueued(?bool $queued): static
+    {
+        if (is_null($queued)) {
+            throw new InvalidArgumentException('non-nullable queued cannot be null');
+        }
+        $this->container['queued'] = $queued;
+
+        return $this;
+    }
+
+    /**
+     * Gets error
+     *
+     * @return string|null
+     */
+    public function getError(): ?string
+    {
+        return $this->container['error'];
+    }
+
+    /**
+     * Sets error
+     *
+     * @param string|null $error error
+     *
+     * @return $this
+     */
+    public function setError(?string $error): static
+    {
+        if (is_null($error)) {
+            throw new InvalidArgumentException('non-nullable error cannot be null');
+        }
+        $this->container['error'] = $error;
 
         return $this;
     }

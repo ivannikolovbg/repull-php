@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * DeleteMigration200ResponseData
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * DeleteMigration200ResponseData Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class DeleteMigration200ResponseData implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'deleteMigration_200_response_data';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'workspace_id' => 'string',
+        'deactivated' => 'bool',
+        'deactivated_at' => '\DateTime'
     ];
 
     /**
@@ -69,8 +70,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'workspace_id' => null,
+        'deactivated' => null,
+        'deactivated_at' => 'date-time'
     ];
 
     /**
@@ -79,8 +81,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'workspace_id' => false,
+        'deactivated' => false,
+        'deactivated_at' => false
     ];
 
     /**
@@ -159,8 +162,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'workspace_id' => 'workspaceId',
+        'deactivated' => 'deactivated',
+        'deactivated_at' => 'deactivatedAt'
     ];
 
     /**
@@ -169,8 +173,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'workspace_id' => 'setWorkspaceId',
+        'deactivated' => 'setDeactivated',
+        'deactivated_at' => 'setDeactivatedAt'
     ];
 
     /**
@@ -179,8 +184,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'workspace_id' => 'getWorkspaceId',
+        'deactivated' => 'getDeactivated',
+        'deactivated_at' => 'getDeactivatedAt'
     ];
 
     /**
@@ -230,8 +236,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('workspace_id', $data ?? [], null);
+        $this->setIfExists('deactivated', $data ?? [], null);
+        $this->setIfExists('deactivated_at', $data ?? [], null);
     }
 
     /**
@@ -272,62 +279,82 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets workspace_id
      *
-     * @return array<string,mixed>[]|null
+     * @return string|null
      */
-    public function getPermits(): ?array
+    public function getWorkspaceId(): ?string
     {
-        return $this->container['permits'];
+        return $this->container['workspace_id'];
     }
 
     /**
-     * Sets permits
+     * Sets workspace_id
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param string|null $workspace_id workspace_id
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setWorkspaceId(?string $workspace_id): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($workspace_id)) {
+            throw new InvalidArgumentException('non-nullable workspace_id cannot be null');
         }
-        $this->container['permits'] = $permits;
+        $this->container['workspace_id'] = $workspace_id;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets deactivated
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return bool|null
      */
-    public function getCached(): ?array
+    public function getDeactivated(): ?bool
     {
-        return $this->container['cached'];
+        return $this->container['deactivated'];
     }
 
     /**
-     * Sets cached
+     * Sets deactivated
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param bool|null $deactivated deactivated
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setDeactivated(?bool $deactivated): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($deactivated)) {
+            throw new InvalidArgumentException('non-nullable deactivated cannot be null');
         }
-        $this->container['cached'] = $cached;
+        $this->container['deactivated'] = $deactivated;
+
+        return $this;
+    }
+
+    /**
+     * Gets deactivated_at
+     *
+     * @return \DateTime|null
+     */
+    public function getDeactivatedAt(): ?\DateTime
+    {
+        return $this->container['deactivated_at'];
+    }
+
+    /**
+     * Sets deactivated_at
+     *
+     * @param \DateTime|null $deactivated_at deactivated_at
+     *
+     * @return $this
+     */
+    public function setDeactivatedAt(?\DateTime $deactivated_at): static
+    {
+        if (is_null($deactivated_at)) {
+            throw new InvalidArgumentException('non-nullable deactivated_at cannot be null');
+        }
+        $this->container['deactivated_at'] = $deactivated_at;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * MigrationChannelMapSourcesInner
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * MigrationChannelMapSourcesInner Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class MigrationChannelMapSourcesInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'MigrationChannelMap_sources_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'provider' => 'string',
+        'supported' => 'bool',
+        'error' => 'string'
     ];
 
     /**
@@ -69,8 +70,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'provider' => null,
+        'supported' => null,
+        'error' => null
     ];
 
     /**
@@ -79,8 +81,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'provider' => false,
+        'supported' => false,
+        'error' => true
     ];
 
     /**
@@ -159,8 +162,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'provider' => 'provider',
+        'supported' => 'supported',
+        'error' => 'error'
     ];
 
     /**
@@ -169,8 +173,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'provider' => 'setProvider',
+        'supported' => 'setSupported',
+        'error' => 'setError'
     ];
 
     /**
@@ -179,8 +184,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'provider' => 'getProvider',
+        'supported' => 'getSupported',
+        'error' => 'getError'
     ];
 
     /**
@@ -230,8 +236,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('provider', $data ?? [], null);
+        $this->setIfExists('supported', $data ?? [], null);
+        $this->setIfExists('error', $data ?? [], null);
     }
 
     /**
@@ -272,62 +279,89 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets provider
      *
-     * @return array<string,mixed>[]|null
+     * @return string|null
      */
-    public function getPermits(): ?array
+    public function getProvider(): ?string
     {
-        return $this->container['permits'];
+        return $this->container['provider'];
     }
 
     /**
-     * Sets permits
+     * Sets provider
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param string|null $provider provider
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setProvider(?string $provider): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($provider)) {
+            throw new InvalidArgumentException('non-nullable provider cannot be null');
         }
-        $this->container['permits'] = $permits;
+        $this->container['provider'] = $provider;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets supported
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return bool|null
      */
-    public function getCached(): ?array
+    public function getSupported(): ?bool
     {
-        return $this->container['cached'];
+        return $this->container['supported'];
     }
 
     /**
-     * Sets cached
+     * Sets supported
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param bool|null $supported False when this PMS does not expose channel links.
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setSupported(?bool $supported): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($supported)) {
+            throw new InvalidArgumentException('non-nullable supported cannot be null');
         }
-        $this->container['cached'] = $cached;
+        $this->container['supported'] = $supported;
+
+        return $this;
+    }
+
+    /**
+     * Gets error
+     *
+     * @return string|null
+     */
+    public function getError(): ?string
+    {
+        return $this->container['error'];
+    }
+
+    /**
+     * Sets error
+     *
+     * @param string|null $error error
+     *
+     * @return $this
+     */
+    public function setError(?string $error): static
+    {
+        if (is_null($error)) {
+            array_push($this->openAPINullablesSetToNull, 'error');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('error', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['error'] = $error;
 
         return $this;
     }

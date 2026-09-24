@@ -37,7 +37,7 @@ use Repull\ObjectSerializer;
 /**
  * AirbnbPermitsWriteRequest Class Doc Comment
  *
- * @description Answer the regulatory permit questions Airbnb asks for this listing. Read them first with &#x60;?source&#x3D;live&#x60; on the GET — Airbnb refuses a &#x60;question_key&#x60; it did not ask for on this listing.
+ * @description Answer the regulatory permit questions Airbnb asks for this listing, in Airbnb&#39;s Listing Permits shape. Read them first with &#x60;?source&#x3D;live&#x60; on the GET: each permit lists its &#x60;flows[]&#x60;, and each flow its &#x60;questions[]&#x60; with an &#x60;answer_key&#x60; and a &#x60;type&#x60;.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

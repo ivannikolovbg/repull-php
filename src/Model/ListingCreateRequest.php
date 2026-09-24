@@ -79,6 +79,8 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
         'summary' => 'string',
         'description' => 'string',
         'default_daily_price' => 'float',
+        'weekend_price' => 'float',
+        'price_per_extra_guest' => 'float',
         'cleaning_fee' => 'float',
         'cancellation_policy' => 'string',
         'check_in_time_start' => 'string',
@@ -114,6 +116,8 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
         'summary' => null,
         'description' => null,
         'default_daily_price' => null,
+        'weekend_price' => null,
+        'price_per_extra_guest' => null,
         'cleaning_fee' => null,
         'cancellation_policy' => null,
         'check_in_time_start' => null,
@@ -149,6 +153,8 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
         'summary' => false,
         'description' => false,
         'default_daily_price' => false,
+        'weekend_price' => true,
+        'price_per_extra_guest' => true,
         'cleaning_fee' => false,
         'cancellation_policy' => false,
         'check_in_time_start' => false,
@@ -254,6 +260,8 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
         'summary' => 'summary',
         'description' => 'description',
         'default_daily_price' => 'defaultDailyPrice',
+        'weekend_price' => 'weekendPrice',
+        'price_per_extra_guest' => 'pricePerExtraGuest',
         'cleaning_fee' => 'cleaningFee',
         'cancellation_policy' => 'cancellationPolicy',
         'check_in_time_start' => 'checkInTimeStart',
@@ -289,6 +297,8 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
         'summary' => 'setSummary',
         'description' => 'setDescription',
         'default_daily_price' => 'setDefaultDailyPrice',
+        'weekend_price' => 'setWeekendPrice',
+        'price_per_extra_guest' => 'setPricePerExtraGuest',
         'cleaning_fee' => 'setCleaningFee',
         'cancellation_policy' => 'setCancellationPolicy',
         'check_in_time_start' => 'setCheckInTimeStart',
@@ -324,6 +334,8 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
         'summary' => 'getSummary',
         'description' => 'getDescription',
         'default_daily_price' => 'getDefaultDailyPrice',
+        'weekend_price' => 'getWeekendPrice',
+        'price_per_extra_guest' => 'getPricePerExtraGuest',
         'cleaning_fee' => 'getCleaningFee',
         'cancellation_policy' => 'getCancellationPolicy',
         'check_in_time_start' => 'getCheckInTimeStart',
@@ -438,6 +450,8 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
         $this->setIfExists('summary', $data ?? [], null);
         $this->setIfExists('description', $data ?? [], null);
         $this->setIfExists('default_daily_price', $data ?? [], null);
+        $this->setIfExists('weekend_price', $data ?? [], null);
+        $this->setIfExists('price_per_extra_guest', $data ?? [], null);
         $this->setIfExists('cleaning_fee', $data ?? [], null);
         $this->setIfExists('cancellation_policy', $data ?? [], null);
         $this->setIfExists('check_in_time_start', $data ?? [], null);
@@ -1006,7 +1020,7 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
     /**
      * Sets default_daily_price
      *
-     * @param float|null $default_daily_price default_daily_price
+     * @param float|null $default_daily_price Nightly rate for every night that is not a weekend night. Stating it is what gives the new listing a calendar: 365 nights are written from it, and that calendar is what a publish sends to the channel. Without a price the listing has no availability to publish, which Booking.com refuses with \"No availability pushed\".
      *
      * @return $this
      */
@@ -1016,6 +1030,74 @@ class ListingCreateRequest implements ModelInterface, ArrayAccess, JsonSerializa
             throw new InvalidArgumentException('non-nullable default_daily_price cannot be null');
         }
         $this->container['default_daily_price'] = $default_daily_price;
+
+        return $this;
+    }
+
+    /**
+     * Gets weekend_price
+     *
+     * @return float|null
+     */
+    public function getWeekendPrice(): ?float
+    {
+        return $this->container['weekend_price'];
+    }
+
+    /**
+     * Sets weekend_price
+     *
+     * @param float|null $weekend_price Nightly rate for Saturday and Sunday nights (UTC). Omit it and those nights take `defaultDailyPrice`. It is the same rate the direct-booking quoter charges for a weekend night, so the calendar and a quote cannot disagree.
+     *
+     * @return $this
+     */
+    public function setWeekendPrice(?float $weekend_price): static
+    {
+        if (is_null($weekend_price)) {
+            array_push($this->openAPINullablesSetToNull, 'weekend_price');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('weekend_price', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['weekend_price'] = $weekend_price;
+
+        return $this;
+    }
+
+    /**
+     * Gets price_per_extra_guest
+     *
+     * @return float|null
+     */
+    public function getPricePerExtraGuest(): ?float
+    {
+        return $this->container['price_per_extra_guest'];
+    }
+
+    /**
+     * Sets price_per_extra_guest
+     *
+     * @param float|null $price_per_extra_guest Charged per guest above the number included in the nightly rate.
+     *
+     * @return $this
+     */
+    public function setPricePerExtraGuest(?float $price_per_extra_guest): static
+    {
+        if (is_null($price_per_extra_guest)) {
+            array_push($this->openAPINullablesSetToNull, 'price_per_extra_guest');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('price_per_extra_guest', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['price_per_extra_guest'] = $price_per_extra_guest;
 
         return $this;
     }

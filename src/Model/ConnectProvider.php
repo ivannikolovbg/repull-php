@@ -68,7 +68,8 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
         'logo_url' => 'string',
         'description' => 'string',
         'docs_url' => 'string',
-        'aliases' => 'string[]'
+        'aliases' => 'string[]',
+        'migration_capabilities' => 'array<string,mixed>'
     ];
 
     /**
@@ -85,7 +86,8 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
         'logo_url' => 'uri',
         'description' => null,
         'docs_url' => 'uri',
-        'aliases' => null
+        'aliases' => null,
+        'migration_capabilities' => null
     ];
 
     /**
@@ -102,7 +104,8 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
         'logo_url' => false,
         'description' => false,
         'docs_url' => false,
-        'aliases' => true
+        'aliases' => true,
+        'migration_capabilities' => true
     ];
 
     /**
@@ -189,7 +192,8 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
         'logo_url' => 'logoUrl',
         'description' => 'description',
         'docs_url' => 'docsUrl',
-        'aliases' => 'aliases'
+        'aliases' => 'aliases',
+        'migration_capabilities' => 'migrationCapabilities'
     ];
 
     /**
@@ -206,7 +210,8 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
         'logo_url' => 'setLogoUrl',
         'description' => 'setDescription',
         'docs_url' => 'setDocsUrl',
-        'aliases' => 'setAliases'
+        'aliases' => 'setAliases',
+        'migration_capabilities' => 'setMigrationCapabilities'
     ];
 
     /**
@@ -223,7 +228,8 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
         'logo_url' => 'getLogoUrl',
         'description' => 'getDescription',
         'docs_url' => 'getDocsUrl',
-        'aliases' => 'getAliases'
+        'aliases' => 'getAliases',
+        'migration_capabilities' => 'getMigrationCapabilities'
     ];
 
     /**
@@ -333,6 +339,7 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('description', $data ?? [], null);
         $this->setIfExists('docs_url', $data ?? [], null);
         $this->setIfExists('aliases', $data ?? [], null);
+        $this->setIfExists('migration_capabilities', $data ?? [], null);
     }
 
     /**
@@ -672,6 +679,40 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['aliases'] = $aliases;
+
+        return $this;
+    }
+
+    /**
+     * Gets migration_capabilities
+     *
+     * @return array<string,mixed>|null
+     */
+    public function getMigrationCapabilities(): ?array
+    {
+        return $this->container['migration_capabilities'];
+    }
+
+    /**
+     * Sets migration_capabilities
+     *
+     * @param array<string,mixed>|null $migration_capabilities PMS providers: what Repull Migrate can carry across, per entity — `{ read: { listings: { level, notes }, … }, write: { … } }` with `level` `full` | `partial` | `none`. `null` for channels (OTAs).
+     *
+     * @return $this
+     */
+    public function setMigrationCapabilities(?array $migration_capabilities): static
+    {
+        if (is_null($migration_capabilities)) {
+            array_push($this->openAPINullablesSetToNull, 'migration_capabilities');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('migration_capabilities', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['migration_capabilities'] = $migration_capabilities;
 
         return $this;
     }

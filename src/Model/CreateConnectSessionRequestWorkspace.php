@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * CreateConnectSessionRequestWorkspace
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * CreateConnectSessionRequestWorkspace Class Doc Comment
  *
+ * @description Migrate only — the property manager being moved. Required unless you send &#x60;X-Workspace-Id&#x60; to reconnect an existing migration.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class CreateConnectSessionRequestWorkspace implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'createConnectSession_request_workspace';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +60,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'name' => 'string',
+        'external_ref' => 'string'
     ];
 
     /**
@@ -69,8 +70,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'name' => null,
+        'external_ref' => null
     ];
 
     /**
@@ -79,8 +80,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'name' => false,
+        'external_ref' => false
     ];
 
     /**
@@ -159,8 +160,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'name' => 'name',
+        'external_ref' => 'externalRef'
     ];
 
     /**
@@ -169,8 +170,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'name' => 'setName',
+        'external_ref' => 'setExternalRef'
     ];
 
     /**
@@ -179,8 +180,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'name' => 'getName',
+        'external_ref' => 'getExternalRef'
     ];
 
     /**
@@ -230,8 +231,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('external_ref', $data ?? [], null);
     }
 
     /**
@@ -259,6 +260,14 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
     {
         $invalidProperties = [];
 
+        if (!is_null($this->container['name']) && (mb_strlen($this->container['name']) > 120)) {
+            $invalidProperties[] = "invalid value for 'name', the character length must be smaller than or equal to 120.";
+        }
+
+        if (!is_null($this->container['external_ref']) && (mb_strlen($this->container['external_ref']) > 120)) {
+            $invalidProperties[] = "invalid value for 'external_ref', the character length must be smaller than or equal to 120.";
+        }
+
         return $invalidProperties;
     }
 
@@ -272,62 +281,63 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets name
      *
-     * @return array<string,mixed>[]|null
+     * @return string|null
      */
-    public function getPermits(): ?array
+    public function getName(): ?string
     {
-        return $this->container['permits'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets permits
+     * Sets name
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param string|null $name name
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setName(?string $name): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($name)) {
+            throw new InvalidArgumentException('non-nullable name cannot be null');
         }
-        $this->container['permits'] = $permits;
+        if ((mb_strlen($name) > 120)) {
+            throw new InvalidArgumentException('invalid length for $name when calling CreateConnectSessionRequestWorkspace., must be smaller than or equal to 120.');
+        }
+
+        $this->container['name'] = $name;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets external_ref
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return string|null
      */
-    public function getCached(): ?array
+    public function getExternalRef(): ?string
     {
-        return $this->container['cached'];
+        return $this->container['external_ref'];
     }
 
     /**
-     * Sets cached
+     * Sets external_ref
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param string|null $external_ref Your own id for this property manager. Returned on every migration read.
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setExternalRef(?string $external_ref): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($external_ref)) {
+            throw new InvalidArgumentException('non-nullable external_ref cannot be null');
         }
-        $this->container['cached'] = $cached;
+        if ((mb_strlen($external_ref) > 120)) {
+            throw new InvalidArgumentException('invalid length for $external_ref when calling CreateConnectSessionRequestWorkspace., must be smaller than or equal to 120.');
+        }
+
+        $this->container['external_ref'] = $external_ref;
 
         return $this;
     }

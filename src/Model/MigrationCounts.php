@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * MigrationCounts
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * MigrationCounts Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class MigrationCounts implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'Migration_counts';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,11 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'listings' => 'int',
+        'reservations' => 'int',
+        'upcoming_reservations' => 'int',
+        'guests' => 'int',
+        'conversations' => 'int'
     ];
 
     /**
@@ -69,8 +72,11 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'listings' => null,
+        'reservations' => null,
+        'upcoming_reservations' => null,
+        'guests' => null,
+        'conversations' => null
     ];
 
     /**
@@ -79,8 +85,11 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'listings' => false,
+        'reservations' => false,
+        'upcoming_reservations' => false,
+        'guests' => false,
+        'conversations' => false
     ];
 
     /**
@@ -159,8 +168,11 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'listings' => 'listings',
+        'reservations' => 'reservations',
+        'upcoming_reservations' => 'upcomingReservations',
+        'guests' => 'guests',
+        'conversations' => 'conversations'
     ];
 
     /**
@@ -169,8 +181,11 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'listings' => 'setListings',
+        'reservations' => 'setReservations',
+        'upcoming_reservations' => 'setUpcomingReservations',
+        'guests' => 'setGuests',
+        'conversations' => 'setConversations'
     ];
 
     /**
@@ -179,8 +194,11 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'listings' => 'getListings',
+        'reservations' => 'getReservations',
+        'upcoming_reservations' => 'getUpcomingReservations',
+        'guests' => 'getGuests',
+        'conversations' => 'getConversations'
     ];
 
     /**
@@ -230,8 +248,11 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('listings', $data ?? [], null);
+        $this->setIfExists('reservations', $data ?? [], null);
+        $this->setIfExists('upcoming_reservations', $data ?? [], null);
+        $this->setIfExists('guests', $data ?? [], null);
+        $this->setIfExists('conversations', $data ?? [], null);
     }
 
     /**
@@ -272,62 +293,136 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets listings
      *
-     * @return array<string,mixed>[]|null
+     * @return int|null
      */
-    public function getPermits(): ?array
+    public function getListings(): ?int
     {
-        return $this->container['permits'];
+        return $this->container['listings'];
     }
 
     /**
-     * Sets permits
+     * Sets listings
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param int|null $listings listings
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setListings(?int $listings): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($listings)) {
+            throw new InvalidArgumentException('non-nullable listings cannot be null');
         }
-        $this->container['permits'] = $permits;
+        $this->container['listings'] = $listings;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets reservations
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return int|null
      */
-    public function getCached(): ?array
+    public function getReservations(): ?int
     {
-        return $this->container['cached'];
+        return $this->container['reservations'];
     }
 
     /**
-     * Sets cached
+     * Sets reservations
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param int|null $reservations reservations
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setReservations(?int $reservations): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($reservations)) {
+            throw new InvalidArgumentException('non-nullable reservations cannot be null');
         }
-        $this->container['cached'] = $cached;
+        $this->container['reservations'] = $reservations;
+
+        return $this;
+    }
+
+    /**
+     * Gets upcoming_reservations
+     *
+     * @return int|null
+     */
+    public function getUpcomingReservations(): ?int
+    {
+        return $this->container['upcoming_reservations'];
+    }
+
+    /**
+     * Sets upcoming_reservations
+     *
+     * @param int|null $upcoming_reservations upcoming_reservations
+     *
+     * @return $this
+     */
+    public function setUpcomingReservations(?int $upcoming_reservations): static
+    {
+        if (is_null($upcoming_reservations)) {
+            throw new InvalidArgumentException('non-nullable upcoming_reservations cannot be null');
+        }
+        $this->container['upcoming_reservations'] = $upcoming_reservations;
+
+        return $this;
+    }
+
+    /**
+     * Gets guests
+     *
+     * @return int|null
+     */
+    public function getGuests(): ?int
+    {
+        return $this->container['guests'];
+    }
+
+    /**
+     * Sets guests
+     *
+     * @param int|null $guests guests
+     *
+     * @return $this
+     */
+    public function setGuests(?int $guests): static
+    {
+        if (is_null($guests)) {
+            throw new InvalidArgumentException('non-nullable guests cannot be null');
+        }
+        $this->container['guests'] = $guests;
+
+        return $this;
+    }
+
+    /**
+     * Gets conversations
+     *
+     * @return int|null
+     */
+    public function getConversations(): ?int
+    {
+        return $this->container['conversations'];
+    }
+
+    /**
+     * Sets conversations
+     *
+     * @param int|null $conversations conversations
+     *
+     * @return $this
+     */
+    public function setConversations(?int $conversations): static
+    {
+        if (is_null($conversations)) {
+            throw new InvalidArgumentException('non-nullable conversations cannot be null');
+        }
+        $this->container['conversations'] = $conversations;
 
         return $this;
     }

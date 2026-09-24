@@ -69,6 +69,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_out_time' => 'string',
         'status' => 'string',
         'status_detail' => 'string',
+        'pending_reason' => 'string',
         'respond_by' => '\DateTime',
         'source' => 'string',
         'platform' => 'string',
@@ -100,6 +101,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_out_time' => null,
         'status' => null,
         'status_detail' => null,
+        'pending_reason' => null,
         'respond_by' => 'date-time',
         'source' => null,
         'platform' => null,
@@ -131,6 +133,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_out_time' => true,
         'status' => false,
         'status_detail' => false,
+        'pending_reason' => false,
         'respond_by' => false,
         'source' => true,
         'platform' => true,
@@ -232,6 +235,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_out_time' => 'checkOutTime',
         'status' => 'status',
         'status_detail' => 'statusDetail',
+        'pending_reason' => 'pendingReason',
         'respond_by' => 'respondBy',
         'source' => 'source',
         'platform' => 'platform',
@@ -263,6 +267,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_out_time' => 'setCheckOutTime',
         'status' => 'setStatus',
         'status_detail' => 'setStatusDetail',
+        'pending_reason' => 'setPendingReason',
         'respond_by' => 'setRespondBy',
         'source' => 'setSource',
         'platform' => 'setPlatform',
@@ -294,6 +299,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'check_out_time' => 'getCheckOutTime',
         'status' => 'getStatus',
         'status_detail' => 'getStatusDetail',
+        'pending_reason' => 'getPendingReason',
         'respond_by' => 'getRespondBy',
         'source' => 'getSource',
         'platform' => 'getPlatform',
@@ -347,6 +353,9 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_DETAIL_REQUEST_EXPIRED = 'request_expired';
+    public const PENDING_REASON_HOST_APPROVAL = 'host_approval';
+    public const PENDING_REASON_GUEST_PAYMENT = 'guest_payment';
+    public const PENDING_REASON_GUEST_VERIFICATION = 'guest_verification';
     public const SOURCE_AIRBNB = 'airbnb';
     public const SOURCE_BOOKING_COM = 'booking.com';
     public const SOURCE_VRBO = 'vrbo';
@@ -386,6 +395,20 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     {
         return [
             self::STATUS_DETAIL_REQUEST_EXPIRED,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getPendingReasonAllowableValues()
+    {
+        return [
+            self::PENDING_REASON_HOST_APPROVAL,
+            self::PENDING_REASON_GUEST_PAYMENT,
+            self::PENDING_REASON_GUEST_VERIFICATION,
         ];
     }
 
@@ -448,6 +471,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('check_out_time', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('status_detail', $data ?? [], null);
+        $this->setIfExists('pending_reason', $data ?? [], null);
         $this->setIfExists('respond_by', $data ?? [], null);
         $this->setIfExists('source', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
@@ -518,6 +542,15 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'status_detail', must be one of '%s'",
                 $this->container['status_detail'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        $allowedValues = self::getPendingReasonAllowableValues();
+        if (!is_null($this->container['pending_reason']) && !in_array($this->container['pending_reason'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'pending_reason', must be one of '%s'",
+                $this->container['pending_reason'],
                 implode("', '", $allowedValues)
             );
         }
@@ -823,6 +856,34 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Gets pending_reason
+     *
+     * @return string|null
+     */
+    public function getPendingReason(): ?string
+    {
+        return $this->container['pending_reason'];
+    }
+
+    /**
+     * Sets pending_reason
+     *
+     * @param string|null $pending_reason Why a `pending` reservation is pending — who has to act next. `host_approval`: a booking request the host must accept or decline (see `respondBy`). `guest_payment`: Airbnb is waiting for the guest to pay. `guest_verification`: Airbnb is holding the booking while the guest completes identity verification. The last two need no action from the host, and Airbnb does not publish a deadline for them. Present only while `status` is `pending`; when it changes you receive `reservation.updated` with the previous raw status in `previousAttributes.status`, even if `status` stays `pending`.
+     *
+     * @return $this
+     */
+    public function setPendingReason(?string $pending_reason): static
+    {
+        if (is_null($pending_reason)) {
+            throw new InvalidArgumentException('non-nullable pending_reason cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['pending_reason'] = $pending_reason;
+
+        return $this;
+    }
+
+    /**
      * Gets respond_by
      *
      * @return \DateTime|null
@@ -835,7 +896,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets respond_by
      *
-     * @param \DateTime|null $respond_by On a `pending` Airbnb booking request that can still be answered: when it lapses (24 hours after the guest asked). Accept or decline before then with `POST /v1/reservations/{id}/accept` / `/decline`. Absent on every other reservation.
+     * @param \DateTime|null $respond_by On a `pending` Airbnb booking request (`pendingReason: host_approval`) that can still be answered: when it lapses (24 hours after the guest asked). Accept or decline before then with `POST /v1/reservations/{id}/accept` / `/decline`. Absent on every other reservation, including bookings Airbnb is holding for the guest's payment or verification — those have no deadline we can report.
      *
      * @return $this
      */

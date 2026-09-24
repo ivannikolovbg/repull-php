@@ -69,6 +69,7 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
         'address' => '\Repull\Model\ListingContentUpdateRequestAddress',
         'details' => '\Repull\Model\ListingContentUpdateRequestDetails',
         'occupancy' => '\Repull\Model\ListingContentUpdateRequestOccupancy',
+        'pricing' => '\Repull\Model\ListingContentUpdateRequestPricing',
         'policies' => '\Repull\Model\ListingContentUpdateRequestPolicies',
         'photos' => '\Repull\Model\ListingContentUpdateRequestPhotosInner[]',
         'photos_mode' => 'string'
@@ -89,6 +90,7 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
         'address' => null,
         'details' => null,
         'occupancy' => null,
+        'pricing' => null,
         'policies' => null,
         'photos' => null,
         'photos_mode' => null
@@ -109,6 +111,7 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
         'address' => false,
         'details' => false,
         'occupancy' => false,
+        'pricing' => false,
         'policies' => false,
         'photos' => false,
         'photos_mode' => false
@@ -199,6 +202,7 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
         'address' => 'address',
         'details' => 'details',
         'occupancy' => 'occupancy',
+        'pricing' => 'pricing',
         'policies' => 'policies',
         'photos' => 'photos',
         'photos_mode' => 'photosMode'
@@ -219,6 +223,7 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
         'address' => 'setAddress',
         'details' => 'setDetails',
         'occupancy' => 'setOccupancy',
+        'pricing' => 'setPricing',
         'policies' => 'setPolicies',
         'photos' => 'setPhotos',
         'photos_mode' => 'setPhotosMode'
@@ -239,6 +244,7 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
         'address' => 'getAddress',
         'details' => 'getDetails',
         'occupancy' => 'getOccupancy',
+        'pricing' => 'getPricing',
         'policies' => 'getPolicies',
         'photos' => 'getPhotos',
         'photos_mode' => 'getPhotosMode'
@@ -315,6 +321,7 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
         $this->setIfExists('address', $data ?? [], null);
         $this->setIfExists('details', $data ?? [], null);
         $this->setIfExists('occupancy', $data ?? [], null);
+        $this->setIfExists('pricing', $data ?? [], null);
         $this->setIfExists('policies', $data ?? [], null);
         $this->setIfExists('photos', $data ?? [], null);
         $this->setIfExists('photos_mode', $data ?? [], 'replace');
@@ -633,6 +640,33 @@ class ListingContentUpdateRequest implements ModelInterface, ArrayAccess, JsonSe
             throw new InvalidArgumentException('non-nullable occupancy cannot be null');
         }
         $this->container['occupancy'] = $occupancy;
+
+        return $this;
+    }
+
+    /**
+     * Gets pricing
+     *
+     * @return \Repull\Model\ListingContentUpdateRequestPricing|null
+     */
+    public function getPricing(): ?\Repull\Model\ListingContentUpdateRequestPricing
+    {
+        return $this->container['pricing'];
+    }
+
+    /**
+     * Sets pricing
+     *
+     * @param \Repull\Model\ListingContentUpdateRequestPricing|null $pricing pricing
+     *
+     * @return $this
+     */
+    public function setPricing(?\Repull\Model\ListingContentUpdateRequestPricing $pricing): static
+    {
+        if (is_null($pricing)) {
+            throw new InvalidArgumentException('non-nullable pricing cannot be null');
+        }
+        $this->container['pricing'] = $pricing;
 
         return $this;
     }

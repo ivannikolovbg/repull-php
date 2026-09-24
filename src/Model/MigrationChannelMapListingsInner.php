@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * MigrationChannelMapListingsInner
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * MigrationChannelMapListingsInner Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class MigrationChannelMapListingsInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'MigrationChannelMap_listings_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,13 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'listing_id' => 'string',
+        'name' => 'string',
+        'provider' => 'string',
+        'external_listing_id' => 'string',
+        'airbnb' => '\Repull\Model\MigrationChannelMapListingsInnerAirbnb',
+        'booking' => '\Repull\Model\MigrationChannelMapListingsInnerBooking',
+        'vrbo' => '\Repull\Model\MigrationChannelMapListingsInnerAirbnb'
     ];
 
     /**
@@ -69,8 +74,13 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'listing_id' => null,
+        'name' => null,
+        'provider' => null,
+        'external_listing_id' => null,
+        'airbnb' => null,
+        'booking' => null,
+        'vrbo' => null
     ];
 
     /**
@@ -79,8 +89,13 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'listing_id' => true,
+        'name' => true,
+        'provider' => false,
+        'external_listing_id' => false,
+        'airbnb' => true,
+        'booking' => true,
+        'vrbo' => true
     ];
 
     /**
@@ -159,8 +174,13 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'listing_id' => 'listingId',
+        'name' => 'name',
+        'provider' => 'provider',
+        'external_listing_id' => 'externalListingId',
+        'airbnb' => 'airbnb',
+        'booking' => 'booking',
+        'vrbo' => 'vrbo'
     ];
 
     /**
@@ -169,8 +189,13 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'listing_id' => 'setListingId',
+        'name' => 'setName',
+        'provider' => 'setProvider',
+        'external_listing_id' => 'setExternalListingId',
+        'airbnb' => 'setAirbnb',
+        'booking' => 'setBooking',
+        'vrbo' => 'setVrbo'
     ];
 
     /**
@@ -179,8 +204,13 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'listing_id' => 'getListingId',
+        'name' => 'getName',
+        'provider' => 'getProvider',
+        'external_listing_id' => 'getExternalListingId',
+        'airbnb' => 'getAirbnb',
+        'booking' => 'getBooking',
+        'vrbo' => 'getVrbo'
     ];
 
     /**
@@ -230,8 +260,13 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('provider', $data ?? [], null);
+        $this->setIfExists('external_listing_id', $data ?? [], null);
+        $this->setIfExists('airbnb', $data ?? [], null);
+        $this->setIfExists('booking', $data ?? [], null);
+        $this->setIfExists('vrbo', $data ?? [], null);
     }
 
     /**
@@ -272,62 +307,225 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets listing_id
      *
-     * @return array<string,mixed>[]|null
+     * @return string|null
      */
-    public function getPermits(): ?array
+    public function getListingId(): ?string
     {
-        return $this->container['permits'];
+        return $this->container['listing_id'];
     }
 
     /**
-     * Sets permits
+     * Sets listing_id
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param string|null $listing_id The property in this workspace, when it came across.
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setListingId(?string $listing_id): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
+        if (is_null($listing_id)) {
+            array_push($this->openAPINullablesSetToNull, 'listing_id');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
+            $index = array_search('listing_id', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['permits'] = $permits;
+        $this->container['listing_id'] = $listing_id;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets name
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return string|null
      */
-    public function getCached(): ?array
+    public function getName(): ?string
     {
-        return $this->container['cached'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets cached
+     * Sets name
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param string|null $name name
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setName(?string $name): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($name)) {
+            array_push($this->openAPINullablesSetToNull, 'name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['cached'] = $cached;
+        $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets provider
+     *
+     * @return string|null
+     */
+    public function getProvider(): ?string
+    {
+        return $this->container['provider'];
+    }
+
+    /**
+     * Sets provider
+     *
+     * @param string|null $provider provider
+     *
+     * @return $this
+     */
+    public function setProvider(?string $provider): static
+    {
+        if (is_null($provider)) {
+            throw new InvalidArgumentException('non-nullable provider cannot be null');
+        }
+        $this->container['provider'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * Gets external_listing_id
+     *
+     * @return string|null
+     */
+    public function getExternalListingId(): ?string
+    {
+        return $this->container['external_listing_id'];
+    }
+
+    /**
+     * Sets external_listing_id
+     *
+     * @param string|null $external_listing_id The listing id in the source PMS.
+     *
+     * @return $this
+     */
+    public function setExternalListingId(?string $external_listing_id): static
+    {
+        if (is_null($external_listing_id)) {
+            throw new InvalidArgumentException('non-nullable external_listing_id cannot be null');
+        }
+        $this->container['external_listing_id'] = $external_listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets airbnb
+     *
+     * @return \Repull\Model\MigrationChannelMapListingsInnerAirbnb|null
+     */
+    public function getAirbnb(): ?\Repull\Model\MigrationChannelMapListingsInnerAirbnb
+    {
+        return $this->container['airbnb'];
+    }
+
+    /**
+     * Sets airbnb
+     *
+     * @param \Repull\Model\MigrationChannelMapListingsInnerAirbnb|null $airbnb airbnb
+     *
+     * @return $this
+     */
+    public function setAirbnb(?\Repull\Model\MigrationChannelMapListingsInnerAirbnb $airbnb): static
+    {
+        if (is_null($airbnb)) {
+            array_push($this->openAPINullablesSetToNull, 'airbnb');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('airbnb', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['airbnb'] = $airbnb;
+
+        return $this;
+    }
+
+    /**
+     * Gets booking
+     *
+     * @return \Repull\Model\MigrationChannelMapListingsInnerBooking|null
+     */
+    public function getBooking(): ?\Repull\Model\MigrationChannelMapListingsInnerBooking
+    {
+        return $this->container['booking'];
+    }
+
+    /**
+     * Sets booking
+     *
+     * @param \Repull\Model\MigrationChannelMapListingsInnerBooking|null $booking booking
+     *
+     * @return $this
+     */
+    public function setBooking(?\Repull\Model\MigrationChannelMapListingsInnerBooking $booking): static
+    {
+        if (is_null($booking)) {
+            array_push($this->openAPINullablesSetToNull, 'booking');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('booking', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['booking'] = $booking;
+
+        return $this;
+    }
+
+    /**
+     * Gets vrbo
+     *
+     * @return \Repull\Model\MigrationChannelMapListingsInnerAirbnb|null
+     */
+    public function getVrbo(): ?\Repull\Model\MigrationChannelMapListingsInnerAirbnb
+    {
+        return $this->container['vrbo'];
+    }
+
+    /**
+     * Sets vrbo
+     *
+     * @param \Repull\Model\MigrationChannelMapListingsInnerAirbnb|null $vrbo vrbo
+     *
+     * @return $this
+     */
+    public function setVrbo(?\Repull\Model\MigrationChannelMapListingsInnerAirbnb $vrbo): static
+    {
+        if (is_null($vrbo)) {
+            array_push($this->openAPINullablesSetToNull, 'vrbo');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('vrbo', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['vrbo'] = $vrbo;
 
         return $this;
     }

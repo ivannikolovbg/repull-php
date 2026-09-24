@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * ListingContentUpdateRequestPricing
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * ListingContentUpdateRequestPricing Class Doc Comment
  *
+ * @description The listing&#39;s standing rates. Partial like every other section: only the fields you send are written, and &#x60;null&#x60; clears one.  Changing &#x60;defaultDailyPrice&#x60; or &#x60;weekendPrice&#x60; also moves the nights on the calendar that still carry the old rate and were written by us — a night you or a channel priced yourself is never touched, and neither is a blocked or reserved one. So a price change reaches the calendar without overwriting anyone&#39;s work.  This is still a local write. Publish to send the new rates to a channel.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingContentUpdateRequestPricing implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'ListingContentUpdateRequest_pricing';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +60,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'default_daily_price' => 'float',
+        'weekend_price' => 'float',
+        'cleaning_fee' => 'float',
+        'price_per_extra_guest' => 'float',
+        'security_deposit' => 'float',
+        'weekly_discount' => 'float',
+        'monthly_discount' => 'float',
+        'guests_included' => 'int',
+        'currency' => 'string'
     ];
 
     /**
@@ -69,8 +77,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'default_daily_price' => null,
+        'weekend_price' => null,
+        'cleaning_fee' => null,
+        'price_per_extra_guest' => null,
+        'security_deposit' => null,
+        'weekly_discount' => null,
+        'monthly_discount' => null,
+        'guests_included' => null,
+        'currency' => null
     ];
 
     /**
@@ -79,8 +94,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'default_daily_price' => true,
+        'weekend_price' => true,
+        'cleaning_fee' => true,
+        'price_per_extra_guest' => true,
+        'security_deposit' => true,
+        'weekly_discount' => true,
+        'monthly_discount' => true,
+        'guests_included' => true,
+        'currency' => true
     ];
 
     /**
@@ -159,8 +181,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'default_daily_price' => 'defaultDailyPrice',
+        'weekend_price' => 'weekendPrice',
+        'cleaning_fee' => 'cleaningFee',
+        'price_per_extra_guest' => 'pricePerExtraGuest',
+        'security_deposit' => 'securityDeposit',
+        'weekly_discount' => 'weeklyDiscount',
+        'monthly_discount' => 'monthlyDiscount',
+        'guests_included' => 'guestsIncluded',
+        'currency' => 'currency'
     ];
 
     /**
@@ -169,8 +198,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'default_daily_price' => 'setDefaultDailyPrice',
+        'weekend_price' => 'setWeekendPrice',
+        'cleaning_fee' => 'setCleaningFee',
+        'price_per_extra_guest' => 'setPricePerExtraGuest',
+        'security_deposit' => 'setSecurityDeposit',
+        'weekly_discount' => 'setWeeklyDiscount',
+        'monthly_discount' => 'setMonthlyDiscount',
+        'guests_included' => 'setGuestsIncluded',
+        'currency' => 'setCurrency'
     ];
 
     /**
@@ -179,8 +215,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'default_daily_price' => 'getDefaultDailyPrice',
+        'weekend_price' => 'getWeekendPrice',
+        'cleaning_fee' => 'getCleaningFee',
+        'price_per_extra_guest' => 'getPricePerExtraGuest',
+        'security_deposit' => 'getSecurityDeposit',
+        'weekly_discount' => 'getWeeklyDiscount',
+        'monthly_discount' => 'getMonthlyDiscount',
+        'guests_included' => 'getGuestsIncluded',
+        'currency' => 'getCurrency'
     ];
 
     /**
@@ -230,8 +273,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('default_daily_price', $data ?? [], null);
+        $this->setIfExists('weekend_price', $data ?? [], null);
+        $this->setIfExists('cleaning_fee', $data ?? [], null);
+        $this->setIfExists('price_per_extra_guest', $data ?? [], null);
+        $this->setIfExists('security_deposit', $data ?? [], null);
+        $this->setIfExists('weekly_discount', $data ?? [], null);
+        $this->setIfExists('monthly_discount', $data ?? [], null);
+        $this->setIfExists('guests_included', $data ?? [], null);
+        $this->setIfExists('currency', $data ?? [], null);
     }
 
     /**
@@ -272,62 +322,307 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets default_daily_price
      *
-     * @return array<string,mixed>[]|null
+     * @return float|null
      */
-    public function getPermits(): ?array
+    public function getDefaultDailyPrice(): ?float
     {
-        return $this->container['permits'];
+        return $this->container['default_daily_price'];
     }
 
     /**
-     * Sets permits
+     * Sets default_daily_price
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param float|null $default_daily_price Nightly rate for every night that is not a weekend night.
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setDefaultDailyPrice(?float $default_daily_price): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
+        if (is_null($default_daily_price)) {
+            array_push($this->openAPINullablesSetToNull, 'default_daily_price');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
+            $index = array_search('default_daily_price', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['permits'] = $permits;
+        $this->container['default_daily_price'] = $default_daily_price;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets weekend_price
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return float|null
      */
-    public function getCached(): ?array
+    public function getWeekendPrice(): ?float
     {
-        return $this->container['cached'];
+        return $this->container['weekend_price'];
     }
 
     /**
-     * Sets cached
+     * Sets weekend_price
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param float|null $weekend_price Nightly rate for Saturday and Sunday nights (UTC).
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setWeekendPrice(?float $weekend_price): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($weekend_price)) {
+            array_push($this->openAPINullablesSetToNull, 'weekend_price');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('weekend_price', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['cached'] = $cached;
+        $this->container['weekend_price'] = $weekend_price;
+
+        return $this;
+    }
+
+    /**
+     * Gets cleaning_fee
+     *
+     * @return float|null
+     */
+    public function getCleaningFee(): ?float
+    {
+        return $this->container['cleaning_fee'];
+    }
+
+    /**
+     * Sets cleaning_fee
+     *
+     * @param float|null $cleaning_fee cleaning_fee
+     *
+     * @return $this
+     */
+    public function setCleaningFee(?float $cleaning_fee): static
+    {
+        if (is_null($cleaning_fee)) {
+            array_push($this->openAPINullablesSetToNull, 'cleaning_fee');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('cleaning_fee', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['cleaning_fee'] = $cleaning_fee;
+
+        return $this;
+    }
+
+    /**
+     * Gets price_per_extra_guest
+     *
+     * @return float|null
+     */
+    public function getPricePerExtraGuest(): ?float
+    {
+        return $this->container['price_per_extra_guest'];
+    }
+
+    /**
+     * Sets price_per_extra_guest
+     *
+     * @param float|null $price_per_extra_guest price_per_extra_guest
+     *
+     * @return $this
+     */
+    public function setPricePerExtraGuest(?float $price_per_extra_guest): static
+    {
+        if (is_null($price_per_extra_guest)) {
+            array_push($this->openAPINullablesSetToNull, 'price_per_extra_guest');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('price_per_extra_guest', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['price_per_extra_guest'] = $price_per_extra_guest;
+
+        return $this;
+    }
+
+    /**
+     * Gets security_deposit
+     *
+     * @return float|null
+     */
+    public function getSecurityDeposit(): ?float
+    {
+        return $this->container['security_deposit'];
+    }
+
+    /**
+     * Sets security_deposit
+     *
+     * @param float|null $security_deposit security_deposit
+     *
+     * @return $this
+     */
+    public function setSecurityDeposit(?float $security_deposit): static
+    {
+        if (is_null($security_deposit)) {
+            array_push($this->openAPINullablesSetToNull, 'security_deposit');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('security_deposit', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['security_deposit'] = $security_deposit;
+
+        return $this;
+    }
+
+    /**
+     * Gets weekly_discount
+     *
+     * @return float|null
+     */
+    public function getWeeklyDiscount(): ?float
+    {
+        return $this->container['weekly_discount'];
+    }
+
+    /**
+     * Sets weekly_discount
+     *
+     * @param float|null $weekly_discount Fraction, not a percentage: `0.1` is 10% off a stay of a week or more.
+     *
+     * @return $this
+     */
+    public function setWeeklyDiscount(?float $weekly_discount): static
+    {
+        if (is_null($weekly_discount)) {
+            array_push($this->openAPINullablesSetToNull, 'weekly_discount');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('weekly_discount', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['weekly_discount'] = $weekly_discount;
+
+        return $this;
+    }
+
+    /**
+     * Gets monthly_discount
+     *
+     * @return float|null
+     */
+    public function getMonthlyDiscount(): ?float
+    {
+        return $this->container['monthly_discount'];
+    }
+
+    /**
+     * Sets monthly_discount
+     *
+     * @param float|null $monthly_discount Fraction, not a percentage.
+     *
+     * @return $this
+     */
+    public function setMonthlyDiscount(?float $monthly_discount): static
+    {
+        if (is_null($monthly_discount)) {
+            array_push($this->openAPINullablesSetToNull, 'monthly_discount');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('monthly_discount', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['monthly_discount'] = $monthly_discount;
+
+        return $this;
+    }
+
+    /**
+     * Gets guests_included
+     *
+     * @return int|null
+     */
+    public function getGuestsIncluded(): ?int
+    {
+        return $this->container['guests_included'];
+    }
+
+    /**
+     * Sets guests_included
+     *
+     * @param int|null $guests_included Guests covered by the nightly rate before `pricePerExtraGuest` applies.
+     *
+     * @return $this
+     */
+    public function setGuestsIncluded(?int $guests_included): static
+    {
+        if (is_null($guests_included)) {
+            array_push($this->openAPINullablesSetToNull, 'guests_included');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('guests_included', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['guests_included'] = $guests_included;
+
+        return $this;
+    }
+
+    /**
+     * Gets currency
+     *
+     * @return string|null
+     */
+    public function getCurrency(): ?string
+    {
+        return $this->container['currency'];
+    }
+
+    /**
+     * Sets currency
+     *
+     * @param string|null $currency ISO 4217, e.g. `USD`.
+     *
+     * @return $this
+     */
+    public function setCurrency(?string $currency): static
+    {
+        if (is_null($currency)) {
+            array_push($this->openAPINullablesSetToNull, 'currency');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('currency', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['currency'] = $currency;
 
         return $this;
     }

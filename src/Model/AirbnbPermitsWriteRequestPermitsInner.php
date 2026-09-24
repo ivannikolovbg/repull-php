@@ -61,7 +61,9 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
     protected static array $openAPITypes = [
         'regulatory_body' => 'string',
         'regulation_type' => 'string',
-        'answers' => '\Repull\Model\AirbnbPermitsWriteRequestPermitsInnerAnswersInner[]'
+        'regulation_context' => 'string',
+        'flow_slug' => 'string',
+        'answers' => 'array<string,\Repull\Model\AirbnbPermitsWriteRequestPermitsInnerAnswersValue>'
     ];
 
     /**
@@ -72,6 +74,8 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
     protected static array $openAPIFormats = [
         'regulatory_body' => null,
         'regulation_type' => null,
+        'regulation_context' => null,
+        'flow_slug' => null,
         'answers' => null
     ];
 
@@ -83,6 +87,8 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
     protected static array $openAPINullables = [
         'regulatory_body' => false,
         'regulation_type' => false,
+        'regulation_context' => false,
+        'flow_slug' => false,
         'answers' => false
     ];
 
@@ -164,6 +170,8 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
     protected static array $attributeMap = [
         'regulatory_body' => 'regulatory_body',
         'regulation_type' => 'regulation_type',
+        'regulation_context' => 'regulation_context',
+        'flow_slug' => 'flow_slug',
         'answers' => 'answers'
     ];
 
@@ -175,6 +183,8 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
     protected static array $setters = [
         'regulatory_body' => 'setRegulatoryBody',
         'regulation_type' => 'setRegulationType',
+        'regulation_context' => 'setRegulationContext',
+        'flow_slug' => 'setFlowSlug',
         'answers' => 'setAnswers'
     ];
 
@@ -186,6 +196,8 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
     protected static array $getters = [
         'regulatory_body' => 'getRegulatoryBody',
         'regulation_type' => 'getRegulationType',
+        'regulation_context' => 'getRegulationContext',
+        'flow_slug' => 'getFlowSlug',
         'answers' => 'getAnswers'
     ];
 
@@ -238,6 +250,8 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
     {
         $this->setIfExists('regulatory_body', $data ?? [], null);
         $this->setIfExists('regulation_type', $data ?? [], null);
+        $this->setIfExists('regulation_context', $data ?? [], null);
+        $this->setIfExists('flow_slug', $data ?? [], null);
         $this->setIfExists('answers', $data ?? [], null);
     }
 
@@ -272,6 +286,9 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
         if ($this->container['regulation_type'] === null) {
             $invalidProperties[] = "'regulation_type' can't be null";
         }
+        if ($this->container['flow_slug'] === null) {
+            $invalidProperties[] = "'flow_slug' can't be null";
+        }
         if ($this->container['answers'] === null) {
             $invalidProperties[] = "'answers' can't be null";
         }
@@ -304,7 +321,7 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
     /**
      * Sets regulatory_body
      *
-     * @param string $regulatory_body As named by the GET, e.g. the city or registry asking.
+     * @param string $regulatory_body As returned by the GET, e.g. `maui_county_hawaii`.
      *
      * @return $this
      */
@@ -331,7 +348,7 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
     /**
      * Sets regulation_type
      *
-     * @param string $regulation_type regulation_type
+     * @param string $regulation_type As returned by the GET.
      *
      * @return $this
      */
@@ -346,9 +363,63 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
     }
 
     /**
+     * Gets regulation_context
+     *
+     * @return string|null
+     */
+    public function getRegulationContext(): ?string
+    {
+        return $this->container['regulation_context'];
+    }
+
+    /**
+     * Sets regulation_context
+     *
+     * @param string|null $regulation_context Echo the GET's `regulation_context` (e.g. `initial`) when present.
+     *
+     * @return $this
+     */
+    public function setRegulationContext(?string $regulation_context): static
+    {
+        if (is_null($regulation_context)) {
+            throw new InvalidArgumentException('non-nullable regulation_context cannot be null');
+        }
+        $this->container['regulation_context'] = $regulation_context;
+
+        return $this;
+    }
+
+    /**
+     * Gets flow_slug
+     *
+     * @return string
+     */
+    public function getFlowSlug(): string
+    {
+        return $this->container['flow_slug'];
+    }
+
+    /**
+     * Sets flow_slug
+     *
+     * @param string $flow_slug The `slug` of the flow you are answering, e.g. `existing_registration` or `exemption_claim`.
+     *
+     * @return $this
+     */
+    public function setFlowSlug(string $flow_slug): static
+    {
+        if (is_null($flow_slug)) {
+            throw new InvalidArgumentException('non-nullable flow_slug cannot be null');
+        }
+        $this->container['flow_slug'] = $flow_slug;
+
+        return $this;
+    }
+
+    /**
      * Gets answers
      *
-     * @return \Repull\Model\AirbnbPermitsWriteRequestPermitsInnerAnswersInner[]
+     * @return array<string,\Repull\Model\AirbnbPermitsWriteRequestPermitsInnerAnswersValue>
      */
     public function getAnswers(): array
     {
@@ -358,7 +429,7 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
     /**
      * Sets answers
      *
-     * @param \Repull\Model\AirbnbPermitsWriteRequestPermitsInnerAnswersInner[] $answers answers
+     * @param array<string,\Repull\Model\AirbnbPermitsWriteRequestPermitsInnerAnswersValue> $answers Keyed by each question's `answer_key`. Each value carries exactly one field, chosen by the question's `type`: TEXT → `text_value`, ATTESTATION → `attestation_value`, RADIO → `radio_value`, DATE → `date_value`, SELECT → `selected_options_value`.
      *
      * @return $this
      */

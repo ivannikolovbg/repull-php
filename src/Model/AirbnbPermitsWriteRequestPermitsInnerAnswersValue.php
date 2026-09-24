@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * AirbnbPermitsWriteRequestPermitsInnerAnswersValue
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * AirbnbPermitsWriteRequestPermitsInnerAnswersValue Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class AirbnbPermitsWriteRequestPermitsInnerAnswersValue implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'AirbnbPermitsWriteRequest_permits_inner_answers_value';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,11 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'text_value' => 'string',
+        'attestation_value' => 'bool',
+        'radio_value' => 'string',
+        'date_value' => 'string',
+        'selected_options_value' => 'string[]'
     ];
 
     /**
@@ -69,8 +72,11 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'text_value' => null,
+        'attestation_value' => null,
+        'radio_value' => null,
+        'date_value' => null,
+        'selected_options_value' => null
     ];
 
     /**
@@ -79,8 +85,11 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'text_value' => false,
+        'attestation_value' => false,
+        'radio_value' => false,
+        'date_value' => false,
+        'selected_options_value' => false
     ];
 
     /**
@@ -159,8 +168,11 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'text_value' => 'text_value',
+        'attestation_value' => 'attestation_value',
+        'radio_value' => 'radio_value',
+        'date_value' => 'date_value',
+        'selected_options_value' => 'selected_options_value'
     ];
 
     /**
@@ -169,8 +181,11 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'text_value' => 'setTextValue',
+        'attestation_value' => 'setAttestationValue',
+        'radio_value' => 'setRadioValue',
+        'date_value' => 'setDateValue',
+        'selected_options_value' => 'setSelectedOptionsValue'
     ];
 
     /**
@@ -179,8 +194,11 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'text_value' => 'getTextValue',
+        'attestation_value' => 'getAttestationValue',
+        'radio_value' => 'getRadioValue',
+        'date_value' => 'getDateValue',
+        'selected_options_value' => 'getSelectedOptionsValue'
     ];
 
     /**
@@ -230,8 +248,11 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('text_value', $data ?? [], null);
+        $this->setIfExists('attestation_value', $data ?? [], null);
+        $this->setIfExists('radio_value', $data ?? [], null);
+        $this->setIfExists('date_value', $data ?? [], null);
+        $this->setIfExists('selected_options_value', $data ?? [], null);
     }
 
     /**
@@ -272,62 +293,136 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets text_value
      *
-     * @return array<string,mixed>[]|null
+     * @return string|null
      */
-    public function getPermits(): ?array
+    public function getTextValue(): ?string
     {
-        return $this->container['permits'];
+        return $this->container['text_value'];
     }
 
     /**
-     * Sets permits
+     * Sets text_value
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param string|null $text_value text_value
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setTextValue(?string $text_value): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($text_value)) {
+            throw new InvalidArgumentException('non-nullable text_value cannot be null');
         }
-        $this->container['permits'] = $permits;
+        $this->container['text_value'] = $text_value;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets attestation_value
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return bool|null
      */
-    public function getCached(): ?array
+    public function getAttestationValue(): ?bool
     {
-        return $this->container['cached'];
+        return $this->container['attestation_value'];
     }
 
     /**
-     * Sets cached
+     * Sets attestation_value
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param bool|null $attestation_value attestation_value
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setAttestationValue(?bool $attestation_value): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($attestation_value)) {
+            throw new InvalidArgumentException('non-nullable attestation_value cannot be null');
         }
-        $this->container['cached'] = $cached;
+        $this->container['attestation_value'] = $attestation_value;
+
+        return $this;
+    }
+
+    /**
+     * Gets radio_value
+     *
+     * @return string|null
+     */
+    public function getRadioValue(): ?string
+    {
+        return $this->container['radio_value'];
+    }
+
+    /**
+     * Sets radio_value
+     *
+     * @param string|null $radio_value radio_value
+     *
+     * @return $this
+     */
+    public function setRadioValue(?string $radio_value): static
+    {
+        if (is_null($radio_value)) {
+            throw new InvalidArgumentException('non-nullable radio_value cannot be null');
+        }
+        $this->container['radio_value'] = $radio_value;
+
+        return $this;
+    }
+
+    /**
+     * Gets date_value
+     *
+     * @return string|null
+     */
+    public function getDateValue(): ?string
+    {
+        return $this->container['date_value'];
+    }
+
+    /**
+     * Sets date_value
+     *
+     * @param string|null $date_value ISO date, YYYY-MM-DD.
+     *
+     * @return $this
+     */
+    public function setDateValue(?string $date_value): static
+    {
+        if (is_null($date_value)) {
+            throw new InvalidArgumentException('non-nullable date_value cannot be null');
+        }
+        $this->container['date_value'] = $date_value;
+
+        return $this;
+    }
+
+    /**
+     * Gets selected_options_value
+     *
+     * @return string[]|null
+     */
+    public function getSelectedOptionsValue(): ?array
+    {
+        return $this->container['selected_options_value'];
+    }
+
+    /**
+     * Sets selected_options_value
+     *
+     * @param string[]|null $selected_options_value selected_options_value
+     *
+     * @return $this
+     */
+    public function setSelectedOptionsValue(?array $selected_options_value): static
+    {
+        if (is_null($selected_options_value)) {
+            throw new InvalidArgumentException('non-nullable selected_options_value cannot be null');
+        }
+        $this->container['selected_options_value'] = $selected_options_value;
 
         return $this;
     }

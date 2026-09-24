@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsWriteRequestPermitsInnerAnswersInner
+ * DeleteMigration200Response
  *
  * PHP version 8.1
  *
@@ -35,15 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsWriteRequestPermitsInnerAnswersInner Class Doc Comment
+ * DeleteMigration200Response Class Doc Comment
  *
- * @description Exactly one value field applies, decided by the question&#39;s &#x60;answer_type&#x60;.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsWriteRequestPermitsInnerAnswersInner implements ModelInterface, ArrayAccess, JsonSerializable
+class DeleteMigration200Response implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +51,7 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersInner implements ModelInterfac
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsWriteRequest_permits_inner_answers_inner';
+    protected static string $openAPIModelName = 'deleteMigration_200_response';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,10 +59,7 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersInner implements ModelInterfac
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'question_key' => 'string',
-        'text_value' => 'string',
-        'date_value' => 'string',
-        'selected_options_value' => 'string[]'
+        'data' => '\Repull\Model\DeleteMigration200ResponseData'
     ];
 
     /**
@@ -72,10 +68,7 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersInner implements ModelInterfac
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'question_key' => null,
-        'text_value' => null,
-        'date_value' => null,
-        'selected_options_value' => null
+        'data' => null
     ];
 
     /**
@@ -84,10 +77,7 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersInner implements ModelInterfac
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'question_key' => false,
-        'text_value' => true,
-        'date_value' => true,
-        'selected_options_value' => true
+        'data' => false
     ];
 
     /**
@@ -166,10 +156,7 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersInner implements ModelInterfac
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'question_key' => 'question_key',
-        'text_value' => 'text_value',
-        'date_value' => 'date_value',
-        'selected_options_value' => 'selected_options_value'
+        'data' => 'data'
     ];
 
     /**
@@ -178,10 +165,7 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersInner implements ModelInterfac
      * @var array<string, string>
      */
     protected static array $setters = [
-        'question_key' => 'setQuestionKey',
-        'text_value' => 'setTextValue',
-        'date_value' => 'setDateValue',
-        'selected_options_value' => 'setSelectedOptionsValue'
+        'data' => 'setData'
     ];
 
     /**
@@ -190,10 +174,7 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersInner implements ModelInterfac
      * @var array<string, string>
      */
     protected static array $getters = [
-        'question_key' => 'getQuestionKey',
-        'text_value' => 'getTextValue',
-        'date_value' => 'getDateValue',
-        'selected_options_value' => 'getSelectedOptionsValue'
+        'data' => 'getData'
     ];
 
     /**
@@ -243,10 +224,7 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersInner implements ModelInterfac
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('question_key', $data ?? [], null);
-        $this->setIfExists('text_value', $data ?? [], null);
-        $this->setIfExists('date_value', $data ?? [], null);
-        $this->setIfExists('selected_options_value', $data ?? [], null);
+        $this->setIfExists('data', $data ?? [], null);
     }
 
     /**
@@ -274,9 +252,6 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersInner implements ModelInterfac
     {
         $invalidProperties = [];
 
-        if ($this->container['question_key'] === null) {
-            $invalidProperties[] = "'question_key' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -290,130 +265,28 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersInner implements ModelInterfac
 
 
     /**
-     * Gets question_key
+     * Gets data
      *
-     * @return string
+     * @return \Repull\Model\DeleteMigration200ResponseData|null
      */
-    public function getQuestionKey(): string
+    public function getData(): ?\Repull\Model\DeleteMigration200ResponseData
     {
-        return $this->container['question_key'];
+        return $this->container['data'];
     }
 
     /**
-     * Sets question_key
+     * Sets data
      *
-     * @param string $question_key question_key
+     * @param \Repull\Model\DeleteMigration200ResponseData|null $data data
      *
      * @return $this
      */
-    public function setQuestionKey(string $question_key): static
+    public function setData(?\Repull\Model\DeleteMigration200ResponseData $data): static
     {
-        if (is_null($question_key)) {
-            throw new InvalidArgumentException('non-nullable question_key cannot be null');
+        if (is_null($data)) {
+            throw new InvalidArgumentException('non-nullable data cannot be null');
         }
-        $this->container['question_key'] = $question_key;
-
-        return $this;
-    }
-
-    /**
-     * Gets text_value
-     *
-     * @return string|null
-     */
-    public function getTextValue(): ?string
-    {
-        return $this->container['text_value'];
-    }
-
-    /**
-     * Sets text_value
-     *
-     * @param string|null $text_value text_value
-     *
-     * @return $this
-     */
-    public function setTextValue(?string $text_value): static
-    {
-        if (is_null($text_value)) {
-            array_push($this->openAPINullablesSetToNull, 'text_value');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('text_value', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['text_value'] = $text_value;
-
-        return $this;
-    }
-
-    /**
-     * Gets date_value
-     *
-     * @return string|null
-     */
-    public function getDateValue(): ?string
-    {
-        return $this->container['date_value'];
-    }
-
-    /**
-     * Sets date_value
-     *
-     * @param string|null $date_value ISO date, YYYY-MM-DD.
-     *
-     * @return $this
-     */
-    public function setDateValue(?string $date_value): static
-    {
-        if (is_null($date_value)) {
-            array_push($this->openAPINullablesSetToNull, 'date_value');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('date_value', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['date_value'] = $date_value;
-
-        return $this;
-    }
-
-    /**
-     * Gets selected_options_value
-     *
-     * @return string[]|null
-     */
-    public function getSelectedOptionsValue(): ?array
-    {
-        return $this->container['selected_options_value'];
-    }
-
-    /**
-     * Sets selected_options_value
-     *
-     * @param string[]|null $selected_options_value selected_options_value
-     *
-     * @return $this
-     */
-    public function setSelectedOptionsValue(?array $selected_options_value): static
-    {
-        if (is_null($selected_options_value)) {
-            array_push($this->openAPINullablesSetToNull, 'selected_options_value');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('selected_options_value', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['selected_options_value'] = $selected_options_value;
+        $this->container['data'] = $data;
 
         return $this;
     }

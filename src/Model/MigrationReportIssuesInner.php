@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * MigrationReportIssuesInner
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * MigrationReportIssuesInner Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class MigrationReportIssuesInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'MigrationReport_issues_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'severity' => 'string',
+        'entity' => 'string',
+        'code' => 'string',
+        'message' => 'string',
+        'count' => 'int',
+        'sample_ids' => 'int[]'
     ];
 
     /**
@@ -69,8 +73,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'severity' => null,
+        'entity' => null,
+        'code' => null,
+        'message' => null,
+        'count' => null,
+        'sample_ids' => null
     ];
 
     /**
@@ -79,8 +87,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'severity' => false,
+        'entity' => false,
+        'code' => false,
+        'message' => false,
+        'count' => false,
+        'sample_ids' => false
     ];
 
     /**
@@ -159,8 +171,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'severity' => 'severity',
+        'entity' => 'entity',
+        'code' => 'code',
+        'message' => 'message',
+        'count' => 'count',
+        'sample_ids' => 'sampleIds'
     ];
 
     /**
@@ -169,8 +185,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'severity' => 'setSeverity',
+        'entity' => 'setEntity',
+        'code' => 'setCode',
+        'message' => 'setMessage',
+        'count' => 'setCount',
+        'sample_ids' => 'setSampleIds'
     ];
 
     /**
@@ -179,8 +199,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'severity' => 'getSeverity',
+        'entity' => 'getEntity',
+        'code' => 'getCode',
+        'message' => 'getMessage',
+        'count' => 'getCount',
+        'sample_ids' => 'getSampleIds'
     ];
 
     /**
@@ -215,6 +239,23 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
         return self::$openAPIModelName;
     }
 
+    public const SEVERITY_ERROR = 'error';
+    public const SEVERITY_WARNING = 'warning';
+    public const SEVERITY_INFO = 'info';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getSeverityAllowableValues()
+    {
+        return [
+            self::SEVERITY_ERROR,
+            self::SEVERITY_WARNING,
+            self::SEVERITY_INFO,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -230,8 +271,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('severity', $data ?? [], null);
+        $this->setIfExists('entity', $data ?? [], null);
+        $this->setIfExists('code', $data ?? [], null);
+        $this->setIfExists('message', $data ?? [], null);
+        $this->setIfExists('count', $data ?? [], null);
+        $this->setIfExists('sample_ids', $data ?? [], null);
     }
 
     /**
@@ -259,6 +304,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
     {
         $invalidProperties = [];
 
+        $allowedValues = self::getSeverityAllowableValues();
+        if (!is_null($this->container['severity']) && !in_array($this->container['severity'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'severity', must be one of '%s'",
+                $this->container['severity'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -272,62 +326,164 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets severity
      *
-     * @return array<string,mixed>[]|null
+     * @return string|null
      */
-    public function getPermits(): ?array
+    public function getSeverity(): ?string
     {
-        return $this->container['permits'];
+        return $this->container['severity'];
     }
 
     /**
-     * Sets permits
+     * Sets severity
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param string|null $severity severity
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setSeverity(?string $severity): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($severity)) {
+            throw new InvalidArgumentException('non-nullable severity cannot be null');
         }
-        $this->container['permits'] = $permits;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['severity'] = $severity;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets entity
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return string|null
      */
-    public function getCached(): ?array
+    public function getEntity(): ?string
     {
-        return $this->container['cached'];
+        return $this->container['entity'];
     }
 
     /**
-     * Sets cached
+     * Sets entity
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param string|null $entity entity
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setEntity(?string $entity): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($entity)) {
+            throw new InvalidArgumentException('non-nullable entity cannot be null');
         }
-        $this->container['cached'] = $cached;
+        $this->container['entity'] = $entity;
+
+        return $this;
+    }
+
+    /**
+     * Gets code
+     *
+     * @return string|null
+     */
+    public function getCode(): ?string
+    {
+        return $this->container['code'];
+    }
+
+    /**
+     * Sets code
+     *
+     * @param string|null $code code
+     *
+     * @return $this
+     */
+    public function setCode(?string $code): static
+    {
+        if (is_null($code)) {
+            throw new InvalidArgumentException('non-nullable code cannot be null');
+        }
+        $this->container['code'] = $code;
+
+        return $this;
+    }
+
+    /**
+     * Gets message
+     *
+     * @return string|null
+     */
+    public function getMessage(): ?string
+    {
+        return $this->container['message'];
+    }
+
+    /**
+     * Sets message
+     *
+     * @param string|null $message message
+     *
+     * @return $this
+     */
+    public function setMessage(?string $message): static
+    {
+        if (is_null($message)) {
+            throw new InvalidArgumentException('non-nullable message cannot be null');
+        }
+        $this->container['message'] = $message;
+
+        return $this;
+    }
+
+    /**
+     * Gets count
+     *
+     * @return int|null
+     */
+    public function getCount(): ?int
+    {
+        return $this->container['count'];
+    }
+
+    /**
+     * Sets count
+     *
+     * @param int|null $count count
+     *
+     * @return $this
+     */
+    public function setCount(?int $count): static
+    {
+        if (is_null($count)) {
+            throw new InvalidArgumentException('non-nullable count cannot be null');
+        }
+        $this->container['count'] = $count;
+
+        return $this;
+    }
+
+    /**
+     * Gets sample_ids
+     *
+     * @return int[]|null
+     */
+    public function getSampleIds(): ?array
+    {
+        return $this->container['sample_ids'];
+    }
+
+    /**
+     * Sets sample_ids
+     *
+     * @param int[]|null $sample_ids Up to 10 affected listing / reservation ids.
+     *
+     * @return $this
+     */
+    public function setSampleIds(?array $sample_ids): static
+    {
+        if (is_null($sample_ids)) {
+            throw new InvalidArgumentException('non-nullable sample_ids cannot be null');
+        }
+        $this->container['sample_ids'] = $sample_ids;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * MigrationChannelMapListingsInnerBooking
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * MigrationChannelMapListingsInnerBooking Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class MigrationChannelMapListingsInnerBooking implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'MigrationChannelMap_listings_inner_booking';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'hotel_id' => 'string',
+        'room_id' => 'string'
     ];
 
     /**
@@ -69,8 +69,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'hotel_id' => null,
+        'room_id' => null
     ];
 
     /**
@@ -79,8 +79,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'hotel_id' => false,
+        'room_id' => false
     ];
 
     /**
@@ -159,8 +159,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'hotel_id' => 'hotelId',
+        'room_id' => 'roomId'
     ];
 
     /**
@@ -169,8 +169,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'hotel_id' => 'setHotelId',
+        'room_id' => 'setRoomId'
     ];
 
     /**
@@ -179,8 +179,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'hotel_id' => 'getHotelId',
+        'room_id' => 'getRoomId'
     ];
 
     /**
@@ -230,8 +230,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('hotel_id', $data ?? [], null);
+        $this->setIfExists('room_id', $data ?? [], null);
     }
 
     /**
@@ -272,62 +272,55 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets hotel_id
      *
-     * @return array<string,mixed>[]|null
+     * @return string|null
      */
-    public function getPermits(): ?array
+    public function getHotelId(): ?string
     {
-        return $this->container['permits'];
+        return $this->container['hotel_id'];
     }
 
     /**
-     * Sets permits
+     * Sets hotel_id
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param string|null $hotel_id hotel_id
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setHotelId(?string $hotel_id): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($hotel_id)) {
+            throw new InvalidArgumentException('non-nullable hotel_id cannot be null');
         }
-        $this->container['permits'] = $permits;
+        $this->container['hotel_id'] = $hotel_id;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets room_id
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return string|null
      */
-    public function getCached(): ?array
+    public function getRoomId(): ?string
     {
-        return $this->container['cached'];
+        return $this->container['room_id'];
     }
 
     /**
-     * Sets cached
+     * Sets room_id
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param string|null $room_id room_id
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setRoomId(?string $room_id): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($room_id)) {
+            throw new InvalidArgumentException('non-nullable room_id cannot be null');
         }
-        $this->container['cached'] = $cached;
+        $this->container['room_id'] = $room_id;
 
         return $this;
     }

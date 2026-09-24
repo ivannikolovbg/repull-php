@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * MigrationConnectionsInner
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * MigrationConnectionsInner Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class MigrationConnectionsInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'Migration_connections_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'id' => 'string',
+        'provider' => 'string',
+        'status' => 'string',
+        'connected_at' => '\DateTime',
+        'last_polled_at' => '\DateTime',
+        'import' => '\Repull\Model\MigrationImportRun'
     ];
 
     /**
@@ -69,8 +73,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'id' => null,
+        'provider' => null,
+        'status' => null,
+        'connected_at' => 'date-time',
+        'last_polled_at' => 'date-time',
+        'import' => null
     ];
 
     /**
@@ -79,8 +87,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'id' => false,
+        'provider' => false,
+        'status' => false,
+        'connected_at' => false,
+        'last_polled_at' => true,
+        'import' => true
     ];
 
     /**
@@ -159,8 +171,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'id' => 'id',
+        'provider' => 'provider',
+        'status' => 'status',
+        'connected_at' => 'connectedAt',
+        'last_polled_at' => 'lastPolledAt',
+        'import' => 'import'
     ];
 
     /**
@@ -169,8 +185,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'id' => 'setId',
+        'provider' => 'setProvider',
+        'status' => 'setStatus',
+        'connected_at' => 'setConnectedAt',
+        'last_polled_at' => 'setLastPolledAt',
+        'import' => 'setImport'
     ];
 
     /**
@@ -179,8 +199,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'id' => 'getId',
+        'provider' => 'getProvider',
+        'status' => 'getStatus',
+        'connected_at' => 'getConnectedAt',
+        'last_polled_at' => 'getLastPolledAt',
+        'import' => 'getImport'
     ];
 
     /**
@@ -230,8 +254,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('provider', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('connected_at', $data ?? [], null);
+        $this->setIfExists('last_polled_at', $data ?? [], null);
+        $this->setIfExists('import', $data ?? [], null);
     }
 
     /**
@@ -272,62 +300,177 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets id
      *
-     * @return array<string,mixed>[]|null
+     * @return string|null
      */
-    public function getPermits(): ?array
+    public function getId(): ?string
     {
-        return $this->container['permits'];
+        return $this->container['id'];
     }
 
     /**
-     * Sets permits
+     * Sets id
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param string|null $id id
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setId(?string $id): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($id)) {
+            throw new InvalidArgumentException('non-nullable id cannot be null');
         }
-        $this->container['permits'] = $permits;
+        $this->container['id'] = $id;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets provider
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return string|null
      */
-    public function getCached(): ?array
+    public function getProvider(): ?string
     {
-        return $this->container['cached'];
+        return $this->container['provider'];
     }
 
     /**
-     * Sets cached
+     * Sets provider
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param string|null $provider provider
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setProvider(?string $provider): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($provider)) {
+            throw new InvalidArgumentException('non-nullable provider cannot be null');
         }
-        $this->container['cached'] = $cached;
+        $this->container['provider'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * Gets status
+     *
+     * @return string|null
+     */
+    public function getStatus(): ?string
+    {
+        return $this->container['status'];
+    }
+
+    /**
+     * Sets status
+     *
+     * @param string|null $status status
+     *
+     * @return $this
+     */
+    public function setStatus(?string $status): static
+    {
+        if (is_null($status)) {
+            throw new InvalidArgumentException('non-nullable status cannot be null');
+        }
+        $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets connected_at
+     *
+     * @return \DateTime|null
+     */
+    public function getConnectedAt(): ?\DateTime
+    {
+        return $this->container['connected_at'];
+    }
+
+    /**
+     * Sets connected_at
+     *
+     * @param \DateTime|null $connected_at connected_at
+     *
+     * @return $this
+     */
+    public function setConnectedAt(?\DateTime $connected_at): static
+    {
+        if (is_null($connected_at)) {
+            throw new InvalidArgumentException('non-nullable connected_at cannot be null');
+        }
+        $this->container['connected_at'] = $connected_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets last_polled_at
+     *
+     * @return \DateTime|null
+     */
+    public function getLastPolledAt(): ?\DateTime
+    {
+        return $this->container['last_polled_at'];
+    }
+
+    /**
+     * Sets last_polled_at
+     *
+     * @param \DateTime|null $last_polled_at last_polled_at
+     *
+     * @return $this
+     */
+    public function setLastPolledAt(?\DateTime $last_polled_at): static
+    {
+        if (is_null($last_polled_at)) {
+            array_push($this->openAPINullablesSetToNull, 'last_polled_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('last_polled_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['last_polled_at'] = $last_polled_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets import
+     *
+     * @return \Repull\Model\MigrationImportRun|null
+     */
+    public function getImport(): ?\Repull\Model\MigrationImportRun
+    {
+        return $this->container['import'];
+    }
+
+    /**
+     * Sets import
+     *
+     * @param \Repull\Model\MigrationImportRun|null $import The last import run, or null before the first one (and for channels, which sync on their own schedule).
+     *
+     * @return $this
+     */
+    public function setImport(?\Repull\Model\MigrationImportRun $import): static
+    {
+        if (is_null($import)) {
+            array_push($this->openAPINullablesSetToNull, 'import');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('import', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['import'] = $import;
 
         return $this;
     }

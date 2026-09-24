@@ -59,7 +59,8 @@ class ListingCreateResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'string'
+        'id' => 'string',
+        'calendar_days_seeded' => 'int'
     ];
 
     /**
@@ -68,7 +69,8 @@ class ListingCreateResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'id' => null
+        'id' => null,
+        'calendar_days_seeded' => null
     ];
 
     /**
@@ -77,7 +79,8 @@ class ListingCreateResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'id' => false
+        'id' => false,
+        'calendar_days_seeded' => false
     ];
 
     /**
@@ -156,7 +159,8 @@ class ListingCreateResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'id' => 'id'
+        'id' => 'id',
+        'calendar_days_seeded' => 'calendarDaysSeeded'
     ];
 
     /**
@@ -165,7 +169,8 @@ class ListingCreateResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'id' => 'setId'
+        'id' => 'setId',
+        'calendar_days_seeded' => 'setCalendarDaysSeeded'
     ];
 
     /**
@@ -174,7 +179,8 @@ class ListingCreateResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'id' => 'getId'
+        'id' => 'getId',
+        'calendar_days_seeded' => 'getCalendarDaysSeeded'
     ];
 
     /**
@@ -225,6 +231,7 @@ class ListingCreateResponse implements ModelInterface, ArrayAccess, JsonSerializ
     public function __construct(?array $data = null)
     {
         $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('calendar_days_seeded', $data ?? [], null);
     }
 
     /**
@@ -287,6 +294,33 @@ class ListingCreateResponse implements ModelInterface, ArrayAccess, JsonSerializ
             throw new InvalidArgumentException('non-nullable id cannot be null');
         }
         $this->container['id'] = $id;
+
+        return $this;
+    }
+
+    /**
+     * Gets calendar_days_seeded
+     *
+     * @return int|null
+     */
+    public function getCalendarDaysSeeded(): ?int
+    {
+        return $this->container['calendar_days_seeded'];
+    }
+
+    /**
+     * Sets calendar_days_seeded
+     *
+     * @param int|null $calendar_days_seeded Nights of calendar written from the price you stated. `0` means the listing has no calendar and a publish will send no availability — state `defaultDailyPrice` on the create, or set it later with `PUT /v1/listings/{id}/content` under `pricing`.
+     *
+     * @return $this
+     */
+    public function setCalendarDaysSeeded(?int $calendar_days_seeded): static
+    {
+        if (is_null($calendar_days_seeded)) {
+            throw new InvalidArgumentException('non-nullable calendar_days_seeded cannot be null');
+        }
+        $this->container['calendar_days_seeded'] = $calendar_days_seeded;
 
         return $this;
     }

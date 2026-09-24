@@ -62,7 +62,11 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'redirect_url' => 'string',
         'state' => 'string',
         'allowed_providers' => 'string[]',
-        'locale' => 'string'
+        'locale' => 'string',
+        'purpose' => 'string',
+        'workspace' => '\Repull\Model\CreateConnectSessionRequestWorkspace',
+        'copy' => '\Repull\Model\CreateConnectSessionRequestCopy',
+        'scope' => 'string[]'
     ];
 
     /**
@@ -74,7 +78,11 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'redirect_url' => 'uri',
         'state' => null,
         'allowed_providers' => null,
-        'locale' => null
+        'locale' => null,
+        'purpose' => null,
+        'workspace' => null,
+        'copy' => null,
+        'scope' => null
     ];
 
     /**
@@ -86,7 +94,11 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'redirect_url' => false,
         'state' => true,
         'allowed_providers' => true,
-        'locale' => true
+        'locale' => true,
+        'purpose' => false,
+        'workspace' => false,
+        'copy' => false,
+        'scope' => false
     ];
 
     /**
@@ -168,7 +180,11 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'redirect_url' => 'redirectUrl',
         'state' => 'state',
         'allowed_providers' => 'allowedProviders',
-        'locale' => 'locale'
+        'locale' => 'locale',
+        'purpose' => 'purpose',
+        'workspace' => 'workspace',
+        'copy' => 'copy',
+        'scope' => 'scope'
     ];
 
     /**
@@ -180,7 +196,11 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'redirect_url' => 'setRedirectUrl',
         'state' => 'setState',
         'allowed_providers' => 'setAllowedProviders',
-        'locale' => 'setLocale'
+        'locale' => 'setLocale',
+        'purpose' => 'setPurpose',
+        'workspace' => 'setWorkspace',
+        'copy' => 'setCopy',
+        'scope' => 'setScope'
     ];
 
     /**
@@ -192,7 +212,11 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'redirect_url' => 'getRedirectUrl',
         'state' => 'getState',
         'allowed_providers' => 'getAllowedProviders',
-        'locale' => 'getLocale'
+        'locale' => 'getLocale',
+        'purpose' => 'getPurpose',
+        'workspace' => 'getWorkspace',
+        'copy' => 'getCopy',
+        'scope' => 'getScope'
     ];
 
     /**
@@ -227,6 +251,62 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         return self::$openAPIModelName;
     }
 
+    public const PURPOSE_CONNECT = 'connect';
+    public const PURPOSE_MIGRATE = 'migrate';
+    public const SCOPE_LISTINGS = 'listings';
+    public const SCOPE_PHOTOS = 'photos';
+    public const SCOPE_AMENITIES = 'amenities';
+    public const SCOPE_ROOMS = 'rooms';
+    public const SCOPE_HOUSE_RULES = 'houseRules';
+    public const SCOPE_FEES = 'fees';
+    public const SCOPE_TAXES = 'taxes';
+    public const SCOPE_OWNERS = 'owners';
+    public const SCOPE_GUESTS = 'guests';
+    public const SCOPE_RESERVATIONS = 'reservations';
+    public const SCOPE_PAYMENTS = 'payments';
+    public const SCOPE_CONVERSATIONS = 'conversations';
+    public const SCOPE_CALENDAR = 'calendar';
+    public const SCOPE_RATES = 'rates';
+    public const SCOPE_CHANNEL_IDS = 'channelIds';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getPurposeAllowableValues()
+    {
+        return [
+            self::PURPOSE_CONNECT,
+            self::PURPOSE_MIGRATE,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getScopeAllowableValues()
+    {
+        return [
+            self::SCOPE_LISTINGS,
+            self::SCOPE_PHOTOS,
+            self::SCOPE_AMENITIES,
+            self::SCOPE_ROOMS,
+            self::SCOPE_HOUSE_RULES,
+            self::SCOPE_FEES,
+            self::SCOPE_TAXES,
+            self::SCOPE_OWNERS,
+            self::SCOPE_GUESTS,
+            self::SCOPE_RESERVATIONS,
+            self::SCOPE_PAYMENTS,
+            self::SCOPE_CONVERSATIONS,
+            self::SCOPE_CALENDAR,
+            self::SCOPE_RATES,
+            self::SCOPE_CHANNEL_IDS,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -246,6 +326,10 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         $this->setIfExists('state', $data ?? [], null);
         $this->setIfExists('allowed_providers', $data ?? [], null);
         $this->setIfExists('locale', $data ?? [], null);
+        $this->setIfExists('purpose', $data ?? [], 'connect');
+        $this->setIfExists('workspace', $data ?? [], null);
+        $this->setIfExists('copy', $data ?? [], null);
+        $this->setIfExists('scope', $data ?? [], null);
     }
 
     /**
@@ -276,6 +360,15 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         if ($this->container['redirect_url'] === null) {
             $invalidProperties[] = "'redirect_url' can't be null";
         }
+        $allowedValues = self::getPurposeAllowableValues();
+        if (!is_null($this->container['purpose']) && !in_array($this->container['purpose'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'purpose', must be one of '%s'",
+                $this->container['purpose'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -413,6 +506,124 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
             }
         }
         $this->container['locale'] = $locale;
+
+        return $this;
+    }
+
+    /**
+     * Gets purpose
+     *
+     * @return string|null
+     */
+    public function getPurpose(): ?string
+    {
+        return $this->container['purpose'];
+    }
+
+    /**
+     * Sets purpose
+     *
+     * @param string|null $purpose `migrate` starts a Repull Migrate session: the property manager connects their current PMS (or channel) and their data is copied into a new workspace of theirs, which you read with `X-Workspace-Id`. The hosted pages use migration wording, and after connecting they show the import's progress.
+     *
+     * @return $this
+     */
+    public function setPurpose(?string $purpose): static
+    {
+        if (is_null($purpose)) {
+            throw new InvalidArgumentException('non-nullable purpose cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['purpose'] = $purpose;
+
+        return $this;
+    }
+
+    /**
+     * Gets workspace
+     *
+     * @return \Repull\Model\CreateConnectSessionRequestWorkspace|null
+     */
+    public function getWorkspace(): ?\Repull\Model\CreateConnectSessionRequestWorkspace
+    {
+        return $this->container['workspace'];
+    }
+
+    /**
+     * Sets workspace
+     *
+     * @param \Repull\Model\CreateConnectSessionRequestWorkspace|null $workspace workspace
+     *
+     * @return $this
+     */
+    public function setWorkspace(?\Repull\Model\CreateConnectSessionRequestWorkspace $workspace): static
+    {
+        if (is_null($workspace)) {
+            throw new InvalidArgumentException('non-nullable workspace cannot be null');
+        }
+        $this->container['workspace'] = $workspace;
+
+        return $this;
+    }
+
+    /**
+     * Gets copy
+     *
+     * @return \Repull\Model\CreateConnectSessionRequestCopy|null
+     */
+    public function getCopy(): ?\Repull\Model\CreateConnectSessionRequestCopy
+    {
+        return $this->container['copy'];
+    }
+
+    /**
+     * Sets copy
+     *
+     * @param \Repull\Model\CreateConnectSessionRequestCopy|null $copy copy
+     *
+     * @return $this
+     */
+    public function setCopy(?\Repull\Model\CreateConnectSessionRequestCopy $copy): static
+    {
+        if (is_null($copy)) {
+            throw new InvalidArgumentException('non-nullable copy cannot be null');
+        }
+        $this->container['copy'] = $copy;
+
+        return $this;
+    }
+
+    /**
+     * Gets scope
+     *
+     * @return string[]|null
+     */
+    public function getScope(): ?array
+    {
+        return $this->container['scope'];
+    }
+
+    /**
+     * Sets scope
+     *
+     * @param string[]|null $scope Migrate only — what you want brought across, listed to the property manager before they connect.
+     *
+     * @return $this
+     */
+    public function setScope(?array $scope): static
+    {
+        if (is_null($scope)) {
+            throw new InvalidArgumentException('non-nullable scope cannot be null');
+        }
+        $allowedValues = self::getScopeAllowableValues();
+        if (array_diff($scope, $allowedValues)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    "Invalid value for 'scope', must be one of '%s'",
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['scope'] = $scope;
 
         return $this;
     }

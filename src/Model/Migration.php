@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * Migration
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * Migration Class Doc Comment
  *
+ * @description One migration: a property manager moved through Repull Migrate, living in its own workspace.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class Migration implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'Migration';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +60,14 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'workspace_id' => 'string',
+        'name' => 'string',
+        'external_ref' => 'string',
+        'created_at' => '\DateTime',
+        'state' => 'string',
+        'cutover_at' => '\DateTime',
+        'connections' => '\Repull\Model\MigrationConnectionsInner[]',
+        'counts' => '\Repull\Model\MigrationCounts'
     ];
 
     /**
@@ -69,8 +76,14 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'workspace_id' => null,
+        'name' => null,
+        'external_ref' => null,
+        'created_at' => 'date-time',
+        'state' => null,
+        'cutover_at' => 'date-time',
+        'connections' => null,
+        'counts' => null
     ];
 
     /**
@@ -79,8 +92,14 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'workspace_id' => false,
+        'name' => false,
+        'external_ref' => true,
+        'created_at' => false,
+        'state' => false,
+        'cutover_at' => true,
+        'connections' => false,
+        'counts' => false
     ];
 
     /**
@@ -159,8 +178,14 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'workspace_id' => 'workspaceId',
+        'name' => 'name',
+        'external_ref' => 'externalRef',
+        'created_at' => 'createdAt',
+        'state' => 'state',
+        'cutover_at' => 'cutoverAt',
+        'connections' => 'connections',
+        'counts' => 'counts'
     ];
 
     /**
@@ -169,8 +194,14 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'workspace_id' => 'setWorkspaceId',
+        'name' => 'setName',
+        'external_ref' => 'setExternalRef',
+        'created_at' => 'setCreatedAt',
+        'state' => 'setState',
+        'cutover_at' => 'setCutoverAt',
+        'connections' => 'setConnections',
+        'counts' => 'setCounts'
     ];
 
     /**
@@ -179,8 +210,14 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'workspace_id' => 'getWorkspaceId',
+        'name' => 'getName',
+        'external_ref' => 'getExternalRef',
+        'created_at' => 'getCreatedAt',
+        'state' => 'getState',
+        'cutover_at' => 'getCutoverAt',
+        'connections' => 'getConnections',
+        'counts' => 'getCounts'
     ];
 
     /**
@@ -215,6 +252,29 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
         return self::$openAPIModelName;
     }
 
+    public const STATE_AWAITING_CONNECTION = 'awaiting_connection';
+    public const STATE_IMPORTING = 'importing';
+    public const STATE_IMPORTED = 'imported';
+    public const STATE_FAILED = 'failed';
+    public const STATE_CUT_OVER = 'cut_over';
+    public const STATE_DEACTIVATED = 'deactivated';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getStateAllowableValues()
+    {
+        return [
+            self::STATE_AWAITING_CONNECTION,
+            self::STATE_IMPORTING,
+            self::STATE_IMPORTED,
+            self::STATE_FAILED,
+            self::STATE_CUT_OVER,
+            self::STATE_DEACTIVATED,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -230,8 +290,14 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('workspace_id', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('external_ref', $data ?? [], null);
+        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('state', $data ?? [], null);
+        $this->setIfExists('cutover_at', $data ?? [], null);
+        $this->setIfExists('connections', $data ?? [], null);
+        $this->setIfExists('counts', $data ?? [], null);
     }
 
     /**
@@ -259,6 +325,30 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
     {
         $invalidProperties = [];
 
+        if ($this->container['workspace_id'] === null) {
+            $invalidProperties[] = "'workspace_id' can't be null";
+        }
+        if ($this->container['name'] === null) {
+            $invalidProperties[] = "'name' can't be null";
+        }
+        if ($this->container['state'] === null) {
+            $invalidProperties[] = "'state' can't be null";
+        }
+        $allowedValues = self::getStateAllowableValues();
+        if (!is_null($this->container['state']) && !in_array($this->container['state'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'state', must be one of '%s'",
+                $this->container['state'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        if ($this->container['connections'] === null) {
+            $invalidProperties[] = "'connections' can't be null";
+        }
+        if ($this->container['counts'] === null) {
+            $invalidProperties[] = "'counts' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -272,62 +362,232 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets workspace_id
      *
-     * @return array<string,mixed>[]|null
+     * @return string
      */
-    public function getPermits(): ?array
+    public function getWorkspaceId(): string
     {
-        return $this->container['permits'];
+        return $this->container['workspace_id'];
     }
 
     /**
-     * Sets permits
+     * Sets workspace_id
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param string $workspace_id Pass as `X-Workspace-Id` to read this property manager's listings, reservations and conversations through the regular endpoints.
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setWorkspaceId(string $workspace_id): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($workspace_id)) {
+            throw new InvalidArgumentException('non-nullable workspace_id cannot be null');
         }
-        $this->container['permits'] = $permits;
+        $this->container['workspace_id'] = $workspace_id;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets name
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return string
      */
-    public function getCached(): ?array
+    public function getName(): string
     {
-        return $this->container['cached'];
+        return $this->container['name'];
     }
 
     /**
-     * Sets cached
+     * Sets name
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param string $name name
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setName(string $name): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($name)) {
+            throw new InvalidArgumentException('non-nullable name cannot be null');
         }
-        $this->container['cached'] = $cached;
+        $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets external_ref
+     *
+     * @return string|null
+     */
+    public function getExternalRef(): ?string
+    {
+        return $this->container['external_ref'];
+    }
+
+    /**
+     * Sets external_ref
+     *
+     * @param string|null $external_ref Your own id for this property manager, as sent when the migration was created.
+     *
+     * @return $this
+     */
+    public function setExternalRef(?string $external_ref): static
+    {
+        if (is_null($external_ref)) {
+            array_push($this->openAPINullablesSetToNull, 'external_ref');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('external_ref', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['external_ref'] = $external_ref;
+
+        return $this;
+    }
+
+    /**
+     * Gets created_at
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->container['created_at'];
+    }
+
+    /**
+     * Sets created_at
+     *
+     * @param \DateTime|null $created_at created_at
+     *
+     * @return $this
+     */
+    public function setCreatedAt(?\DateTime $created_at): static
+    {
+        if (is_null($created_at)) {
+            throw new InvalidArgumentException('non-nullable created_at cannot be null');
+        }
+        $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets state
+     *
+     * @return string
+     */
+    public function getState(): string
+    {
+        return $this->container['state'];
+    }
+
+    /**
+     * Sets state
+     *
+     * @param string $state `awaiting_connection` — not connected yet. `importing` — the first import is running. `imported` — data is in and kept fresh until cutover. `failed` — the last import failed (see `connections[].import.error`). `cut_over` — the source was disconnected. `deactivated` — the migration was deleted.
+     *
+     * @return $this
+     */
+    public function setState(string $state): static
+    {
+        if (is_null($state)) {
+            throw new InvalidArgumentException('non-nullable state cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['state'] = $state;
+
+        return $this;
+    }
+
+    /**
+     * Gets cutover_at
+     *
+     * @return \DateTime|null
+     */
+    public function getCutoverAt(): ?\DateTime
+    {
+        return $this->container['cutover_at'];
+    }
+
+    /**
+     * Sets cutover_at
+     *
+     * @param \DateTime|null $cutover_at cutover_at
+     *
+     * @return $this
+     */
+    public function setCutoverAt(?\DateTime $cutover_at): static
+    {
+        if (is_null($cutover_at)) {
+            array_push($this->openAPINullablesSetToNull, 'cutover_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('cutover_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['cutover_at'] = $cutover_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets connections
+     *
+     * @return \Repull\Model\MigrationConnectionsInner[]
+     */
+    public function getConnections(): array
+    {
+        return $this->container['connections'];
+    }
+
+    /**
+     * Sets connections
+     *
+     * @param \Repull\Model\MigrationConnectionsInner[] $connections connections
+     *
+     * @return $this
+     */
+    public function setConnections(array $connections): static
+    {
+        if (is_null($connections)) {
+            throw new InvalidArgumentException('non-nullable connections cannot be null');
+        }
+        $this->container['connections'] = $connections;
+
+        return $this;
+    }
+
+    /**
+     * Gets counts
+     *
+     * @return \Repull\Model\MigrationCounts
+     */
+    public function getCounts(): \Repull\Model\MigrationCounts
+    {
+        return $this->container['counts'];
+    }
+
+    /**
+     * Sets counts
+     *
+     * @param \Repull\Model\MigrationCounts $counts counts
+     *
+     * @return $this
+     */
+    public function setCounts(\Repull\Model\MigrationCounts $counts): static
+    {
+        if (is_null($counts)) {
+            throw new InvalidArgumentException('non-nullable counts cannot be null');
+        }
+        $this->container['counts'] = $counts;
 
         return $this;
     }

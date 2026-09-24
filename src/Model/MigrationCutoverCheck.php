@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * MigrationCutoverCheck
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * MigrationCutoverCheck Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class MigrationCutoverCheck implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'MigrationCutoverCheck';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'workspace_id' => 'string',
+        'checked_at' => '\DateTime',
+        'matched' => 'int',
+        'missing' => '\Repull\Model\MigrationReservationRef[]',
+        'extra' => '\Repull\Model\MigrationReservationRef[]',
+        'mismatched' => '\Repull\Model\MigrationCutoverCheckMismatchedInner[]'
     ];
 
     /**
@@ -69,8 +73,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'workspace_id' => null,
+        'checked_at' => 'date-time',
+        'matched' => null,
+        'missing' => null,
+        'extra' => null,
+        'mismatched' => null
     ];
 
     /**
@@ -79,8 +87,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'workspace_id' => false,
+        'checked_at' => false,
+        'matched' => false,
+        'missing' => false,
+        'extra' => false,
+        'mismatched' => false
     ];
 
     /**
@@ -159,8 +171,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'workspace_id' => 'workspaceId',
+        'checked_at' => 'checkedAt',
+        'matched' => 'matched',
+        'missing' => 'missing',
+        'extra' => 'extra',
+        'mismatched' => 'mismatched'
     ];
 
     /**
@@ -169,8 +185,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'workspace_id' => 'setWorkspaceId',
+        'checked_at' => 'setCheckedAt',
+        'matched' => 'setMatched',
+        'missing' => 'setMissing',
+        'extra' => 'setExtra',
+        'mismatched' => 'setMismatched'
     ];
 
     /**
@@ -179,8 +199,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'workspace_id' => 'getWorkspaceId',
+        'checked_at' => 'getCheckedAt',
+        'matched' => 'getMatched',
+        'missing' => 'getMissing',
+        'extra' => 'getExtra',
+        'mismatched' => 'getMismatched'
     ];
 
     /**
@@ -230,8 +254,12 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('workspace_id', $data ?? [], null);
+        $this->setIfExists('checked_at', $data ?? [], null);
+        $this->setIfExists('matched', $data ?? [], null);
+        $this->setIfExists('missing', $data ?? [], null);
+        $this->setIfExists('extra', $data ?? [], null);
+        $this->setIfExists('mismatched', $data ?? [], null);
     }
 
     /**
@@ -272,62 +300,163 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets workspace_id
      *
-     * @return array<string,mixed>[]|null
+     * @return string|null
      */
-    public function getPermits(): ?array
+    public function getWorkspaceId(): ?string
     {
-        return $this->container['permits'];
+        return $this->container['workspace_id'];
     }
 
     /**
-     * Sets permits
+     * Sets workspace_id
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param string|null $workspace_id workspace_id
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setWorkspaceId(?string $workspace_id): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($workspace_id)) {
+            throw new InvalidArgumentException('non-nullable workspace_id cannot be null');
         }
-        $this->container['permits'] = $permits;
+        $this->container['workspace_id'] = $workspace_id;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets checked_at
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return \DateTime|null
      */
-    public function getCached(): ?array
+    public function getCheckedAt(): ?\DateTime
     {
-        return $this->container['cached'];
+        return $this->container['checked_at'];
     }
 
     /**
-     * Sets cached
+     * Sets checked_at
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param \DateTime|null $checked_at checked_at
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setCheckedAt(?\DateTime $checked_at): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($checked_at)) {
+            throw new InvalidArgumentException('non-nullable checked_at cannot be null');
         }
-        $this->container['cached'] = $cached;
+        $this->container['checked_at'] = $checked_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets matched
+     *
+     * @return int|null
+     */
+    public function getMatched(): ?int
+    {
+        return $this->container['matched'];
+    }
+
+    /**
+     * Sets matched
+     *
+     * @param int|null $matched matched
+     *
+     * @return $this
+     */
+    public function setMatched(?int $matched): static
+    {
+        if (is_null($matched)) {
+            throw new InvalidArgumentException('non-nullable matched cannot be null');
+        }
+        $this->container['matched'] = $matched;
+
+        return $this;
+    }
+
+    /**
+     * Gets missing
+     *
+     * @return \Repull\Model\MigrationReservationRef[]|null
+     */
+    public function getMissing(): ?array
+    {
+        return $this->container['missing'];
+    }
+
+    /**
+     * Sets missing
+     *
+     * @param \Repull\Model\MigrationReservationRef[]|null $missing Upcoming in the source, absent from the destination.
+     *
+     * @return $this
+     */
+    public function setMissing(?array $missing): static
+    {
+        if (is_null($missing)) {
+            throw new InvalidArgumentException('non-nullable missing cannot be null');
+        }
+        $this->container['missing'] = $missing;
+
+        return $this;
+    }
+
+    /**
+     * Gets extra
+     *
+     * @return \Repull\Model\MigrationReservationRef[]|null
+     */
+    public function getExtra(): ?array
+    {
+        return $this->container['extra'];
+    }
+
+    /**
+     * Sets extra
+     *
+     * @param \Repull\Model\MigrationReservationRef[]|null $extra In the destination, not an upcoming reservation in the source.
+     *
+     * @return $this
+     */
+    public function setExtra(?array $extra): static
+    {
+        if (is_null($extra)) {
+            throw new InvalidArgumentException('non-nullable extra cannot be null');
+        }
+        $this->container['extra'] = $extra;
+
+        return $this;
+    }
+
+    /**
+     * Gets mismatched
+     *
+     * @return \Repull\Model\MigrationCutoverCheckMismatchedInner[]|null
+     */
+    public function getMismatched(): ?array
+    {
+        return $this->container['mismatched'];
+    }
+
+    /**
+     * Sets mismatched
+     *
+     * @param \Repull\Model\MigrationCutoverCheckMismatchedInner[]|null $mismatched mismatched
+     *
+     * @return $this
+     */
+    public function setMismatched(?array $mismatched): static
+    {
+        if (is_null($mismatched)) {
+            throw new InvalidArgumentException('non-nullable mismatched cannot be null');
+        }
+        $this->container['mismatched'] = $mismatched;
 
         return $this;
     }

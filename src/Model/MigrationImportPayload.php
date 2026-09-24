@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * MigrationImportPayload
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * MigrationImportPayload Class Doc Comment
  *
+ * @description One import run into a migration workspace.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class MigrationImportPayload implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'MigrationImportPayload';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +60,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'workspace_id' => 'int',
+        'provider' => 'string',
+        'connection_id' => 'int',
+        'status' => 'string',
+        'started_at' => '\DateTime',
+        'finished_at' => '\DateTime',
+        'entities' => 'string[]',
+        'results' => '\Repull\Model\MigrationImportPayloadResultsInner[]',
+        'error' => 'string'
     ];
 
     /**
@@ -69,8 +77,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'workspace_id' => null,
+        'provider' => null,
+        'connection_id' => null,
+        'status' => null,
+        'started_at' => 'date-time',
+        'finished_at' => 'date-time',
+        'entities' => null,
+        'results' => null,
+        'error' => null
     ];
 
     /**
@@ -79,8 +94,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'workspace_id' => false,
+        'provider' => false,
+        'connection_id' => false,
+        'status' => false,
+        'started_at' => false,
+        'finished_at' => false,
+        'entities' => false,
+        'results' => false,
+        'error' => false
     ];
 
     /**
@@ -159,8 +181,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'workspace_id' => 'workspaceId',
+        'provider' => 'provider',
+        'connection_id' => 'connectionId',
+        'status' => 'status',
+        'started_at' => 'startedAt',
+        'finished_at' => 'finishedAt',
+        'entities' => 'entities',
+        'results' => 'results',
+        'error' => 'error'
     ];
 
     /**
@@ -169,8 +198,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'workspace_id' => 'setWorkspaceId',
+        'provider' => 'setProvider',
+        'connection_id' => 'setConnectionId',
+        'status' => 'setStatus',
+        'started_at' => 'setStartedAt',
+        'finished_at' => 'setFinishedAt',
+        'entities' => 'setEntities',
+        'results' => 'setResults',
+        'error' => 'setError'
     ];
 
     /**
@@ -179,8 +215,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'workspace_id' => 'getWorkspaceId',
+        'provider' => 'getProvider',
+        'connection_id' => 'getConnectionId',
+        'status' => 'getStatus',
+        'started_at' => 'getStartedAt',
+        'finished_at' => 'getFinishedAt',
+        'entities' => 'getEntities',
+        'results' => 'getResults',
+        'error' => 'getError'
     ];
 
     /**
@@ -215,6 +258,21 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
         return self::$openAPIModelName;
     }
 
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_FAILED = 'failed';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getStatusAllowableValues()
+    {
+        return [
+            self::STATUS_COMPLETED,
+            self::STATUS_FAILED,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -230,8 +288,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('workspace_id', $data ?? [], null);
+        $this->setIfExists('provider', $data ?? [], null);
+        $this->setIfExists('connection_id', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('started_at', $data ?? [], null);
+        $this->setIfExists('finished_at', $data ?? [], null);
+        $this->setIfExists('entities', $data ?? [], null);
+        $this->setIfExists('results', $data ?? [], null);
+        $this->setIfExists('error', $data ?? [], null);
     }
 
     /**
@@ -259,6 +324,15 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
     {
         $invalidProperties = [];
 
+        $allowedValues = self::getStatusAllowableValues();
+        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'status', must be one of '%s'",
+                $this->container['status'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -272,62 +346,245 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets workspace_id
      *
-     * @return array<string,mixed>[]|null
+     * @return int|null
      */
-    public function getPermits(): ?array
+    public function getWorkspaceId(): ?int
     {
-        return $this->container['permits'];
+        return $this->container['workspace_id'];
     }
 
     /**
-     * Sets permits
+     * Sets workspace_id
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param int|null $workspace_id workspace_id
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setWorkspaceId(?int $workspace_id): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($workspace_id)) {
+            throw new InvalidArgumentException('non-nullable workspace_id cannot be null');
         }
-        $this->container['permits'] = $permits;
+        $this->container['workspace_id'] = $workspace_id;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets provider
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return string|null
      */
-    public function getCached(): ?array
+    public function getProvider(): ?string
     {
-        return $this->container['cached'];
+        return $this->container['provider'];
     }
 
     /**
-     * Sets cached
+     * Sets provider
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param string|null $provider provider
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setProvider(?string $provider): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($provider)) {
+            throw new InvalidArgumentException('non-nullable provider cannot be null');
         }
-        $this->container['cached'] = $cached;
+        $this->container['provider'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * Gets connection_id
+     *
+     * @return int|null
+     */
+    public function getConnectionId(): ?int
+    {
+        return $this->container['connection_id'];
+    }
+
+    /**
+     * Sets connection_id
+     *
+     * @param int|null $connection_id connection_id
+     *
+     * @return $this
+     */
+    public function setConnectionId(?int $connection_id): static
+    {
+        if (is_null($connection_id)) {
+            throw new InvalidArgumentException('non-nullable connection_id cannot be null');
+        }
+        $this->container['connection_id'] = $connection_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets status
+     *
+     * @return string|null
+     */
+    public function getStatus(): ?string
+    {
+        return $this->container['status'];
+    }
+
+    /**
+     * Sets status
+     *
+     * @param string|null $status status
+     *
+     * @return $this
+     */
+    public function setStatus(?string $status): static
+    {
+        if (is_null($status)) {
+            throw new InvalidArgumentException('non-nullable status cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets started_at
+     *
+     * @return \DateTime|null
+     */
+    public function getStartedAt(): ?\DateTime
+    {
+        return $this->container['started_at'];
+    }
+
+    /**
+     * Sets started_at
+     *
+     * @param \DateTime|null $started_at started_at
+     *
+     * @return $this
+     */
+    public function setStartedAt(?\DateTime $started_at): static
+    {
+        if (is_null($started_at)) {
+            throw new InvalidArgumentException('non-nullable started_at cannot be null');
+        }
+        $this->container['started_at'] = $started_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets finished_at
+     *
+     * @return \DateTime|null
+     */
+    public function getFinishedAt(): ?\DateTime
+    {
+        return $this->container['finished_at'];
+    }
+
+    /**
+     * Sets finished_at
+     *
+     * @param \DateTime|null $finished_at finished_at
+     *
+     * @return $this
+     */
+    public function setFinishedAt(?\DateTime $finished_at): static
+    {
+        if (is_null($finished_at)) {
+            throw new InvalidArgumentException('non-nullable finished_at cannot be null');
+        }
+        $this->container['finished_at'] = $finished_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets entities
+     *
+     * @return string[]|null
+     */
+    public function getEntities(): ?array
+    {
+        return $this->container['entities'];
+    }
+
+    /**
+     * Sets entities
+     *
+     * @param string[]|null $entities entities
+     *
+     * @return $this
+     */
+    public function setEntities(?array $entities): static
+    {
+        if (is_null($entities)) {
+            throw new InvalidArgumentException('non-nullable entities cannot be null');
+        }
+        $this->container['entities'] = $entities;
+
+        return $this;
+    }
+
+    /**
+     * Gets results
+     *
+     * @return \Repull\Model\MigrationImportPayloadResultsInner[]|null
+     */
+    public function getResults(): ?array
+    {
+        return $this->container['results'];
+    }
+
+    /**
+     * Sets results
+     *
+     * @param \Repull\Model\MigrationImportPayloadResultsInner[]|null $results results
+     *
+     * @return $this
+     */
+    public function setResults(?array $results): static
+    {
+        if (is_null($results)) {
+            throw new InvalidArgumentException('non-nullable results cannot be null');
+        }
+        $this->container['results'] = $results;
+
+        return $this;
+    }
+
+    /**
+     * Gets error
+     *
+     * @return string|null
+     */
+    public function getError(): ?string
+    {
+        return $this->container['error'];
+    }
+
+    /**
+     * Sets error
+     *
+     * @param string|null $error Present on `migration.failed`.
+     *
+     * @return $this
+     */
+    public function setError(?string $error): static
+    {
+        if (is_null($error)) {
+            throw new InvalidArgumentException('non-nullable error cannot be null');
+        }
+        $this->container['error'] = $error;
 
         return $this;
     }

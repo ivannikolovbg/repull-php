@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * CreateConnectSessionRequestCopy
  *
  * PHP version 8.1
  *
@@ -35,14 +35,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * CreateConnectSessionRequestCopy Class Doc Comment
  *
+ * @description Migrate only — your wording for the hosted pages. Anything you leave out uses Repull&#39;s localized migration copy.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class CreateConnectSessionRequestCopy implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +52,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'createConnectSession_request_copy';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +60,10 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'title' => 'string',
+        'subtitle' => 'string',
+        'completed_title' => 'string',
+        'completed_body' => 'string'
     ];
 
     /**
@@ -69,8 +72,10 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'title' => null,
+        'subtitle' => null,
+        'completed_title' => null,
+        'completed_body' => null
     ];
 
     /**
@@ -79,8 +84,10 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'title' => false,
+        'subtitle' => false,
+        'completed_title' => false,
+        'completed_body' => false
     ];
 
     /**
@@ -159,8 +166,10 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'title' => 'title',
+        'subtitle' => 'subtitle',
+        'completed_title' => 'completedTitle',
+        'completed_body' => 'completedBody'
     ];
 
     /**
@@ -169,8 +178,10 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'title' => 'setTitle',
+        'subtitle' => 'setSubtitle',
+        'completed_title' => 'setCompletedTitle',
+        'completed_body' => 'setCompletedBody'
     ];
 
     /**
@@ -179,8 +190,10 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'title' => 'getTitle',
+        'subtitle' => 'getSubtitle',
+        'completed_title' => 'getCompletedTitle',
+        'completed_body' => 'getCompletedBody'
     ];
 
     /**
@@ -230,8 +243,10 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('title', $data ?? [], null);
+        $this->setIfExists('subtitle', $data ?? [], null);
+        $this->setIfExists('completed_title', $data ?? [], null);
+        $this->setIfExists('completed_body', $data ?? [], null);
     }
 
     /**
@@ -259,6 +274,22 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
     {
         $invalidProperties = [];
 
+        if (!is_null($this->container['title']) && (mb_strlen($this->container['title']) > 300)) {
+            $invalidProperties[] = "invalid value for 'title', the character length must be smaller than or equal to 300.";
+        }
+
+        if (!is_null($this->container['subtitle']) && (mb_strlen($this->container['subtitle']) > 300)) {
+            $invalidProperties[] = "invalid value for 'subtitle', the character length must be smaller than or equal to 300.";
+        }
+
+        if (!is_null($this->container['completed_title']) && (mb_strlen($this->container['completed_title']) > 300)) {
+            $invalidProperties[] = "invalid value for 'completed_title', the character length must be smaller than or equal to 300.";
+        }
+
+        if (!is_null($this->container['completed_body']) && (mb_strlen($this->container['completed_body']) > 300)) {
+            $invalidProperties[] = "invalid value for 'completed_body', the character length must be smaller than or equal to 300.";
+        }
+
         return $invalidProperties;
     }
 
@@ -272,62 +303,125 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets title
      *
-     * @return array<string,mixed>[]|null
+     * @return string|null
      */
-    public function getPermits(): ?array
+    public function getTitle(): ?string
     {
-        return $this->container['permits'];
+        return $this->container['title'];
     }
 
     /**
-     * Sets permits
+     * Sets title
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param string|null $title title
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setTitle(?string $title): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($title)) {
+            throw new InvalidArgumentException('non-nullable title cannot be null');
         }
-        $this->container['permits'] = $permits;
+        if ((mb_strlen($title) > 300)) {
+            throw new InvalidArgumentException('invalid length for $title when calling CreateConnectSessionRequestCopy., must be smaller than or equal to 300.');
+        }
+
+        $this->container['title'] = $title;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets subtitle
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return string|null
      */
-    public function getCached(): ?array
+    public function getSubtitle(): ?string
     {
-        return $this->container['cached'];
+        return $this->container['subtitle'];
     }
 
     /**
-     * Sets cached
+     * Sets subtitle
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param string|null $subtitle subtitle
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setSubtitle(?string $subtitle): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($subtitle)) {
+            throw new InvalidArgumentException('non-nullable subtitle cannot be null');
         }
-        $this->container['cached'] = $cached;
+        if ((mb_strlen($subtitle) > 300)) {
+            throw new InvalidArgumentException('invalid length for $subtitle when calling CreateConnectSessionRequestCopy., must be smaller than or equal to 300.');
+        }
+
+        $this->container['subtitle'] = $subtitle;
+
+        return $this;
+    }
+
+    /**
+     * Gets completed_title
+     *
+     * @return string|null
+     */
+    public function getCompletedTitle(): ?string
+    {
+        return $this->container['completed_title'];
+    }
+
+    /**
+     * Sets completed_title
+     *
+     * @param string|null $completed_title completed_title
+     *
+     * @return $this
+     */
+    public function setCompletedTitle(?string $completed_title): static
+    {
+        if (is_null($completed_title)) {
+            throw new InvalidArgumentException('non-nullable completed_title cannot be null');
+        }
+        if ((mb_strlen($completed_title) > 300)) {
+            throw new InvalidArgumentException('invalid length for $completed_title when calling CreateConnectSessionRequestCopy., must be smaller than or equal to 300.');
+        }
+
+        $this->container['completed_title'] = $completed_title;
+
+        return $this;
+    }
+
+    /**
+     * Gets completed_body
+     *
+     * @return string|null
+     */
+    public function getCompletedBody(): ?string
+    {
+        return $this->container['completed_body'];
+    }
+
+    /**
+     * Sets completed_body
+     *
+     * @param string|null $completed_body completed_body
+     *
+     * @return $this
+     */
+    public function setCompletedBody(?string $completed_body): static
+    {
+        if (is_null($completed_body)) {
+            throw new InvalidArgumentException('non-nullable completed_body cannot be null');
+        }
+        if ((mb_strlen($completed_body) > 300)) {
+            throw new InvalidArgumentException('invalid length for $completed_body when calling CreateConnectSessionRequestCopy., must be smaller than or equal to 300.');
+        }
+
+        $this->container['completed_body'] = $completed_body;
 
         return $this;
     }

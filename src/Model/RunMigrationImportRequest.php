@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * RunMigrationImportRequest
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * RunMigrationImportRequest Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class RunMigrationImportRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'runMigrationImport_request';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'entities' => 'string[]',
+        'since' => '\DateTime'
     ];
 
     /**
@@ -69,8 +69,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'entities' => null,
+        'since' => 'date-time'
     ];
 
     /**
@@ -79,8 +79,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'entities' => false,
+        'since' => false
     ];
 
     /**
@@ -159,8 +159,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'entities' => 'entities',
+        'since' => 'since'
     ];
 
     /**
@@ -169,8 +169,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'entities' => 'setEntities',
+        'since' => 'setSince'
     ];
 
     /**
@@ -179,8 +179,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'entities' => 'getEntities',
+        'since' => 'getSince'
     ];
 
     /**
@@ -215,6 +215,25 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
         return self::$openAPIModelName;
     }
 
+    public const ENTITIES_LISTINGS = 'listings';
+    public const ENTITIES_RESERVATIONS = 'reservations';
+    public const ENTITIES_MESSAGES = 'messages';
+    public const ENTITIES_CALENDAR = 'calendar';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getEntitiesAllowableValues()
+    {
+        return [
+            self::ENTITIES_LISTINGS,
+            self::ENTITIES_RESERVATIONS,
+            self::ENTITIES_MESSAGES,
+            self::ENTITIES_CALENDAR,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -230,8 +249,8 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('entities', $data ?? [], null);
+        $this->setIfExists('since', $data ?? [], null);
     }
 
     /**
@@ -272,62 +291,64 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets entities
      *
-     * @return array<string,mixed>[]|null
+     * @return string[]|null
      */
-    public function getPermits(): ?array
+    public function getEntities(): ?array
     {
-        return $this->container['permits'];
+        return $this->container['entities'];
     }
 
     /**
-     * Sets permits
+     * Sets entities
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param string[]|null $entities Defaults to listings and reservations.
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setEntities(?array $entities): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($entities)) {
+            throw new InvalidArgumentException('non-nullable entities cannot be null');
         }
-        $this->container['permits'] = $permits;
+        $allowedValues = self::getEntitiesAllowableValues();
+        if (array_diff($entities, $allowedValues)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    "Invalid value for 'entities', must be one of '%s'",
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['entities'] = $entities;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets since
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return \DateTime|null
      */
-    public function getCached(): ?array
+    public function getSince(): ?\DateTime
     {
-        return $this->container['cached'];
+        return $this->container['since'];
     }
 
     /**
-     * Sets cached
+     * Sets since
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param \DateTime|null $since Only reservations changed after this.
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setSince(?\DateTime $since): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($since)) {
+            throw new InvalidArgumentException('non-nullable since cannot be null');
         }
-        $this->container['cached'] = $cached;
+        $this->container['since'] = $since;
 
         return $this;
     }

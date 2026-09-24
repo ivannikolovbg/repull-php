@@ -65,7 +65,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         'api_version' => 'string',
         'timestamp' => '\DateTime',
         'account' => '\Repull\Model\WebhookEventAccount',
-        'data' => '\Repull\Model\UsageQuotaWarningPayload'
+        'data' => '\Repull\Model\MigrationImportPayload',
+        'workspace_id' => 'int'
     ];
 
     /**
@@ -79,7 +80,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         'api_version' => null,
         'timestamp' => 'date-time',
         'account' => null,
-        'data' => null
+        'data' => null,
+        'workspace_id' => null
     ];
 
     /**
@@ -93,7 +95,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         'api_version' => false,
         'timestamp' => false,
         'account' => true,
-        'data' => false
+        'data' => false,
+        'workspace_id' => false
     ];
 
     /**
@@ -177,7 +180,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         'api_version' => 'apiVersion',
         'timestamp' => 'timestamp',
         'account' => 'account',
-        'data' => 'data'
+        'data' => 'data',
+        'workspace_id' => 'workspaceId'
     ];
 
     /**
@@ -191,7 +195,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         'api_version' => 'setApiVersion',
         'timestamp' => 'setTimestamp',
         'account' => 'setAccount',
-        'data' => 'setData'
+        'data' => 'setData',
+        'workspace_id' => 'setWorkspaceId'
     ];
 
     /**
@@ -205,7 +210,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         'api_version' => 'getApiVersion',
         'timestamp' => 'getTimestamp',
         'account' => 'getAccount',
-        'data' => 'getData'
+        'data' => 'getData',
+        'workspace_id' => 'getWorkspaceId'
     ];
 
     /**
@@ -252,6 +258,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     public const EVENT_LISTING_REACTIVATED = 'listing.reactivated';
     public const EVENT_LISTING_SUSPENDED = 'listing.suspended';
     public const EVENT_LISTING_UPDATED = 'listing.updated';
+    public const EVENT_MIGRATION_COMPLETED = 'migration.completed';
+    public const EVENT_MIGRATION_FAILED = 'migration.failed';
     public const EVENT_PAYMENT_COMPLETED = 'payment.completed';
     public const EVENT_PAYMENT_REFUNDED = 'payment.refunded';
     public const EVENT_REPULL_PING = 'repull.ping';
@@ -287,6 +295,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
             self::EVENT_LISTING_REACTIVATED,
             self::EVENT_LISTING_SUSPENDED,
             self::EVENT_LISTING_UPDATED,
+            self::EVENT_MIGRATION_COMPLETED,
+            self::EVENT_MIGRATION_FAILED,
             self::EVENT_PAYMENT_COMPLETED,
             self::EVENT_PAYMENT_REFUNDED,
             self::EVENT_REPULL_PING,
@@ -327,6 +337,7 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('timestamp', $data ?? [], null);
         $this->setIfExists('account', $data ?? [], null);
         $this->setIfExists('data', $data ?? [], null);
+        $this->setIfExists('workspace_id', $data ?? [], null);
     }
 
     /**
@@ -377,6 +388,9 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         }
         if ($this->container['data'] === null) {
             $invalidProperties[] = "'data' can't be null";
+        }
+        if ($this->container['workspace_id'] === null) {
+            $invalidProperties[] = "'workspace_id' can't be null";
         }
         return $invalidProperties;
     }
@@ -536,9 +550,9 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets data
      *
-     * @return \Repull\Model\UsageQuotaWarningPayload
+     * @return \Repull\Model\MigrationImportPayload
      */
-    public function getData(): \Repull\Model\UsageQuotaWarningPayload
+    public function getData(): \Repull\Model\MigrationImportPayload
     {
         return $this->container['data'];
     }
@@ -546,16 +560,43 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets data
      *
-     * @param \Repull\Model\UsageQuotaWarningPayload $data data
+     * @param \Repull\Model\MigrationImportPayload $data data
      *
      * @return $this
      */
-    public function setData(\Repull\Model\UsageQuotaWarningPayload $data): static
+    public function setData(\Repull\Model\MigrationImportPayload $data): static
     {
         if (is_null($data)) {
             throw new InvalidArgumentException('non-nullable data cannot be null');
         }
         $this->container['data'] = $data;
+
+        return $this;
+    }
+
+    /**
+     * Gets workspace_id
+     *
+     * @return int
+     */
+    public function getWorkspaceId(): int
+    {
+        return $this->container['workspace_id'];
+    }
+
+    /**
+     * Sets workspace_id
+     *
+     * @param int $workspace_id The migration's workspace — pass it as `X-Workspace-Id`, or to `GET /v1/migrations/{workspaceId}`.
+     *
+     * @return $this
+     */
+    public function setWorkspaceId(int $workspace_id): static
+    {
+        if (is_null($workspace_id)) {
+            throw new InvalidArgumentException('non-nullable workspace_id cannot be null');
+        }
+        $this->container['workspace_id'] = $workspace_id;
 
         return $this;
     }

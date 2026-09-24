@@ -5,6 +5,23 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.19] - 2026-09-24
+
+Regenerated against the live `https://api.repull.dev/openapi.json` (202 → 209 operations).
+
+### Added
+- **Repull Migrate** — `Repull\Api\MigrateApi`: `listMigrations`, `getMigration`, `getMigrationReport`,
+  `getMigrationChannelMap`, `runMigrationImport`, `checkMigrationCutover`, `cutoverMigration`, `deleteMigration`.
+- `createConnectSession` accepts `purpose: 'migrate'`, `workspace`, `copy` and `scope`; the session returns `workspaceId`.
+- `migration.completed` / `migration.failed` webhook events; child-workspace events carry `workspaceId`.
+- `ConnectProvider::getMigrationCapabilities()`.
+
+### Changed
+- Airbnb permits write takes Airbnb's submission shape (`flow_slug` + `answers` keyed by `answer_key`).
+
+### Removed
+- `getAtlasHealth` (endpoint retired).
+
 ## [0.2.18] - 2026-09-23
 
 ### Added

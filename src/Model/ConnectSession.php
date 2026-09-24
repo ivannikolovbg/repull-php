@@ -63,7 +63,9 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         'session_id' => 'string',
         'url' => 'string',
         'expires_at' => '\DateTime',
-        'state' => 'string'
+        'state' => 'string',
+        'purpose' => 'string',
+        'workspace_id' => 'string'
     ];
 
     /**
@@ -75,7 +77,9 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         'session_id' => null,
         'url' => 'uri',
         'expires_at' => 'date-time',
-        'state' => null
+        'state' => null,
+        'purpose' => null,
+        'workspace_id' => null
     ];
 
     /**
@@ -87,7 +91,9 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         'session_id' => false,
         'url' => false,
         'expires_at' => false,
-        'state' => true
+        'state' => true,
+        'purpose' => false,
+        'workspace_id' => false
     ];
 
     /**
@@ -169,7 +175,9 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         'session_id' => 'sessionId',
         'url' => 'url',
         'expires_at' => 'expiresAt',
-        'state' => 'state'
+        'state' => 'state',
+        'purpose' => 'purpose',
+        'workspace_id' => 'workspaceId'
     ];
 
     /**
@@ -181,7 +189,9 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         'session_id' => 'setSessionId',
         'url' => 'setUrl',
         'expires_at' => 'setExpiresAt',
-        'state' => 'setState'
+        'state' => 'setState',
+        'purpose' => 'setPurpose',
+        'workspace_id' => 'setWorkspaceId'
     ];
 
     /**
@@ -193,7 +203,9 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         'session_id' => 'getSessionId',
         'url' => 'getUrl',
         'expires_at' => 'getExpiresAt',
-        'state' => 'getState'
+        'state' => 'getState',
+        'purpose' => 'getPurpose',
+        'workspace_id' => 'getWorkspaceId'
     ];
 
     /**
@@ -228,6 +240,19 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         return self::$openAPIModelName;
     }
 
+    public const PURPOSE_MIGRATE = 'migrate';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getPurposeAllowableValues()
+    {
+        return [
+            self::PURPOSE_MIGRATE,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -247,6 +272,8 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('url', $data ?? [], null);
         $this->setIfExists('expires_at', $data ?? [], null);
         $this->setIfExists('state', $data ?? [], null);
+        $this->setIfExists('purpose', $data ?? [], null);
+        $this->setIfExists('workspace_id', $data ?? [], null);
     }
 
     /**
@@ -283,6 +310,15 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         if ($this->container['expires_at'] === null) {
             $invalidProperties[] = "'expires_at' can't be null";
         }
+        $allowedValues = self::getPurposeAllowableValues();
+        if (!is_null($this->container['purpose']) && !in_array($this->container['purpose'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'purpose', must be one of '%s'",
+                $this->container['purpose'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -406,6 +442,61 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['state'] = $state;
+
+        return $this;
+    }
+
+    /**
+     * Gets purpose
+     *
+     * @return string|null
+     */
+    public function getPurpose(): ?string
+    {
+        return $this->container['purpose'];
+    }
+
+    /**
+     * Sets purpose
+     *
+     * @param string|null $purpose Present only on a Repull Migrate session.
+     *
+     * @return $this
+     */
+    public function setPurpose(?string $purpose): static
+    {
+        if (is_null($purpose)) {
+            throw new InvalidArgumentException('non-nullable purpose cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['purpose'] = $purpose;
+
+        return $this;
+    }
+
+    /**
+     * Gets workspace_id
+     *
+     * @return string|null
+     */
+    public function getWorkspaceId(): ?string
+    {
+        return $this->container['workspace_id'];
+    }
+
+    /**
+     * Sets workspace_id
+     *
+     * @param string|null $workspace_id Repull Migrate only: the workspace the property manager's data lands in. Read it with `X-Workspace-Id`, track it with `GET /v1/migrations/{workspaceId}`.
+     *
+     * @return $this
+     */
+    public function setWorkspaceId(?string $workspace_id): static
+    {
+        if (is_null($workspace_id)) {
+            throw new InvalidArgumentException('non-nullable workspace_id cannot be null');
+        }
+        $this->container['workspace_id'] = $workspace_id;
 
         return $this;
     }

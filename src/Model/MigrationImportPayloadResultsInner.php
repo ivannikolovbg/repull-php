@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsResponse
+ * MigrationImportPayloadResultsInner
  *
  * PHP version 8.1
  *
@@ -35,14 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsResponse Class Doc Comment
+ * MigrationImportPayloadResultsInner Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class MigrationImportPayloadResultsInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsResponse';
+    protected static string $openAPIModelName = 'MigrationImportPayload_results_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'permits' => 'array<string,mixed>[]',
-        'cached' => '\Repull\Model\AirbnbPermitsResponseCachedInner[]'
+        'entity_type' => 'string',
+        'processed' => 'int',
+        'errors' => 'int'
     ];
 
     /**
@@ -69,8 +70,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'permits' => null,
-        'cached' => null
+        'entity_type' => null,
+        'processed' => null,
+        'errors' => null
     ];
 
     /**
@@ -79,8 +81,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'permits' => true,
-        'cached' => false
+        'entity_type' => false,
+        'processed' => false,
+        'errors' => false
     ];
 
     /**
@@ -159,8 +162,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'permits' => 'permits',
-        'cached' => 'cached'
+        'entity_type' => 'entityType',
+        'processed' => 'processed',
+        'errors' => 'errors'
     ];
 
     /**
@@ -169,8 +173,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $setters = [
-        'permits' => 'setPermits',
-        'cached' => 'setCached'
+        'entity_type' => 'setEntityType',
+        'processed' => 'setProcessed',
+        'errors' => 'setErrors'
     ];
 
     /**
@@ -179,8 +184,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      * @var array<string, string>
      */
     protected static array $getters = [
-        'permits' => 'getPermits',
-        'cached' => 'getCached'
+        'entity_type' => 'getEntityType',
+        'processed' => 'getProcessed',
+        'errors' => 'getErrors'
     ];
 
     /**
@@ -230,8 +236,9 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('permits', $data ?? [], null);
-        $this->setIfExists('cached', $data ?? [], null);
+        $this->setIfExists('entity_type', $data ?? [], null);
+        $this->setIfExists('processed', $data ?? [], null);
+        $this->setIfExists('errors', $data ?? [], null);
     }
 
     /**
@@ -272,62 +279,82 @@ class AirbnbPermitsResponse implements ModelInterface, ArrayAccess, JsonSerializ
 
 
     /**
-     * Gets permits
+     * Gets entity_type
      *
-     * @return array<string,mixed>[]|null
+     * @return string|null
      */
-    public function getPermits(): ?array
+    public function getEntityType(): ?string
     {
-        return $this->container['permits'];
+        return $this->container['entity_type'];
     }
 
     /**
-     * Sets permits
+     * Sets entity_type
      *
-     * @param array<string,mixed>[]|null $permits The live permit flows from Airbnb — present only with `?source=live`, `null` otherwise. Each flow names its `regulatory_body`, `regulation_type`, `status`, its `flows[]` with the `answer_key` / `type` / `choices` of every question you have to answer, plus the answers already on file.
+     * @param string|null $entity_type entity_type
      *
      * @return $this
      */
-    public function setPermits(?array $permits): static
+    public function setEntityType(?string $entity_type): static
     {
-        if (is_null($permits)) {
-            array_push($this->openAPINullablesSetToNull, 'permits');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('permits', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($entity_type)) {
+            throw new InvalidArgumentException('non-nullable entity_type cannot be null');
         }
-        $this->container['permits'] = $permits;
+        $this->container['entity_type'] = $entity_type;
 
         return $this;
     }
 
     /**
-     * Gets cached
+     * Gets processed
      *
-     * @return \Repull\Model\AirbnbPermitsResponseCachedInner[]|null
+     * @return int|null
      */
-    public function getCached(): ?array
+    public function getProcessed(): ?int
     {
-        return $this->container['cached'];
+        return $this->container['processed'];
     }
 
     /**
-     * Sets cached
+     * Sets processed
      *
-     * @param \Repull\Model\AirbnbPermitsResponseCachedInner[]|null $cached Permits as last mirrored by the sync worker: body, type, status, number. The RESULT of a permit, not the questions.
+     * @param int|null $processed processed
      *
      * @return $this
      */
-    public function setCached(?array $cached): static
+    public function setProcessed(?int $processed): static
     {
-        if (is_null($cached)) {
-            throw new InvalidArgumentException('non-nullable cached cannot be null');
+        if (is_null($processed)) {
+            throw new InvalidArgumentException('non-nullable processed cannot be null');
         }
-        $this->container['cached'] = $cached;
+        $this->container['processed'] = $processed;
+
+        return $this;
+    }
+
+    /**
+     * Gets errors
+     *
+     * @return int|null
+     */
+    public function getErrors(): ?int
+    {
+        return $this->container['errors'];
+    }
+
+    /**
+     * Sets errors
+     *
+     * @param int|null $errors errors
+     *
+     * @return $this
+     */
+    public function setErrors(?int $errors): static
+    {
+        if (is_null($errors)) {
+            throw new InvalidArgumentException('non-nullable errors cannot be null');
+        }
+        $this->container['errors'] = $errors;
 
         return $this;
     }
