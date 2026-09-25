@@ -5,6 +5,14 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.22] - 2026-09-25
+
+Regenerated against the live `https://api.repull.dev/openapi.json`:
+
+- `GET /v1/listings/{id}/markups` and `PUT /v1/listings/{id}/markups` — a listing's markup per channel (Airbnb per listing, Booking.com per property), as a percentage; prices are re-sent to the channel on change.
+- The `markup` field on Airbnb connections and Booking.com properties is documented as a fraction (`"0.35"` = +35%).
+- `/v1/properties` is documented as the older name for `/v1/listings`.
+
 ## [0.2.21] - 2026-09-25
 
 Regenerated against the live `https://api.repull.dev/openapi.json`:

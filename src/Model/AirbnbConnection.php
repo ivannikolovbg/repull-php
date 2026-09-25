@@ -680,7 +680,7 @@ class AirbnbConnection implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets markup
      *
-     * @param string|null $markup Decimal markup (e.g. \"1.10\" for +10%).
+     * @param string|null $markup The Airbnb markup as a fraction: \"0.35\" = +35% on the listing's own price. Read or set it as a percentage with `/v1/listings/{id}/markups`.
      *
      * @return $this
      */

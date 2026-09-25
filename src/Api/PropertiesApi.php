@@ -132,7 +132,7 @@ class PropertiesApi
     /**
      * Operation getProperty
      *
-     * Get property details
+     * Get property details (older name for /v1/listings/{id})
      *
      * @param  int $id id (required)
      * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
@@ -155,7 +155,7 @@ class PropertiesApi
     /**
      * Operation getPropertyWithHttpInfo
      *
-     * Get property details
+     * Get property details (older name for /v1/listings/{id})
      *
      * @param  int $id (required)
      * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
@@ -284,7 +284,7 @@ class PropertiesApi
     /**
      * Operation getPropertyAsync
      *
-     * Get property details
+     * Get property details (older name for /v1/listings/{id})
      *
      * @param  int $id (required)
      * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
@@ -310,7 +310,7 @@ class PropertiesApi
     /**
      * Operation getPropertyAsyncWithHttpInfo
      *
-     * Get property details
+     * Get property details (older name for /v1/listings/{id})
      *
      * @param  int $id (required)
      * @param  string|null $include Comma-separated optional expansions. Currently supported: &#x60;amenities&#x60;. Unknown values return 422. (optional)
@@ -478,7 +478,7 @@ class PropertiesApi
     /**
      * Operation listProperties
      *
-     * List properties
+     * List properties (older name for /v1/listings)
      *
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
@@ -515,7 +515,7 @@ class PropertiesApi
     /**
      * Operation listPropertiesWithHttpInfo
      *
-     * List properties
+     * List properties (older name for /v1/listings)
      *
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
@@ -644,7 +644,7 @@ class PropertiesApi
     /**
      * Operation listPropertiesAsync
      *
-     * List properties
+     * List properties (older name for /v1/listings)
      *
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
@@ -684,7 +684,7 @@ class PropertiesApi
     /**
      * Operation listPropertiesAsyncWithHttpInfo
      *
-     * List properties
+     * List properties (older name for /v1/listings)
      *
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)

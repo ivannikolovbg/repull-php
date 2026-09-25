@@ -1,6 +1,6 @@
 <?php
 /**
- * BookingProperty
+ * GetListingMarkups200ResponseBookingInner
  *
  * PHP version 8.1
  *
@@ -35,15 +35,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * BookingProperty Class Doc Comment
+ * GetListingMarkups200ResponseBookingInner Class Doc Comment
  *
- * @description A Booking.com property this workspace holds, with the Repull listings mapped under it. A property is a building; its rooms are what guests book, and each room maps to one Repull listing — so one property commonly carries many listings.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
+class GetListingMarkups200ResponseBookingInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +51,7 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'BookingProperty';
+    protected static string $openAPIModelName = 'get_listing_markups_200_response_booking_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -60,18 +59,9 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'connection_id' => 'string',
         'hotel_id' => 'string',
-        'active' => 'bool',
-        'sync_enabled' => 'bool',
-        'booking_url' => 'string',
-        'markup' => 'string',
-        'sync_category' => 'string',
-        'suspended_at' => '\DateTime',
-        'suspension_reason' => 'string',
-        'created_at' => '\DateTime',
-        'mapping_status' => 'string',
-        'listings' => '\Repull\Model\BookingPropertyListingsInner[]'
+        'markup_percent' => 'float',
+        'listing_ids' => 'string[]'
     ];
 
     /**
@@ -80,18 +70,9 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'connection_id' => null,
         'hotel_id' => null,
-        'active' => null,
-        'sync_enabled' => null,
-        'booking_url' => null,
-        'markup' => null,
-        'sync_category' => null,
-        'suspended_at' => 'date-time',
-        'suspension_reason' => null,
-        'created_at' => 'date-time',
-        'mapping_status' => null,
-        'listings' => null
+        'markup_percent' => null,
+        'listing_ids' => null
     ];
 
     /**
@@ -100,18 +81,9 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'connection_id' => false,
         'hotel_id' => false,
-        'active' => false,
-        'sync_enabled' => false,
-        'booking_url' => true,
-        'markup' => true,
-        'sync_category' => true,
-        'suspended_at' => true,
-        'suspension_reason' => true,
-        'created_at' => true,
-        'mapping_status' => false,
-        'listings' => false
+        'markup_percent' => true,
+        'listing_ids' => false
     ];
 
     /**
@@ -190,18 +162,9 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'connection_id' => 'connectionId',
         'hotel_id' => 'hotelId',
-        'active' => 'active',
-        'sync_enabled' => 'syncEnabled',
-        'booking_url' => 'bookingUrl',
-        'markup' => 'markup',
-        'sync_category' => 'syncCategory',
-        'suspended_at' => 'suspendedAt',
-        'suspension_reason' => 'suspensionReason',
-        'created_at' => 'createdAt',
-        'mapping_status' => 'mappingStatus',
-        'listings' => 'listings'
+        'markup_percent' => 'markupPercent',
+        'listing_ids' => 'listingIds'
     ];
 
     /**
@@ -210,18 +173,9 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
-        'connection_id' => 'setConnectionId',
         'hotel_id' => 'setHotelId',
-        'active' => 'setActive',
-        'sync_enabled' => 'setSyncEnabled',
-        'booking_url' => 'setBookingUrl',
-        'markup' => 'setMarkup',
-        'sync_category' => 'setSyncCategory',
-        'suspended_at' => 'setSuspendedAt',
-        'suspension_reason' => 'setSuspensionReason',
-        'created_at' => 'setCreatedAt',
-        'mapping_status' => 'setMappingStatus',
-        'listings' => 'setListings'
+        'markup_percent' => 'setMarkupPercent',
+        'listing_ids' => 'setListingIds'
     ];
 
     /**
@@ -230,18 +184,9 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
-        'connection_id' => 'getConnectionId',
         'hotel_id' => 'getHotelId',
-        'active' => 'getActive',
-        'sync_enabled' => 'getSyncEnabled',
-        'booking_url' => 'getBookingUrl',
-        'markup' => 'getMarkup',
-        'sync_category' => 'getSyncCategory',
-        'suspended_at' => 'getSuspendedAt',
-        'suspension_reason' => 'getSuspensionReason',
-        'created_at' => 'getCreatedAt',
-        'mapping_status' => 'getMappingStatus',
-        'listings' => 'getListings'
+        'markup_percent' => 'getMarkupPercent',
+        'listing_ids' => 'getListingIds'
     ];
 
     /**
@@ -276,21 +221,6 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
         return self::$openAPIModelName;
     }
 
-    public const MAPPING_STATUS_MAPPED = 'mapped';
-    public const MAPPING_STATUS_UNMAPPED = 'unmapped';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getMappingStatusAllowableValues()
-    {
-        return [
-            self::MAPPING_STATUS_MAPPED,
-            self::MAPPING_STATUS_UNMAPPED,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -306,18 +236,9 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('connection_id', $data ?? [], null);
         $this->setIfExists('hotel_id', $data ?? [], null);
-        $this->setIfExists('active', $data ?? [], null);
-        $this->setIfExists('sync_enabled', $data ?? [], null);
-        $this->setIfExists('booking_url', $data ?? [], null);
-        $this->setIfExists('markup', $data ?? [], null);
-        $this->setIfExists('sync_category', $data ?? [], null);
-        $this->setIfExists('suspended_at', $data ?? [], null);
-        $this->setIfExists('suspension_reason', $data ?? [], null);
-        $this->setIfExists('created_at', $data ?? [], null);
-        $this->setIfExists('mapping_status', $data ?? [], null);
-        $this->setIfExists('listings', $data ?? [], null);
+        $this->setIfExists('markup_percent', $data ?? [], null);
+        $this->setIfExists('listing_ids', $data ?? [], null);
     }
 
     /**
@@ -345,15 +266,6 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
-        $allowedValues = self::getMappingStatusAllowableValues();
-        if (!is_null($this->container['mapping_status']) && !in_array($this->container['mapping_status'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'mapping_status', must be one of '%s'",
-                $this->container['mapping_status'],
-                implode("', '", $allowedValues)
-            );
-        }
-
         return $invalidProperties;
     }
 
@@ -365,33 +277,6 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
         return count($this->listInvalidProperties()) === 0;
     }
 
-
-    /**
-     * Gets connection_id
-     *
-     * @return string|null
-     */
-    public function getConnectionId(): ?string
-    {
-        return $this->container['connection_id'];
-    }
-
-    /**
-     * Sets connection_id
-     *
-     * @param string|null $connection_id Repull-side id for this Booking.com connection.
-     *
-     * @return $this
-     */
-    public function setConnectionId(?string $connection_id): static
-    {
-        if (is_null($connection_id)) {
-            throw new InvalidArgumentException('non-nullable connection_id cannot be null');
-        }
-        $this->container['connection_id'] = $connection_id;
-
-        return $this;
-    }
 
     /**
      * Gets hotel_id
@@ -406,7 +291,7 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets hotel_id
      *
-     * @param string|null $hotel_id Booking.com hotel/property id. This is what `/v1/channels/booking/availability` takes as `property_id`.
+     * @param string|null $hotel_id Booking.com property id.
      *
      * @return $this
      */
@@ -421,314 +306,62 @@ class BookingProperty implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
-     * Gets active
+     * Gets markup_percent
      *
-     * @return bool|null
+     * @return float|null
      */
-    public function getActive(): ?bool
+    public function getMarkupPercent(): ?float
     {
-        return $this->container['active'];
+        return $this->container['markup_percent'];
     }
 
     /**
-     * Sets active
+     * Sets markup_percent
      *
-     * @param bool|null $active active
+     * @param float|null $markup_percent Percent added on Booking.com, for every listing on this property.
      *
      * @return $this
      */
-    public function setActive(?bool $active): static
+    public function setMarkupPercent(?float $markup_percent): static
     {
-        if (is_null($active)) {
-            throw new InvalidArgumentException('non-nullable active cannot be null');
-        }
-        $this->container['active'] = $active;
-
-        return $this;
-    }
-
-    /**
-     * Gets sync_enabled
-     *
-     * @return bool|null
-     */
-    public function getSyncEnabled(): ?bool
-    {
-        return $this->container['sync_enabled'];
-    }
-
-    /**
-     * Sets sync_enabled
-     *
-     * @param bool|null $sync_enabled sync_enabled
-     *
-     * @return $this
-     */
-    public function setSyncEnabled(?bool $sync_enabled): static
-    {
-        if (is_null($sync_enabled)) {
-            throw new InvalidArgumentException('non-nullable sync_enabled cannot be null');
-        }
-        $this->container['sync_enabled'] = $sync_enabled;
-
-        return $this;
-    }
-
-    /**
-     * Gets booking_url
-     *
-     * @return string|null
-     */
-    public function getBookingUrl(): ?string
-    {
-        return $this->container['booking_url'];
-    }
-
-    /**
-     * Sets booking_url
-     *
-     * @param string|null $booking_url booking_url
-     *
-     * @return $this
-     */
-    public function setBookingUrl(?string $booking_url): static
-    {
-        if (is_null($booking_url)) {
-            array_push($this->openAPINullablesSetToNull, 'booking_url');
+        if (is_null($markup_percent)) {
+            array_push($this->openAPINullablesSetToNull, 'markup_percent');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('booking_url', $nullablesSetToNull);
+            $index = array_search('markup_percent', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['booking_url'] = $booking_url;
+        $this->container['markup_percent'] = $markup_percent;
 
         return $this;
     }
 
     /**
-     * Gets markup
+     * Gets listing_ids
      *
-     * @return string|null
+     * @return string[]|null
      */
-    public function getMarkup(): ?string
+    public function getListingIds(): ?array
     {
-        return $this->container['markup'];
+        return $this->container['listing_ids'];
     }
 
     /**
-     * Sets markup
+     * Sets listing_ids
      *
-     * @param string|null $markup The Booking.com markup on this property, as a fraction: \"0.18\" = +18%, shared by every listing on the property. Read or set it as a percentage with `/v1/listings/{id}/markups`.
+     * @param string[]|null $listing_ids Listings in this workspace priced through this property — all share this markup.
      *
      * @return $this
      */
-    public function setMarkup(?string $markup): static
+    public function setListingIds(?array $listing_ids): static
     {
-        if (is_null($markup)) {
-            array_push($this->openAPINullablesSetToNull, 'markup');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('markup', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($listing_ids)) {
+            throw new InvalidArgumentException('non-nullable listing_ids cannot be null');
         }
-        $this->container['markup'] = $markup;
-
-        return $this;
-    }
-
-    /**
-     * Gets sync_category
-     *
-     * @return string|null
-     */
-    public function getSyncCategory(): ?string
-    {
-        return $this->container['sync_category'];
-    }
-
-    /**
-     * Sets sync_category
-     *
-     * @param string|null $sync_category sync_category
-     *
-     * @return $this
-     */
-    public function setSyncCategory(?string $sync_category): static
-    {
-        if (is_null($sync_category)) {
-            array_push($this->openAPINullablesSetToNull, 'sync_category');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('sync_category', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['sync_category'] = $sync_category;
-
-        return $this;
-    }
-
-    /**
-     * Gets suspended_at
-     *
-     * @return \DateTime|null
-     */
-    public function getSuspendedAt(): ?\DateTime
-    {
-        return $this->container['suspended_at'];
-    }
-
-    /**
-     * Sets suspended_at
-     *
-     * @param \DateTime|null $suspended_at suspended_at
-     *
-     * @return $this
-     */
-    public function setSuspendedAt(?\DateTime $suspended_at): static
-    {
-        if (is_null($suspended_at)) {
-            array_push($this->openAPINullablesSetToNull, 'suspended_at');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('suspended_at', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['suspended_at'] = $suspended_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets suspension_reason
-     *
-     * @return string|null
-     */
-    public function getSuspensionReason(): ?string
-    {
-        return $this->container['suspension_reason'];
-    }
-
-    /**
-     * Sets suspension_reason
-     *
-     * @param string|null $suspension_reason suspension_reason
-     *
-     * @return $this
-     */
-    public function setSuspensionReason(?string $suspension_reason): static
-    {
-        if (is_null($suspension_reason)) {
-            array_push($this->openAPINullablesSetToNull, 'suspension_reason');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('suspension_reason', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['suspension_reason'] = $suspension_reason;
-
-        return $this;
-    }
-
-    /**
-     * Gets created_at
-     *
-     * @return \DateTime|null
-     */
-    public function getCreatedAt(): ?\DateTime
-    {
-        return $this->container['created_at'];
-    }
-
-    /**
-     * Sets created_at
-     *
-     * @param \DateTime|null $created_at created_at
-     *
-     * @return $this
-     */
-    public function setCreatedAt(?\DateTime $created_at): static
-    {
-        if (is_null($created_at)) {
-            array_push($this->openAPINullablesSetToNull, 'created_at');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('created_at', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['created_at'] = $created_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets mapping_status
-     *
-     * @return string|null
-     */
-    public function getMappingStatus(): ?string
-    {
-        return $this->container['mapping_status'];
-    }
-
-    /**
-     * Sets mapping_status
-     *
-     * @param string|null $mapping_status `mapped` — at least one room points at a listing. `unmapped` — the property is claimed but its rooms are not mapped yet, so `listings` is empty; finish `POST /v1/connect/booking/map-rooms`. An unmapped property is listed rather than hidden, so a half-finished connection is visible instead of looking like no connection at all.
-     *
-     * @return $this
-     */
-    public function setMappingStatus(?string $mapping_status): static
-    {
-        if (is_null($mapping_status)) {
-            throw new InvalidArgumentException('non-nullable mapping_status cannot be null');
-        }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['mapping_status'] = $mapping_status;
-
-        return $this;
-    }
-
-    /**
-     * Gets listings
-     *
-     * @return \Repull\Model\BookingPropertyListingsInner[]|null
-     */
-    public function getListings(): ?array
-    {
-        return $this->container['listings'];
-    }
-
-    /**
-     * Sets listings
-     *
-     * @param \Repull\Model\BookingPropertyListingsInner[]|null $listings The Repull listings mapped under this property. Empty when `mappingStatus` is `unmapped`. Inactive listings are left out.
-     *
-     * @return $this
-     */
-    public function setListings(?array $listings): static
-    {
-        if (is_null($listings)) {
-            throw new InvalidArgumentException('non-nullable listings cannot be null');
-        }
-        $this->container['listings'] = $listings;
+        $this->container['listing_ids'] = $listing_ids;
 
         return $this;
     }

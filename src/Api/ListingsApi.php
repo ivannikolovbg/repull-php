@@ -93,6 +93,9 @@ class ListingsApi
         'getListing' => [
             'application/json',
         ],
+        'getListingMarkups' => [
+            'application/json',
+        ],
         'getListingPublishStatus' => [
             'application/json',
         ],
@@ -109,6 +112,9 @@ class ListingsApi
             'application/json',
         ],
         'pullListingFromAirbnb' => [
+            'application/json',
+        ],
+        'setListingMarkup' => [
             'application/json',
         ],
         'setListingsStatus' => [
@@ -2176,6 +2182,332 @@ class ListingsApi
         if ($x_schema !== null) {
             $headerParams['X-Schema'] = ObjectSerializer::toHeaderValue($x_schema);
         }
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getListingMarkups
+     *
+     * Get a listing&#39;s channel markups
+     *
+     * @param  string $id Repull listing id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListingMarkups'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\GetListingMarkups200Response|\Repull\Model\Error
+     */
+    public function getListingMarkups(
+        string $id,
+        string $contentType = self::contentTypes['getListingMarkups'][0]
+    ): \Repull\Model\GetListingMarkups200Response|\Repull\Model\Error
+    {
+        list($response) = $this->getListingMarkupsWithHttpInfo($id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getListingMarkupsWithHttpInfo
+     *
+     * Get a listing&#39;s channel markups
+     *
+     * @param  string $id Repull listing id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListingMarkups'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\GetListingMarkups200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getListingMarkupsWithHttpInfo(
+        string $id,
+        string $contentType = self::contentTypes['getListingMarkups'][0]
+    ): array
+    {
+        $request = $this->getListingMarkupsRequest($id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\GetListingMarkups200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\GetListingMarkups200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\GetListingMarkups200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getListingMarkupsAsync
+     *
+     * Get a listing&#39;s channel markups
+     *
+     * @param  string $id Repull listing id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListingMarkups'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getListingMarkupsAsync(
+        string $id,
+        string $contentType = self::contentTypes['getListingMarkups'][0]
+    ): PromiseInterface
+    {
+        return $this->getListingMarkupsAsyncWithHttpInfo($id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getListingMarkupsAsyncWithHttpInfo
+     *
+     * Get a listing&#39;s channel markups
+     *
+     * @param  string $id Repull listing id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListingMarkups'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getListingMarkupsAsyncWithHttpInfo(
+        string $id,
+        string $contentType = self::contentTypes['getListingMarkups'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\GetListingMarkups200Response';
+        $request = $this->getListingMarkupsRequest($id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getListingMarkups'
+     *
+     * @param  string $id Repull listing id. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getListingMarkups'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getListingMarkupsRequest(
+        string $id,
+        string $contentType = self::contentTypes['getListingMarkups'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling getListingMarkups'
+            );
+        }
+
+
+        $resourcePath = '/v1/listings/{id}/markups';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
 
         // path params
         if ($id !== null) {
@@ -4498,6 +4830,299 @@ class ListingsApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation setListingMarkup
+     *
+     * Set a listing&#39;s markup on a channel
+     *
+     * @param  string $id Repull listing id. (required)
+     * @param  \Repull\Model\SetListingMarkupRequest $set_listing_markup_request set_listing_markup_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setListingMarkup'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\Error|null
+     */
+    public function setListingMarkup(
+        string $id,
+        \Repull\Model\SetListingMarkupRequest $set_listing_markup_request,
+        string $contentType = self::contentTypes['setListingMarkup'][0]
+    ): ?\Repull\Model\Error
+    {
+        list($response) = $this->setListingMarkupWithHttpInfo($id, $set_listing_markup_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation setListingMarkupWithHttpInfo
+     *
+     * Set a listing&#39;s markup on a channel
+     *
+     * @param  string $id Repull listing id. (required)
+     * @param  \Repull\Model\SetListingMarkupRequest $set_listing_markup_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setListingMarkup'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function setListingMarkupWithHttpInfo(
+        string $id,
+        \Repull\Model\SetListingMarkupRequest $set_listing_markup_request,
+        string $contentType = self::contentTypes['setListingMarkup'][0]
+    ): array
+    {
+        $request = $this->setListingMarkupRequest($id, $set_listing_markup_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            return [null, $statusCode, $response->getHeaders()];
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation setListingMarkupAsync
+     *
+     * Set a listing&#39;s markup on a channel
+     *
+     * @param  string $id Repull listing id. (required)
+     * @param  \Repull\Model\SetListingMarkupRequest $set_listing_markup_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setListingMarkup'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function setListingMarkupAsync(
+        string $id,
+        \Repull\Model\SetListingMarkupRequest $set_listing_markup_request,
+        string $contentType = self::contentTypes['setListingMarkup'][0]
+    ): PromiseInterface
+    {
+        return $this->setListingMarkupAsyncWithHttpInfo($id, $set_listing_markup_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation setListingMarkupAsyncWithHttpInfo
+     *
+     * Set a listing&#39;s markup on a channel
+     *
+     * @param  string $id Repull listing id. (required)
+     * @param  \Repull\Model\SetListingMarkupRequest $set_listing_markup_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setListingMarkup'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function setListingMarkupAsyncWithHttpInfo(
+        string $id,
+        \Repull\Model\SetListingMarkupRequest $set_listing_markup_request,
+        string $contentType = self::contentTypes['setListingMarkup'][0]
+    ): PromiseInterface
+    {
+        $returnType = '';
+        $request = $this->setListingMarkupRequest($id, $set_listing_markup_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'setListingMarkup'
+     *
+     * @param  string $id Repull listing id. (required)
+     * @param  \Repull\Model\SetListingMarkupRequest $set_listing_markup_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setListingMarkup'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function setListingMarkupRequest(
+        string $id,
+        \Repull\Model\SetListingMarkupRequest $set_listing_markup_request,
+        string $contentType = self::contentTypes['setListingMarkup'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling setListingMarkup'
+            );
+        }
+
+        // verify the required parameter 'set_listing_markup_request' is set
+        if ($set_listing_markup_request === null || (is_array($set_listing_markup_request) && count($set_listing_markup_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $set_listing_markup_request when calling setListingMarkup'
+            );
+        }
+
+
+        $resourcePath = '/v1/listings/{id}/markups';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($set_listing_markup_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($set_listing_markup_request));
+            } else {
+                $httpBody = $set_listing_markup_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
