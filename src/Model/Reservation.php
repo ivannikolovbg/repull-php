@@ -353,6 +353,13 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_DETAIL_REQUEST_EXPIRED = 'request_expired';
+    public const STATUS_DETAIL_DECLINED = 'declined';
+    public const STATUS_DETAIL_REQUEST_VOIDED = 'request_voided';
+    public const STATUS_DETAIL_VERIFICATION_FAILED = 'verification_failed';
+    public const STATUS_DETAIL_HOLD_VOIDED = 'hold_voided';
+    public const STATUS_DETAIL_CANCELLED_BY_GUEST = 'cancelled_by_guest';
+    public const STATUS_DETAIL_CANCELLED_BY_HOST = 'cancelled_by_host';
+    public const STATUS_DETAIL_CANCELLED_BY_PLATFORM = 'cancelled_by_platform';
     public const PENDING_REASON_HOST_APPROVAL = 'host_approval';
     public const PENDING_REASON_GUEST_PAYMENT = 'guest_payment';
     public const PENDING_REASON_GUEST_VERIFICATION = 'guest_verification';
@@ -395,6 +402,13 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     {
         return [
             self::STATUS_DETAIL_REQUEST_EXPIRED,
+            self::STATUS_DETAIL_DECLINED,
+            self::STATUS_DETAIL_REQUEST_VOIDED,
+            self::STATUS_DETAIL_VERIFICATION_FAILED,
+            self::STATUS_DETAIL_HOLD_VOIDED,
+            self::STATUS_DETAIL_CANCELLED_BY_GUEST,
+            self::STATUS_DETAIL_CANCELLED_BY_HOST,
+            self::STATUS_DETAIL_CANCELLED_BY_PLATFORM,
         ];
     }
 
@@ -812,7 +826,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets status
      *
-     * @param string $status Lifecycle status. The API normalises a multi-decade internal taxonomy down to these four buckets, so the value you receive is always one of the enum constants. `completed` is derived from `checkOut < today`. A `pending` booking request the channel already let lapse — Airbnb expires an unanswered request 24 hours after the guest asks, and no request can be answered once its check-in has passed — is reported as `cancelled` with `statusDetail: \"request_expired\"`, even when the channel never told us.
+     * @param string $status Lifecycle status. The API normalises a multi-decade internal taxonomy down to these four buckets, so the value you receive is always one of the enum constants. `completed` is derived from `checkOut < today`. A `pending` booking request the channel already let lapse — Airbnb expires an unanswered request 24 hours after the guest asks, and no request can be answered once its check-in has passed — is reported as `cancelled` with `statusDetail: \"request_expired\"`, even when the channel never told us. Every `cancelled` reservation says how it ended in `statusDetail` when the channel tells us.
      *
      * @return $this
      */
@@ -840,7 +854,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets status_detail
      *
-     * @param string|null $status_detail Present only when `status` was derived rather than reported by the channel. `request_expired` — a booking request nobody answered in time (Airbnb's 24-hour window passed, or the check-in did). Absent otherwise.
+     * @param string|null $status_detail On a `cancelled` reservation: how it ended. `request_expired` — a booking request nobody answered in time (Airbnb's 24-hour window passed, or the check-in did), whether the channel reported it or we derived it. `declined` — the host declined the request. `request_voided` — the request was withdrawn or voided before anyone answered it. `verification_failed` — the guest failed Airbnb's identity verification. `hold_voided` — Airbnb voided a booking it was holding for the guest's payment or verification. `cancelled_by_guest` / `cancelled_by_host` / `cancelled_by_platform` — a booking cancelled by that party (`platform` is the channel itself, e.g. Airbnb support). Matches what the webhooks report for the same change. Absent on every other status, and on a cancellation whose channel gives no reason.
      *
      * @return $this
      */
