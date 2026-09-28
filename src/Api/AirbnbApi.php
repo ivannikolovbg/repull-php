@@ -14377,6 +14377,7 @@ class AirbnbApi
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
      * @return \Repull\Model\AirbnbReview|\Repull\Model\Error
+     * @deprecated
      */
     public function respondAirbnbReview(
         string $id,
@@ -14400,6 +14401,7 @@ class AirbnbApi
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
      * @return array of \Repull\Model\AirbnbReview|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @deprecated
      */
     public function respondAirbnbReviewWithHttpInfo(
         string $id,
@@ -14584,6 +14586,7 @@ class AirbnbApi
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
+     * @deprecated
      */
     public function respondAirbnbReviewAsync(
         string $id,
@@ -14610,6 +14613,7 @@ class AirbnbApi
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
+     * @deprecated
      */
     public function respondAirbnbReviewAsyncWithHttpInfo(
         string $id,
@@ -14665,6 +14669,7 @@ class AirbnbApi
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
+     * @deprecated
      */
     public function respondAirbnbReviewRequest(
         string $id,
