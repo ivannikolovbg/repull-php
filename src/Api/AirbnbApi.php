@@ -3882,10 +3882,10 @@ class AirbnbApi
     /**
      * Operation editAirbnbReview
      *
-     * Edit Airbnb host review
+     * Submit your review of a guest (publishes, final)
      *
-     * @param  string $id Airbnb review id (&#x60;HRabc123&#x60; style). (required)
-     * @param  \Repull\Model\AirbnbReview $airbnb_review airbnb_review (required)
+     * @param  string $id The review&#39;s &#x60;id&#x60; or &#x60;externalReviewId&#x60;, both as returned by &#x60;GET /v1/reviews&#x60;. (required)
+     * @param  \Repull\Model\AirbnbHostReviewSubmit $airbnb_host_review_submit airbnb_host_review_submit (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['editAirbnbReview'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -3894,21 +3894,21 @@ class AirbnbApi
      */
     public function editAirbnbReview(
         string $id,
-        \Repull\Model\AirbnbReview $airbnb_review,
+        \Repull\Model\AirbnbHostReviewSubmit $airbnb_host_review_submit,
         string $contentType = self::contentTypes['editAirbnbReview'][0]
     ): \Repull\Model\AirbnbReview|\Repull\Model\Error
     {
-        list($response) = $this->editAirbnbReviewWithHttpInfo($id, $airbnb_review, $contentType);
+        list($response) = $this->editAirbnbReviewWithHttpInfo($id, $airbnb_host_review_submit, $contentType);
         return $response;
     }
 
     /**
      * Operation editAirbnbReviewWithHttpInfo
      *
-     * Edit Airbnb host review
+     * Submit your review of a guest (publishes, final)
      *
-     * @param  string $id Airbnb review id (&#x60;HRabc123&#x60; style). (required)
-     * @param  \Repull\Model\AirbnbReview $airbnb_review (required)
+     * @param  string $id The review&#39;s &#x60;id&#x60; or &#x60;externalReviewId&#x60;, both as returned by &#x60;GET /v1/reviews&#x60;. (required)
+     * @param  \Repull\Model\AirbnbHostReviewSubmit $airbnb_host_review_submit (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['editAirbnbReview'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -3917,11 +3917,11 @@ class AirbnbApi
      */
     public function editAirbnbReviewWithHttpInfo(
         string $id,
-        \Repull\Model\AirbnbReview $airbnb_review,
+        \Repull\Model\AirbnbHostReviewSubmit $airbnb_host_review_submit,
         string $contentType = self::contentTypes['editAirbnbReview'][0]
     ): array
     {
-        $request = $this->editAirbnbReviewRequest($id, $airbnb_review, $contentType);
+        $request = $this->editAirbnbReviewRequest($id, $airbnb_host_review_submit, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -4090,10 +4090,10 @@ class AirbnbApi
     /**
      * Operation editAirbnbReviewAsync
      *
-     * Edit Airbnb host review
+     * Submit your review of a guest (publishes, final)
      *
-     * @param  string $id Airbnb review id (&#x60;HRabc123&#x60; style). (required)
-     * @param  \Repull\Model\AirbnbReview $airbnb_review (required)
+     * @param  string $id The review&#39;s &#x60;id&#x60; or &#x60;externalReviewId&#x60;, both as returned by &#x60;GET /v1/reviews&#x60;. (required)
+     * @param  \Repull\Model\AirbnbHostReviewSubmit $airbnb_host_review_submit (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['editAirbnbReview'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -4101,11 +4101,11 @@ class AirbnbApi
      */
     public function editAirbnbReviewAsync(
         string $id,
-        \Repull\Model\AirbnbReview $airbnb_review,
+        \Repull\Model\AirbnbHostReviewSubmit $airbnb_host_review_submit,
         string $contentType = self::contentTypes['editAirbnbReview'][0]
     ): PromiseInterface
     {
-        return $this->editAirbnbReviewAsyncWithHttpInfo($id, $airbnb_review, $contentType)
+        return $this->editAirbnbReviewAsyncWithHttpInfo($id, $airbnb_host_review_submit, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -4116,10 +4116,10 @@ class AirbnbApi
     /**
      * Operation editAirbnbReviewAsyncWithHttpInfo
      *
-     * Edit Airbnb host review
+     * Submit your review of a guest (publishes, final)
      *
-     * @param  string $id Airbnb review id (&#x60;HRabc123&#x60; style). (required)
-     * @param  \Repull\Model\AirbnbReview $airbnb_review (required)
+     * @param  string $id The review&#39;s &#x60;id&#x60; or &#x60;externalReviewId&#x60;, both as returned by &#x60;GET /v1/reviews&#x60;. (required)
+     * @param  \Repull\Model\AirbnbHostReviewSubmit $airbnb_host_review_submit (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['editAirbnbReview'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -4127,12 +4127,12 @@ class AirbnbApi
      */
     public function editAirbnbReviewAsyncWithHttpInfo(
         string $id,
-        \Repull\Model\AirbnbReview $airbnb_review,
+        \Repull\Model\AirbnbHostReviewSubmit $airbnb_host_review_submit,
         string $contentType = self::contentTypes['editAirbnbReview'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\AirbnbReview';
-        $request = $this->editAirbnbReviewRequest($id, $airbnb_review, $contentType);
+        $request = $this->editAirbnbReviewRequest($id, $airbnb_host_review_submit, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -4173,8 +4173,8 @@ class AirbnbApi
     /**
      * Create request for operation 'editAirbnbReview'
      *
-     * @param  string $id Airbnb review id (&#x60;HRabc123&#x60; style). (required)
-     * @param  \Repull\Model\AirbnbReview $airbnb_review (required)
+     * @param  string $id The review&#39;s &#x60;id&#x60; or &#x60;externalReviewId&#x60;, both as returned by &#x60;GET /v1/reviews&#x60;. (required)
+     * @param  \Repull\Model\AirbnbHostReviewSubmit $airbnb_host_review_submit (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['editAirbnbReview'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -4182,7 +4182,7 @@ class AirbnbApi
      */
     public function editAirbnbReviewRequest(
         string $id,
-        \Repull\Model\AirbnbReview $airbnb_review,
+        \Repull\Model\AirbnbHostReviewSubmit $airbnb_host_review_submit,
         string $contentType = self::contentTypes['editAirbnbReview'][0]
     ): Request
     {
@@ -4194,10 +4194,10 @@ class AirbnbApi
             );
         }
 
-        // verify the required parameter 'airbnb_review' is set
-        if ($airbnb_review === null || (is_array($airbnb_review) && count($airbnb_review) === 0)) {
+        // verify the required parameter 'airbnb_host_review_submit' is set
+        if ($airbnb_host_review_submit === null || (is_array($airbnb_host_review_submit) && count($airbnb_host_review_submit) === 0)) {
             throw new InvalidArgumentException(
-                'Missing the required parameter $airbnb_review when calling editAirbnbReview'
+                'Missing the required parameter $airbnb_host_review_submit when calling editAirbnbReview'
             );
         }
 
@@ -4228,12 +4228,12 @@ class AirbnbApi
         );
 
         // for model (json/xml)
-        if (isset($airbnb_review)) {
+        if (isset($airbnb_host_review_submit)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($airbnb_review));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($airbnb_host_review_submit));
             } else {
-                $httpBody = $airbnb_review;
+                $httpBody = $airbnb_host_review_submit;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
