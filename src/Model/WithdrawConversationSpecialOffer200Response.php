@@ -60,6 +60,7 @@ class WithdrawConversationSpecialOffer200Response implements ModelInterface, Arr
     protected static array $openAPITypes = [
         'id' => 'string',
         'conversation_id' => 'string',
+        'channel' => 'string',
         'status' => 'string'
     ];
 
@@ -71,6 +72,7 @@ class WithdrawConversationSpecialOffer200Response implements ModelInterface, Arr
     protected static array $openAPIFormats = [
         'id' => null,
         'conversation_id' => null,
+        'channel' => null,
         'status' => null
     ];
 
@@ -82,6 +84,7 @@ class WithdrawConversationSpecialOffer200Response implements ModelInterface, Arr
     protected static array $openAPINullables = [
         'id' => false,
         'conversation_id' => false,
+        'channel' => false,
         'status' => false
     ];
 
@@ -163,6 +166,7 @@ class WithdrawConversationSpecialOffer200Response implements ModelInterface, Arr
     protected static array $attributeMap = [
         'id' => 'id',
         'conversation_id' => 'conversationId',
+        'channel' => 'channel',
         'status' => 'status'
     ];
 
@@ -174,6 +178,7 @@ class WithdrawConversationSpecialOffer200Response implements ModelInterface, Arr
     protected static array $setters = [
         'id' => 'setId',
         'conversation_id' => 'setConversationId',
+        'channel' => 'setChannel',
         'status' => 'setStatus'
     ];
 
@@ -185,6 +190,7 @@ class WithdrawConversationSpecialOffer200Response implements ModelInterface, Arr
     protected static array $getters = [
         'id' => 'getId',
         'conversation_id' => 'getConversationId',
+        'channel' => 'getChannel',
         'status' => 'getStatus'
     ];
 
@@ -220,7 +226,22 @@ class WithdrawConversationSpecialOffer200Response implements ModelInterface, Arr
         return self::$openAPIModelName;
     }
 
+    public const CHANNEL_AIRBNB = 'airbnb';
+    public const CHANNEL_VRBO = 'vrbo';
     public const STATUS_WITHDRAWN = 'withdrawn';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getChannelAllowableValues()
+    {
+        return [
+            self::CHANNEL_AIRBNB,
+            self::CHANNEL_VRBO,
+        ];
+    }
 
     /**
      * Gets allowable values of the enum
@@ -250,6 +271,7 @@ class WithdrawConversationSpecialOffer200Response implements ModelInterface, Arr
     {
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('conversation_id', $data ?? [], null);
+        $this->setIfExists('channel', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
     }
 
@@ -284,6 +306,18 @@ class WithdrawConversationSpecialOffer200Response implements ModelInterface, Arr
         if ($this->container['conversation_id'] === null) {
             $invalidProperties[] = "'conversation_id' can't be null";
         }
+        if ($this->container['channel'] === null) {
+            $invalidProperties[] = "'channel' can't be null";
+        }
+        $allowedValues = self::getChannelAllowableValues();
+        if (!is_null($this->container['channel']) && !in_array($this->container['channel'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'channel', must be one of '%s'",
+                $this->container['channel'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         if ($this->container['status'] === null) {
             $invalidProperties[] = "'status' can't be null";
         }
@@ -358,6 +392,34 @@ class WithdrawConversationSpecialOffer200Response implements ModelInterface, Arr
             throw new InvalidArgumentException('non-nullable conversation_id cannot be null');
         }
         $this->container['conversation_id'] = $conversation_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets channel
+     *
+     * @return string
+     */
+    public function getChannel(): string
+    {
+        return $this->container['channel'];
+    }
+
+    /**
+     * Sets channel
+     *
+     * @param string $channel channel
+     *
+     * @return $this
+     */
+    public function setChannel(string $channel): static
+    {
+        if (is_null($channel)) {
+            throw new InvalidArgumentException('non-nullable channel cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['channel'] = $channel;
 
         return $this;
     }

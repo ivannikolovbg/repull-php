@@ -63,6 +63,9 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         'connected' => 'bool',
         'sync_enabled' => 'bool',
         'since' => '\DateTime',
+        'platform_id' => 'string',
+        'channel_status' => 'string',
+        'channel_status_detail' => 'string',
         'locked_fields' => 'string[]'
     ];
 
@@ -76,6 +79,9 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         'connected' => null,
         'sync_enabled' => null,
         'since' => 'date-time',
+        'platform_id' => null,
+        'channel_status' => null,
+        'channel_status_detail' => null,
         'locked_fields' => null
     ];
 
@@ -89,6 +95,9 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         'connected' => false,
         'sync_enabled' => false,
         'since' => true,
+        'platform_id' => true,
+        'channel_status' => true,
+        'channel_status_detail' => true,
         'locked_fields' => false
     ];
 
@@ -172,6 +181,9 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         'connected' => 'connected',
         'sync_enabled' => 'syncEnabled',
         'since' => 'since',
+        'platform_id' => 'platformId',
+        'channel_status' => 'channelStatus',
+        'channel_status_detail' => 'channelStatusDetail',
         'locked_fields' => 'lockedFields'
     ];
 
@@ -185,6 +197,9 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         'connected' => 'setConnected',
         'sync_enabled' => 'setSyncEnabled',
         'since' => 'setSince',
+        'platform_id' => 'setPlatformId',
+        'channel_status' => 'setChannelStatus',
+        'channel_status_detail' => 'setChannelStatusDetail',
         'locked_fields' => 'setLockedFields'
     ];
 
@@ -198,6 +213,9 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         'connected' => 'getConnected',
         'sync_enabled' => 'getSyncEnabled',
         'since' => 'getSince',
+        'platform_id' => 'getPlatformId',
+        'channel_status' => 'getChannelStatus',
+        'channel_status_detail' => 'getChannelStatusDetail',
         'locked_fields' => 'getLockedFields'
     ];
 
@@ -233,6 +251,23 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         return self::$openAPIModelName;
     }
 
+    public const CHANNEL_STATUS_ONLINE = 'online';
+    public const CHANNEL_STATUS_OFFLINE = 'offline';
+    public const CHANNEL_STATUS_NOT_LIVE = 'not_live';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getChannelStatusAllowableValues()
+    {
+        return [
+            self::CHANNEL_STATUS_ONLINE,
+            self::CHANNEL_STATUS_OFFLINE,
+            self::CHANNEL_STATUS_NOT_LIVE,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -252,6 +287,9 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
         $this->setIfExists('connected', $data ?? [], null);
         $this->setIfExists('sync_enabled', $data ?? [], null);
         $this->setIfExists('since', $data ?? [], null);
+        $this->setIfExists('platform_id', $data ?? [], null);
+        $this->setIfExists('channel_status', $data ?? [], null);
+        $this->setIfExists('channel_status_detail', $data ?? [], null);
         $this->setIfExists('locked_fields', $data ?? [], null);
     }
 
@@ -279,6 +317,15 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
     public function listInvalidProperties(): array
     {
         $invalidProperties = [];
+
+        $allowedValues = self::getChannelStatusAllowableValues();
+        if (!is_null($this->container['channel_status']) && !in_array($this->container['channel_status'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'channel_status', must be one of '%s'",
+                $this->container['channel_status'],
+                implode("', '", $allowedValues)
+            );
+        }
 
         return $invalidProperties;
     }
@@ -403,6 +450,109 @@ class ListingPublishStatusConnection implements ModelInterface, ArrayAccess, Jso
             }
         }
         $this->container['since'] = $since;
+
+        return $this;
+    }
+
+    /**
+     * Gets platform_id
+     *
+     * @return string|null
+     */
+    public function getPlatformId(): ?string
+    {
+        return $this->container['platform_id'];
+    }
+
+    /**
+     * Sets platform_id
+     *
+     * @param string|null $platform_id The listing's id on the channel — Airbnb listing id, Booking.com room/property id, VRBO listing number.
+     *
+     * @return $this
+     */
+    public function setPlatformId(?string $platform_id): static
+    {
+        if (is_null($platform_id)) {
+            array_push($this->openAPINullablesSetToNull, 'platform_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('platform_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['platform_id'] = $platform_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets channel_status
+     *
+     * @return string|null
+     */
+    public function getChannelStatus(): ?string
+    {
+        return $this->container['channel_status'];
+    }
+
+    /**
+     * Sets channel_status
+     *
+     * @param string|null $channel_status Where the listing stands on the channel itself, when the channel reports it (VRBO): `online` — live and bookable; `offline` — hidden by the owner (`POST /v1/listings/{id}/online` brings it back); `not_live` — expired, new, still onboarding or deactivated by the channel (see `channelStatusDetail`). Null when not reported.
+     *
+     * @return $this
+     */
+    public function setChannelStatus(?string $channel_status): static
+    {
+        if (is_null($channel_status)) {
+            array_push($this->openAPINullablesSetToNull, 'channel_status');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('channel_status', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['channel_status'] = $channel_status;
+
+        return $this;
+    }
+
+    /**
+     * Gets channel_status_detail
+     *
+     * @return string|null
+     */
+    public function getChannelStatusDetail(): ?string
+    {
+        return $this->container['channel_status_detail'];
+    }
+
+    /**
+     * Sets channel_status_detail
+     *
+     * @param string|null $channel_status_detail The channel's own status word behind `channelStatus` (VRBO: `LIVE`, `InactiveByOwnerRequest`, `Expired`, `New`, …).
+     *
+     * @return $this
+     */
+    public function setChannelStatusDetail(?string $channel_status_detail): static
+    {
+        if (is_null($channel_status_detail)) {
+            array_push($this->openAPINullablesSetToNull, 'channel_status_detail');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('channel_status_detail', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['channel_status_detail'] = $channel_status_detail;
 
         return $this;
     }

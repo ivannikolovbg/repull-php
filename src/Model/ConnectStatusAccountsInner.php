@@ -62,7 +62,10 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'name' => 'string',
         'picture_url' => 'string',
         'status' => 'string',
-        'connected' => 'bool'
+        'connected' => 'bool',
+        'email' => 'string',
+        'access_type' => 'string',
+        'import' => '\Repull\Model\VrboImportStatus'
     ];
 
     /**
@@ -75,7 +78,10 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'name' => null,
         'picture_url' => null,
         'status' => null,
-        'connected' => null
+        'connected' => null,
+        'email' => null,
+        'access_type' => null,
+        'import' => null
     ];
 
     /**
@@ -88,7 +94,10 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'name' => true,
         'picture_url' => true,
         'status' => true,
-        'connected' => false
+        'connected' => false,
+        'email' => true,
+        'access_type' => true,
+        'import' => true
     ];
 
     /**
@@ -171,7 +180,10 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'name' => 'name',
         'picture_url' => 'pictureUrl',
         'status' => 'status',
-        'connected' => 'connected'
+        'connected' => 'connected',
+        'email' => 'email',
+        'access_type' => 'accessType',
+        'import' => 'import'
     ];
 
     /**
@@ -184,7 +196,10 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'name' => 'setName',
         'picture_url' => 'setPictureUrl',
         'status' => 'setStatus',
-        'connected' => 'setConnected'
+        'connected' => 'setConnected',
+        'email' => 'setEmail',
+        'access_type' => 'setAccessType',
+        'import' => 'setImport'
     ];
 
     /**
@@ -197,7 +212,10 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'name' => 'getName',
         'picture_url' => 'getPictureUrl',
         'status' => 'getStatus',
-        'connected' => 'getConnected'
+        'connected' => 'getConnected',
+        'email' => 'getEmail',
+        'access_type' => 'getAccessType',
+        'import' => 'getImport'
     ];
 
     /**
@@ -232,6 +250,21 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         return self::$openAPIModelName;
     }
 
+    public const ACCESS_TYPE_MESSAGING = 'messaging';
+    public const ACCESS_TYPE_FULL_ACCESS = 'full_access';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getAccessTypeAllowableValues()
+    {
+        return [
+            self::ACCESS_TYPE_MESSAGING,
+            self::ACCESS_TYPE_FULL_ACCESS,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -252,6 +285,9 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         $this->setIfExists('picture_url', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('connected', $data ?? [], null);
+        $this->setIfExists('email', $data ?? [], null);
+        $this->setIfExists('access_type', $data ?? [], null);
+        $this->setIfExists('import', $data ?? [], null);
     }
 
     /**
@@ -278,6 +314,15 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
     public function listInvalidProperties(): array
     {
         $invalidProperties = [];
+
+        $allowedValues = self::getAccessTypeAllowableValues();
+        if (!is_null($this->container['access_type']) && !in_array($this->container['access_type'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'access_type', must be one of '%s'",
+                $this->container['access_type'],
+                implode("', '", $allowedValues)
+            );
+        }
 
         return $invalidProperties;
     }
@@ -443,6 +488,109 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
             throw new InvalidArgumentException('non-nullable connected cannot be null');
         }
         $this->container['connected'] = $connected;
+
+        return $this;
+    }
+
+    /**
+     * Gets email
+     *
+     * @return string|null
+     */
+    public function getEmail(): ?string
+    {
+        return $this->container['email'];
+    }
+
+    /**
+     * Sets email
+     *
+     * @param string|null $email Vrbo only: the account email.
+     *
+     * @return $this
+     */
+    public function setEmail(?string $email): static
+    {
+        if (is_null($email)) {
+            array_push($this->openAPINullablesSetToNull, 'email');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('email', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['email'] = $email;
+
+        return $this;
+    }
+
+    /**
+     * Gets access_type
+     *
+     * @return string|null
+     */
+    public function getAccessType(): ?string
+    {
+        return $this->container['access_type'];
+    }
+
+    /**
+     * Sets access_type
+     *
+     * @param string|null $access_type Vrbo only.
+     *
+     * @return $this
+     */
+    public function setAccessType(?string $access_type): static
+    {
+        if (is_null($access_type)) {
+            array_push($this->openAPINullablesSetToNull, 'access_type');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('access_type', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['access_type'] = $access_type;
+
+        return $this;
+    }
+
+    /**
+     * Gets import
+     *
+     * @return \Repull\Model\VrboImportStatus|null
+     */
+    public function getImport(): ?\Repull\Model\VrboImportStatus
+    {
+        return $this->container['import'];
+    }
+
+    /**
+     * Sets import
+     *
+     * @param \Repull\Model\VrboImportStatus|null $import Vrbo only: where the account import stands.
+     *
+     * @return $this
+     */
+    public function setImport(?\Repull\Model\VrboImportStatus $import): static
+    {
+        if (is_null($import)) {
+            array_push($this->openAPINullablesSetToNull, 'import');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('import', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['import'] = $import;
 
         return $this;
     }

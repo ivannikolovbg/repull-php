@@ -66,7 +66,9 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'external_account_id' => 'string',
         'created_at' => '\DateTime',
         'host' => '\Repull\Model\ConnectHost',
-        'accounts' => '\Repull\Model\ConnectStatusAccountsInner[]'
+        'accounts' => '\Repull\Model\ConnectStatusAccountsInner[]',
+        'write_policy' => '\Repull\Model\PmsWritePolicy',
+        'data_freshness' => 'object'
     ];
 
     /**
@@ -82,7 +84,9 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'external_account_id' => null,
         'created_at' => 'date-time',
         'host' => null,
-        'accounts' => null
+        'accounts' => null,
+        'write_policy' => null,
+        'data_freshness' => null
     ];
 
     /**
@@ -98,7 +102,9 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'external_account_id' => true,
         'created_at' => false,
         'host' => true,
-        'accounts' => false
+        'accounts' => false,
+        'write_policy' => false,
+        'data_freshness' => false
     ];
 
     /**
@@ -184,7 +190,9 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'external_account_id' => 'externalAccountId',
         'created_at' => 'createdAt',
         'host' => 'host',
-        'accounts' => 'accounts'
+        'accounts' => 'accounts',
+        'write_policy' => 'writePolicy',
+        'data_freshness' => 'dataFreshness'
     ];
 
     /**
@@ -200,7 +208,9 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'external_account_id' => 'setExternalAccountId',
         'created_at' => 'setCreatedAt',
         'host' => 'setHost',
-        'accounts' => 'setAccounts'
+        'accounts' => 'setAccounts',
+        'write_policy' => 'setWritePolicy',
+        'data_freshness' => 'setDataFreshness'
     ];
 
     /**
@@ -216,7 +226,9 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'external_account_id' => 'getExternalAccountId',
         'created_at' => 'getCreatedAt',
         'host' => 'getHost',
-        'accounts' => 'getAccounts'
+        'accounts' => 'getAccounts',
+        'write_policy' => 'getWritePolicy',
+        'data_freshness' => 'getDataFreshness'
     ];
 
     /**
@@ -291,6 +303,8 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('created_at', $data ?? [], null);
         $this->setIfExists('host', $data ?? [], null);
         $this->setIfExists('accounts', $data ?? [], null);
+        $this->setIfExists('write_policy', $data ?? [], null);
+        $this->setIfExists('data_freshness', $data ?? [], null);
     }
 
     /**
@@ -556,7 +570,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets accounts
      *
-     * @param \Repull\Model\ConnectStatusAccountsInner[]|null $accounts Airbnb only: every Airbnb account this workspace has connected, including ones since disconnected. Pass `externalAccountId` as `accountId` to `DELETE /v1/connect/airbnb` to disconnect one account.
+     * @param \Repull\Model\ConnectStatusAccountsInner[]|null $accounts Airbnb: every Airbnb account this workspace has connected, including ones since disconnected. Pass `externalAccountId` as `accountId` to `DELETE /v1/connect/airbnb` to disconnect one account. Vrbo (`GET /v1/connect/vrbo-login`): every signed-in Vrbo account, each with `accessType` and `import` (a `VrboImportStatus`), plus a top-level `dataFreshness`.
      *
      * @return $this
      */
@@ -566,6 +580,60 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable accounts cannot be null');
         }
         $this->container['accounts'] = $accounts;
+
+        return $this;
+    }
+
+    /**
+     * Gets write_policy
+     *
+     * @return \Repull\Model\PmsWritePolicy|null
+     */
+    public function getWritePolicy(): ?\Repull\Model\PmsWritePolicy
+    {
+        return $this->container['write_policy'];
+    }
+
+    /**
+     * Sets write_policy
+     *
+     * @param \Repull\Model\PmsWritePolicy|null $write_policy PMS connections only: what the app may change in the PMS. Change it with `PATCH /v1/connect/{provider}/write-policy`.
+     *
+     * @return $this
+     */
+    public function setWritePolicy(?\Repull\Model\PmsWritePolicy $write_policy): static
+    {
+        if (is_null($write_policy)) {
+            throw new InvalidArgumentException('non-nullable write_policy cannot be null');
+        }
+        $this->container['write_policy'] = $write_policy;
+
+        return $this;
+    }
+
+    /**
+     * Gets data_freshness
+     *
+     * @return object|null
+     */
+    public function getDataFreshness(): ?object
+    {
+        return $this->container['data_freshness'];
+    }
+
+    /**
+     * Sets data_freshness
+     *
+     * @param object|null $data_freshness Vrbo only: the same freshness envelope the Airbnb read endpoints return, per account and in aggregate. Its reason is never_synced until a mapping is confirmed and importing while upcoming bookings come in.
+     *
+     * @return $this
+     */
+    public function setDataFreshness(?object $data_freshness): static
+    {
+        if (is_null($data_freshness)) {
+            throw new InvalidArgumentException('non-nullable data_freshness cannot be null');
+        }
+        $this->container['data_freshness'] = $data_freshness;
 
         return $this;
     }

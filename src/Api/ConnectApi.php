@@ -86,7 +86,22 @@ class ConnectApi
         'deleteConnection' => [
             'application/json',
         ],
+        'getBookingExtranetLoginConfig' => [
+            'application/json',
+        ],
+        'getBookingExtranetLoginStatus' => [
+            'application/json',
+        ],
         'getConnectStatus' => [
+            'application/json',
+        ],
+        'getConnectWritePolicy' => [
+            'application/json',
+        ],
+        'getVrboConnectImport' => [
+            'application/json',
+        ],
+        'inviteBookingExtranetUser' => [
             'application/json',
         ],
         'listConnectBookingRooms' => [
@@ -101,7 +116,13 @@ class ConnectApi
         'mapConnectBookingRooms' => [
             'application/json',
         ],
+        'searchConnectSessionListingOptions' => [
+            'application/json',
+        ],
         'selectConnectProvider' => [
+            'application/json',
+        ],
+        'startBookingExtranetLogin' => [
             'application/json',
         ],
         'submitBeds24Credentials' => [
@@ -140,7 +161,13 @@ class ConnectApi
         'submitVrboCredentials' => [
             'application/json',
         ],
+        'updateConnectWritePolicy' => [
+            'application/json',
+        ],
         'verifyBookingHotel' => [
+            'application/json',
+        ],
+        'vrboLogin' => [
             'application/json',
         ],
     ];
@@ -1376,6 +1403,592 @@ class ConnectApi
     }
 
     /**
+     * Operation getBookingExtranetLoginConfig
+     *
+     * Booking.com direct-login config
+     *
+     * @param  string $session_id The Connect session ID (capability token). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingExtranetLoginConfig'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\GetBookingExtranetLoginConfig200Response
+     */
+    public function getBookingExtranetLoginConfig(
+        string $session_id,
+        string $contentType = self::contentTypes['getBookingExtranetLoginConfig'][0]
+    ): \Repull\Model\GetBookingExtranetLoginConfig200Response
+    {
+        list($response) = $this->getBookingExtranetLoginConfigWithHttpInfo($session_id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getBookingExtranetLoginConfigWithHttpInfo
+     *
+     * Booking.com direct-login config
+     *
+     * @param  string $session_id The Connect session ID (capability token). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingExtranetLoginConfig'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\GetBookingExtranetLoginConfig200Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getBookingExtranetLoginConfigWithHttpInfo(
+        string $session_id,
+        string $contentType = self::contentTypes['getBookingExtranetLoginConfig'][0]
+    ): array
+    {
+        $request = $this->getBookingExtranetLoginConfigRequest($session_id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\GetBookingExtranetLoginConfig200Response',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\GetBookingExtranetLoginConfig200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\GetBookingExtranetLoginConfig200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getBookingExtranetLoginConfigAsync
+     *
+     * Booking.com direct-login config
+     *
+     * @param  string $session_id The Connect session ID (capability token). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingExtranetLoginConfig'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getBookingExtranetLoginConfigAsync(
+        string $session_id,
+        string $contentType = self::contentTypes['getBookingExtranetLoginConfig'][0]
+    ): PromiseInterface
+    {
+        return $this->getBookingExtranetLoginConfigAsyncWithHttpInfo($session_id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getBookingExtranetLoginConfigAsyncWithHttpInfo
+     *
+     * Booking.com direct-login config
+     *
+     * @param  string $session_id The Connect session ID (capability token). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingExtranetLoginConfig'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getBookingExtranetLoginConfigAsyncWithHttpInfo(
+        string $session_id,
+        string $contentType = self::contentTypes['getBookingExtranetLoginConfig'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\GetBookingExtranetLoginConfig200Response';
+        $request = $this->getBookingExtranetLoginConfigRequest($session_id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getBookingExtranetLoginConfig'
+     *
+     * @param  string $session_id The Connect session ID (capability token). (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingExtranetLoginConfig'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getBookingExtranetLoginConfigRequest(
+        string $session_id,
+        string $contentType = self::contentTypes['getBookingExtranetLoginConfig'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'session_id' is set
+        if ($session_id === null || (is_array($session_id) && count($session_id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $session_id when calling getBookingExtranetLoginConfig'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/booking-extranet-login/session';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $session_id,
+            'sessionId', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getBookingExtranetLoginStatus
+     *
+     * Booking.com direct-login status
+     *
+     * @param  string $session_id The Connect session ID (capability token). (required)
+     * @param  int $account_id account_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingExtranetLoginStatus'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\GetBookingExtranetLoginStatus200Response
+     */
+    public function getBookingExtranetLoginStatus(
+        string $session_id,
+        int $account_id,
+        string $contentType = self::contentTypes['getBookingExtranetLoginStatus'][0]
+    ): \Repull\Model\GetBookingExtranetLoginStatus200Response
+    {
+        list($response) = $this->getBookingExtranetLoginStatusWithHttpInfo($session_id, $account_id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getBookingExtranetLoginStatusWithHttpInfo
+     *
+     * Booking.com direct-login status
+     *
+     * @param  string $session_id The Connect session ID (capability token). (required)
+     * @param  int $account_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingExtranetLoginStatus'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\GetBookingExtranetLoginStatus200Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getBookingExtranetLoginStatusWithHttpInfo(
+        string $session_id,
+        int $account_id,
+        string $contentType = self::contentTypes['getBookingExtranetLoginStatus'][0]
+    ): array
+    {
+        $request = $this->getBookingExtranetLoginStatusRequest($session_id, $account_id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\GetBookingExtranetLoginStatus200Response',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\GetBookingExtranetLoginStatus200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\GetBookingExtranetLoginStatus200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getBookingExtranetLoginStatusAsync
+     *
+     * Booking.com direct-login status
+     *
+     * @param  string $session_id The Connect session ID (capability token). (required)
+     * @param  int $account_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingExtranetLoginStatus'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getBookingExtranetLoginStatusAsync(
+        string $session_id,
+        int $account_id,
+        string $contentType = self::contentTypes['getBookingExtranetLoginStatus'][0]
+    ): PromiseInterface
+    {
+        return $this->getBookingExtranetLoginStatusAsyncWithHttpInfo($session_id, $account_id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getBookingExtranetLoginStatusAsyncWithHttpInfo
+     *
+     * Booking.com direct-login status
+     *
+     * @param  string $session_id The Connect session ID (capability token). (required)
+     * @param  int $account_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingExtranetLoginStatus'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getBookingExtranetLoginStatusAsyncWithHttpInfo(
+        string $session_id,
+        int $account_id,
+        string $contentType = self::contentTypes['getBookingExtranetLoginStatus'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\GetBookingExtranetLoginStatus200Response';
+        $request = $this->getBookingExtranetLoginStatusRequest($session_id, $account_id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getBookingExtranetLoginStatus'
+     *
+     * @param  string $session_id The Connect session ID (capability token). (required)
+     * @param  int $account_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getBookingExtranetLoginStatus'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getBookingExtranetLoginStatusRequest(
+        string $session_id,
+        int $account_id,
+        string $contentType = self::contentTypes['getBookingExtranetLoginStatus'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'session_id' is set
+        if ($session_id === null || (is_array($session_id) && count($session_id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $session_id when calling getBookingExtranetLoginStatus'
+            );
+        }
+
+        // verify the required parameter 'account_id' is set
+        if ($account_id === null || (is_array($account_id) && count($account_id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $account_id when calling getBookingExtranetLoginStatus'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/booking-extranet-login/status';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $session_id,
+            'sessionId', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $account_id,
+            'accountId', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation getConnectStatus
      *
      * Get connection status
@@ -1653,6 +2266,876 @@ class ConnectApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getConnectWritePolicy
+     *
+     * Get what the app may change in a PMS
+     *
+     * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConnectWritePolicy'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\GetConnectWritePolicy200Response|\Repull\Model\Error
+     */
+    public function getConnectWritePolicy(
+        string $provider,
+        string $contentType = self::contentTypes['getConnectWritePolicy'][0]
+    ): \Repull\Model\GetConnectWritePolicy200Response|\Repull\Model\Error
+    {
+        list($response) = $this->getConnectWritePolicyWithHttpInfo($provider, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getConnectWritePolicyWithHttpInfo
+     *
+     * Get what the app may change in a PMS
+     *
+     * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConnectWritePolicy'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\GetConnectWritePolicy200Response|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getConnectWritePolicyWithHttpInfo(
+        string $provider,
+        string $contentType = self::contentTypes['getConnectWritePolicy'][0]
+    ): array
+    {
+        $request = $this->getConnectWritePolicyRequest($provider, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\GetConnectWritePolicy200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\GetConnectWritePolicy200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\GetConnectWritePolicy200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getConnectWritePolicyAsync
+     *
+     * Get what the app may change in a PMS
+     *
+     * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConnectWritePolicy'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getConnectWritePolicyAsync(
+        string $provider,
+        string $contentType = self::contentTypes['getConnectWritePolicy'][0]
+    ): PromiseInterface
+    {
+        return $this->getConnectWritePolicyAsyncWithHttpInfo($provider, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getConnectWritePolicyAsyncWithHttpInfo
+     *
+     * Get what the app may change in a PMS
+     *
+     * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConnectWritePolicy'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getConnectWritePolicyAsyncWithHttpInfo(
+        string $provider,
+        string $contentType = self::contentTypes['getConnectWritePolicy'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\GetConnectWritePolicy200Response';
+        $request = $this->getConnectWritePolicyRequest($provider, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getConnectWritePolicy'
+     *
+     * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getConnectWritePolicy'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getConnectWritePolicyRequest(
+        string $provider,
+        string $contentType = self::contentTypes['getConnectWritePolicy'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'provider' is set
+        if ($provider === null || (is_array($provider) && count($provider) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $provider when calling getConnectWritePolicy'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/{provider}/write-policy';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($provider !== null) {
+            $resourcePath = str_replace(
+                '{provider}',
+                ObjectSerializer::toPathValue($provider),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getVrboConnectImport
+     *
+     * Import progress of the session&#39;s Vrbo account
+     *
+     * @param  string $session_id session_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getVrboConnectImport'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\VrboImportStatus
+     */
+    public function getVrboConnectImport(
+        string $session_id,
+        string $contentType = self::contentTypes['getVrboConnectImport'][0]
+    ): \Repull\Model\VrboImportStatus
+    {
+        list($response) = $this->getVrboConnectImportWithHttpInfo($session_id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getVrboConnectImportWithHttpInfo
+     *
+     * Import progress of the session&#39;s Vrbo account
+     *
+     * @param  string $session_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getVrboConnectImport'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\VrboImportStatus, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getVrboConnectImportWithHttpInfo(
+        string $session_id,
+        string $contentType = self::contentTypes['getVrboConnectImport'][0]
+    ): array
+    {
+        $request = $this->getVrboConnectImportRequest($session_id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\VrboImportStatus',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\VrboImportStatus',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\VrboImportStatus',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getVrboConnectImportAsync
+     *
+     * Import progress of the session&#39;s Vrbo account
+     *
+     * @param  string $session_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getVrboConnectImport'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getVrboConnectImportAsync(
+        string $session_id,
+        string $contentType = self::contentTypes['getVrboConnectImport'][0]
+    ): PromiseInterface
+    {
+        return $this->getVrboConnectImportAsyncWithHttpInfo($session_id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getVrboConnectImportAsyncWithHttpInfo
+     *
+     * Import progress of the session&#39;s Vrbo account
+     *
+     * @param  string $session_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getVrboConnectImport'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getVrboConnectImportAsyncWithHttpInfo(
+        string $session_id,
+        string $contentType = self::contentTypes['getVrboConnectImport'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\VrboImportStatus';
+        $request = $this->getVrboConnectImportRequest($session_id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getVrboConnectImport'
+     *
+     * @param  string $session_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getVrboConnectImport'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getVrboConnectImportRequest(
+        string $session_id,
+        string $contentType = self::contentTypes['getVrboConnectImport'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'session_id' is set
+        if ($session_id === null || (is_array($session_id) && count($session_id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $session_id when calling getVrboConnectImport'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/vrbo-login/session';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $session_id,
+            'sessionId', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation inviteBookingExtranetUser
+     *
+     * Connect Booking.com by inviting a user
+     *
+     * @param  \Repull\Model\InviteBookingExtranetUserRequest $invite_booking_extranet_user_request invite_booking_extranet_user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['inviteBookingExtranetUser'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\InviteBookingExtranetUser200Response
+     */
+    public function inviteBookingExtranetUser(
+        \Repull\Model\InviteBookingExtranetUserRequest $invite_booking_extranet_user_request,
+        string $contentType = self::contentTypes['inviteBookingExtranetUser'][0]
+    ): \Repull\Model\InviteBookingExtranetUser200Response
+    {
+        list($response) = $this->inviteBookingExtranetUserWithHttpInfo($invite_booking_extranet_user_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation inviteBookingExtranetUserWithHttpInfo
+     *
+     * Connect Booking.com by inviting a user
+     *
+     * @param  \Repull\Model\InviteBookingExtranetUserRequest $invite_booking_extranet_user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['inviteBookingExtranetUser'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\InviteBookingExtranetUser200Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function inviteBookingExtranetUserWithHttpInfo(
+        \Repull\Model\InviteBookingExtranetUserRequest $invite_booking_extranet_user_request,
+        string $contentType = self::contentTypes['inviteBookingExtranetUser'][0]
+    ): array
+    {
+        $request = $this->inviteBookingExtranetUserRequest($invite_booking_extranet_user_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\InviteBookingExtranetUser200Response',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\InviteBookingExtranetUser200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\InviteBookingExtranetUser200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation inviteBookingExtranetUserAsync
+     *
+     * Connect Booking.com by inviting a user
+     *
+     * @param  \Repull\Model\InviteBookingExtranetUserRequest $invite_booking_extranet_user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['inviteBookingExtranetUser'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function inviteBookingExtranetUserAsync(
+        \Repull\Model\InviteBookingExtranetUserRequest $invite_booking_extranet_user_request,
+        string $contentType = self::contentTypes['inviteBookingExtranetUser'][0]
+    ): PromiseInterface
+    {
+        return $this->inviteBookingExtranetUserAsyncWithHttpInfo($invite_booking_extranet_user_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation inviteBookingExtranetUserAsyncWithHttpInfo
+     *
+     * Connect Booking.com by inviting a user
+     *
+     * @param  \Repull\Model\InviteBookingExtranetUserRequest $invite_booking_extranet_user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['inviteBookingExtranetUser'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function inviteBookingExtranetUserAsyncWithHttpInfo(
+        \Repull\Model\InviteBookingExtranetUserRequest $invite_booking_extranet_user_request,
+        string $contentType = self::contentTypes['inviteBookingExtranetUser'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\InviteBookingExtranetUser200Response';
+        $request = $this->inviteBookingExtranetUserRequest($invite_booking_extranet_user_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'inviteBookingExtranetUser'
+     *
+     * @param  \Repull\Model\InviteBookingExtranetUserRequest $invite_booking_extranet_user_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['inviteBookingExtranetUser'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function inviteBookingExtranetUserRequest(
+        \Repull\Model\InviteBookingExtranetUserRequest $invite_booking_extranet_user_request,
+        string $contentType = self::contentTypes['inviteBookingExtranetUser'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'invite_booking_extranet_user_request' is set
+        if ($invite_booking_extranet_user_request === null || (is_array($invite_booking_extranet_user_request) && count($invite_booking_extranet_user_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $invite_booking_extranet_user_request when calling inviteBookingExtranetUser'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/booking-extranet-login/invite';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($invite_booking_extranet_user_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($invite_booking_extranet_user_request));
+            } else {
+                $httpBody = $invite_booking_extranet_user_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
@@ -2885,6 +4368,331 @@ class ConnectApi
     }
 
     /**
+     * Operation searchConnectSessionListingOptions
+     *
+     * Search listings for a Connect mapping picker
+     *
+     * @param  string $session_id session_id (required)
+     * @param  string|null $q q (optional)
+     * @param  int|null $limit limit (optional, default to 20)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchConnectSessionListingOptions'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\SearchConnectSessionListingOptions200Response
+     */
+    public function searchConnectSessionListingOptions(
+        string $session_id,
+        ?string $q = null,
+        ?int $limit = 20,
+        string $contentType = self::contentTypes['searchConnectSessionListingOptions'][0]
+    ): \Repull\Model\SearchConnectSessionListingOptions200Response
+    {
+        list($response) = $this->searchConnectSessionListingOptionsWithHttpInfo($session_id, $q, $limit, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation searchConnectSessionListingOptionsWithHttpInfo
+     *
+     * Search listings for a Connect mapping picker
+     *
+     * @param  string $session_id (required)
+     * @param  string|null $q (optional)
+     * @param  int|null $limit (optional, default to 20)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchConnectSessionListingOptions'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\SearchConnectSessionListingOptions200Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function searchConnectSessionListingOptionsWithHttpInfo(
+        string $session_id,
+        ?string $q = null,
+        ?int $limit = 20,
+        string $contentType = self::contentTypes['searchConnectSessionListingOptions'][0]
+    ): array
+    {
+        $request = $this->searchConnectSessionListingOptionsRequest($session_id, $q, $limit, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SearchConnectSessionListingOptions200Response',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SearchConnectSessionListingOptions200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SearchConnectSessionListingOptions200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation searchConnectSessionListingOptionsAsync
+     *
+     * Search listings for a Connect mapping picker
+     *
+     * @param  string $session_id (required)
+     * @param  string|null $q (optional)
+     * @param  int|null $limit (optional, default to 20)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchConnectSessionListingOptions'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function searchConnectSessionListingOptionsAsync(
+        string $session_id,
+        ?string $q = null,
+        ?int $limit = 20,
+        string $contentType = self::contentTypes['searchConnectSessionListingOptions'][0]
+    ): PromiseInterface
+    {
+        return $this->searchConnectSessionListingOptionsAsyncWithHttpInfo($session_id, $q, $limit, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation searchConnectSessionListingOptionsAsyncWithHttpInfo
+     *
+     * Search listings for a Connect mapping picker
+     *
+     * @param  string $session_id (required)
+     * @param  string|null $q (optional)
+     * @param  int|null $limit (optional, default to 20)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchConnectSessionListingOptions'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function searchConnectSessionListingOptionsAsyncWithHttpInfo(
+        string $session_id,
+        ?string $q = null,
+        ?int $limit = 20,
+        string $contentType = self::contentTypes['searchConnectSessionListingOptions'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\SearchConnectSessionListingOptions200Response';
+        $request = $this->searchConnectSessionListingOptionsRequest($session_id, $q, $limit, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'searchConnectSessionListingOptions'
+     *
+     * @param  string $session_id (required)
+     * @param  string|null $q (optional)
+     * @param  int|null $limit (optional, default to 20)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchConnectSessionListingOptions'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function searchConnectSessionListingOptionsRequest(
+        string $session_id,
+        ?string $q = null,
+        ?int $limit = 20,
+        string $contentType = self::contentTypes['searchConnectSessionListingOptions'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'session_id' is set
+        if ($session_id === null || (is_array($session_id) && count($session_id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $session_id when calling searchConnectSessionListingOptions'
+            );
+        }
+
+
+        if ($limit !== null && $limit > 50) {
+            throw new InvalidArgumentException('invalid value for "$limit" when calling ConnectApi.searchConnectSessionListingOptions, must be smaller than or equal to 50.');
+        }
+        if ($limit !== null && $limit < 1) {
+            throw new InvalidArgumentException('invalid value for "$limit" when calling ConnectApi.searchConnectSessionListingOptions, must be bigger than or equal to 1.');
+        }
+        
+
+        $resourcePath = '/v1/connect/sessions/{sessionId}/listing-options';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $q,
+            'q', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $limit,
+            'limit', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+
+        // path params
+        if ($session_id !== null) {
+            $resourcePath = str_replace(
+                '{sessionId}',
+                ObjectSerializer::toPathValue($session_id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation selectConnectProvider
      *
      * Bind a picker session to a provider
@@ -3141,6 +4949,284 @@ class ConnectApi
                 $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($select_connect_provider_request));
             } else {
                 $httpBody = $select_connect_provider_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation startBookingExtranetLogin
+     *
+     * Sign in with a Booking.com Extranet user
+     *
+     * @param  \Repull\Model\StartBookingExtranetLoginRequest $start_booking_extranet_login_request start_booking_extranet_login_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['startBookingExtranetLogin'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\StartBookingExtranetLogin200Response
+     */
+    public function startBookingExtranetLogin(
+        \Repull\Model\StartBookingExtranetLoginRequest $start_booking_extranet_login_request,
+        string $contentType = self::contentTypes['startBookingExtranetLogin'][0]
+    ): \Repull\Model\StartBookingExtranetLogin200Response
+    {
+        list($response) = $this->startBookingExtranetLoginWithHttpInfo($start_booking_extranet_login_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation startBookingExtranetLoginWithHttpInfo
+     *
+     * Sign in with a Booking.com Extranet user
+     *
+     * @param  \Repull\Model\StartBookingExtranetLoginRequest $start_booking_extranet_login_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['startBookingExtranetLogin'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\StartBookingExtranetLogin200Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function startBookingExtranetLoginWithHttpInfo(
+        \Repull\Model\StartBookingExtranetLoginRequest $start_booking_extranet_login_request,
+        string $contentType = self::contentTypes['startBookingExtranetLogin'][0]
+    ): array
+    {
+        $request = $this->startBookingExtranetLoginRequest($start_booking_extranet_login_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\StartBookingExtranetLogin200Response',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\StartBookingExtranetLogin200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\StartBookingExtranetLogin200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation startBookingExtranetLoginAsync
+     *
+     * Sign in with a Booking.com Extranet user
+     *
+     * @param  \Repull\Model\StartBookingExtranetLoginRequest $start_booking_extranet_login_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['startBookingExtranetLogin'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function startBookingExtranetLoginAsync(
+        \Repull\Model\StartBookingExtranetLoginRequest $start_booking_extranet_login_request,
+        string $contentType = self::contentTypes['startBookingExtranetLogin'][0]
+    ): PromiseInterface
+    {
+        return $this->startBookingExtranetLoginAsyncWithHttpInfo($start_booking_extranet_login_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation startBookingExtranetLoginAsyncWithHttpInfo
+     *
+     * Sign in with a Booking.com Extranet user
+     *
+     * @param  \Repull\Model\StartBookingExtranetLoginRequest $start_booking_extranet_login_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['startBookingExtranetLogin'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function startBookingExtranetLoginAsyncWithHttpInfo(
+        \Repull\Model\StartBookingExtranetLoginRequest $start_booking_extranet_login_request,
+        string $contentType = self::contentTypes['startBookingExtranetLogin'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\StartBookingExtranetLogin200Response';
+        $request = $this->startBookingExtranetLoginRequest($start_booking_extranet_login_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'startBookingExtranetLogin'
+     *
+     * @param  \Repull\Model\StartBookingExtranetLoginRequest $start_booking_extranet_login_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['startBookingExtranetLogin'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function startBookingExtranetLoginRequest(
+        \Repull\Model\StartBookingExtranetLoginRequest $start_booking_extranet_login_request,
+        string $contentType = self::contentTypes['startBookingExtranetLogin'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'start_booking_extranet_login_request' is set
+        if ($start_booking_extranet_login_request === null || (is_array($start_booking_extranet_login_request) && count($start_booking_extranet_login_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $start_booking_extranet_login_request when calling startBookingExtranetLogin'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/booking-extranet-login/session';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($start_booking_extranet_login_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($start_booking_extranet_login_request));
+            } else {
+                $httpBody = $start_booking_extranet_login_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -7256,6 +9342,342 @@ class ConnectApi
     }
 
     /**
+     * Operation updateConnectWritePolicy
+     *
+     * Change what the app may change in a PMS
+     *
+     * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  \Repull\Model\UpdateConnectWritePolicyRequest $update_connect_write_policy_request update_connect_write_policy_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateConnectWritePolicy'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\GetConnectWritePolicy200Response|\Repull\Model\Error
+     */
+    public function updateConnectWritePolicy(
+        string $provider,
+        \Repull\Model\UpdateConnectWritePolicyRequest $update_connect_write_policy_request,
+        string $contentType = self::contentTypes['updateConnectWritePolicy'][0]
+    ): \Repull\Model\GetConnectWritePolicy200Response|\Repull\Model\Error
+    {
+        list($response) = $this->updateConnectWritePolicyWithHttpInfo($provider, $update_connect_write_policy_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation updateConnectWritePolicyWithHttpInfo
+     *
+     * Change what the app may change in a PMS
+     *
+     * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  \Repull\Model\UpdateConnectWritePolicyRequest $update_connect_write_policy_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateConnectWritePolicy'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\GetConnectWritePolicy200Response|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function updateConnectWritePolicyWithHttpInfo(
+        string $provider,
+        \Repull\Model\UpdateConnectWritePolicyRequest $update_connect_write_policy_request,
+        string $contentType = self::contentTypes['updateConnectWritePolicy'][0]
+    ): array
+    {
+        $request = $this->updateConnectWritePolicyRequest($provider, $update_connect_write_policy_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\GetConnectWritePolicy200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\GetConnectWritePolicy200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\GetConnectWritePolicy200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation updateConnectWritePolicyAsync
+     *
+     * Change what the app may change in a PMS
+     *
+     * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  \Repull\Model\UpdateConnectWritePolicyRequest $update_connect_write_policy_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateConnectWritePolicy'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateConnectWritePolicyAsync(
+        string $provider,
+        \Repull\Model\UpdateConnectWritePolicyRequest $update_connect_write_policy_request,
+        string $contentType = self::contentTypes['updateConnectWritePolicy'][0]
+    ): PromiseInterface
+    {
+        return $this->updateConnectWritePolicyAsyncWithHttpInfo($provider, $update_connect_write_policy_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation updateConnectWritePolicyAsyncWithHttpInfo
+     *
+     * Change what the app may change in a PMS
+     *
+     * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  \Repull\Model\UpdateConnectWritePolicyRequest $update_connect_write_policy_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateConnectWritePolicy'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function updateConnectWritePolicyAsyncWithHttpInfo(
+        string $provider,
+        \Repull\Model\UpdateConnectWritePolicyRequest $update_connect_write_policy_request,
+        string $contentType = self::contentTypes['updateConnectWritePolicy'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\GetConnectWritePolicy200Response';
+        $request = $this->updateConnectWritePolicyRequest($provider, $update_connect_write_policy_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'updateConnectWritePolicy'
+     *
+     * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
+     * @param  \Repull\Model\UpdateConnectWritePolicyRequest $update_connect_write_policy_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateConnectWritePolicy'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function updateConnectWritePolicyRequest(
+        string $provider,
+        \Repull\Model\UpdateConnectWritePolicyRequest $update_connect_write_policy_request,
+        string $contentType = self::contentTypes['updateConnectWritePolicy'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'provider' is set
+        if ($provider === null || (is_array($provider) && count($provider) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $provider when calling updateConnectWritePolicy'
+            );
+        }
+
+        // verify the required parameter 'update_connect_write_policy_request' is set
+        if ($update_connect_write_policy_request === null || (is_array($update_connect_write_policy_request) && count($update_connect_write_policy_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $update_connect_write_policy_request when calling updateConnectWritePolicy'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/{provider}/write-policy';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($provider !== null) {
+            $resourcePath = str_replace(
+                '{provider}',
+                ObjectSerializer::toPathValue($provider),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($update_connect_write_policy_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($update_connect_write_policy_request));
+            } else {
+                $httpBody = $update_connect_write_policy_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PATCH',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation verifyBookingHotel
      *
      * Verify a Booking.com hotel ID for a Connect session
@@ -7585,6 +10007,284 @@ class ConnectApi
                 $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($booking_verify_hotel_request));
             } else {
                 $httpBody = $booking_verify_hotel_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation vrboLogin
+     *
+     * Sign in with a Vrbo host account
+     *
+     * @param  \Repull\Model\VrboLoginRequest $vrbo_login_request vrbo_login_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['vrboLogin'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\VrboLogin200Response
+     */
+    public function vrboLogin(
+        \Repull\Model\VrboLoginRequest $vrbo_login_request,
+        string $contentType = self::contentTypes['vrboLogin'][0]
+    ): \Repull\Model\VrboLogin200Response
+    {
+        list($response) = $this->vrboLoginWithHttpInfo($vrbo_login_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation vrboLoginWithHttpInfo
+     *
+     * Sign in with a Vrbo host account
+     *
+     * @param  \Repull\Model\VrboLoginRequest $vrbo_login_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['vrboLogin'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\VrboLogin200Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function vrboLoginWithHttpInfo(
+        \Repull\Model\VrboLoginRequest $vrbo_login_request,
+        string $contentType = self::contentTypes['vrboLogin'][0]
+    ): array
+    {
+        $request = $this->vrboLoginRequest($vrbo_login_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\VrboLogin200Response',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\VrboLogin200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\VrboLogin200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation vrboLoginAsync
+     *
+     * Sign in with a Vrbo host account
+     *
+     * @param  \Repull\Model\VrboLoginRequest $vrbo_login_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['vrboLogin'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function vrboLoginAsync(
+        \Repull\Model\VrboLoginRequest $vrbo_login_request,
+        string $contentType = self::contentTypes['vrboLogin'][0]
+    ): PromiseInterface
+    {
+        return $this->vrboLoginAsyncWithHttpInfo($vrbo_login_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation vrboLoginAsyncWithHttpInfo
+     *
+     * Sign in with a Vrbo host account
+     *
+     * @param  \Repull\Model\VrboLoginRequest $vrbo_login_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['vrboLogin'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function vrboLoginAsyncWithHttpInfo(
+        \Repull\Model\VrboLoginRequest $vrbo_login_request,
+        string $contentType = self::contentTypes['vrboLogin'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\VrboLogin200Response';
+        $request = $this->vrboLoginRequest($vrbo_login_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'vrboLogin'
+     *
+     * @param  \Repull\Model\VrboLoginRequest $vrbo_login_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['vrboLogin'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function vrboLoginRequest(
+        \Repull\Model\VrboLoginRequest $vrbo_login_request,
+        string $contentType = self::contentTypes['vrboLogin'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'vrbo_login_request' is set
+        if ($vrbo_login_request === null || (is_array($vrbo_login_request) && count($vrbo_login_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $vrbo_login_request when calling vrboLogin'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/vrbo-login/session';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($vrbo_login_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($vrbo_login_request));
+            } else {
+                $httpBody = $vrbo_login_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {

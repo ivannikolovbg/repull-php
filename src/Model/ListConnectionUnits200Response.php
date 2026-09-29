@@ -1,6 +1,6 @@
 <?php
 /**
- * CreateConversationSpecialOfferRequest
+ * ListConnectionUnits200Response
  *
  * PHP version 8.1
  *
@@ -34,15 +34,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * CreateConversationSpecialOfferRequest Class Doc Comment
+ * ListConnectionUnits200Response Class Doc Comment
  *
- * @description Priced by &#x60;totalPrice&#x60; (Airbnb) OR by its parts — &#x60;rentalAmount&#x60;, &#x60;fees&#x60;, &#x60;damageDeposit&#x60; (VRBO) — never both. With &#x60;totalPrice&#x60;, &#x60;checkIn&#x60;, &#x60;checkOut&#x60; and &#x60;guests&#x60; are required.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class CreateConversationSpecialOfferRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +50,7 @@ class CreateConversationSpecialOfferRequest implements ModelInterface, ArrayAcce
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'create_conversation_special_offer_request';
+    protected static string $openAPIModelName = 'listConnectionUnits_200_response';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,15 +58,13 @@ class CreateConversationSpecialOfferRequest implements ModelInterface, ArrayAcce
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'listing_id' => 'int',
-        'check_in' => '\DateTime',
-        'check_out' => '\DateTime',
-        'guests' => '\Repull\Model\CreateConversationSpecialOfferRequestGuests',
-        'total_price' => 'float',
-        'rental_amount' => 'float',
-        'fees' => '\Repull\Model\CreateConversationSpecialOfferRequestFeesInner[]',
-        'damage_deposit' => 'float',
-        'message' => 'string'
+        'connection_id' => 'string',
+        'channel' => 'string',
+        'status' => 'string',
+        'units' => '\Repull\Model\ListConnectionUnits200ResponseUnitsInner[]',
+        'listing_options' => '\Repull\Model\ListConnectionUnits200ResponseListingOptionsInner[]',
+        'missing_capabilities' => 'string[]',
+        'listing_options_total' => 'int'
     ];
 
     /**
@@ -76,15 +73,13 @@ class CreateConversationSpecialOfferRequest implements ModelInterface, ArrayAcce
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'listing_id' => null,
-        'check_in' => 'date',
-        'check_out' => 'date',
-        'guests' => null,
-        'total_price' => null,
-        'rental_amount' => null,
-        'fees' => null,
-        'damage_deposit' => null,
-        'message' => null
+        'connection_id' => null,
+        'channel' => null,
+        'status' => null,
+        'units' => null,
+        'listing_options' => null,
+        'missing_capabilities' => null,
+        'listing_options_total' => null
     ];
 
     /**
@@ -93,15 +88,13 @@ class CreateConversationSpecialOfferRequest implements ModelInterface, ArrayAcce
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'listing_id' => false,
-        'check_in' => false,
-        'check_out' => false,
-        'guests' => false,
-        'total_price' => false,
-        'rental_amount' => false,
-        'fees' => false,
-        'damage_deposit' => true,
-        'message' => false
+        'connection_id' => false,
+        'channel' => false,
+        'status' => false,
+        'units' => false,
+        'listing_options' => false,
+        'missing_capabilities' => false,
+        'listing_options_total' => false
     ];
 
     /**
@@ -180,15 +173,13 @@ class CreateConversationSpecialOfferRequest implements ModelInterface, ArrayAcce
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'listing_id' => 'listingId',
-        'check_in' => 'checkIn',
-        'check_out' => 'checkOut',
-        'guests' => 'guests',
-        'total_price' => 'totalPrice',
-        'rental_amount' => 'rentalAmount',
-        'fees' => 'fees',
-        'damage_deposit' => 'damageDeposit',
-        'message' => 'message'
+        'connection_id' => 'connection_id',
+        'channel' => 'channel',
+        'status' => 'status',
+        'units' => 'units',
+        'listing_options' => 'listing_options',
+        'missing_capabilities' => 'missing_capabilities',
+        'listing_options_total' => 'listing_options_total'
     ];
 
     /**
@@ -197,15 +188,13 @@ class CreateConversationSpecialOfferRequest implements ModelInterface, ArrayAcce
      * @var array<string, string>
      */
     protected static array $setters = [
-        'listing_id' => 'setListingId',
-        'check_in' => 'setCheckIn',
-        'check_out' => 'setCheckOut',
-        'guests' => 'setGuests',
-        'total_price' => 'setTotalPrice',
-        'rental_amount' => 'setRentalAmount',
-        'fees' => 'setFees',
-        'damage_deposit' => 'setDamageDeposit',
-        'message' => 'setMessage'
+        'connection_id' => 'setConnectionId',
+        'channel' => 'setChannel',
+        'status' => 'setStatus',
+        'units' => 'setUnits',
+        'listing_options' => 'setListingOptions',
+        'missing_capabilities' => 'setMissingCapabilities',
+        'listing_options_total' => 'setListingOptionsTotal'
     ];
 
     /**
@@ -214,15 +203,13 @@ class CreateConversationSpecialOfferRequest implements ModelInterface, ArrayAcce
      * @var array<string, string>
      */
     protected static array $getters = [
-        'listing_id' => 'getListingId',
-        'check_in' => 'getCheckIn',
-        'check_out' => 'getCheckOut',
-        'guests' => 'getGuests',
-        'total_price' => 'getTotalPrice',
-        'rental_amount' => 'getRentalAmount',
-        'fees' => 'getFees',
-        'damage_deposit' => 'getDamageDeposit',
-        'message' => 'getMessage'
+        'connection_id' => 'getConnectionId',
+        'channel' => 'getChannel',
+        'status' => 'getStatus',
+        'units' => 'getUnits',
+        'listing_options' => 'getListingOptions',
+        'missing_capabilities' => 'getMissingCapabilities',
+        'listing_options_total' => 'getListingOptionsTotal'
     ];
 
     /**
@@ -257,6 +244,23 @@ class CreateConversationSpecialOfferRequest implements ModelInterface, ArrayAcce
         return self::$openAPIModelName;
     }
 
+    public const STATUS_IMPORTING = 'importing';
+    public const STATUS_READY = 'ready';
+    public const STATUS_COMPLETED = 'completed';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getStatusAllowableValues()
+    {
+        return [
+            self::STATUS_IMPORTING,
+            self::STATUS_READY,
+            self::STATUS_COMPLETED,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -272,15 +276,13 @@ class CreateConversationSpecialOfferRequest implements ModelInterface, ArrayAcce
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('listing_id', $data ?? [], null);
-        $this->setIfExists('check_in', $data ?? [], null);
-        $this->setIfExists('check_out', $data ?? [], null);
-        $this->setIfExists('guests', $data ?? [], null);
-        $this->setIfExists('total_price', $data ?? [], null);
-        $this->setIfExists('rental_amount', $data ?? [], null);
-        $this->setIfExists('fees', $data ?? [], null);
-        $this->setIfExists('damage_deposit', $data ?? [], null);
-        $this->setIfExists('message', $data ?? [], null);
+        $this->setIfExists('connection_id', $data ?? [], null);
+        $this->setIfExists('channel', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('units', $data ?? [], null);
+        $this->setIfExists('listing_options', $data ?? [], null);
+        $this->setIfExists('missing_capabilities', $data ?? [], null);
+        $this->setIfExists('listing_options_total', $data ?? [], null);
     }
 
     /**
@@ -308,20 +310,13 @@ class CreateConversationSpecialOfferRequest implements ModelInterface, ArrayAcce
     {
         $invalidProperties = [];
 
-        if (!is_null($this->container['total_price']) && ($this->container['total_price'] <= 0)) {
-            $invalidProperties[] = "invalid value for 'total_price', must be bigger than 0.";
-        }
-
-        if (!is_null($this->container['rental_amount']) && ($this->container['rental_amount'] <= 0)) {
-            $invalidProperties[] = "invalid value for 'rental_amount', must be bigger than 0.";
-        }
-
-        if (!is_null($this->container['damage_deposit']) && ($this->container['damage_deposit'] < 0)) {
-            $invalidProperties[] = "invalid value for 'damage_deposit', must be bigger than or equal to 0.";
-        }
-
-        if (!is_null($this->container['message']) && (mb_strlen($this->container['message']) > 2000)) {
-            $invalidProperties[] = "invalid value for 'message', the character length must be smaller than or equal to 2000.";
+        $allowedValues = self::getStatusAllowableValues();
+        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'status', must be one of '%s'",
+                $this->container['status'],
+                implode("', '", $allowedValues)
+            );
         }
 
         return $invalidProperties;
@@ -337,270 +332,191 @@ class CreateConversationSpecialOfferRequest implements ModelInterface, ArrayAcce
 
 
     /**
-     * Gets listing_id
-     *
-     * @return int|null
-     */
-    public function getListingId(): ?int
-    {
-        return $this->container['listing_id'];
-    }
-
-    /**
-     * Sets listing_id
-     *
-     * @param int|null $listing_id Repull listing id to offer. Defaults to the listing the conversation is about.
-     *
-     * @return $this
-     */
-    public function setListingId(?int $listing_id): static
-    {
-        if (is_null($listing_id)) {
-            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
-        }
-        $this->container['listing_id'] = $listing_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets check_in
-     *
-     * @return \DateTime|null
-     */
-    public function getCheckIn(): ?\DateTime
-    {
-        return $this->container['check_in'];
-    }
-
-    /**
-     * Sets check_in
-     *
-     * @param \DateTime|null $check_in check_in
-     *
-     * @return $this
-     */
-    public function setCheckIn(?\DateTime $check_in): static
-    {
-        if (is_null($check_in)) {
-            throw new InvalidArgumentException('non-nullable check_in cannot be null');
-        }
-        $this->container['check_in'] = $check_in;
-
-        return $this;
-    }
-
-    /**
-     * Gets check_out
-     *
-     * @return \DateTime|null
-     */
-    public function getCheckOut(): ?\DateTime
-    {
-        return $this->container['check_out'];
-    }
-
-    /**
-     * Sets check_out
-     *
-     * @param \DateTime|null $check_out Must be after `checkIn`.
-     *
-     * @return $this
-     */
-    public function setCheckOut(?\DateTime $check_out): static
-    {
-        if (is_null($check_out)) {
-            throw new InvalidArgumentException('non-nullable check_out cannot be null');
-        }
-        $this->container['check_out'] = $check_out;
-
-        return $this;
-    }
-
-    /**
-     * Gets guests
-     *
-     * @return \Repull\Model\CreateConversationSpecialOfferRequestGuests|null
-     */
-    public function getGuests(): ?\Repull\Model\CreateConversationSpecialOfferRequestGuests
-    {
-        return $this->container['guests'];
-    }
-
-    /**
-     * Sets guests
-     *
-     * @param \Repull\Model\CreateConversationSpecialOfferRequestGuests|null $guests guests
-     *
-     * @return $this
-     */
-    public function setGuests(?\Repull\Model\CreateConversationSpecialOfferRequestGuests $guests): static
-    {
-        if (is_null($guests)) {
-            throw new InvalidArgumentException('non-nullable guests cannot be null');
-        }
-        $this->container['guests'] = $guests;
-
-        return $this;
-    }
-
-    /**
-     * Gets total_price
-     *
-     * @return float|null
-     */
-    public function getTotalPrice(): ?float
-    {
-        return $this->container['total_price'];
-    }
-
-    /**
-     * Sets total_price
-     *
-     * @param float|null $total_price Airbnb: the total the guest pays for the whole stay, in the listing’s Airbnb currency.
-     *
-     * @return $this
-     */
-    public function setTotalPrice(?float $total_price): static
-    {
-        if (is_null($total_price)) {
-            throw new InvalidArgumentException('non-nullable total_price cannot be null');
-        }
-
-        if (($total_price <= 0)) {
-            throw new InvalidArgumentException('invalid value for $total_price when calling CreateConversationSpecialOfferRequest., must be bigger than 0.');
-        }
-
-        $this->container['total_price'] = $total_price;
-
-        return $this;
-    }
-
-    /**
-     * Gets rental_amount
-     *
-     * @return float|null
-     */
-    public function getRentalAmount(): ?float
-    {
-        return $this->container['rental_amount'];
-    }
-
-    /**
-     * Sets rental_amount
-     *
-     * @param float|null $rental_amount VRBO: rent for the whole stay, excluding fees and taxes.
-     *
-     * @return $this
-     */
-    public function setRentalAmount(?float $rental_amount): static
-    {
-        if (is_null($rental_amount)) {
-            throw new InvalidArgumentException('non-nullable rental_amount cannot be null');
-        }
-
-        if (($rental_amount <= 0)) {
-            throw new InvalidArgumentException('invalid value for $rental_amount when calling CreateConversationSpecialOfferRequest., must be bigger than 0.');
-        }
-
-        $this->container['rental_amount'] = $rental_amount;
-
-        return $this;
-    }
-
-    /**
-     * Gets fees
-     *
-     * @return \Repull\Model\CreateConversationSpecialOfferRequestFeesInner[]|null
-     */
-    public function getFees(): ?array
-    {
-        return $this->container['fees'];
-    }
-
-    /**
-     * Sets fees
-     *
-     * @param \Repull\Model\CreateConversationSpecialOfferRequestFeesInner[]|null $fees VRBO: the offer’s fees — replaces its fee list. `type` is VRBO’s fee type (`CLEANING`, `PET`, …).
-     *
-     * @return $this
-     */
-    public function setFees(?array $fees): static
-    {
-        if (is_null($fees)) {
-            throw new InvalidArgumentException('non-nullable fees cannot be null');
-        }
-        $this->container['fees'] = $fees;
-
-        return $this;
-    }
-
-    /**
-     * Gets damage_deposit
-     *
-     * @return float|null
-     */
-    public function getDamageDeposit(): ?float
-    {
-        return $this->container['damage_deposit'];
-    }
-
-    /**
-     * Sets damage_deposit
-     *
-     * @param float|null $damage_deposit VRBO: refundable damage deposit; `null` for none.
-     *
-     * @return $this
-     */
-    public function setDamageDeposit(?float $damage_deposit): static
-    {
-        if (is_null($damage_deposit)) {
-            array_push($this->openAPINullablesSetToNull, 'damage_deposit');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('damage_deposit', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-
-        if (!is_null($damage_deposit) && ($damage_deposit < 0)) {
-            throw new InvalidArgumentException('invalid value for $damage_deposit when calling CreateConversationSpecialOfferRequest., must be bigger than or equal to 0.');
-        }
-
-        $this->container['damage_deposit'] = $damage_deposit;
-
-        return $this;
-    }
-
-    /**
-     * Gets message
+     * Gets connection_id
      *
      * @return string|null
      */
-    public function getMessage(): ?string
+    public function getConnectionId(): ?string
     {
-        return $this->container['message'];
+        return $this->container['connection_id'];
     }
 
     /**
-     * Sets message
+     * Sets connection_id
      *
-     * @param string|null $message VRBO: the message sent to the guest with the offer (a friendly default otherwise).
+     * @param string|null $connection_id connection_id
      *
      * @return $this
      */
-    public function setMessage(?string $message): static
+    public function setConnectionId(?string $connection_id): static
     {
-        if (is_null($message)) {
-            throw new InvalidArgumentException('non-nullable message cannot be null');
+        if (is_null($connection_id)) {
+            throw new InvalidArgumentException('non-nullable connection_id cannot be null');
         }
-        if ((mb_strlen($message) > 2000)) {
-            throw new InvalidArgumentException('invalid length for $message when calling CreateConversationSpecialOfferRequest., must be smaller than or equal to 2000.');
-        }
+        $this->container['connection_id'] = $connection_id;
 
-        $this->container['message'] = $message;
+        return $this;
+    }
+
+    /**
+     * Gets channel
+     *
+     * @return string|null
+     */
+    public function getChannel(): ?string
+    {
+        return $this->container['channel'];
+    }
+
+    /**
+     * Sets channel
+     *
+     * @param string|null $channel channel
+     *
+     * @return $this
+     */
+    public function setChannel(?string $channel): static
+    {
+        if (is_null($channel)) {
+            throw new InvalidArgumentException('non-nullable channel cannot be null');
+        }
+        $this->container['channel'] = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Gets status
+     *
+     * @return string|null
+     */
+    public function getStatus(): ?string
+    {
+        return $this->container['status'];
+    }
+
+    /**
+     * Sets status
+     *
+     * @param string|null $status status
+     *
+     * @return $this
+     */
+    public function setStatus(?string $status): static
+    {
+        if (is_null($status)) {
+            throw new InvalidArgumentException('non-nullable status cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets units
+     *
+     * @return \Repull\Model\ListConnectionUnits200ResponseUnitsInner[]|null
+     */
+    public function getUnits(): ?array
+    {
+        return $this->container['units'];
+    }
+
+    /**
+     * Sets units
+     *
+     * @param \Repull\Model\ListConnectionUnits200ResponseUnitsInner[]|null $units units
+     *
+     * @return $this
+     */
+    public function setUnits(?array $units): static
+    {
+        if (is_null($units)) {
+            throw new InvalidArgumentException('non-nullable units cannot be null');
+        }
+        $this->container['units'] = $units;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_options
+     *
+     * @return \Repull\Model\ListConnectionUnits200ResponseListingOptionsInner[]|null
+     */
+    public function getListingOptions(): ?array
+    {
+        return $this->container['listing_options'];
+    }
+
+    /**
+     * Sets listing_options
+     *
+     * @param \Repull\Model\ListConnectionUnits200ResponseListingOptionsInner[]|null $listing_options listing_options
+     *
+     * @return $this
+     */
+    public function setListingOptions(?array $listing_options): static
+    {
+        if (is_null($listing_options)) {
+            throw new InvalidArgumentException('non-nullable listing_options cannot be null');
+        }
+        $this->container['listing_options'] = $listing_options;
+
+        return $this;
+    }
+
+    /**
+     * Gets missing_capabilities
+     *
+     * @return string[]|null
+     */
+    public function getMissingCapabilities(): ?array
+    {
+        return $this->container['missing_capabilities'];
+    }
+
+    /**
+     * Sets missing_capabilities
+     *
+     * @param string[]|null $missing_capabilities missing_capabilities
+     *
+     * @return $this
+     */
+    public function setMissingCapabilities(?array $missing_capabilities): static
+    {
+        if (is_null($missing_capabilities)) {
+            throw new InvalidArgumentException('non-nullable missing_capabilities cannot be null');
+        }
+        $this->container['missing_capabilities'] = $missing_capabilities;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_options_total
+     *
+     * @return int|null
+     */
+    public function getListingOptionsTotal(): ?int
+    {
+        return $this->container['listing_options_total'];
+    }
+
+    /**
+     * Sets listing_options_total
+     *
+     * @param int|null $listing_options_total How many listings the workspace has to map to.
+     *
+     * @return $this
+     */
+    public function setListingOptionsTotal(?int $listing_options_total): static
+    {
+        if (is_null($listing_options_total)) {
+            throw new InvalidArgumentException('non-nullable listing_options_total cannot be null');
+        }
+        $this->container['listing_options_total'] = $listing_options_total;
 
         return $this;
     }

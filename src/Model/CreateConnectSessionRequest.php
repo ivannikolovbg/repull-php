@@ -60,6 +60,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $openAPITypes = [
         'redirect_url' => 'string',
         'state' => 'string',
+        'access_type' => 'string',
         'allowed_providers' => 'string[]',
         'locale' => 'string',
         'purpose' => 'string',
@@ -76,6 +77,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $openAPIFormats = [
         'redirect_url' => 'uri',
         'state' => null,
+        'access_type' => null,
         'allowed_providers' => null,
         'locale' => null,
         'purpose' => null,
@@ -92,6 +94,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $openAPINullables = [
         'redirect_url' => false,
         'state' => true,
+        'access_type' => false,
         'allowed_providers' => true,
         'locale' => true,
         'purpose' => false,
@@ -178,6 +181,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $attributeMap = [
         'redirect_url' => 'redirectUrl',
         'state' => 'state',
+        'access_type' => 'accessType',
         'allowed_providers' => 'allowedProviders',
         'locale' => 'locale',
         'purpose' => 'purpose',
@@ -194,6 +198,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $setters = [
         'redirect_url' => 'setRedirectUrl',
         'state' => 'setState',
+        'access_type' => 'setAccessType',
         'allowed_providers' => 'setAllowedProviders',
         'locale' => 'setLocale',
         'purpose' => 'setPurpose',
@@ -210,6 +215,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $getters = [
         'redirect_url' => 'getRedirectUrl',
         'state' => 'getState',
+        'access_type' => 'getAccessType',
         'allowed_providers' => 'getAllowedProviders',
         'locale' => 'getLocale',
         'purpose' => 'getPurpose',
@@ -250,6 +256,9 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         return self::$openAPIModelName;
     }
 
+    public const ACCESS_TYPE_FULL_ACCESS = 'full_access';
+    public const ACCESS_TYPE_MESSAGING = 'messaging';
+    public const ACCESS_TYPE_READ_ONLY = 'read_only';
     public const PURPOSE_CONNECT = 'connect';
     public const PURPOSE_MIGRATE = 'migrate';
     public const SCOPE_LISTINGS = 'listings';
@@ -267,6 +276,20 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     public const SCOPE_CALENDAR = 'calendar';
     public const SCOPE_RATES = 'rates';
     public const SCOPE_CHANNEL_IDS = 'channelIds';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getAccessTypeAllowableValues()
+    {
+        return [
+            self::ACCESS_TYPE_FULL_ACCESS,
+            self::ACCESS_TYPE_MESSAGING,
+            self::ACCESS_TYPE_READ_ONLY,
+        ];
+    }
 
     /**
      * Gets allowable values of the enum
@@ -323,6 +346,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     {
         $this->setIfExists('redirect_url', $data ?? [], null);
         $this->setIfExists('state', $data ?? [], null);
+        $this->setIfExists('access_type', $data ?? [], null);
         $this->setIfExists('allowed_providers', $data ?? [], null);
         $this->setIfExists('locale', $data ?? [], null);
         $this->setIfExists('purpose', $data ?? [], 'connect');
@@ -359,6 +383,15 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         if ($this->container['redirect_url'] === null) {
             $invalidProperties[] = "'redirect_url' can't be null";
         }
+        $allowedValues = self::getAccessTypeAllowableValues();
+        if (!is_null($this->container['access_type']) && !in_array($this->container['access_type'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'access_type', must be one of '%s'",
+                $this->container['access_type'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         $allowedValues = self::getPurposeAllowableValues();
         if (!is_null($this->container['purpose']) && !in_array($this->container['purpose'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -437,6 +470,34 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
             }
         }
         $this->container['state'] = $state;
+
+        return $this;
+    }
+
+    /**
+     * Gets access_type
+     *
+     * @return string|null
+     */
+    public function getAccessType(): ?string
+    {
+        return $this->container['access_type'];
+    }
+
+    /**
+     * Sets access_type
+     *
+     * @param string|null $access_type What the connection may do. Airbnb: the OAuth scope tier. Vrbo: `messaging` (or `read_only`) imports bookings and messages and never pushes the calendar; `full_access` also pushes prices and availability. Setting it locks the choice; omit it to let the host choose on the hosted page (default `full_access`).
+     *
+     * @return $this
+     */
+    public function setAccessType(?string $access_type): static
+    {
+        if (is_null($access_type)) {
+            throw new InvalidArgumentException('non-nullable access_type cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['access_type'] = $access_type;
 
         return $this;
     }

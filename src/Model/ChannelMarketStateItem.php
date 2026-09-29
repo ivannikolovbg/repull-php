@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * ChannelMarketStateItem Class Doc Comment
  *
- * @description What happened on ONE channel item — one Airbnb connection, or one Booking.com property. A listing can carry several Airbnb connections (a re-list, or a move between host accounts) and each gets its own entry.
+ * @description What happened on ONE channel item — one Airbnb connection, one Booking.com property, or one VRBO unit. A listing can carry several Airbnb connections (a re-list, or a move between host accounts) and each gets its own entry.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -64,6 +64,7 @@ class ChannelMarketStateItem implements ModelInterface, ArrayAccess, JsonSeriali
         'ok' => 'bool',
         'connection_id' => 'string',
         'hotel_id' => 'string',
+        'platform_id' => 'string',
         'code' => 'string',
         'previous_code' => 'string',
         'message' => 'string',
@@ -82,6 +83,7 @@ class ChannelMarketStateItem implements ModelInterface, ArrayAccess, JsonSeriali
         'ok' => null,
         'connection_id' => null,
         'hotel_id' => null,
+        'platform_id' => null,
         'code' => null,
         'previous_code' => null,
         'message' => null,
@@ -100,6 +102,7 @@ class ChannelMarketStateItem implements ModelInterface, ArrayAccess, JsonSeriali
         'ok' => false,
         'connection_id' => true,
         'hotel_id' => true,
+        'platform_id' => true,
         'code' => false,
         'previous_code' => false,
         'message' => false,
@@ -188,6 +191,7 @@ class ChannelMarketStateItem implements ModelInterface, ArrayAccess, JsonSeriali
         'ok' => 'ok',
         'connection_id' => 'connectionId',
         'hotel_id' => 'hotelId',
+        'platform_id' => 'platformId',
         'code' => 'code',
         'previous_code' => 'previousCode',
         'message' => 'message',
@@ -206,6 +210,7 @@ class ChannelMarketStateItem implements ModelInterface, ArrayAccess, JsonSeriali
         'ok' => 'setOk',
         'connection_id' => 'setConnectionId',
         'hotel_id' => 'setHotelId',
+        'platform_id' => 'setPlatformId',
         'code' => 'setCode',
         'previous_code' => 'setPreviousCode',
         'message' => 'setMessage',
@@ -224,6 +229,7 @@ class ChannelMarketStateItem implements ModelInterface, ArrayAccess, JsonSeriali
         'ok' => 'getOk',
         'connection_id' => 'getConnectionId',
         'hotel_id' => 'getHotelId',
+        'platform_id' => 'getPlatformId',
         'code' => 'getCode',
         'previous_code' => 'getPreviousCode',
         'message' => 'getMessage',
@@ -265,6 +271,7 @@ class ChannelMarketStateItem implements ModelInterface, ArrayAccess, JsonSeriali
 
     public const CHANNEL_AIRBNB = 'airbnb';
     public const CHANNEL_BOOKING = 'booking';
+    public const CHANNEL_VRBO = 'vrbo';
     public const STATE_ONLINE = 'online';
     public const STATE_OFFLINE = 'offline';
     public const STATE_UNCHANGED = 'unchanged';
@@ -279,6 +286,7 @@ class ChannelMarketStateItem implements ModelInterface, ArrayAccess, JsonSeriali
         return [
             self::CHANNEL_AIRBNB,
             self::CHANNEL_BOOKING,
+            self::CHANNEL_VRBO,
         ];
     }
 
@@ -315,6 +323,7 @@ class ChannelMarketStateItem implements ModelInterface, ArrayAccess, JsonSeriali
         $this->setIfExists('ok', $data ?? [], null);
         $this->setIfExists('connection_id', $data ?? [], null);
         $this->setIfExists('hotel_id', $data ?? [], null);
+        $this->setIfExists('platform_id', $data ?? [], null);
         $this->setIfExists('code', $data ?? [], null);
         $this->setIfExists('previous_code', $data ?? [], null);
         $this->setIfExists('message', $data ?? [], null);
@@ -538,6 +547,40 @@ class ChannelMarketStateItem implements ModelInterface, ArrayAccess, JsonSeriali
     }
 
     /**
+     * Gets platform_id
+     *
+     * @return string|null
+     */
+    public function getPlatformId(): ?string
+    {
+        return $this->container['platform_id'];
+    }
+
+    /**
+     * Sets platform_id
+     *
+     * @param string|null $platform_id The VRBO listing number of the unit hidden or reactivated. Present on VRBO items.
+     *
+     * @return $this
+     */
+    public function setPlatformId(?string $platform_id): static
+    {
+        if (is_null($platform_id)) {
+            array_push($this->openAPINullablesSetToNull, 'platform_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('platform_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['platform_id'] = $platform_id;
+
+        return $this;
+    }
+
+    /**
      * Gets code
      *
      * @return string|null
@@ -550,7 +593,7 @@ class ChannelMarketStateItem implements ModelInterface, ArrayAccess, JsonSeriali
     /**
      * Sets code
      *
-     * @param string|null $code Error code when `ok` is false — the SAME code the channel-specific endpoint returns for this failure, so one vocabulary covers both surfaces. Absent when `ok` is true.  The channel codes come in pairs, and the pair is the retryable split — the most useful bit in the whole item:  - `airbnb_rejected` / `booking_rejected` — the channel refused the request AS SENT. `message` carries its own reason. Correct it and send again; resending the same thing is refused again. - `airbnb_error` / `booking_error` — the channel did not complete the request (outage, timeout, server error). Nothing about the request needs to change: retry with backoff.  Plus `ambiguous_booking_mapping` (name the property with `hotelId`) and `payment_required` (a billing refusal, which keeps its own code rather than being buried under a channel one).
+     * @param string|null $code Error code when `ok` is false — the SAME code the channel-specific endpoint returns for this failure, so one vocabulary covers both surfaces. Absent when `ok` is true.  The channel codes come in pairs, and the pair is the retryable split — the most useful bit in the whole item:  - `airbnb_rejected` / `booking_rejected` — the channel refused the request AS SENT. `message` carries its own reason. Correct it and send again; resending the same thing is refused again. - `airbnb_error` / `booking_error` — the channel did not complete the request (outage, timeout, server error). Nothing about the request needs to change: retry with backoff.  Plus `ambiguous_booking_mapping` (name the property with `hotelId`) and `payment_required` (a billing refusal, which keeps its own code rather than being buried under a channel one). VRBO items: `vrbo_rejected` (VRBO still shows the unit in the old state after the change), `vrbo_error` (VRBO did not complete it — retry), `vrbo_not_ready` (the unit's VRBO details have not synced yet — retry in a few minutes), `vrbo_session_expired` (reconnect the VRBO account).
      *
      * @return $this
      */
@@ -660,7 +703,7 @@ class ChannelMarketStateItem implements ModelInterface, ArrayAccess, JsonSeriali
     /**
      * Sets verified
      *
-     * @param bool|null $verified Airbnb only: the listing was READ BACK afterwards and is in the state asked for — down after `offline`, live after `online`. Airbnb can accept a deactivation and leave a listing live, or accept an activation and keep it offline; either is returned as a failure, never as success. `false` means the read-back could not run — an unknown, not a success.
+     * @param bool|null $verified Airbnb and VRBO: the listing was READ BACK afterwards and is in the state asked for — down after `offline`, live after `online`. Airbnb can accept a deactivation and leave a listing live, or accept an activation and keep it offline; either is returned as a failure, never as success. `false` means the read-back could not run — an unknown, not a success.
      *
      * @return $this
      */

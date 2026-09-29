@@ -58,7 +58,8 @@ class ReplyToReviewRequest implements ModelInterface, ArrayAccess, JsonSerializa
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'message' => 'string'
+        'message' => 'string',
+        'name' => 'string'
     ];
 
     /**
@@ -67,7 +68,8 @@ class ReplyToReviewRequest implements ModelInterface, ArrayAccess, JsonSerializa
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'message' => null
+        'message' => null,
+        'name' => null
     ];
 
     /**
@@ -76,7 +78,8 @@ class ReplyToReviewRequest implements ModelInterface, ArrayAccess, JsonSerializa
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'message' => false
+        'message' => false,
+        'name' => false
     ];
 
     /**
@@ -155,7 +158,8 @@ class ReplyToReviewRequest implements ModelInterface, ArrayAccess, JsonSerializa
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'message' => 'message'
+        'message' => 'message',
+        'name' => 'name'
     ];
 
     /**
@@ -164,7 +168,8 @@ class ReplyToReviewRequest implements ModelInterface, ArrayAccess, JsonSerializa
      * @var array<string, string>
      */
     protected static array $setters = [
-        'message' => 'setMessage'
+        'message' => 'setMessage',
+        'name' => 'setName'
     ];
 
     /**
@@ -173,7 +178,8 @@ class ReplyToReviewRequest implements ModelInterface, ArrayAccess, JsonSerializa
      * @var array<string, string>
      */
     protected static array $getters = [
-        'message' => 'getMessage'
+        'message' => 'getMessage',
+        'name' => 'getName'
     ];
 
     /**
@@ -224,6 +230,7 @@ class ReplyToReviewRequest implements ModelInterface, ArrayAccess, JsonSerializa
     public function __construct(?array $data = null)
     {
         $this->setIfExists('message', $data ?? [], null);
+        $this->setIfExists('name', $data ?? [], null);
     }
 
     /**
@@ -254,6 +261,10 @@ class ReplyToReviewRequest implements ModelInterface, ArrayAccess, JsonSerializa
         if ($this->container['message'] === null) {
             $invalidProperties[] = "'message' can't be null";
         }
+        if (!is_null($this->container['name']) && (mb_strlen($this->container['name']) > 80)) {
+            $invalidProperties[] = "invalid value for 'name', the character length must be smaller than or equal to 80.";
+        }
+
         return $invalidProperties;
     }
 
@@ -289,6 +300,37 @@ class ReplyToReviewRequest implements ModelInterface, ArrayAccess, JsonSerializa
             throw new InvalidArgumentException('non-nullable message cannot be null');
         }
         $this->container['message'] = $message;
+
+        return $this;
+    }
+
+    /**
+     * Gets name
+     *
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->container['name'];
+    }
+
+    /**
+     * Sets name
+     *
+     * @param string|null $name VRBO: the name the response is signed with (the connected account's host name otherwise). Ignored on other channels.
+     *
+     * @return $this
+     */
+    public function setName(?string $name): static
+    {
+        if (is_null($name)) {
+            throw new InvalidArgumentException('non-nullable name cannot be null');
+        }
+        if ((mb_strlen($name) > 80)) {
+            throw new InvalidArgumentException('invalid length for $name when calling ReplyToReviewRequest., must be smaller than or equal to 80.');
+        }
+
+        $this->container['name'] = $name;
 
         return $this;
     }

@@ -60,6 +60,7 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
     protected static array $openAPITypes = [
         'id' => 'string',
         'conversation_id' => 'string',
+        'channel' => 'string',
         'status' => 'string',
         'listing_id' => 'string',
         'airbnb_listing_id' => 'string',
@@ -68,6 +69,13 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
         'nights' => 'int',
         'guests' => '\Repull\Model\CreateConversationSpecialOffer201ResponseGuests',
         'total_price' => 'float',
+        'currency' => 'string',
+        'rental_amount' => 'float',
+        'discount' => 'float',
+        'fees' => '\Repull\Model\CreateConversationSpecialOffer201ResponseFeesInner[]',
+        'damage_deposit' => 'float',
+        'lines' => '\Repull\Model\CreateConversationSpecialOffer201ResponseLinesInner[]',
+        'message' => 'string',
         'created_at' => '\DateTime',
         'expires_at' => '\DateTime'
     ];
@@ -80,6 +88,7 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
     protected static array $openAPIFormats = [
         'id' => null,
         'conversation_id' => null,
+        'channel' => null,
         'status' => null,
         'listing_id' => null,
         'airbnb_listing_id' => null,
@@ -88,6 +97,13 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
         'nights' => null,
         'guests' => null,
         'total_price' => null,
+        'currency' => null,
+        'rental_amount' => null,
+        'discount' => null,
+        'fees' => null,
+        'damage_deposit' => null,
+        'lines' => null,
+        'message' => null,
         'created_at' => 'date-time',
         'expires_at' => 'date-time'
     ];
@@ -100,6 +116,7 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
     protected static array $openAPINullables = [
         'id' => true,
         'conversation_id' => false,
+        'channel' => false,
         'status' => true,
         'listing_id' => true,
         'airbnb_listing_id' => true,
@@ -108,6 +125,13 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
         'nights' => true,
         'guests' => true,
         'total_price' => true,
+        'currency' => true,
+        'rental_amount' => true,
+        'discount' => true,
+        'fees' => false,
+        'damage_deposit' => true,
+        'lines' => false,
+        'message' => true,
         'created_at' => true,
         'expires_at' => true
     ];
@@ -190,6 +214,7 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
     protected static array $attributeMap = [
         'id' => 'id',
         'conversation_id' => 'conversationId',
+        'channel' => 'channel',
         'status' => 'status',
         'listing_id' => 'listingId',
         'airbnb_listing_id' => 'airbnbListingId',
@@ -198,6 +223,13 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
         'nights' => 'nights',
         'guests' => 'guests',
         'total_price' => 'totalPrice',
+        'currency' => 'currency',
+        'rental_amount' => 'rentalAmount',
+        'discount' => 'discount',
+        'fees' => 'fees',
+        'damage_deposit' => 'damageDeposit',
+        'lines' => 'lines',
+        'message' => 'message',
         'created_at' => 'createdAt',
         'expires_at' => 'expiresAt'
     ];
@@ -210,6 +242,7 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
     protected static array $setters = [
         'id' => 'setId',
         'conversation_id' => 'setConversationId',
+        'channel' => 'setChannel',
         'status' => 'setStatus',
         'listing_id' => 'setListingId',
         'airbnb_listing_id' => 'setAirbnbListingId',
@@ -218,6 +251,13 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
         'nights' => 'setNights',
         'guests' => 'setGuests',
         'total_price' => 'setTotalPrice',
+        'currency' => 'setCurrency',
+        'rental_amount' => 'setRentalAmount',
+        'discount' => 'setDiscount',
+        'fees' => 'setFees',
+        'damage_deposit' => 'setDamageDeposit',
+        'lines' => 'setLines',
+        'message' => 'setMessage',
         'created_at' => 'setCreatedAt',
         'expires_at' => 'setExpiresAt'
     ];
@@ -230,6 +270,7 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
     protected static array $getters = [
         'id' => 'getId',
         'conversation_id' => 'getConversationId',
+        'channel' => 'getChannel',
         'status' => 'getStatus',
         'listing_id' => 'getListingId',
         'airbnb_listing_id' => 'getAirbnbListingId',
@@ -238,6 +279,13 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
         'nights' => 'getNights',
         'guests' => 'getGuests',
         'total_price' => 'getTotalPrice',
+        'currency' => 'getCurrency',
+        'rental_amount' => 'getRentalAmount',
+        'discount' => 'getDiscount',
+        'fees' => 'getFees',
+        'damage_deposit' => 'getDamageDeposit',
+        'lines' => 'getLines',
+        'message' => 'getMessage',
         'created_at' => 'getCreatedAt',
         'expires_at' => 'getExpiresAt'
     ];
@@ -274,6 +322,21 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
         return self::$openAPIModelName;
     }
 
+    public const CHANNEL_AIRBNB = 'airbnb';
+    public const CHANNEL_VRBO = 'vrbo';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getChannelAllowableValues()
+    {
+        return [
+            self::CHANNEL_AIRBNB,
+            self::CHANNEL_VRBO,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -291,6 +354,7 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
     {
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('conversation_id', $data ?? [], null);
+        $this->setIfExists('channel', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('airbnb_listing_id', $data ?? [], null);
@@ -299,6 +363,13 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
         $this->setIfExists('nights', $data ?? [], null);
         $this->setIfExists('guests', $data ?? [], null);
         $this->setIfExists('total_price', $data ?? [], null);
+        $this->setIfExists('currency', $data ?? [], null);
+        $this->setIfExists('rental_amount', $data ?? [], null);
+        $this->setIfExists('discount', $data ?? [], null);
+        $this->setIfExists('fees', $data ?? [], null);
+        $this->setIfExists('damage_deposit', $data ?? [], null);
+        $this->setIfExists('lines', $data ?? [], null);
+        $this->setIfExists('message', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
         $this->setIfExists('expires_at', $data ?? [], null);
     }
@@ -334,6 +405,15 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
         if ($this->container['conversation_id'] === null) {
             $invalidProperties[] = "'conversation_id' can't be null";
         }
+        $allowedValues = self::getChannelAllowableValues();
+        if (!is_null($this->container['channel']) && !in_array($this->container['channel'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'channel', must be one of '%s'",
+                $this->container['channel'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         if ($this->container['status'] === null && !$this->isNullableSetToNull('status')) {
             $invalidProperties[] = "'status' is required";
         }
@@ -374,7 +454,7 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
     /**
      * Sets id
      *
-     * @param string|null $id Airbnb special-offer id. Use it to read or withdraw the offer.
+     * @param string|null $id The offer id — use it to read or withdraw the offer. Airbnb’s special-offer id; on VRBO, where a conversation has one live offer, `current`.
      *
      * @return $this
      */
@@ -423,6 +503,34 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
     }
 
     /**
+     * Gets channel
+     *
+     * @return string|null
+     */
+    public function getChannel(): ?string
+    {
+        return $this->container['channel'];
+    }
+
+    /**
+     * Sets channel
+     *
+     * @param string|null $channel The channel the offer is on.
+     *
+     * @return $this
+     */
+    public function setChannel(?string $channel): static
+    {
+        if (is_null($channel)) {
+            throw new InvalidArgumentException('non-nullable channel cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['channel'] = $channel;
+
+        return $this;
+    }
+
+    /**
      * Gets status
      *
      * @return string|null
@@ -435,7 +543,7 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
     /**
      * Sets status
      *
-     * @param string|null $status Airbnb’s status for the offer: `active` (the guest can book it), `accepted`, `declined`, `expired` or `voided` (withdrawn).
+     * @param string|null $status Airbnb: its status for the offer — `active` (the guest can book it), `accepted`, `declined`, `expired` or `voided` (withdrawn). VRBO: `sent` (just sent), `current` (the live offer) or `preview` (recalculated, not sent).
      *
      * @return $this
      */
@@ -673,7 +781,7 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
     /**
      * Sets total_price
      *
-     * @param float|null $total_price Total for the stay, in the listing’s Airbnb currency.
+     * @param float|null $total_price What the guest pays for the stay. Airbnb: the total you set. VRBO: VRBO’s own total, including its taxes and service fee.
      *
      * @return $this
      */
@@ -690,6 +798,230 @@ class CreateConversationSpecialOffer201Response implements ModelInterface, Array
             }
         }
         $this->container['total_price'] = $total_price;
+
+        return $this;
+    }
+
+    /**
+     * Gets currency
+     *
+     * @return string|null
+     */
+    public function getCurrency(): ?string
+    {
+        return $this->container['currency'];
+    }
+
+    /**
+     * Sets currency
+     *
+     * @param string|null $currency Currency of the amounts, when the channel states it (VRBO).
+     *
+     * @return $this
+     */
+    public function setCurrency(?string $currency): static
+    {
+        if (is_null($currency)) {
+            array_push($this->openAPINullablesSetToNull, 'currency');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('currency', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['currency'] = $currency;
+
+        return $this;
+    }
+
+    /**
+     * Gets rental_amount
+     *
+     * @return float|null
+     */
+    public function getRentalAmount(): ?float
+    {
+        return $this->container['rental_amount'];
+    }
+
+    /**
+     * Sets rental_amount
+     *
+     * @param float|null $rental_amount VRBO: rent for the stay, excluding fees and taxes. Null on Airbnb (priced by one total).
+     *
+     * @return $this
+     */
+    public function setRentalAmount(?float $rental_amount): static
+    {
+        if (is_null($rental_amount)) {
+            array_push($this->openAPINullablesSetToNull, 'rental_amount');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('rental_amount', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['rental_amount'] = $rental_amount;
+
+        return $this;
+    }
+
+    /**
+     * Gets discount
+     *
+     * @return float|null
+     */
+    public function getDiscount(): ?float
+    {
+        return $this->container['discount'];
+    }
+
+    /**
+     * Sets discount
+     *
+     * @param float|null $discount VRBO: its automatic stay discount on the rent, when the offer carries one.
+     *
+     * @return $this
+     */
+    public function setDiscount(?float $discount): static
+    {
+        if (is_null($discount)) {
+            array_push($this->openAPINullablesSetToNull, 'discount');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('discount', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['discount'] = $discount;
+
+        return $this;
+    }
+
+    /**
+     * Gets fees
+     *
+     * @return \Repull\Model\CreateConversationSpecialOffer201ResponseFeesInner[]|null
+     */
+    public function getFees(): ?array
+    {
+        return $this->container['fees'];
+    }
+
+    /**
+     * Sets fees
+     *
+     * @param \Repull\Model\CreateConversationSpecialOffer201ResponseFeesInner[]|null $fees VRBO: the offer’s fees by type. Empty on Airbnb.
+     *
+     * @return $this
+     */
+    public function setFees(?array $fees): static
+    {
+        if (is_null($fees)) {
+            throw new InvalidArgumentException('non-nullable fees cannot be null');
+        }
+        $this->container['fees'] = $fees;
+
+        return $this;
+    }
+
+    /**
+     * Gets damage_deposit
+     *
+     * @return float|null
+     */
+    public function getDamageDeposit(): ?float
+    {
+        return $this->container['damage_deposit'];
+    }
+
+    /**
+     * Sets damage_deposit
+     *
+     * @param float|null $damage_deposit VRBO: refundable damage deposit; null for none.
+     *
+     * @return $this
+     */
+    public function setDamageDeposit(?float $damage_deposit): static
+    {
+        if (is_null($damage_deposit)) {
+            array_push($this->openAPINullablesSetToNull, 'damage_deposit');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('damage_deposit', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['damage_deposit'] = $damage_deposit;
+
+        return $this;
+    }
+
+    /**
+     * Gets lines
+     *
+     * @return \Repull\Model\CreateConversationSpecialOffer201ResponseLinesInner[]|null
+     */
+    public function getLines(): ?array
+    {
+        return $this->container['lines'];
+    }
+
+    /**
+     * Sets lines
+     *
+     * @param \Repull\Model\CreateConversationSpecialOffer201ResponseLinesInner[]|null $lines VRBO: its offer summary line by line, in VRBO’s words (nights, fees, taxes, total traveler payment, payout).
+     *
+     * @return $this
+     */
+    public function setLines(?array $lines): static
+    {
+        if (is_null($lines)) {
+            throw new InvalidArgumentException('non-nullable lines cannot be null');
+        }
+        $this->container['lines'] = $lines;
+
+        return $this;
+    }
+
+    /**
+     * Gets message
+     *
+     * @return string|null
+     */
+    public function getMessage(): ?string
+    {
+        return $this->container['message'];
+    }
+
+    /**
+     * Sets message
+     *
+     * @param string|null $message The message sent to the guest with the offer (VRBO).
+     *
+     * @return $this
+     */
+    public function setMessage(?string $message): static
+    {
+        if (is_null($message)) {
+            array_push($this->openAPINullablesSetToNull, 'message');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('message', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['message'] = $message;
 
         return $this;
     }

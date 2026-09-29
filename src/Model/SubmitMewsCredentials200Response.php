@@ -60,6 +60,7 @@ class SubmitMewsCredentials200Response implements ModelInterface, ArrayAccess, J
     protected static array $openAPITypes = [
         'provider' => 'string',
         'connected' => 'bool',
+        'write_policy' => '\Repull\Model\PmsWritePolicy',
         'pms_connection_id' => 'string',
         'created' => 'bool',
         'session_id' => 'string',
@@ -75,6 +76,7 @@ class SubmitMewsCredentials200Response implements ModelInterface, ArrayAccess, J
     protected static array $openAPIFormats = [
         'provider' => null,
         'connected' => null,
+        'write_policy' => null,
         'pms_connection_id' => null,
         'created' => null,
         'session_id' => null,
@@ -90,6 +92,7 @@ class SubmitMewsCredentials200Response implements ModelInterface, ArrayAccess, J
     protected static array $openAPINullables = [
         'provider' => false,
         'connected' => false,
+        'write_policy' => false,
         'pms_connection_id' => false,
         'created' => false,
         'session_id' => true,
@@ -175,6 +178,7 @@ class SubmitMewsCredentials200Response implements ModelInterface, ArrayAccess, J
     protected static array $attributeMap = [
         'provider' => 'provider',
         'connected' => 'connected',
+        'write_policy' => 'writePolicy',
         'pms_connection_id' => 'pmsConnectionId',
         'created' => 'created',
         'session_id' => 'sessionId',
@@ -190,6 +194,7 @@ class SubmitMewsCredentials200Response implements ModelInterface, ArrayAccess, J
     protected static array $setters = [
         'provider' => 'setProvider',
         'connected' => 'setConnected',
+        'write_policy' => 'setWritePolicy',
         'pms_connection_id' => 'setPmsConnectionId',
         'created' => 'setCreated',
         'session_id' => 'setSessionId',
@@ -205,6 +210,7 @@ class SubmitMewsCredentials200Response implements ModelInterface, ArrayAccess, J
     protected static array $getters = [
         'provider' => 'getProvider',
         'connected' => 'getConnected',
+        'write_policy' => 'getWritePolicy',
         'pms_connection_id' => 'getPmsConnectionId',
         'created' => 'getCreated',
         'session_id' => 'getSessionId',
@@ -261,6 +267,7 @@ class SubmitMewsCredentials200Response implements ModelInterface, ArrayAccess, J
     {
         $this->setIfExists('provider', $data ?? [], null);
         $this->setIfExists('connected', $data ?? [], null);
+        $this->setIfExists('write_policy', $data ?? [], null);
         $this->setIfExists('pms_connection_id', $data ?? [], null);
         $this->setIfExists('created', $data ?? [], null);
         $this->setIfExists('session_id', $data ?? [], null);
@@ -355,6 +362,33 @@ class SubmitMewsCredentials200Response implements ModelInterface, ArrayAccess, J
             throw new InvalidArgumentException('non-nullable connected cannot be null');
         }
         $this->container['connected'] = $connected;
+
+        return $this;
+    }
+
+    /**
+     * Gets write_policy
+     *
+     * @return \Repull\Model\PmsWritePolicy|null
+     */
+    public function getWritePolicy(): ?\Repull\Model\PmsWritePolicy
+    {
+        return $this->container['write_policy'];
+    }
+
+    /**
+     * Sets write_policy
+     *
+     * @param \Repull\Model\PmsWritePolicy|null $write_policy write_policy
+     *
+     * @return $this
+     */
+    public function setWritePolicy(?\Repull\Model\PmsWritePolicy $write_policy): static
+    {
+        if (is_null($write_policy)) {
+            throw new InvalidArgumentException('non-nullable write_policy cannot be null');
+        }
+        $this->container['write_policy'] = $write_policy;
 
         return $this;
     }

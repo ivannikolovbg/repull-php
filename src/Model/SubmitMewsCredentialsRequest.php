@@ -59,6 +59,7 @@ class SubmitMewsCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPITypes = [
         'session_id' => 'string',
+        'write_policy' => 'object',
         'credentials' => '\Repull\Model\SubmitMewsCredentialsRequestCredentials'
     ];
 
@@ -69,6 +70,7 @@ class SubmitMewsCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPIFormats = [
         'session_id' => null,
+        'write_policy' => null,
         'credentials' => null
     ];
 
@@ -79,6 +81,7 @@ class SubmitMewsCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPINullables = [
         'session_id' => false,
+        'write_policy' => false,
         'credentials' => false
     ];
 
@@ -159,6 +162,7 @@ class SubmitMewsCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $attributeMap = [
         'session_id' => 'sessionId',
+        'write_policy' => 'writePolicy',
         'credentials' => 'credentials'
     ];
 
@@ -169,6 +173,7 @@ class SubmitMewsCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $setters = [
         'session_id' => 'setSessionId',
+        'write_policy' => 'setWritePolicy',
         'credentials' => 'setCredentials'
     ];
 
@@ -179,6 +184,7 @@ class SubmitMewsCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $getters = [
         'session_id' => 'getSessionId',
+        'write_policy' => 'getWritePolicy',
         'credentials' => 'getCredentials'
     ];
 
@@ -230,6 +236,7 @@ class SubmitMewsCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
     public function __construct(?array $data = null)
     {
         $this->setIfExists('session_id', $data ?? [], null);
+        $this->setIfExists('write_policy', $data ?? [], null);
         $this->setIfExists('credentials', $data ?? [], null);
     }
 
@@ -296,6 +303,33 @@ class SubmitMewsCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
             throw new InvalidArgumentException('non-nullable session_id cannot be null');
         }
         $this->container['session_id'] = $session_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets write_policy
+     *
+     * @return object|null
+     */
+    public function getWritePolicy(): ?object
+    {
+        return $this->container['write_policy'];
+    }
+
+    /**
+     * Sets write_policy
+     *
+     * @param object|null $write_policy Optional: what the app may change in the PMS, set before the first sync. Same shape as `PATCH /v1/connect/{provider}/write-policy`; switches you leave out keep the provider default (calendar off for hotel PMSs, bookings on).
+     *
+     * @return $this
+     */
+    public function setWritePolicy(?object $write_policy): static
+    {
+        if (is_null($write_policy)) {
+            throw new InvalidArgumentException('non-nullable write_policy cannot be null');
+        }
+        $this->container['write_policy'] = $write_policy;
 
         return $this;
     }

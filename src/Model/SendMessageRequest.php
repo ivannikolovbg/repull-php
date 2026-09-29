@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * SendMessageRequest Class Doc Comment
  *
- * @description &#x60;message&#x60;, &#x60;attachments&#x60;, or both. Per-channel limits for &#x60;attachments&#x60;:  | Channel | Accepted types | Per file | Per request | Text | |---|---|---|---|---| | Airbnb | JPEG, PNG, GIF, WebP (sent as JPEG), MP4, QuickTime | 10 MB | 5 | optional — each file is sent as its own message, then the text | | Booking.com | JPEG, PNG | 10 MB | 5 | **required** — all files ride on the one text message | | SMS, email, direct-booking site chat | — | — | — | &#x60;422 attachments_not_supported&#x60;; nothing is sent |
+ * @description &#x60;message&#x60;, &#x60;attachments&#x60;, or both. Per-channel limits for &#x60;attachments&#x60;:  | Channel | Accepted types | Per file | Per request | Text | |---|---|---|---|---| | Airbnb | JPEG, PNG, GIF, WebP (sent as JPEG), MP4, QuickTime | 10 MB | 5 | optional — each file is sent as its own message, then the text | | Booking.com | JPEG, PNG | 10 MB | 5 | **required** — all files ride on the one text message | | VRBO, SMS, email, direct-booking site chat | — | — | — | &#x60;422 attachments_not_supported&#x60;; nothing is sent |
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -223,6 +223,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
 
     public const CHANNEL_AIRBNB = 'airbnb';
     public const CHANNEL_BOOKING = 'booking';
+    public const CHANNEL_VRBO = 'vrbo';
     public const CHANNEL_SMS = 'sms';
     public const CHANNEL_EMAIL = 'email';
     public const CHANNEL_WEBSITE = 'website';
@@ -237,6 +238,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         return [
             self::CHANNEL_AIRBNB,
             self::CHANNEL_BOOKING,
+            self::CHANNEL_VRBO,
             self::CHANNEL_SMS,
             self::CHANNEL_EMAIL,
             self::CHANNEL_WEBSITE,

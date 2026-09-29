@@ -58,7 +58,8 @@ class PreapproveConversationRequest implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'block_instant_booking' => 'bool'
+        'block_instant_booking' => 'bool',
+        'message' => 'string'
     ];
 
     /**
@@ -67,7 +68,8 @@ class PreapproveConversationRequest implements ModelInterface, ArrayAccess, Json
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'block_instant_booking' => null
+        'block_instant_booking' => null,
+        'message' => null
     ];
 
     /**
@@ -76,7 +78,8 @@ class PreapproveConversationRequest implements ModelInterface, ArrayAccess, Json
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'block_instant_booking' => false
+        'block_instant_booking' => false,
+        'message' => false
     ];
 
     /**
@@ -155,7 +158,8 @@ class PreapproveConversationRequest implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'block_instant_booking' => 'blockInstantBooking'
+        'block_instant_booking' => 'blockInstantBooking',
+        'message' => 'message'
     ];
 
     /**
@@ -164,7 +168,8 @@ class PreapproveConversationRequest implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $setters = [
-        'block_instant_booking' => 'setBlockInstantBooking'
+        'block_instant_booking' => 'setBlockInstantBooking',
+        'message' => 'setMessage'
     ];
 
     /**
@@ -173,7 +178,8 @@ class PreapproveConversationRequest implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $getters = [
-        'block_instant_booking' => 'getBlockInstantBooking'
+        'block_instant_booking' => 'getBlockInstantBooking',
+        'message' => 'getMessage'
     ];
 
     /**
@@ -224,6 +230,7 @@ class PreapproveConversationRequest implements ModelInterface, ArrayAccess, Json
     public function __construct(?array $data = null)
     {
         $this->setIfExists('block_instant_booking', $data ?? [], false);
+        $this->setIfExists('message', $data ?? [], null);
     }
 
     /**
@@ -251,6 +258,10 @@ class PreapproveConversationRequest implements ModelInterface, ArrayAccess, Json
     {
         $invalidProperties = [];
 
+        if (!is_null($this->container['message']) && (mb_strlen($this->container['message']) > 2000)) {
+            $invalidProperties[] = "invalid value for 'message', the character length must be smaller than or equal to 2000.";
+        }
+
         return $invalidProperties;
     }
 
@@ -276,7 +287,7 @@ class PreapproveConversationRequest implements ModelInterface, ArrayAccess, Json
     /**
      * Sets block_instant_booking
      *
-     * @param bool|null $block_instant_booking When `true`, the guest cannot Instant Book the listing and must book through this pre-approval. Leave `false` unless you need that.
+     * @param bool|null $block_instant_booking Airbnb: when `true`, the guest cannot Instant Book the listing and must book through this pre-approval. Leave `false` unless you need that.
      *
      * @return $this
      */
@@ -286,6 +297,37 @@ class PreapproveConversationRequest implements ModelInterface, ArrayAccess, Json
             throw new InvalidArgumentException('non-nullable block_instant_booking cannot be null');
         }
         $this->container['block_instant_booking'] = $block_instant_booking;
+
+        return $this;
+    }
+
+    /**
+     * Gets message
+     *
+     * @return string|null
+     */
+    public function getMessage(): ?string
+    {
+        return $this->container['message'];
+    }
+
+    /**
+     * Sets message
+     *
+     * @param string|null $message VRBO: the message sent to the guest with the pre-approval (a friendly default otherwise).
+     *
+     * @return $this
+     */
+    public function setMessage(?string $message): static
+    {
+        if (is_null($message)) {
+            throw new InvalidArgumentException('non-nullable message cannot be null');
+        }
+        if ((mb_strlen($message) > 2000)) {
+            throw new InvalidArgumentException('invalid length for $message when calling PreapproveConversationRequest., must be smaller than or equal to 2000.');
+        }
+
+        $this->container['message'] = $message;
 
         return $this;
     }

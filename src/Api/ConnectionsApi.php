@@ -1,6 +1,6 @@
 <?php
 /**
- * HealthApi
+ * ConnectionsApi
  * PHP version 8.1
  *
  * @package  Repull
@@ -44,13 +44,13 @@ use Repull\FormDataProcessor;
 use Repull\ObjectSerializer;
 
 /**
- * HealthApi Class Doc Comment
+ * ConnectionsApi Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class HealthApi
+class ConnectionsApi
 {
     /**
      * @var ClientInterface
@@ -74,16 +74,16 @@ class HealthApi
 
     /** @var string[] $contentTypes **/
     public const contentTypes = [
-        'getAuthHealth' => [
+        'applyConnectionMappings' => [
             'application/json',
         ],
-        'getChannelHealth' => [
+        'autoMapConnectionUnits' => [
             'application/json',
         ],
-        'getMcpHealth' => [
+        'listConnectionUnits' => [
             'application/json',
         ],
-        'getWebhooksHealth' => [
+        'searchConnectionListingOptions' => [
             'application/json',
         ],
     ];
@@ -135,40 +135,48 @@ class HealthApi
     }
 
     /**
-     * Operation getAuthHealth
+     * Operation applyConnectionMappings
      *
-     * API-key authentication path health
+     * Map, unmap or create listings for units
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAuthHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request apply_connection_mappings_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['applyConnectionMappings'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array<string,mixed>
+     * @return \Repull\Model\ApplyConnectionMappings200Response
      */
-    public function getAuthHealth(
-        string $contentType = self::contentTypes['getAuthHealth'][0]
-    ): array
+    public function applyConnectionMappings(
+        string $id,
+        \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request,
+        string $contentType = self::contentTypes['applyConnectionMappings'][0]
+    ): \Repull\Model\ApplyConnectionMappings200Response
     {
-        list($response) = $this->getAuthHealthWithHttpInfo($contentType);
+        list($response) = $this->applyConnectionMappingsWithHttpInfo($id, $apply_connection_mappings_request, $contentType);
         return $response;
     }
 
     /**
-     * Operation getAuthHealthWithHttpInfo
+     * Operation applyConnectionMappingsWithHttpInfo
      *
-     * API-key authentication path health
+     * Map, unmap or create listings for units
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAuthHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['applyConnectionMappings'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of array<string,mixed>, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ApplyConnectionMappings200Response, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getAuthHealthWithHttpInfo(
-        string $contentType = self::contentTypes['getAuthHealth'][0]
+    public function applyConnectionMappingsWithHttpInfo(
+        string $id,
+        \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request,
+        string $contentType = self::contentTypes['applyConnectionMappings'][0]
     ): array
     {
-        $request = $this->getAuthHealthRequest($contentType);
+        $request = $this->applyConnectionMappingsRequest($id, $apply_connection_mappings_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -195,7 +203,7 @@ class HealthApi
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        'array<string,mixed>',
+                        '\Repull\Model\ApplyConnectionMappings200Response',
                         $request,
                         $response,
                     );
@@ -216,7 +224,7 @@ class HealthApi
             }
 
             return $this->handleResponseWithDataType(
-                'array<string,mixed>',
+                '\Repull\Model\ApplyConnectionMappings200Response',
                 $request,
                 $response,
             );
@@ -225,7 +233,7 @@ class HealthApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        'array<string,mixed>',
+                        '\Repull\Model\ApplyConnectionMappings200Response',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -237,20 +245,24 @@ class HealthApi
     }
 
     /**
-     * Operation getAuthHealthAsync
+     * Operation applyConnectionMappingsAsync
      *
-     * API-key authentication path health
+     * Map, unmap or create listings for units
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAuthHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['applyConnectionMappings'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function getAuthHealthAsync(
-        string $contentType = self::contentTypes['getAuthHealth'][0]
+    public function applyConnectionMappingsAsync(
+        string $id,
+        \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request,
+        string $contentType = self::contentTypes['applyConnectionMappings'][0]
     ): PromiseInterface
     {
-        return $this->getAuthHealthAsyncWithHttpInfo($contentType)
+        return $this->applyConnectionMappingsAsyncWithHttpInfo($id, $apply_connection_mappings_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -259,21 +271,25 @@ class HealthApi
     }
 
     /**
-     * Operation getAuthHealthAsyncWithHttpInfo
+     * Operation applyConnectionMappingsAsyncWithHttpInfo
      *
-     * API-key authentication path health
+     * Map, unmap or create listings for units
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAuthHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['applyConnectionMappings'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function getAuthHealthAsyncWithHttpInfo(
-        string $contentType = self::contentTypes['getAuthHealth'][0]
+    public function applyConnectionMappingsAsyncWithHttpInfo(
+        string $id,
+        \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request,
+        string $contentType = self::contentTypes['applyConnectionMappings'][0]
     ): PromiseInterface
     {
-        $returnType = 'array<string,mixed>';
-        $request = $this->getAuthHealthRequest($contentType);
+        $returnType = '\Repull\Model\ApplyConnectionMappings200Response';
+        $request = $this->applyConnectionMappingsRequest($id, $apply_connection_mappings_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -312,20 +328,38 @@ class HealthApi
     }
 
     /**
-     * Create request for operation 'getAuthHealth'
+     * Create request for operation 'applyConnectionMappings'
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getAuthHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['applyConnectionMappings'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getAuthHealthRequest(
-        string $contentType = self::contentTypes['getAuthHealth'][0]
+    public function applyConnectionMappingsRequest(
+        string $id,
+        \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request,
+        string $contentType = self::contentTypes['applyConnectionMappings'][0]
     ): Request
     {
 
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling applyConnectionMappings'
+            );
+        }
 
-        $resourcePath = '/v1/health/auth';
+        // verify the required parameter 'apply_connection_mappings_request' is set
+        if ($apply_connection_mappings_request === null || (is_array($apply_connection_mappings_request) && count($apply_connection_mappings_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $apply_connection_mappings_request when calling applyConnectionMappings'
+            );
+        }
+
+
+        $resourcePath = '/v1/connections/{id}/mappings';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -334,6 +368,14 @@ class HealthApi
 
 
 
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
 
 
         $headers = $this->headerSelector->selectHeaders(
@@ -343,7 +385,14 @@ class HealthApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if (isset($apply_connection_mappings_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($apply_connection_mappings_request));
+            } else {
+                $httpBody = $apply_connection_mappings_request;
+            }
+        } elseif (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -367,6 +416,11 @@ class HealthApi
             }
         }
 
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
             $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
@@ -381,7 +435,7 @@ class HealthApi
         $operationHost = $this->config->getHost();
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
-            'GET',
+            'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
@@ -389,44 +443,48 @@ class HealthApi
     }
 
     /**
-     * Operation getChannelHealth
+     * Operation autoMapConnectionUnits
      *
-     * Per-channel connectivity health
+     * Auto-map units by exact name
      *
-     * @param  string $channel channel (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getChannelHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  \Repull\Model\AutoMapConnectionUnitsRequest|null $auto_map_connection_units_request auto_map_connection_units_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['autoMapConnectionUnits'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\GetChannelHealth200Response
+     * @return \Repull\Model\AutoMapConnectionUnits200Response
      */
-    public function getChannelHealth(
-        string $channel,
-        string $contentType = self::contentTypes['getChannelHealth'][0]
-    ): \Repull\Model\GetChannelHealth200Response
+    public function autoMapConnectionUnits(
+        string $id,
+        ?\Repull\Model\AutoMapConnectionUnitsRequest $auto_map_connection_units_request = null,
+        string $contentType = self::contentTypes['autoMapConnectionUnits'][0]
+    ): \Repull\Model\AutoMapConnectionUnits200Response
     {
-        list($response) = $this->getChannelHealthWithHttpInfo($channel, $contentType);
+        list($response) = $this->autoMapConnectionUnitsWithHttpInfo($id, $auto_map_connection_units_request, $contentType);
         return $response;
     }
 
     /**
-     * Operation getChannelHealthWithHttpInfo
+     * Operation autoMapConnectionUnitsWithHttpInfo
      *
-     * Per-channel connectivity health
+     * Auto-map units by exact name
      *
-     * @param  string $channel (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getChannelHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  \Repull\Model\AutoMapConnectionUnitsRequest|null $auto_map_connection_units_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['autoMapConnectionUnits'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\GetChannelHealth200Response, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AutoMapConnectionUnits200Response, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getChannelHealthWithHttpInfo(
-        string $channel,
-        string $contentType = self::contentTypes['getChannelHealth'][0]
+    public function autoMapConnectionUnitsWithHttpInfo(
+        string $id,
+        ?\Repull\Model\AutoMapConnectionUnitsRequest $auto_map_connection_units_request = null,
+        string $contentType = self::contentTypes['autoMapConnectionUnits'][0]
     ): array
     {
-        $request = $this->getChannelHealthRequest($channel, $contentType);
+        $request = $this->autoMapConnectionUnitsRequest($id, $auto_map_connection_units_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -453,7 +511,7 @@ class HealthApi
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Repull\Model\GetChannelHealth200Response',
+                        '\Repull\Model\AutoMapConnectionUnits200Response',
                         $request,
                         $response,
                     );
@@ -474,7 +532,7 @@ class HealthApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Repull\Model\GetChannelHealth200Response',
+                '\Repull\Model\AutoMapConnectionUnits200Response',
                 $request,
                 $response,
             );
@@ -483,7 +541,7 @@ class HealthApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Repull\Model\GetChannelHealth200Response',
+                        '\Repull\Model\AutoMapConnectionUnits200Response',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -495,22 +553,24 @@ class HealthApi
     }
 
     /**
-     * Operation getChannelHealthAsync
+     * Operation autoMapConnectionUnitsAsync
      *
-     * Per-channel connectivity health
+     * Auto-map units by exact name
      *
-     * @param  string $channel (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getChannelHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  \Repull\Model\AutoMapConnectionUnitsRequest|null $auto_map_connection_units_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['autoMapConnectionUnits'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function getChannelHealthAsync(
-        string $channel,
-        string $contentType = self::contentTypes['getChannelHealth'][0]
+    public function autoMapConnectionUnitsAsync(
+        string $id,
+        ?\Repull\Model\AutoMapConnectionUnitsRequest $auto_map_connection_units_request = null,
+        string $contentType = self::contentTypes['autoMapConnectionUnits'][0]
     ): PromiseInterface
     {
-        return $this->getChannelHealthAsyncWithHttpInfo($channel, $contentType)
+        return $this->autoMapConnectionUnitsAsyncWithHttpInfo($id, $auto_map_connection_units_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -519,23 +579,25 @@ class HealthApi
     }
 
     /**
-     * Operation getChannelHealthAsyncWithHttpInfo
+     * Operation autoMapConnectionUnitsAsyncWithHttpInfo
      *
-     * Per-channel connectivity health
+     * Auto-map units by exact name
      *
-     * @param  string $channel (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getChannelHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  \Repull\Model\AutoMapConnectionUnitsRequest|null $auto_map_connection_units_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['autoMapConnectionUnits'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function getChannelHealthAsyncWithHttpInfo(
-        string $channel,
-        string $contentType = self::contentTypes['getChannelHealth'][0]
+    public function autoMapConnectionUnitsAsyncWithHttpInfo(
+        string $id,
+        ?\Repull\Model\AutoMapConnectionUnitsRequest $auto_map_connection_units_request = null,
+        string $contentType = self::contentTypes['autoMapConnectionUnits'][0]
     ): PromiseInterface
     {
-        $returnType = '\Repull\Model\GetChannelHealth200Response';
-        $request = $this->getChannelHealthRequest($channel, $contentType);
+        $returnType = '\Repull\Model\AutoMapConnectionUnits200Response';
+        $request = $this->autoMapConnectionUnitsRequest($id, $auto_map_connection_units_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -574,29 +636,32 @@ class HealthApi
     }
 
     /**
-     * Create request for operation 'getChannelHealth'
+     * Create request for operation 'autoMapConnectionUnits'
      *
-     * @param  string $channel (required)
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getChannelHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  \Repull\Model\AutoMapConnectionUnitsRequest|null $auto_map_connection_units_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['autoMapConnectionUnits'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getChannelHealthRequest(
-        string $channel,
-        string $contentType = self::contentTypes['getChannelHealth'][0]
+    public function autoMapConnectionUnitsRequest(
+        string $id,
+        ?\Repull\Model\AutoMapConnectionUnitsRequest $auto_map_connection_units_request = null,
+        string $contentType = self::contentTypes['autoMapConnectionUnits'][0]
     ): Request
     {
 
-        // verify the required parameter 'channel' is set
-        if ($channel === null || (is_array($channel) && count($channel) === 0)) {
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
             throw new InvalidArgumentException(
-                'Missing the required parameter $channel when calling getChannelHealth'
+                'Missing the required parameter $id when calling autoMapConnectionUnits'
             );
         }
 
 
-        $resourcePath = '/v1/health/channels/{channel}';
+
+        $resourcePath = '/v1/connections/{id}/mappings/automap';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -606,10 +671,321 @@ class HealthApi
 
 
         // path params
-        if ($channel !== null) {
+        if ($id !== null) {
             $resourcePath = str_replace(
-                '{channel}',
-                ObjectSerializer::toPathValue($channel),
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($auto_map_connection_units_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($auto_map_connection_units_request));
+            } else {
+                $httpBody = $auto_map_connection_units_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation listConnectionUnits
+     *
+     * List a connection&#39;s mappable units
+     *
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string|null $session_id The Connect session ID (capability token). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionUnits'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\ListConnectionUnits200Response
+     */
+    public function listConnectionUnits(
+        string $id,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['listConnectionUnits'][0]
+    ): \Repull\Model\ListConnectionUnits200Response
+    {
+        list($response) = $this->listConnectionUnitsWithHttpInfo($id, $session_id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation listConnectionUnitsWithHttpInfo
+     *
+     * List a connection&#39;s mappable units
+     *
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string|null $session_id The Connect session ID (capability token). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionUnits'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\ListConnectionUnits200Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function listConnectionUnitsWithHttpInfo(
+        string $id,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['listConnectionUnits'][0]
+    ): array
+    {
+        $request = $this->listConnectionUnitsRequest($id, $session_id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\ListConnectionUnits200Response',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\ListConnectionUnits200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\ListConnectionUnits200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation listConnectionUnitsAsync
+     *
+     * List a connection&#39;s mappable units
+     *
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string|null $session_id The Connect session ID (capability token). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionUnits'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function listConnectionUnitsAsync(
+        string $id,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['listConnectionUnits'][0]
+    ): PromiseInterface
+    {
+        return $this->listConnectionUnitsAsyncWithHttpInfo($id, $session_id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation listConnectionUnitsAsyncWithHttpInfo
+     *
+     * List a connection&#39;s mappable units
+     *
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string|null $session_id The Connect session ID (capability token). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionUnits'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function listConnectionUnitsAsyncWithHttpInfo(
+        string $id,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['listConnectionUnits'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\ListConnectionUnits200Response';
+        $request = $this->listConnectionUnitsRequest($id, $session_id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'listConnectionUnits'
+     *
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string|null $session_id The Connect session ID (capability token). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionUnits'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function listConnectionUnitsRequest(
+        string $id,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['listConnectionUnits'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling listConnectionUnits'
+            );
+        }
+
+
+
+        $resourcePath = '/v1/connections/{id}/units';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $session_id,
+            'sessionId', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
                 $resourcePath
             );
         }
@@ -646,6 +1022,11 @@ class HealthApi
             }
         }
 
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
         $defaultHeaders = [];
         if ($this->config->getUserAgent()) {
             $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
@@ -668,40 +1049,56 @@ class HealthApi
     }
 
     /**
-     * Operation getMcpHealth
+     * Operation searchConnectionListingOptions
      *
-     * MCP server reachability
+     * Search listings a unit can be mapped to
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getMcpHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;. (required)
+     * @param  string|null $q Text to match (name, city or listing id). (optional)
+     * @param  int|null $limit limit (optional, default to 20)
+     * @param  string|null $session_id session_id (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchConnectionListingOptions'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array<string,mixed>
+     * @return \Repull\Model\SearchConnectionListingOptions200Response
      */
-    public function getMcpHealth(
-        string $contentType = self::contentTypes['getMcpHealth'][0]
-    ): array
+    public function searchConnectionListingOptions(
+        string $id,
+        ?string $q = null,
+        ?int $limit = 20,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['searchConnectionListingOptions'][0]
+    ): \Repull\Model\SearchConnectionListingOptions200Response
     {
-        list($response) = $this->getMcpHealthWithHttpInfo($contentType);
+        list($response) = $this->searchConnectionListingOptionsWithHttpInfo($id, $q, $limit, $session_id, $contentType);
         return $response;
     }
 
     /**
-     * Operation getMcpHealthWithHttpInfo
+     * Operation searchConnectionListingOptionsWithHttpInfo
      *
-     * MCP server reachability
+     * Search listings a unit can be mapped to
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getMcpHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;. (required)
+     * @param  string|null $q Text to match (name, city or listing id). (optional)
+     * @param  int|null $limit (optional, default to 20)
+     * @param  string|null $session_id (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchConnectionListingOptions'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of array<string,mixed>, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SearchConnectionListingOptions200Response, HTTP status code, HTTP response headers (array of strings)
      */
-    public function getMcpHealthWithHttpInfo(
-        string $contentType = self::contentTypes['getMcpHealth'][0]
+    public function searchConnectionListingOptionsWithHttpInfo(
+        string $id,
+        ?string $q = null,
+        ?int $limit = 20,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['searchConnectionListingOptions'][0]
     ): array
     {
-        $request = $this->getMcpHealthRequest($contentType);
+        $request = $this->searchConnectionListingOptionsRequest($id, $q, $limit, $session_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -728,7 +1125,7 @@ class HealthApi
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        'array<string,mixed>',
+                        '\Repull\Model\SearchConnectionListingOptions200Response',
                         $request,
                         $response,
                     );
@@ -749,7 +1146,7 @@ class HealthApi
             }
 
             return $this->handleResponseWithDataType(
-                'array<string,mixed>',
+                '\Repull\Model\SearchConnectionListingOptions200Response',
                 $request,
                 $response,
             );
@@ -758,7 +1155,7 @@ class HealthApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        'array<string,mixed>',
+                        '\Repull\Model\SearchConnectionListingOptions200Response',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -770,20 +1167,28 @@ class HealthApi
     }
 
     /**
-     * Operation getMcpHealthAsync
+     * Operation searchConnectionListingOptionsAsync
      *
-     * MCP server reachability
+     * Search listings a unit can be mapped to
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getMcpHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;. (required)
+     * @param  string|null $q Text to match (name, city or listing id). (optional)
+     * @param  int|null $limit (optional, default to 20)
+     * @param  string|null $session_id (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchConnectionListingOptions'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function getMcpHealthAsync(
-        string $contentType = self::contentTypes['getMcpHealth'][0]
+    public function searchConnectionListingOptionsAsync(
+        string $id,
+        ?string $q = null,
+        ?int $limit = 20,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['searchConnectionListingOptions'][0]
     ): PromiseInterface
     {
-        return $this->getMcpHealthAsyncWithHttpInfo($contentType)
+        return $this->searchConnectionListingOptionsAsyncWithHttpInfo($id, $q, $limit, $session_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -792,21 +1197,29 @@ class HealthApi
     }
 
     /**
-     * Operation getMcpHealthAsyncWithHttpInfo
+     * Operation searchConnectionListingOptionsAsyncWithHttpInfo
      *
-     * MCP server reachability
+     * Search listings a unit can be mapped to
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getMcpHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;. (required)
+     * @param  string|null $q Text to match (name, city or listing id). (optional)
+     * @param  int|null $limit (optional, default to 20)
+     * @param  string|null $session_id (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchConnectionListingOptions'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
-    public function getMcpHealthAsyncWithHttpInfo(
-        string $contentType = self::contentTypes['getMcpHealth'][0]
+    public function searchConnectionListingOptionsAsyncWithHttpInfo(
+        string $id,
+        ?string $q = null,
+        ?int $limit = 20,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['searchConnectionListingOptions'][0]
     ): PromiseInterface
     {
-        $returnType = 'array<string,mixed>';
-        $request = $this->getMcpHealthRequest($contentType);
+        $returnType = '\Repull\Model\SearchConnectionListingOptions200Response';
+        $request = $this->searchConnectionListingOptionsRequest($id, $q, $limit, $session_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -845,282 +1258,87 @@ class HealthApi
     }
 
     /**
-     * Create request for operation 'getMcpHealth'
+     * Create request for operation 'searchConnectionListingOptions'
      *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getMcpHealth'] to see the possible values for this operation
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;. (required)
+     * @param  string|null $q Text to match (name, city or listing id). (optional)
+     * @param  int|null $limit (optional, default to 20)
+     * @param  string|null $session_id (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['searchConnectionListingOptions'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function getMcpHealthRequest(
-        string $contentType = self::contentTypes['getMcpHealth'][0]
+    public function searchConnectionListingOptionsRequest(
+        string $id,
+        ?string $q = null,
+        ?int $limit = 20,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['searchConnectionListingOptions'][0]
     ): Request
     {
 
-
-        $resourcePath = '/v1/health/mcp';
-        $formParams = [];
-        $queryParams = [];
-        $headerParams = [];
-        $httpBody = '';
-        $multipart = false;
-
-
-
-
-
-        $headers = $this->headerSelector->selectHeaders(
-            ['application/json', ],
-            $contentType,
-            $multipart
-        );
-
-        // for model (json/xml)
-        if (count($formParams) > 0) {
-            if ($multipart) {
-                $multipartContents = [];
-                foreach ($formParams as $formParamName => $formParamValue) {
-                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
-                    foreach ($formParamValueItems as $formParamValueItem) {
-                        $multipartContents[] = [
-                            'name' => $formParamName,
-                            'contents' => $formParamValueItem
-                        ];
-                    }
-                }
-                // for HTTP post (form)
-                $httpBody = new MultipartStream($multipartContents);
-
-            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
-                # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
-            } else {
-                // for HTTP post (form)
-                $httpBody = ObjectSerializer::buildQuery($formParams);
-            }
-        }
-
-        $defaultHeaders = [];
-        if ($this->config->getUserAgent()) {
-            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
-        }
-
-        $headers = array_merge(
-            $defaultHeaders,
-            $headerParams,
-            $headers
-        );
-
-        $operationHost = $this->config->getHost();
-        $query = ObjectSerializer::buildQuery($queryParams);
-        return new Request(
-            'GET',
-            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
-            $headers,
-            $httpBody
-        );
-    }
-
-    /**
-     * Operation getWebhooksHealth
-     *
-     * Webhook delivery pipeline health
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhooksHealth'] to see the possible values for this operation
-     *
-     * @throws ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws InvalidArgumentException
-     * @return array<string,mixed>
-     */
-    public function getWebhooksHealth(
-        string $contentType = self::contentTypes['getWebhooksHealth'][0]
-    ): array
-    {
-        list($response) = $this->getWebhooksHealthWithHttpInfo($contentType);
-        return $response;
-    }
-
-    /**
-     * Operation getWebhooksHealthWithHttpInfo
-     *
-     * Webhook delivery pipeline health
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhooksHealth'] to see the possible values for this operation
-     *
-     * @throws ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws InvalidArgumentException
-     * @return array of array<string,mixed>, HTTP status code, HTTP response headers (array of strings)
-     */
-    public function getWebhooksHealthWithHttpInfo(
-        string $contentType = self::contentTypes['getWebhooksHealth'][0]
-    ): array
-    {
-        $request = $this->getWebhooksHealthRequest($contentType);
-
-        try {
-            $options = $this->createHttpClientOption();
-            try {
-                $response = $this->client->send($request, $options);
-            } catch (RequestException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
-                );
-            } catch (ConnectException $e) {
-                throw new ApiException(
-                    "[{$e->getCode()}] {$e->getMessage()}",
-                    (int) $e->getCode(),
-                    null,
-                    null
-                );
-            }
-
-            $statusCode = $response->getStatusCode();
-
-            switch($statusCode) {
-                case 200:
-                    return $this->handleResponseWithDataType(
-                        'array<string,mixed>',
-                        $request,
-                        $response,
-                    );
-            }
-            
-
-            if ($statusCode < 200 || $statusCode > 299) {
-                throw new ApiException(
-                    sprintf(
-                        '[%d] Error connecting to the API (%s)',
-                        $statusCode,
-                        (string) $request->getUri()
-                    ),
-                    $statusCode,
-                    $response->getHeaders(),
-                    (string) $response->getBody()
-                );
-            }
-
-            return $this->handleResponseWithDataType(
-                'array<string,mixed>',
-                $request,
-                $response,
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling searchConnectionListingOptions'
             );
-        } catch (ApiException $e) {
-            switch ($e->getCode()) {
-                case 200:
-                    $data = ObjectSerializer::deserialize(
-                        $e->getResponseBody(),
-                        'array<string,mixed>',
-                        $e->getResponseHeaders()
-                    );
-                    $e->setResponseObject($data);
-                    throw $e;
-            }
+        }
+
+
+        if ($limit !== null && $limit > 50) {
+            throw new InvalidArgumentException('invalid value for "$limit" when calling ConnectionsApi.searchConnectionListingOptions, must be smaller than or equal to 50.');
+        }
+        if ($limit !== null && $limit < 1) {
+            throw new InvalidArgumentException('invalid value for "$limit" when calling ConnectionsApi.searchConnectionListingOptions, must be bigger than or equal to 1.');
+        }
         
-            throw $e;
-        }
-    }
-
-    /**
-     * Operation getWebhooksHealthAsync
-     *
-     * Webhook delivery pipeline health
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhooksHealth'] to see the possible values for this operation
-     *
-     * @throws InvalidArgumentException
-     * @return PromiseInterface
-     */
-    public function getWebhooksHealthAsync(
-        string $contentType = self::contentTypes['getWebhooksHealth'][0]
-    ): PromiseInterface
-    {
-        return $this->getWebhooksHealthAsyncWithHttpInfo($contentType)
-            ->then(
-                function ($response) {
-                    return $response[0];
-                }
-            );
-    }
-
-    /**
-     * Operation getWebhooksHealthAsyncWithHttpInfo
-     *
-     * Webhook delivery pipeline health
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhooksHealth'] to see the possible values for this operation
-     *
-     * @throws InvalidArgumentException
-     * @return PromiseInterface
-     */
-    public function getWebhooksHealthAsyncWithHttpInfo(
-        string $contentType = self::contentTypes['getWebhooksHealth'][0]
-    ): PromiseInterface
-    {
-        $returnType = 'array<string,mixed>';
-        $request = $this->getWebhooksHealthRequest($contentType);
-
-        return $this->client
-            ->sendAsync($request, $this->createHttpClientOption())
-            ->then(
-                function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
-                        $content = $response->getBody(); //stream goes to serializer
-                    } else {
-                        $content = (string) $response->getBody();
-                        if ($returnType !== 'string') {
-                            $content = json_decode($content);
-                        }
-                    }
-
-                    return [
-                        ObjectSerializer::deserialize($content, $returnType, []),
-                        $response->getStatusCode(),
-                        $response->getHeaders()
-                    ];
-                },
-                function ($exception) {
-                    $response = $exception->getResponse();
-                    $statusCode = $response->getStatusCode();
-                    throw new ApiException(
-                        sprintf(
-                            '[%d] Error connecting to the API (%s)',
-                            $statusCode,
-                            $exception->getRequest()->getUri()
-                        ),
-                        $statusCode,
-                        $response->getHeaders(),
-                        (string) $response->getBody()
-                    );
-                }
-            );
-    }
-
-    /**
-     * Create request for operation 'getWebhooksHealth'
-     *
-     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getWebhooksHealth'] to see the possible values for this operation
-     *
-     * @throws InvalidArgumentException
-     * @return \GuzzleHttp\Psr7\Request
-     */
-    public function getWebhooksHealthRequest(
-        string $contentType = self::contentTypes['getWebhooksHealth'][0]
-    ): Request
-    {
 
 
-        $resourcePath = '/v1/health/webhooks';
+        $resourcePath = '/v1/connections/{id}/listing-options';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $q,
+            'q', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $limit,
+            'limit', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $session_id,
+            'sessionId', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
 
 
         $headers = $this->headerSelector->selectHeaders(
@@ -1152,6 +1370,11 @@ class HealthApi
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
             }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
         }
 
         $defaultHeaders = [];

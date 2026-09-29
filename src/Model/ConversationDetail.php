@@ -73,7 +73,8 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
         'created_at' => '\DateTime',
         'updated_at' => '\DateTime',
         'host' => '\Repull\Model\ConversationHost',
-        'guest' => '\Repull\Model\ConversationGuest'
+        'guest' => '\Repull\Model\ConversationGuest',
+        'capabilities' => '\Repull\Model\ConversationCapabilities'
     ];
 
     /**
@@ -96,7 +97,8 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
         'created_at' => 'date-time',
         'updated_at' => 'date-time',
         'host' => null,
-        'guest' => null
+        'guest' => null,
+        'capabilities' => null
     ];
 
     /**
@@ -119,7 +121,8 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
         'created_at' => false,
         'updated_at' => false,
         'host' => true,
-        'guest' => true
+        'guest' => true,
+        'capabilities' => false
     ];
 
     /**
@@ -212,7 +215,8 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
         'created_at' => 'createdAt',
         'updated_at' => 'updatedAt',
         'host' => 'host',
-        'guest' => 'guest'
+        'guest' => 'guest',
+        'capabilities' => 'capabilities'
     ];
 
     /**
@@ -235,7 +239,8 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
         'created_at' => 'setCreatedAt',
         'updated_at' => 'setUpdatedAt',
         'host' => 'setHost',
-        'guest' => 'setGuest'
+        'guest' => 'setGuest',
+        'capabilities' => 'setCapabilities'
     ];
 
     /**
@@ -258,7 +263,8 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
         'created_at' => 'getCreatedAt',
         'updated_at' => 'getUpdatedAt',
         'host' => 'getHost',
-        'guest' => 'getGuest'
+        'guest' => 'getGuest',
+        'capabilities' => 'getCapabilities'
     ];
 
     /**
@@ -359,6 +365,7 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
         $this->setIfExists('updated_at', $data ?? [], null);
         $this->setIfExists('host', $data ?? [], null);
         $this->setIfExists('guest', $data ?? [], null);
+        $this->setIfExists('capabilities', $data ?? [], null);
     }
 
     /**
@@ -889,6 +896,33 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
             }
         }
         $this->container['guest'] = $guest;
+
+        return $this;
+    }
+
+    /**
+     * Gets capabilities
+     *
+     * @return \Repull\Model\ConversationCapabilities|null
+     */
+    public function getCapabilities(): ?\Repull\Model\ConversationCapabilities
+    {
+        return $this->container['capabilities'];
+    }
+
+    /**
+     * Sets capabilities
+     *
+     * @param \Repull\Model\ConversationCapabilities|null $capabilities capabilities
+     *
+     * @return $this
+     */
+    public function setCapabilities(?\Repull\Model\ConversationCapabilities $capabilities): static
+    {
+        if (is_null($capabilities)) {
+            throw new InvalidArgumentException('non-nullable capabilities cannot be null');
+        }
+        $this->container['capabilities'] = $capabilities;
 
         return $this;
     }

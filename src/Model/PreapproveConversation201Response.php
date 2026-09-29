@@ -59,9 +59,11 @@ class PreapproveConversation201Response implements ModelInterface, ArrayAccess, 
      */
     protected static array $openAPITypes = [
         'conversation_id' => 'string',
+        'channel' => 'string',
         'status' => 'string',
         'block_instant_booking' => 'bool',
-        'expires_at' => '\DateTime'
+        'expires_at' => '\DateTime',
+        'message' => 'string'
     ];
 
     /**
@@ -71,9 +73,11 @@ class PreapproveConversation201Response implements ModelInterface, ArrayAccess, 
      */
     protected static array $openAPIFormats = [
         'conversation_id' => null,
+        'channel' => null,
         'status' => null,
         'block_instant_booking' => null,
-        'expires_at' => 'date-time'
+        'expires_at' => 'date-time',
+        'message' => null
     ];
 
     /**
@@ -83,9 +87,11 @@ class PreapproveConversation201Response implements ModelInterface, ArrayAccess, 
      */
     protected static array $openAPINullables = [
         'conversation_id' => false,
+        'channel' => false,
         'status' => false,
         'block_instant_booking' => false,
-        'expires_at' => true
+        'expires_at' => true,
+        'message' => true
     ];
 
     /**
@@ -165,9 +171,11 @@ class PreapproveConversation201Response implements ModelInterface, ArrayAccess, 
      */
     protected static array $attributeMap = [
         'conversation_id' => 'conversationId',
+        'channel' => 'channel',
         'status' => 'status',
         'block_instant_booking' => 'blockInstantBooking',
-        'expires_at' => 'expiresAt'
+        'expires_at' => 'expiresAt',
+        'message' => 'message'
     ];
 
     /**
@@ -177,9 +185,11 @@ class PreapproveConversation201Response implements ModelInterface, ArrayAccess, 
      */
     protected static array $setters = [
         'conversation_id' => 'setConversationId',
+        'channel' => 'setChannel',
         'status' => 'setStatus',
         'block_instant_booking' => 'setBlockInstantBooking',
-        'expires_at' => 'setExpiresAt'
+        'expires_at' => 'setExpiresAt',
+        'message' => 'setMessage'
     ];
 
     /**
@@ -189,9 +199,11 @@ class PreapproveConversation201Response implements ModelInterface, ArrayAccess, 
      */
     protected static array $getters = [
         'conversation_id' => 'getConversationId',
+        'channel' => 'getChannel',
         'status' => 'getStatus',
         'block_instant_booking' => 'getBlockInstantBooking',
-        'expires_at' => 'getExpiresAt'
+        'expires_at' => 'getExpiresAt',
+        'message' => 'getMessage'
     ];
 
     /**
@@ -226,7 +238,22 @@ class PreapproveConversation201Response implements ModelInterface, ArrayAccess, 
         return self::$openAPIModelName;
     }
 
+    public const CHANNEL_AIRBNB = 'airbnb';
+    public const CHANNEL_VRBO = 'vrbo';
     public const STATUS_PRE_APPROVED = 'pre_approved';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getChannelAllowableValues()
+    {
+        return [
+            self::CHANNEL_AIRBNB,
+            self::CHANNEL_VRBO,
+        ];
+    }
 
     /**
      * Gets allowable values of the enum
@@ -255,9 +282,11 @@ class PreapproveConversation201Response implements ModelInterface, ArrayAccess, 
     public function __construct(?array $data = null)
     {
         $this->setIfExists('conversation_id', $data ?? [], null);
+        $this->setIfExists('channel', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('block_instant_booking', $data ?? [], null);
         $this->setIfExists('expires_at', $data ?? [], null);
+        $this->setIfExists('message', $data ?? [], null);
     }
 
     /**
@@ -288,6 +317,18 @@ class PreapproveConversation201Response implements ModelInterface, ArrayAccess, 
         if ($this->container['conversation_id'] === null) {
             $invalidProperties[] = "'conversation_id' can't be null";
         }
+        if ($this->container['channel'] === null) {
+            $invalidProperties[] = "'channel' can't be null";
+        }
+        $allowedValues = self::getChannelAllowableValues();
+        if (!is_null($this->container['channel']) && !in_array($this->container['channel'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'channel', must be one of '%s'",
+                $this->container['channel'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         if ($this->container['status'] === null) {
             $invalidProperties[] = "'status' can't be null";
         }
@@ -305,6 +346,9 @@ class PreapproveConversation201Response implements ModelInterface, ArrayAccess, 
         }
         if ($this->container['expires_at'] === null && !$this->isNullableSetToNull('expires_at')) {
             $invalidProperties[] = "'expires_at' is required";
+        }
+        if ($this->container['message'] === null && !$this->isNullableSetToNull('message')) {
+            $invalidProperties[] = "'message' is required";
         }
         return $invalidProperties;
     }
@@ -341,6 +385,34 @@ class PreapproveConversation201Response implements ModelInterface, ArrayAccess, 
             throw new InvalidArgumentException('non-nullable conversation_id cannot be null');
         }
         $this->container['conversation_id'] = $conversation_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets channel
+     *
+     * @return string
+     */
+    public function getChannel(): string
+    {
+        return $this->container['channel'];
+    }
+
+    /**
+     * Sets channel
+     *
+     * @param string $channel channel
+     *
+     * @return $this
+     */
+    public function setChannel(string $channel): static
+    {
+        if (is_null($channel)) {
+            throw new InvalidArgumentException('non-nullable channel cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['channel'] = $channel;
 
         return $this;
     }
@@ -413,7 +485,7 @@ class PreapproveConversation201Response implements ModelInterface, ArrayAccess, 
     /**
      * Sets expires_at
      *
-     * @param \DateTime|null $expires_at When the guest can no longer book on the pre-approval, if Airbnb reported it.
+     * @param \DateTime|null $expires_at When the guest can no longer book on the pre-approval, if the channel reported it.
      *
      * @return $this
      */
@@ -430,6 +502,40 @@ class PreapproveConversation201Response implements ModelInterface, ArrayAccess, 
             }
         }
         $this->container['expires_at'] = $expires_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets message
+     *
+     * @return string|null
+     */
+    public function getMessage(): ?string
+    {
+        return $this->container['message'];
+    }
+
+    /**
+     * Sets message
+     *
+     * @param string|null $message The message sent to the guest with the pre-approval (VRBO).
+     *
+     * @return $this
+     */
+    public function setMessage(?string $message): static
+    {
+        if (is_null($message)) {
+            array_push($this->openAPINullablesSetToNull, 'message');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('message', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['message'] = $message;
 
         return $this;
     }
