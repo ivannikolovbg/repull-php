@@ -2084,6 +2084,7 @@ class ReservationsApi
      *
      * List reservations
      *
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
@@ -2110,6 +2111,7 @@ class ReservationsApi
      * @return \Repull\Model\ReservationListResponse|\Repull\Model\Error
      */
     public function listReservations(
+        ?string $account = null,
         ?string $x_schema = null,
         ?int $limit = 50,
         ?string $cursor = null,
@@ -2132,7 +2134,7 @@ class ReservationsApi
         string $contentType = self::contentTypes['listReservations'][0]
     ): \Repull\Model\ReservationListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listReservationsWithHttpInfo($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_out_after, $check_out_before, $check_in_from, $check_in_to, $check_in_after2, $check_in_before2, $check_out_after2, $check_out_before2, $updated_since, $include_total, $contentType);
+        list($response) = $this->listReservationsWithHttpInfo($account, $x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_out_after, $check_out_before, $check_in_from, $check_in_to, $check_in_after2, $check_in_before2, $check_out_after2, $check_out_before2, $updated_since, $include_total, $contentType);
         return $response;
     }
 
@@ -2141,6 +2143,7 @@ class ReservationsApi
      *
      * List reservations
      *
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
@@ -2167,6 +2170,7 @@ class ReservationsApi
      * @return array of \Repull\Model\ReservationListResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listReservationsWithHttpInfo(
+        ?string $account = null,
         ?string $x_schema = null,
         ?int $limit = 50,
         ?string $cursor = null,
@@ -2189,7 +2193,7 @@ class ReservationsApi
         string $contentType = self::contentTypes['listReservations'][0]
     ): array
     {
-        $request = $this->listReservationsRequest($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_out_after, $check_out_before, $check_in_from, $check_in_to, $check_in_after2, $check_in_before2, $check_out_after2, $check_out_before2, $updated_since, $include_total, $contentType);
+        $request = $this->listReservationsRequest($account, $x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_out_after, $check_out_before, $check_in_from, $check_in_to, $check_in_after2, $check_in_before2, $check_out_after2, $check_out_before2, $updated_since, $include_total, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2290,6 +2294,7 @@ class ReservationsApi
      *
      * List reservations
      *
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
@@ -2315,6 +2320,7 @@ class ReservationsApi
      * @return PromiseInterface
      */
     public function listReservationsAsync(
+        ?string $account = null,
         ?string $x_schema = null,
         ?int $limit = 50,
         ?string $cursor = null,
@@ -2337,7 +2343,7 @@ class ReservationsApi
         string $contentType = self::contentTypes['listReservations'][0]
     ): PromiseInterface
     {
-        return $this->listReservationsAsyncWithHttpInfo($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_out_after, $check_out_before, $check_in_from, $check_in_to, $check_in_after2, $check_in_before2, $check_out_after2, $check_out_before2, $updated_since, $include_total, $contentType)
+        return $this->listReservationsAsyncWithHttpInfo($account, $x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_out_after, $check_out_before, $check_in_from, $check_in_to, $check_in_after2, $check_in_before2, $check_out_after2, $check_out_before2, $updated_since, $include_total, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2350,6 +2356,7 @@ class ReservationsApi
      *
      * List reservations
      *
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
@@ -2375,6 +2382,7 @@ class ReservationsApi
      * @return PromiseInterface
      */
     public function listReservationsAsyncWithHttpInfo(
+        ?string $account = null,
         ?string $x_schema = null,
         ?int $limit = 50,
         ?string $cursor = null,
@@ -2398,7 +2406,7 @@ class ReservationsApi
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ReservationListResponse';
-        $request = $this->listReservationsRequest($x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_out_after, $check_out_before, $check_in_from, $check_in_to, $check_in_after2, $check_in_before2, $check_out_after2, $check_out_before2, $updated_since, $include_total, $contentType);
+        $request = $this->listReservationsRequest($account, $x_schema, $limit, $cursor, $offset, $platform, $status, $listing_id, $check_in_after, $check_in_before, $check_out_after, $check_out_before, $check_in_from, $check_in_to, $check_in_after2, $check_in_before2, $check_out_after2, $check_out_before2, $updated_since, $include_total, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2439,6 +2447,7 @@ class ReservationsApi
     /**
      * Create request for operation 'listReservations'
      *
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
      * @param  string|null $x_schema Apply a custom or built-in schema to transform the response. Built-in: &#x60;native&#x60; (default), &#x60;calry&#x60;, &#x60;calry-v1&#x60;. Custom: any schema name created via &#x60;POST /v1/schema/custom&#x60;. Unknown / inactive schema names fall back to &#x60;native&#x60;. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
@@ -2464,6 +2473,7 @@ class ReservationsApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listReservationsRequest(
+        ?string $account = null,
         ?string $x_schema = null,
         ?int $limit = 50,
         ?string $cursor = null,
@@ -2486,6 +2496,7 @@ class ReservationsApi
         string $contentType = self::contentTypes['listReservations'][0]
     ): Request
     {
+
 
 
         if ($limit !== null && $limit > 100) {
@@ -2526,6 +2537,15 @@ class ReservationsApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $account,
+            'account', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $limit,

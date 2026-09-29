@@ -479,6 +479,7 @@ class PropertiesApi
      *
      * List properties (older name for /v1/listings)
      *
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
@@ -495,6 +496,7 @@ class PropertiesApi
      * @return \Repull\Model\PropertyListResponse|\Repull\Model\Error
      */
     public function listProperties(
+        ?string $account = null,
         ?int $limit = 50,
         ?string $cursor = null,
         ?int $offset = 0,
@@ -507,7 +509,7 @@ class PropertiesApi
         string $contentType = self::contentTypes['listProperties'][0]
     ): \Repull\Model\PropertyListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listPropertiesWithHttpInfo($limit, $cursor, $offset, $q, $status, $lifecycle_status, $channel, $updated_since, $include_total, $contentType);
+        list($response) = $this->listPropertiesWithHttpInfo($account, $limit, $cursor, $offset, $q, $status, $lifecycle_status, $channel, $updated_since, $include_total, $contentType);
         return $response;
     }
 
@@ -516,6 +518,7 @@ class PropertiesApi
      *
      * List properties (older name for /v1/listings)
      *
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
@@ -532,6 +535,7 @@ class PropertiesApi
      * @return array of \Repull\Model\PropertyListResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listPropertiesWithHttpInfo(
+        ?string $account = null,
         ?int $limit = 50,
         ?string $cursor = null,
         ?int $offset = 0,
@@ -544,7 +548,7 @@ class PropertiesApi
         string $contentType = self::contentTypes['listProperties'][0]
     ): array
     {
-        $request = $this->listPropertiesRequest($limit, $cursor, $offset, $q, $status, $lifecycle_status, $channel, $updated_since, $include_total, $contentType);
+        $request = $this->listPropertiesRequest($account, $limit, $cursor, $offset, $q, $status, $lifecycle_status, $channel, $updated_since, $include_total, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -645,6 +649,7 @@ class PropertiesApi
      *
      * List properties (older name for /v1/listings)
      *
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
@@ -660,6 +665,7 @@ class PropertiesApi
      * @return PromiseInterface
      */
     public function listPropertiesAsync(
+        ?string $account = null,
         ?int $limit = 50,
         ?string $cursor = null,
         ?int $offset = 0,
@@ -672,7 +678,7 @@ class PropertiesApi
         string $contentType = self::contentTypes['listProperties'][0]
     ): PromiseInterface
     {
-        return $this->listPropertiesAsyncWithHttpInfo($limit, $cursor, $offset, $q, $status, $lifecycle_status, $channel, $updated_since, $include_total, $contentType)
+        return $this->listPropertiesAsyncWithHttpInfo($account, $limit, $cursor, $offset, $q, $status, $lifecycle_status, $channel, $updated_since, $include_total, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -685,6 +691,7 @@ class PropertiesApi
      *
      * List properties (older name for /v1/listings)
      *
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
@@ -700,6 +707,7 @@ class PropertiesApi
      * @return PromiseInterface
      */
     public function listPropertiesAsyncWithHttpInfo(
+        ?string $account = null,
         ?int $limit = 50,
         ?string $cursor = null,
         ?int $offset = 0,
@@ -713,7 +721,7 @@ class PropertiesApi
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\PropertyListResponse';
-        $request = $this->listPropertiesRequest($limit, $cursor, $offset, $q, $status, $lifecycle_status, $channel, $updated_since, $include_total, $contentType);
+        $request = $this->listPropertiesRequest($account, $limit, $cursor, $offset, $q, $status, $lifecycle_status, $channel, $updated_since, $include_total, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -754,6 +762,7 @@ class PropertiesApi
     /**
      * Create request for operation 'listProperties'
      *
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
      * @param  int|null $limit Page size (max 100). Requests over the cap return 422. (optional, default to 50)
      * @param  string|null $cursor Opaque cursor returned in the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
@@ -769,6 +778,7 @@ class PropertiesApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listPropertiesRequest(
+        ?string $account = null,
         ?int $limit = 50,
         ?string $cursor = null,
         ?int $offset = 0,
@@ -781,6 +791,7 @@ class PropertiesApi
         string $contentType = self::contentTypes['listProperties'][0]
     ): Request
     {
+
 
         if ($limit !== null && $limit > 100) {
             throw new InvalidArgumentException('invalid value for "$limit" when calling PropertiesApi.listProperties, must be smaller than or equal to 100.');
@@ -811,6 +822,15 @@ class PropertiesApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $account,
+            'account', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $limit,

@@ -75,6 +75,8 @@ enum WebhookEventType: string
 
     case ACCOUNT_CREATED = 'account.created';
 
+    case CONNECT_SESSION_COMPLETED = 'connect.session.completed';
+
     case ACCOUNT_DISCONNECTED = 'account.disconnected';
 
     case REVIEW_CREATED = 'review.created';

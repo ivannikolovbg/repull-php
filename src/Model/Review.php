@@ -59,6 +59,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
+        'account' => '\Repull\Model\RecordAccount',
         'id' => 'string',
         'external_id' => 'string',
         'platform' => 'string',
@@ -89,6 +90,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
+        'account' => null,
         'id' => null,
         'external_id' => null,
         'platform' => null,
@@ -119,6 +121,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
+        'account' => true,
         'id' => false,
         'external_id' => false,
         'platform' => true,
@@ -219,6 +222,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
+        'account' => 'account',
         'id' => 'id',
         'external_id' => 'externalId',
         'platform' => 'platform',
@@ -249,6 +253,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
+        'account' => 'setAccount',
         'id' => 'setId',
         'external_id' => 'setExternalId',
         'platform' => 'setPlatform',
@@ -279,6 +284,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
+        'account' => 'getAccount',
         'id' => 'getId',
         'external_id' => 'getExternalId',
         'platform' => 'getPlatform',
@@ -382,6 +388,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('account', $data ?? [], null);
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('external_id', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
@@ -460,6 +467,40 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         return count($this->listInvalidProperties()) === 0;
     }
 
+
+    /**
+     * Gets account
+     *
+     * @return \Repull\Model\RecordAccount|null
+     */
+    public function getAccount(): ?\Repull\Model\RecordAccount
+    {
+        return $this->container['account'];
+    }
+
+    /**
+     * Sets account
+     *
+     * @param \Repull\Model\RecordAccount|null $account The connected account this review belongs to. List endpoint.
+     *
+     * @return $this
+     */
+    public function setAccount(?\Repull\Model\RecordAccount $account): static
+    {
+        if (is_null($account)) {
+            array_push($this->openAPINullablesSetToNull, 'account');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('account', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['account'] = $account;
+
+        return $this;
+    }
 
     /**
      * Gets id

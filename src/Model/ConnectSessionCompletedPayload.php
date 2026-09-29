@@ -1,6 +1,6 @@
 <?php
 /**
- * Property
+ * ConnectSessionCompletedPayload
  *
  * PHP version 8.1
  *
@@ -34,15 +34,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * Property Class Doc Comment
+ * ConnectSessionCompletedPayload Class Doc Comment
  *
- * @description A vacation rental property in your Repull workspace. Backed by the core &#x60;listings&#x60; row — enriched per-PMS fields (bedrooms, property type, provider id, etc.) live in provider-specific detail tables and are NOT returned here.  Field availability differs by endpoint: - &#x60;channels&#x60; is returned by the list endpoint (&#x60;GET /v1/properties&#x60;) only. - &#x60;latitude&#x60;, &#x60;longitude&#x60;, &#x60;createdAt&#x60;, and &#x60;amenities&#x60; are returned by the detail endpoint (&#x60;GET /v1/properties/{id}&#x60;) only. &#x60;amenities&#x60; requires &#x60;?include&#x3D;amenities&#x60;.  An **inactive** property (&#x60;status: inactive&#x60;) appears only in the list endpoint, and only when &#x60;?status&#x3D;inactive|all&#x60; asks for it. Such a row carries identity fields only — &#x60;id&#x60;, &#x60;name&#x60;, &#x60;status&#x60;, &#x60;lifecycleStatus&#x60;, &#x60;channels&#x60;, &#x60;accounts&#x60;, &#x60;updatedAt&#x60; — so every other field is absent until the property is activated. Every other endpoint answers &#x60;403 listing_inactive&#x60; for it.
+ * @description Payload for &#x60;connect.session.completed&#x60;. A user finished a Connect session, on any channel or PMS. Use &#x60;state&#x60; (your token from session creation) or &#x60;sessionId&#x60; to tie the connection to your own user; the account it names is keyed the same way as every other event&#39;s &#x60;account&#x60; block.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class Property implements ModelInterface, ArrayAccess, JsonSerializable
+class ConnectSessionCompletedPayload implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'Property';
+    protected static string $openAPIModelName = 'ConnectSessionCompletedPayload';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,20 +59,13 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'accounts' => '\Repull\Model\RecordAccount[]',
-        'id' => 'string',
-        'name' => 'string',
-        'address' => 'string',
-        'city' => 'string',
-        'latitude' => 'string',
-        'longitude' => 'string',
-        'currency' => 'string',
-        'status' => 'string',
-        'lifecycle_status' => 'string',
-        'created_at' => '\DateTime',
-        'updated_at' => '\DateTime',
-        'channels' => 'string[]',
-        'amenities' => '\Repull\Model\ListingAmenity[]'
+        'session_id' => 'string',
+        'state' => 'string',
+        'provider' => 'string',
+        'external_account_id' => 'string',
+        'connection_id' => 'int',
+        'purpose' => 'string',
+        'completed_at' => '\DateTime'
     ];
 
     /**
@@ -81,20 +74,13 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'accounts' => null,
-        'id' => null,
-        'name' => null,
-        'address' => null,
-        'city' => null,
-        'latitude' => null,
-        'longitude' => null,
-        'currency' => null,
-        'status' => null,
-        'lifecycle_status' => null,
-        'created_at' => 'date-time',
-        'updated_at' => 'date-time',
-        'channels' => null,
-        'amenities' => null
+        'session_id' => null,
+        'state' => null,
+        'provider' => null,
+        'external_account_id' => null,
+        'connection_id' => null,
+        'purpose' => null,
+        'completed_at' => 'date-time'
     ];
 
     /**
@@ -103,20 +89,13 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'accounts' => false,
-        'id' => false,
-        'name' => false,
-        'address' => true,
-        'city' => true,
-        'latitude' => true,
-        'longitude' => true,
-        'currency' => true,
-        'status' => false,
-        'lifecycle_status' => true,
-        'created_at' => false,
-        'updated_at' => false,
-        'channels' => false,
-        'amenities' => false
+        'session_id' => false,
+        'state' => true,
+        'provider' => true,
+        'external_account_id' => true,
+        'connection_id' => true,
+        'purpose' => false,
+        'completed_at' => false
     ];
 
     /**
@@ -195,20 +174,13 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'accounts' => 'accounts',
-        'id' => 'id',
-        'name' => 'name',
-        'address' => 'address',
-        'city' => 'city',
-        'latitude' => 'latitude',
-        'longitude' => 'longitude',
-        'currency' => 'currency',
-        'status' => 'status',
-        'lifecycle_status' => 'lifecycleStatus',
-        'created_at' => 'createdAt',
-        'updated_at' => 'updatedAt',
-        'channels' => 'channels',
-        'amenities' => 'amenities'
+        'session_id' => 'sessionId',
+        'state' => 'state',
+        'provider' => 'provider',
+        'external_account_id' => 'externalAccountId',
+        'connection_id' => 'connectionId',
+        'purpose' => 'purpose',
+        'completed_at' => 'completedAt'
     ];
 
     /**
@@ -217,20 +189,13 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
-        'accounts' => 'setAccounts',
-        'id' => 'setId',
-        'name' => 'setName',
-        'address' => 'setAddress',
-        'city' => 'setCity',
-        'latitude' => 'setLatitude',
-        'longitude' => 'setLongitude',
-        'currency' => 'setCurrency',
-        'status' => 'setStatus',
-        'lifecycle_status' => 'setLifecycleStatus',
-        'created_at' => 'setCreatedAt',
-        'updated_at' => 'setUpdatedAt',
-        'channels' => 'setChannels',
-        'amenities' => 'setAmenities'
+        'session_id' => 'setSessionId',
+        'state' => 'setState',
+        'provider' => 'setProvider',
+        'external_account_id' => 'setExternalAccountId',
+        'connection_id' => 'setConnectionId',
+        'purpose' => 'setPurpose',
+        'completed_at' => 'setCompletedAt'
     ];
 
     /**
@@ -239,20 +204,13 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
-        'accounts' => 'getAccounts',
-        'id' => 'getId',
-        'name' => 'getName',
-        'address' => 'getAddress',
-        'city' => 'getCity',
-        'latitude' => 'getLatitude',
-        'longitude' => 'getLongitude',
-        'currency' => 'getCurrency',
-        'status' => 'getStatus',
-        'lifecycle_status' => 'getLifecycleStatus',
-        'created_at' => 'getCreatedAt',
-        'updated_at' => 'getUpdatedAt',
-        'channels' => 'getChannels',
-        'amenities' => 'getAmenities'
+        'session_id' => 'getSessionId',
+        'state' => 'getState',
+        'provider' => 'getProvider',
+        'external_account_id' => 'getExternalAccountId',
+        'connection_id' => 'getConnectionId',
+        'purpose' => 'getPurpose',
+        'completed_at' => 'getCompletedAt'
     ];
 
     /**
@@ -287,19 +245,19 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         return self::$openAPIModelName;
     }
 
-    public const STATUS_ACTIVE = 'active';
-    public const STATUS_INACTIVE = 'inactive';
+    public const PURPOSE_CONNECT = 'connect';
+    public const PURPOSE_MIGRATE = 'migrate';
 
     /**
      * Gets allowable values of the enum
      *
      * @return string[]
      */
-    public static function getStatusAllowableValues()
+    public static function getPurposeAllowableValues()
     {
         return [
-            self::STATUS_ACTIVE,
-            self::STATUS_INACTIVE,
+            self::PURPOSE_CONNECT,
+            self::PURPOSE_MIGRATE,
         ];
     }
 
@@ -317,20 +275,13 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('accounts', $data ?? [], null);
-        $this->setIfExists('id', $data ?? [], null);
-        $this->setIfExists('name', $data ?? [], null);
-        $this->setIfExists('address', $data ?? [], null);
-        $this->setIfExists('city', $data ?? [], null);
-        $this->setIfExists('latitude', $data ?? [], null);
-        $this->setIfExists('longitude', $data ?? [], null);
-        $this->setIfExists('currency', $data ?? [], null);
-        $this->setIfExists('status', $data ?? [], null);
-        $this->setIfExists('lifecycle_status', $data ?? [], null);
-        $this->setIfExists('created_at', $data ?? [], null);
-        $this->setIfExists('updated_at', $data ?? [], null);
-        $this->setIfExists('channels', $data ?? [], null);
-        $this->setIfExists('amenities', $data ?? [], null);
+        $this->setIfExists('session_id', $data ?? [], null);
+        $this->setIfExists('state', $data ?? [], null);
+        $this->setIfExists('provider', $data ?? [], null);
+        $this->setIfExists('external_account_id', $data ?? [], null);
+        $this->setIfExists('connection_id', $data ?? [], null);
+        $this->setIfExists('purpose', $data ?? [], null);
+        $this->setIfExists('completed_at', $data ?? [], null);
     }
 
     /**
@@ -358,11 +309,11 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
-        $allowedValues = self::getStatusAllowableValues();
-        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
+        $allowedValues = self::getPurposeAllowableValues();
+        if (!is_null($this->container['purpose']) && !in_array($this->container['purpose'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'status', must be one of '%s'",
-                $this->container['status'],
+                "invalid value '%s' for 'purpose', must be one of '%s'",
+                $this->container['purpose'],
                 implode("', '", $allowedValues)
             );
         }
@@ -380,422 +331,219 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
 
 
     /**
-     * Gets accounts
+     * Gets session_id
      *
-     * @return \Repull\Model\RecordAccount[]|null
+     * @return string|null
      */
-    public function getAccounts(): ?array
+    public function getSessionId(): ?string
     {
-        return $this->container['accounts'];
+        return $this->container['session_id'];
     }
 
     /**
-     * Sets accounts
+     * Sets session_id
      *
-     * @param \Repull\Model\RecordAccount[]|null $accounts The connected account the property belongs to on each channel it is on. List endpoint.
+     * @param string|null $session_id session_id
      *
      * @return $this
      */
-    public function setAccounts(?array $accounts): static
+    public function setSessionId(?string $session_id): static
     {
-        if (is_null($accounts)) {
-            throw new InvalidArgumentException('non-nullable accounts cannot be null');
+        if (is_null($session_id)) {
+            throw new InvalidArgumentException('non-nullable session_id cannot be null');
         }
-        $this->container['accounts'] = $accounts;
+        $this->container['session_id'] = $session_id;
 
         return $this;
     }
 
     /**
-     * Gets id
+     * Gets state
      *
      * @return string|null
      */
-    public function getId(): ?string
+    public function getState(): ?string
     {
-        return $this->container['id'];
+        return $this->container['state'];
     }
 
     /**
-     * Sets id
+     * Sets state
      *
-     * @param string|null $id Internal Repull property ID. Equal to the listing id (`listings.id`); the same integer is used as `listingId` on reservations and `propertyId` on availability.
+     * @param string|null $state The `state` you passed when creating the session.
      *
      * @return $this
      */
-    public function setId(?string $id): static
+    public function setState(?string $state): static
     {
-        if (is_null($id)) {
-            throw new InvalidArgumentException('non-nullable id cannot be null');
-        }
-        $this->container['id'] = $id;
-
-        return $this;
-    }
-
-    /**
-     * Gets name
-     *
-     * @return string|null
-     */
-    public function getName(): ?string
-    {
-        return $this->container['name'];
-    }
-
-    /**
-     * Sets name
-     *
-     * @param string|null $name Property name
-     *
-     * @return $this
-     */
-    public function setName(?string $name): static
-    {
-        if (is_null($name)) {
-            throw new InvalidArgumentException('non-nullable name cannot be null');
-        }
-        $this->container['name'] = $name;
-
-        return $this;
-    }
-
-    /**
-     * Gets address
-     *
-     * @return string|null
-     */
-    public function getAddress(): ?string
-    {
-        return $this->container['address'];
-    }
-
-    /**
-     * Sets address
-     *
-     * @param string|null $address Street address (from the listing's `street` field).
-     *
-     * @return $this
-     */
-    public function setAddress(?string $address): static
-    {
-        if (is_null($address)) {
-            array_push($this->openAPINullablesSetToNull, 'address');
+        if (is_null($state)) {
+            array_push($this->openAPINullablesSetToNull, 'state');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('address', $nullablesSetToNull);
+            $index = array_search('state', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['address'] = $address;
+        $this->container['state'] = $state;
 
         return $this;
     }
 
     /**
-     * Gets city
+     * Gets provider
      *
      * @return string|null
      */
-    public function getCity(): ?string
+    public function getProvider(): ?string
     {
-        return $this->container['city'];
+        return $this->container['provider'];
     }
 
     /**
-     * Sets city
+     * Sets provider
      *
-     * @param string|null $city city
+     * @param string|null $provider Channel or PMS: airbnb, booking, booking_extranet, vrbo, plumguide, hostaway, …
      *
      * @return $this
      */
-    public function setCity(?string $city): static
+    public function setProvider(?string $provider): static
     {
-        if (is_null($city)) {
-            array_push($this->openAPINullablesSetToNull, 'city');
+        if (is_null($provider)) {
+            array_push($this->openAPINullablesSetToNull, 'provider');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('city', $nullablesSetToNull);
+            $index = array_search('provider', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['city'] = $city;
+        $this->container['provider'] = $provider;
 
         return $this;
     }
 
     /**
-     * Gets latitude
+     * Gets external_account_id
      *
      * @return string|null
      */
-    public function getLatitude(): ?string
+    public function getExternalAccountId(): ?string
     {
-        return $this->container['latitude'];
+        return $this->container['external_account_id'];
     }
 
     /**
-     * Sets latitude
+     * Sets external_account_id
      *
-     * @param string|null $latitude Detail endpoint only. Decimal degrees, as a string.
+     * @param string|null $external_account_id The provider's own account id — Airbnb host id, Booking.com hotel id, Vrbo account id, or the PMS account.
      *
      * @return $this
      */
-    public function setLatitude(?string $latitude): static
+    public function setExternalAccountId(?string $external_account_id): static
     {
-        if (is_null($latitude)) {
-            array_push($this->openAPINullablesSetToNull, 'latitude');
+        if (is_null($external_account_id)) {
+            array_push($this->openAPINullablesSetToNull, 'external_account_id');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('latitude', $nullablesSetToNull);
+            $index = array_search('external_account_id', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['latitude'] = $latitude;
+        $this->container['external_account_id'] = $external_account_id;
 
         return $this;
     }
 
     /**
-     * Gets longitude
+     * Gets connection_id
      *
-     * @return string|null
+     * @return int|null
      */
-    public function getLongitude(): ?string
+    public function getConnectionId(): ?int
     {
-        return $this->container['longitude'];
+        return $this->container['connection_id'];
     }
 
     /**
-     * Sets longitude
+     * Sets connection_id
      *
-     * @param string|null $longitude Detail endpoint only. Decimal degrees, as a string.
+     * @param int|null $connection_id Repull connection id, when the account has one (the `X-Account-Id` value).
      *
      * @return $this
      */
-    public function setLongitude(?string $longitude): static
+    public function setConnectionId(?int $connection_id): static
     {
-        if (is_null($longitude)) {
-            array_push($this->openAPINullablesSetToNull, 'longitude');
+        if (is_null($connection_id)) {
+            array_push($this->openAPINullablesSetToNull, 'connection_id');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('longitude', $nullablesSetToNull);
+            $index = array_search('connection_id', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['longitude'] = $longitude;
+        $this->container['connection_id'] = $connection_id;
 
         return $this;
     }
 
     /**
-     * Gets currency
+     * Gets purpose
      *
      * @return string|null
      */
-    public function getCurrency(): ?string
+    public function getPurpose(): ?string
     {
-        return $this->container['currency'];
+        return $this->container['purpose'];
     }
 
     /**
-     * Sets currency
+     * Sets purpose
      *
-     * @param string|null $currency ISO 4217 currency code for this property's pricing.
+     * @param string|null $purpose purpose
      *
      * @return $this
      */
-    public function setCurrency(?string $currency): static
+    public function setPurpose(?string $purpose): static
     {
-        if (is_null($currency)) {
-            array_push($this->openAPINullablesSetToNull, 'currency');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('currency', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['currency'] = $currency;
-
-        return $this;
-    }
-
-    /**
-     * Gets status
-     *
-     * @return string|null
-     */
-    public function getStatus(): ?string
-    {
-        return $this->container['status'];
-    }
-
-    /**
-     * Sets status
-     *
-     * @param string|null $status Derived from `listings.active`.
-     *
-     * @return $this
-     */
-    public function setStatus(?string $status): static
-    {
-        if (is_null($status)) {
-            throw new InvalidArgumentException('non-nullable status cannot be null');
+        if (is_null($purpose)) {
+            throw new InvalidArgumentException('non-nullable purpose cannot be null');
         }
         // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['status'] = $status;
+        $this->container['purpose'] = $purpose;
 
         return $this;
     }
 
     /**
-     * Gets lifecycle_status
-     *
-     * @return string|null
-     */
-    public function getLifecycleStatus(): ?string
-    {
-        return $this->container['lifecycle_status'];
-    }
-
-    /**
-     * Sets lifecycle_status
-     *
-     * @param string|null $lifecycle_status The listing's lifecycle state (e.g. `live`, `draft`, `archived`).
-     *
-     * @return $this
-     */
-    public function setLifecycleStatus(?string $lifecycle_status): static
-    {
-        if (is_null($lifecycle_status)) {
-            array_push($this->openAPINullablesSetToNull, 'lifecycle_status');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('lifecycle_status', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['lifecycle_status'] = $lifecycle_status;
-
-        return $this;
-    }
-
-    /**
-     * Gets created_at
+     * Gets completed_at
      *
      * @return \DateTime|null
      */
-    public function getCreatedAt(): ?\DateTime
+    public function getCompletedAt(): ?\DateTime
     {
-        return $this->container['created_at'];
+        return $this->container['completed_at'];
     }
 
     /**
-     * Sets created_at
+     * Sets completed_at
      *
-     * @param \DateTime|null $created_at When the property was created. Detail endpoint only.
+     * @param \DateTime|null $completed_at completed_at
      *
      * @return $this
      */
-    public function setCreatedAt(?\DateTime $created_at): static
+    public function setCompletedAt(?\DateTime $completed_at): static
     {
-        if (is_null($created_at)) {
-            throw new InvalidArgumentException('non-nullable created_at cannot be null');
+        if (is_null($completed_at)) {
+            throw new InvalidArgumentException('non-nullable completed_at cannot be null');
         }
-        $this->container['created_at'] = $created_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets updated_at
-     *
-     * @return \DateTime|null
-     */
-    public function getUpdatedAt(): ?\DateTime
-    {
-        return $this->container['updated_at'];
-    }
-
-    /**
-     * Sets updated_at
-     *
-     * @param \DateTime|null $updated_at Last time this property record changed. Feed the newest value you have seen back as `?updated_since=` to poll for changes only. List endpoint (`GET /v1/properties`) only.
-     *
-     * @return $this
-     */
-    public function setUpdatedAt(?\DateTime $updated_at): static
-    {
-        if (is_null($updated_at)) {
-            throw new InvalidArgumentException('non-nullable updated_at cannot be null');
-        }
-        $this->container['updated_at'] = $updated_at;
-
-        return $this;
-    }
-
-    /**
-     * Gets channels
-     *
-     * @return string[]|null
-     */
-    public function getChannels(): ?array
-    {
-        return $this->container['channels'];
-    }
-
-    /**
-     * Sets channels
-     *
-     * @param string[]|null $channels OTAs/channels this property is actively published on, as channel-name strings (e.g. `airbnb`, `booking`, `vrbo`). Empty array when the property has no active channel links. List endpoint (`GET /v1/properties`) only.
-     *
-     * @return $this
-     */
-    public function setChannels(?array $channels): static
-    {
-        if (is_null($channels)) {
-            throw new InvalidArgumentException('non-nullable channels cannot be null');
-        }
-        $this->container['channels'] = $channels;
-
-        return $this;
-    }
-
-    /**
-     * Gets amenities
-     *
-     * @return \Repull\Model\ListingAmenity[]|null
-     */
-    public function getAmenities(): ?array
-    {
-        return $this->container['amenities'];
-    }
-
-    /**
-     * Sets amenities
-     *
-     * @param \Repull\Model\ListingAmenity[]|null $amenities Amenity rows for the property. Detail endpoint only, and **only present when the caller passes `?include=amenities`.** Empty array (`[]`) when the property has no amenity rows.
-     *
-     * @return $this
-     */
-    public function setAmenities(?array $amenities): static
-    {
-        if (is_null($amenities)) {
-            throw new InvalidArgumentException('non-nullable amenities cannot be null');
-        }
-        $this->container['amenities'] = $amenities;
+        $this->container['completed_at'] = $completed_at;
 
         return $this;
     }

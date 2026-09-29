@@ -1,6 +1,6 @@
 <?php
 /**
- * CreateConnectSessionRequest
+ * ConnectSessionCompletedEvent
  *
  * PHP version 8.1
  *
@@ -34,14 +34,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * CreateConnectSessionRequest Class Doc Comment
+ * ConnectSessionCompletedEvent Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class ConnectSessionCompletedEvent implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'createConnectSession_request';
+    protected static string $openAPIModelName = 'ConnectSessionCompletedEvent';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -58,15 +58,12 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'redirect_url' => 'string',
-        'state' => 'string',
-        'access_type' => 'string',
-        'allowed_providers' => 'string[]',
-        'locale' => 'string',
-        'purpose' => 'string',
-        'workspace' => '\Repull\Model\CreateConnectSessionRequestWorkspace',
-        'copy' => '\Repull\Model\CreateConnectSessionRequestCopy',
-        'scope' => 'string[]'
+        'event' => 'string',
+        'event_id' => 'string',
+        'api_version' => 'string',
+        'timestamp' => '\DateTime',
+        'account' => '\Repull\Model\WebhookEventAccount',
+        'data' => '\Repull\Model\ConnectSessionCompletedPayload'
     ];
 
     /**
@@ -75,15 +72,12 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'redirect_url' => 'uri',
-        'state' => null,
-        'access_type' => null,
-        'allowed_providers' => null,
-        'locale' => null,
-        'purpose' => null,
-        'workspace' => null,
-        'copy' => null,
-        'scope' => null
+        'event' => null,
+        'event_id' => 'uuid',
+        'api_version' => null,
+        'timestamp' => 'date-time',
+        'account' => null,
+        'data' => null
     ];
 
     /**
@@ -92,15 +86,12 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'redirect_url' => false,
-        'state' => true,
-        'access_type' => false,
-        'allowed_providers' => true,
-        'locale' => true,
-        'purpose' => false,
-        'workspace' => false,
-        'copy' => false,
-        'scope' => false
+        'event' => false,
+        'event_id' => false,
+        'api_version' => false,
+        'timestamp' => false,
+        'account' => true,
+        'data' => false
     ];
 
     /**
@@ -179,15 +170,12 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'redirect_url' => 'redirectUrl',
-        'state' => 'state',
-        'access_type' => 'accessType',
-        'allowed_providers' => 'allowedProviders',
-        'locale' => 'locale',
-        'purpose' => 'purpose',
-        'workspace' => 'workspace',
-        'copy' => 'copy',
-        'scope' => 'scope'
+        'event' => 'event',
+        'event_id' => 'eventId',
+        'api_version' => 'apiVersion',
+        'timestamp' => 'timestamp',
+        'account' => 'account',
+        'data' => 'data'
     ];
 
     /**
@@ -196,15 +184,12 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $setters = [
-        'redirect_url' => 'setRedirectUrl',
-        'state' => 'setState',
-        'access_type' => 'setAccessType',
-        'allowed_providers' => 'setAllowedProviders',
-        'locale' => 'setLocale',
-        'purpose' => 'setPurpose',
-        'workspace' => 'setWorkspace',
-        'copy' => 'setCopy',
-        'scope' => 'setScope'
+        'event' => 'setEvent',
+        'event_id' => 'setEventId',
+        'api_version' => 'setApiVersion',
+        'timestamp' => 'setTimestamp',
+        'account' => 'setAccount',
+        'data' => 'setData'
     ];
 
     /**
@@ -213,15 +198,12 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $getters = [
-        'redirect_url' => 'getRedirectUrl',
-        'state' => 'getState',
-        'access_type' => 'getAccessType',
-        'allowed_providers' => 'getAllowedProviders',
-        'locale' => 'getLocale',
-        'purpose' => 'getPurpose',
-        'workspace' => 'getWorkspace',
-        'copy' => 'getCopy',
-        'scope' => 'getScope'
+        'event' => 'getEvent',
+        'event_id' => 'getEventId',
+        'api_version' => 'getApiVersion',
+        'timestamp' => 'getTimestamp',
+        'account' => 'getAccount',
+        'data' => 'getData'
     ];
 
     /**
@@ -256,77 +238,17 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         return self::$openAPIModelName;
     }
 
-    public const ACCESS_TYPE_FULL_ACCESS = 'full_access';
-    public const ACCESS_TYPE_MESSAGING = 'messaging';
-    public const ACCESS_TYPE_READ_ONLY = 'read_only';
-    public const PURPOSE_CONNECT = 'connect';
-    public const PURPOSE_MIGRATE = 'migrate';
-    public const SCOPE_LISTINGS = 'listings';
-    public const SCOPE_PHOTOS = 'photos';
-    public const SCOPE_AMENITIES = 'amenities';
-    public const SCOPE_ROOMS = 'rooms';
-    public const SCOPE_HOUSE_RULES = 'houseRules';
-    public const SCOPE_FEES = 'fees';
-    public const SCOPE_TAXES = 'taxes';
-    public const SCOPE_OWNERS = 'owners';
-    public const SCOPE_GUESTS = 'guests';
-    public const SCOPE_RESERVATIONS = 'reservations';
-    public const SCOPE_PAYMENTS = 'payments';
-    public const SCOPE_CONVERSATIONS = 'conversations';
-    public const SCOPE_CALENDAR = 'calendar';
-    public const SCOPE_RATES = 'rates';
-    public const SCOPE_CHANNEL_IDS = 'channelIds';
+    public const EVENT_CONNECT_SESSION_COMPLETED = 'connect.session.completed';
 
     /**
      * Gets allowable values of the enum
      *
      * @return string[]
      */
-    public static function getAccessTypeAllowableValues()
+    public static function getEventAllowableValues()
     {
         return [
-            self::ACCESS_TYPE_FULL_ACCESS,
-            self::ACCESS_TYPE_MESSAGING,
-            self::ACCESS_TYPE_READ_ONLY,
-        ];
-    }
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getPurposeAllowableValues()
-    {
-        return [
-            self::PURPOSE_CONNECT,
-            self::PURPOSE_MIGRATE,
-        ];
-    }
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getScopeAllowableValues()
-    {
-        return [
-            self::SCOPE_LISTINGS,
-            self::SCOPE_PHOTOS,
-            self::SCOPE_AMENITIES,
-            self::SCOPE_ROOMS,
-            self::SCOPE_HOUSE_RULES,
-            self::SCOPE_FEES,
-            self::SCOPE_TAXES,
-            self::SCOPE_OWNERS,
-            self::SCOPE_GUESTS,
-            self::SCOPE_RESERVATIONS,
-            self::SCOPE_PAYMENTS,
-            self::SCOPE_CONVERSATIONS,
-            self::SCOPE_CALENDAR,
-            self::SCOPE_RATES,
-            self::SCOPE_CHANNEL_IDS,
+            self::EVENT_CONNECT_SESSION_COMPLETED,
         ];
     }
 
@@ -344,15 +266,12 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('redirect_url', $data ?? [], null);
-        $this->setIfExists('state', $data ?? [], null);
-        $this->setIfExists('access_type', $data ?? [], null);
-        $this->setIfExists('allowed_providers', $data ?? [], null);
-        $this->setIfExists('locale', $data ?? [], null);
-        $this->setIfExists('purpose', $data ?? [], 'connect');
-        $this->setIfExists('workspace', $data ?? [], null);
-        $this->setIfExists('copy', $data ?? [], null);
-        $this->setIfExists('scope', $data ?? [], null);
+        $this->setIfExists('event', $data ?? [], null);
+        $this->setIfExists('event_id', $data ?? [], null);
+        $this->setIfExists('api_version', $data ?? [], null);
+        $this->setIfExists('timestamp', $data ?? [], null);
+        $this->setIfExists('account', $data ?? [], null);
+        $this->setIfExists('data', $data ?? [], null);
     }
 
     /**
@@ -380,27 +299,30 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     {
         $invalidProperties = [];
 
-        if ($this->container['redirect_url'] === null) {
-            $invalidProperties[] = "'redirect_url' can't be null";
+        if ($this->container['event'] === null) {
+            $invalidProperties[] = "'event' can't be null";
         }
-        $allowedValues = self::getAccessTypeAllowableValues();
-        if (!is_null($this->container['access_type']) && !in_array($this->container['access_type'], $allowedValues, true)) {
+        $allowedValues = self::getEventAllowableValues();
+        if (!is_null($this->container['event']) && !in_array($this->container['event'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'access_type', must be one of '%s'",
-                $this->container['access_type'],
+                "invalid value '%s' for 'event', must be one of '%s'",
+                $this->container['event'],
                 implode("', '", $allowedValues)
             );
         }
 
-        $allowedValues = self::getPurposeAllowableValues();
-        if (!is_null($this->container['purpose']) && !in_array($this->container['purpose'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'purpose', must be one of '%s'",
-                $this->container['purpose'],
-                implode("', '", $allowedValues)
-            );
+        if ($this->container['event_id'] === null) {
+            $invalidProperties[] = "'event_id' can't be null";
         }
-
+        if ($this->container['api_version'] === null) {
+            $invalidProperties[] = "'api_version' can't be null";
+        }
+        if ($this->container['timestamp'] === null) {
+            $invalidProperties[] = "'timestamp' can't be null";
+        }
+        if ($this->container['data'] === null) {
+            $invalidProperties[] = "'data' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -414,276 +336,171 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
 
 
     /**
-     * Gets redirect_url
+     * Gets event
      *
      * @return string
      */
-    public function getRedirectUrl(): string
+    public function getEvent(): string
     {
-        return $this->container['redirect_url'];
+        return $this->container['event'];
     }
 
     /**
-     * Sets redirect_url
+     * Sets event
      *
-     * @param string $redirect_url Where to send the user after they finish (or cancel). Status query params are appended.
+     * @param string $event The event name. This field is `event`, not `type`.
      *
      * @return $this
      */
-    public function setRedirectUrl(string $redirect_url): static
+    public function setEvent(string $event): static
     {
-        if (is_null($redirect_url)) {
-            throw new InvalidArgumentException('non-nullable redirect_url cannot be null');
-        }
-        $this->container['redirect_url'] = $redirect_url;
-
-        return $this;
-    }
-
-    /**
-     * Gets state
-     *
-     * @return string|null
-     */
-    public function getState(): ?string
-    {
-        return $this->container['state'];
-    }
-
-    /**
-     * Sets state
-     *
-     * @param string|null $state Your own correlation token, e.g. your user id (at most 500 characters). Echoed in this response, on the redirect back (`&state=`), in the popup message, and in the `connect.session.completed` webhook.
-     *
-     * @return $this
-     */
-    public function setState(?string $state): static
-    {
-        if (is_null($state)) {
-            array_push($this->openAPINullablesSetToNull, 'state');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('state', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['state'] = $state;
-
-        return $this;
-    }
-
-    /**
-     * Gets access_type
-     *
-     * @return string|null
-     */
-    public function getAccessType(): ?string
-    {
-        return $this->container['access_type'];
-    }
-
-    /**
-     * Sets access_type
-     *
-     * @param string|null $access_type What the connection may do. Airbnb: the OAuth scope tier. Vrbo: `messaging` (or `read_only`) imports bookings and messages and never pushes the calendar; `full_access` also pushes prices and availability. Setting it locks the choice; omit it to let the host choose on the hosted page (default `full_access`).
-     *
-     * @return $this
-     */
-    public function setAccessType(?string $access_type): static
-    {
-        if (is_null($access_type)) {
-            throw new InvalidArgumentException('non-nullable access_type cannot be null');
+        if (is_null($event)) {
+            throw new InvalidArgumentException('non-nullable event cannot be null');
         }
         // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['access_type'] = $access_type;
+        $this->container['event'] = $event;
 
         return $this;
     }
 
     /**
-     * Gets allowed_providers
+     * Gets event_id
      *
-     * @return string[]|null
+     * @return string
      */
-    public function getAllowedProviders(): ?array
+    public function getEventId(): string
     {
-        return $this->container['allowed_providers'];
+        return $this->container['event_id'];
     }
 
     /**
-     * Sets allowed_providers
+     * Sets event_id
      *
-     * @param string[]|null $allowed_providers Optional whitelist of provider IDs the picker should expose. Omit to show every channel in the registry.
+     * @param string $event_id Stable across every delivery and replay of this logical event — dedupe on it.
      *
      * @return $this
      */
-    public function setAllowedProviders(?array $allowed_providers): static
+    public function setEventId(string $event_id): static
     {
-        if (is_null($allowed_providers)) {
-            array_push($this->openAPINullablesSetToNull, 'allowed_providers');
+        if (is_null($event_id)) {
+            throw new InvalidArgumentException('non-nullable event_id cannot be null');
+        }
+        $this->container['event_id'] = $event_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets api_version
+     *
+     * @return string
+     */
+    public function getApiVersion(): string
+    {
+        return $this->container['api_version'];
+    }
+
+    /**
+     * Sets api_version
+     *
+     * @param string $api_version api_version
+     *
+     * @return $this
+     */
+    public function setApiVersion(string $api_version): static
+    {
+        if (is_null($api_version)) {
+            throw new InvalidArgumentException('non-nullable api_version cannot be null');
+        }
+        $this->container['api_version'] = $api_version;
+
+        return $this;
+    }
+
+    /**
+     * Gets timestamp
+     *
+     * @return \DateTime
+     */
+    public function getTimestamp(): \DateTime
+    {
+        return $this->container['timestamp'];
+    }
+
+    /**
+     * Sets timestamp
+     *
+     * @param \DateTime $timestamp When this delivery was built.
+     *
+     * @return $this
+     */
+    public function setTimestamp(\DateTime $timestamp): static
+    {
+        if (is_null($timestamp)) {
+            throw new InvalidArgumentException('non-nullable timestamp cannot be null');
+        }
+        $this->container['timestamp'] = $timestamp;
+
+        return $this;
+    }
+
+    /**
+     * Gets account
+     *
+     * @return \Repull\Model\WebhookEventAccount|null
+     */
+    public function getAccount(): ?\Repull\Model\WebhookEventAccount
+    {
+        return $this->container['account'];
+    }
+
+    /**
+     * Sets account
+     *
+     * @param \Repull\Model\WebhookEventAccount|null $account account
+     *
+     * @return $this
+     */
+    public function setAccount(?\Repull\Model\WebhookEventAccount $account): static
+    {
+        if (is_null($account)) {
+            array_push($this->openAPINullablesSetToNull, 'account');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('allowed_providers', $nullablesSetToNull);
+            $index = array_search('account', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['allowed_providers'] = $allowed_providers;
+        $this->container['account'] = $account;
 
         return $this;
     }
 
     /**
-     * Gets locale
+     * Gets data
      *
-     * @return string|null
+     * @return \Repull\Model\ConnectSessionCompletedPayload
      */
-    public function getLocale(): ?string
+    public function getData(): \Repull\Model\ConnectSessionCompletedPayload
     {
-        return $this->container['locale'];
+        return $this->container['data'];
     }
 
     /**
-     * Sets locale
+     * Sets data
      *
-     * @param string|null $locale Optional UI language for the hosted Connect pages. Accepts any supported locale code (currently `en`, `fr`). When set it pins the language for the whole flow, overriding the workspace `default_language`. Unknown codes are ignored and the page falls back to the workspace default, then `Accept-Language`, then `en`. The end user can still override per-visit with a `?locale=` query param on the hosted page.
+     * @param \Repull\Model\ConnectSessionCompletedPayload $data data
      *
      * @return $this
      */
-    public function setLocale(?string $locale): static
+    public function setData(\Repull\Model\ConnectSessionCompletedPayload $data): static
     {
-        if (is_null($locale)) {
-            array_push($this->openAPINullablesSetToNull, 'locale');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('locale', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
+        if (is_null($data)) {
+            throw new InvalidArgumentException('non-nullable data cannot be null');
         }
-        $this->container['locale'] = $locale;
-
-        return $this;
-    }
-
-    /**
-     * Gets purpose
-     *
-     * @return string|null
-     */
-    public function getPurpose(): ?string
-    {
-        return $this->container['purpose'];
-    }
-
-    /**
-     * Sets purpose
-     *
-     * @param string|null $purpose `migrate` starts a Repull Migrate session: the property manager connects their current PMS (or channel) and their data is copied into a new workspace of theirs, which you read with `X-Workspace-Id`. The hosted pages use migration wording, and after connecting they show the import's progress.
-     *
-     * @return $this
-     */
-    public function setPurpose(?string $purpose): static
-    {
-        if (is_null($purpose)) {
-            throw new InvalidArgumentException('non-nullable purpose cannot be null');
-        }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['purpose'] = $purpose;
-
-        return $this;
-    }
-
-    /**
-     * Gets workspace
-     *
-     * @return \Repull\Model\CreateConnectSessionRequestWorkspace|null
-     */
-    public function getWorkspace(): ?\Repull\Model\CreateConnectSessionRequestWorkspace
-    {
-        return $this->container['workspace'];
-    }
-
-    /**
-     * Sets workspace
-     *
-     * @param \Repull\Model\CreateConnectSessionRequestWorkspace|null $workspace workspace
-     *
-     * @return $this
-     */
-    public function setWorkspace(?\Repull\Model\CreateConnectSessionRequestWorkspace $workspace): static
-    {
-        if (is_null($workspace)) {
-            throw new InvalidArgumentException('non-nullable workspace cannot be null');
-        }
-        $this->container['workspace'] = $workspace;
-
-        return $this;
-    }
-
-    /**
-     * Gets copy
-     *
-     * @return \Repull\Model\CreateConnectSessionRequestCopy|null
-     */
-    public function getCopy(): ?\Repull\Model\CreateConnectSessionRequestCopy
-    {
-        return $this->container['copy'];
-    }
-
-    /**
-     * Sets copy
-     *
-     * @param \Repull\Model\CreateConnectSessionRequestCopy|null $copy copy
-     *
-     * @return $this
-     */
-    public function setCopy(?\Repull\Model\CreateConnectSessionRequestCopy $copy): static
-    {
-        if (is_null($copy)) {
-            throw new InvalidArgumentException('non-nullable copy cannot be null');
-        }
-        $this->container['copy'] = $copy;
-
-        return $this;
-    }
-
-    /**
-     * Gets scope
-     *
-     * @return string[]|null
-     */
-    public function getScope(): ?array
-    {
-        return $this->container['scope'];
-    }
-
-    /**
-     * Sets scope
-     *
-     * @param string[]|null $scope Migrate only — what you want brought across, listed to the property manager before they connect.
-     *
-     * @return $this
-     */
-    public function setScope(?array $scope): static
-    {
-        if (is_null($scope)) {
-            throw new InvalidArgumentException('non-nullable scope cannot be null');
-        }
-        $allowedValues = self::getScopeAllowableValues();
-        if (array_diff($scope, $allowedValues)) {
-            throw new InvalidArgumentException(
-                sprintf(
-                    "Invalid value for 'scope', must be one of '%s'",
-                    implode("', '", $allowedValues)
-                )
-            );
-        }
-        $this->container['scope'] = $scope;
+        $this->container['data'] = $data;
 
         return $this;
     }

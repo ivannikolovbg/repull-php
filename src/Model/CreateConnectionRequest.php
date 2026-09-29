@@ -61,7 +61,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     protected static array $openAPITypes = [
         'redirect_url' => 'string',
         'access_type' => 'string',
-        'api_key' => 'string',
+        'state' => 'string',
         'client_id' => 'string',
         'client_secret' => 'string',
         'locale' => 'string'
@@ -75,7 +75,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     protected static array $openAPIFormats = [
         'redirect_url' => 'uri',
         'access_type' => null,
-        'api_key' => null,
+        'state' => null,
         'client_id' => null,
         'client_secret' => null,
         'locale' => null
@@ -89,7 +89,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     protected static array $openAPINullables = [
         'redirect_url' => false,
         'access_type' => false,
-        'api_key' => false,
+        'state' => false,
         'client_id' => false,
         'client_secret' => false,
         'locale' => true
@@ -173,7 +173,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     protected static array $attributeMap = [
         'redirect_url' => 'redirectUrl',
         'access_type' => 'accessType',
-        'api_key' => 'apiKey',
+        'state' => 'state',
         'client_id' => 'clientId',
         'client_secret' => 'clientSecret',
         'locale' => 'locale'
@@ -187,7 +187,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     protected static array $setters = [
         'redirect_url' => 'setRedirectUrl',
         'access_type' => 'setAccessType',
-        'api_key' => 'setApiKey',
+        'state' => 'setState',
         'client_id' => 'setClientId',
         'client_secret' => 'setClientSecret',
         'locale' => 'setLocale'
@@ -201,7 +201,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     protected static array $getters = [
         'redirect_url' => 'getRedirectUrl',
         'access_type' => 'getAccessType',
-        'api_key' => 'getApiKey',
+        'state' => 'getState',
         'client_id' => 'getClientId',
         'client_secret' => 'getClientSecret',
         'locale' => 'getLocale'
@@ -273,7 +273,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     {
         $this->setIfExists('redirect_url', $data ?? [], null);
         $this->setIfExists('access_type', $data ?? [], 'full_access');
-        $this->setIfExists('api_key', $data ?? [], null);
+        $this->setIfExists('state', $data ?? [], null);
         $this->setIfExists('client_id', $data ?? [], null);
         $this->setIfExists('client_secret', $data ?? [], null);
         $this->setIfExists('locale', $data ?? [], null);
@@ -381,28 +381,28 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     }
 
     /**
-     * Gets api_key
+     * Gets state
      *
      * @return string|null
      */
-    public function getApiKey(): ?string
+    public function getState(): ?string
     {
-        return $this->container['api_key'];
+        return $this->container['state'];
     }
 
     /**
-     * Sets api_key
+     * Sets state
      *
-     * @param string|null $api_key PMS providers — API key.
+     * @param string|null $state Airbnb + Booking.com — your own correlation token, e.g. your user id (at most 500 characters). Echoed on the redirect back (`&state=`) and in the `connect.session.completed` webhook.
      *
      * @return $this
      */
-    public function setApiKey(?string $api_key): static
+    public function setState(?string $state): static
     {
-        if (is_null($api_key)) {
-            throw new InvalidArgumentException('non-nullable api_key cannot be null');
+        if (is_null($state)) {
+            throw new InvalidArgumentException('non-nullable state cannot be null');
         }
-        $this->container['api_key'] = $api_key;
+        $this->container['state'] = $state;
 
         return $this;
     }

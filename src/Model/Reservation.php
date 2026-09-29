@@ -59,6 +59,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
+        'account' => '\Repull\Model\RecordAccount',
         'id' => 'string',
         'listing_id' => 'string',
         'guest_id' => 'string',
@@ -92,6 +93,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
+        'account' => null,
         'id' => null,
         'listing_id' => null,
         'guest_id' => null,
@@ -125,6 +127,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
+        'account' => true,
         'id' => false,
         'listing_id' => false,
         'guest_id' => false,
@@ -228,6 +231,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
+        'account' => 'account',
         'id' => 'id',
         'listing_id' => 'listingId',
         'guest_id' => 'guestId',
@@ -261,6 +265,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
+        'account' => 'setAccount',
         'id' => 'setId',
         'listing_id' => 'setListingId',
         'guest_id' => 'setGuestId',
@@ -294,6 +299,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
+        'account' => 'getAccount',
         'id' => 'getId',
         'listing_id' => 'getListingId',
         'guest_id' => 'getGuestId',
@@ -481,6 +487,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('account', $data ?? [], null);
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('guest_id', $data ?? [], null);
@@ -613,6 +620,40 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         return count($this->listInvalidProperties()) === 0;
     }
 
+
+    /**
+     * Gets account
+     *
+     * @return \Repull\Model\RecordAccount|null
+     */
+    public function getAccount(): ?\Repull\Model\RecordAccount
+    {
+        return $this->container['account'];
+    }
+
+    /**
+     * Sets account
+     *
+     * @param \Repull\Model\RecordAccount|null $account The connected account this reservation belongs to. List endpoint.
+     *
+     * @return $this
+     */
+    public function setAccount(?\Repull\Model\RecordAccount $account): static
+    {
+        if (is_null($account)) {
+            array_push($this->openAPINullablesSetToNull, 'account');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('account', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['account'] = $account;
+
+        return $this;
+    }
 
     /**
      * Gets id

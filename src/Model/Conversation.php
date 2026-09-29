@@ -59,6 +59,7 @@ class Conversation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
+        'account' => '\Repull\Model\RecordAccount',
         'id' => 'string',
         'platform' => 'string',
         'external_thread_id' => 'string',
@@ -80,6 +81,7 @@ class Conversation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
+        'account' => null,
         'id' => null,
         'platform' => null,
         'external_thread_id' => null,
@@ -101,6 +103,7 @@ class Conversation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
+        'account' => true,
         'id' => false,
         'platform' => true,
         'external_thread_id' => true,
@@ -192,6 +195,7 @@ class Conversation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
+        'account' => 'account',
         'id' => 'id',
         'platform' => 'platform',
         'external_thread_id' => 'externalThreadId',
@@ -213,6 +217,7 @@ class Conversation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
+        'account' => 'setAccount',
         'id' => 'setId',
         'platform' => 'setPlatform',
         'external_thread_id' => 'setExternalThreadId',
@@ -234,6 +239,7 @@ class Conversation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
+        'account' => 'getAccount',
         'id' => 'getId',
         'platform' => 'getPlatform',
         'external_thread_id' => 'getExternalThreadId',
@@ -332,6 +338,7 @@ class Conversation implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('account', $data ?? [], null);
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
         $this->setIfExists('external_thread_id', $data ?? [], null);
@@ -401,6 +408,40 @@ class Conversation implements ModelInterface, ArrayAccess, JsonSerializable
         return count($this->listInvalidProperties()) === 0;
     }
 
+
+    /**
+     * Gets account
+     *
+     * @return \Repull\Model\RecordAccount|null
+     */
+    public function getAccount(): ?\Repull\Model\RecordAccount
+    {
+        return $this->container['account'];
+    }
+
+    /**
+     * Sets account
+     *
+     * @param \Repull\Model\RecordAccount|null $account The connected account this conversation belongs to. List endpoint.
+     *
+     * @return $this
+     */
+    public function setAccount(?\Repull\Model\RecordAccount $account): static
+    {
+        if (is_null($account)) {
+            array_push($this->openAPINullablesSetToNull, 'account');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('account', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['account'] = $account;
+
+        return $this;
+    }
 
     /**
      * Gets id
