@@ -63,6 +63,7 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
         'operations' => '\Repull\Model\AirbnbCalendarOperation[]',
         'model_type' => 'string',
         'settings' => 'array<string,mixed>',
+        'fees' => '\Repull\Model\AirbnbPricingWriteRequestFeesInner[]',
         'records' => '\Repull\Model\AirbnbPricingWriteRequestRecordsInner[]',
         'currency' => 'string',
         'rule' => 'array<string,mixed>'
@@ -78,6 +79,7 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
         'operations' => null,
         'model_type' => null,
         'settings' => null,
+        'fees' => null,
         'records' => null,
         'currency' => null,
         'rule' => null
@@ -93,6 +95,7 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
         'operations' => false,
         'model_type' => true,
         'settings' => true,
+        'fees' => true,
         'records' => true,
         'currency' => true,
         'rule' => true
@@ -178,6 +181,7 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
         'operations' => 'operations',
         'model_type' => 'modelType',
         'settings' => 'settings',
+        'fees' => 'fees',
         'records' => 'records',
         'currency' => 'currency',
         'rule' => 'rule'
@@ -193,6 +197,7 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
         'operations' => 'setOperations',
         'model_type' => 'setModelType',
         'settings' => 'setSettings',
+        'fees' => 'setFees',
         'records' => 'setRecords',
         'currency' => 'setCurrency',
         'rule' => 'setRule'
@@ -208,6 +213,7 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
         'operations' => 'getOperations',
         'model_type' => 'getModelType',
         'settings' => 'getSettings',
+        'fees' => 'getFees',
         'records' => 'getRecords',
         'currency' => 'getCurrency',
         'rule' => 'getRule'
@@ -308,6 +314,7 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
         $this->setIfExists('operations', $data ?? [], null);
         $this->setIfExists('model_type', $data ?? [], null);
         $this->setIfExists('settings', $data ?? [], null);
+        $this->setIfExists('fees', $data ?? [], null);
         $this->setIfExists('records', $data ?? [], null);
         $this->setIfExists('currency', $data ?? [], null);
         $this->setIfExists('rule', $data ?? [], null);
@@ -361,6 +368,10 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
                 $this->container['model_type'],
                 implode("', '", $allowedValues)
             );
+        }
+
+        if (!is_null($this->container['fees']) && (count($this->container['fees']) < 1)) {
+            $invalidProperties[] = "invalid value for 'fees', number of items must be greater than or equal to 1.";
         }
 
         if (!is_null($this->container['records']) && (count($this->container['records']) < 1)) {
@@ -491,7 +502,7 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets settings
      *
-     * @param array<string,mixed>|null $settings Required for `type: \"standard\" | \"rate-plan\" | \"fees\"` — the pricing-settings object to PUT.
+     * @param array<string,mixed>|null $settings Required for `type: \"standard\" | \"rate-plan\"` — the pricing-settings object to PUT. With `type: \"fees\"` it is the raw alternative to `fees`: `{\"standard_fees\": [...]}` **replaces every fee** on the listing (Airbnb does not merge), so send the complete list. Prefer `fees`.
      *
      * @return $this
      */
@@ -508,6 +519,45 @@ class AirbnbPricingWriteRequest implements ModelInterface, ArrayAccess, JsonSeri
             }
         }
         $this->container['settings'] = $settings;
+
+        return $this;
+    }
+
+    /**
+     * Gets fees
+     *
+     * @return \Repull\Model\AirbnbPricingWriteRequestFeesInner[]|null
+     */
+    public function getFees(): ?array
+    {
+        return $this->container['fees'];
+    }
+
+    /**
+     * Sets fees
+     *
+     * @param \Repull\Model\AirbnbPricingWriteRequestFeesInner[]|null $fees With `type: \"fees\"` — the fee changes to apply. **Merged by `fee_type`**: fees you do not mention are kept, the ones you send are set, and `amount: null` removes that fee. (Airbnb itself replaces the whole fee list on every write, so Repull reads the listing's current fees, applies your changes and writes the full set.) The response is the listing's fees as Airbnb holds them afterwards.  **Units — the same as `GET …/pricing` returns:** a `flat` fee is the amount in the listing currency × 1,000,000 (`160000000` = 160.00); a `percent` fee is a whole percent of the rent (`10` = 10%).  Example — add a 10% management fee and keep everything else: `{\"type\":\"fees\",\"fees\":[{\"fee_type\":\"PASS_THROUGH_MANAGEMENT_FEE\",\"amount\":10,\"amount_type\":\"percent\"}]}`. Remove the pet fee: `{\"type\":\"fees\",\"fees\":[{\"fee_type\":\"PASS_THROUGH_PET_FEE\",\"amount\":null}]}`.
+     *
+     * @return $this
+     */
+    public function setFees(?array $fees): static
+    {
+        if (is_null($fees)) {
+            array_push($this->openAPINullablesSetToNull, 'fees');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('fees', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+
+
+        if (!is_null($fees) && (count($fees) < 1)) {
+            throw new InvalidArgumentException('invalid length for $fees when calling AirbnbPricingWriteRequest., number of items must be greater than or equal to 1.');
+        }
+        $this->container['fees'] = $fees;
 
         return $this;
     }

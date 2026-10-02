@@ -60,6 +60,9 @@ class BookingPropertyListingsInner implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPITypes = [
         'listing_id' => 'string',
         'name' => 'string',
+        'public_name' => 'string',
+        'status' => 'string',
+        'inactive_reason' => 'string',
         'city' => 'string',
         'room_id' => 'string',
         'room_booking_id' => 'string',
@@ -75,6 +78,9 @@ class BookingPropertyListingsInner implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPIFormats = [
         'listing_id' => null,
         'name' => null,
+        'public_name' => null,
+        'status' => null,
+        'inactive_reason' => null,
         'city' => null,
         'room_id' => null,
         'room_booking_id' => null,
@@ -90,6 +96,9 @@ class BookingPropertyListingsInner implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPINullables = [
         'listing_id' => false,
         'name' => true,
+        'public_name' => true,
+        'status' => false,
+        'inactive_reason' => false,
         'city' => true,
         'room_id' => true,
         'room_booking_id' => true,
@@ -175,6 +184,9 @@ class BookingPropertyListingsInner implements ModelInterface, ArrayAccess, JsonS
     protected static array $attributeMap = [
         'listing_id' => 'listingId',
         'name' => 'name',
+        'public_name' => 'publicName',
+        'status' => 'status',
+        'inactive_reason' => 'inactiveReason',
         'city' => 'city',
         'room_id' => 'roomId',
         'room_booking_id' => 'roomBookingId',
@@ -190,6 +202,9 @@ class BookingPropertyListingsInner implements ModelInterface, ArrayAccess, JsonS
     protected static array $setters = [
         'listing_id' => 'setListingId',
         'name' => 'setName',
+        'public_name' => 'setPublicName',
+        'status' => 'setStatus',
+        'inactive_reason' => 'setInactiveReason',
         'city' => 'setCity',
         'room_id' => 'setRoomId',
         'room_booking_id' => 'setRoomBookingId',
@@ -205,6 +220,9 @@ class BookingPropertyListingsInner implements ModelInterface, ArrayAccess, JsonS
     protected static array $getters = [
         'listing_id' => 'getListingId',
         'name' => 'getName',
+        'public_name' => 'getPublicName',
+        'status' => 'getStatus',
+        'inactive_reason' => 'getInactiveReason',
         'city' => 'getCity',
         'room_id' => 'getRoomId',
         'room_booking_id' => 'getRoomBookingId',
@@ -244,8 +262,40 @@ class BookingPropertyListingsInner implements ModelInterface, ArrayAccess, JsonS
         return self::$openAPIModelName;
     }
 
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_INACTIVE = 'inactive';
+    public const INACTIVE_REASON_PLAN_LIMIT = 'plan_limit';
+    public const INACTIVE_REASON_UNLISTED_ON_AIRBNB = 'unlisted_on_airbnb';
+    public const INACTIVE_REASON_DEACTIVATED = 'deactivated';
     public const MAPPED_VIA_ROOM = 'room';
     public const MAPPED_VIA_PROPERTY = 'property';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getStatusAllowableValues()
+    {
+        return [
+            self::STATUS_ACTIVE,
+            self::STATUS_INACTIVE,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getInactiveReasonAllowableValues()
+    {
+        return [
+            self::INACTIVE_REASON_PLAN_LIMIT,
+            self::INACTIVE_REASON_UNLISTED_ON_AIRBNB,
+            self::INACTIVE_REASON_DEACTIVATED,
+        ];
+    }
 
     /**
      * Gets allowable values of the enum
@@ -276,6 +326,9 @@ class BookingPropertyListingsInner implements ModelInterface, ArrayAccess, JsonS
     {
         $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('public_name', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('inactive_reason', $data ?? [], null);
         $this->setIfExists('city', $data ?? [], null);
         $this->setIfExists('room_id', $data ?? [], null);
         $this->setIfExists('room_booking_id', $data ?? [], null);
@@ -307,6 +360,24 @@ class BookingPropertyListingsInner implements ModelInterface, ArrayAccess, JsonS
     public function listInvalidProperties(): array
     {
         $invalidProperties = [];
+
+        $allowedValues = self::getStatusAllowableValues();
+        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'status', must be one of '%s'",
+                $this->container['status'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        $allowedValues = self::getInactiveReasonAllowableValues();
+        if (!is_null($this->container['inactive_reason']) && !in_array($this->container['inactive_reason'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'inactive_reason', must be one of '%s'",
+                $this->container['inactive_reason'],
+                implode("', '", $allowedValues)
+            );
+        }
 
         $allowedValues = self::getMappedViaAllowableValues();
         if (!is_null($this->container['mapped_via']) && !in_array($this->container['mapped_via'], $allowedValues, true)) {
@@ -369,7 +440,7 @@ class BookingPropertyListingsInner implements ModelInterface, ArrayAccess, JsonS
     /**
      * Sets name
      *
-     * @param string|null $name name
+     * @param string|null $name The host's internal nickname for the listing.
      *
      * @return $this
      */
@@ -386,6 +457,96 @@ class BookingPropertyListingsInner implements ModelInterface, ArrayAccess, JsonS
             }
         }
         $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets public_name
+     *
+     * @return string|null
+     */
+    public function getPublicName(): ?string
+    {
+        return $this->container['public_name'];
+    }
+
+    /**
+     * Sets public_name
+     *
+     * @param string|null $public_name The title guests see on the channel; show this to end users.
+     *
+     * @return $this
+     */
+    public function setPublicName(?string $public_name): static
+    {
+        if (is_null($public_name)) {
+            array_push($this->openAPINullablesSetToNull, 'public_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('public_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['public_name'] = $public_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets status
+     *
+     * @return string|null
+     */
+    public function getStatus(): ?string
+    {
+        return $this->container['status'];
+    }
+
+    /**
+     * Sets status
+     *
+     * @param string|null $status Inactive listings appear only with `?status=inactive|all`, with identity fields only.
+     *
+     * @return $this
+     */
+    public function setStatus(?string $status): static
+    {
+        if (is_null($status)) {
+            throw new InvalidArgumentException('non-nullable status cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets inactive_reason
+     *
+     * @return string|null
+     */
+    public function getInactiveReason(): ?string
+    {
+        return $this->container['inactive_reason'];
+    }
+
+    /**
+     * Sets inactive_reason
+     *
+     * @param string|null $inactive_reason On inactive listings only: why it is inactive.
+     *
+     * @return $this
+     */
+    public function setInactiveReason(?string $inactive_reason): static
+    {
+        if (is_null($inactive_reason)) {
+            throw new InvalidArgumentException('non-nullable inactive_reason cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['inactive_reason'] = $inactive_reason;
 
         return $this;
     }

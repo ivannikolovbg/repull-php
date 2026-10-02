@@ -58,18 +58,18 @@ class ReservationCreateResponse implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'int',
+        'id' => 'string',
         'confirmation_code' => 'string',
-        'listing_id' => 'int',
+        'listing_id' => 'string',
         'platform' => 'string',
         'status' => 'string',
         'check_in' => '\DateTime',
         'check_out' => '\DateTime',
-        'guest_id' => 'int',
+        'guest_id' => 'string',
         'total_price' => 'float',
         'currency' => 'string',
         'unit' => '\Repull\Model\ReservationCreateResponseUnit',
-        'pms' => '\Repull\Model\ReservationCreateResponsePms'
+        'pms' => '\Repull\Model\ReservationPmsOutcome'
     ];
 
     /**
@@ -343,9 +343,9 @@ class ReservationCreateResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Gets id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->container['id'];
     }
@@ -353,11 +353,11 @@ class ReservationCreateResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets id
      *
-     * @param int|null $id Pass to `GET /v1/reservations/{id}` for the full record.
+     * @param string|null $id Pass to `GET /v1/reservations/{id}` for the full record. A string, like every id in API responses.
      *
      * @return $this
      */
-    public function setId(?int $id): static
+    public function setId(?string $id): static
     {
         if (is_null($id)) {
             throw new InvalidArgumentException('non-nullable id cannot be null');
@@ -397,9 +397,9 @@ class ReservationCreateResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Gets listing_id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getListingId(): ?int
+    public function getListingId(): ?string
     {
         return $this->container['listing_id'];
     }
@@ -407,11 +407,11 @@ class ReservationCreateResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets listing_id
      *
-     * @param int|null $listing_id listing_id
+     * @param string|null $listing_id listing_id
      *
      * @return $this
      */
-    public function setListingId(?int $listing_id): static
+    public function setListingId(?string $listing_id): static
     {
         if (is_null($listing_id)) {
             throw new InvalidArgumentException('non-nullable listing_id cannot be null');
@@ -532,9 +532,9 @@ class ReservationCreateResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Gets guest_id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getGuestId(): ?int
+    public function getGuestId(): ?string
     {
         return $this->container['guest_id'];
     }
@@ -542,11 +542,11 @@ class ReservationCreateResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets guest_id
      *
-     * @param int|null $guest_id guest_id
+     * @param string|null $guest_id guest_id
      *
      * @return $this
      */
-    public function setGuestId(?int $guest_id): static
+    public function setGuestId(?string $guest_id): static
     {
         if (is_null($guest_id)) {
             array_push($this->openAPINullablesSetToNull, 'guest_id');
@@ -576,7 +576,7 @@ class ReservationCreateResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets total_price
      *
-     * @param float|null $total_price The price the pricing engine derived for the stay. Reservations created through this endpoint are NOT priced from the request — see the operation description. On a Mews or Cloudbeds listing, the PMS prices it from its own rate.
+     * @param float|null $total_price The total the booking was recorded at. On a PMS listing: the PMS's total (your `totalPrice` where the PMS honours one, else the PMS's own price). On any other listing: the price the rate engine derived (`0` when the listing has no rates for the range).
      *
      * @return $this
      */
@@ -668,9 +668,9 @@ class ReservationCreateResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Gets pms
      *
-     * @return \Repull\Model\ReservationCreateResponsePms|null
+     * @return \Repull\Model\ReservationPmsOutcome|null
      */
-    public function getPms(): ?\Repull\Model\ReservationCreateResponsePms
+    public function getPms(): ?\Repull\Model\ReservationPmsOutcome
     {
         return $this->container['pms'];
     }
@@ -678,11 +678,11 @@ class ReservationCreateResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets pms
      *
-     * @param \Repull\Model\ReservationCreateResponsePms|null $pms pms
+     * @param \Repull\Model\ReservationPmsOutcome|null $pms pms
      *
      * @return $this
      */
-    public function setPms(?\Repull\Model\ReservationCreateResponsePms $pms): static
+    public function setPms(?\Repull\Model\ReservationPmsOutcome $pms): static
     {
         if (is_null($pms)) {
             throw new InvalidArgumentException('non-nullable pms cannot be null');

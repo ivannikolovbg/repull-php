@@ -133,6 +133,7 @@ class VRBOApi
      *
      * List VRBO listings
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listVrboListings'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -140,10 +141,11 @@ class VRBOApi
      * @return \Repull\Model\VrboListing[]
      */
     public function listVrboListings(
+        ?string $status = 'active',
         string $contentType = self::contentTypes['listVrboListings'][0]
     ): array
     {
-        list($response) = $this->listVrboListingsWithHttpInfo($contentType);
+        list($response) = $this->listVrboListingsWithHttpInfo($status, $contentType);
         return $response;
     }
 
@@ -152,6 +154,7 @@ class VRBOApi
      *
      * List VRBO listings
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listVrboListings'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -159,10 +162,11 @@ class VRBOApi
      * @return array of \Repull\Model\VrboListing[], HTTP status code, HTTP response headers (array of strings)
      */
     public function listVrboListingsWithHttpInfo(
+        ?string $status = 'active',
         string $contentType = self::contentTypes['listVrboListings'][0]
     ): array
     {
-        $request = $this->listVrboListingsRequest($contentType);
+        $request = $this->listVrboListingsRequest($status, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -235,16 +239,18 @@ class VRBOApi
      *
      * List VRBO listings
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listVrboListings'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function listVrboListingsAsync(
+        ?string $status = 'active',
         string $contentType = self::contentTypes['listVrboListings'][0]
     ): PromiseInterface
     {
-        return $this->listVrboListingsAsyncWithHttpInfo($contentType)
+        return $this->listVrboListingsAsyncWithHttpInfo($status, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -257,17 +263,19 @@ class VRBOApi
      *
      * List VRBO listings
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listVrboListings'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function listVrboListingsAsyncWithHttpInfo(
+        ?string $status = 'active',
         string $contentType = self::contentTypes['listVrboListings'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\VrboListing[]';
-        $request = $this->listVrboListingsRequest($contentType);
+        $request = $this->listVrboListingsRequest($status, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -308,15 +316,18 @@ class VRBOApi
     /**
      * Create request for operation 'listVrboListings'
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listVrboListings'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listVrboListingsRequest(
+        ?string $status = 'active',
         string $contentType = self::contentTypes['listVrboListings'][0]
     ): Request
     {
+
 
 
         $resourcePath = '/v1/channels/vrbo/listings';
@@ -326,6 +337,15 @@ class VRBOApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $status,
+            'status', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 

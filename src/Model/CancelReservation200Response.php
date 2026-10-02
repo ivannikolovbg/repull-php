@@ -66,7 +66,7 @@ class CancelReservation200Response implements ModelInterface, ArrayAccess, JsonS
         'check_out' => '\DateTime',
         'updated_at' => 'string',
         'already_cancelled' => 'bool',
-        'pms' => '\Repull\Model\CancelReservation200ResponsePms'
+        'pms' => '\Repull\Model\ReservationPmsOutcome'
     ];
 
     /**
@@ -596,9 +596,9 @@ class CancelReservation200Response implements ModelInterface, ArrayAccess, JsonS
     /**
      * Gets pms
      *
-     * @return \Repull\Model\CancelReservation200ResponsePms|null
+     * @return \Repull\Model\ReservationPmsOutcome|null
      */
-    public function getPms(): ?\Repull\Model\CancelReservation200ResponsePms
+    public function getPms(): ?\Repull\Model\ReservationPmsOutcome
     {
         return $this->container['pms'];
     }
@@ -606,11 +606,11 @@ class CancelReservation200Response implements ModelInterface, ArrayAccess, JsonS
     /**
      * Sets pms
      *
-     * @param \Repull\Model\CancelReservation200ResponsePms|null $pms pms
+     * @param \Repull\Model\ReservationPmsOutcome|null $pms pms
      *
      * @return $this
      */
-    public function setPms(?\Repull\Model\CancelReservation200ResponsePms $pms): static
+    public function setPms(?\Repull\Model\ReservationPmsOutcome $pms): static
     {
         if (is_null($pms)) {
             throw new InvalidArgumentException('non-nullable pms cannot be null');

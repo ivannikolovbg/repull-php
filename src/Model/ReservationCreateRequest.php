@@ -36,6 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * ReservationCreateRequest Class Doc Comment
  *
+ * @description Which fields a listing takes depends on whether it is managed in a PMS — see the operation description and &#x60;GET /v1/listings/{id}&#x60; → &#x60;capabilities.reservations&#x60;. A field the listing cannot take is refused by name (&#x60;422 unsupported_field&#x60;), never dropped.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -64,10 +65,16 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
         'guest' => '\Repull\Model\ReservationGuestInput',
         'platform' => 'string',
         'status' => 'string',
+        'adults' => 'int',
+        'children' => 'int',
+        'guest_count' => 'int',
+        'total_price' => 'float',
+        'notes' => 'string',
+        'unit_id' => 'string',
+        'send_confirmation_email' => 'bool',
         'check_in_time' => 'string',
         'check_out_time' => 'string',
         'guest_id' => 'int',
-        'guest_count' => 'int',
         'currency' => 'string'
     ];
 
@@ -83,10 +90,16 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
         'guest' => null,
         'platform' => null,
         'status' => null,
+        'adults' => null,
+        'children' => null,
+        'guest_count' => null,
+        'total_price' => null,
+        'notes' => null,
+        'unit_id' => null,
+        'send_confirmation_email' => null,
         'check_in_time' => null,
         'check_out_time' => null,
         'guest_id' => null,
-        'guest_count' => null,
         'currency' => null
     ];
 
@@ -102,10 +115,16 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
         'guest' => false,
         'platform' => false,
         'status' => false,
+        'adults' => false,
+        'children' => false,
+        'guest_count' => false,
+        'total_price' => false,
+        'notes' => false,
+        'unit_id' => false,
+        'send_confirmation_email' => false,
         'check_in_time' => false,
         'check_out_time' => false,
         'guest_id' => false,
-        'guest_count' => false,
         'currency' => false
     ];
 
@@ -191,10 +210,16 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
         'guest' => 'guest',
         'platform' => 'platform',
         'status' => 'status',
+        'adults' => 'adults',
+        'children' => 'children',
+        'guest_count' => 'guestCount',
+        'total_price' => 'totalPrice',
+        'notes' => 'notes',
+        'unit_id' => 'unitId',
+        'send_confirmation_email' => 'sendConfirmationEmail',
         'check_in_time' => 'checkInTime',
         'check_out_time' => 'checkOutTime',
         'guest_id' => 'guestId',
-        'guest_count' => 'guestCount',
         'currency' => 'currency'
     ];
 
@@ -210,10 +235,16 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
         'guest' => 'setGuest',
         'platform' => 'setPlatform',
         'status' => 'setStatus',
+        'adults' => 'setAdults',
+        'children' => 'setChildren',
+        'guest_count' => 'setGuestCount',
+        'total_price' => 'setTotalPrice',
+        'notes' => 'setNotes',
+        'unit_id' => 'setUnitId',
+        'send_confirmation_email' => 'setSendConfirmationEmail',
         'check_in_time' => 'setCheckInTime',
         'check_out_time' => 'setCheckOutTime',
         'guest_id' => 'setGuestId',
-        'guest_count' => 'setGuestCount',
         'currency' => 'setCurrency'
     ];
 
@@ -229,10 +260,16 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
         'guest' => 'getGuest',
         'platform' => 'getPlatform',
         'status' => 'getStatus',
+        'adults' => 'getAdults',
+        'children' => 'getChildren',
+        'guest_count' => 'getGuestCount',
+        'total_price' => 'getTotalPrice',
+        'notes' => 'getNotes',
+        'unit_id' => 'getUnitId',
+        'send_confirmation_email' => 'getSendConfirmationEmail',
         'check_in_time' => 'getCheckInTime',
         'check_out_time' => 'getCheckOutTime',
         'guest_id' => 'getGuestId',
-        'guest_count' => 'getGuestCount',
         'currency' => 'getCurrency'
     ];
 
@@ -271,6 +308,8 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
     public const PLATFORM_DIRECT = 'direct';
     public const PLATFORM_WEBSITE = 'website';
     public const PLATFORM_OWNER = 'owner';
+    public const STATUS_CONFIRMED = 'confirmed';
+    public const STATUS_TENTATIVE = 'tentative';
 
     /**
      * Gets allowable values of the enum
@@ -283,6 +322,19 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
             self::PLATFORM_DIRECT,
             self::PLATFORM_WEBSITE,
             self::PLATFORM_OWNER,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getStatusAllowableValues()
+    {
+        return [
+            self::STATUS_CONFIRMED,
+            self::STATUS_TENTATIVE,
         ];
     }
 
@@ -305,11 +357,17 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
         $this->setIfExists('check_out', $data ?? [], null);
         $this->setIfExists('guest', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], 'direct');
-        $this->setIfExists('status', $data ?? [], 'accept');
+        $this->setIfExists('status', $data ?? [], 'confirmed');
+        $this->setIfExists('adults', $data ?? [], null);
+        $this->setIfExists('children', $data ?? [], null);
+        $this->setIfExists('guest_count', $data ?? [], null);
+        $this->setIfExists('total_price', $data ?? [], null);
+        $this->setIfExists('notes', $data ?? [], null);
+        $this->setIfExists('unit_id', $data ?? [], null);
+        $this->setIfExists('send_confirmation_email', $data ?? [], null);
         $this->setIfExists('check_in_time', $data ?? [], null);
         $this->setIfExists('check_out_time', $data ?? [], null);
         $this->setIfExists('guest_id', $data ?? [], null);
-        $this->setIfExists('guest_count', $data ?? [], null);
         $this->setIfExists('currency', $data ?? [], null);
     }
 
@@ -359,16 +417,41 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
             );
         }
 
+        $allowedValues = self::getStatusAllowableValues();
+        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'status', must be one of '%s'",
+                $this->container['status'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        if (!is_null($this->container['adults']) && ($this->container['adults'] < 1)) {
+            $invalidProperties[] = "invalid value for 'adults', must be bigger than or equal to 1.";
+        }
+
+        if (!is_null($this->container['children']) && ($this->container['children'] < 0)) {
+            $invalidProperties[] = "invalid value for 'children', must be bigger than or equal to 0.";
+        }
+
+        if (!is_null($this->container['guest_count']) && ($this->container['guest_count'] < 1)) {
+            $invalidProperties[] = "invalid value for 'guest_count', must be bigger than or equal to 1.";
+        }
+
+        if (!is_null($this->container['total_price']) && ($this->container['total_price'] < 0)) {
+            $invalidProperties[] = "invalid value for 'total_price', must be bigger than or equal to 0.";
+        }
+
+        if (!is_null($this->container['notes']) && (mb_strlen($this->container['notes']) > 5000)) {
+            $invalidProperties[] = "invalid value for 'notes', the character length must be smaller than or equal to 5000.";
+        }
+
         if (!is_null($this->container['check_in_time']) && !preg_match("/^([01]\\d|2[0-3]):[0-5]\\d$/", $this->container['check_in_time'])) {
             $invalidProperties[] = "invalid value for 'check_in_time', must be conform to the pattern /^([01]\\d|2[0-3]):[0-5]\\d$/.";
         }
 
         if (!is_null($this->container['check_out_time']) && !preg_match("/^([01]\\d|2[0-3]):[0-5]\\d$/", $this->container['check_out_time'])) {
             $invalidProperties[] = "invalid value for 'check_out_time', must be conform to the pattern /^([01]\\d|2[0-3]):[0-5]\\d$/.";
-        }
-
-        if (!is_null($this->container['guest_count']) && ($this->container['guest_count'] < 1)) {
-            $invalidProperties[] = "invalid value for 'guest_count', must be bigger than or equal to 1.";
         }
 
         if (!is_null($this->container['currency']) && (mb_strlen($this->container['currency']) > 3)) {
@@ -512,7 +595,7 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets platform
      *
-     * @param string|null $platform OTA platforms are deliberately absent — those reservations are owned by the channel and arrive through sync.
+     * @param string|null $platform OTA platforms are deliberately absent — those reservations are owned by the channel and arrive through sync. `owner` is refused on a PMS listing (block owner stays in the PMS).
      *
      * @return $this
      */
@@ -540,7 +623,7 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets status
      *
-     * @param string|null $status Lifecycle status to open the reservation in. Defaults to confirmed.
+     * @param string|null $status `confirmed` (default) or `tentative` (an optional hold, where the PMS has one). On a listing not managed in a PMS the value is passed to the reservation pipeline as before.
      *
      * @return $this
      */
@@ -549,7 +632,221 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
         if (is_null($status)) {
             throw new InvalidArgumentException('non-nullable status cannot be null');
         }
+        // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets adults
+     *
+     * @return int|null
+     */
+    public function getAdults(): ?int
+    {
+        return $this->container['adults'];
+    }
+
+    /**
+     * Sets adults
+     *
+     * @param int|null $adults adults
+     *
+     * @return $this
+     */
+    public function setAdults(?int $adults): static
+    {
+        if (is_null($adults)) {
+            throw new InvalidArgumentException('non-nullable adults cannot be null');
+        }
+
+        if (($adults < 1)) {
+            throw new InvalidArgumentException('invalid value for $adults when calling ReservationCreateRequest., must be bigger than or equal to 1.');
+        }
+
+        $this->container['adults'] = $adults;
+
+        return $this;
+    }
+
+    /**
+     * Gets children
+     *
+     * @return int|null
+     */
+    public function getChildren(): ?int
+    {
+        return $this->container['children'];
+    }
+
+    /**
+     * Sets children
+     *
+     * @param int|null $children children
+     *
+     * @return $this
+     */
+    public function setChildren(?int $children): static
+    {
+        if (is_null($children)) {
+            throw new InvalidArgumentException('non-nullable children cannot be null');
+        }
+
+        if (($children < 0)) {
+            throw new InvalidArgumentException('invalid value for $children when calling ReservationCreateRequest., must be bigger than or equal to 0.');
+        }
+
+        $this->container['children'] = $children;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest_count
+     *
+     * @return int|null
+     */
+    public function getGuestCount(): ?int
+    {
+        return $this->container['guest_count'];
+    }
+
+    /**
+     * Sets guest_count
+     *
+     * @param int|null $guest_count Total guests. On a PMS listing without `adults`, used as the adult count.
+     *
+     * @return $this
+     */
+    public function setGuestCount(?int $guest_count): static
+    {
+        if (is_null($guest_count)) {
+            throw new InvalidArgumentException('non-nullable guest_count cannot be null');
+        }
+
+        if (($guest_count < 1)) {
+            throw new InvalidArgumentException('invalid value for $guest_count when calling ReservationCreateRequest., must be bigger than or equal to 1.');
+        }
+
+        $this->container['guest_count'] = $guest_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets total_price
+     *
+     * @return float|null
+     */
+    public function getTotalPrice(): ?float
+    {
+        return $this->container['total_price'];
+    }
+
+    /**
+     * Sets total_price
+     *
+     * @param float|null $total_price PMS listings only: the total for the whole stay, in the listing's currency. Honoured where `capabilities.reservations.customPrice` is true; omit it and the PMS prices the stay (from its quote where it has one). Refused on a listing not managed in a PMS, whose rate engine prices the stay.
+     *
+     * @return $this
+     */
+    public function setTotalPrice(?float $total_price): static
+    {
+        if (is_null($total_price)) {
+            throw new InvalidArgumentException('non-nullable total_price cannot be null');
+        }
+
+        if (($total_price < 0)) {
+            throw new InvalidArgumentException('invalid value for $total_price when calling ReservationCreateRequest., must be bigger than or equal to 0.');
+        }
+
+        $this->container['total_price'] = $total_price;
+
+        return $this;
+    }
+
+    /**
+     * Gets notes
+     *
+     * @return string|null
+     */
+    public function getNotes(): ?string
+    {
+        return $this->container['notes'];
+    }
+
+    /**
+     * Sets notes
+     *
+     * @param string|null $notes PMS listings only: booking notes stored in the PMS.
+     *
+     * @return $this
+     */
+    public function setNotes(?string $notes): static
+    {
+        if (is_null($notes)) {
+            throw new InvalidArgumentException('non-nullable notes cannot be null');
+        }
+        if ((mb_strlen($notes) > 5000)) {
+            throw new InvalidArgumentException('invalid length for $notes when calling ReservationCreateRequest., must be smaller than or equal to 5000.');
+        }
+
+        $this->container['notes'] = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Gets unit_id
+     *
+     * @return string|null
+     */
+    public function getUnitId(): ?string
+    {
+        return $this->container['unit_id'];
+    }
+
+    /**
+     * Sets unit_id
+     *
+     * @param string|null $unit_id PMS listings only: book this unit (`GET /v1/listings/{id}` → `units[].id`). Refused by PMSs that cannot target a unit.
+     *
+     * @return $this
+     */
+    public function setUnitId(?string $unit_id): static
+    {
+        if (is_null($unit_id)) {
+            throw new InvalidArgumentException('non-nullable unit_id cannot be null');
+        }
+        $this->container['unit_id'] = $unit_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets send_confirmation_email
+     *
+     * @return bool|null
+     */
+    public function getSendConfirmationEmail(): ?bool
+    {
+        return $this->container['send_confirmation_email'];
+    }
+
+    /**
+     * Sets send_confirmation_email
+     *
+     * @param bool|null $send_confirmation_email PMS listings only: ask the PMS to email the guest its own confirmation, where the PMS supports it.
+     *
+     * @return $this
+     */
+    public function setSendConfirmationEmail(?bool $send_confirmation_email): static
+    {
+        if (is_null($send_confirmation_email)) {
+            throw new InvalidArgumentException('non-nullable send_confirmation_email cannot be null');
+        }
+        $this->container['send_confirmation_email'] = $send_confirmation_email;
 
         return $this;
     }
@@ -567,7 +864,7 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets check_in_time
      *
-     * @param string|null $check_in_time check_in_time
+     * @param string|null $check_in_time Listings not managed in a PMS only.
      *
      * @return $this
      */
@@ -599,7 +896,7 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets check_out_time
      *
-     * @param string|null $check_out_time check_out_time
+     * @param string|null $check_out_time Listings not managed in a PMS only.
      *
      * @return $this
      */
@@ -631,7 +928,7 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets guest_id
      *
-     * @param int|null $guest_id Attach an existing guest instead of matching/creating one. Must belong to this workspace.
+     * @param int|null $guest_id Listings not managed in a PMS only: attach an existing guest instead of matching/creating one. Must belong to this workspace.
      *
      * @return $this
      */
@@ -641,38 +938,6 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
             throw new InvalidArgumentException('non-nullable guest_id cannot be null');
         }
         $this->container['guest_id'] = $guest_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets guest_count
-     *
-     * @return int|null
-     */
-    public function getGuestCount(): ?int
-    {
-        return $this->container['guest_count'];
-    }
-
-    /**
-     * Sets guest_count
-     *
-     * @param int|null $guest_count guest_count
-     *
-     * @return $this
-     */
-    public function setGuestCount(?int $guest_count): static
-    {
-        if (is_null($guest_count)) {
-            throw new InvalidArgumentException('non-nullable guest_count cannot be null');
-        }
-
-        if (($guest_count < 1)) {
-            throw new InvalidArgumentException('invalid value for $guest_count when calling ReservationCreateRequest., must be bigger than or equal to 1.');
-        }
-
-        $this->container['guest_count'] = $guest_count;
 
         return $this;
     }
@@ -690,7 +955,7 @@ class ReservationCreateRequest implements ModelInterface, ArrayAccess, JsonSeria
     /**
      * Sets currency
      *
-     * @param string|null $currency currency
+     * @param string|null $currency Listings not managed in a PMS only (a PMS books in the property's currency).
      *
      * @return $this
      */

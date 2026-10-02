@@ -61,6 +61,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPITypes = [
         'listing_id' => 'string',
         'name' => 'string',
+        'public_name' => 'string',
         'city' => 'string',
         'thumbnail_url' => 'string',
         'connections' => '\Repull\Model\AirbnbConnection[]'
@@ -74,6 +75,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPIFormats = [
         'listing_id' => null,
         'name' => null,
+        'public_name' => null,
         'city' => null,
         'thumbnail_url' => 'uri',
         'connections' => null
@@ -87,6 +89,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPINullables = [
         'listing_id' => false,
         'name' => false,
+        'public_name' => true,
         'city' => true,
         'thumbnail_url' => true,
         'connections' => false
@@ -170,6 +173,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $attributeMap = [
         'listing_id' => 'listingId',
         'name' => 'name',
+        'public_name' => 'publicName',
         'city' => 'city',
         'thumbnail_url' => 'thumbnailUrl',
         'connections' => 'connections'
@@ -183,6 +187,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $setters = [
         'listing_id' => 'setListingId',
         'name' => 'setName',
+        'public_name' => 'setPublicName',
         'city' => 'setCity',
         'thumbnail_url' => 'setThumbnailUrl',
         'connections' => 'setConnections'
@@ -196,6 +201,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $getters = [
         'listing_id' => 'getListingId',
         'name' => 'getName',
+        'public_name' => 'getPublicName',
         'city' => 'getCity',
         'thumbnail_url' => 'getThumbnailUrl',
         'connections' => 'getConnections'
@@ -250,6 +256,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('public_name', $data ?? [], null);
         $this->setIfExists('city', $data ?? [], null);
         $this->setIfExists('thumbnail_url', $data ?? [], null);
         $this->setIfExists('connections', $data ?? [], null);
@@ -332,7 +339,7 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets name
      *
-     * @param string|null $name Listing title
+     * @param string|null $name The host's internal nickname for the listing.
      *
      * @return $this
      */
@@ -342,6 +349,40 @@ class AirbnbListing implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable name cannot be null');
         }
         $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets public_name
+     *
+     * @return string|null
+     */
+    public function getPublicName(): ?string
+    {
+        return $this->container['public_name'];
+    }
+
+    /**
+     * Sets public_name
+     *
+     * @param string|null $public_name The title guests see on the channel (e.g. the Airbnb listing title). `name` is the host's internal nickname for the listing; show `publicName` in anything a guest or end user reads. Present on inactive rows too.
+     *
+     * @return $this
+     */
+    public function setPublicName(?string $public_name): static
+    {
+        if (is_null($public_name)) {
+            array_push($this->openAPINullablesSetToNull, 'public_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('public_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['public_name'] = $public_name;
 
         return $this;
     }

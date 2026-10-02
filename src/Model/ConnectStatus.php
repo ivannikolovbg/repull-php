@@ -68,7 +68,10 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => '\Repull\Model\ConnectHost',
         'accounts' => '\Repull\Model\ConnectStatusAccountsInner[]',
         'write_policy' => '\Repull\Model\PmsWritePolicy',
-        'data_freshness' => 'object'
+        'capabilities' => '\Repull\Model\ConnectStatusCapabilities',
+        'data_freshness' => 'object',
+        'action' => '\Repull\Model\ConnectionAction',
+        'fix_url' => 'string'
     ];
 
     /**
@@ -86,7 +89,10 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => null,
         'accounts' => null,
         'write_policy' => null,
-        'data_freshness' => null
+        'capabilities' => null,
+        'data_freshness' => null,
+        'action' => null,
+        'fix_url' => 'uri'
     ];
 
     /**
@@ -104,7 +110,10 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => true,
         'accounts' => false,
         'write_policy' => false,
-        'data_freshness' => false
+        'capabilities' => false,
+        'data_freshness' => false,
+        'action' => true,
+        'fix_url' => true
     ];
 
     /**
@@ -192,7 +201,10 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => 'host',
         'accounts' => 'accounts',
         'write_policy' => 'writePolicy',
-        'data_freshness' => 'dataFreshness'
+        'capabilities' => 'capabilities',
+        'data_freshness' => 'dataFreshness',
+        'action' => 'action',
+        'fix_url' => 'fixUrl'
     ];
 
     /**
@@ -210,7 +222,10 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => 'setHost',
         'accounts' => 'setAccounts',
         'write_policy' => 'setWritePolicy',
-        'data_freshness' => 'setDataFreshness'
+        'capabilities' => 'setCapabilities',
+        'data_freshness' => 'setDataFreshness',
+        'action' => 'setAction',
+        'fix_url' => 'setFixUrl'
     ];
 
     /**
@@ -228,7 +243,10 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => 'getHost',
         'accounts' => 'getAccounts',
         'write_policy' => 'getWritePolicy',
-        'data_freshness' => 'getDataFreshness'
+        'capabilities' => 'getCapabilities',
+        'data_freshness' => 'getDataFreshness',
+        'action' => 'getAction',
+        'fix_url' => 'getFixUrl'
     ];
 
     /**
@@ -304,7 +322,10 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('host', $data ?? [], null);
         $this->setIfExists('accounts', $data ?? [], null);
         $this->setIfExists('write_policy', $data ?? [], null);
+        $this->setIfExists('capabilities', $data ?? [], null);
         $this->setIfExists('data_freshness', $data ?? [], null);
+        $this->setIfExists('action', $data ?? [], null);
+        $this->setIfExists('fix_url', $data ?? [], null);
     }
 
     /**
@@ -612,6 +633,33 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Gets capabilities
+     *
+     * @return \Repull\Model\ConnectStatusCapabilities|null
+     */
+    public function getCapabilities(): ?\Repull\Model\ConnectStatusCapabilities
+    {
+        return $this->container['capabilities'];
+    }
+
+    /**
+     * Sets capabilities
+     *
+     * @param \Repull\Model\ConnectStatusCapabilities|null $capabilities capabilities
+     *
+     * @return $this
+     */
+    public function setCapabilities(?\Repull\Model\ConnectStatusCapabilities $capabilities): static
+    {
+        if (is_null($capabilities)) {
+            throw new InvalidArgumentException('non-nullable capabilities cannot be null');
+        }
+        $this->container['capabilities'] = $capabilities;
+
+        return $this;
+    }
+
+    /**
      * Gets data_freshness
      *
      * @return object|null
@@ -634,6 +682,74 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable data_freshness cannot be null');
         }
         $this->container['data_freshness'] = $data_freshness;
+
+        return $this;
+    }
+
+    /**
+     * Gets action
+     *
+     * @return \Repull\Model\ConnectionAction|null
+     */
+    public function getAction(): ?\Repull\Model\ConnectionAction
+    {
+        return $this->container['action'];
+    }
+
+    /**
+     * Sets action
+     *
+     * @param \Repull\Model\ConnectionAction|null $action Smoobu only: set to `{ required: true, reason: \"reauth_required\", message }` when the connection still uses a legacy single API key, which Smoobu stops accepting on October 31, 2026. `null` once it is on an API key + secret.
+     *
+     * @return $this
+     */
+    public function setAction(?\Repull\Model\ConnectionAction $action): static
+    {
+        if (is_null($action)) {
+            array_push($this->openAPINullablesSetToNull, 'action');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('action', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['action'] = $action;
+
+        return $this;
+    }
+
+    /**
+     * Gets fix_url
+     *
+     * @return string|null
+     */
+    public function getFixUrl(): ?string
+    {
+        return $this->container['fix_url'];
+    }
+
+    /**
+     * Sets fix_url
+     *
+     * @param string|null $fix_url Smoobu only: durable link to the hosted Smoobu form where the host pastes a new API key + secret. Submitting it updates this same connection (`id` unchanged). Present only when `action.required` is true.
+     *
+     * @return $this
+     */
+    public function setFixUrl(?string $fix_url): static
+    {
+        if (is_null($fix_url)) {
+            array_push($this->openAPINullablesSetToNull, 'fix_url');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('fix_url', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['fix_url'] = $fix_url;
 
         return $this;
     }

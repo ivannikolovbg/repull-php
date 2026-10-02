@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * AirbnbListingDetailsWriteRequest Class Doc Comment
  *
- * @description Update what kind of property this is, when the quiet hours are, or how the guest gets in. At least one field required. These are among the attributes Airbnb locks on established listings — see &#x60;blockedFields&#x60; on the response.
+ * @description Update what kind of property this is, when the quiet hours are, how the guest gets in, the house manual, directions or Wi-Fi details. At least one field required. These are among the attributes Airbnb locks on established listings — see &#x60;blockedFields&#x60; on the response.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -63,7 +63,11 @@ class AirbnbListingDetailsWriteRequest implements ModelInterface, ArrayAccess, J
         'property_type_category' => 'string',
         'room_type_category' => 'string',
         'quiet_hours' => '\Repull\Model\AirbnbListingDetailsWriteRequestQuietHoursInner[]',
-        'check_in_option' => '\Repull\Model\AirbnbListingDetailsWriteRequestCheckInOption'
+        'check_in_option' => '\Repull\Model\AirbnbListingDetailsWriteRequestCheckInOption',
+        'house_manual' => 'string',
+        'directions' => 'string',
+        'wifi_network' => 'string',
+        'wifi_password' => 'string'
     ];
 
     /**
@@ -76,7 +80,11 @@ class AirbnbListingDetailsWriteRequest implements ModelInterface, ArrayAccess, J
         'property_type_category' => null,
         'room_type_category' => null,
         'quiet_hours' => null,
-        'check_in_option' => null
+        'check_in_option' => null,
+        'house_manual' => null,
+        'directions' => null,
+        'wifi_network' => null,
+        'wifi_password' => null
     ];
 
     /**
@@ -89,7 +97,11 @@ class AirbnbListingDetailsWriteRequest implements ModelInterface, ArrayAccess, J
         'property_type_category' => false,
         'room_type_category' => false,
         'quiet_hours' => false,
-        'check_in_option' => false
+        'check_in_option' => false,
+        'house_manual' => true,
+        'directions' => true,
+        'wifi_network' => true,
+        'wifi_password' => true
     ];
 
     /**
@@ -172,7 +184,11 @@ class AirbnbListingDetailsWriteRequest implements ModelInterface, ArrayAccess, J
         'property_type_category' => 'property_type_category',
         'room_type_category' => 'room_type_category',
         'quiet_hours' => 'quiet_hours',
-        'check_in_option' => 'check_in_option'
+        'check_in_option' => 'check_in_option',
+        'house_manual' => 'house_manual',
+        'directions' => 'directions',
+        'wifi_network' => 'wifi_network',
+        'wifi_password' => 'wifi_password'
     ];
 
     /**
@@ -185,7 +201,11 @@ class AirbnbListingDetailsWriteRequest implements ModelInterface, ArrayAccess, J
         'property_type_category' => 'setPropertyTypeCategory',
         'room_type_category' => 'setRoomTypeCategory',
         'quiet_hours' => 'setQuietHours',
-        'check_in_option' => 'setCheckInOption'
+        'check_in_option' => 'setCheckInOption',
+        'house_manual' => 'setHouseManual',
+        'directions' => 'setDirections',
+        'wifi_network' => 'setWifiNetwork',
+        'wifi_password' => 'setWifiPassword'
     ];
 
     /**
@@ -198,7 +218,11 @@ class AirbnbListingDetailsWriteRequest implements ModelInterface, ArrayAccess, J
         'property_type_category' => 'getPropertyTypeCategory',
         'room_type_category' => 'getRoomTypeCategory',
         'quiet_hours' => 'getQuietHours',
-        'check_in_option' => 'getCheckInOption'
+        'check_in_option' => 'getCheckInOption',
+        'house_manual' => 'getHouseManual',
+        'directions' => 'getDirections',
+        'wifi_network' => 'getWifiNetwork',
+        'wifi_password' => 'getWifiPassword'
     ];
 
     /**
@@ -295,6 +319,10 @@ class AirbnbListingDetailsWriteRequest implements ModelInterface, ArrayAccess, J
         $this->setIfExists('room_type_category', $data ?? [], null);
         $this->setIfExists('quiet_hours', $data ?? [], null);
         $this->setIfExists('check_in_option', $data ?? [], null);
+        $this->setIfExists('house_manual', $data ?? [], null);
+        $this->setIfExists('directions', $data ?? [], null);
+        $this->setIfExists('wifi_network', $data ?? [], null);
+        $this->setIfExists('wifi_password', $data ?? [], null);
     }
 
     /**
@@ -342,6 +370,22 @@ class AirbnbListingDetailsWriteRequest implements ModelInterface, ArrayAccess, J
 
         if (!is_null($this->container['quiet_hours']) && (count($this->container['quiet_hours']) < 1)) {
             $invalidProperties[] = "invalid value for 'quiet_hours', number of items must be greater than or equal to 1.";
+        }
+
+        if (!is_null($this->container['house_manual']) && (mb_strlen($this->container['house_manual']) > 10000)) {
+            $invalidProperties[] = "invalid value for 'house_manual', the character length must be smaller than or equal to 10000.";
+        }
+
+        if (!is_null($this->container['directions']) && (mb_strlen($this->container['directions']) > 5000)) {
+            $invalidProperties[] = "invalid value for 'directions', the character length must be smaller than or equal to 5000.";
+        }
+
+        if (!is_null($this->container['wifi_network']) && (mb_strlen($this->container['wifi_network']) > 255)) {
+            $invalidProperties[] = "invalid value for 'wifi_network', the character length must be smaller than or equal to 255.";
+        }
+
+        if (!is_null($this->container['wifi_password']) && (mb_strlen($this->container['wifi_password']) > 255)) {
+            $invalidProperties[] = "invalid value for 'wifi_password', the character length must be smaller than or equal to 255.";
         }
 
         return $invalidProperties;
@@ -494,6 +538,158 @@ class AirbnbListingDetailsWriteRequest implements ModelInterface, ArrayAccess, J
             throw new InvalidArgumentException('non-nullable check_in_option cannot be null');
         }
         $this->container['check_in_option'] = $check_in_option;
+
+        return $this;
+    }
+
+    /**
+     * Gets house_manual
+     *
+     * @return string|null
+     */
+    public function getHouseManual(): ?string
+    {
+        return $this->container['house_manual'];
+    }
+
+    /**
+     * Sets house_manual
+     *
+     * @param string|null $house_manual The house manual guests see after booking.
+     *
+     * @return $this
+     */
+    public function setHouseManual(?string $house_manual): static
+    {
+        if (is_null($house_manual)) {
+            array_push($this->openAPINullablesSetToNull, 'house_manual');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('house_manual', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        if (!is_null($house_manual) && (mb_strlen($house_manual) > 10000)) {
+            throw new InvalidArgumentException('invalid length for $house_manual when calling AirbnbListingDetailsWriteRequest., must be smaller than or equal to 10000.');
+        }
+
+        $this->container['house_manual'] = $house_manual;
+
+        return $this;
+    }
+
+    /**
+     * Gets directions
+     *
+     * @return string|null
+     */
+    public function getDirections(): ?string
+    {
+        return $this->container['directions'];
+    }
+
+    /**
+     * Sets directions
+     *
+     * @param string|null $directions Directions to the property, shown to booked guests.
+     *
+     * @return $this
+     */
+    public function setDirections(?string $directions): static
+    {
+        if (is_null($directions)) {
+            array_push($this->openAPINullablesSetToNull, 'directions');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('directions', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        if (!is_null($directions) && (mb_strlen($directions) > 5000)) {
+            throw new InvalidArgumentException('invalid length for $directions when calling AirbnbListingDetailsWriteRequest., must be smaller than or equal to 5000.');
+        }
+
+        $this->container['directions'] = $directions;
+
+        return $this;
+    }
+
+    /**
+     * Gets wifi_network
+     *
+     * @return string|null
+     */
+    public function getWifiNetwork(): ?string
+    {
+        return $this->container['wifi_network'];
+    }
+
+    /**
+     * Sets wifi_network
+     *
+     * @param string|null $wifi_network Wi-Fi network name.
+     *
+     * @return $this
+     */
+    public function setWifiNetwork(?string $wifi_network): static
+    {
+        if (is_null($wifi_network)) {
+            array_push($this->openAPINullablesSetToNull, 'wifi_network');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('wifi_network', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        if (!is_null($wifi_network) && (mb_strlen($wifi_network) > 255)) {
+            throw new InvalidArgumentException('invalid length for $wifi_network when calling AirbnbListingDetailsWriteRequest., must be smaller than or equal to 255.');
+        }
+
+        $this->container['wifi_network'] = $wifi_network;
+
+        return $this;
+    }
+
+    /**
+     * Gets wifi_password
+     *
+     * @return string|null
+     */
+    public function getWifiPassword(): ?string
+    {
+        return $this->container['wifi_password'];
+    }
+
+    /**
+     * Sets wifi_password
+     *
+     * @param string|null $wifi_password Wi-Fi password.
+     *
+     * @return $this
+     */
+    public function setWifiPassword(?string $wifi_password): static
+    {
+        if (is_null($wifi_password)) {
+            array_push($this->openAPINullablesSetToNull, 'wifi_password');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('wifi_password', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        if (!is_null($wifi_password) && (mb_strlen($wifi_password) > 255)) {
+            throw new InvalidArgumentException('invalid length for $wifi_password when calling AirbnbListingDetailsWriteRequest., must be smaller than or equal to 255.');
+        }
+
+        $this->container['wifi_password'] = $wifi_password;
 
         return $this;
     }

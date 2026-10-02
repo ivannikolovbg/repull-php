@@ -1,6 +1,6 @@
 <?php
 /**
- * CancelReservation200ResponsePmsErrorsInner
+ * ReservationQuoteResponseBreakdown
  *
  * PHP version 8.1
  *
@@ -34,14 +34,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * CancelReservation200ResponsePmsErrorsInner Class Doc Comment
+ * ReservationQuoteResponseBreakdown Class Doc Comment
  *
+ * @description The parts the PMS itemized; absent parts were not itemized.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class CancelReservation200ResponsePmsErrorsInner implements ModelInterface, ArrayAccess, JsonSerializable
+class ReservationQuoteResponseBreakdown implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +51,7 @@ class CancelReservation200ResponsePmsErrorsInner implements ModelInterface, Arra
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'cancel_reservation_200_response_pms_errors_inner';
+    protected static string $openAPIModelName = 'ReservationQuoteResponse_breakdown';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -58,9 +59,10 @@ class CancelReservation200ResponsePmsErrorsInner implements ModelInterface, Arra
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'section' => 'string',
-        'message' => 'string',
-        'code' => 'string'
+        'accommodation' => 'float',
+        'cleaning_fee' => 'float',
+        'taxes' => 'float',
+        'fees' => 'float'
     ];
 
     /**
@@ -69,9 +71,10 @@ class CancelReservation200ResponsePmsErrorsInner implements ModelInterface, Arra
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'section' => null,
-        'message' => null,
-        'code' => null
+        'accommodation' => null,
+        'cleaning_fee' => null,
+        'taxes' => null,
+        'fees' => null
     ];
 
     /**
@@ -80,9 +83,10 @@ class CancelReservation200ResponsePmsErrorsInner implements ModelInterface, Arra
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'section' => false,
-        'message' => false,
-        'code' => false
+        'accommodation' => false,
+        'cleaning_fee' => false,
+        'taxes' => false,
+        'fees' => false
     ];
 
     /**
@@ -161,9 +165,10 @@ class CancelReservation200ResponsePmsErrorsInner implements ModelInterface, Arra
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'section' => 'section',
-        'message' => 'message',
-        'code' => 'code'
+        'accommodation' => 'accommodation',
+        'cleaning_fee' => 'cleaningFee',
+        'taxes' => 'taxes',
+        'fees' => 'fees'
     ];
 
     /**
@@ -172,9 +177,10 @@ class CancelReservation200ResponsePmsErrorsInner implements ModelInterface, Arra
      * @var array<string, string>
      */
     protected static array $setters = [
-        'section' => 'setSection',
-        'message' => 'setMessage',
-        'code' => 'setCode'
+        'accommodation' => 'setAccommodation',
+        'cleaning_fee' => 'setCleaningFee',
+        'taxes' => 'setTaxes',
+        'fees' => 'setFees'
     ];
 
     /**
@@ -183,9 +189,10 @@ class CancelReservation200ResponsePmsErrorsInner implements ModelInterface, Arra
      * @var array<string, string>
      */
     protected static array $getters = [
-        'section' => 'getSection',
-        'message' => 'getMessage',
-        'code' => 'getCode'
+        'accommodation' => 'getAccommodation',
+        'cleaning_fee' => 'getCleaningFee',
+        'taxes' => 'getTaxes',
+        'fees' => 'getFees'
     ];
 
     /**
@@ -235,9 +242,10 @@ class CancelReservation200ResponsePmsErrorsInner implements ModelInterface, Arra
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('section', $data ?? [], null);
-        $this->setIfExists('message', $data ?? [], null);
-        $this->setIfExists('code', $data ?? [], null);
+        $this->setIfExists('accommodation', $data ?? [], null);
+        $this->setIfExists('cleaning_fee', $data ?? [], null);
+        $this->setIfExists('taxes', $data ?? [], null);
+        $this->setIfExists('fees', $data ?? [], null);
     }
 
     /**
@@ -278,82 +286,109 @@ class CancelReservation200ResponsePmsErrorsInner implements ModelInterface, Arra
 
 
     /**
-     * Gets section
+     * Gets accommodation
      *
-     * @return string|null
+     * @return float|null
      */
-    public function getSection(): ?string
+    public function getAccommodation(): ?float
     {
-        return $this->container['section'];
+        return $this->container['accommodation'];
     }
 
     /**
-     * Sets section
+     * Sets accommodation
      *
-     * @param string|null $section section
+     * @param float|null $accommodation accommodation
      *
      * @return $this
      */
-    public function setSection(?string $section): static
+    public function setAccommodation(?float $accommodation): static
     {
-        if (is_null($section)) {
-            throw new InvalidArgumentException('non-nullable section cannot be null');
+        if (is_null($accommodation)) {
+            throw new InvalidArgumentException('non-nullable accommodation cannot be null');
         }
-        $this->container['section'] = $section;
+        $this->container['accommodation'] = $accommodation;
 
         return $this;
     }
 
     /**
-     * Gets message
+     * Gets cleaning_fee
      *
-     * @return string|null
+     * @return float|null
      */
-    public function getMessage(): ?string
+    public function getCleaningFee(): ?float
     {
-        return $this->container['message'];
+        return $this->container['cleaning_fee'];
     }
 
     /**
-     * Sets message
+     * Sets cleaning_fee
      *
-     * @param string|null $message message
+     * @param float|null $cleaning_fee cleaning_fee
      *
      * @return $this
      */
-    public function setMessage(?string $message): static
+    public function setCleaningFee(?float $cleaning_fee): static
     {
-        if (is_null($message)) {
-            throw new InvalidArgumentException('non-nullable message cannot be null');
+        if (is_null($cleaning_fee)) {
+            throw new InvalidArgumentException('non-nullable cleaning_fee cannot be null');
         }
-        $this->container['message'] = $message;
+        $this->container['cleaning_fee'] = $cleaning_fee;
 
         return $this;
     }
 
     /**
-     * Gets code
+     * Gets taxes
      *
-     * @return string|null
+     * @return float|null
      */
-    public function getCode(): ?string
+    public function getTaxes(): ?float
     {
-        return $this->container['code'];
+        return $this->container['taxes'];
     }
 
     /**
-     * Sets code
+     * Sets taxes
      *
-     * @param string|null $code code
+     * @param float|null $taxes taxes
      *
      * @return $this
      */
-    public function setCode(?string $code): static
+    public function setTaxes(?float $taxes): static
     {
-        if (is_null($code)) {
-            throw new InvalidArgumentException('non-nullable code cannot be null');
+        if (is_null($taxes)) {
+            throw new InvalidArgumentException('non-nullable taxes cannot be null');
         }
-        $this->container['code'] = $code;
+        $this->container['taxes'] = $taxes;
+
+        return $this;
+    }
+
+    /**
+     * Gets fees
+     *
+     * @return float|null
+     */
+    public function getFees(): ?float
+    {
+        return $this->container['fees'];
+    }
+
+    /**
+     * Sets fees
+     *
+     * @param float|null $fees fees
+     *
+     * @return $this
+     */
+    public function setFees(?float $fees): static
+    {
+        if (is_null($fees)) {
+            throw new InvalidArgumentException('non-nullable fees cannot be null');
+        }
+        $this->container['fees'] = $fees;
 
         return $this;
     }

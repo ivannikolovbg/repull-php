@@ -71,6 +71,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'did_you_mean' => 'string',
         'previous_code' => 'string',
         'listing_ids' => 'string[]',
+        'listings' => '\Repull\Model\ErrorErrorListingsInner[]',
         'listing_id' => 'string',
         'airbnb_listing_id' => 'string',
         'sync_category' => 'string',
@@ -97,6 +98,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'did_you_mean' => null,
         'previous_code' => null,
         'listing_ids' => null,
+        'listings' => null,
         'listing_id' => null,
         'airbnb_listing_id' => null,
         'sync_category' => null,
@@ -123,6 +125,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'did_you_mean' => false,
         'previous_code' => false,
         'listing_ids' => false,
+        'listings' => false,
         'listing_id' => false,
         'airbnb_listing_id' => false,
         'sync_category' => false,
@@ -219,6 +222,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'did_you_mean' => 'did_you_mean',
         'previous_code' => 'previous_code',
         'listing_ids' => 'listing_ids',
+        'listings' => 'listings',
         'listing_id' => 'listing_id',
         'airbnb_listing_id' => 'airbnb_listing_id',
         'sync_category' => 'sync_category',
@@ -245,6 +249,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'did_you_mean' => 'setDidYouMean',
         'previous_code' => 'setPreviousCode',
         'listing_ids' => 'setListingIds',
+        'listings' => 'setListings',
         'listing_id' => 'setListingId',
         'airbnb_listing_id' => 'setAirbnbListingId',
         'sync_category' => 'setSyncCategory',
@@ -271,6 +276,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'did_you_mean' => 'getDidYouMean',
         'previous_code' => 'getPreviousCode',
         'listing_ids' => 'getListingIds',
+        'listings' => 'getListings',
         'listing_id' => 'getListingId',
         'airbnb_listing_id' => 'getAirbnbListingId',
         'sync_category' => 'getSyncCategory',
@@ -338,6 +344,7 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('did_you_mean', $data ?? [], null);
         $this->setIfExists('previous_code', $data ?? [], null);
         $this->setIfExists('listing_ids', $data ?? [], null);
+        $this->setIfExists('listings', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('airbnb_listing_id', $data ?? [], null);
         $this->setIfExists('sync_category', $data ?? [], null);
@@ -753,6 +760,33 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable listing_ids cannot be null');
         }
         $this->container['listing_ids'] = $listing_ids;
+
+        return $this;
+    }
+
+    /**
+     * Gets listings
+     *
+     * @return \Repull\Model\ErrorErrorListingsInner[]|null
+     */
+    public function getListings(): ?array
+    {
+        return $this->container['listings'];
+    }
+
+    /**
+     * Sets listings
+     *
+     * @param \Repull\Model\ErrorErrorListingsInner[]|null $listings The same inactive listings with their names, so you can show the user which ones to activate. Present on `code: \"listing_inactive\"` (HTTP 403). `name` is null only when the request did not resolve it.
+     *
+     * @return $this
+     */
+    public function setListings(?array $listings): static
+    {
+        if (is_null($listings)) {
+            throw new InvalidArgumentException('non-nullable listings cannot be null');
+        }
+        $this->container['listings'] = $listings;
 
         return $this;
     }

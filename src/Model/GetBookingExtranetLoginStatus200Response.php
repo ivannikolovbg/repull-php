@@ -58,7 +58,7 @@ class GetBookingExtranetLoginStatus200Response implements ModelInterface, ArrayA
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'account_id' => 'int',
+        'account_id' => 'string',
         'status' => 'string',
         'error_message' => 'string',
         'friendly_error' => 'string',
@@ -301,9 +301,9 @@ class GetBookingExtranetLoginStatus200Response implements ModelInterface, ArrayA
     /**
      * Gets account_id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getAccountId(): ?int
+    public function getAccountId(): ?string
     {
         return $this->container['account_id'];
     }
@@ -311,11 +311,11 @@ class GetBookingExtranetLoginStatus200Response implements ModelInterface, ArrayA
     /**
      * Sets account_id
      *
-     * @param int|null $account_id account_id
+     * @param string|null $account_id The connection id (numeric string, like every `*Id` on the wire).
      *
      * @return $this
      */
-    public function setAccountId(?int $account_id): static
+    public function setAccountId(?string $account_id): static
     {
         if (is_null($account_id)) {
             throw new InvalidArgumentException('non-nullable account_id cannot be null');

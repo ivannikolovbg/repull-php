@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * ReservationCreateResponseUnit Class Doc Comment
  *
- * @description Mews or Cloudbeds listings only: the room the PMS assigned. Absent for every other listing.
+ * @description PMS listings: the unit the PMS assigned (hotel-model PMSs), or null. Absent for direct bookings.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

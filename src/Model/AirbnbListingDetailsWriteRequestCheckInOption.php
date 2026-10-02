@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * AirbnbListingDetailsWriteRequestCheckInOption Class Doc Comment
  *
- * @description How the guest lets themselves in — Airbnb&#39;s &#x60;check_in_option&#x60;.
+ * @description How the guest lets themselves in — Airbnb&#39;s &#x60;check_in_option&#x60;. &#x60;instruction&#x60; is the arrival instructions the guest sees.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

@@ -59,7 +59,7 @@ class SubmitSmoobuCredentialsRequest implements ModelInterface, ArrayAccess, Jso
      */
     protected static array $openAPITypes = [
         'session_id' => 'string',
-        'credentials' => 'array<string,mixed>'
+        'credentials' => '\Repull\Model\SubmitSmoobuCredentialsRequestCredentials'
     ];
 
     /**
@@ -303,9 +303,9 @@ class SubmitSmoobuCredentialsRequest implements ModelInterface, ArrayAccess, Jso
     /**
      * Gets credentials
      *
-     * @return array<string,mixed>
+     * @return \Repull\Model\SubmitSmoobuCredentialsRequestCredentials
      */
-    public function getCredentials(): array
+    public function getCredentials(): \Repull\Model\SubmitSmoobuCredentialsRequestCredentials
     {
         return $this->container['credentials'];
     }
@@ -313,11 +313,11 @@ class SubmitSmoobuCredentialsRequest implements ModelInterface, ArrayAccess, Jso
     /**
      * Sets credentials
      *
-     * @param array<string,mixed> $credentials API key from Smoobu → Settings → For developers.
+     * @param \Repull\Model\SubmitSmoobuCredentialsRequestCredentials $credentials credentials
      *
      * @return $this
      */
-    public function setCredentials(array $credentials): static
+    public function setCredentials(\Repull\Model\SubmitSmoobuCredentialsRequestCredentials $credentials): static
     {
         if (is_null($credentials)) {
             throw new InvalidArgumentException('non-nullable credentials cannot be null');

@@ -60,6 +60,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $openAPITypes = [
         'redirect_url' => 'string',
         'state' => 'string',
+        'reservation_history_months' => 'int',
         'access_type' => 'string',
         'allowed_providers' => 'string[]',
         'locale' => 'string',
@@ -77,6 +78,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $openAPIFormats = [
         'redirect_url' => 'uri',
         'state' => null,
+        'reservation_history_months' => null,
         'access_type' => null,
         'allowed_providers' => null,
         'locale' => null,
@@ -94,6 +96,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $openAPINullables = [
         'redirect_url' => false,
         'state' => true,
+        'reservation_history_months' => false,
         'access_type' => false,
         'allowed_providers' => true,
         'locale' => true,
@@ -181,6 +184,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $attributeMap = [
         'redirect_url' => 'redirectUrl',
         'state' => 'state',
+        'reservation_history_months' => 'reservationHistoryMonths',
         'access_type' => 'accessType',
         'allowed_providers' => 'allowedProviders',
         'locale' => 'locale',
@@ -198,6 +202,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $setters = [
         'redirect_url' => 'setRedirectUrl',
         'state' => 'setState',
+        'reservation_history_months' => 'setReservationHistoryMonths',
         'access_type' => 'setAccessType',
         'allowed_providers' => 'setAllowedProviders',
         'locale' => 'setLocale',
@@ -215,6 +220,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     protected static array $getters = [
         'redirect_url' => 'getRedirectUrl',
         'state' => 'getState',
+        'reservation_history_months' => 'getReservationHistoryMonths',
         'access_type' => 'getAccessType',
         'allowed_providers' => 'getAllowedProviders',
         'locale' => 'getLocale',
@@ -346,6 +352,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     {
         $this->setIfExists('redirect_url', $data ?? [], null);
         $this->setIfExists('state', $data ?? [], null);
+        $this->setIfExists('reservation_history_months', $data ?? [], null);
         $this->setIfExists('access_type', $data ?? [], null);
         $this->setIfExists('allowed_providers', $data ?? [], null);
         $this->setIfExists('locale', $data ?? [], null);
@@ -383,6 +390,14 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         if ($this->container['redirect_url'] === null) {
             $invalidProperties[] = "'redirect_url' can't be null";
         }
+        if (!is_null($this->container['reservation_history_months']) && ($this->container['reservation_history_months'] > 60)) {
+            $invalidProperties[] = "invalid value for 'reservation_history_months', must be smaller than or equal to 60.";
+        }
+
+        if (!is_null($this->container['reservation_history_months']) && ($this->container['reservation_history_months'] < 1)) {
+            $invalidProperties[] = "invalid value for 'reservation_history_months', must be bigger than or equal to 1.";
+        }
+
         $allowedValues = self::getAccessTypeAllowableValues();
         if (!is_null($this->container['access_type']) && !in_array($this->container['access_type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -470,6 +485,41 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
             }
         }
         $this->container['state'] = $state;
+
+        return $this;
+    }
+
+    /**
+     * Gets reservation_history_months
+     *
+     * @return int|null
+     */
+    public function getReservationHistoryMonths(): ?int
+    {
+        return $this->container['reservation_history_months'];
+    }
+
+    /**
+     * Sets reservation_history_months
+     *
+     * @param int|null $reservation_history_months Airbnb — how many months of past reservations the first import pulls (1–60). Omit it for the default window. Upcoming stays are always imported. A wider window takes longer to import, because every extra month is more stays to fetch.
+     *
+     * @return $this
+     */
+    public function setReservationHistoryMonths(?int $reservation_history_months): static
+    {
+        if (is_null($reservation_history_months)) {
+            throw new InvalidArgumentException('non-nullable reservation_history_months cannot be null');
+        }
+
+        if (($reservation_history_months > 60)) {
+            throw new InvalidArgumentException('invalid value for $reservation_history_months when calling CreateConnectSessionRequest., must be smaller than or equal to 60.');
+        }
+        if (($reservation_history_months < 1)) {
+            throw new InvalidArgumentException('invalid value for $reservation_history_months when calling CreateConnectSessionRequest., must be bigger than or equal to 1.');
+        }
+
+        $this->container['reservation_history_months'] = $reservation_history_months;
 
         return $this;
     }

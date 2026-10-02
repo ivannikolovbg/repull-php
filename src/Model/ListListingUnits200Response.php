@@ -58,7 +58,7 @@ class ListListingUnits200Response implements ModelInterface, ArrayAccess, JsonSe
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'listing_id' => 'int',
+        'listing_id' => 'string',
         'total' => 'int',
         'data' => '\Repull\Model\ListListingUnits200ResponseDataInner[]'
     ];
@@ -280,9 +280,9 @@ class ListListingUnits200Response implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Gets listing_id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getListingId(): ?int
+    public function getListingId(): ?string
     {
         return $this->container['listing_id'];
     }
@@ -290,11 +290,11 @@ class ListListingUnits200Response implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Sets listing_id
      *
-     * @param int|null $listing_id listing_id
+     * @param string|null $listing_id Repull listing id (numeric string, like every `*Id` on the wire).
      *
      * @return $this
      */
-    public function setListingId(?int $listing_id): static
+    public function setListingId(?string $listing_id): static
     {
         if (is_null($listing_id)) {
             throw new InvalidArgumentException('non-nullable listing_id cannot be null');

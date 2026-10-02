@@ -1,6 +1,6 @@
 <?php
 /**
- * AirbnbPermitsWriteRequestPermitsInnerAnswersValue
+ * UpdateAirbnbCheckinGuideRequest
  *
  * PHP version 8.1
  *
@@ -34,14 +34,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * AirbnbPermitsWriteRequestPermitsInnerAnswersValue Class Doc Comment
+ * UpdateAirbnbCheckinGuideRequest Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class AirbnbPermitsWriteRequestPermitsInnerAnswersValue implements ModelInterface, ArrayAccess, JsonSerializable
+class UpdateAirbnbCheckinGuideRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersValue implements ModelInterfac
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'AirbnbPermitsWriteRequest_permits_inner_answers_value';
+    protected static string $openAPIModelName = 'update_airbnb_checkin_guide_request';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -58,11 +58,8 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersValue implements ModelInterfac
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'text_value' => 'string',
-        'attestation_value' => 'bool',
-        'radio_value' => 'string',
-        'date_value' => 'string',
-        'selected_options_value' => 'string[]'
+        'locale' => 'string',
+        'steps' => '\Repull\Model\UpdateAirbnbCheckinGuideRequestStepsInner[]'
     ];
 
     /**
@@ -71,11 +68,8 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersValue implements ModelInterfac
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'text_value' => null,
-        'attestation_value' => null,
-        'radio_value' => null,
-        'date_value' => null,
-        'selected_options_value' => null
+        'locale' => null,
+        'steps' => null
     ];
 
     /**
@@ -84,11 +78,8 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersValue implements ModelInterfac
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'text_value' => false,
-        'attestation_value' => false,
-        'radio_value' => false,
-        'date_value' => false,
-        'selected_options_value' => false
+        'locale' => false,
+        'steps' => false
     ];
 
     /**
@@ -167,11 +158,8 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersValue implements ModelInterfac
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'text_value' => 'text_value',
-        'attestation_value' => 'attestation_value',
-        'radio_value' => 'radio_value',
-        'date_value' => 'date_value',
-        'selected_options_value' => 'selected_options_value'
+        'locale' => 'locale',
+        'steps' => 'steps'
     ];
 
     /**
@@ -180,11 +168,8 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersValue implements ModelInterfac
      * @var array<string, string>
      */
     protected static array $setters = [
-        'text_value' => 'setTextValue',
-        'attestation_value' => 'setAttestationValue',
-        'radio_value' => 'setRadioValue',
-        'date_value' => 'setDateValue',
-        'selected_options_value' => 'setSelectedOptionsValue'
+        'locale' => 'setLocale',
+        'steps' => 'setSteps'
     ];
 
     /**
@@ -193,11 +178,8 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersValue implements ModelInterfac
      * @var array<string, string>
      */
     protected static array $getters = [
-        'text_value' => 'getTextValue',
-        'attestation_value' => 'getAttestationValue',
-        'radio_value' => 'getRadioValue',
-        'date_value' => 'getDateValue',
-        'selected_options_value' => 'getSelectedOptionsValue'
+        'locale' => 'getLocale',
+        'steps' => 'getSteps'
     ];
 
     /**
@@ -247,11 +229,8 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersValue implements ModelInterfac
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('text_value', $data ?? [], null);
-        $this->setIfExists('attestation_value', $data ?? [], null);
-        $this->setIfExists('radio_value', $data ?? [], null);
-        $this->setIfExists('date_value', $data ?? [], null);
-        $this->setIfExists('selected_options_value', $data ?? [], null);
+        $this->setIfExists('locale', $data ?? [], null);
+        $this->setIfExists('steps', $data ?? [], null);
     }
 
     /**
@@ -279,6 +258,13 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersValue implements ModelInterfac
     {
         $invalidProperties = [];
 
+        if ($this->container['steps'] === null) {
+            $invalidProperties[] = "'steps' can't be null";
+        }
+        if ((count($this->container['steps']) > 30)) {
+            $invalidProperties[] = "invalid value for 'steps', number of items must be less than or equal to 30.";
+        }
+
         return $invalidProperties;
     }
 
@@ -292,136 +278,59 @@ class AirbnbPermitsWriteRequestPermitsInnerAnswersValue implements ModelInterfac
 
 
     /**
-     * Gets text_value
+     * Gets locale
      *
      * @return string|null
      */
-    public function getTextValue(): ?string
+    public function getLocale(): ?string
     {
-        return $this->container['text_value'];
+        return $this->container['locale'];
     }
 
     /**
-     * Sets text_value
+     * Sets locale
      *
-     * @param string|null $text_value text_value
+     * @param string|null $locale Language of the guide when one has to be created. Ignored when the listing already has a guide.
      *
      * @return $this
      */
-    public function setTextValue(?string $text_value): static
+    public function setLocale(?string $locale): static
     {
-        if (is_null($text_value)) {
-            throw new InvalidArgumentException('non-nullable text_value cannot be null');
+        if (is_null($locale)) {
+            throw new InvalidArgumentException('non-nullable locale cannot be null');
         }
-        $this->container['text_value'] = $text_value;
+        $this->container['locale'] = $locale;
 
         return $this;
     }
 
     /**
-     * Gets attestation_value
+     * Gets steps
      *
-     * @return bool|null
+     * @return \Repull\Model\UpdateAirbnbCheckinGuideRequestStepsInner[]
      */
-    public function getAttestationValue(): ?bool
+    public function getSteps(): array
     {
-        return $this->container['attestation_value'];
+        return $this->container['steps'];
     }
 
     /**
-     * Sets attestation_value
+     * Sets steps
      *
-     * @param bool|null $attestation_value attestation_value
+     * @param \Repull\Model\UpdateAirbnbCheckinGuideRequestStepsInner[] $steps The guide's steps, in the order guests see them.
      *
      * @return $this
      */
-    public function setAttestationValue(?bool $attestation_value): static
+    public function setSteps(array $steps): static
     {
-        if (is_null($attestation_value)) {
-            throw new InvalidArgumentException('non-nullable attestation_value cannot be null');
+        if (is_null($steps)) {
+            throw new InvalidArgumentException('non-nullable steps cannot be null');
         }
-        $this->container['attestation_value'] = $attestation_value;
 
-        return $this;
-    }
-
-    /**
-     * Gets radio_value
-     *
-     * @return string|null
-     */
-    public function getRadioValue(): ?string
-    {
-        return $this->container['radio_value'];
-    }
-
-    /**
-     * Sets radio_value
-     *
-     * @param string|null $radio_value radio_value
-     *
-     * @return $this
-     */
-    public function setRadioValue(?string $radio_value): static
-    {
-        if (is_null($radio_value)) {
-            throw new InvalidArgumentException('non-nullable radio_value cannot be null');
+        if ((count($steps) > 30)) {
+            throw new InvalidArgumentException('invalid value for $steps when calling UpdateAirbnbCheckinGuideRequest., number of items must be less than or equal to 30.');
         }
-        $this->container['radio_value'] = $radio_value;
-
-        return $this;
-    }
-
-    /**
-     * Gets date_value
-     *
-     * @return string|null
-     */
-    public function getDateValue(): ?string
-    {
-        return $this->container['date_value'];
-    }
-
-    /**
-     * Sets date_value
-     *
-     * @param string|null $date_value ISO date, YYYY-MM-DD.
-     *
-     * @return $this
-     */
-    public function setDateValue(?string $date_value): static
-    {
-        if (is_null($date_value)) {
-            throw new InvalidArgumentException('non-nullable date_value cannot be null');
-        }
-        $this->container['date_value'] = $date_value;
-
-        return $this;
-    }
-
-    /**
-     * Gets selected_options_value
-     *
-     * @return string[]|null
-     */
-    public function getSelectedOptionsValue(): ?array
-    {
-        return $this->container['selected_options_value'];
-    }
-
-    /**
-     * Sets selected_options_value
-     *
-     * @param string[]|null $selected_options_value selected_options_value
-     *
-     * @return $this
-     */
-    public function setSelectedOptionsValue(?array $selected_options_value): static
-    {
-        if (is_null($selected_options_value)) {
-            throw new InvalidArgumentException('non-nullable selected_options_value cannot be null');
-        }
-        $this->container['selected_options_value'] = $selected_options_value;
+        $this->container['steps'] = $steps;
 
         return $this;
     }

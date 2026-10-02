@@ -55,4 +55,49 @@ final class SmokeTest extends TestCase
         $this->assertSame('test-flows', $r->getPlatform());
         $this->assertSame('accept', $r->getStatus());
     }
+
+    public function testQuoteReservationIsExposedAndSerializes(): void
+    {
+        $api = new \Repull\Api\ReservationsApi();
+        $this->assertTrue(method_exists($api, 'quoteReservation'));
+
+        $q = new \Repull\Model\ReservationQuoteRequest([
+            'listing_id' => 4118,
+            'check_in' => new \DateTime('2026-10-01'),
+            'check_out' => new \DateTime('2026-10-05'),
+            'adults' => 2,
+        ]);
+        $json = json_decode(json_encode(\Repull\ObjectSerializer::sanitizeForSerialization($q)), true);
+        $this->assertSame(4118, $json['listingId']);
+        $this->assertSame('2026-10-01', $json['checkIn']);
+
+        $res = \Repull\ObjectSerializer::deserialize(
+            json_decode('{"listingId":"4118","available":true,"total":880,"restrictions":[]}'),
+            '\\Repull\\Model\\ReservationQuoteResponse'
+        );
+        $this->assertTrue($res->getAvailable());
+        $this->assertSame('4118', $res->getListingId());
+    }
+
+    public function testCreateReservationAcceptsPmsFields(): void
+    {
+        $c = new \Repull\Model\ReservationCreateRequest([
+            'listing_id' => 4118,
+            'check_in' => new \DateTime('2026-10-01'),
+            'check_out' => new \DateTime('2026-10-05'),
+            'guest' => new \Repull\Model\ReservationGuestInput(['first_name' => 'Ada']),
+            'adults' => 2,
+            'children' => 1,
+            'total_price' => 880,
+            'notes' => 'Late arrival',
+            'unit_id' => 'u-1',
+            'status' => 'tentative',
+            'send_confirmation_email' => false,
+        ]);
+        $json = json_decode(json_encode(\Repull\ObjectSerializer::sanitizeForSerialization($c)), true);
+        $this->assertSame('u-1', $json['unitId']);
+        $this->assertSame('tentative', $json['status']);
+        $this->assertFalse($json['sendConfirmationEmail']);
+        $this->assertEquals(880, $json['totalPrice']);
+    }
 }

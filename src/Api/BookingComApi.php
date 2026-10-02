@@ -3827,6 +3827,7 @@ class BookingComApi
      *
      * List Booking.com properties
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingProperties'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -3834,10 +3835,11 @@ class BookingComApi
      * @return \Repull\Model\BookingProperty[]
      */
     public function listBookingProperties(
+        ?string $status = 'active',
         string $contentType = self::contentTypes['listBookingProperties'][0]
     ): array
     {
-        list($response) = $this->listBookingPropertiesWithHttpInfo($contentType);
+        list($response) = $this->listBookingPropertiesWithHttpInfo($status, $contentType);
         return $response;
     }
 
@@ -3846,6 +3848,7 @@ class BookingComApi
      *
      * List Booking.com properties
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingProperties'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -3853,10 +3856,11 @@ class BookingComApi
      * @return array of \Repull\Model\BookingProperty[], HTTP status code, HTTP response headers (array of strings)
      */
     public function listBookingPropertiesWithHttpInfo(
+        ?string $status = 'active',
         string $contentType = self::contentTypes['listBookingProperties'][0]
     ): array
     {
-        $request = $this->listBookingPropertiesRequest($contentType);
+        $request = $this->listBookingPropertiesRequest($status, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -3929,16 +3933,18 @@ class BookingComApi
      *
      * List Booking.com properties
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingProperties'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function listBookingPropertiesAsync(
+        ?string $status = 'active',
         string $contentType = self::contentTypes['listBookingProperties'][0]
     ): PromiseInterface
     {
-        return $this->listBookingPropertiesAsyncWithHttpInfo($contentType)
+        return $this->listBookingPropertiesAsyncWithHttpInfo($status, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -3951,17 +3957,19 @@ class BookingComApi
      *
      * List Booking.com properties
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingProperties'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function listBookingPropertiesAsyncWithHttpInfo(
+        ?string $status = 'active',
         string $contentType = self::contentTypes['listBookingProperties'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\BookingProperty[]';
-        $request = $this->listBookingPropertiesRequest($contentType);
+        $request = $this->listBookingPropertiesRequest($status, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -4002,15 +4010,18 @@ class BookingComApi
     /**
      * Create request for operation 'listBookingProperties'
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingProperties'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listBookingPropertiesRequest(
+        ?string $status = 'active',
         string $contentType = self::contentTypes['listBookingProperties'][0]
     ): Request
     {
+
 
 
         $resourcePath = '/v1/channels/booking/properties';
@@ -4020,6 +4031,15 @@ class BookingComApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $status,
+            'status', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 

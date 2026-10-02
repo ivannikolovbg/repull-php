@@ -1,6 +1,6 @@
 <?php
 /**
- * CreateConnectionRequest
+ * ListingCapabilities
  *
  * PHP version 8.1
  *
@@ -34,15 +34,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * CreateConnectionRequest Class Doc Comment
+ * ListingCapabilities Class Doc Comment
  *
- * @description Provider-specific credentials (apiKey, clientId/clientSecret, etc.) or OAuth init params for Airbnb.
+ * @description &#x60;GET /v1/listings/{id}&#x60; only. What the API can do with this listing.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingCapabilities implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'create_connection_request';
+    protected static string $openAPIModelName = 'Listing_capabilities';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,13 +59,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'redirect_url' => 'string',
-        'access_type' => 'string',
-        'reservation_history_months' => 'int',
-        'state' => 'string',
-        'client_id' => 'string',
-        'client_secret' => 'string',
-        'locale' => 'string'
+        'reservations' => '\Repull\Model\ReservationCapabilities'
     ];
 
     /**
@@ -74,13 +68,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'redirect_url' => 'uri',
-        'access_type' => null,
-        'reservation_history_months' => null,
-        'state' => null,
-        'client_id' => null,
-        'client_secret' => null,
-        'locale' => null
+        'reservations' => null
     ];
 
     /**
@@ -89,13 +77,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'redirect_url' => false,
-        'access_type' => false,
-        'reservation_history_months' => false,
-        'state' => false,
-        'client_id' => false,
-        'client_secret' => false,
-        'locale' => true
+        'reservations' => false
     ];
 
     /**
@@ -174,13 +156,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'redirect_url' => 'redirectUrl',
-        'access_type' => 'accessType',
-        'reservation_history_months' => 'reservationHistoryMonths',
-        'state' => 'state',
-        'client_id' => 'clientId',
-        'client_secret' => 'clientSecret',
-        'locale' => 'locale'
+        'reservations' => 'reservations'
     ];
 
     /**
@@ -189,13 +165,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $setters = [
-        'redirect_url' => 'setRedirectUrl',
-        'access_type' => 'setAccessType',
-        'reservation_history_months' => 'setReservationHistoryMonths',
-        'state' => 'setState',
-        'client_id' => 'setClientId',
-        'client_secret' => 'setClientSecret',
-        'locale' => 'setLocale'
+        'reservations' => 'setReservations'
     ];
 
     /**
@@ -204,13 +174,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $getters = [
-        'redirect_url' => 'getRedirectUrl',
-        'access_type' => 'getAccessType',
-        'reservation_history_months' => 'getReservationHistoryMonths',
-        'state' => 'getState',
-        'client_id' => 'getClientId',
-        'client_secret' => 'getClientSecret',
-        'locale' => 'getLocale'
+        'reservations' => 'getReservations'
     ];
 
     /**
@@ -245,23 +209,6 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         return self::$openAPIModelName;
     }
 
-    public const ACCESS_TYPE_READ_ONLY = 'read_only';
-    public const ACCESS_TYPE_FULL_ACCESS = 'full_access';
-    public const ACCESS_TYPE_MESSAGING = 'messaging';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getAccessTypeAllowableValues()
-    {
-        return [
-            self::ACCESS_TYPE_READ_ONLY,
-            self::ACCESS_TYPE_FULL_ACCESS,
-            self::ACCESS_TYPE_MESSAGING,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -277,13 +224,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('redirect_url', $data ?? [], null);
-        $this->setIfExists('access_type', $data ?? [], 'full_access');
-        $this->setIfExists('reservation_history_months', $data ?? [], null);
-        $this->setIfExists('state', $data ?? [], null);
-        $this->setIfExists('client_id', $data ?? [], null);
-        $this->setIfExists('client_secret', $data ?? [], null);
-        $this->setIfExists('locale', $data ?? [], null);
+        $this->setIfExists('reservations', $data ?? [], null);
     }
 
     /**
@@ -311,23 +252,6 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     {
         $invalidProperties = [];
 
-        $allowedValues = self::getAccessTypeAllowableValues();
-        if (!is_null($this->container['access_type']) && !in_array($this->container['access_type'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'access_type', must be one of '%s'",
-                $this->container['access_type'],
-                implode("', '", $allowedValues)
-            );
-        }
-
-        if (!is_null($this->container['reservation_history_months']) && ($this->container['reservation_history_months'] > 60)) {
-            $invalidProperties[] = "invalid value for 'reservation_history_months', must be smaller than or equal to 60.";
-        }
-
-        if (!is_null($this->container['reservation_history_months']) && ($this->container['reservation_history_months'] < 1)) {
-            $invalidProperties[] = "invalid value for 'reservation_history_months', must be bigger than or equal to 1.";
-        }
-
         return $invalidProperties;
     }
 
@@ -341,206 +265,28 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
 
 
     /**
-     * Gets redirect_url
+     * Gets reservations
      *
-     * @return string|null
+     * @return \Repull\Model\ReservationCapabilities|null
      */
-    public function getRedirectUrl(): ?string
+    public function getReservations(): ?\Repull\Model\ReservationCapabilities
     {
-        return $this->container['redirect_url'];
+        return $this->container['reservations'];
     }
 
     /**
-     * Sets redirect_url
+     * Sets reservations
      *
-     * @param string|null $redirect_url Airbnb + Booking.com — where to redirect the user after they finish the hosted connect flow.
+     * @param \Repull\Model\ReservationCapabilities|null $reservations reservations
      *
      * @return $this
      */
-    public function setRedirectUrl(?string $redirect_url): static
+    public function setReservations(?\Repull\Model\ReservationCapabilities $reservations): static
     {
-        if (is_null($redirect_url)) {
-            throw new InvalidArgumentException('non-nullable redirect_url cannot be null');
+        if (is_null($reservations)) {
+            throw new InvalidArgumentException('non-nullable reservations cannot be null');
         }
-        $this->container['redirect_url'] = $redirect_url;
-
-        return $this;
-    }
-
-    /**
-     * Gets access_type
-     *
-     * @return string|null
-     */
-    public function getAccessType(): ?string
-    {
-        return $this->container['access_type'];
-    }
-
-    /**
-     * Sets access_type
-     *
-     * @param string|null $access_type Airbnb only — selects the OAuth scope set. 'read_only' grants read-only scopes; 'messaging' grants read scopes plus message read/send but NOT property management, so it can coexist with another app (e.g. an existing PMS) that already holds property management on the same Airbnb account; 'full_access' (default) grants full host scopes including the exclusive property management (only one app per Airbnb account can hold it). The hosted consent screen normally lets the host pick a tier; passing `accessType` explicitly fixes the tier and hides that choice, so the host can only continue with the tier you requested. Omit it to let the host choose.
-     *
-     * @return $this
-     */
-    public function setAccessType(?string $access_type): static
-    {
-        if (is_null($access_type)) {
-            throw new InvalidArgumentException('non-nullable access_type cannot be null');
-        }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['access_type'] = $access_type;
-
-        return $this;
-    }
-
-    /**
-     * Gets reservation_history_months
-     *
-     * @return int|null
-     */
-    public function getReservationHistoryMonths(): ?int
-    {
-        return $this->container['reservation_history_months'];
-    }
-
-    /**
-     * Sets reservation_history_months
-     *
-     * @param int|null $reservation_history_months Airbnb — how many months of past reservations the first import pulls (1–60). Omit it for the default window. Upcoming stays are always imported. A wider window takes longer to import, because every extra month is more stays to fetch.
-     *
-     * @return $this
-     */
-    public function setReservationHistoryMonths(?int $reservation_history_months): static
-    {
-        if (is_null($reservation_history_months)) {
-            throw new InvalidArgumentException('non-nullable reservation_history_months cannot be null');
-        }
-
-        if (($reservation_history_months > 60)) {
-            throw new InvalidArgumentException('invalid value for $reservation_history_months when calling CreateConnectionRequest., must be smaller than or equal to 60.');
-        }
-        if (($reservation_history_months < 1)) {
-            throw new InvalidArgumentException('invalid value for $reservation_history_months when calling CreateConnectionRequest., must be bigger than or equal to 1.');
-        }
-
-        $this->container['reservation_history_months'] = $reservation_history_months;
-
-        return $this;
-    }
-
-    /**
-     * Gets state
-     *
-     * @return string|null
-     */
-    public function getState(): ?string
-    {
-        return $this->container['state'];
-    }
-
-    /**
-     * Sets state
-     *
-     * @param string|null $state Airbnb + Booking.com — your own correlation token, e.g. your user id (at most 500 characters). Echoed on the redirect back (`&state=`) and in the `connect.session.completed` webhook.
-     *
-     * @return $this
-     */
-    public function setState(?string $state): static
-    {
-        if (is_null($state)) {
-            throw new InvalidArgumentException('non-nullable state cannot be null');
-        }
-        $this->container['state'] = $state;
-
-        return $this;
-    }
-
-    /**
-     * Gets client_id
-     *
-     * @return string|null
-     */
-    public function getClientId(): ?string
-    {
-        return $this->container['client_id'];
-    }
-
-    /**
-     * Sets client_id
-     *
-     * @param string|null $client_id Plumguide — client ID.
-     *
-     * @return $this
-     */
-    public function setClientId(?string $client_id): static
-    {
-        if (is_null($client_id)) {
-            throw new InvalidArgumentException('non-nullable client_id cannot be null');
-        }
-        $this->container['client_id'] = $client_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets client_secret
-     *
-     * @return string|null
-     */
-    public function getClientSecret(): ?string
-    {
-        return $this->container['client_secret'];
-    }
-
-    /**
-     * Sets client_secret
-     *
-     * @param string|null $client_secret Plumguide — client secret.
-     *
-     * @return $this
-     */
-    public function setClientSecret(?string $client_secret): static
-    {
-        if (is_null($client_secret)) {
-            throw new InvalidArgumentException('non-nullable client_secret cannot be null');
-        }
-        $this->container['client_secret'] = $client_secret;
-
-        return $this;
-    }
-
-    /**
-     * Gets locale
-     *
-     * @return string|null
-     */
-    public function getLocale(): ?string
-    {
-        return $this->container['locale'];
-    }
-
-    /**
-     * Sets locale
-     *
-     * @param string|null $locale Airbnb only — optional UI language for the hosted Connect pages. Accepts any supported locale code (currently `en`, `fr`); unknown codes are ignored and resolution falls back to the workspace `default_language`, then `Accept-Language`, then `en`.
-     *
-     * @return $this
-     */
-    public function setLocale(?string $locale): static
-    {
-        if (is_null($locale)) {
-            array_push($this->openAPINullablesSetToNull, 'locale');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('locale', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['locale'] = $locale;
+        $this->container['reservations'] = $reservations;
 
         return $this;
     }

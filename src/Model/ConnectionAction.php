@@ -1,6 +1,6 @@
 <?php
 /**
- * CancelReservation200ResponsePms
+ * ConnectionAction
  *
  * PHP version 8.1
  *
@@ -34,15 +34,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * CancelReservation200ResponsePms Class Doc Comment
+ * ConnectionAction Class Doc Comment
  *
- * @description Present when the cancellation was made in a PMS.
+ * @description A host action a connection needs before it can work.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class CancelReservation200ResponsePms implements ModelInterface, ArrayAccess, JsonSerializable
+class ConnectionAction implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class CancelReservation200ResponsePms implements ModelInterface, ArrayAccess, Js
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'cancel_reservation_200_response_pms';
+    protected static string $openAPIModelName = 'ConnectionAction';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,9 +59,9 @@ class CancelReservation200ResponsePms implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'provider' => 'string',
-        'applied' => 'string[]',
-        'errors' => '\Repull\Model\CancelReservation200ResponsePmsErrorsInner[]'
+        'required' => 'bool',
+        'reason' => 'string',
+        'message' => 'string'
     ];
 
     /**
@@ -70,9 +70,9 @@ class CancelReservation200ResponsePms implements ModelInterface, ArrayAccess, Js
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'provider' => null,
-        'applied' => null,
-        'errors' => null
+        'required' => null,
+        'reason' => null,
+        'message' => null
     ];
 
     /**
@@ -81,9 +81,9 @@ class CancelReservation200ResponsePms implements ModelInterface, ArrayAccess, Js
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'provider' => false,
-        'applied' => false,
-        'errors' => false
+        'required' => false,
+        'reason' => true,
+        'message' => true
     ];
 
     /**
@@ -162,9 +162,9 @@ class CancelReservation200ResponsePms implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'provider' => 'provider',
-        'applied' => 'applied',
-        'errors' => 'errors'
+        'required' => 'required',
+        'reason' => 'reason',
+        'message' => 'message'
     ];
 
     /**
@@ -173,9 +173,9 @@ class CancelReservation200ResponsePms implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $setters = [
-        'provider' => 'setProvider',
-        'applied' => 'setApplied',
-        'errors' => 'setErrors'
+        'required' => 'setRequired',
+        'reason' => 'setReason',
+        'message' => 'setMessage'
     ];
 
     /**
@@ -184,9 +184,9 @@ class CancelReservation200ResponsePms implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $getters = [
-        'provider' => 'getProvider',
-        'applied' => 'getApplied',
-        'errors' => 'getErrors'
+        'required' => 'getRequired',
+        'reason' => 'getReason',
+        'message' => 'getMessage'
     ];
 
     /**
@@ -236,9 +236,9 @@ class CancelReservation200ResponsePms implements ModelInterface, ArrayAccess, Js
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('provider', $data ?? [], null);
-        $this->setIfExists('applied', $data ?? [], null);
-        $this->setIfExists('errors', $data ?? [], null);
+        $this->setIfExists('required', $data ?? [], null);
+        $this->setIfExists('reason', $data ?? [], null);
+        $this->setIfExists('message', $data ?? [], null);
     }
 
     /**
@@ -266,6 +266,9 @@ class CancelReservation200ResponsePms implements ModelInterface, ArrayAccess, Js
     {
         $invalidProperties = [];
 
+        if ($this->container['required'] === null) {
+            $invalidProperties[] = "'required' can't be null";
+        }
         return $invalidProperties;
     }
 
@@ -279,82 +282,96 @@ class CancelReservation200ResponsePms implements ModelInterface, ArrayAccess, Js
 
 
     /**
-     * Gets provider
+     * Gets required
+     *
+     * @return bool
+     */
+    public function getRequired(): bool
+    {
+        return $this->container['required'];
+    }
+
+    /**
+     * Sets required
+     *
+     * @param bool $required Whether a host action is pending.
+     *
+     * @return $this
+     */
+    public function setRequired(bool $required): static
+    {
+        if (is_null($required)) {
+            throw new InvalidArgumentException('non-nullable required cannot be null');
+        }
+        $this->container['required'] = $required;
+
+        return $this;
+    }
+
+    /**
+     * Gets reason
      *
      * @return string|null
      */
-    public function getProvider(): ?string
+    public function getReason(): ?string
     {
-        return $this->container['provider'];
+        return $this->container['reason'];
     }
 
     /**
-     * Sets provider
+     * Sets reason
      *
-     * @param string|null $provider provider
+     * @param string|null $reason Machine-readable reason, stable for programmatic handling.
      *
      * @return $this
      */
-    public function setProvider(?string $provider): static
+    public function setReason(?string $reason): static
     {
-        if (is_null($provider)) {
-            throw new InvalidArgumentException('non-nullable provider cannot be null');
+        if (is_null($reason)) {
+            array_push($this->openAPINullablesSetToNull, 'reason');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('reason', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['provider'] = $provider;
+        $this->container['reason'] = $reason;
 
         return $this;
     }
 
     /**
-     * Gets applied
+     * Gets message
      *
-     * @return string[]|null
+     * @return string|null
      */
-    public function getApplied(): ?array
+    public function getMessage(): ?string
     {
-        return $this->container['applied'];
+        return $this->container['message'];
     }
 
     /**
-     * Sets applied
+     * Sets message
      *
-     * @param string[]|null $applied applied
+     * @param string|null $message Host-facing one-liner describing what to do.
      *
      * @return $this
      */
-    public function setApplied(?array $applied): static
+    public function setMessage(?string $message): static
     {
-        if (is_null($applied)) {
-            throw new InvalidArgumentException('non-nullable applied cannot be null');
+        if (is_null($message)) {
+            array_push($this->openAPINullablesSetToNull, 'message');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('message', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['applied'] = $applied;
-
-        return $this;
-    }
-
-    /**
-     * Gets errors
-     *
-     * @return \Repull\Model\CancelReservation200ResponsePmsErrorsInner[]|null
-     */
-    public function getErrors(): ?array
-    {
-        return $this->container['errors'];
-    }
-
-    /**
-     * Sets errors
-     *
-     * @param \Repull\Model\CancelReservation200ResponsePmsErrorsInner[]|null $errors errors
-     *
-     * @return $this
-     */
-    public function setErrors(?array $errors): static
-    {
-        if (is_null($errors)) {
-            throw new InvalidArgumentException('non-nullable errors cannot be null');
-        }
-        $this->container['errors'] = $errors;
+        $this->container['message'] = $message;
 
         return $this;
     }

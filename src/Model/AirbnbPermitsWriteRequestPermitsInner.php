@@ -62,7 +62,7 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
         'regulation_type' => 'string',
         'regulation_context' => 'string',
         'flow_slug' => 'string',
-        'answers' => 'array<string,\Repull\Model\AirbnbPermitsWriteRequestPermitsInnerAnswersValue>'
+        'answers' => 'array<string,array<string,mixed>>'
     ];
 
     /**
@@ -418,7 +418,7 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
     /**
      * Gets answers
      *
-     * @return array<string,\Repull\Model\AirbnbPermitsWriteRequestPermitsInnerAnswersValue>
+     * @return array<string,array<string,mixed>>
      */
     public function getAnswers(): array
     {
@@ -428,7 +428,7 @@ class AirbnbPermitsWriteRequestPermitsInner implements ModelInterface, ArrayAcce
     /**
      * Sets answers
      *
-     * @param array<string,\Repull\Model\AirbnbPermitsWriteRequestPermitsInnerAnswersValue> $answers Keyed by each question's `answer_key`. Each value carries exactly one field, chosen by the question's `type`: TEXT → `text_value`, ATTESTATION → `attestation_value`, RADIO → `radio_value`, DATE → `date_value`, SELECT → `selected_options_value`.
+     * @param array<string,array<string,mixed>> $answers Keyed by each question's `answer_key`. Each value carries exactly one `<type>_value` field named after the question's `type` (lower-case): `text_value`, `attestation_value` (boolean), `radio_value`, `dropdown_value`, `email_value`, `future_date_value` (YYYY-MM-DD) and `file_upload_value` (object with the base64 file) are the ones Airbnb returns in production; other question types follow the same pattern. Airbnb validates the value against its question. Example: `{\"email\": {\"email_value\": \"host@example.com\"}, \"expiration_date\": {\"future_date_value\": \"2029-02-04\"}, \"attestation\": {\"attestation_value\": true}}`.
      *
      * @return $this
      */

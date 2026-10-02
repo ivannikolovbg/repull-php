@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * Listing Class Doc Comment
  *
- * @description A vacation rental listing in your Repull workspace.  An **inactive** listing appears only in &#x60;GET /v1/listings&#x60;, and only when &#x60;?status&#x3D;&#x60; asks for it. Such a row carries identity fields only — &#x60;id&#x60;, &#x60;name&#x60;, &#x60;status&#x60;, &#x60;channels&#x60; — so &#x60;address&#x60;, &#x60;content&#x60;, &#x60;details&#x60;, &#x60;createdAt&#x60; and &#x60;updatedAt&#x60; are absent until the listing is activated. &#x60;GET /v1/listings/{id}&#x60; and every other listing endpoint answer &#x60;403 listing_inactive&#x60; for it. The one field you can add back is &#x60;thumbnailUrl&#x60;, by passing &#x60;?include&#x3D;thumbnail&#x60; — enough to render an activate/deactivate picker with pictures from a single request.
+ * @description A vacation rental listing in your Repull workspace.  An **inactive** listing appears only in &#x60;GET /v1/listings&#x60;, and only when &#x60;?status&#x3D;&#x60; asks for it. Such a row carries identity fields only — &#x60;id&#x60;, &#x60;name&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, &#x60;address.city&#x60;, &#x60;channels&#x60; — so the street, &#x60;content&#x60;, &#x60;details&#x60;, &#x60;createdAt&#x60; and &#x60;updatedAt&#x60; are absent until the listing is activated. &#x60;inactiveReason&#x60; is &#x60;plan_limit&#x60; (held back by the plan; activating needs a free slot or an upgrade), &#x60;unlisted_on_airbnb&#x60;, or &#x60;deactivated&#x60; (switched off by you). &#x60;GET /v1/listings/{id}&#x60; and every other listing endpoint answer &#x60;403 listing_inactive&#x60; for it. The one field you can add back is &#x60;thumbnailUrl&#x60;, by passing &#x60;?include&#x3D;thumbnail&#x60; — enough to render an activate/deactivate picker with pictures from a single request.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -59,9 +59,11 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
+        'capabilities' => '\Repull\Model\ListingCapabilities',
         'units' => '\Repull\Model\ListingUnitsInner[]',
         'id' => 'string',
         'name' => 'string',
+        'public_name' => 'string',
         'address' => '\Repull\Model\ListingAddress',
         'thumbnail_url' => 'string',
         'status' => 'string',
@@ -79,9 +81,11 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
+        'capabilities' => null,
         'units' => null,
         'id' => null,
         'name' => null,
+        'public_name' => null,
         'address' => null,
         'thumbnail_url' => 'uri',
         'status' => null,
@@ -99,9 +103,11 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
+        'capabilities' => false,
         'units' => false,
         'id' => false,
         'name' => false,
+        'public_name' => true,
         'address' => false,
         'thumbnail_url' => true,
         'status' => false,
@@ -189,9 +195,11 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
+        'capabilities' => 'capabilities',
         'units' => 'units',
         'id' => 'id',
         'name' => 'name',
+        'public_name' => 'publicName',
         'address' => 'address',
         'thumbnail_url' => 'thumbnailUrl',
         'status' => 'status',
@@ -209,9 +217,11 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
+        'capabilities' => 'setCapabilities',
         'units' => 'setUnits',
         'id' => 'setId',
         'name' => 'setName',
+        'public_name' => 'setPublicName',
         'address' => 'setAddress',
         'thumbnail_url' => 'setThumbnailUrl',
         'status' => 'setStatus',
@@ -229,9 +239,11 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
+        'capabilities' => 'getCapabilities',
         'units' => 'getUnits',
         'id' => 'getId',
         'name' => 'getName',
+        'public_name' => 'getPublicName',
         'address' => 'getAddress',
         'thumbnail_url' => 'getThumbnailUrl',
         'status' => 'getStatus',
@@ -307,9 +319,11 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('capabilities', $data ?? [], null);
         $this->setIfExists('units', $data ?? [], null);
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('public_name', $data ?? [], null);
         $this->setIfExists('address', $data ?? [], null);
         $this->setIfExists('thumbnail_url', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
@@ -366,6 +380,33 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         return count($this->listInvalidProperties()) === 0;
     }
 
+
+    /**
+     * Gets capabilities
+     *
+     * @return \Repull\Model\ListingCapabilities|null
+     */
+    public function getCapabilities(): ?\Repull\Model\ListingCapabilities
+    {
+        return $this->container['capabilities'];
+    }
+
+    /**
+     * Sets capabilities
+     *
+     * @param \Repull\Model\ListingCapabilities|null $capabilities capabilities
+     *
+     * @return $this
+     */
+    public function setCapabilities(?\Repull\Model\ListingCapabilities $capabilities): static
+    {
+        if (is_null($capabilities)) {
+            throw new InvalidArgumentException('non-nullable capabilities cannot be null');
+        }
+        $this->container['capabilities'] = $capabilities;
+
+        return $this;
+    }
 
     /**
      * Gets units
@@ -434,7 +475,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets name
      *
-     * @param string|null $name name
+     * @param string|null $name The host's internal nickname for the listing.
      *
      * @return $this
      */
@@ -444,6 +485,40 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable name cannot be null');
         }
         $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets public_name
+     *
+     * @return string|null
+     */
+    public function getPublicName(): ?string
+    {
+        return $this->container['public_name'];
+    }
+
+    /**
+     * Sets public_name
+     *
+     * @param string|null $public_name The title guests see on the channel (e.g. the Airbnb listing title). `name` is the host's internal nickname for the listing; show `publicName` in anything a guest or end user reads. Present on inactive rows too.
+     *
+     * @return $this
+     */
+    public function setPublicName(?string $public_name): static
+    {
+        if (is_null($public_name)) {
+            array_push($this->openAPINullablesSetToNull, 'public_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('public_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['public_name'] = $public_name;
 
         return $this;
     }

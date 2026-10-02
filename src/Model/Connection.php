@@ -63,7 +63,9 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'string',
         'external_account_id' => 'string',
         'created_at' => '\DateTime',
-        'host' => '\Repull\Model\ConnectHost'
+        'host' => '\Repull\Model\ConnectHost',
+        'action' => '\Repull\Model\ConnectionAction',
+        'fix_url' => 'string'
     ];
 
     /**
@@ -77,7 +79,9 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => null,
         'external_account_id' => null,
         'created_at' => 'date-time',
-        'host' => null
+        'host' => null,
+        'action' => null,
+        'fix_url' => 'uri'
     ];
 
     /**
@@ -91,7 +95,9 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => false,
         'external_account_id' => true,
         'created_at' => false,
-        'host' => true
+        'host' => true,
+        'action' => true,
+        'fix_url' => true
     ];
 
     /**
@@ -175,7 +181,9 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'status',
         'external_account_id' => 'externalAccountId',
         'created_at' => 'createdAt',
-        'host' => 'host'
+        'host' => 'host',
+        'action' => 'action',
+        'fix_url' => 'fixUrl'
     ];
 
     /**
@@ -189,7 +197,9 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'setStatus',
         'external_account_id' => 'setExternalAccountId',
         'created_at' => 'setCreatedAt',
-        'host' => 'setHost'
+        'host' => 'setHost',
+        'action' => 'setAction',
+        'fix_url' => 'setFixUrl'
     ];
 
     /**
@@ -203,7 +213,9 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'getStatus',
         'external_account_id' => 'getExternalAccountId',
         'created_at' => 'getCreatedAt',
-        'host' => 'getHost'
+        'host' => 'getHost',
+        'action' => 'getAction',
+        'fix_url' => 'getFixUrl'
     ];
 
     /**
@@ -241,6 +253,9 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
     public const STATUS_ACTIVE = 'active';
     public const STATUS_INACTIVE = 'inactive';
     public const STATUS_ERROR = 'error';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_DISCONNECTED = 'disconnected';
+    public const STATUS_NEEDS_PERMISSIONS = 'needs_permissions';
 
     /**
      * Gets allowable values of the enum
@@ -253,6 +268,9 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
             self::STATUS_ACTIVE,
             self::STATUS_INACTIVE,
             self::STATUS_ERROR,
+            self::STATUS_PENDING,
+            self::STATUS_DISCONNECTED,
+            self::STATUS_NEEDS_PERMISSIONS,
         ];
     }
 
@@ -276,6 +294,8 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('external_account_id', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
         $this->setIfExists('host', $data ?? [], null);
+        $this->setIfExists('action', $data ?? [], null);
+        $this->setIfExists('fix_url', $data ?? [], null);
     }
 
     /**
@@ -391,7 +411,7 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets status
      *
-     * @param string|null $status status
+     * @param string|null $status `active` — connected and working. `pending` — still settling. `needs_permissions` — connected but the host must grant more access before it works (see `action`/`fixUrl`). An `active` connection can also carry an `action` (e.g. a Smoobu legacy API key that must be replaced with a key + secret before October 31, 2026). `error` — the last operation failed. `disconnected` — revoked or superseded.
      *
      * @return $this
      */
@@ -497,6 +517,74 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['host'] = $host;
+
+        return $this;
+    }
+
+    /**
+     * Gets action
+     *
+     * @return \Repull\Model\ConnectionAction|null
+     */
+    public function getAction(): ?\Repull\Model\ConnectionAction
+    {
+        return $this->container['action'];
+    }
+
+    /**
+     * Sets action
+     *
+     * @param \Repull\Model\ConnectionAction|null $action Set when the host must do something before the connection works (e.g. grant the invited Booking.com Extranet user full access). `null` when no action is pending.
+     *
+     * @return $this
+     */
+    public function setAction(?\Repull\Model\ConnectionAction $action): static
+    {
+        if (is_null($action)) {
+            array_push($this->openAPINullablesSetToNull, 'action');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('action', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['action'] = $action;
+
+        return $this;
+    }
+
+    /**
+     * Gets fix_url
+     *
+     * @return string|null
+     */
+    public function getFixUrl(): ?string
+    {
+        return $this->container['fix_url'];
+    }
+
+    /**
+     * Sets fix_url
+     *
+     * @param string|null $fix_url Durable link that reopens the hosted Connect flow bound to this account on the fix screen — send the host here to resolve `action`. Present only when `action.required` is true; `null` otherwise.
+     *
+     * @return $this
+     */
+    public function setFixUrl(?string $fix_url): static
+    {
+        if (is_null($fix_url)) {
+            array_push($this->openAPINullablesSetToNull, 'fix_url');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('fix_url', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['fix_url'] = $fix_url;
 
         return $this;
     }

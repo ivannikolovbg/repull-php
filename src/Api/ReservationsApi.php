@@ -92,6 +92,9 @@ class ReservationsApi
         'listReservations' => [
             'application/json',
         ],
+        'quoteReservation' => [
+            'application/json',
+        ],
         'updateReservation' => [
             'application/json',
         ],
@@ -563,20 +566,24 @@ class ReservationsApi
      * Cancel a reservation
      *
      * @param  int $id Reservation id. (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  \Repull\Model\CancelReservationRequest|null $cancel_reservation_request cancel_reservation_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelReservation'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\CancelReservation200Response|\Repull\Model\Error|null
+     * @return \Repull\Model\CancelReservation200Response|\Repull\Model\Error
      */
     public function cancelReservation(
         int $id,
+        ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         ?\Repull\Model\CancelReservationRequest $cancel_reservation_request = null,
         string $contentType = self::contentTypes['cancelReservation'][0]
-    ): \Repull\Model\CancelReservation200Response|\Repull\Model\Error|null
+    ): \Repull\Model\CancelReservation200Response|\Repull\Model\Error
     {
-        list($response) = $this->cancelReservationWithHttpInfo($id, $cancel_reservation_request, $contentType);
+        list($response) = $this->cancelReservationWithHttpInfo($id, $idempotency_key, $x_account_id, $cancel_reservation_request, $contentType);
         return $response;
     }
 
@@ -586,20 +593,24 @@ class ReservationsApi
      * Cancel a reservation
      *
      * @param  int $id Reservation id. (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  \Repull\Model\CancelReservationRequest|null $cancel_reservation_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelReservation'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\CancelReservation200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\CancelReservation200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function cancelReservationWithHttpInfo(
         int $id,
+        ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         ?\Repull\Model\CancelReservationRequest $cancel_reservation_request = null,
         string $contentType = self::contentTypes['cancelReservation'][0]
     ): array
     {
-        $request = $this->cancelReservationRequest($id, $cancel_reservation_request, $contentType);
+        $request = $this->cancelReservationRequest($id, $idempotency_key, $x_account_id, $cancel_reservation_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -630,7 +641,19 @@ class ReservationsApi
                         $request,
                         $response,
                     );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
                 case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -642,7 +665,19 @@ class ReservationsApi
                         $request,
                         $response,
                     );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
                 case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -679,7 +714,23 @@ class ReservationsApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -695,7 +746,23 @@ class ReservationsApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -715,6 +782,8 @@ class ReservationsApi
      * Cancel a reservation
      *
      * @param  int $id Reservation id. (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  \Repull\Model\CancelReservationRequest|null $cancel_reservation_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelReservation'] to see the possible values for this operation
      *
@@ -723,11 +792,13 @@ class ReservationsApi
      */
     public function cancelReservationAsync(
         int $id,
+        ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         ?\Repull\Model\CancelReservationRequest $cancel_reservation_request = null,
         string $contentType = self::contentTypes['cancelReservation'][0]
     ): PromiseInterface
     {
-        return $this->cancelReservationAsyncWithHttpInfo($id, $cancel_reservation_request, $contentType)
+        return $this->cancelReservationAsyncWithHttpInfo($id, $idempotency_key, $x_account_id, $cancel_reservation_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -741,6 +812,8 @@ class ReservationsApi
      * Cancel a reservation
      *
      * @param  int $id Reservation id. (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  \Repull\Model\CancelReservationRequest|null $cancel_reservation_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelReservation'] to see the possible values for this operation
      *
@@ -749,12 +822,14 @@ class ReservationsApi
      */
     public function cancelReservationAsyncWithHttpInfo(
         int $id,
+        ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         ?\Repull\Model\CancelReservationRequest $cancel_reservation_request = null,
         string $contentType = self::contentTypes['cancelReservation'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\CancelReservation200Response';
-        $request = $this->cancelReservationRequest($id, $cancel_reservation_request, $contentType);
+        $request = $this->cancelReservationRequest($id, $idempotency_key, $x_account_id, $cancel_reservation_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -796,6 +871,8 @@ class ReservationsApi
      * Create request for operation 'cancelReservation'
      *
      * @param  int $id Reservation id. (required)
+     * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  \Repull\Model\CancelReservationRequest|null $cancel_reservation_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['cancelReservation'] to see the possible values for this operation
      *
@@ -804,6 +881,8 @@ class ReservationsApi
      */
     public function cancelReservationRequest(
         int $id,
+        ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         ?\Repull\Model\CancelReservationRequest $cancel_reservation_request = null,
         string $contentType = self::contentTypes['cancelReservation'][0]
     ): Request
@@ -816,6 +895,11 @@ class ReservationsApi
             );
         }
 
+        if ($idempotency_key !== null && strlen($idempotency_key) > 255) {
+            throw new InvalidArgumentException('invalid length for "$idempotency_key" when calling ReservationsApi.cancelReservation, must be smaller than or equal to 255.');
+        }
+        
+
 
 
         $resourcePath = '/v1/reservations/{id}/cancel';
@@ -826,6 +910,14 @@ class ReservationsApi
         $multipart = false;
 
 
+        // header params
+        if ($idempotency_key !== null) {
+            $headerParams['Idempotency-Key'] = ObjectSerializer::toHeaderValue($idempotency_key);
+        }
+        // header params
+        if ($x_account_id !== null) {
+            $headerParams['X-Account-Id'] = ObjectSerializer::toHeaderValue($x_account_id);
+        }
 
         // path params
         if ($id !== null) {
@@ -908,6 +1000,7 @@ class ReservationsApi
      *
      * @param  \Repull\Model\ReservationCreateRequest $reservation_create_request reservation_create_request (required)
      * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createReservation'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -917,10 +1010,11 @@ class ReservationsApi
     public function createReservation(
         \Repull\Model\ReservationCreateRequest $reservation_create_request,
         ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         string $contentType = self::contentTypes['createReservation'][0]
     ): \Repull\Model\ReservationCreateResponse|\Repull\Model\Error
     {
-        list($response) = $this->createReservationWithHttpInfo($reservation_create_request, $idempotency_key, $contentType);
+        list($response) = $this->createReservationWithHttpInfo($reservation_create_request, $idempotency_key, $x_account_id, $contentType);
         return $response;
     }
 
@@ -931,19 +1025,21 @@ class ReservationsApi
      *
      * @param  \Repull\Model\ReservationCreateRequest $reservation_create_request (required)
      * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createReservation'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ReservationCreateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ReservationCreateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function createReservationWithHttpInfo(
         \Repull\Model\ReservationCreateRequest $reservation_create_request,
         ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         string $contentType = self::contentTypes['createReservation'][0]
     ): array
     {
-        $request = $this->createReservationRequest($reservation_create_request, $idempotency_key, $contentType);
+        $request = $this->createReservationRequest($reservation_create_request, $idempotency_key, $x_account_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -974,6 +1070,12 @@ class ReservationsApi
                         $request,
                         $response,
                     );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
                 case 401:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
@@ -992,6 +1094,12 @@ class ReservationsApi
                         $request,
                         $response,
                     );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
                 case 422:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
@@ -999,6 +1107,12 @@ class ReservationsApi
                         $response,
                     );
                 case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -1035,6 +1149,14 @@ class ReservationsApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -1059,6 +1181,14 @@ class ReservationsApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -1068,6 +1198,14 @@ class ReservationsApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -1088,6 +1226,7 @@ class ReservationsApi
      *
      * @param  \Repull\Model\ReservationCreateRequest $reservation_create_request (required)
      * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createReservation'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1096,10 +1235,11 @@ class ReservationsApi
     public function createReservationAsync(
         \Repull\Model\ReservationCreateRequest $reservation_create_request,
         ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         string $contentType = self::contentTypes['createReservation'][0]
     ): PromiseInterface
     {
-        return $this->createReservationAsyncWithHttpInfo($reservation_create_request, $idempotency_key, $contentType)
+        return $this->createReservationAsyncWithHttpInfo($reservation_create_request, $idempotency_key, $x_account_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1114,6 +1254,7 @@ class ReservationsApi
      *
      * @param  \Repull\Model\ReservationCreateRequest $reservation_create_request (required)
      * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createReservation'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1122,11 +1263,12 @@ class ReservationsApi
     public function createReservationAsyncWithHttpInfo(
         \Repull\Model\ReservationCreateRequest $reservation_create_request,
         ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         string $contentType = self::contentTypes['createReservation'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ReservationCreateResponse';
-        $request = $this->createReservationRequest($reservation_create_request, $idempotency_key, $contentType);
+        $request = $this->createReservationRequest($reservation_create_request, $idempotency_key, $x_account_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1169,6 +1311,7 @@ class ReservationsApi
      *
      * @param  \Repull\Model\ReservationCreateRequest $reservation_create_request (required)
      * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createReservation'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1177,6 +1320,7 @@ class ReservationsApi
     public function createReservationRequest(
         \Repull\Model\ReservationCreateRequest $reservation_create_request,
         ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         string $contentType = self::contentTypes['createReservation'][0]
     ): Request
     {
@@ -1193,6 +1337,7 @@ class ReservationsApi
         }
         
 
+
         $resourcePath = '/v1/reservations';
         $formParams = [];
         $queryParams = [];
@@ -1204,6 +1349,10 @@ class ReservationsApi
         // header params
         if ($idempotency_key !== null) {
             $headerParams['Idempotency-Key'] = ObjectSerializer::toHeaderValue($idempotency_key);
+        }
+        // header params
+        if ($x_account_id !== null) {
+            $headerParams['X-Account-Id'] = ObjectSerializer::toHeaderValue($x_account_id);
         }
 
 
@@ -2774,6 +2923,402 @@ class ReservationsApi
     }
 
     /**
+     * Operation quoteReservation
+     *
+     * Quote a reservation in the PMS
+     *
+     * @param  \Repull\Model\ReservationQuoteRequest $reservation_quote_request reservation_quote_request (required)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['quoteReservation'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\ReservationQuoteResponse|\Repull\Model\Error
+     */
+    public function quoteReservation(
+        \Repull\Model\ReservationQuoteRequest $reservation_quote_request,
+        ?string $x_account_id = null,
+        string $contentType = self::contentTypes['quoteReservation'][0]
+    ): \Repull\Model\ReservationQuoteResponse|\Repull\Model\Error
+    {
+        list($response) = $this->quoteReservationWithHttpInfo($reservation_quote_request, $x_account_id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation quoteReservationWithHttpInfo
+     *
+     * Quote a reservation in the PMS
+     *
+     * @param  \Repull\Model\ReservationQuoteRequest $reservation_quote_request (required)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['quoteReservation'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\ReservationQuoteResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function quoteReservationWithHttpInfo(
+        \Repull\Model\ReservationQuoteRequest $reservation_quote_request,
+        ?string $x_account_id = null,
+        string $contentType = self::contentTypes['quoteReservation'][0]
+    ): array
+    {
+        $request = $this->quoteReservationRequest($reservation_quote_request, $x_account_id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\ReservationQuoteResponse',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\ReservationQuoteResponse',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\ReservationQuoteResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation quoteReservationAsync
+     *
+     * Quote a reservation in the PMS
+     *
+     * @param  \Repull\Model\ReservationQuoteRequest $reservation_quote_request (required)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['quoteReservation'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function quoteReservationAsync(
+        \Repull\Model\ReservationQuoteRequest $reservation_quote_request,
+        ?string $x_account_id = null,
+        string $contentType = self::contentTypes['quoteReservation'][0]
+    ): PromiseInterface
+    {
+        return $this->quoteReservationAsyncWithHttpInfo($reservation_quote_request, $x_account_id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation quoteReservationAsyncWithHttpInfo
+     *
+     * Quote a reservation in the PMS
+     *
+     * @param  \Repull\Model\ReservationQuoteRequest $reservation_quote_request (required)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['quoteReservation'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function quoteReservationAsyncWithHttpInfo(
+        \Repull\Model\ReservationQuoteRequest $reservation_quote_request,
+        ?string $x_account_id = null,
+        string $contentType = self::contentTypes['quoteReservation'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\ReservationQuoteResponse';
+        $request = $this->quoteReservationRequest($reservation_quote_request, $x_account_id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'quoteReservation'
+     *
+     * @param  \Repull\Model\ReservationQuoteRequest $reservation_quote_request (required)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['quoteReservation'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function quoteReservationRequest(
+        \Repull\Model\ReservationQuoteRequest $reservation_quote_request,
+        ?string $x_account_id = null,
+        string $contentType = self::contentTypes['quoteReservation'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'reservation_quote_request' is set
+        if ($reservation_quote_request === null || (is_array($reservation_quote_request) && count($reservation_quote_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $reservation_quote_request when calling quoteReservation'
+            );
+        }
+
+
+
+        $resourcePath = '/v1/reservations/quote';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+        // header params
+        if ($x_account_id !== null) {
+            $headerParams['X-Account-Id'] = ObjectSerializer::toHeaderValue($x_account_id);
+        }
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($reservation_quote_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($reservation_quote_request));
+            } else {
+                $httpBody = $reservation_quote_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation updateReservation
      *
      * Update a reservation
@@ -2781,6 +3326,7 @@ class ReservationsApi
      * @param  int $id Internal Repull reservation ID. (required)
      * @param  \Repull\Model\ReservationUpdateRequest $reservation_update_request reservation_update_request (required)
      * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateReservation'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -2791,10 +3337,11 @@ class ReservationsApi
         int $id,
         \Repull\Model\ReservationUpdateRequest $reservation_update_request,
         ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         string $contentType = self::contentTypes['updateReservation'][0]
     ): \Repull\Model\ReservationUpdateResponse|\Repull\Model\Error
     {
-        list($response) = $this->updateReservationWithHttpInfo($id, $reservation_update_request, $idempotency_key, $contentType);
+        list($response) = $this->updateReservationWithHttpInfo($id, $reservation_update_request, $idempotency_key, $x_account_id, $contentType);
         return $response;
     }
 
@@ -2806,20 +3353,22 @@ class ReservationsApi
      * @param  int $id Internal Repull reservation ID. (required)
      * @param  \Repull\Model\ReservationUpdateRequest $reservation_update_request (required)
      * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateReservation'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ReservationUpdateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ReservationUpdateResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function updateReservationWithHttpInfo(
         int $id,
         \Repull\Model\ReservationUpdateRequest $reservation_update_request,
         ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         string $contentType = self::contentTypes['updateReservation'][0]
     ): array
     {
-        $request = $this->updateReservationRequest($id, $reservation_update_request, $idempotency_key, $contentType);
+        $request = $this->updateReservationRequest($id, $reservation_update_request, $idempotency_key, $x_account_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2868,6 +3417,12 @@ class ReservationsApi
                         $request,
                         $response,
                     );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
                 case 422:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
@@ -2875,6 +3430,12 @@ class ReservationsApi
                         $response,
                     );
                 case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -2935,6 +3496,14 @@ class ReservationsApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 422:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -2944,6 +3513,14 @@ class ReservationsApi
                     $e->setResponseObject($data);
                     throw $e;
                 case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\Error',
@@ -2965,6 +3542,7 @@ class ReservationsApi
      * @param  int $id Internal Repull reservation ID. (required)
      * @param  \Repull\Model\ReservationUpdateRequest $reservation_update_request (required)
      * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateReservation'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -2974,10 +3552,11 @@ class ReservationsApi
         int $id,
         \Repull\Model\ReservationUpdateRequest $reservation_update_request,
         ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         string $contentType = self::contentTypes['updateReservation'][0]
     ): PromiseInterface
     {
-        return $this->updateReservationAsyncWithHttpInfo($id, $reservation_update_request, $idempotency_key, $contentType)
+        return $this->updateReservationAsyncWithHttpInfo($id, $reservation_update_request, $idempotency_key, $x_account_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2993,6 +3572,7 @@ class ReservationsApi
      * @param  int $id Internal Repull reservation ID. (required)
      * @param  \Repull\Model\ReservationUpdateRequest $reservation_update_request (required)
      * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateReservation'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -3002,11 +3582,12 @@ class ReservationsApi
         int $id,
         \Repull\Model\ReservationUpdateRequest $reservation_update_request,
         ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         string $contentType = self::contentTypes['updateReservation'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ReservationUpdateResponse';
-        $request = $this->updateReservationRequest($id, $reservation_update_request, $idempotency_key, $contentType);
+        $request = $this->updateReservationRequest($id, $reservation_update_request, $idempotency_key, $x_account_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -3050,6 +3631,7 @@ class ReservationsApi
      * @param  int $id Internal Repull reservation ID. (required)
      * @param  \Repull\Model\ReservationUpdateRequest $reservation_update_request (required)
      * @param  string|null $idempotency_key Makes a retry of this request safe. Send a unique string (a UUID generated at the point you build the request) and the response is stored for 24 hours: a repeat with the SAME key replays that stored response — tagged &#x60;Idempotency-Status: cached&#x60; — without running the operation again, so no duplicate reservation, guest or guest message is created.  - Same key while the first request is still in flight → &#x60;409 idempotency_key_in_use&#x60;. - Same key with a DIFFERENT payload → &#x60;422 idempotency_key_reused&#x60;. Generate a new key per distinct request; reuse one only when retrying that exact request. - Retryable outcomes are deliberately not stored, so a retry with the same key runs for real: any status &gt;&#x3D; 500, &#x60;408&#x60;, &#x60;425&#x60; and &#x60;429&#x60;, and the refusals that happen before anything is done and tell you to fix something outside the request first — &#x60;connection_reauth_required&#x60;, &#x60;listing_inactive&#x60;, and the rate/daily limits. Every other answer, including a final refusal such as &#x60;422 airbnb_rejected&#x60;, is stored and replayed. (optional)
+     * @param  string|null $x_account_id Restrict the request to one connected account (a Repull connection id, &#x60;GET /v1/connect&#x60; → &#x60;id&#x60;). A listing or reservation outside that account answers &#x60;404 not_found&#x60;. Omit it to act workspace-wide. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateReservation'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -3059,6 +3641,7 @@ class ReservationsApi
         int $id,
         \Repull\Model\ReservationUpdateRequest $reservation_update_request,
         ?string $idempotency_key = null,
+        ?string $x_account_id = null,
         string $contentType = self::contentTypes['updateReservation'][0]
     ): Request
     {
@@ -3082,6 +3665,7 @@ class ReservationsApi
         }
         
 
+
         $resourcePath = '/v1/reservations/{id}';
         $formParams = [];
         $queryParams = [];
@@ -3093,6 +3677,10 @@ class ReservationsApi
         // header params
         if ($idempotency_key !== null) {
             $headerParams['Idempotency-Key'] = ObjectSerializer::toHeaderValue($idempotency_key);
+        }
+        // header params
+        if ($x_account_id !== null) {
+            $headerParams['X-Account-Id'] = ObjectSerializer::toHeaderValue($x_account_id);
         }
 
         // path params

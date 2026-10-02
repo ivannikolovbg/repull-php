@@ -58,16 +58,17 @@ class ReservationUpdateResponse implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'id' => 'int',
+        'id' => 'string',
         'confirmation_code' => 'string',
-        'listing_id' => 'int',
+        'listing_id' => 'string',
         'check_in' => '\DateTime',
         'check_out' => '\DateTime',
         'check_in_time' => 'string',
         'check_out_time' => 'string',
         'status' => 'string',
         'updated_at' => '\DateTime',
-        'changed' => 'string[]'
+        'changed' => 'string[]',
+        'pms' => '\Repull\Model\ReservationPmsOutcome'
     ];
 
     /**
@@ -85,7 +86,8 @@ class ReservationUpdateResponse implements ModelInterface, ArrayAccess, JsonSeri
         'check_out_time' => null,
         'status' => null,
         'updated_at' => 'date-time',
-        'changed' => null
+        'changed' => null,
+        'pms' => null
     ];
 
     /**
@@ -103,7 +105,8 @@ class ReservationUpdateResponse implements ModelInterface, ArrayAccess, JsonSeri
         'check_out_time' => true,
         'status' => true,
         'updated_at' => true,
-        'changed' => false
+        'changed' => false,
+        'pms' => false
     ];
 
     /**
@@ -191,7 +194,8 @@ class ReservationUpdateResponse implements ModelInterface, ArrayAccess, JsonSeri
         'check_out_time' => 'checkOutTime',
         'status' => 'status',
         'updated_at' => 'updatedAt',
-        'changed' => 'changed'
+        'changed' => 'changed',
+        'pms' => 'pms'
     ];
 
     /**
@@ -209,7 +213,8 @@ class ReservationUpdateResponse implements ModelInterface, ArrayAccess, JsonSeri
         'check_out_time' => 'setCheckOutTime',
         'status' => 'setStatus',
         'updated_at' => 'setUpdatedAt',
-        'changed' => 'setChanged'
+        'changed' => 'setChanged',
+        'pms' => 'setPms'
     ];
 
     /**
@@ -227,7 +232,8 @@ class ReservationUpdateResponse implements ModelInterface, ArrayAccess, JsonSeri
         'check_out_time' => 'getCheckOutTime',
         'status' => 'getStatus',
         'updated_at' => 'getUpdatedAt',
-        'changed' => 'getChanged'
+        'changed' => 'getChanged',
+        'pms' => 'getPms'
     ];
 
     /**
@@ -287,6 +293,7 @@ class ReservationUpdateResponse implements ModelInterface, ArrayAccess, JsonSeri
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('updated_at', $data ?? [], null);
         $this->setIfExists('changed', $data ?? [], null);
+        $this->setIfExists('pms', $data ?? [], null);
     }
 
     /**
@@ -329,9 +336,9 @@ class ReservationUpdateResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Gets id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->container['id'];
     }
@@ -339,11 +346,11 @@ class ReservationUpdateResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets id
      *
-     * @param int|null $id id
+     * @param string|null $id A string, like every id in API responses.
      *
      * @return $this
      */
-    public function setId(?int $id): static
+    public function setId(?string $id): static
     {
         if (is_null($id)) {
             throw new InvalidArgumentException('non-nullable id cannot be null');
@@ -390,9 +397,9 @@ class ReservationUpdateResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Gets listing_id
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getListingId(): ?int
+    public function getListingId(): ?string
     {
         return $this->container['listing_id'];
     }
@@ -400,11 +407,11 @@ class ReservationUpdateResponse implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets listing_id
      *
-     * @param int|null $listing_id listing_id
+     * @param string|null $listing_id listing_id
      *
      * @return $this
      */
-    public function setListingId(?int $listing_id): static
+    public function setListingId(?string $listing_id): static
     {
         if (is_null($listing_id)) {
             array_push($this->openAPINullablesSetToNull, 'listing_id');
@@ -648,6 +655,33 @@ class ReservationUpdateResponse implements ModelInterface, ArrayAccess, JsonSeri
             throw new InvalidArgumentException('non-nullable changed cannot be null');
         }
         $this->container['changed'] = $changed;
+
+        return $this;
+    }
+
+    /**
+     * Gets pms
+     *
+     * @return \Repull\Model\ReservationPmsOutcome|null
+     */
+    public function getPms(): ?\Repull\Model\ReservationPmsOutcome
+    {
+        return $this->container['pms'];
+    }
+
+    /**
+     * Sets pms
+     *
+     * @param \Repull\Model\ReservationPmsOutcome|null $pms pms
+     *
+     * @return $this
+     */
+    public function setPms(?\Repull\Model\ReservationPmsOutcome $pms): static
+    {
+        if (is_null($pms)) {
+            throw new InvalidArgumentException('non-nullable pms cannot be null');
+        }
+        $this->container['pms'] = $pms;
 
         return $this;
     }

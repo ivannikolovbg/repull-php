@@ -1,6 +1,6 @@
 <?php
 /**
- * CreateConnectionRequest
+ * AirbnbPricingWriteRequestFeesInner
  *
  * PHP version 8.1
  *
@@ -34,15 +34,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * CreateConnectionRequest Class Doc Comment
+ * AirbnbPricingWriteRequestFeesInner Class Doc Comment
  *
- * @description Provider-specific credentials (apiKey, clientId/clientSecret, etc.) or OAuth init params for Airbnb.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class AirbnbPricingWriteRequestFeesInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +50,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'create_connection_request';
+    protected static string $openAPIModelName = 'AirbnbPricingWriteRequest_fees_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,13 +58,12 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'redirect_url' => 'string',
-        'access_type' => 'string',
-        'reservation_history_months' => 'int',
-        'state' => 'string',
-        'client_id' => 'string',
-        'client_secret' => 'string',
-        'locale' => 'string'
+        'fee_type' => 'string',
+        'amount' => 'float',
+        'amount_type' => 'string',
+        'charge_type' => 'string',
+        'charge_period' => 'string',
+        'offline' => 'bool'
     ];
 
     /**
@@ -74,13 +72,12 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'redirect_url' => 'uri',
-        'access_type' => null,
-        'reservation_history_months' => null,
-        'state' => null,
-        'client_id' => null,
-        'client_secret' => null,
-        'locale' => null
+        'fee_type' => null,
+        'amount' => null,
+        'amount_type' => null,
+        'charge_type' => null,
+        'charge_period' => null,
+        'offline' => null
     ];
 
     /**
@@ -89,13 +86,12 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'redirect_url' => false,
-        'access_type' => false,
-        'reservation_history_months' => false,
-        'state' => false,
-        'client_id' => false,
-        'client_secret' => false,
-        'locale' => true
+        'fee_type' => false,
+        'amount' => true,
+        'amount_type' => false,
+        'charge_type' => false,
+        'charge_period' => false,
+        'offline' => false
     ];
 
     /**
@@ -174,13 +170,12 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'redirect_url' => 'redirectUrl',
-        'access_type' => 'accessType',
-        'reservation_history_months' => 'reservationHistoryMonths',
-        'state' => 'state',
-        'client_id' => 'clientId',
-        'client_secret' => 'clientSecret',
-        'locale' => 'locale'
+        'fee_type' => 'fee_type',
+        'amount' => 'amount',
+        'amount_type' => 'amount_type',
+        'charge_type' => 'charge_type',
+        'charge_period' => 'charge_period',
+        'offline' => 'offline'
     ];
 
     /**
@@ -189,13 +184,12 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $setters = [
-        'redirect_url' => 'setRedirectUrl',
-        'access_type' => 'setAccessType',
-        'reservation_history_months' => 'setReservationHistoryMonths',
-        'state' => 'setState',
-        'client_id' => 'setClientId',
-        'client_secret' => 'setClientSecret',
-        'locale' => 'setLocale'
+        'fee_type' => 'setFeeType',
+        'amount' => 'setAmount',
+        'amount_type' => 'setAmountType',
+        'charge_type' => 'setChargeType',
+        'charge_period' => 'setChargePeriod',
+        'offline' => 'setOffline'
     ];
 
     /**
@@ -204,13 +198,12 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      * @var array<string, string>
      */
     protected static array $getters = [
-        'redirect_url' => 'getRedirectUrl',
-        'access_type' => 'getAccessType',
-        'reservation_history_months' => 'getReservationHistoryMonths',
-        'state' => 'getState',
-        'client_id' => 'getClientId',
-        'client_secret' => 'getClientSecret',
-        'locale' => 'getLocale'
+        'fee_type' => 'getFeeType',
+        'amount' => 'getAmount',
+        'amount_type' => 'getAmountType',
+        'charge_type' => 'getChargeType',
+        'charge_period' => 'getChargePeriod',
+        'offline' => 'getOffline'
     ];
 
     /**
@@ -245,21 +238,51 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         return self::$openAPIModelName;
     }
 
-    public const ACCESS_TYPE_READ_ONLY = 'read_only';
-    public const ACCESS_TYPE_FULL_ACCESS = 'full_access';
-    public const ACCESS_TYPE_MESSAGING = 'messaging';
+    public const AMOUNT_TYPE_FLAT = 'flat';
+    public const AMOUNT_TYPE_PERCENT = 'percent';
+    public const CHARGE_TYPE_PER_GROUP = 'PER_GROUP';
+    public const CHARGE_TYPE_PER_PERSON = 'PER_PERSON';
+    public const CHARGE_TYPE_PER_PET = 'PER_PET';
+    public const CHARGE_PERIOD_PER_BOOKING = 'PER_BOOKING';
+    public const CHARGE_PERIOD_PER_NIGHT = 'PER_NIGHT';
 
     /**
      * Gets allowable values of the enum
      *
      * @return string[]
      */
-    public static function getAccessTypeAllowableValues()
+    public static function getAmountTypeAllowableValues()
     {
         return [
-            self::ACCESS_TYPE_READ_ONLY,
-            self::ACCESS_TYPE_FULL_ACCESS,
-            self::ACCESS_TYPE_MESSAGING,
+            self::AMOUNT_TYPE_FLAT,
+            self::AMOUNT_TYPE_PERCENT,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getChargeTypeAllowableValues()
+    {
+        return [
+            self::CHARGE_TYPE_PER_GROUP,
+            self::CHARGE_TYPE_PER_PERSON,
+            self::CHARGE_TYPE_PER_PET,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getChargePeriodAllowableValues()
+    {
+        return [
+            self::CHARGE_PERIOD_PER_BOOKING,
+            self::CHARGE_PERIOD_PER_NIGHT,
         ];
     }
 
@@ -277,13 +300,12 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('redirect_url', $data ?? [], null);
-        $this->setIfExists('access_type', $data ?? [], 'full_access');
-        $this->setIfExists('reservation_history_months', $data ?? [], null);
-        $this->setIfExists('state', $data ?? [], null);
-        $this->setIfExists('client_id', $data ?? [], null);
-        $this->setIfExists('client_secret', $data ?? [], null);
-        $this->setIfExists('locale', $data ?? [], null);
+        $this->setIfExists('fee_type', $data ?? [], null);
+        $this->setIfExists('amount', $data ?? [], null);
+        $this->setIfExists('amount_type', $data ?? [], null);
+        $this->setIfExists('charge_type', $data ?? [], null);
+        $this->setIfExists('charge_period', $data ?? [], null);
+        $this->setIfExists('offline', $data ?? [], null);
     }
 
     /**
@@ -311,21 +333,41 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     {
         $invalidProperties = [];
 
-        $allowedValues = self::getAccessTypeAllowableValues();
-        if (!is_null($this->container['access_type']) && !in_array($this->container['access_type'], $allowedValues, true)) {
+        if ($this->container['fee_type'] === null) {
+            $invalidProperties[] = "'fee_type' can't be null";
+        }
+        if ($this->container['amount'] === null && !$this->isNullableSetToNull('amount')) {
+            $invalidProperties[] = "'amount' is required";
+        }
+        if (!is_null($this->container['amount']) && ($this->container['amount'] < 0)) {
+            $invalidProperties[] = "invalid value for 'amount', must be bigger than or equal to 0.";
+        }
+
+        $allowedValues = self::getAmountTypeAllowableValues();
+        if (!is_null($this->container['amount_type']) && !in_array($this->container['amount_type'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'access_type', must be one of '%s'",
-                $this->container['access_type'],
+                "invalid value '%s' for 'amount_type', must be one of '%s'",
+                $this->container['amount_type'],
                 implode("', '", $allowedValues)
             );
         }
 
-        if (!is_null($this->container['reservation_history_months']) && ($this->container['reservation_history_months'] > 60)) {
-            $invalidProperties[] = "invalid value for 'reservation_history_months', must be smaller than or equal to 60.";
+        $allowedValues = self::getChargeTypeAllowableValues();
+        if (!is_null($this->container['charge_type']) && !in_array($this->container['charge_type'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'charge_type', must be one of '%s'",
+                $this->container['charge_type'],
+                implode("', '", $allowedValues)
+            );
         }
 
-        if (!is_null($this->container['reservation_history_months']) && ($this->container['reservation_history_months'] < 1)) {
-            $invalidProperties[] = "invalid value for 'reservation_history_months', must be bigger than or equal to 1.";
+        $allowedValues = self::getChargePeriodAllowableValues();
+        if (!is_null($this->container['charge_period']) && !in_array($this->container['charge_period'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'charge_period', must be one of '%s'",
+                $this->container['charge_period'],
+                implode("', '", $allowedValues)
+            );
         }
 
         return $invalidProperties;
@@ -341,206 +383,178 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
 
 
     /**
-     * Gets redirect_url
+     * Gets fee_type
      *
-     * @return string|null
+     * @return string
      */
-    public function getRedirectUrl(): ?string
+    public function getFeeType(): string
     {
-        return $this->container['redirect_url'];
+        return $this->container['fee_type'];
     }
 
     /**
-     * Sets redirect_url
+     * Sets fee_type
      *
-     * @param string|null $redirect_url Airbnb + Booking.com — where to redirect the user after they finish the hosted connect flow.
+     * @param string $fee_type Airbnb fee type: `PASS_THROUGH_CLEANING_FEE`, `PASS_THROUGH_SHORT_TERM_CLEANING_FEE`, `PASS_THROUGH_PET_FEE`, `PASS_THROUGH_SECURITY_DEPOSIT`, `PASS_THROUGH_MANAGEMENT_FEE`, `PASS_THROUGH_RESORT_FEE`, `PASS_THROUGH_COMMUNITY_FEE`, `PASS_THROUGH_LINEN_FEE`.
      *
      * @return $this
      */
-    public function setRedirectUrl(?string $redirect_url): static
+    public function setFeeType(string $fee_type): static
     {
-        if (is_null($redirect_url)) {
-            throw new InvalidArgumentException('non-nullable redirect_url cannot be null');
+        if (is_null($fee_type)) {
+            throw new InvalidArgumentException('non-nullable fee_type cannot be null');
         }
-        $this->container['redirect_url'] = $redirect_url;
+        $this->container['fee_type'] = $fee_type;
 
         return $this;
     }
 
     /**
-     * Gets access_type
+     * Gets amount
      *
-     * @return string|null
+     * @return float|null
      */
-    public function getAccessType(): ?string
+    public function getAmount(): ?float
     {
-        return $this->container['access_type'];
+        return $this->container['amount'];
     }
 
     /**
-     * Sets access_type
+     * Sets amount
      *
-     * @param string|null $access_type Airbnb only — selects the OAuth scope set. 'read_only' grants read-only scopes; 'messaging' grants read scopes plus message read/send but NOT property management, so it can coexist with another app (e.g. an existing PMS) that already holds property management on the same Airbnb account; 'full_access' (default) grants full host scopes including the exclusive property management (only one app per Airbnb account can hold it). The hosted consent screen normally lets the host pick a tier; passing `accessType` explicitly fixes the tier and hides that choice, so the host can only continue with the tier you requested. Omit it to let the host choose.
+     * @param float|null $amount `null` removes the fee. Flat: currency × 1,000,000. Percent: whole percent.
      *
      * @return $this
      */
-    public function setAccessType(?string $access_type): static
+    public function setAmount(?float $amount): static
     {
-        if (is_null($access_type)) {
-            throw new InvalidArgumentException('non-nullable access_type cannot be null');
-        }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['access_type'] = $access_type;
-
-        return $this;
-    }
-
-    /**
-     * Gets reservation_history_months
-     *
-     * @return int|null
-     */
-    public function getReservationHistoryMonths(): ?int
-    {
-        return $this->container['reservation_history_months'];
-    }
-
-    /**
-     * Sets reservation_history_months
-     *
-     * @param int|null $reservation_history_months Airbnb — how many months of past reservations the first import pulls (1–60). Omit it for the default window. Upcoming stays are always imported. A wider window takes longer to import, because every extra month is more stays to fetch.
-     *
-     * @return $this
-     */
-    public function setReservationHistoryMonths(?int $reservation_history_months): static
-    {
-        if (is_null($reservation_history_months)) {
-            throw new InvalidArgumentException('non-nullable reservation_history_months cannot be null');
-        }
-
-        if (($reservation_history_months > 60)) {
-            throw new InvalidArgumentException('invalid value for $reservation_history_months when calling CreateConnectionRequest., must be smaller than or equal to 60.');
-        }
-        if (($reservation_history_months < 1)) {
-            throw new InvalidArgumentException('invalid value for $reservation_history_months when calling CreateConnectionRequest., must be bigger than or equal to 1.');
-        }
-
-        $this->container['reservation_history_months'] = $reservation_history_months;
-
-        return $this;
-    }
-
-    /**
-     * Gets state
-     *
-     * @return string|null
-     */
-    public function getState(): ?string
-    {
-        return $this->container['state'];
-    }
-
-    /**
-     * Sets state
-     *
-     * @param string|null $state Airbnb + Booking.com — your own correlation token, e.g. your user id (at most 500 characters). Echoed on the redirect back (`&state=`) and in the `connect.session.completed` webhook.
-     *
-     * @return $this
-     */
-    public function setState(?string $state): static
-    {
-        if (is_null($state)) {
-            throw new InvalidArgumentException('non-nullable state cannot be null');
-        }
-        $this->container['state'] = $state;
-
-        return $this;
-    }
-
-    /**
-     * Gets client_id
-     *
-     * @return string|null
-     */
-    public function getClientId(): ?string
-    {
-        return $this->container['client_id'];
-    }
-
-    /**
-     * Sets client_id
-     *
-     * @param string|null $client_id Plumguide — client ID.
-     *
-     * @return $this
-     */
-    public function setClientId(?string $client_id): static
-    {
-        if (is_null($client_id)) {
-            throw new InvalidArgumentException('non-nullable client_id cannot be null');
-        }
-        $this->container['client_id'] = $client_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets client_secret
-     *
-     * @return string|null
-     */
-    public function getClientSecret(): ?string
-    {
-        return $this->container['client_secret'];
-    }
-
-    /**
-     * Sets client_secret
-     *
-     * @param string|null $client_secret Plumguide — client secret.
-     *
-     * @return $this
-     */
-    public function setClientSecret(?string $client_secret): static
-    {
-        if (is_null($client_secret)) {
-            throw new InvalidArgumentException('non-nullable client_secret cannot be null');
-        }
-        $this->container['client_secret'] = $client_secret;
-
-        return $this;
-    }
-
-    /**
-     * Gets locale
-     *
-     * @return string|null
-     */
-    public function getLocale(): ?string
-    {
-        return $this->container['locale'];
-    }
-
-    /**
-     * Sets locale
-     *
-     * @param string|null $locale Airbnb only — optional UI language for the hosted Connect pages. Accepts any supported locale code (currently `en`, `fr`); unknown codes are ignored and resolution falls back to the workspace `default_language`, then `Accept-Language`, then `en`.
-     *
-     * @return $this
-     */
-    public function setLocale(?string $locale): static
-    {
-        if (is_null($locale)) {
-            array_push($this->openAPINullablesSetToNull, 'locale');
+        if (is_null($amount)) {
+            array_push($this->openAPINullablesSetToNull, 'amount');
         } else {
             $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('locale', $nullablesSetToNull);
+            $index = array_search('amount', $nullablesSetToNull);
             if ($index !== FALSE) {
                 unset($nullablesSetToNull[$index]);
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        $this->container['locale'] = $locale;
+
+        if (!is_null($amount) && ($amount < 0)) {
+            throw new InvalidArgumentException('invalid value for $amount when calling AirbnbPricingWriteRequestFeesInner., must be bigger than or equal to 0.');
+        }
+
+        $this->container['amount'] = $amount;
+
+        return $this;
+    }
+
+    /**
+     * Gets amount_type
+     *
+     * @return string|null
+     */
+    public function getAmountType(): ?string
+    {
+        return $this->container['amount_type'];
+    }
+
+    /**
+     * Sets amount_type
+     *
+     * @param string|null $amount_type Defaults to the existing fee's, else `flat`. Percent is accepted for management and resort fees.
+     *
+     * @return $this
+     */
+    public function setAmountType(?string $amount_type): static
+    {
+        if (is_null($amount_type)) {
+            throw new InvalidArgumentException('non-nullable amount_type cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['amount_type'] = $amount_type;
+
+        return $this;
+    }
+
+    /**
+     * Gets charge_type
+     *
+     * @return string|null
+     */
+    public function getChargeType(): ?string
+    {
+        return $this->container['charge_type'];
+    }
+
+    /**
+     * Sets charge_type
+     *
+     * @param string|null $charge_type Who it is charged per. Defaults to the existing fee's, else `PER_GROUP`.
+     *
+     * @return $this
+     */
+    public function setChargeType(?string $charge_type): static
+    {
+        if (is_null($charge_type)) {
+            throw new InvalidArgumentException('non-nullable charge_type cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['charge_type'] = $charge_type;
+
+        return $this;
+    }
+
+    /**
+     * Gets charge_period
+     *
+     * @return string|null
+     */
+    public function getChargePeriod(): ?string
+    {
+        return $this->container['charge_period'];
+    }
+
+    /**
+     * Sets charge_period
+     *
+     * @param string|null $charge_period Once per booking or per night. Defaults to the existing fee's, else `PER_BOOKING`.
+     *
+     * @return $this
+     */
+    public function setChargePeriod(?string $charge_period): static
+    {
+        if (is_null($charge_period)) {
+            throw new InvalidArgumentException('non-nullable charge_period cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['charge_period'] = $charge_period;
+
+        return $this;
+    }
+
+    /**
+     * Gets offline
+     *
+     * @return bool|null
+     */
+    public function getOffline(): ?bool
+    {
+        return $this->container['offline'];
+    }
+
+    /**
+     * Sets offline
+     *
+     * @param bool|null $offline Collected offline by the host rather than through Airbnb. Default `false`.
+     *
+     * @return $this
+     */
+    public function setOffline(?bool $offline): static
+    {
+        if (is_null($offline)) {
+            throw new InvalidArgumentException('non-nullable offline cannot be null');
+        }
+        $this->container['offline'] = $offline;
 
         return $this;
     }

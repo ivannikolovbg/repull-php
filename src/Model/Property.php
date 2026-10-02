@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * Property Class Doc Comment
  *
- * @description A vacation rental property in your Repull workspace. Backed by the core &#x60;listings&#x60; row — enriched per-PMS fields (bedrooms, property type, provider id, etc.) live in provider-specific detail tables and are NOT returned here.  Field availability differs by endpoint: - &#x60;channels&#x60; is returned by the list endpoint (&#x60;GET /v1/properties&#x60;) only. - &#x60;latitude&#x60;, &#x60;longitude&#x60;, &#x60;createdAt&#x60;, and &#x60;amenities&#x60; are returned by the detail endpoint (&#x60;GET /v1/properties/{id}&#x60;) only. &#x60;amenities&#x60; requires &#x60;?include&#x3D;amenities&#x60;.  An **inactive** property (&#x60;status: inactive&#x60;) appears only in the list endpoint, and only when &#x60;?status&#x3D;inactive|all&#x60; asks for it. Such a row carries identity fields only — &#x60;id&#x60;, &#x60;name&#x60;, &#x60;status&#x60;, &#x60;lifecycleStatus&#x60;, &#x60;channels&#x60;, &#x60;accounts&#x60;, &#x60;updatedAt&#x60; — so every other field is absent until the property is activated. Every other endpoint answers &#x60;403 listing_inactive&#x60; for it.
+ * @description A vacation rental property in your Repull workspace. Backed by the core &#x60;listings&#x60; row — enriched per-PMS fields (bedrooms, property type, provider id, etc.) live in provider-specific detail tables and are NOT returned here.  Field availability differs by endpoint: - &#x60;channels&#x60; is returned by the list endpoint (&#x60;GET /v1/properties&#x60;) only. - &#x60;latitude&#x60;, &#x60;longitude&#x60;, &#x60;createdAt&#x60;, and &#x60;amenities&#x60; are returned by the detail endpoint (&#x60;GET /v1/properties/{id}&#x60;) only. &#x60;amenities&#x60; requires &#x60;?include&#x3D;amenities&#x60;.  An **inactive** property (&#x60;status: inactive&#x60;) appears only in the list endpoint, and only when &#x60;?status&#x3D;inactive|all&#x60; asks for it. Such a row carries identity fields only — &#x60;id&#x60;, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, &#x60;lifecycleStatus&#x60;, &#x60;channels&#x60;, &#x60;accounts&#x60;, &#x60;updatedAt&#x60; — so every other field is absent until the property is activated. &#x60;inactiveReason&#x60; is &#x60;plan_limit&#x60; (held back by the plan; activating needs a free slot or an upgrade), &#x60;unlisted_on_airbnb&#x60;, or &#x60;deactivated&#x60; (switched off by you). Every other endpoint answers &#x60;403 listing_inactive&#x60; for it.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -62,6 +62,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'accounts' => '\Repull\Model\RecordAccount[]',
         'id' => 'string',
         'name' => 'string',
+        'public_name' => 'string',
         'address' => 'string',
         'city' => 'string',
         'latitude' => 'string',
@@ -84,6 +85,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'accounts' => null,
         'id' => null,
         'name' => null,
+        'public_name' => null,
         'address' => null,
         'city' => null,
         'latitude' => null,
@@ -106,6 +108,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'accounts' => false,
         'id' => false,
         'name' => false,
+        'public_name' => true,
         'address' => true,
         'city' => true,
         'latitude' => true,
@@ -198,6 +201,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'accounts' => 'accounts',
         'id' => 'id',
         'name' => 'name',
+        'public_name' => 'publicName',
         'address' => 'address',
         'city' => 'city',
         'latitude' => 'latitude',
@@ -220,6 +224,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'accounts' => 'setAccounts',
         'id' => 'setId',
         'name' => 'setName',
+        'public_name' => 'setPublicName',
         'address' => 'setAddress',
         'city' => 'setCity',
         'latitude' => 'setLatitude',
@@ -242,6 +247,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'accounts' => 'getAccounts',
         'id' => 'getId',
         'name' => 'getName',
+        'public_name' => 'getPublicName',
         'address' => 'getAddress',
         'city' => 'getCity',
         'latitude' => 'getLatitude',
@@ -320,6 +326,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('accounts', $data ?? [], null);
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('public_name', $data ?? [], null);
         $this->setIfExists('address', $data ?? [], null);
         $this->setIfExists('city', $data ?? [], null);
         $this->setIfExists('latitude', $data ?? [], null);
@@ -446,7 +453,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets name
      *
-     * @param string|null $name Property name
+     * @param string|null $name Property name — the host's internal nickname.
      *
      * @return $this
      */
@@ -456,6 +463,40 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable name cannot be null');
         }
         $this->container['name'] = $name;
+
+        return $this;
+    }
+
+    /**
+     * Gets public_name
+     *
+     * @return string|null
+     */
+    public function getPublicName(): ?string
+    {
+        return $this->container['public_name'];
+    }
+
+    /**
+     * Sets public_name
+     *
+     * @param string|null $public_name The title guests see on the channel (e.g. the Airbnb listing title). `name` is the host's internal nickname for the listing; show `publicName` in anything a guest or end user reads. Present on inactive rows too.
+     *
+     * @return $this
+     */
+    public function setPublicName(?string $public_name): static
+    {
+        if (is_null($public_name)) {
+            array_push($this->openAPINullablesSetToNull, 'public_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('public_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['public_name'] = $public_name;
 
         return $this;
     }

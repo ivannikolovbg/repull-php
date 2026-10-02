@@ -1,6 +1,6 @@
 <?php
 /**
- * ReservationCreateResponsePms
+ * ReservationPmsSectionError
  *
  * PHP version 8.1
  *
@@ -34,15 +34,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ReservationCreateResponsePms Class Doc Comment
+ * ReservationPmsSectionError Class Doc Comment
  *
- * @description Mews or Cloudbeds listings only: the booking was made in the PMS first, and this is what it applied.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ReservationCreateResponsePms implements ModelInterface, ArrayAccess, JsonSerializable
+class ReservationPmsSectionError implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +50,7 @@ class ReservationCreateResponsePms implements ModelInterface, ArrayAccess, JsonS
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ReservationCreateResponse_pms';
+    protected static string $openAPIModelName = 'ReservationPmsSectionError';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,10 +58,9 @@ class ReservationCreateResponsePms implements ModelInterface, ArrayAccess, JsonS
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'provider' => 'string',
-        'reservation_id' => 'string',
-        'applied' => 'string[]',
-        'errors' => '\Repull\Model\CancelReservation200ResponsePmsErrorsInner[]'
+        'section' => 'string',
+        'code' => 'string',
+        'message' => 'string'
     ];
 
     /**
@@ -71,10 +69,9 @@ class ReservationCreateResponsePms implements ModelInterface, ArrayAccess, JsonS
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'provider' => null,
-        'reservation_id' => null,
-        'applied' => null,
-        'errors' => null
+        'section' => null,
+        'code' => null,
+        'message' => null
     ];
 
     /**
@@ -83,10 +80,9 @@ class ReservationCreateResponsePms implements ModelInterface, ArrayAccess, JsonS
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'provider' => false,
-        'reservation_id' => false,
-        'applied' => false,
-        'errors' => false
+        'section' => false,
+        'code' => false,
+        'message' => false
     ];
 
     /**
@@ -165,10 +161,9 @@ class ReservationCreateResponsePms implements ModelInterface, ArrayAccess, JsonS
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'provider' => 'provider',
-        'reservation_id' => 'reservationId',
-        'applied' => 'applied',
-        'errors' => 'errors'
+        'section' => 'section',
+        'code' => 'code',
+        'message' => 'message'
     ];
 
     /**
@@ -177,10 +172,9 @@ class ReservationCreateResponsePms implements ModelInterface, ArrayAccess, JsonS
      * @var array<string, string>
      */
     protected static array $setters = [
-        'provider' => 'setProvider',
-        'reservation_id' => 'setReservationId',
-        'applied' => 'setApplied',
-        'errors' => 'setErrors'
+        'section' => 'setSection',
+        'code' => 'setCode',
+        'message' => 'setMessage'
     ];
 
     /**
@@ -189,10 +183,9 @@ class ReservationCreateResponsePms implements ModelInterface, ArrayAccess, JsonS
      * @var array<string, string>
      */
     protected static array $getters = [
-        'provider' => 'getProvider',
-        'reservation_id' => 'getReservationId',
-        'applied' => 'getApplied',
-        'errors' => 'getErrors'
+        'section' => 'getSection',
+        'code' => 'getCode',
+        'message' => 'getMessage'
     ];
 
     /**
@@ -242,10 +235,9 @@ class ReservationCreateResponsePms implements ModelInterface, ArrayAccess, JsonS
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('provider', $data ?? [], null);
-        $this->setIfExists('reservation_id', $data ?? [], null);
-        $this->setIfExists('applied', $data ?? [], null);
-        $this->setIfExists('errors', $data ?? [], null);
+        $this->setIfExists('section', $data ?? [], null);
+        $this->setIfExists('code', $data ?? [], null);
+        $this->setIfExists('message', $data ?? [], null);
     }
 
     /**
@@ -286,109 +278,82 @@ class ReservationCreateResponsePms implements ModelInterface, ArrayAccess, JsonS
 
 
     /**
-     * Gets provider
+     * Gets section
      *
      * @return string|null
      */
-    public function getProvider(): ?string
+    public function getSection(): ?string
     {
-        return $this->container['provider'];
+        return $this->container['section'];
     }
 
     /**
-     * Sets provider
+     * Sets section
      *
-     * @param string|null $provider provider
+     * @param string|null $section section
      *
      * @return $this
      */
-    public function setProvider(?string $provider): static
+    public function setSection(?string $section): static
     {
-        if (is_null($provider)) {
-            throw new InvalidArgumentException('non-nullable provider cannot be null');
+        if (is_null($section)) {
+            throw new InvalidArgumentException('non-nullable section cannot be null');
         }
-        $this->container['provider'] = $provider;
+        $this->container['section'] = $section;
 
         return $this;
     }
 
     /**
-     * Gets reservation_id
+     * Gets code
      *
      * @return string|null
      */
-    public function getReservationId(): ?string
+    public function getCode(): ?string
     {
-        return $this->container['reservation_id'];
+        return $this->container['code'];
     }
 
     /**
-     * Sets reservation_id
+     * Sets code
      *
-     * @param string|null $reservation_id The PMS's own id for the booking.
+     * @param string|null $code code
      *
      * @return $this
      */
-    public function setReservationId(?string $reservation_id): static
+    public function setCode(?string $code): static
     {
-        if (is_null($reservation_id)) {
-            throw new InvalidArgumentException('non-nullable reservation_id cannot be null');
+        if (is_null($code)) {
+            throw new InvalidArgumentException('non-nullable code cannot be null');
         }
-        $this->container['reservation_id'] = $reservation_id;
+        $this->container['code'] = $code;
 
         return $this;
     }
 
     /**
-     * Gets applied
+     * Gets message
      *
-     * @return string[]|null
+     * @return string|null
      */
-    public function getApplied(): ?array
+    public function getMessage(): ?string
     {
-        return $this->container['applied'];
+        return $this->container['message'];
     }
 
     /**
-     * Sets applied
+     * Sets message
      *
-     * @param string[]|null $applied applied
+     * @param string|null $message message
      *
      * @return $this
      */
-    public function setApplied(?array $applied): static
+    public function setMessage(?string $message): static
     {
-        if (is_null($applied)) {
-            throw new InvalidArgumentException('non-nullable applied cannot be null');
+        if (is_null($message)) {
+            throw new InvalidArgumentException('non-nullable message cannot be null');
         }
-        $this->container['applied'] = $applied;
-
-        return $this;
-    }
-
-    /**
-     * Gets errors
-     *
-     * @return \Repull\Model\CancelReservation200ResponsePmsErrorsInner[]|null
-     */
-    public function getErrors(): ?array
-    {
-        return $this->container['errors'];
-    }
-
-    /**
-     * Sets errors
-     *
-     * @param \Repull\Model\CancelReservation200ResponsePmsErrorsInner[]|null $errors errors
-     *
-     * @return $this
-     */
-    public function setErrors(?array $errors): static
-    {
-        if (is_null($errors)) {
-            throw new InvalidArgumentException('non-nullable errors cannot be null');
-        }
-        $this->container['errors'] = $errors;
+        $this->container['message'] = $message;
 
         return $this;
     }

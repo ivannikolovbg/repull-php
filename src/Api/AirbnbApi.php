@@ -11380,6 +11380,7 @@ class AirbnbApi
      *
      * List Airbnb listings
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache) and &#x60;thumbnail&#x60; (adds &#x60;thumbnailUrl&#x60; to each listing). Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListings'] to see the possible values for this operation
@@ -11389,12 +11390,13 @@ class AirbnbApi
      * @return \Repull\Model\AirbnbListingListResponse|\Repull\Model\Error
      */
     public function listAirbnbListings(
+        ?string $status = 'active',
         ?string $account_id = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listAirbnbListings'][0]
     ): \Repull\Model\AirbnbListingListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listAirbnbListingsWithHttpInfo($account_id, $include, $contentType);
+        list($response) = $this->listAirbnbListingsWithHttpInfo($status, $account_id, $include, $contentType);
         return $response;
     }
 
@@ -11403,6 +11405,7 @@ class AirbnbApi
      *
      * List Airbnb listings
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache) and &#x60;thumbnail&#x60; (adds &#x60;thumbnailUrl&#x60; to each listing). Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListings'] to see the possible values for this operation
@@ -11412,12 +11415,13 @@ class AirbnbApi
      * @return array of \Repull\Model\AirbnbListingListResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbListingsWithHttpInfo(
+        ?string $status = 'active',
         ?string $account_id = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listAirbnbListings'][0]
     ): array
     {
-        $request = $this->listAirbnbListingsRequest($account_id, $include, $contentType);
+        $request = $this->listAirbnbListingsRequest($status, $account_id, $include, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -11518,6 +11522,7 @@ class AirbnbApi
      *
      * List Airbnb listings
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache) and &#x60;thumbnail&#x60; (adds &#x60;thumbnailUrl&#x60; to each listing). Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListings'] to see the possible values for this operation
@@ -11526,12 +11531,13 @@ class AirbnbApi
      * @return PromiseInterface
      */
     public function listAirbnbListingsAsync(
+        ?string $status = 'active',
         ?string $account_id = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listAirbnbListings'][0]
     ): PromiseInterface
     {
-        return $this->listAirbnbListingsAsyncWithHttpInfo($account_id, $include, $contentType)
+        return $this->listAirbnbListingsAsyncWithHttpInfo($status, $account_id, $include, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -11544,6 +11550,7 @@ class AirbnbApi
      *
      * List Airbnb listings
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache) and &#x60;thumbnail&#x60; (adds &#x60;thumbnailUrl&#x60; to each listing). Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListings'] to see the possible values for this operation
@@ -11552,13 +11559,14 @@ class AirbnbApi
      * @return PromiseInterface
      */
     public function listAirbnbListingsAsyncWithHttpInfo(
+        ?string $status = 'active',
         ?string $account_id = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listAirbnbListings'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\AirbnbListingListResponse';
-        $request = $this->listAirbnbListingsRequest($account_id, $include, $contentType);
+        $request = $this->listAirbnbListingsRequest($status, $account_id, $include, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -11599,6 +11607,7 @@ class AirbnbApi
     /**
      * Create request for operation 'listAirbnbListings'
      *
+     * @param  string|null $status &#x60;active&#x60; (default) leaves inactive listings out. &#x60;inactive&#x60; returns only them and &#x60;all&#x60; returns both. An inactive listing comes back with identity fields only (ids, &#x60;name&#x60;, &#x60;city&#x60;, &#x60;status&#x60;, &#x60;inactiveReason&#x60;, its account), which is enough to show what can be activated. Every row carries &#x60;status&#x60;. (optional, default to 'active')
      * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
      * @param  string|null $include Comma-separated expansions. Currently supported: &#x60;amenities&#x60; (adds &#x60;amenities&#x60; and &#x60;accessibility_amenities&#x60; arrays to each connection, sourced from the local &#x60;listings_airbnb_amenities&#x60; cache) and &#x60;thumbnail&#x60; (adds &#x60;thumbnailUrl&#x60; to each listing). Unknown values return 422 with a &#x60;valid_values&#x60; envelope. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbListings'] to see the possible values for this operation
@@ -11607,11 +11616,13 @@ class AirbnbApi
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listAirbnbListingsRequest(
+        ?string $status = 'active',
         ?string $account_id = null,
         ?string $include = null,
         string $contentType = self::contentTypes['listAirbnbListings'][0]
     ): Request
     {
+
 
 
 
@@ -11623,6 +11634,15 @@ class AirbnbApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $status,
+            'status', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $account_id,
@@ -16627,46 +16647,46 @@ class AirbnbApi
     /**
      * Operation updateAirbnbCheckinGuide
      *
-     * Upsert Airbnb check-in guide
+     * Replace the steps of an Airbnb check-in guide
      *
      * @param  string $id Repull listing id (numeric string). (required)
-     * @param  string|null $locale Locale to upsert. Defaults to &#x60;en&#x60;. (optional, default to 'en')
+     * @param  \Repull\Model\UpdateAirbnbCheckinGuideRequest $update_airbnb_checkin_guide_request update_airbnb_checkin_guide_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbCheckinGuide'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\Error|null
+     * @return \Repull\Model\UpdateAirbnbCheckinGuide200Response|\Repull\Model\Error
      */
     public function updateAirbnbCheckinGuide(
         string $id,
-        ?string $locale = 'en',
+        \Repull\Model\UpdateAirbnbCheckinGuideRequest $update_airbnb_checkin_guide_request,
         string $contentType = self::contentTypes['updateAirbnbCheckinGuide'][0]
-    ): ?\Repull\Model\Error
+    ): \Repull\Model\UpdateAirbnbCheckinGuide200Response|\Repull\Model\Error
     {
-        list($response) = $this->updateAirbnbCheckinGuideWithHttpInfo($id, $locale, $contentType);
+        list($response) = $this->updateAirbnbCheckinGuideWithHttpInfo($id, $update_airbnb_checkin_guide_request, $contentType);
         return $response;
     }
 
     /**
      * Operation updateAirbnbCheckinGuideWithHttpInfo
      *
-     * Upsert Airbnb check-in guide
+     * Replace the steps of an Airbnb check-in guide
      *
      * @param  string $id Repull listing id (numeric string). (required)
-     * @param  string|null $locale Locale to upsert. Defaults to &#x60;en&#x60;. (optional, default to 'en')
+     * @param  \Repull\Model\UpdateAirbnbCheckinGuideRequest $update_airbnb_checkin_guide_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbCheckinGuide'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\UpdateAirbnbCheckinGuide200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function updateAirbnbCheckinGuideWithHttpInfo(
         string $id,
-        ?string $locale = 'en',
+        \Repull\Model\UpdateAirbnbCheckinGuideRequest $update_airbnb_checkin_guide_request,
         string $contentType = self::contentTypes['updateAirbnbCheckinGuide'][0]
     ): array
     {
-        $request = $this->updateAirbnbCheckinGuideRequest($id, $locale, $contentType);
+        $request = $this->updateAirbnbCheckinGuideRequest($id, $update_airbnb_checkin_guide_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -16690,10 +16710,86 @@ class AirbnbApi
 
             $statusCode = $response->getStatusCode();
 
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\UpdateAirbnbCheckinGuide200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
 
-            return [null, $statusCode, $response->getHeaders()];
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\UpdateAirbnbCheckinGuide200Response',
+                $request,
+                $response,
+            );
         } catch (ApiException $e) {
             switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\UpdateAirbnbCheckinGuide200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -16759,10 +16855,10 @@ class AirbnbApi
     /**
      * Operation updateAirbnbCheckinGuideAsync
      *
-     * Upsert Airbnb check-in guide
+     * Replace the steps of an Airbnb check-in guide
      *
      * @param  string $id Repull listing id (numeric string). (required)
-     * @param  string|null $locale Locale to upsert. Defaults to &#x60;en&#x60;. (optional, default to 'en')
+     * @param  \Repull\Model\UpdateAirbnbCheckinGuideRequest $update_airbnb_checkin_guide_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbCheckinGuide'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -16770,11 +16866,11 @@ class AirbnbApi
      */
     public function updateAirbnbCheckinGuideAsync(
         string $id,
-        ?string $locale = 'en',
+        \Repull\Model\UpdateAirbnbCheckinGuideRequest $update_airbnb_checkin_guide_request,
         string $contentType = self::contentTypes['updateAirbnbCheckinGuide'][0]
     ): PromiseInterface
     {
-        return $this->updateAirbnbCheckinGuideAsyncWithHttpInfo($id, $locale, $contentType)
+        return $this->updateAirbnbCheckinGuideAsyncWithHttpInfo($id, $update_airbnb_checkin_guide_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -16785,10 +16881,10 @@ class AirbnbApi
     /**
      * Operation updateAirbnbCheckinGuideAsyncWithHttpInfo
      *
-     * Upsert Airbnb check-in guide
+     * Replace the steps of an Airbnb check-in guide
      *
      * @param  string $id Repull listing id (numeric string). (required)
-     * @param  string|null $locale Locale to upsert. Defaults to &#x60;en&#x60;. (optional, default to 'en')
+     * @param  \Repull\Model\UpdateAirbnbCheckinGuideRequest $update_airbnb_checkin_guide_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbCheckinGuide'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -16796,18 +16892,31 @@ class AirbnbApi
      */
     public function updateAirbnbCheckinGuideAsyncWithHttpInfo(
         string $id,
-        ?string $locale = 'en',
+        \Repull\Model\UpdateAirbnbCheckinGuideRequest $update_airbnb_checkin_guide_request,
         string $contentType = self::contentTypes['updateAirbnbCheckinGuide'][0]
     ): PromiseInterface
     {
-        $returnType = '';
-        $request = $this->updateAirbnbCheckinGuideRequest($id, $locale, $contentType);
+        $returnType = '\Repull\Model\UpdateAirbnbCheckinGuide200Response';
+        $request = $this->updateAirbnbCheckinGuideRequest($id, $update_airbnb_checkin_guide_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
                 },
                 function ($exception) {
                     $response = $exception->getResponse();
@@ -16830,7 +16939,7 @@ class AirbnbApi
      * Create request for operation 'updateAirbnbCheckinGuide'
      *
      * @param  string $id Repull listing id (numeric string). (required)
-     * @param  string|null $locale Locale to upsert. Defaults to &#x60;en&#x60;. (optional, default to 'en')
+     * @param  \Repull\Model\UpdateAirbnbCheckinGuideRequest $update_airbnb_checkin_guide_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['updateAirbnbCheckinGuide'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -16838,7 +16947,7 @@ class AirbnbApi
      */
     public function updateAirbnbCheckinGuideRequest(
         string $id,
-        ?string $locale = 'en',
+        \Repull\Model\UpdateAirbnbCheckinGuideRequest $update_airbnb_checkin_guide_request,
         string $contentType = self::contentTypes['updateAirbnbCheckinGuide'][0]
     ): Request
     {
@@ -16850,6 +16959,12 @@ class AirbnbApi
             );
         }
 
+        // verify the required parameter 'update_airbnb_checkin_guide_request' is set
+        if ($update_airbnb_checkin_guide_request === null || (is_array($update_airbnb_checkin_guide_request) && count($update_airbnb_checkin_guide_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $update_airbnb_checkin_guide_request when calling updateAirbnbCheckinGuide'
+            );
+        }
 
 
         $resourcePath = '/v1/channels/airbnb/listings/{id}/checkin-guide';
@@ -16859,15 +16974,6 @@ class AirbnbApi
         $httpBody = '';
         $multipart = false;
 
-        // query params
-        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
-            $locale,
-            'locale', // param base name
-            'string', // openApiType
-            'form', // style
-            true, // explode
-            false // required
-        ) ?? []);
 
 
         // path params
@@ -16887,7 +16993,14 @@ class AirbnbApi
         );
 
         // for model (json/xml)
-        if (count($formParams) > 0) {
+        if (isset($update_airbnb_checkin_guide_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($update_airbnb_checkin_guide_request));
+            } else {
+                $httpBody = $update_airbnb_checkin_guide_request;
+            }
+        } elseif (count($formParams) > 0) {
             if ($multipart) {
                 $multipartContents = [];
                 foreach ($formParams as $formParamName => $formParamValue) {
@@ -18057,7 +18170,7 @@ class AirbnbApi
     /**
      * Operation updateAirbnbListingDetails
      *
-     * Update property type, room type, quiet hours or check-in method
+     * Update property type, quiet hours, check-in method, house manual, directions or Wi-Fi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request airbnb_listing_details_write_request (required)
@@ -18082,7 +18195,7 @@ class AirbnbApi
     /**
      * Operation updateAirbnbListingDetailsWithHttpInfo
      *
-     * Update property type, room type, quiet hours or check-in method
+     * Update property type, quiet hours, check-in method, house manual, directions or Wi-Fi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request (required)
@@ -18269,7 +18382,7 @@ class AirbnbApi
     /**
      * Operation updateAirbnbListingDetailsAsync
      *
-     * Update property type, room type, quiet hours or check-in method
+     * Update property type, quiet hours, check-in method, house manual, directions or Wi-Fi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request (required)
@@ -18297,7 +18410,7 @@ class AirbnbApi
     /**
      * Operation updateAirbnbListingDetailsAsyncWithHttpInfo
      *
-     * Update property type, room type, quiet hours or check-in method
+     * Update property type, quiet hours, check-in method, house manual, directions or Wi-Fi
      *
      * @param  string $id Repull listing id (numeric string). (required)
      * @param  \Repull\Model\AirbnbListingDetailsWriteRequest $airbnb_listing_details_write_request (required)
