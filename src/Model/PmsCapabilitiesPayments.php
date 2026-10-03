@@ -1,6 +1,6 @@
 <?php
 /**
- * ConnectStatusCapabilities
+ * PmsCapabilitiesPayments
  *
  * PHP version 8.1
  *
@@ -34,15 +34,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ConnectStatusCapabilities Class Doc Comment
+ * PmsCapabilitiesPayments Class Doc Comment
  *
- * @description PMS providers only. &#x60;reservations&#x60;: which reservation writes the API performs on this connection&#39;s listings — the connector&#39;s support combined with &#x60;writePolicy&#x60;. &#x60;pms&#x60;: everything else the API does through this PMS (review replies, request answers, listing content, guests, message channel/attachments, calendar). When &#x60;connected&#x60; is false, what the connector supports once connected.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSerializable
+class PmsCapabilitiesPayments implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +50,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ConnectStatus_capabilities';
+    protected static string $openAPIModelName = 'PmsCapabilities_payments';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +58,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'reservations' => '\Repull\Model\ReservationCapabilities',
-        'pms' => '\Repull\Model\PmsCapabilities'
+        'read' => 'bool'
     ];
 
     /**
@@ -69,8 +67,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'reservations' => null,
-        'pms' => null
+        'read' => null
     ];
 
     /**
@@ -79,8 +76,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'reservations' => false,
-        'pms' => false
+        'read' => false
     ];
 
     /**
@@ -159,8 +155,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'reservations' => 'reservations',
-        'pms' => 'pms'
+        'read' => 'read'
     ];
 
     /**
@@ -169,8 +164,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $setters = [
-        'reservations' => 'setReservations',
-        'pms' => 'setPms'
+        'read' => 'setRead'
     ];
 
     /**
@@ -179,8 +173,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $getters = [
-        'reservations' => 'getReservations',
-        'pms' => 'getPms'
+        'read' => 'getRead'
     ];
 
     /**
@@ -230,8 +223,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('reservations', $data ?? [], null);
-        $this->setIfExists('pms', $data ?? [], null);
+        $this->setIfExists('read', $data ?? [], null);
     }
 
     /**
@@ -272,55 +264,28 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
 
 
     /**
-     * Gets reservations
+     * Gets read
      *
-     * @return \Repull\Model\ReservationCapabilities|null
+     * @return bool|null
      */
-    public function getReservations(): ?\Repull\Model\ReservationCapabilities
+    public function getRead(): ?bool
     {
-        return $this->container['reservations'];
+        return $this->container['read'];
     }
 
     /**
-     * Sets reservations
+     * Sets read
      *
-     * @param \Repull\Model\ReservationCapabilities|null $reservations reservations
+     * @param bool|null $read Payments recorded in the PMS are imported onto the reservation.
      *
      * @return $this
      */
-    public function setReservations(?\Repull\Model\ReservationCapabilities $reservations): static
+    public function setRead(?bool $read): static
     {
-        if (is_null($reservations)) {
-            throw new InvalidArgumentException('non-nullable reservations cannot be null');
+        if (is_null($read)) {
+            throw new InvalidArgumentException('non-nullable read cannot be null');
         }
-        $this->container['reservations'] = $reservations;
-
-        return $this;
-    }
-
-    /**
-     * Gets pms
-     *
-     * @return \Repull\Model\PmsCapabilities|null
-     */
-    public function getPms(): ?\Repull\Model\PmsCapabilities
-    {
-        return $this->container['pms'];
-    }
-
-    /**
-     * Sets pms
-     *
-     * @param \Repull\Model\PmsCapabilities|null $pms pms
-     *
-     * @return $this
-     */
-    public function setPms(?\Repull\Model\PmsCapabilities $pms): static
-    {
-        if (is_null($pms)) {
-            throw new InvalidArgumentException('non-nullable pms cannot be null');
-        }
-        $this->container['pms'] = $pms;
+        $this->container['read'] = $read;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * GuestCreateResponseContactsInner
+ * PmsCapabilitiesTasks
  *
  * PHP version 8.1
  *
@@ -34,14 +34,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * GuestCreateResponseContactsInner Class Doc Comment
+ * PmsCapabilitiesTasks Class Doc Comment
  *
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class GuestCreateResponseContactsInner implements ModelInterface, ArrayAccess, JsonSerializable
+class PmsCapabilitiesTasks implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +50,7 @@ class GuestCreateResponseContactsInner implements ModelInterface, ArrayAccess, J
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'GuestCreateResponse_contacts_inner';
+    protected static string $openAPIModelName = 'PmsCapabilities_tasks';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -58,9 +58,8 @@ class GuestCreateResponseContactsInner implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'type' => 'string',
-        'value' => 'string',
-        'is_primary' => 'bool'
+        'read' => 'bool',
+        'write' => 'bool'
     ];
 
     /**
@@ -69,9 +68,8 @@ class GuestCreateResponseContactsInner implements ModelInterface, ArrayAccess, J
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'type' => null,
-        'value' => null,
-        'is_primary' => null
+        'read' => null,
+        'write' => null
     ];
 
     /**
@@ -80,9 +78,8 @@ class GuestCreateResponseContactsInner implements ModelInterface, ArrayAccess, J
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'type' => false,
-        'value' => false,
-        'is_primary' => false
+        'read' => false,
+        'write' => false
     ];
 
     /**
@@ -161,9 +158,8 @@ class GuestCreateResponseContactsInner implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'type' => 'type',
-        'value' => 'value',
-        'is_primary' => 'isPrimary'
+        'read' => 'read',
+        'write' => 'write'
     ];
 
     /**
@@ -172,9 +168,8 @@ class GuestCreateResponseContactsInner implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $setters = [
-        'type' => 'setType',
-        'value' => 'setValue',
-        'is_primary' => 'setIsPrimary'
+        'read' => 'setRead',
+        'write' => 'setWrite'
     ];
 
     /**
@@ -183,9 +178,8 @@ class GuestCreateResponseContactsInner implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $getters = [
-        'type' => 'getType',
-        'value' => 'getValue',
-        'is_primary' => 'getIsPrimary'
+        'read' => 'getRead',
+        'write' => 'getWrite'
     ];
 
     /**
@@ -220,21 +214,6 @@ class GuestCreateResponseContactsInner implements ModelInterface, ArrayAccess, J
         return self::$openAPIModelName;
     }
 
-    public const TYPE_EMAIL = 'email';
-    public const TYPE_PHONE = 'phone';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getTypeAllowableValues()
-    {
-        return [
-            self::TYPE_EMAIL,
-            self::TYPE_PHONE,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -250,9 +229,8 @@ class GuestCreateResponseContactsInner implements ModelInterface, ArrayAccess, J
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('type', $data ?? [], null);
-        $this->setIfExists('value', $data ?? [], null);
-        $this->setIfExists('is_primary', $data ?? [], null);
+        $this->setIfExists('read', $data ?? [], null);
+        $this->setIfExists('write', $data ?? [], null);
     }
 
     /**
@@ -280,15 +258,6 @@ class GuestCreateResponseContactsInner implements ModelInterface, ArrayAccess, J
     {
         $invalidProperties = [];
 
-        $allowedValues = self::getTypeAllowableValues();
-        if (!is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'type', must be one of '%s'",
-                $this->container['type'],
-                implode("', '", $allowedValues)
-            );
-        }
-
         return $invalidProperties;
     }
 
@@ -302,83 +271,55 @@ class GuestCreateResponseContactsInner implements ModelInterface, ArrayAccess, J
 
 
     /**
-     * Gets type
-     *
-     * @return string|null
-     */
-    public function getType(): ?string
-    {
-        return $this->container['type'];
-    }
-
-    /**
-     * Sets type
-     *
-     * @param string|null $type type
-     *
-     * @return $this
-     */
-    public function setType(?string $type): static
-    {
-        if (is_null($type)) {
-            throw new InvalidArgumentException('non-nullable type cannot be null');
-        }
-        // (relax-enums.php) accept unknown enum values for forward compat
-        $this->container['type'] = $type;
-
-        return $this;
-    }
-
-    /**
-     * Gets value
-     *
-     * @return string|null
-     */
-    public function getValue(): ?string
-    {
-        return $this->container['value'];
-    }
-
-    /**
-     * Sets value
-     *
-     * @param string|null $value value
-     *
-     * @return $this
-     */
-    public function setValue(?string $value): static
-    {
-        if (is_null($value)) {
-            throw new InvalidArgumentException('non-nullable value cannot be null');
-        }
-        $this->container['value'] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Gets is_primary
+     * Gets read
      *
      * @return bool|null
      */
-    public function getIsPrimary(): ?bool
+    public function getRead(): ?bool
     {
-        return $this->container['is_primary'];
+        return $this->container['read'];
     }
 
     /**
-     * Sets is_primary
+     * Sets read
      *
-     * @param bool|null $is_primary is_primary
+     * @param bool|null $read read
      *
      * @return $this
      */
-    public function setIsPrimary(?bool $is_primary): static
+    public function setRead(?bool $read): static
     {
-        if (is_null($is_primary)) {
-            throw new InvalidArgumentException('non-nullable is_primary cannot be null');
+        if (is_null($read)) {
+            throw new InvalidArgumentException('non-nullable read cannot be null');
         }
-        $this->container['is_primary'] = $is_primary;
+        $this->container['read'] = $read;
+
+        return $this;
+    }
+
+    /**
+     * Gets write
+     *
+     * @return bool|null
+     */
+    public function getWrite(): ?bool
+    {
+        return $this->container['write'];
+    }
+
+    /**
+     * Sets write
+     *
+     * @param bool|null $write write
+     *
+     * @return $this
+     */
+    public function setWrite(?bool $write): static
+    {
+        if (is_null($write)) {
+            throw new InvalidArgumentException('non-nullable write cannot be null');
+        }
+        $this->container['write'] = $write;
 
         return $this;
     }

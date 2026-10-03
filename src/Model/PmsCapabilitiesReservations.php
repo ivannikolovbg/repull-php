@@ -1,6 +1,6 @@
 <?php
 /**
- * ConnectStatusCapabilities
+ * PmsCapabilitiesReservations
  *
  * PHP version 8.1
  *
@@ -34,15 +34,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ConnectStatusCapabilities Class Doc Comment
+ * PmsCapabilitiesReservations Class Doc Comment
  *
- * @description PMS providers only. &#x60;reservations&#x60;: which reservation writes the API performs on this connection&#39;s listings — the connector&#39;s support combined with &#x60;writePolicy&#x60;. &#x60;pms&#x60;: everything else the API does through this PMS (review replies, request answers, listing content, guests, message channel/attachments, calendar). When &#x60;connected&#x60; is false, what the connector supports once connected.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSerializable
+class PmsCapabilitiesReservations implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +50,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ConnectStatus_capabilities';
+    protected static string $openAPIModelName = 'PmsCapabilities_reservations';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +58,8 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'reservations' => '\Repull\Model\ReservationCapabilities',
-        'pms' => '\Repull\Model\PmsCapabilities'
+        'respond' => 'bool',
+        'preapprove' => 'bool'
     ];
 
     /**
@@ -69,8 +68,8 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'reservations' => null,
-        'pms' => null
+        'respond' => null,
+        'preapprove' => null
     ];
 
     /**
@@ -79,8 +78,8 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'reservations' => false,
-        'pms' => false
+        'respond' => false,
+        'preapprove' => false
     ];
 
     /**
@@ -159,8 +158,8 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'reservations' => 'reservations',
-        'pms' => 'pms'
+        'respond' => 'respond',
+        'preapprove' => 'preapprove'
     ];
 
     /**
@@ -169,8 +168,8 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $setters = [
-        'reservations' => 'setReservations',
-        'pms' => 'setPms'
+        'respond' => 'setRespond',
+        'preapprove' => 'setPreapprove'
     ];
 
     /**
@@ -179,8 +178,8 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $getters = [
-        'reservations' => 'getReservations',
-        'pms' => 'getPms'
+        'respond' => 'getRespond',
+        'preapprove' => 'getPreapprove'
     ];
 
     /**
@@ -230,8 +229,8 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('reservations', $data ?? [], null);
-        $this->setIfExists('pms', $data ?? [], null);
+        $this->setIfExists('respond', $data ?? [], null);
+        $this->setIfExists('preapprove', $data ?? [], null);
     }
 
     /**
@@ -272,55 +271,55 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
 
 
     /**
-     * Gets reservations
+     * Gets respond
      *
-     * @return \Repull\Model\ReservationCapabilities|null
+     * @return bool|null
      */
-    public function getReservations(): ?\Repull\Model\ReservationCapabilities
+    public function getRespond(): ?bool
     {
-        return $this->container['reservations'];
+        return $this->container['respond'];
     }
 
     /**
-     * Sets reservations
+     * Sets respond
      *
-     * @param \Repull\Model\ReservationCapabilities|null $reservations reservations
+     * @param bool|null $respond `POST /v1/reservations/{id}/accept|decline` on requests this PMS relays.
      *
      * @return $this
      */
-    public function setReservations(?\Repull\Model\ReservationCapabilities $reservations): static
+    public function setRespond(?bool $respond): static
     {
-        if (is_null($reservations)) {
-            throw new InvalidArgumentException('non-nullable reservations cannot be null');
+        if (is_null($respond)) {
+            throw new InvalidArgumentException('non-nullable respond cannot be null');
         }
-        $this->container['reservations'] = $reservations;
+        $this->container['respond'] = $respond;
 
         return $this;
     }
 
     /**
-     * Gets pms
+     * Gets preapprove
      *
-     * @return \Repull\Model\PmsCapabilities|null
+     * @return bool|null
      */
-    public function getPms(): ?\Repull\Model\PmsCapabilities
+    public function getPreapprove(): ?bool
     {
-        return $this->container['pms'];
+        return $this->container['preapprove'];
     }
 
     /**
-     * Sets pms
+     * Sets preapprove
      *
-     * @param \Repull\Model\PmsCapabilities|null $pms pms
+     * @param bool|null $preapprove `POST /v1/conversations/{id}/pre-approval` on inquiries this PMS relays.
      *
      * @return $this
      */
-    public function setPms(?\Repull\Model\PmsCapabilities $pms): static
+    public function setPreapprove(?bool $preapprove): static
     {
-        if (is_null($pms)) {
-            throw new InvalidArgumentException('non-nullable pms cannot be null');
+        if (is_null($preapprove)) {
+            throw new InvalidArgumentException('non-nullable preapprove cannot be null');
         }
-        $this->container['pms'] = $pms;
+        $this->container['preapprove'] = $preapprove;
 
         return $this;
     }

@@ -60,7 +60,8 @@ class ListingContentUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPITypes = [
         'id' => 'string',
         'changed' => 'string[]',
-        'deferred' => 'string[]'
+        'deferred' => 'string[]',
+        'pms' => '\Repull\Model\ListingContentUpdateResponsePms'
     ];
 
     /**
@@ -71,7 +72,8 @@ class ListingContentUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPIFormats = [
         'id' => null,
         'changed' => null,
-        'deferred' => null
+        'deferred' => null,
+        'pms' => null
     ];
 
     /**
@@ -82,7 +84,8 @@ class ListingContentUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPINullables = [
         'id' => false,
         'changed' => false,
-        'deferred' => false
+        'deferred' => false,
+        'pms' => true
     ];
 
     /**
@@ -163,7 +166,8 @@ class ListingContentUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     protected static array $attributeMap = [
         'id' => 'id',
         'changed' => 'changed',
-        'deferred' => 'deferred'
+        'deferred' => 'deferred',
+        'pms' => 'pms'
     ];
 
     /**
@@ -174,7 +178,8 @@ class ListingContentUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     protected static array $setters = [
         'id' => 'setId',
         'changed' => 'setChanged',
-        'deferred' => 'setDeferred'
+        'deferred' => 'setDeferred',
+        'pms' => 'setPms'
     ];
 
     /**
@@ -185,7 +190,8 @@ class ListingContentUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     protected static array $getters = [
         'id' => 'getId',
         'changed' => 'getChanged',
-        'deferred' => 'getDeferred'
+        'deferred' => 'getDeferred',
+        'pms' => 'getPms'
     ];
 
     /**
@@ -238,6 +244,7 @@ class ListingContentUpdateResponse implements ModelInterface, ArrayAccess, JsonS
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('changed', $data ?? [], null);
         $this->setIfExists('deferred', $data ?? [], null);
+        $this->setIfExists('pms', $data ?? [], null);
     }
 
     /**
@@ -344,7 +351,7 @@ class ListingContentUpdateResponse implements ModelInterface, ArrayAccess, JsonS
     /**
      * Sets deferred
      *
-     * @param string[]|null $deferred Provided-but-not-applied fields — e.g. \"photos\" when a non-empty photos array carried no valid http(s) URL.
+     * @param string[]|null $deferred Provided-but-not-applied fields — e.g. \"photos\" when a non-empty photos array carried no valid http(s) URL. On a listing a PMS manages, also the content sections the PMS refused (`title`, `descriptions`, `times`, `capacity`, `amenities`, `houseRules`, `address`, `photos`), which are then not written here either.
      *
      * @return $this
      */
@@ -354,6 +361,40 @@ class ListingContentUpdateResponse implements ModelInterface, ArrayAccess, JsonS
             throw new InvalidArgumentException('non-nullable deferred cannot be null');
         }
         $this->container['deferred'] = $deferred;
+
+        return $this;
+    }
+
+    /**
+     * Gets pms
+     *
+     * @return \Repull\Model\ListingContentUpdateResponsePms|null
+     */
+    public function getPms(): ?\Repull\Model\ListingContentUpdateResponsePms
+    {
+        return $this->container['pms'];
+    }
+
+    /**
+     * Sets pms
+     *
+     * @param \Repull\Model\ListingContentUpdateResponsePms|null $pms pms
+     *
+     * @return $this
+     */
+    public function setPms(?\Repull\Model\ListingContentUpdateResponsePms $pms): static
+    {
+        if (is_null($pms)) {
+            array_push($this->openAPINullablesSetToNull, 'pms');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('pms', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['pms'] = $pms;
 
         return $this;
     }

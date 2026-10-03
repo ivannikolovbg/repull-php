@@ -1,6 +1,6 @@
 <?php
 /**
- * ConnectStatusCapabilities
+ * PmsCapabilitiesConversations
  *
  * PHP version 8.1
  *
@@ -34,15 +34,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ConnectStatusCapabilities Class Doc Comment
+ * PmsCapabilitiesConversations Class Doc Comment
  *
- * @description PMS providers only. &#x60;reservations&#x60;: which reservation writes the API performs on this connection&#39;s listings — the connector&#39;s support combined with &#x60;writePolicy&#x60;. &#x60;pms&#x60;: everything else the API does through this PMS (review replies, request answers, listing content, guests, message channel/attachments, calendar). When &#x60;connected&#x60; is false, what the connector supports once connected.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSerializable
+class PmsCapabilitiesConversations implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +50,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ConnectStatus_capabilities';
+    protected static string $openAPIModelName = 'PmsCapabilities_conversations';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +58,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'reservations' => '\Repull\Model\ReservationCapabilities',
-        'pms' => '\Repull\Model\PmsCapabilities'
+        'send' => 'bool',
+        'attachments' => 'bool',
+        'channel_select' => 'bool'
     ];
 
     /**
@@ -69,8 +69,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'reservations' => null,
-        'pms' => null
+        'send' => null,
+        'attachments' => null,
+        'channel_select' => null
     ];
 
     /**
@@ -79,8 +80,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'reservations' => false,
-        'pms' => false
+        'send' => false,
+        'attachments' => false,
+        'channel_select' => false
     ];
 
     /**
@@ -159,8 +161,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'reservations' => 'reservations',
-        'pms' => 'pms'
+        'send' => 'send',
+        'attachments' => 'attachments',
+        'channel_select' => 'channelSelect'
     ];
 
     /**
@@ -169,8 +172,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $setters = [
-        'reservations' => 'setReservations',
-        'pms' => 'setPms'
+        'send' => 'setSend',
+        'attachments' => 'setAttachments',
+        'channel_select' => 'setChannelSelect'
     ];
 
     /**
@@ -179,8 +183,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $getters = [
-        'reservations' => 'getReservations',
-        'pms' => 'getPms'
+        'send' => 'getSend',
+        'attachments' => 'getAttachments',
+        'channel_select' => 'getChannelSelect'
     ];
 
     /**
@@ -230,8 +235,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('reservations', $data ?? [], null);
-        $this->setIfExists('pms', $data ?? [], null);
+        $this->setIfExists('send', $data ?? [], null);
+        $this->setIfExists('attachments', $data ?? [], null);
+        $this->setIfExists('channel_select', $data ?? [], null);
     }
 
     /**
@@ -272,55 +278,82 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
 
 
     /**
-     * Gets reservations
+     * Gets send
      *
-     * @return \Repull\Model\ReservationCapabilities|null
+     * @return bool|null
      */
-    public function getReservations(): ?\Repull\Model\ReservationCapabilities
+    public function getSend(): ?bool
     {
-        return $this->container['reservations'];
+        return $this->container['send'];
     }
 
     /**
-     * Sets reservations
+     * Sets send
      *
-     * @param \Repull\Model\ReservationCapabilities|null $reservations reservations
+     * @param bool|null $send send
      *
      * @return $this
      */
-    public function setReservations(?\Repull\Model\ReservationCapabilities $reservations): static
+    public function setSend(?bool $send): static
     {
-        if (is_null($reservations)) {
-            throw new InvalidArgumentException('non-nullable reservations cannot be null');
+        if (is_null($send)) {
+            throw new InvalidArgumentException('non-nullable send cannot be null');
         }
-        $this->container['reservations'] = $reservations;
+        $this->container['send'] = $send;
 
         return $this;
     }
 
     /**
-     * Gets pms
+     * Gets attachments
      *
-     * @return \Repull\Model\PmsCapabilities|null
+     * @return bool|null
      */
-    public function getPms(): ?\Repull\Model\PmsCapabilities
+    public function getAttachments(): ?bool
     {
-        return $this->container['pms'];
+        return $this->container['attachments'];
     }
 
     /**
-     * Sets pms
+     * Sets attachments
      *
-     * @param \Repull\Model\PmsCapabilities|null $pms pms
+     * @param bool|null $attachments `attachments` on `POST /v1/conversations/{id}/messages`.
      *
      * @return $this
      */
-    public function setPms(?\Repull\Model\PmsCapabilities $pms): static
+    public function setAttachments(?bool $attachments): static
     {
-        if (is_null($pms)) {
-            throw new InvalidArgumentException('non-nullable pms cannot be null');
+        if (is_null($attachments)) {
+            throw new InvalidArgumentException('non-nullable attachments cannot be null');
         }
-        $this->container['pms'] = $pms;
+        $this->container['attachments'] = $attachments;
+
+        return $this;
+    }
+
+    /**
+     * Gets channel_select
+     *
+     * @return bool|null
+     */
+    public function getChannelSelect(): ?bool
+    {
+        return $this->container['channel_select'];
+    }
+
+    /**
+     * Sets channel_select
+     *
+     * @param bool|null $channel_select `channel` on `POST /v1/conversations/{id}/messages`.
+     *
+     * @return $this
+     */
+    public function setChannelSelect(?bool $channel_select): static
+    {
+        if (is_null($channel_select)) {
+            throw new InvalidArgumentException('non-nullable channel_select cannot be null');
+        }
+        $this->container['channel_select'] = $channel_select;
 
         return $this;
     }

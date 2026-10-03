@@ -1,6 +1,6 @@
 <?php
 /**
- * ConnectStatusCapabilities
+ * ListingContentUpdateResponsePms
  *
  * PHP version 8.1
  *
@@ -34,15 +34,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ConnectStatusCapabilities Class Doc Comment
+ * ListingContentUpdateResponsePms Class Doc Comment
  *
- * @description PMS providers only. &#x60;reservations&#x60;: which reservation writes the API performs on this connection&#39;s listings — the connector&#39;s support combined with &#x60;writePolicy&#x60;. &#x60;pms&#x60;: everything else the API does through this PMS (review replies, request answers, listing content, guests, message channel/attachments, calendar). When &#x60;connected&#x60; is false, what the connector supports once connected.
+ * @description Present when the listing is managed in a PMS: the PMS-owned fields were written there first, and this is its per-section outcome.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingContentUpdateResponsePms implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ConnectStatus_capabilities';
+    protected static string $openAPIModelName = 'ListingContentUpdateResponse_pms';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'reservations' => '\Repull\Model\ReservationCapabilities',
-        'pms' => '\Repull\Model\PmsCapabilities'
+        'provider' => 'string',
+        'applied' => 'string[]',
+        'errors' => '\Repull\Model\ListingContentUpdateResponsePmsErrorsInner[]'
     ];
 
     /**
@@ -69,8 +70,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'reservations' => null,
-        'pms' => null
+        'provider' => null,
+        'applied' => null,
+        'errors' => null
     ];
 
     /**
@@ -79,8 +81,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'reservations' => false,
-        'pms' => false
+        'provider' => false,
+        'applied' => false,
+        'errors' => false
     ];
 
     /**
@@ -159,8 +162,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'reservations' => 'reservations',
-        'pms' => 'pms'
+        'provider' => 'provider',
+        'applied' => 'applied',
+        'errors' => 'errors'
     ];
 
     /**
@@ -169,8 +173,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $setters = [
-        'reservations' => 'setReservations',
-        'pms' => 'setPms'
+        'provider' => 'setProvider',
+        'applied' => 'setApplied',
+        'errors' => 'setErrors'
     ];
 
     /**
@@ -179,8 +184,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $getters = [
-        'reservations' => 'getReservations',
-        'pms' => 'getPms'
+        'provider' => 'getProvider',
+        'applied' => 'getApplied',
+        'errors' => 'getErrors'
     ];
 
     /**
@@ -230,8 +236,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('reservations', $data ?? [], null);
-        $this->setIfExists('pms', $data ?? [], null);
+        $this->setIfExists('provider', $data ?? [], null);
+        $this->setIfExists('applied', $data ?? [], null);
+        $this->setIfExists('errors', $data ?? [], null);
     }
 
     /**
@@ -272,55 +279,82 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
 
 
     /**
-     * Gets reservations
+     * Gets provider
      *
-     * @return \Repull\Model\ReservationCapabilities|null
+     * @return string|null
      */
-    public function getReservations(): ?\Repull\Model\ReservationCapabilities
+    public function getProvider(): ?string
     {
-        return $this->container['reservations'];
+        return $this->container['provider'];
     }
 
     /**
-     * Sets reservations
+     * Sets provider
      *
-     * @param \Repull\Model\ReservationCapabilities|null $reservations reservations
+     * @param string|null $provider provider
      *
      * @return $this
      */
-    public function setReservations(?\Repull\Model\ReservationCapabilities $reservations): static
+    public function setProvider(?string $provider): static
     {
-        if (is_null($reservations)) {
-            throw new InvalidArgumentException('non-nullable reservations cannot be null');
+        if (is_null($provider)) {
+            throw new InvalidArgumentException('non-nullable provider cannot be null');
         }
-        $this->container['reservations'] = $reservations;
+        $this->container['provider'] = $provider;
 
         return $this;
     }
 
     /**
-     * Gets pms
+     * Gets applied
      *
-     * @return \Repull\Model\PmsCapabilities|null
+     * @return string[]|null
      */
-    public function getPms(): ?\Repull\Model\PmsCapabilities
+    public function getApplied(): ?array
     {
-        return $this->container['pms'];
+        return $this->container['applied'];
     }
 
     /**
-     * Sets pms
+     * Sets applied
      *
-     * @param \Repull\Model\PmsCapabilities|null $pms pms
+     * @param string[]|null $applied Sections the PMS applied.
      *
      * @return $this
      */
-    public function setPms(?\Repull\Model\PmsCapabilities $pms): static
+    public function setApplied(?array $applied): static
     {
-        if (is_null($pms)) {
-            throw new InvalidArgumentException('non-nullable pms cannot be null');
+        if (is_null($applied)) {
+            throw new InvalidArgumentException('non-nullable applied cannot be null');
         }
-        $this->container['pms'] = $pms;
+        $this->container['applied'] = $applied;
+
+        return $this;
+    }
+
+    /**
+     * Gets errors
+     *
+     * @return \Repull\Model\ListingContentUpdateResponsePmsErrorsInner[]|null
+     */
+    public function getErrors(): ?array
+    {
+        return $this->container['errors'];
+    }
+
+    /**
+     * Sets errors
+     *
+     * @param \Repull\Model\ListingContentUpdateResponsePmsErrorsInner[]|null $errors Sections the PMS refused, with its reason.
+     *
+     * @return $this
+     */
+    public function setErrors(?array $errors): static
+    {
+        if (is_null($errors)) {
+            throw new InvalidArgumentException('non-nullable errors cannot be null');
+        }
+        $this->container['errors'] = $errors;
 
         return $this;
     }

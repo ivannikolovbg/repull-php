@@ -1,6 +1,6 @@
 <?php
 /**
- * ConnectStatusCapabilities
+ * ListingContentUpdateResponsePmsErrorsInner
  *
  * PHP version 8.1
  *
@@ -34,15 +34,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ConnectStatusCapabilities Class Doc Comment
+ * ListingContentUpdateResponsePmsErrorsInner Class Doc Comment
  *
- * @description PMS providers only. &#x60;reservations&#x60;: which reservation writes the API performs on this connection&#39;s listings — the connector&#39;s support combined with &#x60;writePolicy&#x60;. &#x60;pms&#x60;: everything else the API does through this PMS (review replies, request answers, listing content, guests, message channel/attachments, calendar). When &#x60;connected&#x60; is false, what the connector supports once connected.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSerializable
+class ListingContentUpdateResponsePmsErrorsInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +50,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ConnectStatus_capabilities';
+    protected static string $openAPIModelName = 'ListingContentUpdateResponse_pms_errors_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +58,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'reservations' => '\Repull\Model\ReservationCapabilities',
-        'pms' => '\Repull\Model\PmsCapabilities'
+        'section' => 'string',
+        'code' => 'string',
+        'message' => 'string'
     ];
 
     /**
@@ -69,8 +69,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'reservations' => null,
-        'pms' => null
+        'section' => null,
+        'code' => null,
+        'message' => null
     ];
 
     /**
@@ -79,8 +80,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'reservations' => false,
-        'pms' => false
+        'section' => false,
+        'code' => false,
+        'message' => false
     ];
 
     /**
@@ -159,8 +161,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'reservations' => 'reservations',
-        'pms' => 'pms'
+        'section' => 'section',
+        'code' => 'code',
+        'message' => 'message'
     ];
 
     /**
@@ -169,8 +172,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $setters = [
-        'reservations' => 'setReservations',
-        'pms' => 'setPms'
+        'section' => 'setSection',
+        'code' => 'setCode',
+        'message' => 'setMessage'
     ];
 
     /**
@@ -179,8 +183,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $getters = [
-        'reservations' => 'getReservations',
-        'pms' => 'getPms'
+        'section' => 'getSection',
+        'code' => 'getCode',
+        'message' => 'getMessage'
     ];
 
     /**
@@ -215,6 +220,29 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
         return self::$openAPIModelName;
     }
 
+    public const CODE_REJECTED = 'rejected';
+    public const CODE_UNAVAILABLE = 'unavailable';
+    public const CODE_UNSUPPORTED = 'unsupported';
+    public const CODE_NOT_FOUND = 'not_found';
+    public const CODE_REAUTH_REQUIRED = 'reauth_required';
+    public const CODE_DUPLICATE = 'duplicate';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getCodeAllowableValues()
+    {
+        return [
+            self::CODE_REJECTED,
+            self::CODE_UNAVAILABLE,
+            self::CODE_UNSUPPORTED,
+            self::CODE_NOT_FOUND,
+            self::CODE_REAUTH_REQUIRED,
+            self::CODE_DUPLICATE,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -230,8 +258,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('reservations', $data ?? [], null);
-        $this->setIfExists('pms', $data ?? [], null);
+        $this->setIfExists('section', $data ?? [], null);
+        $this->setIfExists('code', $data ?? [], null);
+        $this->setIfExists('message', $data ?? [], null);
     }
 
     /**
@@ -259,6 +288,15 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
     {
         $invalidProperties = [];
 
+        $allowedValues = self::getCodeAllowableValues();
+        if (!is_null($this->container['code']) && !in_array($this->container['code'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'code', must be one of '%s'",
+                $this->container['code'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -272,55 +310,83 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
 
 
     /**
-     * Gets reservations
+     * Gets section
      *
-     * @return \Repull\Model\ReservationCapabilities|null
+     * @return string|null
      */
-    public function getReservations(): ?\Repull\Model\ReservationCapabilities
+    public function getSection(): ?string
     {
-        return $this->container['reservations'];
+        return $this->container['section'];
     }
 
     /**
-     * Sets reservations
+     * Sets section
      *
-     * @param \Repull\Model\ReservationCapabilities|null $reservations reservations
+     * @param string|null $section section
      *
      * @return $this
      */
-    public function setReservations(?\Repull\Model\ReservationCapabilities $reservations): static
+    public function setSection(?string $section): static
     {
-        if (is_null($reservations)) {
-            throw new InvalidArgumentException('non-nullable reservations cannot be null');
+        if (is_null($section)) {
+            throw new InvalidArgumentException('non-nullable section cannot be null');
         }
-        $this->container['reservations'] = $reservations;
+        $this->container['section'] = $section;
 
         return $this;
     }
 
     /**
-     * Gets pms
+     * Gets code
      *
-     * @return \Repull\Model\PmsCapabilities|null
+     * @return string|null
      */
-    public function getPms(): ?\Repull\Model\PmsCapabilities
+    public function getCode(): ?string
     {
-        return $this->container['pms'];
+        return $this->container['code'];
     }
 
     /**
-     * Sets pms
+     * Sets code
      *
-     * @param \Repull\Model\PmsCapabilities|null $pms pms
+     * @param string|null $code code
      *
      * @return $this
      */
-    public function setPms(?\Repull\Model\PmsCapabilities $pms): static
+    public function setCode(?string $code): static
     {
-        if (is_null($pms)) {
-            throw new InvalidArgumentException('non-nullable pms cannot be null');
+        if (is_null($code)) {
+            throw new InvalidArgumentException('non-nullable code cannot be null');
         }
-        $this->container['pms'] = $pms;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['code'] = $code;
+
+        return $this;
+    }
+
+    /**
+     * Gets message
+     *
+     * @return string|null
+     */
+    public function getMessage(): ?string
+    {
+        return $this->container['message'];
+    }
+
+    /**
+     * Sets message
+     *
+     * @param string|null $message message
+     *
+     * @return $this
+     */
+    public function setMessage(?string $message): static
+    {
+        if (is_null($message)) {
+            throw new InvalidArgumentException('non-nullable message cannot be null');
+        }
+        $this->container['message'] = $message;
 
         return $this;
     }

@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * ListingCapabilities Class Doc Comment
  *
- * @description &#x60;GET /v1/listings/{id}&#x60; only. What the API can do with this listing.
+ * @description &#x60;GET /v1/listings/{id}&#x60; only. What the API can do with this listing. &#x60;pms&#x60; is present when a connected PMS manages it.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -59,7 +59,8 @@ class ListingCapabilities implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'reservations' => '\Repull\Model\ReservationCapabilities'
+        'reservations' => '\Repull\Model\ReservationCapabilities',
+        'pms' => '\Repull\Model\PmsCapabilities'
     ];
 
     /**
@@ -68,7 +69,8 @@ class ListingCapabilities implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'reservations' => null
+        'reservations' => null,
+        'pms' => null
     ];
 
     /**
@@ -77,7 +79,8 @@ class ListingCapabilities implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'reservations' => false
+        'reservations' => false,
+        'pms' => false
     ];
 
     /**
@@ -156,7 +159,8 @@ class ListingCapabilities implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'reservations' => 'reservations'
+        'reservations' => 'reservations',
+        'pms' => 'pms'
     ];
 
     /**
@@ -165,7 +169,8 @@ class ListingCapabilities implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, string>
      */
     protected static array $setters = [
-        'reservations' => 'setReservations'
+        'reservations' => 'setReservations',
+        'pms' => 'setPms'
     ];
 
     /**
@@ -174,7 +179,8 @@ class ListingCapabilities implements ModelInterface, ArrayAccess, JsonSerializab
      * @var array<string, string>
      */
     protected static array $getters = [
-        'reservations' => 'getReservations'
+        'reservations' => 'getReservations',
+        'pms' => 'getPms'
     ];
 
     /**
@@ -225,6 +231,7 @@ class ListingCapabilities implements ModelInterface, ArrayAccess, JsonSerializab
     public function __construct(?array $data = null)
     {
         $this->setIfExists('reservations', $data ?? [], null);
+        $this->setIfExists('pms', $data ?? [], null);
     }
 
     /**
@@ -287,6 +294,33 @@ class ListingCapabilities implements ModelInterface, ArrayAccess, JsonSerializab
             throw new InvalidArgumentException('non-nullable reservations cannot be null');
         }
         $this->container['reservations'] = $reservations;
+
+        return $this;
+    }
+
+    /**
+     * Gets pms
+     *
+     * @return \Repull\Model\PmsCapabilities|null
+     */
+    public function getPms(): ?\Repull\Model\PmsCapabilities
+    {
+        return $this->container['pms'];
+    }
+
+    /**
+     * Sets pms
+     *
+     * @param \Repull\Model\PmsCapabilities|null $pms pms
+     *
+     * @return $this
+     */
+    public function setPms(?\Repull\Model\PmsCapabilities $pms): static
+    {
+        if (is_null($pms)) {
+            throw new InvalidArgumentException('non-nullable pms cannot be null');
+        }
+        $this->container['pms'] = $pms;
 
         return $this;
     }

@@ -65,8 +65,9 @@ class GuestCreateResponse implements ModelInterface, ArrayAccess, JsonSerializab
         'language' => 'string',
         'currency' => 'string',
         'is_business_traveler' => 'bool',
-        'contacts' => '\Repull\Model\GuestCreateResponseContactsInner[]',
-        'created_at' => '\DateTime'
+        'contacts' => '\Repull\Model\GuestUpdateResponseContactsInner[]',
+        'created_at' => '\DateTime',
+        'pms' => '\Repull\Model\GuestCreateResponsePms'
     ];
 
     /**
@@ -83,7 +84,8 @@ class GuestCreateResponse implements ModelInterface, ArrayAccess, JsonSerializab
         'currency' => null,
         'is_business_traveler' => null,
         'contacts' => null,
-        'created_at' => 'date-time'
+        'created_at' => 'date-time',
+        'pms' => null
     ];
 
     /**
@@ -100,7 +102,8 @@ class GuestCreateResponse implements ModelInterface, ArrayAccess, JsonSerializab
         'currency' => true,
         'is_business_traveler' => false,
         'contacts' => false,
-        'created_at' => false
+        'created_at' => false,
+        'pms' => true
     ];
 
     /**
@@ -187,7 +190,8 @@ class GuestCreateResponse implements ModelInterface, ArrayAccess, JsonSerializab
         'currency' => 'currency',
         'is_business_traveler' => 'isBusinessTraveler',
         'contacts' => 'contacts',
-        'created_at' => 'createdAt'
+        'created_at' => 'createdAt',
+        'pms' => 'pms'
     ];
 
     /**
@@ -204,7 +208,8 @@ class GuestCreateResponse implements ModelInterface, ArrayAccess, JsonSerializab
         'currency' => 'setCurrency',
         'is_business_traveler' => 'setIsBusinessTraveler',
         'contacts' => 'setContacts',
-        'created_at' => 'setCreatedAt'
+        'created_at' => 'setCreatedAt',
+        'pms' => 'setPms'
     ];
 
     /**
@@ -221,7 +226,8 @@ class GuestCreateResponse implements ModelInterface, ArrayAccess, JsonSerializab
         'currency' => 'getCurrency',
         'is_business_traveler' => 'getIsBusinessTraveler',
         'contacts' => 'getContacts',
-        'created_at' => 'getCreatedAt'
+        'created_at' => 'getCreatedAt',
+        'pms' => 'getPms'
     ];
 
     /**
@@ -280,6 +286,7 @@ class GuestCreateResponse implements ModelInterface, ArrayAccess, JsonSerializab
         $this->setIfExists('is_business_traveler', $data ?? [], null);
         $this->setIfExists('contacts', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('pms', $data ?? [], null);
     }
 
     /**
@@ -532,7 +539,7 @@ class GuestCreateResponse implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Gets contacts
      *
-     * @return \Repull\Model\GuestCreateResponseContactsInner[]|null
+     * @return \Repull\Model\GuestUpdateResponseContactsInner[]|null
      */
     public function getContacts(): ?array
     {
@@ -542,7 +549,7 @@ class GuestCreateResponse implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets contacts
      *
-     * @param \Repull\Model\GuestCreateResponseContactsInner[]|null $contacts One entry per stored contact. Email and phone are separate records.
+     * @param \Repull\Model\GuestUpdateResponseContactsInner[]|null $contacts One entry per stored contact. Email and phone are separate records.
      *
      * @return $this
      */
@@ -579,6 +586,40 @@ class GuestCreateResponse implements ModelInterface, ArrayAccess, JsonSerializab
             throw new InvalidArgumentException('non-nullable created_at cannot be null');
         }
         $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets pms
+     *
+     * @return \Repull\Model\GuestCreateResponsePms|null
+     */
+    public function getPms(): ?\Repull\Model\GuestCreateResponsePms
+    {
+        return $this->container['pms'];
+    }
+
+    /**
+     * Sets pms
+     *
+     * @param \Repull\Model\GuestCreateResponsePms|null $pms pms
+     *
+     * @return $this
+     */
+    public function setPms(?\Repull\Model\GuestCreateResponsePms $pms): static
+    {
+        if (is_null($pms)) {
+            array_push($this->openAPINullablesSetToNull, 'pms');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('pms', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['pms'] = $pms;
 
         return $this;
     }

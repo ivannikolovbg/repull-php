@@ -60,6 +60,7 @@ class ReplyToReview201Response implements ModelInterface, ArrayAccess, JsonSeria
     protected static array $openAPITypes = [
         'id' => 'string',
         'platform' => 'string',
+        'pms' => 'string',
         'response' => 'string'
     ];
 
@@ -71,6 +72,7 @@ class ReplyToReview201Response implements ModelInterface, ArrayAccess, JsonSeria
     protected static array $openAPIFormats = [
         'id' => null,
         'platform' => null,
+        'pms' => null,
         'response' => null
     ];
 
@@ -82,6 +84,7 @@ class ReplyToReview201Response implements ModelInterface, ArrayAccess, JsonSeria
     protected static array $openAPINullables = [
         'id' => false,
         'platform' => false,
+        'pms' => true,
         'response' => false
     ];
 
@@ -163,6 +166,7 @@ class ReplyToReview201Response implements ModelInterface, ArrayAccess, JsonSeria
     protected static array $attributeMap = [
         'id' => 'id',
         'platform' => 'platform',
+        'pms' => 'pms',
         'response' => 'response'
     ];
 
@@ -174,6 +178,7 @@ class ReplyToReview201Response implements ModelInterface, ArrayAccess, JsonSeria
     protected static array $setters = [
         'id' => 'setId',
         'platform' => 'setPlatform',
+        'pms' => 'setPms',
         'response' => 'setResponse'
     ];
 
@@ -185,6 +190,7 @@ class ReplyToReview201Response implements ModelInterface, ArrayAccess, JsonSeria
     protected static array $getters = [
         'id' => 'getId',
         'platform' => 'getPlatform',
+        'pms' => 'getPms',
         'response' => 'getResponse'
     ];
 
@@ -237,6 +243,7 @@ class ReplyToReview201Response implements ModelInterface, ArrayAccess, JsonSeria
     {
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
+        $this->setIfExists('pms', $data ?? [], null);
         $this->setIfExists('response', $data ?? [], null);
     }
 
@@ -327,6 +334,40 @@ class ReplyToReview201Response implements ModelInterface, ArrayAccess, JsonSeria
             throw new InvalidArgumentException('non-nullable platform cannot be null');
         }
         $this->container['platform'] = $platform;
+
+        return $this;
+    }
+
+    /**
+     * Gets pms
+     *
+     * @return string|null
+     */
+    public function getPms(): ?string
+    {
+        return $this->container['pms'];
+    }
+
+    /**
+     * Sets pms
+     *
+     * @param string|null $pms The PMS the reply went through, when the review came from one.
+     *
+     * @return $this
+     */
+    public function setPms(?string $pms): static
+    {
+        if (is_null($pms)) {
+            array_push($this->openAPINullablesSetToNull, 'pms');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('pms', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['pms'] = $pms;
 
         return $this;
     }

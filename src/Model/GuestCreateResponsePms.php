@@ -1,6 +1,6 @@
 <?php
 /**
- * ConnectStatusCapabilities
+ * GuestCreateResponsePms
  *
  * PHP version 8.1
  *
@@ -34,15 +34,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ConnectStatusCapabilities Class Doc Comment
+ * GuestCreateResponsePms Class Doc Comment
  *
- * @description PMS providers only. &#x60;reservations&#x60;: which reservation writes the API performs on this connection&#39;s listings — the connector&#39;s support combined with &#x60;writePolicy&#x60;. &#x60;pms&#x60;: everything else the API does through this PMS (review replies, request answers, listing content, guests, message channel/attachments, calendar). When &#x60;connected&#x60; is false, what the connector supports once connected.
+ * @description Set when &#x60;provider&#x60; was sent: the PMS the guest was also created in, and its id there.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSerializable
+class GuestCreateResponsePms implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ConnectStatus_capabilities';
+    protected static string $openAPIModelName = 'GuestCreateResponse_pms';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,8 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'reservations' => '\Repull\Model\ReservationCapabilities',
-        'pms' => '\Repull\Model\PmsCapabilities'
+        'provider' => 'string',
+        'external_id' => 'string'
     ];
 
     /**
@@ -69,8 +69,8 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'reservations' => null,
-        'pms' => null
+        'provider' => null,
+        'external_id' => null
     ];
 
     /**
@@ -79,8 +79,8 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'reservations' => false,
-        'pms' => false
+        'provider' => false,
+        'external_id' => true
     ];
 
     /**
@@ -159,8 +159,8 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'reservations' => 'reservations',
-        'pms' => 'pms'
+        'provider' => 'provider',
+        'external_id' => 'externalId'
     ];
 
     /**
@@ -169,8 +169,8 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $setters = [
-        'reservations' => 'setReservations',
-        'pms' => 'setPms'
+        'provider' => 'setProvider',
+        'external_id' => 'setExternalId'
     ];
 
     /**
@@ -179,8 +179,8 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $getters = [
-        'reservations' => 'getReservations',
-        'pms' => 'getPms'
+        'provider' => 'getProvider',
+        'external_id' => 'getExternalId'
     ];
 
     /**
@@ -230,8 +230,8 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('reservations', $data ?? [], null);
-        $this->setIfExists('pms', $data ?? [], null);
+        $this->setIfExists('provider', $data ?? [], null);
+        $this->setIfExists('external_id', $data ?? [], null);
     }
 
     /**
@@ -272,55 +272,62 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
 
 
     /**
-     * Gets reservations
+     * Gets provider
      *
-     * @return \Repull\Model\ReservationCapabilities|null
+     * @return string|null
      */
-    public function getReservations(): ?\Repull\Model\ReservationCapabilities
+    public function getProvider(): ?string
     {
-        return $this->container['reservations'];
+        return $this->container['provider'];
     }
 
     /**
-     * Sets reservations
+     * Sets provider
      *
-     * @param \Repull\Model\ReservationCapabilities|null $reservations reservations
+     * @param string|null $provider provider
      *
      * @return $this
      */
-    public function setReservations(?\Repull\Model\ReservationCapabilities $reservations): static
+    public function setProvider(?string $provider): static
     {
-        if (is_null($reservations)) {
-            throw new InvalidArgumentException('non-nullable reservations cannot be null');
+        if (is_null($provider)) {
+            throw new InvalidArgumentException('non-nullable provider cannot be null');
         }
-        $this->container['reservations'] = $reservations;
+        $this->container['provider'] = $provider;
 
         return $this;
     }
 
     /**
-     * Gets pms
+     * Gets external_id
      *
-     * @return \Repull\Model\PmsCapabilities|null
+     * @return string|null
      */
-    public function getPms(): ?\Repull\Model\PmsCapabilities
+    public function getExternalId(): ?string
     {
-        return $this->container['pms'];
+        return $this->container['external_id'];
     }
 
     /**
-     * Sets pms
+     * Sets external_id
      *
-     * @param \Repull\Model\PmsCapabilities|null $pms pms
+     * @param string|null $external_id external_id
      *
      * @return $this
      */
-    public function setPms(?\Repull\Model\PmsCapabilities $pms): static
+    public function setExternalId(?string $external_id): static
     {
-        if (is_null($pms)) {
-            throw new InvalidArgumentException('non-nullable pms cannot be null');
+        if (is_null($external_id)) {
+            array_push($this->openAPINullablesSetToNull, 'external_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('external_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['pms'] = $pms;
+        $this->container['external_id'] = $external_id;
 
         return $this;
     }

@@ -64,7 +64,8 @@ class GuestCreateRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         'phone' => 'string',
         'language' => 'string',
         'currency' => 'string',
-        'is_business_traveler' => 'bool'
+        'is_business_traveler' => 'bool',
+        'provider' => 'string'
     ];
 
     /**
@@ -79,7 +80,8 @@ class GuestCreateRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         'phone' => null,
         'language' => null,
         'currency' => null,
-        'is_business_traveler' => null
+        'is_business_traveler' => null,
+        'provider' => null
     ];
 
     /**
@@ -94,7 +96,8 @@ class GuestCreateRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         'phone' => false,
         'language' => false,
         'currency' => false,
-        'is_business_traveler' => false
+        'is_business_traveler' => false,
+        'provider' => false
     ];
 
     /**
@@ -179,7 +182,8 @@ class GuestCreateRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         'phone' => 'phone',
         'language' => 'language',
         'currency' => 'currency',
-        'is_business_traveler' => 'isBusinessTraveler'
+        'is_business_traveler' => 'isBusinessTraveler',
+        'provider' => 'provider'
     ];
 
     /**
@@ -194,7 +198,8 @@ class GuestCreateRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         'phone' => 'setPhone',
         'language' => 'setLanguage',
         'currency' => 'setCurrency',
-        'is_business_traveler' => 'setIsBusinessTraveler'
+        'is_business_traveler' => 'setIsBusinessTraveler',
+        'provider' => 'setProvider'
     ];
 
     /**
@@ -209,7 +214,8 @@ class GuestCreateRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         'phone' => 'getPhone',
         'language' => 'getLanguage',
         'currency' => 'getCurrency',
-        'is_business_traveler' => 'getIsBusinessTraveler'
+        'is_business_traveler' => 'getIsBusinessTraveler',
+        'provider' => 'getProvider'
     ];
 
     /**
@@ -266,6 +272,7 @@ class GuestCreateRequest implements ModelInterface, ArrayAccess, JsonSerializabl
         $this->setIfExists('language', $data ?? [], null);
         $this->setIfExists('currency', $data ?? [], null);
         $this->setIfExists('is_business_traveler', $data ?? [], false);
+        $this->setIfExists('provider', $data ?? [], null);
     }
 
     /**
@@ -508,6 +515,33 @@ class GuestCreateRequest implements ModelInterface, ArrayAccess, JsonSerializabl
             throw new InvalidArgumentException('non-nullable is_business_traveler cannot be null');
         }
         $this->container['is_business_traveler'] = $is_business_traveler;
+
+        return $this;
+    }
+
+    /**
+     * Gets provider
+     *
+     * @return string|null
+     */
+    public function getProvider(): ?string
+    {
+        return $this->container['provider'];
+    }
+
+    /**
+     * Sets provider
+     *
+     * @param string|null $provider A connected PMS to create the guest in as well. The guest is created there FIRST; a PMS that cannot create guest profiles returns `422 pms_write_unsupported` and nothing is created. The PMS's guest id comes back as `pms.externalId`, and later `PATCH /v1/guests/{id}` changes reach it.
+     *
+     * @return $this
+     */
+    public function setProvider(?string $provider): static
+    {
+        if (is_null($provider)) {
+            throw new InvalidArgumentException('non-nullable provider cannot be null');
+        }
+        $this->container['provider'] = $provider;
 
         return $this;
     }

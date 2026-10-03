@@ -1,6 +1,6 @@
 <?php
 /**
- * ConnectStatusCapabilities
+ * GuestUpdateRequest
  *
  * PHP version 8.1
  *
@@ -34,15 +34,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ConnectStatusCapabilities Class Doc Comment
+ * GuestUpdateRequest Class Doc Comment
  *
- * @description PMS providers only. &#x60;reservations&#x60;: which reservation writes the API performs on this connection&#39;s listings — the connector&#39;s support combined with &#x60;writePolicy&#x60;. &#x60;pms&#x60;: everything else the API does through this PMS (review replies, request answers, listing content, guests, message channel/attachments, calendar). When &#x60;connected&#x60; is false, what the connector supports once connected.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSerializable
+class GuestUpdateRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +50,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ConnectStatus_capabilities';
+    protected static string $openAPIModelName = 'GuestUpdateRequest';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +58,11 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'reservations' => '\Repull\Model\ReservationCapabilities',
-        'pms' => '\Repull\Model\PmsCapabilities'
+        'first_name' => 'string',
+        'last_name' => 'string',
+        'email' => 'string',
+        'phone' => 'string',
+        'language' => 'string'
     ];
 
     /**
@@ -69,8 +71,11 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'reservations' => null,
-        'pms' => null
+        'first_name' => null,
+        'last_name' => null,
+        'email' => 'email',
+        'phone' => null,
+        'language' => null
     ];
 
     /**
@@ -79,8 +84,11 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'reservations' => false,
-        'pms' => false
+        'first_name' => false,
+        'last_name' => false,
+        'email' => false,
+        'phone' => false,
+        'language' => false
     ];
 
     /**
@@ -159,8 +167,11 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'reservations' => 'reservations',
-        'pms' => 'pms'
+        'first_name' => 'firstName',
+        'last_name' => 'lastName',
+        'email' => 'email',
+        'phone' => 'phone',
+        'language' => 'language'
     ];
 
     /**
@@ -169,8 +180,11 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $setters = [
-        'reservations' => 'setReservations',
-        'pms' => 'setPms'
+        'first_name' => 'setFirstName',
+        'last_name' => 'setLastName',
+        'email' => 'setEmail',
+        'phone' => 'setPhone',
+        'language' => 'setLanguage'
     ];
 
     /**
@@ -179,8 +193,11 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $getters = [
-        'reservations' => 'getReservations',
-        'pms' => 'getPms'
+        'first_name' => 'getFirstName',
+        'last_name' => 'getLastName',
+        'email' => 'getEmail',
+        'phone' => 'getPhone',
+        'language' => 'getLanguage'
     ];
 
     /**
@@ -230,8 +247,11 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('reservations', $data ?? [], null);
-        $this->setIfExists('pms', $data ?? [], null);
+        $this->setIfExists('first_name', $data ?? [], null);
+        $this->setIfExists('last_name', $data ?? [], null);
+        $this->setIfExists('email', $data ?? [], null);
+        $this->setIfExists('phone', $data ?? [], null);
+        $this->setIfExists('language', $data ?? [], null);
     }
 
     /**
@@ -259,6 +279,10 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
     {
         $invalidProperties = [];
 
+        if (!is_null($this->container['first_name']) && (mb_strlen($this->container['first_name']) < 1)) {
+            $invalidProperties[] = "invalid value for 'first_name', the character length must be bigger than or equal to 1.";
+        }
+
         return $invalidProperties;
     }
 
@@ -272,55 +296,141 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
 
 
     /**
-     * Gets reservations
+     * Gets first_name
      *
-     * @return \Repull\Model\ReservationCapabilities|null
+     * @return string|null
      */
-    public function getReservations(): ?\Repull\Model\ReservationCapabilities
+    public function getFirstName(): ?string
     {
-        return $this->container['reservations'];
+        return $this->container['first_name'];
     }
 
     /**
-     * Sets reservations
+     * Sets first_name
      *
-     * @param \Repull\Model\ReservationCapabilities|null $reservations reservations
+     * @param string|null $first_name first_name
      *
      * @return $this
      */
-    public function setReservations(?\Repull\Model\ReservationCapabilities $reservations): static
+    public function setFirstName(?string $first_name): static
     {
-        if (is_null($reservations)) {
-            throw new InvalidArgumentException('non-nullable reservations cannot be null');
+        if (is_null($first_name)) {
+            throw new InvalidArgumentException('non-nullable first_name cannot be null');
         }
-        $this->container['reservations'] = $reservations;
+
+        if ((mb_strlen($first_name) < 1)) {
+            throw new InvalidArgumentException('invalid length for $first_name when calling GuestUpdateRequest., must be bigger than or equal to 1.');
+        }
+
+        $this->container['first_name'] = $first_name;
 
         return $this;
     }
 
     /**
-     * Gets pms
+     * Gets last_name
      *
-     * @return \Repull\Model\PmsCapabilities|null
+     * @return string|null
      */
-    public function getPms(): ?\Repull\Model\PmsCapabilities
+    public function getLastName(): ?string
     {
-        return $this->container['pms'];
+        return $this->container['last_name'];
     }
 
     /**
-     * Sets pms
+     * Sets last_name
      *
-     * @param \Repull\Model\PmsCapabilities|null $pms pms
+     * @param string|null $last_name last_name
      *
      * @return $this
      */
-    public function setPms(?\Repull\Model\PmsCapabilities $pms): static
+    public function setLastName(?string $last_name): static
     {
-        if (is_null($pms)) {
-            throw new InvalidArgumentException('non-nullable pms cannot be null');
+        if (is_null($last_name)) {
+            throw new InvalidArgumentException('non-nullable last_name cannot be null');
         }
-        $this->container['pms'] = $pms;
+        $this->container['last_name'] = $last_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets email
+     *
+     * @return string|null
+     */
+    public function getEmail(): ?string
+    {
+        return $this->container['email'];
+    }
+
+    /**
+     * Sets email
+     *
+     * @param string|null $email Added as the guest's newest email; earlier ones are kept.
+     *
+     * @return $this
+     */
+    public function setEmail(?string $email): static
+    {
+        if (is_null($email)) {
+            throw new InvalidArgumentException('non-nullable email cannot be null');
+        }
+        $this->container['email'] = $email;
+
+        return $this;
+    }
+
+    /**
+     * Gets phone
+     *
+     * @return string|null
+     */
+    public function getPhone(): ?string
+    {
+        return $this->container['phone'];
+    }
+
+    /**
+     * Sets phone
+     *
+     * @param string|null $phone E.164 preferred. Added as the guest's newest phone; earlier ones are kept.
+     *
+     * @return $this
+     */
+    public function setPhone(?string $phone): static
+    {
+        if (is_null($phone)) {
+            throw new InvalidArgumentException('non-nullable phone cannot be null');
+        }
+        $this->container['phone'] = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Gets language
+     *
+     * @return string|null
+     */
+    public function getLanguage(): ?string
+    {
+        return $this->container['language'];
+    }
+
+    /**
+     * Sets language
+     *
+     * @param string|null $language BCP-47 tag.
+     *
+     * @return $this
+     */
+    public function setLanguage(?string $language): static
+    {
+        if (is_null($language)) {
+            throw new InvalidArgumentException('non-nullable language cannot be null');
+        }
+        $this->container['language'] = $language;
 
         return $this;
     }

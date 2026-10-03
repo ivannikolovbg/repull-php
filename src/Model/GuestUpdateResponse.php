@@ -1,6 +1,6 @@
 <?php
 /**
- * ConnectStatusCapabilities
+ * GuestUpdateResponse
  *
  * PHP version 8.1
  *
@@ -34,15 +34,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ConnectStatusCapabilities Class Doc Comment
+ * GuestUpdateResponse Class Doc Comment
  *
- * @description PMS providers only. &#x60;reservations&#x60;: which reservation writes the API performs on this connection&#39;s listings — the connector&#39;s support combined with &#x60;writePolicy&#x60;. &#x60;pms&#x60;: everything else the API does through this PMS (review replies, request answers, listing content, guests, message channel/attachments, calendar). When &#x60;connected&#x60; is false, what the connector supports once connected.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSerializable
+class GuestUpdateResponse implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +50,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ConnectStatus_capabilities';
+    protected static string $openAPIModelName = 'GuestUpdateResponse';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +58,13 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'reservations' => '\Repull\Model\ReservationCapabilities',
-        'pms' => '\Repull\Model\PmsCapabilities'
+        'id' => 'int',
+        'first_name' => 'string',
+        'last_name' => 'string',
+        'language' => 'string',
+        'contacts' => '\Repull\Model\GuestUpdateResponseContactsInner[]',
+        'updated_at' => '\DateTime',
+        'pms' => '\Repull\Model\GuestUpdateResponsePmsInner[]'
     ];
 
     /**
@@ -69,7 +73,12 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'reservations' => null,
+        'id' => null,
+        'first_name' => null,
+        'last_name' => null,
+        'language' => null,
+        'contacts' => null,
+        'updated_at' => 'date-time',
         'pms' => null
     ];
 
@@ -79,7 +88,12 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'reservations' => false,
+        'id' => false,
+        'first_name' => false,
+        'last_name' => true,
+        'language' => true,
+        'contacts' => false,
+        'updated_at' => true,
         'pms' => false
     ];
 
@@ -159,7 +173,12 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'reservations' => 'reservations',
+        'id' => 'id',
+        'first_name' => 'firstName',
+        'last_name' => 'lastName',
+        'language' => 'language',
+        'contacts' => 'contacts',
+        'updated_at' => 'updatedAt',
         'pms' => 'pms'
     ];
 
@@ -169,7 +188,12 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $setters = [
-        'reservations' => 'setReservations',
+        'id' => 'setId',
+        'first_name' => 'setFirstName',
+        'last_name' => 'setLastName',
+        'language' => 'setLanguage',
+        'contacts' => 'setContacts',
+        'updated_at' => 'setUpdatedAt',
         'pms' => 'setPms'
     ];
 
@@ -179,7 +203,12 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $getters = [
-        'reservations' => 'getReservations',
+        'id' => 'getId',
+        'first_name' => 'getFirstName',
+        'last_name' => 'getLastName',
+        'language' => 'getLanguage',
+        'contacts' => 'getContacts',
+        'updated_at' => 'getUpdatedAt',
         'pms' => 'getPms'
     ];
 
@@ -230,7 +259,12 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('reservations', $data ?? [], null);
+        $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('first_name', $data ?? [], null);
+        $this->setIfExists('last_name', $data ?? [], null);
+        $this->setIfExists('language', $data ?? [], null);
+        $this->setIfExists('contacts', $data ?? [], null);
+        $this->setIfExists('updated_at', $data ?? [], null);
         $this->setIfExists('pms', $data ?? [], null);
     }
 
@@ -272,28 +306,184 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
 
 
     /**
-     * Gets reservations
+     * Gets id
      *
-     * @return \Repull\Model\ReservationCapabilities|null
+     * @return int|null
      */
-    public function getReservations(): ?\Repull\Model\ReservationCapabilities
+    public function getId(): ?int
     {
-        return $this->container['reservations'];
+        return $this->container['id'];
     }
 
     /**
-     * Sets reservations
+     * Sets id
      *
-     * @param \Repull\Model\ReservationCapabilities|null $reservations reservations
+     * @param int|null $id id
      *
      * @return $this
      */
-    public function setReservations(?\Repull\Model\ReservationCapabilities $reservations): static
+    public function setId(?int $id): static
     {
-        if (is_null($reservations)) {
-            throw new InvalidArgumentException('non-nullable reservations cannot be null');
+        if (is_null($id)) {
+            throw new InvalidArgumentException('non-nullable id cannot be null');
         }
-        $this->container['reservations'] = $reservations;
+        $this->container['id'] = $id;
+
+        return $this;
+    }
+
+    /**
+     * Gets first_name
+     *
+     * @return string|null
+     */
+    public function getFirstName(): ?string
+    {
+        return $this->container['first_name'];
+    }
+
+    /**
+     * Sets first_name
+     *
+     * @param string|null $first_name first_name
+     *
+     * @return $this
+     */
+    public function setFirstName(?string $first_name): static
+    {
+        if (is_null($first_name)) {
+            throw new InvalidArgumentException('non-nullable first_name cannot be null');
+        }
+        $this->container['first_name'] = $first_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets last_name
+     *
+     * @return string|null
+     */
+    public function getLastName(): ?string
+    {
+        return $this->container['last_name'];
+    }
+
+    /**
+     * Sets last_name
+     *
+     * @param string|null $last_name last_name
+     *
+     * @return $this
+     */
+    public function setLastName(?string $last_name): static
+    {
+        if (is_null($last_name)) {
+            array_push($this->openAPINullablesSetToNull, 'last_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('last_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['last_name'] = $last_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets language
+     *
+     * @return string|null
+     */
+    public function getLanguage(): ?string
+    {
+        return $this->container['language'];
+    }
+
+    /**
+     * Sets language
+     *
+     * @param string|null $language language
+     *
+     * @return $this
+     */
+    public function setLanguage(?string $language): static
+    {
+        if (is_null($language)) {
+            array_push($this->openAPINullablesSetToNull, 'language');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('language', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['language'] = $language;
+
+        return $this;
+    }
+
+    /**
+     * Gets contacts
+     *
+     * @return \Repull\Model\GuestUpdateResponseContactsInner[]|null
+     */
+    public function getContacts(): ?array
+    {
+        return $this->container['contacts'];
+    }
+
+    /**
+     * Sets contacts
+     *
+     * @param \Repull\Model\GuestUpdateResponseContactsInner[]|null $contacts contacts
+     *
+     * @return $this
+     */
+    public function setContacts(?array $contacts): static
+    {
+        if (is_null($contacts)) {
+            throw new InvalidArgumentException('non-nullable contacts cannot be null');
+        }
+        $this->container['contacts'] = $contacts;
+
+        return $this;
+    }
+
+    /**
+     * Gets updated_at
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->container['updated_at'];
+    }
+
+    /**
+     * Sets updated_at
+     *
+     * @param \DateTime|null $updated_at updated_at
+     *
+     * @return $this
+     */
+    public function setUpdatedAt(?\DateTime $updated_at): static
+    {
+        if (is_null($updated_at)) {
+            array_push($this->openAPINullablesSetToNull, 'updated_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('updated_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['updated_at'] = $updated_at;
 
         return $this;
     }
@@ -301,9 +491,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Gets pms
      *
-     * @return \Repull\Model\PmsCapabilities|null
+     * @return \Repull\Model\GuestUpdateResponsePmsInner[]|null
      */
-    public function getPms(): ?\Repull\Model\PmsCapabilities
+    public function getPms(): ?array
     {
         return $this->container['pms'];
     }
@@ -311,11 +501,11 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets pms
      *
-     * @param \Repull\Model\PmsCapabilities|null $pms pms
+     * @param \Repull\Model\GuestUpdateResponsePmsInner[]|null $pms Each PMS the change was written to first (the guest's linked PMSs), with the sections it applied.
      *
      * @return $this
      */
-    public function setPms(?\Repull\Model\PmsCapabilities $pms): static
+    public function setPms(?array $pms): static
     {
         if (is_null($pms)) {
             throw new InvalidArgumentException('non-nullable pms cannot be null');

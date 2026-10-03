@@ -63,6 +63,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'string',
         'external_id' => 'string',
         'platform' => 'string',
+        'pms' => 'string',
         'listing_id' => 'string',
         'provider_property_id' => 'string',
         'reservation_id' => 'string',
@@ -94,6 +95,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => null,
         'external_id' => null,
         'platform' => null,
+        'pms' => null,
         'listing_id' => null,
         'provider_property_id' => null,
         'reservation_id' => null,
@@ -125,6 +127,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => false,
         'external_id' => false,
         'platform' => true,
+        'pms' => true,
         'listing_id' => true,
         'provider_property_id' => true,
         'reservation_id' => true,
@@ -226,6 +229,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'id',
         'external_id' => 'externalId',
         'platform' => 'platform',
+        'pms' => 'pms',
         'listing_id' => 'listingId',
         'provider_property_id' => 'providerPropertyId',
         'reservation_id' => 'reservationId',
@@ -257,6 +261,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'setId',
         'external_id' => 'setExternalId',
         'platform' => 'setPlatform',
+        'pms' => 'setPms',
         'listing_id' => 'setListingId',
         'provider_property_id' => 'setProviderPropertyId',
         'reservation_id' => 'setReservationId',
@@ -288,6 +293,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'getId',
         'external_id' => 'getExternalId',
         'platform' => 'getPlatform',
+        'pms' => 'getPms',
         'listing_id' => 'getListingId',
         'provider_property_id' => 'getProviderPropertyId',
         'reservation_id' => 'getReservationId',
@@ -392,6 +398,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('external_id', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
+        $this->setIfExists('pms', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('provider_property_id', $data ?? [], null);
         $this->setIfExists('reservation_id', $data ?? [], null);
@@ -587,6 +594,40 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['platform'] = $platform;
+
+        return $this;
+    }
+
+    /**
+     * Gets pms
+     *
+     * @return string|null
+     */
+    public function getPms(): ?string
+    {
+        return $this->container['pms'];
+    }
+
+    /**
+     * Sets pms
+     *
+     * @param string|null $pms The PMS this review was read from (`guesty`, `hostaway`, …) when it came through one — `platform` is still the channel the guest wrote it on. A reply (`POST /v1/reviews/{id}/reply`) goes through this PMS; `GET /v1/connect/{provider}` → `capabilities.pms.reviews.reply` says whether it can. `null` for a review from a directly connected channel.
+     *
+     * @return $this
+     */
+    public function setPms(?string $pms): static
+    {
+        if (is_null($pms)) {
+            array_push($this->openAPINullablesSetToNull, 'pms');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('pms', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['pms'] = $pms;
 
         return $this;
     }

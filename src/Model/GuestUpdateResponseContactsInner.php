@@ -1,6 +1,6 @@
 <?php
 /**
- * ConnectStatusCapabilities
+ * GuestUpdateResponseContactsInner
  *
  * PHP version 8.1
  *
@@ -34,15 +34,14 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ConnectStatusCapabilities Class Doc Comment
+ * GuestUpdateResponseContactsInner Class Doc Comment
  *
- * @description PMS providers only. &#x60;reservations&#x60;: which reservation writes the API performs on this connection&#39;s listings — the connector&#39;s support combined with &#x60;writePolicy&#x60;. &#x60;pms&#x60;: everything else the API does through this PMS (review replies, request answers, listing content, guests, message channel/attachments, calendar). When &#x60;connected&#x60; is false, what the connector supports once connected.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSerializable
+class GuestUpdateResponseContactsInner implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +50,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ConnectStatus_capabilities';
+    protected static string $openAPIModelName = 'GuestUpdateResponse_contacts_inner';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +58,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'reservations' => '\Repull\Model\ReservationCapabilities',
-        'pms' => '\Repull\Model\PmsCapabilities'
+        'type' => 'string',
+        'value' => 'string',
+        'is_primary' => 'bool'
     ];
 
     /**
@@ -69,8 +69,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'reservations' => null,
-        'pms' => null
+        'type' => null,
+        'value' => null,
+        'is_primary' => null
     ];
 
     /**
@@ -79,8 +80,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'reservations' => false,
-        'pms' => false
+        'type' => false,
+        'value' => false,
+        'is_primary' => false
     ];
 
     /**
@@ -159,8 +161,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'reservations' => 'reservations',
-        'pms' => 'pms'
+        'type' => 'type',
+        'value' => 'value',
+        'is_primary' => 'isPrimary'
     ];
 
     /**
@@ -169,8 +172,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $setters = [
-        'reservations' => 'setReservations',
-        'pms' => 'setPms'
+        'type' => 'setType',
+        'value' => 'setValue',
+        'is_primary' => 'setIsPrimary'
     ];
 
     /**
@@ -179,8 +183,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $getters = [
-        'reservations' => 'getReservations',
-        'pms' => 'getPms'
+        'type' => 'getType',
+        'value' => 'getValue',
+        'is_primary' => 'getIsPrimary'
     ];
 
     /**
@@ -215,6 +220,21 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
         return self::$openAPIModelName;
     }
 
+    public const TYPE_EMAIL = 'email';
+    public const TYPE_PHONE = 'phone';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getTypeAllowableValues()
+    {
+        return [
+            self::TYPE_EMAIL,
+            self::TYPE_PHONE,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -230,8 +250,9 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('reservations', $data ?? [], null);
-        $this->setIfExists('pms', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
+        $this->setIfExists('value', $data ?? [], null);
+        $this->setIfExists('is_primary', $data ?? [], null);
     }
 
     /**
@@ -259,6 +280,15 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
     {
         $invalidProperties = [];
 
+        $allowedValues = self::getTypeAllowableValues();
+        if (!is_null($this->container['type']) && !in_array($this->container['type'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'type', must be one of '%s'",
+                $this->container['type'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -272,55 +302,83 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
 
 
     /**
-     * Gets reservations
+     * Gets type
      *
-     * @return \Repull\Model\ReservationCapabilities|null
+     * @return string|null
      */
-    public function getReservations(): ?\Repull\Model\ReservationCapabilities
+    public function getType(): ?string
     {
-        return $this->container['reservations'];
+        return $this->container['type'];
     }
 
     /**
-     * Sets reservations
+     * Sets type
      *
-     * @param \Repull\Model\ReservationCapabilities|null $reservations reservations
+     * @param string|null $type type
      *
      * @return $this
      */
-    public function setReservations(?\Repull\Model\ReservationCapabilities $reservations): static
+    public function setType(?string $type): static
     {
-        if (is_null($reservations)) {
-            throw new InvalidArgumentException('non-nullable reservations cannot be null');
+        if (is_null($type)) {
+            throw new InvalidArgumentException('non-nullable type cannot be null');
         }
-        $this->container['reservations'] = $reservations;
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['type'] = $type;
 
         return $this;
     }
 
     /**
-     * Gets pms
+     * Gets value
      *
-     * @return \Repull\Model\PmsCapabilities|null
+     * @return string|null
      */
-    public function getPms(): ?\Repull\Model\PmsCapabilities
+    public function getValue(): ?string
     {
-        return $this->container['pms'];
+        return $this->container['value'];
     }
 
     /**
-     * Sets pms
+     * Sets value
      *
-     * @param \Repull\Model\PmsCapabilities|null $pms pms
+     * @param string|null $value value
      *
      * @return $this
      */
-    public function setPms(?\Repull\Model\PmsCapabilities $pms): static
+    public function setValue(?string $value): static
     {
-        if (is_null($pms)) {
-            throw new InvalidArgumentException('non-nullable pms cannot be null');
+        if (is_null($value)) {
+            throw new InvalidArgumentException('non-nullable value cannot be null');
         }
-        $this->container['pms'] = $pms;
+        $this->container['value'] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Gets is_primary
+     *
+     * @return bool|null
+     */
+    public function getIsPrimary(): ?bool
+    {
+        return $this->container['is_primary'];
+    }
+
+    /**
+     * Sets is_primary
+     *
+     * @param bool|null $is_primary is_primary
+     *
+     * @return $this
+     */
+    public function setIsPrimary(?bool $is_primary): static
+    {
+        if (is_null($is_primary)) {
+            throw new InvalidArgumentException('non-nullable is_primary cannot be null');
+        }
+        $this->container['is_primary'] = $is_primary;
 
         return $this;
     }

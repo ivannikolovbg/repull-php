@@ -1,6 +1,6 @@
 <?php
 /**
- * ConnectStatusCapabilities
+ * PmsCapabilities
  *
  * PHP version 8.1
  *
@@ -34,15 +34,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ConnectStatusCapabilities Class Doc Comment
+ * PmsCapabilities Class Doc Comment
  *
- * @description PMS providers only. &#x60;reservations&#x60;: which reservation writes the API performs on this connection&#39;s listings — the connector&#39;s support combined with &#x60;writePolicy&#x60;. &#x60;pms&#x60;: everything else the API does through this PMS (review replies, request answers, listing content, guests, message channel/attachments, calendar). When &#x60;connected&#x60; is false, what the connector supports once connected.
+ * @description What the API does through a connected PMS beyond reservation writes, read from the same connector table the router uses — a &#x60;false&#x60; flag is a &#x60;422 pms_write_unsupported&#x60; naming the PMS.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSerializable
+class PmsCapabilities implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ConnectStatus_capabilities';
+    protected static string $openAPIModelName = 'PmsCapabilities';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,17 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'reservations' => '\Repull\Model\ReservationCapabilities',
-        'pms' => '\Repull\Model\PmsCapabilities'
+        'provider' => 'string',
+        'connected' => 'bool',
+        'reservations' => '\Repull\Model\PmsCapabilitiesReservations',
+        'reviews' => '\Repull\Model\PmsCapabilitiesReviews',
+        'listings' => '\Repull\Model\PmsCapabilitiesListings',
+        'guests' => '\Repull\Model\PmsCapabilitiesGuests',
+        'conversations' => '\Repull\Model\PmsCapabilitiesConversations',
+        'calendar' => '\Repull\Model\PmsCapabilitiesCalendar',
+        'payments' => '\Repull\Model\PmsCapabilitiesPayments',
+        'tasks' => '\Repull\Model\PmsCapabilitiesTasks',
+        'notes' => 'array<string,string>'
     ];
 
     /**
@@ -69,8 +78,17 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
+        'provider' => null,
+        'connected' => null,
         'reservations' => null,
-        'pms' => null
+        'reviews' => null,
+        'listings' => null,
+        'guests' => null,
+        'conversations' => null,
+        'calendar' => null,
+        'payments' => null,
+        'tasks' => null,
+        'notes' => null
     ];
 
     /**
@@ -79,8 +97,17 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
+        'provider' => false,
+        'connected' => false,
         'reservations' => false,
-        'pms' => false
+        'reviews' => false,
+        'listings' => false,
+        'guests' => false,
+        'conversations' => false,
+        'calendar' => false,
+        'payments' => false,
+        'tasks' => false,
+        'notes' => false
     ];
 
     /**
@@ -159,8 +186,17 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
+        'provider' => 'provider',
+        'connected' => 'connected',
         'reservations' => 'reservations',
-        'pms' => 'pms'
+        'reviews' => 'reviews',
+        'listings' => 'listings',
+        'guests' => 'guests',
+        'conversations' => 'conversations',
+        'calendar' => 'calendar',
+        'payments' => 'payments',
+        'tasks' => 'tasks',
+        'notes' => 'notes'
     ];
 
     /**
@@ -169,8 +205,17 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $setters = [
+        'provider' => 'setProvider',
+        'connected' => 'setConnected',
         'reservations' => 'setReservations',
-        'pms' => 'setPms'
+        'reviews' => 'setReviews',
+        'listings' => 'setListings',
+        'guests' => 'setGuests',
+        'conversations' => 'setConversations',
+        'calendar' => 'setCalendar',
+        'payments' => 'setPayments',
+        'tasks' => 'setTasks',
+        'notes' => 'setNotes'
     ];
 
     /**
@@ -179,8 +224,17 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $getters = [
+        'provider' => 'getProvider',
+        'connected' => 'getConnected',
         'reservations' => 'getReservations',
-        'pms' => 'getPms'
+        'reviews' => 'getReviews',
+        'listings' => 'getListings',
+        'guests' => 'getGuests',
+        'conversations' => 'getConversations',
+        'calendar' => 'getCalendar',
+        'payments' => 'getPayments',
+        'tasks' => 'getTasks',
+        'notes' => 'getNotes'
     ];
 
     /**
@@ -230,8 +284,17 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('provider', $data ?? [], null);
+        $this->setIfExists('connected', $data ?? [], null);
         $this->setIfExists('reservations', $data ?? [], null);
-        $this->setIfExists('pms', $data ?? [], null);
+        $this->setIfExists('reviews', $data ?? [], null);
+        $this->setIfExists('listings', $data ?? [], null);
+        $this->setIfExists('guests', $data ?? [], null);
+        $this->setIfExists('conversations', $data ?? [], null);
+        $this->setIfExists('calendar', $data ?? [], null);
+        $this->setIfExists('payments', $data ?? [], null);
+        $this->setIfExists('tasks', $data ?? [], null);
+        $this->setIfExists('notes', $data ?? [], null);
     }
 
     /**
@@ -272,11 +335,65 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
 
 
     /**
+     * Gets provider
+     *
+     * @return string|null
+     */
+    public function getProvider(): ?string
+    {
+        return $this->container['provider'];
+    }
+
+    /**
+     * Sets provider
+     *
+     * @param string|null $provider provider
+     *
+     * @return $this
+     */
+    public function setProvider(?string $provider): static
+    {
+        if (is_null($provider)) {
+            throw new InvalidArgumentException('non-nullable provider cannot be null');
+        }
+        $this->container['provider'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * Gets connected
+     *
+     * @return bool|null
+     */
+    public function getConnected(): ?bool
+    {
+        return $this->container['connected'];
+    }
+
+    /**
+     * Sets connected
+     *
+     * @param bool|null $connected `false`: what the connector supports once connected (on a listing: a dead link — every write answers `409 no_connection`).
+     *
+     * @return $this
+     */
+    public function setConnected(?bool $connected): static
+    {
+        if (is_null($connected)) {
+            throw new InvalidArgumentException('non-nullable connected cannot be null');
+        }
+        $this->container['connected'] = $connected;
+
+        return $this;
+    }
+
+    /**
      * Gets reservations
      *
-     * @return \Repull\Model\ReservationCapabilities|null
+     * @return \Repull\Model\PmsCapabilitiesReservations|null
      */
-    public function getReservations(): ?\Repull\Model\ReservationCapabilities
+    public function getReservations(): ?\Repull\Model\PmsCapabilitiesReservations
     {
         return $this->container['reservations'];
     }
@@ -284,11 +401,11 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets reservations
      *
-     * @param \Repull\Model\ReservationCapabilities|null $reservations reservations
+     * @param \Repull\Model\PmsCapabilitiesReservations|null $reservations reservations
      *
      * @return $this
      */
-    public function setReservations(?\Repull\Model\ReservationCapabilities $reservations): static
+    public function setReservations(?\Repull\Model\PmsCapabilitiesReservations $reservations): static
     {
         if (is_null($reservations)) {
             throw new InvalidArgumentException('non-nullable reservations cannot be null');
@@ -299,28 +416,217 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
     }
 
     /**
-     * Gets pms
+     * Gets reviews
      *
-     * @return \Repull\Model\PmsCapabilities|null
+     * @return \Repull\Model\PmsCapabilitiesReviews|null
      */
-    public function getPms(): ?\Repull\Model\PmsCapabilities
+    public function getReviews(): ?\Repull\Model\PmsCapabilitiesReviews
     {
-        return $this->container['pms'];
+        return $this->container['reviews'];
     }
 
     /**
-     * Sets pms
+     * Sets reviews
      *
-     * @param \Repull\Model\PmsCapabilities|null $pms pms
+     * @param \Repull\Model\PmsCapabilitiesReviews|null $reviews reviews
      *
      * @return $this
      */
-    public function setPms(?\Repull\Model\PmsCapabilities $pms): static
+    public function setReviews(?\Repull\Model\PmsCapabilitiesReviews $reviews): static
     {
-        if (is_null($pms)) {
-            throw new InvalidArgumentException('non-nullable pms cannot be null');
+        if (is_null($reviews)) {
+            throw new InvalidArgumentException('non-nullable reviews cannot be null');
         }
-        $this->container['pms'] = $pms;
+        $this->container['reviews'] = $reviews;
+
+        return $this;
+    }
+
+    /**
+     * Gets listings
+     *
+     * @return \Repull\Model\PmsCapabilitiesListings|null
+     */
+    public function getListings(): ?\Repull\Model\PmsCapabilitiesListings
+    {
+        return $this->container['listings'];
+    }
+
+    /**
+     * Sets listings
+     *
+     * @param \Repull\Model\PmsCapabilitiesListings|null $listings listings
+     *
+     * @return $this
+     */
+    public function setListings(?\Repull\Model\PmsCapabilitiesListings $listings): static
+    {
+        if (is_null($listings)) {
+            throw new InvalidArgumentException('non-nullable listings cannot be null');
+        }
+        $this->container['listings'] = $listings;
+
+        return $this;
+    }
+
+    /**
+     * Gets guests
+     *
+     * @return \Repull\Model\PmsCapabilitiesGuests|null
+     */
+    public function getGuests(): ?\Repull\Model\PmsCapabilitiesGuests
+    {
+        return $this->container['guests'];
+    }
+
+    /**
+     * Sets guests
+     *
+     * @param \Repull\Model\PmsCapabilitiesGuests|null $guests guests
+     *
+     * @return $this
+     */
+    public function setGuests(?\Repull\Model\PmsCapabilitiesGuests $guests): static
+    {
+        if (is_null($guests)) {
+            throw new InvalidArgumentException('non-nullable guests cannot be null');
+        }
+        $this->container['guests'] = $guests;
+
+        return $this;
+    }
+
+    /**
+     * Gets conversations
+     *
+     * @return \Repull\Model\PmsCapabilitiesConversations|null
+     */
+    public function getConversations(): ?\Repull\Model\PmsCapabilitiesConversations
+    {
+        return $this->container['conversations'];
+    }
+
+    /**
+     * Sets conversations
+     *
+     * @param \Repull\Model\PmsCapabilitiesConversations|null $conversations conversations
+     *
+     * @return $this
+     */
+    public function setConversations(?\Repull\Model\PmsCapabilitiesConversations $conversations): static
+    {
+        if (is_null($conversations)) {
+            throw new InvalidArgumentException('non-nullable conversations cannot be null');
+        }
+        $this->container['conversations'] = $conversations;
+
+        return $this;
+    }
+
+    /**
+     * Gets calendar
+     *
+     * @return \Repull\Model\PmsCapabilitiesCalendar|null
+     */
+    public function getCalendar(): ?\Repull\Model\PmsCapabilitiesCalendar
+    {
+        return $this->container['calendar'];
+    }
+
+    /**
+     * Sets calendar
+     *
+     * @param \Repull\Model\PmsCapabilitiesCalendar|null $calendar calendar
+     *
+     * @return $this
+     */
+    public function setCalendar(?\Repull\Model\PmsCapabilitiesCalendar $calendar): static
+    {
+        if (is_null($calendar)) {
+            throw new InvalidArgumentException('non-nullable calendar cannot be null');
+        }
+        $this->container['calendar'] = $calendar;
+
+        return $this;
+    }
+
+    /**
+     * Gets payments
+     *
+     * @return \Repull\Model\PmsCapabilitiesPayments|null
+     */
+    public function getPayments(): ?\Repull\Model\PmsCapabilitiesPayments
+    {
+        return $this->container['payments'];
+    }
+
+    /**
+     * Sets payments
+     *
+     * @param \Repull\Model\PmsCapabilitiesPayments|null $payments payments
+     *
+     * @return $this
+     */
+    public function setPayments(?\Repull\Model\PmsCapabilitiesPayments $payments): static
+    {
+        if (is_null($payments)) {
+            throw new InvalidArgumentException('non-nullable payments cannot be null');
+        }
+        $this->container['payments'] = $payments;
+
+        return $this;
+    }
+
+    /**
+     * Gets tasks
+     *
+     * @return \Repull\Model\PmsCapabilitiesTasks|null
+     */
+    public function getTasks(): ?\Repull\Model\PmsCapabilitiesTasks
+    {
+        return $this->container['tasks'];
+    }
+
+    /**
+     * Sets tasks
+     *
+     * @param \Repull\Model\PmsCapabilitiesTasks|null $tasks tasks
+     *
+     * @return $this
+     */
+    public function setTasks(?\Repull\Model\PmsCapabilitiesTasks $tasks): static
+    {
+        if (is_null($tasks)) {
+            throw new InvalidArgumentException('non-nullable tasks cannot be null');
+        }
+        $this->container['tasks'] = $tasks;
+
+        return $this;
+    }
+
+    /**
+     * Gets notes
+     *
+     * @return array<string,string>|null
+     */
+    public function getNotes(): ?array
+    {
+        return $this->container['notes'];
+    }
+
+    /**
+     * Sets notes
+     *
+     * @param array<string,string>|null $notes The connector's own notes per family (limits, required access).
+     *
+     * @return $this
+     */
+    public function setNotes(?array $notes): static
+    {
+        if (is_null($notes)) {
+            throw new InvalidArgumentException('non-nullable notes cannot be null');
+        }
+        $this->container['notes'] = $notes;
 
         return $this;
     }

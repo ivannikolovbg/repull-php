@@ -5,6 +5,18 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.30] - 2026-10-03
+
+Regenerated against the live `https://api.repull.dev/openapi.json` — the PMS API surface for connected Guesty and Hostaway accounts:
+
+- New `GuestsApi::updateGuest()` (`PATCH /v1/guests/{id}`, body `GuestUpdateRequest`, returns `GuestUpdateResponse`, optional `$idempotency_key`): change a guest's `firstName`, `lastName`, `email`, `phone` or `language`. A guest linked to a connected PMS is changed there first; `getPms()` lists each PMS written to.
+- `GuestCreateRequest::setProvider()`: also create the guest in a connected PMS; `GuestCreateResponse::getPms()` carries the PMS's guest id (`externalId`).
+- New `PmsCapabilities` model, returned as `capabilities.pms` on `Listing` (`GET /v1/listings/{id}`) and `ConnectStatus` (`GET /v1/connect/{provider}`): review replies, request accept/decline and pre-approval, listing content sections, guest create/update, message channel and attachments, calendar writes, payments and tasks.
+- `Review::getPms()` and the review reply response's `pms`: the PMS a review was read from, and the PMS the reply went through.
+- `ListingContentUpdateResponse::getPms()`: per-section outcome when a PMS manages the listing.
+- `SendMessageRequest::setChannel()` accepts a PMS's own channel names on PMS-relayed conversations (no longer an enum).
+- The guest contact model is now generated as `GuestUpdateResponseContactsInner` (same shape, shared by create and update); `GuestCreateResponseContactsInner` is gone.
+
 ## [0.2.29] - 2026-10-03
 
 Regenerated against the live `https://api.repull.dev/openapi.json`:

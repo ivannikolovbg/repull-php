@@ -1,6 +1,6 @@
 <?php
 /**
- * ConnectStatusCapabilities
+ * PmsCapabilitiesListings
  *
  * PHP version 8.1
  *
@@ -34,15 +34,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * ConnectStatusCapabilities Class Doc Comment
+ * PmsCapabilitiesListings Class Doc Comment
  *
- * @description PMS providers only. &#x60;reservations&#x60;: which reservation writes the API performs on this connection&#39;s listings — the connector&#39;s support combined with &#x60;writePolicy&#x60;. &#x60;pms&#x60;: everything else the API does through this PMS (review replies, request answers, listing content, guests, message channel/attachments, calendar). When &#x60;connected&#x60; is false, what the connector supports once connected.
+ * @description Sections &#x60;PUT /v1/listings/{id}/content&#x60; writes to the PMS.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSerializable
+class PmsCapabilitiesListings implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -51,7 +51,7 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'ConnectStatus_capabilities';
+    protected static string $openAPIModelName = 'PmsCapabilities_listings';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -59,8 +59,17 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'reservations' => '\Repull\Model\ReservationCapabilities',
-        'pms' => '\Repull\Model\PmsCapabilities'
+        'title' => 'bool',
+        'descriptions' => 'bool',
+        'times' => 'bool',
+        'capacity' => 'bool',
+        'amenities' => 'bool',
+        'house_rules' => 'bool',
+        'address' => 'bool',
+        'photos_add' => 'bool',
+        'photos_delete' => 'bool',
+        'photos_reorder' => 'bool',
+        'photo_captions' => 'bool'
     ];
 
     /**
@@ -69,8 +78,17 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'reservations' => null,
-        'pms' => null
+        'title' => null,
+        'descriptions' => null,
+        'times' => null,
+        'capacity' => null,
+        'amenities' => null,
+        'house_rules' => null,
+        'address' => null,
+        'photos_add' => null,
+        'photos_delete' => null,
+        'photos_reorder' => null,
+        'photo_captions' => null
     ];
 
     /**
@@ -79,8 +97,17 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'reservations' => false,
-        'pms' => false
+        'title' => false,
+        'descriptions' => false,
+        'times' => false,
+        'capacity' => false,
+        'amenities' => false,
+        'house_rules' => false,
+        'address' => false,
+        'photos_add' => false,
+        'photos_delete' => false,
+        'photos_reorder' => false,
+        'photo_captions' => false
     ];
 
     /**
@@ -159,8 +186,17 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'reservations' => 'reservations',
-        'pms' => 'pms'
+        'title' => 'title',
+        'descriptions' => 'descriptions',
+        'times' => 'times',
+        'capacity' => 'capacity',
+        'amenities' => 'amenities',
+        'house_rules' => 'houseRules',
+        'address' => 'address',
+        'photos_add' => 'photosAdd',
+        'photos_delete' => 'photosDelete',
+        'photos_reorder' => 'photosReorder',
+        'photo_captions' => 'photoCaptions'
     ];
 
     /**
@@ -169,8 +205,17 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $setters = [
-        'reservations' => 'setReservations',
-        'pms' => 'setPms'
+        'title' => 'setTitle',
+        'descriptions' => 'setDescriptions',
+        'times' => 'setTimes',
+        'capacity' => 'setCapacity',
+        'amenities' => 'setAmenities',
+        'house_rules' => 'setHouseRules',
+        'address' => 'setAddress',
+        'photos_add' => 'setPhotosAdd',
+        'photos_delete' => 'setPhotosDelete',
+        'photos_reorder' => 'setPhotosReorder',
+        'photo_captions' => 'setPhotoCaptions'
     ];
 
     /**
@@ -179,8 +224,17 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      * @var array<string, string>
      */
     protected static array $getters = [
-        'reservations' => 'getReservations',
-        'pms' => 'getPms'
+        'title' => 'getTitle',
+        'descriptions' => 'getDescriptions',
+        'times' => 'getTimes',
+        'capacity' => 'getCapacity',
+        'amenities' => 'getAmenities',
+        'house_rules' => 'getHouseRules',
+        'address' => 'getAddress',
+        'photos_add' => 'getPhotosAdd',
+        'photos_delete' => 'getPhotosDelete',
+        'photos_reorder' => 'getPhotosReorder',
+        'photo_captions' => 'getPhotoCaptions'
     ];
 
     /**
@@ -230,8 +284,17 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('reservations', $data ?? [], null);
-        $this->setIfExists('pms', $data ?? [], null);
+        $this->setIfExists('title', $data ?? [], null);
+        $this->setIfExists('descriptions', $data ?? [], null);
+        $this->setIfExists('times', $data ?? [], null);
+        $this->setIfExists('capacity', $data ?? [], null);
+        $this->setIfExists('amenities', $data ?? [], null);
+        $this->setIfExists('house_rules', $data ?? [], null);
+        $this->setIfExists('address', $data ?? [], null);
+        $this->setIfExists('photos_add', $data ?? [], null);
+        $this->setIfExists('photos_delete', $data ?? [], null);
+        $this->setIfExists('photos_reorder', $data ?? [], null);
+        $this->setIfExists('photo_captions', $data ?? [], null);
     }
 
     /**
@@ -272,55 +335,298 @@ class ConnectStatusCapabilities implements ModelInterface, ArrayAccess, JsonSeri
 
 
     /**
-     * Gets reservations
+     * Gets title
      *
-     * @return \Repull\Model\ReservationCapabilities|null
+     * @return bool|null
      */
-    public function getReservations(): ?\Repull\Model\ReservationCapabilities
+    public function getTitle(): ?bool
     {
-        return $this->container['reservations'];
+        return $this->container['title'];
     }
 
     /**
-     * Sets reservations
+     * Sets title
      *
-     * @param \Repull\Model\ReservationCapabilities|null $reservations reservations
+     * @param bool|null $title title
      *
      * @return $this
      */
-    public function setReservations(?\Repull\Model\ReservationCapabilities $reservations): static
+    public function setTitle(?bool $title): static
     {
-        if (is_null($reservations)) {
-            throw new InvalidArgumentException('non-nullable reservations cannot be null');
+        if (is_null($title)) {
+            throw new InvalidArgumentException('non-nullable title cannot be null');
         }
-        $this->container['reservations'] = $reservations;
+        $this->container['title'] = $title;
 
         return $this;
     }
 
     /**
-     * Gets pms
+     * Gets descriptions
      *
-     * @return \Repull\Model\PmsCapabilities|null
+     * @return bool|null
      */
-    public function getPms(): ?\Repull\Model\PmsCapabilities
+    public function getDescriptions(): ?bool
     {
-        return $this->container['pms'];
+        return $this->container['descriptions'];
     }
 
     /**
-     * Sets pms
+     * Sets descriptions
      *
-     * @param \Repull\Model\PmsCapabilities|null $pms pms
+     * @param bool|null $descriptions descriptions
      *
      * @return $this
      */
-    public function setPms(?\Repull\Model\PmsCapabilities $pms): static
+    public function setDescriptions(?bool $descriptions): static
     {
-        if (is_null($pms)) {
-            throw new InvalidArgumentException('non-nullable pms cannot be null');
+        if (is_null($descriptions)) {
+            throw new InvalidArgumentException('non-nullable descriptions cannot be null');
         }
-        $this->container['pms'] = $pms;
+        $this->container['descriptions'] = $descriptions;
+
+        return $this;
+    }
+
+    /**
+     * Gets times
+     *
+     * @return bool|null
+     */
+    public function getTimes(): ?bool
+    {
+        return $this->container['times'];
+    }
+
+    /**
+     * Sets times
+     *
+     * @param bool|null $times times
+     *
+     * @return $this
+     */
+    public function setTimes(?bool $times): static
+    {
+        if (is_null($times)) {
+            throw new InvalidArgumentException('non-nullable times cannot be null');
+        }
+        $this->container['times'] = $times;
+
+        return $this;
+    }
+
+    /**
+     * Gets capacity
+     *
+     * @return bool|null
+     */
+    public function getCapacity(): ?bool
+    {
+        return $this->container['capacity'];
+    }
+
+    /**
+     * Sets capacity
+     *
+     * @param bool|null $capacity capacity
+     *
+     * @return $this
+     */
+    public function setCapacity(?bool $capacity): static
+    {
+        if (is_null($capacity)) {
+            throw new InvalidArgumentException('non-nullable capacity cannot be null');
+        }
+        $this->container['capacity'] = $capacity;
+
+        return $this;
+    }
+
+    /**
+     * Gets amenities
+     *
+     * @return bool|null
+     */
+    public function getAmenities(): ?bool
+    {
+        return $this->container['amenities'];
+    }
+
+    /**
+     * Sets amenities
+     *
+     * @param bool|null $amenities amenities
+     *
+     * @return $this
+     */
+    public function setAmenities(?bool $amenities): static
+    {
+        if (is_null($amenities)) {
+            throw new InvalidArgumentException('non-nullable amenities cannot be null');
+        }
+        $this->container['amenities'] = $amenities;
+
+        return $this;
+    }
+
+    /**
+     * Gets house_rules
+     *
+     * @return bool|null
+     */
+    public function getHouseRules(): ?bool
+    {
+        return $this->container['house_rules'];
+    }
+
+    /**
+     * Sets house_rules
+     *
+     * @param bool|null $house_rules house_rules
+     *
+     * @return $this
+     */
+    public function setHouseRules(?bool $house_rules): static
+    {
+        if (is_null($house_rules)) {
+            throw new InvalidArgumentException('non-nullable house_rules cannot be null');
+        }
+        $this->container['house_rules'] = $house_rules;
+
+        return $this;
+    }
+
+    /**
+     * Gets address
+     *
+     * @return bool|null
+     */
+    public function getAddress(): ?bool
+    {
+        return $this->container['address'];
+    }
+
+    /**
+     * Sets address
+     *
+     * @param bool|null $address address
+     *
+     * @return $this
+     */
+    public function setAddress(?bool $address): static
+    {
+        if (is_null($address)) {
+            throw new InvalidArgumentException('non-nullable address cannot be null');
+        }
+        $this->container['address'] = $address;
+
+        return $this;
+    }
+
+    /**
+     * Gets photos_add
+     *
+     * @return bool|null
+     */
+    public function getPhotosAdd(): ?bool
+    {
+        return $this->container['photos_add'];
+    }
+
+    /**
+     * Sets photos_add
+     *
+     * @param bool|null $photos_add photos_add
+     *
+     * @return $this
+     */
+    public function setPhotosAdd(?bool $photos_add): static
+    {
+        if (is_null($photos_add)) {
+            throw new InvalidArgumentException('non-nullable photos_add cannot be null');
+        }
+        $this->container['photos_add'] = $photos_add;
+
+        return $this;
+    }
+
+    /**
+     * Gets photos_delete
+     *
+     * @return bool|null
+     */
+    public function getPhotosDelete(): ?bool
+    {
+        return $this->container['photos_delete'];
+    }
+
+    /**
+     * Sets photos_delete
+     *
+     * @param bool|null $photos_delete photos_delete
+     *
+     * @return $this
+     */
+    public function setPhotosDelete(?bool $photos_delete): static
+    {
+        if (is_null($photos_delete)) {
+            throw new InvalidArgumentException('non-nullable photos_delete cannot be null');
+        }
+        $this->container['photos_delete'] = $photos_delete;
+
+        return $this;
+    }
+
+    /**
+     * Gets photos_reorder
+     *
+     * @return bool|null
+     */
+    public function getPhotosReorder(): ?bool
+    {
+        return $this->container['photos_reorder'];
+    }
+
+    /**
+     * Sets photos_reorder
+     *
+     * @param bool|null $photos_reorder photos_reorder
+     *
+     * @return $this
+     */
+    public function setPhotosReorder(?bool $photos_reorder): static
+    {
+        if (is_null($photos_reorder)) {
+            throw new InvalidArgumentException('non-nullable photos_reorder cannot be null');
+        }
+        $this->container['photos_reorder'] = $photos_reorder;
+
+        return $this;
+    }
+
+    /**
+     * Gets photo_captions
+     *
+     * @return bool|null
+     */
+    public function getPhotoCaptions(): ?bool
+    {
+        return $this->container['photo_captions'];
+    }
+
+    /**
+     * Sets photo_captions
+     *
+     * @param bool|null $photo_captions photo_captions
+     *
+     * @return $this
+     */
+    public function setPhotoCaptions(?bool $photo_captions): static
+    {
+        if (is_null($photo_captions)) {
+            throw new InvalidArgumentException('non-nullable photo_captions cannot be null');
+        }
+        $this->container['photo_captions'] = $photo_captions;
 
         return $this;
     }
