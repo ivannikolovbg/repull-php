@@ -5,6 +5,14 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.29] - 2026-10-03
+
+Regenerated against the live `https://api.repull.dev/openapi.json`:
+
+- New `Repull\Api\ConnectApi::submitTrackCredentials()` (`POST /v1/connect/track/credentials`, with `SubmitTrackCredentialsRequest` / `SubmitTrackCredentialsRequestCredentials`): connect a Track (TRACK Hospitality Software) account with `domain`, `api_key`, `api_secret` and optional `key_type` (`server` / `channel`), `auth_mode` (`hmac` / `basic`), `hmac_realm`, `secret_is_base64`, `payment_type_id`, `move_reason_id`.
+- New `ConnectApi::recheckBookingExtranetLogin()` (`POST /v1/connect/booking-extranet-login/recheck`) and `ConnectApi::resumeConnect()` (`GET /v1/connect/resume`).
+- Track listed in the per-PMS reservation write tables.
+
 ## [0.2.28] - 2026-10-02
 
 Regenerated against the live `https://api.repull.dev/openapi.json`:
