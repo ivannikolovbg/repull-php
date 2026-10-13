@@ -62,7 +62,8 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         'available' => 'bool',
         'price' => 'float',
         'min_nights' => 'int',
-        'max_nights' => 'int'
+        'max_nights' => 'int',
+        'available_units' => 'int'
     ];
 
     /**
@@ -74,7 +75,8 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         'available' => null,
         'price' => null,
         'min_nights' => null,
-        'max_nights' => null
+        'max_nights' => null,
+        'available_units' => null
     ];
 
     /**
@@ -86,7 +88,8 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         'available' => false,
         'price' => false,
         'min_nights' => false,
-        'max_nights' => false
+        'max_nights' => false,
+        'available_units' => false
     ];
 
     /**
@@ -168,7 +171,8 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         'available' => 'available',
         'price' => 'price',
         'min_nights' => 'minNights',
-        'max_nights' => 'maxNights'
+        'max_nights' => 'maxNights',
+        'available_units' => 'availableUnits'
     ];
 
     /**
@@ -180,7 +184,8 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         'available' => 'setAvailable',
         'price' => 'setPrice',
         'min_nights' => 'setMinNights',
-        'max_nights' => 'setMaxNights'
+        'max_nights' => 'setMaxNights',
+        'available_units' => 'setAvailableUnits'
     ];
 
     /**
@@ -192,7 +197,8 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         'available' => 'getAvailable',
         'price' => 'getPrice',
         'min_nights' => 'getMinNights',
-        'max_nights' => 'getMaxNights'
+        'max_nights' => 'getMaxNights',
+        'available_units' => 'getAvailableUnits'
     ];
 
     /**
@@ -246,6 +252,7 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         $this->setIfExists('price', $data ?? [], null);
         $this->setIfExists('min_nights', $data ?? [], null);
         $this->setIfExists('max_nights', $data ?? [], null);
+        $this->setIfExists('available_units', $data ?? [], null);
     }
 
     /**
@@ -279,6 +286,10 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
 
         if (!is_null($this->container['max_nights']) && ($this->container['max_nights'] < 1)) {
             $invalidProperties[] = "invalid value for 'max_nights', must be bigger than or equal to 1.";
+        }
+
+        if (!is_null($this->container['available_units']) && ($this->container['available_units'] < 0)) {
+            $invalidProperties[] = "invalid value for 'available_units', must be bigger than or equal to 0.";
         }
 
         return $invalidProperties;
@@ -407,6 +418,38 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         }
 
         $this->container['max_nights'] = $max_nights;
+
+        return $this;
+    }
+
+    /**
+     * Gets available_units
+     *
+     * @return int|null
+     */
+    public function getAvailableUnits(): ?int
+    {
+        return $this->container['available_units'];
+    }
+
+    /**
+     * Sets available_units
+     *
+     * @param int|null $available_units Rooms to sell on these dates, for a listing that sells several identical rooms (`unitCount` > 1, e.g. a Booking.com room type). Up to the listing's `unitCount`. Refused with `409 managed_by_pms` on a hotel PMS room type (Cloudbeds, Mews) — its PMS owns the room count.
+     *
+     * @return $this
+     */
+    public function setAvailableUnits(?int $available_units): static
+    {
+        if (is_null($available_units)) {
+            throw new InvalidArgumentException('non-nullable available_units cannot be null');
+        }
+
+        if (($available_units < 0)) {
+            throw new InvalidArgumentException('invalid value for $available_units when calling AvailabilityWriteSettings., must be bigger than or equal to 0.');
+        }
+
+        $this->container['available_units'] = $available_units;
 
         return $this;
     }

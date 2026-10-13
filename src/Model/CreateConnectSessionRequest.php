@@ -63,6 +63,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'reservation_history_months' => 'int',
         'access_type' => 'string',
         'allowed_providers' => 'string[]',
+        'include_request_only' => 'bool',
         'locale' => 'string',
         'purpose' => 'string',
         'workspace' => '\Repull\Model\CreateConnectSessionRequestWorkspace',
@@ -81,6 +82,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'reservation_history_months' => null,
         'access_type' => null,
         'allowed_providers' => null,
+        'include_request_only' => null,
         'locale' => null,
         'purpose' => null,
         'workspace' => null,
@@ -99,6 +101,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'reservation_history_months' => false,
         'access_type' => false,
         'allowed_providers' => true,
+        'include_request_only' => false,
         'locale' => true,
         'purpose' => false,
         'workspace' => false,
@@ -187,6 +190,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'reservation_history_months' => 'reservationHistoryMonths',
         'access_type' => 'accessType',
         'allowed_providers' => 'allowedProviders',
+        'include_request_only' => 'includeRequestOnly',
         'locale' => 'locale',
         'purpose' => 'purpose',
         'workspace' => 'workspace',
@@ -205,6 +209,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'reservation_history_months' => 'setReservationHistoryMonths',
         'access_type' => 'setAccessType',
         'allowed_providers' => 'setAllowedProviders',
+        'include_request_only' => 'setIncludeRequestOnly',
         'locale' => 'setLocale',
         'purpose' => 'setPurpose',
         'workspace' => 'setWorkspace',
@@ -223,6 +228,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'reservation_history_months' => 'getReservationHistoryMonths',
         'access_type' => 'getAccessType',
         'allowed_providers' => 'getAllowedProviders',
+        'include_request_only' => 'getIncludeRequestOnly',
         'locale' => 'getLocale',
         'purpose' => 'getPurpose',
         'workspace' => 'getWorkspace',
@@ -355,6 +361,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         $this->setIfExists('reservation_history_months', $data ?? [], null);
         $this->setIfExists('access_type', $data ?? [], null);
         $this->setIfExists('allowed_providers', $data ?? [], null);
+        $this->setIfExists('include_request_only', $data ?? [], false);
         $this->setIfExists('locale', $data ?? [], null);
         $this->setIfExists('purpose', $data ?? [], 'connect');
         $this->setIfExists('workspace', $data ?? [], null);
@@ -582,6 +589,33 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
             }
         }
         $this->container['allowed_providers'] = $allowed_providers;
+
+        return $this;
+    }
+
+    /**
+     * Gets include_request_only
+     *
+     * @return bool|null
+     */
+    public function getIncludeRequestOnly(): ?bool
+    {
+        return $this->container['include_request_only'];
+    }
+
+    /**
+     * Sets include_request_only
+     *
+     * @param bool|null $include_request_only Also list PMSes Repull doesn't connect yet (`status: request-only` in `GET /v1/connect/providers?includeRequestOnly=true`), plus an Other PMS card. Picking one opens a form that collects the host's contact and access details for the Repull team and ends with \"A team member will contact you\". No connection is made: the redirect carries `status=requested&provider=<id>`, and no `connect.session.completed` webhook fires. Naming a request-only id in `allowedProviders` offers it without this flag.
+     *
+     * @return $this
+     */
+    public function setIncludeRequestOnly(?bool $include_request_only): static
+    {
+        if (is_null($include_request_only)) {
+            throw new InvalidArgumentException('non-nullable include_request_only cannot be null');
+        }
+        $this->container['include_request_only'] = $include_request_only;
 
         return $this;
     }

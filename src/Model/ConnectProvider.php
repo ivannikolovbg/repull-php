@@ -269,9 +269,11 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
     public const CONNECT_PATTERN_CREDENTIALS = 'credentials';
     public const CONNECT_PATTERN_ACTIVATION = 'activation';
     public const CONNECT_PATTERN_CLAIM = 'claim';
+    public const CONNECT_PATTERN_EXTRANET = 'extranet';
     public const STATUS_LIVE = 'live';
     public const STATUS_BETA = 'beta';
     public const STATUS_COMING_SOON = 'coming-soon';
+    public const STATUS_REQUEST_ONLY = 'request-only';
 
     /**
      * Gets allowable values of the enum
@@ -298,6 +300,7 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
             self::CONNECT_PATTERN_CREDENTIALS,
             self::CONNECT_PATTERN_ACTIVATION,
             self::CONNECT_PATTERN_CLAIM,
+            self::CONNECT_PATTERN_EXTRANET,
         ];
     }
 
@@ -312,6 +315,7 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
             self::STATUS_LIVE,
             self::STATUS_BETA,
             self::STATUS_COMING_SOON,
+            self::STATUS_REQUEST_ONLY,
         ];
     }
 
@@ -524,7 +528,7 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets connect_pattern
      *
-     * @param string $connect_pattern How the host is connected. `oauth`: provider-side consent screen. `credentials`: hosted form collects API keys. `activation`: push-only handshake (Vrbo). `claim`: connectivity-provider designation in the channel's Extranet (Booking.com).
+     * @param string $connect_pattern How the host is connected. `oauth`: provider-side consent screen. `credentials`: hosted form collects API keys. `activation`: push-only handshake. `claim`: connectivity-provider designation in the channel's Extranet (Booking.com). `extranet`: the host signs in with their Booking.com Extranet user.
      *
      * @return $this
      */
@@ -552,7 +556,7 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets status
      *
-     * @param string $status Pickers should hide / disable `coming-soon` cards. `beta` cards are clickable but show a Beta pill.
+     * @param string $status Pickers should hide / disable `coming-soon` cards. `beta` cards are clickable but show a Beta pill. `request-only` is a PMS Repull doesn't connect yet, listed only with `includeRequestOnly`: picking it collects the host's access details for the Repull team, and the session ends as `requested` instead of connecting.
      *
      * @return $this
      */

@@ -62,6 +62,7 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
         'limits' => '\Repull\Model\GetUsageSummary200ResponseLimits',
         'used' => '\Repull\Model\GetUsageSummary200ResponseUsed',
         'remaining' => '\Repull\Model\GetUsageSummary200ResponseRemaining',
+        'credits' => '\Repull\Model\GetUsageSummary200ResponseCredits',
         'daily_resets_at' => '\DateTime',
         'resets_at' => '\DateTime',
         'breakdown' => '\Repull\Model\GetUsageSummary200ResponseBreakdownInner[]',
@@ -82,6 +83,7 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
         'limits' => null,
         'used' => null,
         'remaining' => null,
+        'credits' => null,
         'daily_resets_at' => 'date-time',
         'resets_at' => 'date-time',
         'breakdown' => null,
@@ -102,6 +104,7 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
         'limits' => false,
         'used' => false,
         'remaining' => false,
+        'credits' => false,
         'daily_resets_at' => false,
         'resets_at' => false,
         'breakdown' => false,
@@ -192,6 +195,7 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
         'limits' => 'limits',
         'used' => 'used',
         'remaining' => 'remaining',
+        'credits' => 'credits',
         'daily_resets_at' => 'dailyResetsAt',
         'resets_at' => 'resetsAt',
         'breakdown' => 'breakdown',
@@ -212,6 +216,7 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
         'limits' => 'setLimits',
         'used' => 'setUsed',
         'remaining' => 'setRemaining',
+        'credits' => 'setCredits',
         'daily_resets_at' => 'setDailyResetsAt',
         'resets_at' => 'setResetsAt',
         'breakdown' => 'setBreakdown',
@@ -232,6 +237,7 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
         'limits' => 'getLimits',
         'used' => 'getUsed',
         'remaining' => 'getRemaining',
+        'credits' => 'getCredits',
         'daily_resets_at' => 'getDailyResetsAt',
         'resets_at' => 'getResetsAt',
         'breakdown' => 'getBreakdown',
@@ -293,6 +299,7 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
         $this->setIfExists('limits', $data ?? [], null);
         $this->setIfExists('used', $data ?? [], null);
         $this->setIfExists('remaining', $data ?? [], null);
+        $this->setIfExists('credits', $data ?? [], null);
         $this->setIfExists('daily_resets_at', $data ?? [], null);
         $this->setIfExists('resets_at', $data ?? [], null);
         $this->setIfExists('breakdown', $data ?? [], null);
@@ -444,6 +451,33 @@ class GetUsageSummary200Response implements ModelInterface, ArrayAccess, JsonSer
             throw new InvalidArgumentException('non-nullable remaining cannot be null');
         }
         $this->container['remaining'] = $remaining;
+
+        return $this;
+    }
+
+    /**
+     * Gets credits
+     *
+     * @return \Repull\Model\GetUsageSummary200ResponseCredits|null
+     */
+    public function getCredits(): ?\Repull\Model\GetUsageSummary200ResponseCredits
+    {
+        return $this->container['credits'];
+    }
+
+    /**
+     * Sets credits
+     *
+     * @param \Repull\Model\GetUsageSummary200ResponseCredits|null $credits credits
+     *
+     * @return $this
+     */
+    public function setCredits(?\Repull\Model\GetUsageSummary200ResponseCredits $credits): static
+    {
+        if (is_null($credits)) {
+            throw new InvalidArgumentException('non-nullable credits cannot be null');
+        }
+        $this->container['credits'] = $credits;
 
         return $this;
     }

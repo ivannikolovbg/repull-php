@@ -62,6 +62,7 @@ class AvailabilityBatchWriteRequest implements ModelInterface, ArrayAccess, Json
         'price' => 'float',
         'min_nights' => 'int',
         'max_nights' => 'int',
+        'available_units' => 'int',
         'dates' => '\DateTime[]',
         'property_ids' => 'int[]'
     ];
@@ -76,6 +77,7 @@ class AvailabilityBatchWriteRequest implements ModelInterface, ArrayAccess, Json
         'price' => null,
         'min_nights' => null,
         'max_nights' => null,
+        'available_units' => null,
         'dates' => 'date',
         'property_ids' => null
     ];
@@ -90,6 +92,7 @@ class AvailabilityBatchWriteRequest implements ModelInterface, ArrayAccess, Json
         'price' => false,
         'min_nights' => false,
         'max_nights' => false,
+        'available_units' => false,
         'dates' => false,
         'property_ids' => false
     ];
@@ -174,6 +177,7 @@ class AvailabilityBatchWriteRequest implements ModelInterface, ArrayAccess, Json
         'price' => 'price',
         'min_nights' => 'minNights',
         'max_nights' => 'maxNights',
+        'available_units' => 'availableUnits',
         'dates' => 'dates',
         'property_ids' => 'propertyIds'
     ];
@@ -188,6 +192,7 @@ class AvailabilityBatchWriteRequest implements ModelInterface, ArrayAccess, Json
         'price' => 'setPrice',
         'min_nights' => 'setMinNights',
         'max_nights' => 'setMaxNights',
+        'available_units' => 'setAvailableUnits',
         'dates' => 'setDates',
         'property_ids' => 'setPropertyIds'
     ];
@@ -202,6 +207,7 @@ class AvailabilityBatchWriteRequest implements ModelInterface, ArrayAccess, Json
         'price' => 'getPrice',
         'min_nights' => 'getMinNights',
         'max_nights' => 'getMaxNights',
+        'available_units' => 'getAvailableUnits',
         'dates' => 'getDates',
         'property_ids' => 'getPropertyIds'
     ];
@@ -257,6 +263,7 @@ class AvailabilityBatchWriteRequest implements ModelInterface, ArrayAccess, Json
         $this->setIfExists('price', $data ?? [], null);
         $this->setIfExists('min_nights', $data ?? [], null);
         $this->setIfExists('max_nights', $data ?? [], null);
+        $this->setIfExists('available_units', $data ?? [], null);
         $this->setIfExists('dates', $data ?? [], null);
         $this->setIfExists('property_ids', $data ?? [], null);
     }
@@ -292,6 +299,10 @@ class AvailabilityBatchWriteRequest implements ModelInterface, ArrayAccess, Json
 
         if (!is_null($this->container['max_nights']) && ($this->container['max_nights'] < 1)) {
             $invalidProperties[] = "invalid value for 'max_nights', must be bigger than or equal to 1.";
+        }
+
+        if (!is_null($this->container['available_units']) && ($this->container['available_units'] < 0)) {
+            $invalidProperties[] = "invalid value for 'available_units', must be bigger than or equal to 0.";
         }
 
         if ($this->container['dates'] === null) {
@@ -434,6 +445,38 @@ class AvailabilityBatchWriteRequest implements ModelInterface, ArrayAccess, Json
         }
 
         $this->container['max_nights'] = $max_nights;
+
+        return $this;
+    }
+
+    /**
+     * Gets available_units
+     *
+     * @return int|null
+     */
+    public function getAvailableUnits(): ?int
+    {
+        return $this->container['available_units'];
+    }
+
+    /**
+     * Sets available_units
+     *
+     * @param int|null $available_units Rooms to sell on these dates, for a listing that sells several identical rooms (`unitCount` > 1, e.g. a Booking.com room type). Up to the listing's `unitCount`. Refused with `409 managed_by_pms` on a hotel PMS room type (Cloudbeds, Mews) — its PMS owns the room count.
+     *
+     * @return $this
+     */
+    public function setAvailableUnits(?int $available_units): static
+    {
+        if (is_null($available_units)) {
+            throw new InvalidArgumentException('non-nullable available_units cannot be null');
+        }
+
+        if (($available_units < 0)) {
+            throw new InvalidArgumentException('invalid value for $available_units when calling AvailabilityBatchWriteRequest., must be bigger than or equal to 0.');
+        }
+
+        $this->container['available_units'] = $available_units;
 
         return $this;
     }

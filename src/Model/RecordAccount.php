@@ -61,7 +61,8 @@ class RecordAccount implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPITypes = [
         'provider' => 'string',
         'external_account_id' => 'string',
-        'connection_id' => 'string'
+        'connection_id' => 'string',
+        'hotel_id' => 'string'
     ];
 
     /**
@@ -72,7 +73,8 @@ class RecordAccount implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPIFormats = [
         'provider' => null,
         'external_account_id' => null,
-        'connection_id' => null
+        'connection_id' => null,
+        'hotel_id' => null
     ];
 
     /**
@@ -83,7 +85,8 @@ class RecordAccount implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPINullables = [
         'provider' => false,
         'external_account_id' => false,
-        'connection_id' => true
+        'connection_id' => true,
+        'hotel_id' => false
     ];
 
     /**
@@ -164,7 +167,8 @@ class RecordAccount implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $attributeMap = [
         'provider' => 'provider',
         'external_account_id' => 'externalAccountId',
-        'connection_id' => 'connectionId'
+        'connection_id' => 'connectionId',
+        'hotel_id' => 'hotelId'
     ];
 
     /**
@@ -175,7 +179,8 @@ class RecordAccount implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $setters = [
         'provider' => 'setProvider',
         'external_account_id' => 'setExternalAccountId',
-        'connection_id' => 'setConnectionId'
+        'connection_id' => 'setConnectionId',
+        'hotel_id' => 'setHotelId'
     ];
 
     /**
@@ -186,7 +191,8 @@ class RecordAccount implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $getters = [
         'provider' => 'getProvider',
         'external_account_id' => 'getExternalAccountId',
-        'connection_id' => 'getConnectionId'
+        'connection_id' => 'getConnectionId',
+        'hotel_id' => 'getHotelId'
     ];
 
     /**
@@ -239,6 +245,7 @@ class RecordAccount implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('provider', $data ?? [], null);
         $this->setIfExists('external_account_id', $data ?? [], null);
         $this->setIfExists('connection_id', $data ?? [], null);
+        $this->setIfExists('hotel_id', $data ?? [], null);
     }
 
     /**
@@ -362,6 +369,33 @@ class RecordAccount implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['connection_id'] = $connection_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets hotel_id
+     *
+     * @return string|null
+     */
+    public function getHotelId(): ?string
+    {
+        return $this->container['hotel_id'];
+    }
+
+    /**
+     * Sets hotel_id
+     *
+     * @param string|null $hotel_id Booking.com only: the hotel (property) id the record belongs to. On a `booking_extranet` account, `externalAccountId` is the login, which can cover several hotels.
+     *
+     * @return $this
+     */
+    public function setHotelId(?string $hotel_id): static
+    {
+        if (is_null($hotel_id)) {
+            throw new InvalidArgumentException('non-nullable hotel_id cannot be null');
+        }
+        $this->container['hotel_id'] = $hotel_id;
 
         return $this;
     }

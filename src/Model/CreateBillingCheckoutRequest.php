@@ -209,8 +209,6 @@ class CreateBillingCheckoutRequest implements ModelInterface, ArrayAccess, JsonS
     }
 
     public const PLAN_STARTER = 'starter';
-    public const PLAN_GROWTH = 'growth';
-    public const PLAN_SCALE = 'scale';
 
     /**
      * Gets allowable values of the enum
@@ -221,8 +219,6 @@ class CreateBillingCheckoutRequest implements ModelInterface, ArrayAccess, JsonS
     {
         return [
             self::PLAN_STARTER,
-            self::PLAN_GROWTH,
-            self::PLAN_SCALE,
         ];
     }
 

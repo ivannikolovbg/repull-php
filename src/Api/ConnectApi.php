@@ -119,6 +119,9 @@ class ConnectApi
         'recheckBookingExtranetLogin' => [
             'application/json',
         ],
+        'rentalReadyConnectCallback' => [
+            'application/json',
+        ],
         'resumeConnect' => [
             'application/json',
         ],
@@ -177,6 +180,9 @@ class ConnectApi
             'application/json',
         ],
         'vrboLogin' => [
+            'application/json',
+        ],
+        'zeevouConnectCallback' => [
             'application/json',
         ],
     ];
@@ -3506,6 +3512,7 @@ class ConnectApi
      *
      * List Connect channels
      *
+     * @param  bool|null $include_request_only Also return the PMSes Repull doesn&#39;t connect yet (&#x60;status: request-only&#x60;), for a picker you render yourself for a session created with &#x60;includeRequestOnly&#x60;. (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectProviders'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -3513,10 +3520,11 @@ class ConnectApi
      * @return \Repull\Model\ConnectProviderListResponse
      */
     public function listConnectProviders(
+        ?bool $include_request_only = false,
         string $contentType = self::contentTypes['listConnectProviders'][0]
     ): \Repull\Model\ConnectProviderListResponse
     {
-        list($response) = $this->listConnectProvidersWithHttpInfo($contentType);
+        list($response) = $this->listConnectProvidersWithHttpInfo($include_request_only, $contentType);
         return $response;
     }
 
@@ -3525,6 +3533,7 @@ class ConnectApi
      *
      * List Connect channels
      *
+     * @param  bool|null $include_request_only Also return the PMSes Repull doesn&#39;t connect yet (&#x60;status: request-only&#x60;), for a picker you render yourself for a session created with &#x60;includeRequestOnly&#x60;. (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectProviders'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -3532,10 +3541,11 @@ class ConnectApi
      * @return array of \Repull\Model\ConnectProviderListResponse, HTTP status code, HTTP response headers (array of strings)
      */
     public function listConnectProvidersWithHttpInfo(
+        ?bool $include_request_only = false,
         string $contentType = self::contentTypes['listConnectProviders'][0]
     ): array
     {
-        $request = $this->listConnectProvidersRequest($contentType);
+        $request = $this->listConnectProvidersRequest($include_request_only, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -3608,16 +3618,18 @@ class ConnectApi
      *
      * List Connect channels
      *
+     * @param  bool|null $include_request_only Also return the PMSes Repull doesn&#39;t connect yet (&#x60;status: request-only&#x60;), for a picker you render yourself for a session created with &#x60;includeRequestOnly&#x60;. (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectProviders'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function listConnectProvidersAsync(
+        ?bool $include_request_only = false,
         string $contentType = self::contentTypes['listConnectProviders'][0]
     ): PromiseInterface
     {
-        return $this->listConnectProvidersAsyncWithHttpInfo($contentType)
+        return $this->listConnectProvidersAsyncWithHttpInfo($include_request_only, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -3630,17 +3642,19 @@ class ConnectApi
      *
      * List Connect channels
      *
+     * @param  bool|null $include_request_only Also return the PMSes Repull doesn&#39;t connect yet (&#x60;status: request-only&#x60;), for a picker you render yourself for a session created with &#x60;includeRequestOnly&#x60;. (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectProviders'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return PromiseInterface
      */
     public function listConnectProvidersAsyncWithHttpInfo(
+        ?bool $include_request_only = false,
         string $contentType = self::contentTypes['listConnectProviders'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ConnectProviderListResponse';
-        $request = $this->listConnectProvidersRequest($contentType);
+        $request = $this->listConnectProvidersRequest($include_request_only, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -3681,15 +3695,18 @@ class ConnectApi
     /**
      * Create request for operation 'listConnectProviders'
      *
+     * @param  bool|null $include_request_only Also return the PMSes Repull doesn&#39;t connect yet (&#x60;status: request-only&#x60;), for a picker you render yourself for a session created with &#x60;includeRequestOnly&#x60;. (optional, default to false)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectProviders'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function listConnectProvidersRequest(
+        ?bool $include_request_only = false,
         string $contentType = self::contentTypes['listConnectProviders'][0]
     ): Request
     {
+
 
 
         $resourcePath = '/v1/connect/providers';
@@ -3699,6 +3716,15 @@ class ConnectApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $include_request_only,
+            'includeRequestOnly', // param base name
+            'boolean', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 
@@ -4718,6 +4744,278 @@ class ConnectApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation rentalReadyConnectCallback
+     *
+     * RentalReady OAuth callback
+     *
+     * @param  string $state The signed Connect state Repull sent to RentalReady. (required)
+     * @param  string|null $code Authorization code from RentalReady. (optional)
+     * @param  string|null $error Set by RentalReady when the host denied access (&#x60;access_denied&#x60;). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['rentalReadyConnectCallback'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return void
+     */
+    public function rentalReadyConnectCallback(
+        string $state,
+        ?string $code = null,
+        ?string $error = null,
+        string $contentType = self::contentTypes['rentalReadyConnectCallback'][0]
+    ): void
+    {
+        $this->rentalReadyConnectCallbackWithHttpInfo($state, $code, $error, $contentType);
+    }
+
+    /**
+     * Operation rentalReadyConnectCallbackWithHttpInfo
+     *
+     * RentalReady OAuth callback
+     *
+     * @param  string $state The signed Connect state Repull sent to RentalReady. (required)
+     * @param  string|null $code Authorization code from RentalReady. (optional)
+     * @param  string|null $error Set by RentalReady when the host denied access (&#x60;access_denied&#x60;). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['rentalReadyConnectCallback'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function rentalReadyConnectCallbackWithHttpInfo(
+        string $state,
+        ?string $code = null,
+        ?string $error = null,
+        string $contentType = self::contentTypes['rentalReadyConnectCallback'][0]
+    ): array
+    {
+        $request = $this->rentalReadyConnectCallbackRequest($state, $code, $error, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            return [null, $statusCode, $response->getHeaders()];
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation rentalReadyConnectCallbackAsync
+     *
+     * RentalReady OAuth callback
+     *
+     * @param  string $state The signed Connect state Repull sent to RentalReady. (required)
+     * @param  string|null $code Authorization code from RentalReady. (optional)
+     * @param  string|null $error Set by RentalReady when the host denied access (&#x60;access_denied&#x60;). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['rentalReadyConnectCallback'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function rentalReadyConnectCallbackAsync(
+        string $state,
+        ?string $code = null,
+        ?string $error = null,
+        string $contentType = self::contentTypes['rentalReadyConnectCallback'][0]
+    ): PromiseInterface
+    {
+        return $this->rentalReadyConnectCallbackAsyncWithHttpInfo($state, $code, $error, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation rentalReadyConnectCallbackAsyncWithHttpInfo
+     *
+     * RentalReady OAuth callback
+     *
+     * @param  string $state The signed Connect state Repull sent to RentalReady. (required)
+     * @param  string|null $code Authorization code from RentalReady. (optional)
+     * @param  string|null $error Set by RentalReady when the host denied access (&#x60;access_denied&#x60;). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['rentalReadyConnectCallback'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function rentalReadyConnectCallbackAsyncWithHttpInfo(
+        string $state,
+        ?string $code = null,
+        ?string $error = null,
+        string $contentType = self::contentTypes['rentalReadyConnectCallback'][0]
+    ): PromiseInterface
+    {
+        $returnType = '';
+        $request = $this->rentalReadyConnectCallbackRequest($state, $code, $error, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'rentalReadyConnectCallback'
+     *
+     * @param  string $state The signed Connect state Repull sent to RentalReady. (required)
+     * @param  string|null $code Authorization code from RentalReady. (optional)
+     * @param  string|null $error Set by RentalReady when the host denied access (&#x60;access_denied&#x60;). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['rentalReadyConnectCallback'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function rentalReadyConnectCallbackRequest(
+        string $state,
+        ?string $code = null,
+        ?string $error = null,
+        string $contentType = self::contentTypes['rentalReadyConnectCallback'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'state' is set
+        if ($state === null || (is_array($state) && count($state) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $state when calling rentalReadyConnectCallback'
+            );
+        }
+
+
+
+
+        $resourcePath = '/v1/connect/rentalready/callback';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $code,
+            'code', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $state,
+            'state', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $error,
+            'error', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            [],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
@@ -11284,6 +11582,278 @@ class ConnectApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation zeevouConnectCallback
+     *
+     * Zeevou OAuth callback
+     *
+     * @param  string $state The signed Connect state Repull sent to Zeevou. (required)
+     * @param  string|null $code Authorization code from Zeevou. (optional)
+     * @param  string|null $error Set by Zeevou when the host denied access (&#x60;access_denied&#x60;). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['zeevouConnectCallback'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return void
+     */
+    public function zeevouConnectCallback(
+        string $state,
+        ?string $code = null,
+        ?string $error = null,
+        string $contentType = self::contentTypes['zeevouConnectCallback'][0]
+    ): void
+    {
+        $this->zeevouConnectCallbackWithHttpInfo($state, $code, $error, $contentType);
+    }
+
+    /**
+     * Operation zeevouConnectCallbackWithHttpInfo
+     *
+     * Zeevou OAuth callback
+     *
+     * @param  string $state The signed Connect state Repull sent to Zeevou. (required)
+     * @param  string|null $code Authorization code from Zeevou. (optional)
+     * @param  string|null $error Set by Zeevou when the host denied access (&#x60;access_denied&#x60;). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['zeevouConnectCallback'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function zeevouConnectCallbackWithHttpInfo(
+        string $state,
+        ?string $code = null,
+        ?string $error = null,
+        string $contentType = self::contentTypes['zeevouConnectCallback'][0]
+    ): array
+    {
+        $request = $this->zeevouConnectCallbackRequest($state, $code, $error, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+
+            return [null, $statusCode, $response->getHeaders()];
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation zeevouConnectCallbackAsync
+     *
+     * Zeevou OAuth callback
+     *
+     * @param  string $state The signed Connect state Repull sent to Zeevou. (required)
+     * @param  string|null $code Authorization code from Zeevou. (optional)
+     * @param  string|null $error Set by Zeevou when the host denied access (&#x60;access_denied&#x60;). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['zeevouConnectCallback'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function zeevouConnectCallbackAsync(
+        string $state,
+        ?string $code = null,
+        ?string $error = null,
+        string $contentType = self::contentTypes['zeevouConnectCallback'][0]
+    ): PromiseInterface
+    {
+        return $this->zeevouConnectCallbackAsyncWithHttpInfo($state, $code, $error, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation zeevouConnectCallbackAsyncWithHttpInfo
+     *
+     * Zeevou OAuth callback
+     *
+     * @param  string $state The signed Connect state Repull sent to Zeevou. (required)
+     * @param  string|null $code Authorization code from Zeevou. (optional)
+     * @param  string|null $error Set by Zeevou when the host denied access (&#x60;access_denied&#x60;). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['zeevouConnectCallback'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function zeevouConnectCallbackAsyncWithHttpInfo(
+        string $state,
+        ?string $code = null,
+        ?string $error = null,
+        string $contentType = self::contentTypes['zeevouConnectCallback'][0]
+    ): PromiseInterface
+    {
+        $returnType = '';
+        $request = $this->zeevouConnectCallbackRequest($state, $code, $error, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    return [null, $response->getStatusCode(), $response->getHeaders()];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'zeevouConnectCallback'
+     *
+     * @param  string $state The signed Connect state Repull sent to Zeevou. (required)
+     * @param  string|null $code Authorization code from Zeevou. (optional)
+     * @param  string|null $error Set by Zeevou when the host denied access (&#x60;access_denied&#x60;). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['zeevouConnectCallback'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function zeevouConnectCallbackRequest(
+        string $state,
+        ?string $code = null,
+        ?string $error = null,
+        string $contentType = self::contentTypes['zeevouConnectCallback'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'state' is set
+        if ($state === null || (is_array($state) && count($state) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $state when calling zeevouConnectCallback'
+            );
+        }
+
+
+
+
+        $resourcePath = '/v1/connect/zeevou/callback';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $code,
+            'code', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $state,
+            'state', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $error,
+            'error', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            [],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody

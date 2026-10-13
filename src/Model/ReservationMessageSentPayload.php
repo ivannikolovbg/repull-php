@@ -59,6 +59,7 @@ class ReservationMessageSentPayload implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
+        'hotel_id' => 'string',
         'reservation_id' => 'int',
         'thread_id' => 'string',
         'message_id' => 'string',
@@ -80,6 +81,7 @@ class ReservationMessageSentPayload implements ModelInterface, ArrayAccess, Json
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
+        'hotel_id' => null,
         'reservation_id' => null,
         'thread_id' => null,
         'message_id' => null,
@@ -101,6 +103,7 @@ class ReservationMessageSentPayload implements ModelInterface, ArrayAccess, Json
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
+        'hotel_id' => true,
         'reservation_id' => true,
         'thread_id' => false,
         'message_id' => false,
@@ -192,6 +195,7 @@ class ReservationMessageSentPayload implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $attributeMap = [
+        'hotel_id' => 'hotelId',
         'reservation_id' => 'reservationId',
         'thread_id' => 'threadId',
         'message_id' => 'messageId',
@@ -213,6 +217,7 @@ class ReservationMessageSentPayload implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $setters = [
+        'hotel_id' => 'setHotelId',
         'reservation_id' => 'setReservationId',
         'thread_id' => 'setThreadId',
         'message_id' => 'setMessageId',
@@ -234,6 +239,7 @@ class ReservationMessageSentPayload implements ModelInterface, ArrayAccess, Json
      * @var array<string, string>
      */
     protected static array $getters = [
+        'hotel_id' => 'getHotelId',
         'reservation_id' => 'getReservationId',
         'thread_id' => 'getThreadId',
         'message_id' => 'getMessageId',
@@ -324,6 +330,7 @@ class ReservationMessageSentPayload implements ModelInterface, ArrayAccess, Json
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('hotel_id', $data ?? [], null);
         $this->setIfExists('reservation_id', $data ?? [], null);
         $this->setIfExists('thread_id', $data ?? [], null);
         $this->setIfExists('message_id', $data ?? [], null);
@@ -393,6 +400,40 @@ class ReservationMessageSentPayload implements ModelInterface, ArrayAccess, Json
         return count($this->listInvalidProperties()) === 0;
     }
 
+
+    /**
+     * Gets hotel_id
+     *
+     * @return string|null
+     */
+    public function getHotelId(): ?string
+    {
+        return $this->container['hotel_id'];
+    }
+
+    /**
+     * Sets hotel_id
+     *
+     * @param string|null $hotel_id Booking.com only: the hotel (property) id of the conversation's listing. Absent on other channels. A Booking.com Extranet login can cover several hotels, so use this to route the message.
+     *
+     * @return $this
+     */
+    public function setHotelId(?string $hotel_id): static
+    {
+        if (is_null($hotel_id)) {
+            array_push($this->openAPINullablesSetToNull, 'hotel_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('hotel_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['hotel_id'] = $hotel_id;
+
+        return $this;
+    }
 
     /**
      * Gets reservation_id

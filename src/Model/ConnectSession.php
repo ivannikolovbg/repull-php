@@ -64,6 +64,7 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         'expires_at' => '\DateTime',
         'state' => 'string',
         'purpose' => 'string',
+        'include_request_only' => 'bool',
         'workspace_id' => 'string'
     ];
 
@@ -78,6 +79,7 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         'expires_at' => 'date-time',
         'state' => null,
         'purpose' => null,
+        'include_request_only' => null,
         'workspace_id' => null
     ];
 
@@ -92,6 +94,7 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         'expires_at' => false,
         'state' => true,
         'purpose' => false,
+        'include_request_only' => false,
         'workspace_id' => false
     ];
 
@@ -176,6 +179,7 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         'expires_at' => 'expiresAt',
         'state' => 'state',
         'purpose' => 'purpose',
+        'include_request_only' => 'includeRequestOnly',
         'workspace_id' => 'workspaceId'
     ];
 
@@ -190,6 +194,7 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         'expires_at' => 'setExpiresAt',
         'state' => 'setState',
         'purpose' => 'setPurpose',
+        'include_request_only' => 'setIncludeRequestOnly',
         'workspace_id' => 'setWorkspaceId'
     ];
 
@@ -204,6 +209,7 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         'expires_at' => 'getExpiresAt',
         'state' => 'getState',
         'purpose' => 'getPurpose',
+        'include_request_only' => 'getIncludeRequestOnly',
         'workspace_id' => 'getWorkspaceId'
     ];
 
@@ -272,6 +278,7 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('expires_at', $data ?? [], null);
         $this->setIfExists('state', $data ?? [], null);
         $this->setIfExists('purpose', $data ?? [], null);
+        $this->setIfExists('include_request_only', $data ?? [], null);
         $this->setIfExists('workspace_id', $data ?? [], null);
     }
 
@@ -474,6 +481,33 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Gets include_request_only
+     *
+     * @return bool|null
+     */
+    public function getIncludeRequestOnly(): ?bool
+    {
+        return $this->container['include_request_only'];
+    }
+
+    /**
+     * Sets include_request_only
+     *
+     * @param bool|null $include_request_only Present (`true`) when the session also lists PMSes Repull doesn't connect yet.
+     *
+     * @return $this
+     */
+    public function setIncludeRequestOnly(?bool $include_request_only): static
+    {
+        if (is_null($include_request_only)) {
+            throw new InvalidArgumentException('non-nullable include_request_only cannot be null');
+        }
+        $this->container['include_request_only'] = $include_request_only;
+
+        return $this;
+    }
+
+    /**
      * Gets workspace_id
      *
      * @return string|null
@@ -486,7 +520,7 @@ class ConnectSession implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets workspace_id
      *
-     * @param string|null $workspace_id Repull Migrate only: the workspace the property manager's data lands in. Read it with `X-Workspace-Id`, track it with `GET /v1/migrations/{workspaceId}`.
+     * @param string|null $workspace_id Present when the session lands on a sub-workspace (`workspace` or `X-Workspace-Id` on the request): the workspace the connection lands in. Read and write it with `X-Workspace-Id`; on a migrate session, track the import with `GET /v1/migrations/{workspaceId}`.
      *
      * @return $this
      */

@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * CreateConnectSessionRequestWorkspace Class Doc Comment
  *
- * @description Migrate only — the property manager being moved. Required unless you send &#x60;X-Workspace-Id&#x60; to reconnect an existing migration.
+ * @description Opens a new sub-workspace for this customer of yours and lands the connection there; the response returns its &#x60;workspaceId&#x60;, which you then send as &#x60;X-Workspace-Id&#x60;. Works with both purposes: a plain &#x60;connect&#x60; keeps the normal onboarding pages. Required for &#x60;migrate&#x60; unless you send &#x60;X-Workspace-Id&#x60; to reconnect an existing one. Don&#39;t send it together with &#x60;X-Workspace-Id&#x60;.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

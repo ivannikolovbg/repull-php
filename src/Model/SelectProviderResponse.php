@@ -231,6 +231,7 @@ class SelectProviderResponse implements ModelInterface, ArrayAccess, JsonSeriali
     public const PATTERN_CREDENTIALS = 'credentials';
     public const PATTERN_ACTIVATION = 'activation';
     public const PATTERN_CLAIM = 'claim';
+    public const PATTERN_EXTRANET = 'extranet';
 
     /**
      * Gets allowable values of the enum
@@ -244,6 +245,7 @@ class SelectProviderResponse implements ModelInterface, ArrayAccess, JsonSeriali
             self::PATTERN_CREDENTIALS,
             self::PATTERN_ACTIVATION,
             self::PATTERN_CLAIM,
+            self::PATTERN_EXTRANET,
         ];
     }
 
@@ -408,7 +410,7 @@ class SelectProviderResponse implements ModelInterface, ArrayAccess, JsonSeriali
     /**
      * Sets next_url
      *
-     * @param string|null $next_url Where to send the user next — OAuth consent, credentials form, activation checklist, or claim form.
+     * @param string|null $next_url Where to send the user next — OAuth consent, credentials form, activation checklist, claim form, or (for a `request-only` PMS) the request form.
      *
      * @return $this
      */

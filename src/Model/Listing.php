@@ -60,6 +60,9 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPITypes = [
         'capabilities' => '\Repull\Model\ListingCapabilities',
+        'kind' => 'string',
+        'hotel' => '\Repull\Model\ListingHotel',
+        'unit_count' => 'int',
         'units' => '\Repull\Model\ListingUnitsInner[]',
         'id' => 'string',
         'name' => 'string',
@@ -82,6 +85,9 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPIFormats = [
         'capabilities' => null,
+        'kind' => null,
+        'hotel' => null,
+        'unit_count' => null,
         'units' => null,
         'id' => null,
         'name' => null,
@@ -104,6 +110,9 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPINullables = [
         'capabilities' => false,
+        'kind' => false,
+        'hotel' => true,
+        'unit_count' => false,
         'units' => false,
         'id' => false,
         'name' => false,
@@ -196,6 +205,9 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $attributeMap = [
         'capabilities' => 'capabilities',
+        'kind' => 'kind',
+        'hotel' => 'hotel',
+        'unit_count' => 'unitCount',
         'units' => 'units',
         'id' => 'id',
         'name' => 'name',
@@ -218,6 +230,9 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $setters = [
         'capabilities' => 'setCapabilities',
+        'kind' => 'setKind',
+        'hotel' => 'setHotel',
+        'unit_count' => 'setUnitCount',
         'units' => 'setUnits',
         'id' => 'setId',
         'name' => 'setName',
@@ -240,6 +255,9 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $getters = [
         'capabilities' => 'getCapabilities',
+        'kind' => 'getKind',
+        'hotel' => 'getHotel',
+        'unit_count' => 'getUnitCount',
         'units' => 'getUnits',
         'id' => 'getId',
         'name' => 'getName',
@@ -287,9 +305,24 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         return self::$openAPIModelName;
     }
 
+    public const KIND_HOME = 'home';
+    public const KIND_ROOM_TYPE = 'room_type';
     public const STATUS_ACTIVE = 'active';
     public const STATUS_INACTIVE = 'inactive';
     public const STATUS_ARCHIVED = 'archived';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getKindAllowableValues()
+    {
+        return [
+            self::KIND_HOME,
+            self::KIND_ROOM_TYPE,
+        ];
+    }
 
     /**
      * Gets allowable values of the enum
@@ -320,6 +353,9 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
     public function __construct(?array $data = null)
     {
         $this->setIfExists('capabilities', $data ?? [], null);
+        $this->setIfExists('kind', $data ?? [], null);
+        $this->setIfExists('hotel', $data ?? [], null);
+        $this->setIfExists('unit_count', $data ?? [], null);
         $this->setIfExists('units', $data ?? [], null);
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('name', $data ?? [], null);
@@ -359,6 +395,19 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
     public function listInvalidProperties(): array
     {
         $invalidProperties = [];
+
+        $allowedValues = self::getKindAllowableValues();
+        if (!is_null($this->container['kind']) && !in_array($this->container['kind'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'kind', must be one of '%s'",
+                $this->container['kind'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        if (!is_null($this->container['unit_count']) && ($this->container['unit_count'] < 1)) {
+            $invalidProperties[] = "invalid value for 'unit_count', must be bigger than or equal to 1.";
+        }
 
         $allowedValues = self::getStatusAllowableValues();
         if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
@@ -404,6 +453,100 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable capabilities cannot be null');
         }
         $this->container['capabilities'] = $capabilities;
+
+        return $this;
+    }
+
+    /**
+     * Gets kind
+     *
+     * @return string|null
+     */
+    public function getKind(): ?string
+    {
+        return $this->container['kind'];
+    }
+
+    /**
+     * Sets kind
+     *
+     * @param string|null $kind `room_type` when the listing sells several identical units (a hotel room type: `unitCount` > 1) or is a hotel PMS room type; `home` otherwise. See the Hotels & multi-unit guide.
+     *
+     * @return $this
+     */
+    public function setKind(?string $kind): static
+    {
+        if (is_null($kind)) {
+            throw new InvalidArgumentException('non-nullable kind cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['kind'] = $kind;
+
+        return $this;
+    }
+
+    /**
+     * Gets hotel
+     *
+     * @return \Repull\Model\ListingHotel|null
+     */
+    public function getHotel(): ?\Repull\Model\ListingHotel
+    {
+        return $this->container['hotel'];
+    }
+
+    /**
+     * Sets hotel
+     *
+     * @param \Repull\Model\ListingHotel|null $hotel hotel
+     *
+     * @return $this
+     */
+    public function setHotel(?\Repull\Model\ListingHotel $hotel): static
+    {
+        if (is_null($hotel)) {
+            array_push($this->openAPINullablesSetToNull, 'hotel');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('hotel', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['hotel'] = $hotel;
+
+        return $this;
+    }
+
+    /**
+     * Gets unit_count
+     *
+     * @return int|null
+     */
+    public function getUnitCount(): ?int
+    {
+        return $this->container['unit_count'];
+    }
+
+    /**
+     * Sets unit_count
+     *
+     * @param int|null $unit_count How many identical units (rooms) this listing sells: the hotel PMS rooms of the room type, the room count on Booking.com, or 1 for a home. Rooms left per night are `availableUnits` on `GET /v1/availability/{propertyId}`.
+     *
+     * @return $this
+     */
+    public function setUnitCount(?int $unit_count): static
+    {
+        if (is_null($unit_count)) {
+            throw new InvalidArgumentException('non-nullable unit_count cannot be null');
+        }
+
+        if (($unit_count < 1)) {
+            throw new InvalidArgumentException('invalid value for $unit_count when calling Listing., must be bigger than or equal to 1.');
+        }
+
+        $this->container['unit_count'] = $unit_count;
 
         return $this;
     }

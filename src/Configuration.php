@@ -469,10 +469,6 @@ class Configuration
             [
                 "url" => "https://api.repull.dev",
                 "description" => "Production",
-            ],
-            [
-                "url" => "http://repull.localhost:3000/api/repull",
-                "description" => "Local development",
             ]
         ];
     }

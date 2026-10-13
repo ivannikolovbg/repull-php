@@ -63,6 +63,7 @@ class GetChannelHealth200ResponseVrbo implements ModelInterface, ArrayAccess, Js
         'accounts_signed_out' => 'int',
         'inbox_sync_late' => 'int',
         'calendar_queue_backlog' => 'int',
+        'connector_errors' => 'int',
         'calendar_oldest_wait_minutes' => 'int',
         'window_hours' => 'int'
     ];
@@ -77,6 +78,7 @@ class GetChannelHealth200ResponseVrbo implements ModelInterface, ArrayAccess, Js
         'accounts_signed_out' => null,
         'inbox_sync_late' => null,
         'calendar_queue_backlog' => null,
+        'connector_errors' => null,
         'calendar_oldest_wait_minutes' => null,
         'window_hours' => null
     ];
@@ -91,6 +93,7 @@ class GetChannelHealth200ResponseVrbo implements ModelInterface, ArrayAccess, Js
         'accounts_signed_out' => false,
         'inbox_sync_late' => false,
         'calendar_queue_backlog' => false,
+        'connector_errors' => false,
         'calendar_oldest_wait_minutes' => false,
         'window_hours' => false
     ];
@@ -175,6 +178,7 @@ class GetChannelHealth200ResponseVrbo implements ModelInterface, ArrayAccess, Js
         'accounts_signed_out' => 'accounts_signed_out',
         'inbox_sync_late' => 'inbox_sync_late',
         'calendar_queue_backlog' => 'calendar_queue_backlog',
+        'connector_errors' => 'connector_errors',
         'calendar_oldest_wait_minutes' => 'calendar_oldest_wait_minutes',
         'window_hours' => 'window_hours'
     ];
@@ -189,6 +193,7 @@ class GetChannelHealth200ResponseVrbo implements ModelInterface, ArrayAccess, Js
         'accounts_signed_out' => 'setAccountsSignedOut',
         'inbox_sync_late' => 'setInboxSyncLate',
         'calendar_queue_backlog' => 'setCalendarQueueBacklog',
+        'connector_errors' => 'setConnectorErrors',
         'calendar_oldest_wait_minutes' => 'setCalendarOldestWaitMinutes',
         'window_hours' => 'setWindowHours'
     ];
@@ -203,6 +208,7 @@ class GetChannelHealth200ResponseVrbo implements ModelInterface, ArrayAccess, Js
         'accounts_signed_out' => 'getAccountsSignedOut',
         'inbox_sync_late' => 'getInboxSyncLate',
         'calendar_queue_backlog' => 'getCalendarQueueBacklog',
+        'connector_errors' => 'getConnectorErrors',
         'calendar_oldest_wait_minutes' => 'getCalendarOldestWaitMinutes',
         'window_hours' => 'getWindowHours'
     ];
@@ -258,6 +264,7 @@ class GetChannelHealth200ResponseVrbo implements ModelInterface, ArrayAccess, Js
         $this->setIfExists('accounts_signed_out', $data ?? [], null);
         $this->setIfExists('inbox_sync_late', $data ?? [], null);
         $this->setIfExists('calendar_queue_backlog', $data ?? [], null);
+        $this->setIfExists('connector_errors', $data ?? [], null);
         $this->setIfExists('calendar_oldest_wait_minutes', $data ?? [], null);
         $this->setIfExists('window_hours', $data ?? [], null);
     }
@@ -403,6 +410,33 @@ class GetChannelHealth200ResponseVrbo implements ModelInterface, ArrayAccess, Js
             throw new InvalidArgumentException('non-nullable calendar_queue_backlog cannot be null');
         }
         $this->container['calendar_queue_backlog'] = $calendar_queue_backlog;
+
+        return $this;
+    }
+
+    /**
+     * Gets connector_errors
+     *
+     * @return int|null
+     */
+    public function getConnectorErrors(): ?int
+    {
+        return $this->container['connector_errors'];
+    }
+
+    /**
+     * Sets connector_errors
+     *
+     * @param int|null $connector_errors Failed pushes in the window caused by Repull's own VRBO connector (a timeout, a browser session in use), not by VRBO. They are retried and never set `status`.
+     *
+     * @return $this
+     */
+    public function setConnectorErrors(?int $connector_errors): static
+    {
+        if (is_null($connector_errors)) {
+            throw new InvalidArgumentException('non-nullable connector_errors cannot be null');
+        }
+        $this->container['connector_errors'] = $connector_errors;
 
         return $this;
     }
