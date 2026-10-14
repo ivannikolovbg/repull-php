@@ -69,7 +69,11 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
         'status' => 'string',
         'cancellation_policy' => 'string',
         'check_in_time' => 'string',
-        'check_out_time' => 'string'
+        'check_out_time' => 'string',
+        'guest_notes' => 'string',
+        'conversation_id' => 'string',
+        'external_thread_id' => 'string',
+        'inquiry_id' => 'string'
     ];
 
     /**
@@ -88,7 +92,11 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
         'status' => null,
         'cancellation_policy' => null,
         'check_in_time' => null,
-        'check_out_time' => null
+        'check_out_time' => null,
+        'guest_notes' => null,
+        'conversation_id' => null,
+        'external_thread_id' => null,
+        'inquiry_id' => null
     ];
 
     /**
@@ -107,7 +115,11 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
         'status' => false,
         'cancellation_policy' => true,
         'check_in_time' => true,
-        'check_out_time' => true
+        'check_out_time' => true,
+        'guest_notes' => true,
+        'conversation_id' => true,
+        'external_thread_id' => true,
+        'inquiry_id' => true
     ];
 
     /**
@@ -196,7 +208,11 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
         'status' => 'status',
         'cancellation_policy' => 'cancellationPolicy',
         'check_in_time' => 'checkInTime',
-        'check_out_time' => 'checkOutTime'
+        'check_out_time' => 'checkOutTime',
+        'guest_notes' => 'guestNotes',
+        'conversation_id' => 'conversationId',
+        'external_thread_id' => 'externalThreadId',
+        'inquiry_id' => 'inquiryId'
     ];
 
     /**
@@ -215,7 +231,11 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
         'status' => 'setStatus',
         'cancellation_policy' => 'setCancellationPolicy',
         'check_in_time' => 'setCheckInTime',
-        'check_out_time' => 'setCheckOutTime'
+        'check_out_time' => 'setCheckOutTime',
+        'guest_notes' => 'setGuestNotes',
+        'conversation_id' => 'setConversationId',
+        'external_thread_id' => 'setExternalThreadId',
+        'inquiry_id' => 'setInquiryId'
     ];
 
     /**
@@ -234,7 +254,11 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
         'status' => 'getStatus',
         'cancellation_policy' => 'getCancellationPolicy',
         'check_in_time' => 'getCheckInTime',
-        'check_out_time' => 'getCheckOutTime'
+        'check_out_time' => 'getCheckOutTime',
+        'guest_notes' => 'getGuestNotes',
+        'conversation_id' => 'getConversationId',
+        'external_thread_id' => 'getExternalThreadId',
+        'inquiry_id' => 'getInquiryId'
     ];
 
     /**
@@ -295,6 +319,10 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
         $this->setIfExists('cancellation_policy', $data ?? [], null);
         $this->setIfExists('check_in_time', $data ?? [], null);
         $this->setIfExists('check_out_time', $data ?? [], null);
+        $this->setIfExists('guest_notes', $data ?? [], null);
+        $this->setIfExists('conversation_id', $data ?? [], null);
+        $this->setIfExists('external_thread_id', $data ?? [], null);
+        $this->setIfExists('inquiry_id', $data ?? [], null);
     }
 
     /**
@@ -672,6 +700,142 @@ class ReservationWebhookObject implements ModelInterface, ArrayAccess, JsonSeria
             }
         }
         $this->container['check_out_time'] = $check_out_time;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest_notes
+     *
+     * @return string|null
+     */
+    public function getGuestNotes(): ?string
+    {
+        return $this->container['guest_notes'];
+    }
+
+    /**
+     * Sets guest_notes
+     *
+     * @param string|null $guest_notes What the guest wrote with the booking — on Booking.com, the estimated arrival time and special requests. Free text. `null` when there were none.
+     *
+     * @return $this
+     */
+    public function setGuestNotes(?string $guest_notes): static
+    {
+        if (is_null($guest_notes)) {
+            array_push($this->openAPINullablesSetToNull, 'guest_notes');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('guest_notes', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['guest_notes'] = $guest_notes;
+
+        return $this;
+    }
+
+    /**
+     * Gets conversation_id
+     *
+     * @return string|null
+     */
+    public function getConversationId(): ?string
+    {
+        return $this->container['conversation_id'];
+    }
+
+    /**
+     * Sets conversation_id
+     *
+     * @param string|null $conversation_id The conversation with this guest — pass it to `GET /v1/conversations/{id}` and `/v1/conversations/{id}/messages`. It is the same conversation from inquiry through pre-approval to the confirmed booking, and the same id the message webhooks carry, so a booking links straight to the messages that led to it. `null` when the channel has no conversation for this booking.
+     *
+     * @return $this
+     */
+    public function setConversationId(?string $conversation_id): static
+    {
+        if (is_null($conversation_id)) {
+            array_push($this->openAPINullablesSetToNull, 'conversation_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('conversation_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['conversation_id'] = $conversation_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets external_thread_id
+     *
+     * @return string|null
+     */
+    public function getExternalThreadId(): ?string
+    {
+        return $this->container['external_thread_id'];
+    }
+
+    /**
+     * Sets external_thread_id
+     *
+     * @param string|null $external_thread_id The channel's own id for that conversation (Airbnb thread id, Booking.com conversation id, …). `null` when there is none.
+     *
+     * @return $this
+     */
+    public function setExternalThreadId(?string $external_thread_id): static
+    {
+        if (is_null($external_thread_id)) {
+            array_push($this->openAPINullablesSetToNull, 'external_thread_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('external_thread_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['external_thread_id'] = $external_thread_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets inquiry_id
+     *
+     * @return string|null
+     */
+    public function getInquiryId(): ?string
+    {
+        return $this->container['inquiry_id'];
+    }
+
+    /**
+     * Sets inquiry_id
+     *
+     * @param string|null $inquiry_id The inquiry this booking came from (`GET /v1/inquiries`), when the guest asked before booking. When an inquiry turns into a booking, `inquiry.updated` fires with `status: \"booked\"` and this reservation's id. `null` for bookings with no inquiry.
+     *
+     * @return $this
+     */
+    public function setInquiryId(?string $inquiry_id): static
+    {
+        if (is_null($inquiry_id)) {
+            array_push($this->openAPINullablesSetToNull, 'inquiry_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('inquiry_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['inquiry_id'] = $inquiry_id;
 
         return $this;
     }

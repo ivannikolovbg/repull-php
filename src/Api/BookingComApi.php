@@ -119,6 +119,9 @@ class BookingComApi
         'listBookingReviews' => [
             'application/json',
         ],
+        'listBookingTransactions' => [
+            'application/json',
+        ],
         'listBookingWebhooks' => [
             'application/json',
         ],
@@ -5072,6 +5075,371 @@ class BookingComApi
             'form', // style
             true, // explode
             true // required
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation listBookingTransactions
+     *
+     * List Booking.com transactions (settlement ledger)
+     *
+     * @param  string|null $type Filter by transaction type, e.g. &#x60;Payout&#x60;, &#x60;Reservation&#x60;, &#x60;Refund&#x60;. (optional)
+     * @param  string|null $status Filter by raw status. (optional)
+     * @param  bool|null $is_payout When &#x60;true&#x60;, only payout rows (money that reached the host). (optional)
+     * @param  int|null $limit Page size (default 100, max 500). (optional)
+     * @param  string|null $cursor Opaque pagination cursor from a previous &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingTransactions'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\ListBookingTransactions200Response
+     */
+    public function listBookingTransactions(
+        ?string $type = null,
+        ?string $status = null,
+        ?bool $is_payout = null,
+        ?int $limit = null,
+        ?string $cursor = null,
+        string $contentType = self::contentTypes['listBookingTransactions'][0]
+    ): \Repull\Model\ListBookingTransactions200Response
+    {
+        list($response) = $this->listBookingTransactionsWithHttpInfo($type, $status, $is_payout, $limit, $cursor, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation listBookingTransactionsWithHttpInfo
+     *
+     * List Booking.com transactions (settlement ledger)
+     *
+     * @param  string|null $type Filter by transaction type, e.g. &#x60;Payout&#x60;, &#x60;Reservation&#x60;, &#x60;Refund&#x60;. (optional)
+     * @param  string|null $status Filter by raw status. (optional)
+     * @param  bool|null $is_payout When &#x60;true&#x60;, only payout rows (money that reached the host). (optional)
+     * @param  int|null $limit Page size (default 100, max 500). (optional)
+     * @param  string|null $cursor Opaque pagination cursor from a previous &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingTransactions'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\ListBookingTransactions200Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function listBookingTransactionsWithHttpInfo(
+        ?string $type = null,
+        ?string $status = null,
+        ?bool $is_payout = null,
+        ?int $limit = null,
+        ?string $cursor = null,
+        string $contentType = self::contentTypes['listBookingTransactions'][0]
+    ): array
+    {
+        $request = $this->listBookingTransactionsRequest($type, $status, $is_payout, $limit, $cursor, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\ListBookingTransactions200Response',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\ListBookingTransactions200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\ListBookingTransactions200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation listBookingTransactionsAsync
+     *
+     * List Booking.com transactions (settlement ledger)
+     *
+     * @param  string|null $type Filter by transaction type, e.g. &#x60;Payout&#x60;, &#x60;Reservation&#x60;, &#x60;Refund&#x60;. (optional)
+     * @param  string|null $status Filter by raw status. (optional)
+     * @param  bool|null $is_payout When &#x60;true&#x60;, only payout rows (money that reached the host). (optional)
+     * @param  int|null $limit Page size (default 100, max 500). (optional)
+     * @param  string|null $cursor Opaque pagination cursor from a previous &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingTransactions'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function listBookingTransactionsAsync(
+        ?string $type = null,
+        ?string $status = null,
+        ?bool $is_payout = null,
+        ?int $limit = null,
+        ?string $cursor = null,
+        string $contentType = self::contentTypes['listBookingTransactions'][0]
+    ): PromiseInterface
+    {
+        return $this->listBookingTransactionsAsyncWithHttpInfo($type, $status, $is_payout, $limit, $cursor, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation listBookingTransactionsAsyncWithHttpInfo
+     *
+     * List Booking.com transactions (settlement ledger)
+     *
+     * @param  string|null $type Filter by transaction type, e.g. &#x60;Payout&#x60;, &#x60;Reservation&#x60;, &#x60;Refund&#x60;. (optional)
+     * @param  string|null $status Filter by raw status. (optional)
+     * @param  bool|null $is_payout When &#x60;true&#x60;, only payout rows (money that reached the host). (optional)
+     * @param  int|null $limit Page size (default 100, max 500). (optional)
+     * @param  string|null $cursor Opaque pagination cursor from a previous &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingTransactions'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function listBookingTransactionsAsyncWithHttpInfo(
+        ?string $type = null,
+        ?string $status = null,
+        ?bool $is_payout = null,
+        ?int $limit = null,
+        ?string $cursor = null,
+        string $contentType = self::contentTypes['listBookingTransactions'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\ListBookingTransactions200Response';
+        $request = $this->listBookingTransactionsRequest($type, $status, $is_payout, $limit, $cursor, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'listBookingTransactions'
+     *
+     * @param  string|null $type Filter by transaction type, e.g. &#x60;Payout&#x60;, &#x60;Reservation&#x60;, &#x60;Refund&#x60;. (optional)
+     * @param  string|null $status Filter by raw status. (optional)
+     * @param  bool|null $is_payout When &#x60;true&#x60;, only payout rows (money that reached the host). (optional)
+     * @param  int|null $limit Page size (default 100, max 500). (optional)
+     * @param  string|null $cursor Opaque pagination cursor from a previous &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listBookingTransactions'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function listBookingTransactionsRequest(
+        ?string $type = null,
+        ?string $status = null,
+        ?bool $is_payout = null,
+        ?int $limit = null,
+        ?string $cursor = null,
+        string $contentType = self::contentTypes['listBookingTransactions'][0]
+    ): Request
+    {
+
+
+
+
+        if ($limit !== null && $limit > 500) {
+            throw new InvalidArgumentException('invalid value for "$limit" when calling BookingComApi.listBookingTransactions, must be smaller than or equal to 500.');
+        }
+        if ($limit !== null && $limit < 1) {
+            throw new InvalidArgumentException('invalid value for "$limit" when calling BookingComApi.listBookingTransactions, must be bigger than or equal to 1.');
+        }
+        
+
+
+        $resourcePath = '/v1/channels/booking/transactions';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $type,
+            'type', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $status,
+            'status', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $is_payout,
+            'is_payout', // param base name
+            'boolean', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $limit,
+            'limit', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $cursor,
+            'cursor', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
         ) ?? []);
 
 
