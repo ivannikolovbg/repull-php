@@ -232,7 +232,7 @@ Regenerated against the live spec (89 → 102 → 124 tracked paths over prior d
 
 ### Notes
 - Regenerated from `https://api.repull.dev/openapi.json`. Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
-- `POST /v1/reviews/{id}/reply` was missing its `{id}` path-parameter declaration in the live spec, which fails openapi-generator's spec validation and — if validation is skipped — silently drops `id` from the generated method signature (`ReviewsApi::replyToReview` would have built requests against the literal, unsubstituted `/v1/reviews/{id}/reply` URL). A fix for the spec source (`vanio-repull-api`) has been prepared and committed locally on that repo's `fix/reviews-reply-path-param` branch (not yet merged/deployed). This SDK was generated against a locally-patched copy of the spec carrying that same parameter declaration (`id: integer, in: path, required`) so `replyToReview(int $id, ...)` works correctly today; the *committed* `openapi/v1.json` in this repo is untouched and remains byte-for-byte identical to the live spec.
+- `POST /v1/reviews/{id}/reply` was missing its `{id}` path-parameter declaration in the live spec, which fails openapi-generator's spec validation and — if validation is skipped — silently drops `id` from the generated method signature (`ReviewsApi::replyToReview` would have built requests against the literal, unsubstituted `/v1/reviews/{id}/reply` URL). A fix for the spec source (`repull-api`) has been prepared and committed locally on that repo's `fix/reviews-reply-path-param` branch (not yet merged/deployed). This SDK was generated against a locally-patched copy of the spec carrying that same parameter declaration (`id: integer, in: path, required`) so `replyToReview(int $id, ...)` works correctly today; the *committed* `openapi/v1.json` in this repo is untouched and remains byte-for-byte identical to the live spec.
 - Examples (`examples/quickstart.php`, `examples/connect_airbnb.php`) updated for current method names (`listReservations`, `createConnection`, `getConnectStatus`) — they referenced pre-rename method names (`v1ReservationsGet`, `v1ConnectProviderPost`, `v1ConnectProviderGet`) that no longer exist in the generated client.
 
 ## [0.2.9] - 2026-07-26
@@ -277,7 +277,7 @@ Regenerated against the live spec (89 → 102 → 124 tracked paths over prior d
 ## [0.2.4] - 2026-05-15
 
 ### Added
-- **`listings_limit_exceeded` (402) error documentation across every generated model.** The API now returns `402 Payment Required` with `error.code = "listings_limit_exceeded"` when a customer is over their tier's active-listing cap (free=5, starter=50, custom=unlimited). Unlike 429, this is NOT a "wait and retry" condition — `Retry-After` is not set. Recovery: `DELETE` listings to fall under the cap, or upgrade at `repull.dev/dashboard/billing`. `/v1/health`, `/v1/usage/*`, and any `DELETE` are exempt. The 402 envelope mirrors `rate_limit_exceeded` and adds `tier`, `limit`, `active_listings`, `upgrade_url`. Tracks vanio-repull-api PR #66.
+- **`listings_limit_exceeded` (402) error documentation across every generated model.** The API now returns `402 Payment Required` with `error.code = "listings_limit_exceeded"` when a customer is over their tier's active-listing cap (free=5, starter=50, custom=unlimited). Unlike 429, this is NOT a "wait and retry" condition — `Retry-After` is not set. Recovery: `DELETE` listings to fall under the cap, or upgrade at `repull.dev/dashboard/billing`. `/v1/health`, `/v1/usage/*`, and any `DELETE` are exempt. The 402 envelope mirrors `rate_limit_exceeded` and adds `tier`, `limit`, `active_listings`, `upgrade_url`. Tracks repull-api PR #66.
 
 ### Notes
 - Regenerated from `https://api.repull.dev/openapi.json`. Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
@@ -290,7 +290,7 @@ Regenerated against the live spec (89 → 102 → 124 tracked paths over prior d
 - New `ListingAmenity` model and amenity arrays on `Listing` / `Property` responses.
 
 ### Notes
-- Regenerated from `https://api.repull.dev/openapi.json`. Tracks vanio-repull-api PRs #59 and #61.
+- Regenerated from `https://api.repull.dev/openapi.json`. Tracks repull-api PRs #59 and #61.
 - Generator: `@openapitools/openapi-generator-cli` with `php-nextgen` template.
 - Enum validators relaxed in 58 model files for forward compatibility.
 - `vendor/bin/phpunit` (4 tests) green.

@@ -123,4 +123,4 @@ MIT — see [`LICENSE`](LICENSE).
 
 ---
 
-Powered by [Repull](https://repull.dev). AI features powered by [Vanio AI](https://vanio.ai).
+Powered by [Repull](https://repull.dev).
