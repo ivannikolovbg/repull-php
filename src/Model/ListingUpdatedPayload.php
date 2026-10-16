@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * ListingUpdatedPayload Class Doc Comment
  *
- * @description Payload for &#x60;listing.updated&#x60;. Something about the listing changed on the channel — content, pricing, booking settings, house rules, availability or sync settings.
+ * @description Payload for &#x60;listing.updated&#x60;. Something about the listing changed on the channel — content, pricing, booking settings, house rules, availability, sync settings or promotions.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -233,6 +233,7 @@ class ListingUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
     public const AREA_RULES = 'rules';
     public const AREA_AVAILABILITY = 'availability';
     public const AREA_SYNC_SETTINGS = 'sync_settings';
+    public const AREA_PROMOTIONS = 'promotions';
 
     /**
      * Gets allowable values of the enum
@@ -248,6 +249,7 @@ class ListingUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
             self::AREA_RULES,
             self::AREA_AVAILABILITY,
             self::AREA_SYNC_SETTINGS,
+            self::AREA_PROMOTIONS,
         ];
     }
 
@@ -360,7 +362,7 @@ class ListingUpdatedPayload implements ModelInterface, ArrayAccess, JsonSerializ
     /**
      * Sets area
      *
-     * @param string|null $area Which part moved. Airbnb sends one notification per area rather than a diff, so this is the signal for what to re-read.
+     * @param string|null $area Which part moved. Airbnb sends one notification per area rather than a diff, so this is the signal for what to re-read. `promotions`: the listing’s Airbnb or Booking.com promotions changed — re-read `GET /v1/listings/{id}/promotions`.
      *
      * @return $this
      */

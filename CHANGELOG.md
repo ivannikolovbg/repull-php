@@ -5,6 +5,13 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.35] - 2026-10-16
+
+### Added
+- Listing promotions — Airbnb and Booking.com in one model: `PromotionsApi` (`listListingPromotions`, `createListingPromotion`, `getListingPromotion`, `updateListingPromotion`, `deleteListingPromotion`, `refreshListingPromotions`, `getListingPromotionCatalog`, `bulkListingPromotions`). Guide: https://repull.dev/docs/promotions
+- `listing.updated` area `promotions`.
+- `ReservationMoneyLine::getPromotionType()` on discount lines produced by an Airbnb promotion.
+
 ## [0.2.34] - 2026-10-16
 
 ### Added

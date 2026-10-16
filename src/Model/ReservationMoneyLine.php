@@ -64,7 +64,8 @@ class ReservationMoneyLine implements ModelInterface, ArrayAccess, JsonSerializa
         'amount' => 'float',
         'description' => 'string',
         'quantity' => 'float',
-        'vat' => 'float'
+        'vat' => 'float',
+        'promotion_type' => 'string'
     ];
 
     /**
@@ -78,7 +79,8 @@ class ReservationMoneyLine implements ModelInterface, ArrayAccess, JsonSerializa
         'amount' => null,
         'description' => null,
         'quantity' => null,
-        'vat' => null
+        'vat' => null,
+        'promotion_type' => null
     ];
 
     /**
@@ -92,7 +94,8 @@ class ReservationMoneyLine implements ModelInterface, ArrayAccess, JsonSerializa
         'amount' => false,
         'description' => false,
         'quantity' => false,
-        'vat' => false
+        'vat' => false,
+        'promotion_type' => false
     ];
 
     /**
@@ -176,7 +179,8 @@ class ReservationMoneyLine implements ModelInterface, ArrayAccess, JsonSerializa
         'amount' => 'amount',
         'description' => 'description',
         'quantity' => 'quantity',
-        'vat' => 'vat'
+        'vat' => 'vat',
+        'promotion_type' => 'promotionType'
     ];
 
     /**
@@ -190,7 +194,8 @@ class ReservationMoneyLine implements ModelInterface, ArrayAccess, JsonSerializa
         'amount' => 'setAmount',
         'description' => 'setDescription',
         'quantity' => 'setQuantity',
-        'vat' => 'setVat'
+        'vat' => 'setVat',
+        'promotion_type' => 'setPromotionType'
     ];
 
     /**
@@ -204,7 +209,8 @@ class ReservationMoneyLine implements ModelInterface, ArrayAccess, JsonSerializa
         'amount' => 'getAmount',
         'description' => 'getDescription',
         'quantity' => 'getQuantity',
-        'vat' => 'getVat'
+        'vat' => 'getVat',
+        'promotion_type' => 'getPromotionType'
     ];
 
     /**
@@ -239,6 +245,25 @@ class ReservationMoneyLine implements ModelInterface, ArrayAccess, JsonSerializa
         return self::$openAPIModelName;
     }
 
+    public const PROMOTION_TYPE_TOP_RATED_GUESTS = 'top_rated_guests';
+    public const PROMOTION_TYPE_MOBILE = 'mobile';
+    public const PROMOTION_TYPE_NEW_LISTING = 'new_listing';
+    public const PROMOTION_TYPE_CUSTOM = 'custom';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getPromotionTypeAllowableValues()
+    {
+        return [
+            self::PROMOTION_TYPE_TOP_RATED_GUESTS,
+            self::PROMOTION_TYPE_MOBILE,
+            self::PROMOTION_TYPE_NEW_LISTING,
+            self::PROMOTION_TYPE_CUSTOM,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -260,6 +285,7 @@ class ReservationMoneyLine implements ModelInterface, ArrayAccess, JsonSerializa
         $this->setIfExists('description', $data ?? [], null);
         $this->setIfExists('quantity', $data ?? [], null);
         $this->setIfExists('vat', $data ?? [], null);
+        $this->setIfExists('promotion_type', $data ?? [], null);
     }
 
     /**
@@ -290,6 +316,15 @@ class ReservationMoneyLine implements ModelInterface, ArrayAccess, JsonSerializa
         if ($this->container['amount'] === null) {
             $invalidProperties[] = "'amount' can't be null";
         }
+        $allowedValues = self::getPromotionTypeAllowableValues();
+        if (!is_null($this->container['promotion_type']) && !in_array($this->container['promotion_type'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'promotion_type', must be one of '%s'",
+                $this->container['promotion_type'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -460,6 +495,34 @@ class ReservationMoneyLine implements ModelInterface, ArrayAccess, JsonSerializa
             throw new InvalidArgumentException('non-nullable vat cannot be null');
         }
         $this->container['vat'] = $vat;
+
+        return $this;
+    }
+
+    /**
+     * Gets promotion_type
+     *
+     * @return string|null
+     */
+    public function getPromotionType(): ?string
+    {
+        return $this->container['promotion_type'];
+    }
+
+    /**
+     * Sets promotion_type
+     *
+     * @param string|null $promotion_type Discount lines only: the listing promotion that produced the discount, named as in `GET /v1/listings/{id}/promotions` (Airbnb reports each applied promotion as its own line). `custom` is an Airbnb Custom promotion.
+     *
+     * @return $this
+     */
+    public function setPromotionType(?string $promotion_type): static
+    {
+        if (is_null($promotion_type)) {
+            throw new InvalidArgumentException('non-nullable promotion_type cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['promotion_type'] = $promotion_type;
 
         return $this;
     }
