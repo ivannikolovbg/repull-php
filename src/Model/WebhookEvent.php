@@ -247,6 +247,9 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
 
     public const EVENT_ACCOUNT_CREATED = 'account.created';
     public const EVENT_ACCOUNT_DISCONNECTED = 'account.disconnected';
+    public const EVENT_ACCOUNT_IMPORT_COMPLETED = 'account.import.completed';
+    public const EVENT_ACCOUNT_IMPORT_FAILED = 'account.import.failed';
+    public const EVENT_ACCOUNT_IMPORT_STARTED = 'account.import.started';
     public const EVENT_AI_OPERATION_COMPLETED = 'ai.operation.completed';
     public const EVENT_AI_OPERATION_FAILED = 'ai.operation.failed';
     public const EVENT_CALENDAR_UPDATED = 'calendar.updated';
@@ -288,6 +291,9 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         return [
             self::EVENT_ACCOUNT_CREATED,
             self::EVENT_ACCOUNT_DISCONNECTED,
+            self::EVENT_ACCOUNT_IMPORT_COMPLETED,
+            self::EVENT_ACCOUNT_IMPORT_FAILED,
+            self::EVENT_ACCOUNT_IMPORT_STARTED,
             self::EVENT_AI_OPERATION_COMPLETED,
             self::EVENT_AI_OPERATION_FAILED,
             self::EVENT_CALENDAR_UPDATED,

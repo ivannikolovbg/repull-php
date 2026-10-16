@@ -65,7 +65,8 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'created_at' => '\DateTime',
         'host' => '\Repull\Model\ConnectHost',
         'action' => '\Repull\Model\ConnectionAction',
-        'fix_url' => 'string'
+        'fix_url' => 'string',
+        'import' => '\Repull\Model\AccountImport'
     ];
 
     /**
@@ -81,7 +82,8 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'created_at' => 'date-time',
         'host' => null,
         'action' => null,
-        'fix_url' => 'uri'
+        'fix_url' => 'uri',
+        'import' => null
     ];
 
     /**
@@ -97,7 +99,8 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'created_at' => false,
         'host' => true,
         'action' => true,
-        'fix_url' => true
+        'fix_url' => true,
+        'import' => true
     ];
 
     /**
@@ -183,7 +186,8 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'created_at' => 'createdAt',
         'host' => 'host',
         'action' => 'action',
-        'fix_url' => 'fixUrl'
+        'fix_url' => 'fixUrl',
+        'import' => 'import'
     ];
 
     /**
@@ -199,7 +203,8 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'created_at' => 'setCreatedAt',
         'host' => 'setHost',
         'action' => 'setAction',
-        'fix_url' => 'setFixUrl'
+        'fix_url' => 'setFixUrl',
+        'import' => 'setImport'
     ];
 
     /**
@@ -215,7 +220,8 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'created_at' => 'getCreatedAt',
         'host' => 'getHost',
         'action' => 'getAction',
-        'fix_url' => 'getFixUrl'
+        'fix_url' => 'getFixUrl',
+        'import' => 'getImport'
     ];
 
     /**
@@ -296,6 +302,7 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('host', $data ?? [], null);
         $this->setIfExists('action', $data ?? [], null);
         $this->setIfExists('fix_url', $data ?? [], null);
+        $this->setIfExists('import', $data ?? [], null);
     }
 
     /**
@@ -585,6 +592,40 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['fix_url'] = $fix_url;
+
+        return $this;
+    }
+
+    /**
+     * Gets import
+     *
+     * @return \Repull\Model\AccountImport|null
+     */
+    public function getImport(): ?\Repull\Model\AccountImport
+    {
+        return $this->container['import'];
+    }
+
+    /**
+     * Sets import
+     *
+     * @param \Repull\Model\AccountImport|null $import The account's latest import — `status: running` while the first sync (or a later one) is going, then `completed` or `failed`. `null` when no import has been recorded. The same run is announced by the `account.import.*` webhooks; the history is on `GET /v1/connections/{id}/imports`.
+     *
+     * @return $this
+     */
+    public function setImport(?\Repull\Model\AccountImport $import): static
+    {
+        if (is_null($import)) {
+            array_push($this->openAPINullablesSetToNull, 'import');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('import', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['import'] = $import;
 
         return $this;
     }

@@ -79,6 +79,12 @@ enum WebhookEventType: string
 
     case ACCOUNT_DISCONNECTED = 'account.disconnected';
 
+    case ACCOUNT_IMPORT_STARTED = 'account.import.started';
+
+    case ACCOUNT_IMPORT_COMPLETED = 'account.import.completed';
+
+    case ACCOUNT_IMPORT_FAILED = 'account.import.failed';
+
     case REVIEW_CREATED = 'review.created';
 
     case REVIEW_RESPONDED = 'review.responded';

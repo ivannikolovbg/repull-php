@@ -80,6 +80,9 @@ class ConnectionsApi
         'autoMapConnectionUnits' => [
             'application/json',
         ],
+        'listConnectionImports' => [
+            'application/json',
+        ],
         'listConnectionUnits' => [
             'application/json',
         ],
@@ -738,6 +741,364 @@ class ConnectionsApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation listConnectionImports
+     *
+     * List a connection&#39;s imports
+     *
+     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:36&#x60;, &#x60;vrbo:12&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
+     * @param  int|null $limit How many runs to return, newest first. (optional, default to 20)
+     * @param  string|null $session_id The Connect session ID (capability token). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionImports'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\ListConnectionImports200Response|\Repull\Model\Error
+     */
+    public function listConnectionImports(
+        string $id,
+        ?int $limit = 20,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['listConnectionImports'][0]
+    ): \Repull\Model\ListConnectionImports200Response|\Repull\Model\Error
+    {
+        list($response) = $this->listConnectionImportsWithHttpInfo($id, $limit, $session_id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation listConnectionImportsWithHttpInfo
+     *
+     * List a connection&#39;s imports
+     *
+     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:36&#x60;, &#x60;vrbo:12&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
+     * @param  int|null $limit How many runs to return, newest first. (optional, default to 20)
+     * @param  string|null $session_id The Connect session ID (capability token). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionImports'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\ListConnectionImports200Response|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function listConnectionImportsWithHttpInfo(
+        string $id,
+        ?int $limit = 20,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['listConnectionImports'][0]
+    ): array
+    {
+        $request = $this->listConnectionImportsRequest($id, $limit, $session_id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\ListConnectionImports200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\ListConnectionImports200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\ListConnectionImports200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation listConnectionImportsAsync
+     *
+     * List a connection&#39;s imports
+     *
+     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:36&#x60;, &#x60;vrbo:12&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
+     * @param  int|null $limit How many runs to return, newest first. (optional, default to 20)
+     * @param  string|null $session_id The Connect session ID (capability token). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionImports'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function listConnectionImportsAsync(
+        string $id,
+        ?int $limit = 20,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['listConnectionImports'][0]
+    ): PromiseInterface
+    {
+        return $this->listConnectionImportsAsyncWithHttpInfo($id, $limit, $session_id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation listConnectionImportsAsyncWithHttpInfo
+     *
+     * List a connection&#39;s imports
+     *
+     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:36&#x60;, &#x60;vrbo:12&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
+     * @param  int|null $limit How many runs to return, newest first. (optional, default to 20)
+     * @param  string|null $session_id The Connect session ID (capability token). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionImports'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function listConnectionImportsAsyncWithHttpInfo(
+        string $id,
+        ?int $limit = 20,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['listConnectionImports'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\ListConnectionImports200Response';
+        $request = $this->listConnectionImportsRequest($id, $limit, $session_id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'listConnectionImports'
+     *
+     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:36&#x60;, &#x60;vrbo:12&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
+     * @param  int|null $limit How many runs to return, newest first. (optional, default to 20)
+     * @param  string|null $session_id The Connect session ID (capability token). (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionImports'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function listConnectionImportsRequest(
+        string $id,
+        ?int $limit = 20,
+        ?string $session_id = null,
+        string $contentType = self::contentTypes['listConnectionImports'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling listConnectionImports'
+            );
+        }
+
+        if ($limit !== null && $limit > 100) {
+            throw new InvalidArgumentException('invalid value for "$limit" when calling ConnectionsApi.listConnectionImports, must be smaller than or equal to 100.');
+        }
+        if ($limit !== null && $limit < 1) {
+            throw new InvalidArgumentException('invalid value for "$limit" when calling ConnectionsApi.listConnectionImports, must be bigger than or equal to 1.');
+        }
+        
+
+
+        $resourcePath = '/v1/connections/{id}/imports';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $limit,
+            'limit', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $session_id,
+            'sessionId', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody

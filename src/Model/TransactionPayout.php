@@ -62,7 +62,8 @@ class TransactionPayout implements ModelInterface, ArrayAccess, JsonSerializable
         'payout_date' => 'string',
         'paid_out_amount' => 'float',
         'bank_destination' => 'string',
-        'statement_url' => 'string'
+        'statement_url' => 'string',
+        'statement_id' => 'string'
     ];
 
     /**
@@ -75,7 +76,8 @@ class TransactionPayout implements ModelInterface, ArrayAccess, JsonSerializable
         'payout_date' => null,
         'paid_out_amount' => null,
         'bank_destination' => null,
-        'statement_url' => null
+        'statement_url' => null,
+        'statement_id' => null
     ];
 
     /**
@@ -88,7 +90,8 @@ class TransactionPayout implements ModelInterface, ArrayAccess, JsonSerializable
         'payout_date' => true,
         'paid_out_amount' => true,
         'bank_destination' => true,
-        'statement_url' => true
+        'statement_url' => true,
+        'statement_id' => true
     ];
 
     /**
@@ -171,7 +174,8 @@ class TransactionPayout implements ModelInterface, ArrayAccess, JsonSerializable
         'payout_date' => 'payoutDate',
         'paid_out_amount' => 'paidOutAmount',
         'bank_destination' => 'bankDestination',
-        'statement_url' => 'statementUrl'
+        'statement_url' => 'statementUrl',
+        'statement_id' => 'statementId'
     ];
 
     /**
@@ -184,7 +188,8 @@ class TransactionPayout implements ModelInterface, ArrayAccess, JsonSerializable
         'payout_date' => 'setPayoutDate',
         'paid_out_amount' => 'setPaidOutAmount',
         'bank_destination' => 'setBankDestination',
-        'statement_url' => 'setStatementUrl'
+        'statement_url' => 'setStatementUrl',
+        'statement_id' => 'setStatementId'
     ];
 
     /**
@@ -197,7 +202,8 @@ class TransactionPayout implements ModelInterface, ArrayAccess, JsonSerializable
         'payout_date' => 'getPayoutDate',
         'paid_out_amount' => 'getPaidOutAmount',
         'bank_destination' => 'getBankDestination',
-        'statement_url' => 'getStatementUrl'
+        'statement_url' => 'getStatementUrl',
+        'statement_id' => 'getStatementId'
     ];
 
     /**
@@ -252,6 +258,7 @@ class TransactionPayout implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('paid_out_amount', $data ?? [], null);
         $this->setIfExists('bank_destination', $data ?? [], null);
         $this->setIfExists('statement_url', $data ?? [], null);
+        $this->setIfExists('statement_id', $data ?? [], null);
     }
 
     /**
@@ -449,7 +456,7 @@ class TransactionPayout implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets statement_url
      *
-     * @param string|null $statement_url Link to the channel's original payout statement PDF — the authoritative settlement record (Booking.com). Null when none.
+     * @param string|null $statement_url Repull-hosted download link for the original payout statement PDF (the authoritative settlement record). Add `?format=csv` for the CSV. Served by `GET /v1/transactions/{id}/statement` — no channel session needed. Null when none is stored.
      *
      * @return $this
      */
@@ -466,6 +473,40 @@ class TransactionPayout implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['statement_url'] = $statement_url;
+
+        return $this;
+    }
+
+    /**
+     * Gets statement_id
+     *
+     * @return string|null
+     */
+    public function getStatementId(): ?string
+    {
+        return $this->container['statement_id'];
+    }
+
+    /**
+     * Sets statement_id
+     *
+     * @param string|null $statement_id The channel's own numeric statement id (Booking.com, e.g. \"010747030095\"). Null when none.
+     *
+     * @return $this
+     */
+    public function setStatementId(?string $statement_id): static
+    {
+        if (is_null($statement_id)) {
+            array_push($this->openAPINullablesSetToNull, 'statement_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('statement_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['statement_id'] = $statement_id;
 
         return $this;
     }
