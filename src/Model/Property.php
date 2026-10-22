@@ -65,6 +65,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'public_name' => 'string',
         'address' => 'string',
         'city' => 'string',
+        'address_details' => '\Repull\Model\PostalAddress',
         'latitude' => 'string',
         'longitude' => 'string',
         'currency' => 'string',
@@ -88,6 +89,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'public_name' => null,
         'address' => null,
         'city' => null,
+        'address_details' => null,
         'latitude' => null,
         'longitude' => null,
         'currency' => null,
@@ -111,6 +113,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'public_name' => true,
         'address' => true,
         'city' => true,
+        'address_details' => false,
         'latitude' => true,
         'longitude' => true,
         'currency' => true,
@@ -204,6 +207,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'public_name' => 'publicName',
         'address' => 'address',
         'city' => 'city',
+        'address_details' => 'addressDetails',
         'latitude' => 'latitude',
         'longitude' => 'longitude',
         'currency' => 'currency',
@@ -227,6 +231,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'public_name' => 'setPublicName',
         'address' => 'setAddress',
         'city' => 'setCity',
+        'address_details' => 'setAddressDetails',
         'latitude' => 'setLatitude',
         'longitude' => 'setLongitude',
         'currency' => 'setCurrency',
@@ -250,6 +255,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         'public_name' => 'getPublicName',
         'address' => 'getAddress',
         'city' => 'getCity',
+        'address_details' => 'getAddressDetails',
         'latitude' => 'getLatitude',
         'longitude' => 'getLongitude',
         'currency' => 'getCurrency',
@@ -329,6 +335,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('public_name', $data ?? [], null);
         $this->setIfExists('address', $data ?? [], null);
         $this->setIfExists('city', $data ?? [], null);
+        $this->setIfExists('address_details', $data ?? [], null);
         $this->setIfExists('latitude', $data ?? [], null);
         $this->setIfExists('longitude', $data ?? [], null);
         $this->setIfExists('currency', $data ?? [], null);
@@ -514,7 +521,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets address
      *
-     * @param string|null $address Street address (from the listing's `street` field).
+     * @param string|null $address Street line only, as stored on the listing — no unit, state or postal code. Kept for existing integrations; read `addressDetails` for the full postal address.
      *
      * @return $this
      */
@@ -548,7 +555,7 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets city
      *
-     * @param string|null $city city
+     * @param string|null $city City as stored on the listing. Kept for existing integrations; `addressDetails.city` is the resolved city.
      *
      * @return $this
      */
@@ -565,6 +572,33 @@ class Property implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['city'] = $city;
+
+        return $this;
+    }
+
+    /**
+     * Gets address_details
+     *
+     * @return \Repull\Model\PostalAddress|null
+     */
+    public function getAddressDetails(): ?\Repull\Model\PostalAddress
+    {
+        return $this->container['address_details'];
+    }
+
+    /**
+     * Sets address_details
+     *
+     * @param \Repull\Model\PostalAddress|null $address_details address_details
+     *
+     * @return $this
+     */
+    public function setAddressDetails(?\Repull\Model\PostalAddress $address_details): static
+    {
+        if (is_null($address_details)) {
+            throw new InvalidArgumentException('non-nullable address_details cannot be null');
+        }
+        $this->container['address_details'] = $address_details;
 
         return $this;
     }

@@ -62,6 +62,8 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'string',
         'external_message_id' => 'string',
         'direction' => 'string',
+        'status' => 'string',
+        'status_reason' => 'string',
         'sender_type' => 'string',
         'sender_name' => 'string',
         'sender_avatar' => 'string',
@@ -85,6 +87,8 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => null,
         'external_message_id' => null,
         'direction' => null,
+        'status' => null,
+        'status_reason' => null,
         'sender_type' => null,
         'sender_name' => null,
         'sender_avatar' => 'uri',
@@ -108,6 +112,8 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => false,
         'external_message_id' => true,
         'direction' => false,
+        'status' => false,
+        'status_reason' => true,
         'sender_type' => true,
         'sender_name' => false,
         'sender_avatar' => true,
@@ -118,7 +124,7 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         'is_automated' => false,
         'ai_generated' => false,
         'sent_at' => false,
-        'delivered_at' => false,
+        'delivered_at' => true,
         'read_at' => true
     ];
 
@@ -201,6 +207,8 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'id',
         'external_message_id' => 'externalMessageId',
         'direction' => 'direction',
+        'status' => 'status',
+        'status_reason' => 'statusReason',
         'sender_type' => 'senderType',
         'sender_name' => 'senderName',
         'sender_avatar' => 'senderAvatar',
@@ -224,6 +232,8 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'setId',
         'external_message_id' => 'setExternalMessageId',
         'direction' => 'setDirection',
+        'status' => 'setStatus',
+        'status_reason' => 'setStatusReason',
         'sender_type' => 'setSenderType',
         'sender_name' => 'setSenderName',
         'sender_avatar' => 'setSenderAvatar',
@@ -247,6 +257,8 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'getId',
         'external_message_id' => 'getExternalMessageId',
         'direction' => 'getDirection',
+        'status' => 'getStatus',
+        'status_reason' => 'getStatusReason',
         'sender_type' => 'getSenderType',
         'sender_name' => 'getSenderName',
         'sender_avatar' => 'getSenderAvatar',
@@ -295,6 +307,10 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
 
     public const DIRECTION_INBOUND = 'inbound';
     public const DIRECTION_OUTBOUND = 'outbound';
+    public const STATUS_RECEIVED = 'received';
+    public const STATUS_SENDING = 'sending';
+    public const STATUS_SENT = 'sent';
+    public const STATUS_FAILED = 'failed';
 
     /**
      * Gets allowable values of the enum
@@ -306,6 +322,21 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         return [
             self::DIRECTION_INBOUND,
             self::DIRECTION_OUTBOUND,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getStatusAllowableValues()
+    {
+        return [
+            self::STATUS_RECEIVED,
+            self::STATUS_SENDING,
+            self::STATUS_SENT,
+            self::STATUS_FAILED,
         ];
     }
 
@@ -326,6 +357,8 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('external_message_id', $data ?? [], null);
         $this->setIfExists('direction', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('status_reason', $data ?? [], null);
         $this->setIfExists('sender_type', $data ?? [], null);
         $this->setIfExists('sender_name', $data ?? [], null);
         $this->setIfExists('sender_avatar', $data ?? [], null);
@@ -370,6 +403,15 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'direction', must be one of '%s'",
                 $this->container['direction'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        $allowedValues = self::getStatusAllowableValues();
+        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'status', must be one of '%s'",
+                $this->container['status'],
                 implode("', '", $allowedValues)
             );
         }
@@ -471,6 +513,68 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['direction'] = $direction;
+
+        return $this;
+    }
+
+    /**
+     * Gets status
+     *
+     * @return string|null
+     */
+    public function getStatus(): ?string
+    {
+        return $this->container['status'];
+    }
+
+    /**
+     * Sets status
+     *
+     * @param string|null $status Delivery state. Inbound messages are `received`. An outbound message is `sending` while it is queued to the channel, `sent` once the channel accepted it, or `failed`. Only `sent` (or `received`) means the guest can see it.
+     *
+     * @return $this
+     */
+    public function setStatus(?string $status): static
+    {
+        if (is_null($status)) {
+            throw new InvalidArgumentException('non-nullable status cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets status_reason
+     *
+     * @return string|null
+     */
+    public function getStatusReason(): ?string
+    {
+        return $this->container['status_reason'];
+    }
+
+    /**
+     * Sets status_reason
+     *
+     * @param string|null $status_reason Why a message is still `sending` or `failed`, in plain words. `null` otherwise.
+     *
+     * @return $this
+     */
+    public function setStatusReason(?string $status_reason): static
+    {
+        if (is_null($status_reason)) {
+            array_push($this->openAPINullablesSetToNull, 'status_reason');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('status_reason', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['status_reason'] = $status_reason;
 
         return $this;
     }
@@ -786,14 +890,21 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets delivered_at
      *
-     * @param \DateTime|null $delivered_at delivered_at
+     * @param \DateTime|null $delivered_at When the message reached the channel. `null` while it is `sending` or when it `failed`.
      *
      * @return $this
      */
     public function setDeliveredAt(?\DateTime $delivered_at): static
     {
         if (is_null($delivered_at)) {
-            throw new InvalidArgumentException('non-nullable delivered_at cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'delivered_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('delivered_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['delivered_at'] = $delivered_at;
 

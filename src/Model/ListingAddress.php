@@ -36,6 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * ListingAddress Class Doc Comment
  *
+ * @description The listing&#39;s postal address, unit included. Each part is read from the listing first, then from the connected channels (Airbnb, Vrbo, Booking.com). On an inactive row only &#x60;city&#x60; is present.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -59,7 +60,12 @@ class ListingAddress implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPITypes = [
         'street' => 'string',
-        'city' => 'string'
+        'line1' => 'string',
+        'line2' => 'string',
+        'city' => 'string',
+        'state' => 'string',
+        'postal_code' => 'string',
+        'country_code' => 'string'
     ];
 
     /**
@@ -69,7 +75,12 @@ class ListingAddress implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPIFormats = [
         'street' => null,
-        'city' => null
+        'line1' => null,
+        'line2' => null,
+        'city' => null,
+        'state' => null,
+        'postal_code' => null,
+        'country_code' => null
     ];
 
     /**
@@ -79,7 +90,12 @@ class ListingAddress implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $openAPINullables = [
         'street' => true,
-        'city' => true
+        'line1' => true,
+        'line2' => true,
+        'city' => true,
+        'state' => true,
+        'postal_code' => true,
+        'country_code' => true
     ];
 
     /**
@@ -159,7 +175,12 @@ class ListingAddress implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $attributeMap = [
         'street' => 'street',
-        'city' => 'city'
+        'line1' => 'line1',
+        'line2' => 'line2',
+        'city' => 'city',
+        'state' => 'state',
+        'postal_code' => 'postalCode',
+        'country_code' => 'countryCode'
     ];
 
     /**
@@ -169,7 +190,12 @@ class ListingAddress implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $setters = [
         'street' => 'setStreet',
-        'city' => 'setCity'
+        'line1' => 'setLine1',
+        'line2' => 'setLine2',
+        'city' => 'setCity',
+        'state' => 'setState',
+        'postal_code' => 'setPostalCode',
+        'country_code' => 'setCountryCode'
     ];
 
     /**
@@ -179,7 +205,12 @@ class ListingAddress implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $getters = [
         'street' => 'getStreet',
-        'city' => 'getCity'
+        'line1' => 'getLine1',
+        'line2' => 'getLine2',
+        'city' => 'getCity',
+        'state' => 'getState',
+        'postal_code' => 'getPostalCode',
+        'country_code' => 'getCountryCode'
     ];
 
     /**
@@ -230,7 +261,12 @@ class ListingAddress implements ModelInterface, ArrayAccess, JsonSerializable
     public function __construct(?array $data = null)
     {
         $this->setIfExists('street', $data ?? [], null);
+        $this->setIfExists('line1', $data ?? [], null);
+        $this->setIfExists('line2', $data ?? [], null);
         $this->setIfExists('city', $data ?? [], null);
+        $this->setIfExists('state', $data ?? [], null);
+        $this->setIfExists('postal_code', $data ?? [], null);
+        $this->setIfExists('country_code', $data ?? [], null);
     }
 
     /**
@@ -283,7 +319,7 @@ class ListingAddress implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets street
      *
-     * @param string|null $street street
+     * @param string|null $street Street line as stored on the listing. Kept for existing integrations; same value as `line1` unless the listing has no street of its own.
      *
      * @return $this
      */
@@ -300,6 +336,74 @@ class ListingAddress implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['street'] = $street;
+
+        return $this;
+    }
+
+    /**
+     * Gets line1
+     *
+     * @return string|null
+     */
+    public function getLine1(): ?string
+    {
+        return $this->container['line1'];
+    }
+
+    /**
+     * Sets line1
+     *
+     * @param string|null $line1 Street address: number and street.
+     *
+     * @return $this
+     */
+    public function setLine1(?string $line1): static
+    {
+        if (is_null($line1)) {
+            array_push($this->openAPINullablesSetToNull, 'line1');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('line1', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['line1'] = $line1;
+
+        return $this;
+    }
+
+    /**
+     * Gets line2
+     *
+     * @return string|null
+     */
+    public function getLine2(): ?string
+    {
+        return $this->container['line2'];
+    }
+
+    /**
+     * Sets line2
+     *
+     * @param string|null $line2 Apartment, unit, suite or building.
+     *
+     * @return $this
+     */
+    public function setLine2(?string $line2): static
+    {
+        if (is_null($line2)) {
+            array_push($this->openAPINullablesSetToNull, 'line2');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('line2', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['line2'] = $line2;
 
         return $this;
     }
@@ -334,6 +438,108 @@ class ListingAddress implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['city'] = $city;
+
+        return $this;
+    }
+
+    /**
+     * Gets state
+     *
+     * @return string|null
+     */
+    public function getState(): ?string
+    {
+        return $this->container['state'];
+    }
+
+    /**
+     * Sets state
+     *
+     * @param string|null $state State, province or region.
+     *
+     * @return $this
+     */
+    public function setState(?string $state): static
+    {
+        if (is_null($state)) {
+            array_push($this->openAPINullablesSetToNull, 'state');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('state', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['state'] = $state;
+
+        return $this;
+    }
+
+    /**
+     * Gets postal_code
+     *
+     * @return string|null
+     */
+    public function getPostalCode(): ?string
+    {
+        return $this->container['postal_code'];
+    }
+
+    /**
+     * Sets postal_code
+     *
+     * @param string|null $postal_code Postal or ZIP code.
+     *
+     * @return $this
+     */
+    public function setPostalCode(?string $postal_code): static
+    {
+        if (is_null($postal_code)) {
+            array_push($this->openAPINullablesSetToNull, 'postal_code');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('postal_code', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['postal_code'] = $postal_code;
+
+        return $this;
+    }
+
+    /**
+     * Gets country_code
+     *
+     * @return string|null
+     */
+    public function getCountryCode(): ?string
+    {
+        return $this->container['country_code'];
+    }
+
+    /**
+     * Sets country_code
+     *
+     * @param string|null $country_code ISO 3166-1 alpha-2 country code.
+     *
+     * @return $this
+     */
+    public function setCountryCode(?string $country_code): static
+    {
+        if (is_null($country_code)) {
+            array_push($this->openAPINullablesSetToNull, 'country_code');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('country_code', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['country_code'] = $country_code;
 
         return $this;
     }

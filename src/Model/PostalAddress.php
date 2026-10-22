@@ -1,6 +1,6 @@
 <?php
 /**
- * PlumguideListingListResponse
+ * PostalAddress
  *
  * PHP version 8.1
  *
@@ -34,14 +34,15 @@ use ReturnTypeWillChange;
 use Repull\ObjectSerializer;
 
 /**
- * PlumguideListingListResponse Class Doc Comment
+ * PostalAddress Class Doc Comment
  *
+ * @description The full postal address, unit included. Returned on every active row of &#x60;GET /v1/properties&#x60;, &#x60;GET /v1/properties/{id}&#x60;, &#x60;GET /v1/listings&#x60; and &#x60;GET /v1/listings/{id}&#x60; (on listings, these fields sit inside &#x60;address&#x60;). Each part is read from the listing first, then from the connected channels (Airbnb, Vrbo, Booking.com), so &#x60;line2&#x60; carries the apartment or unit number that tells units in the same building apart. A part nobody has stored is &#x60;null&#x60;.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class PlumguideListingListResponse implements ModelInterface, ArrayAccess, JsonSerializable
+class PostalAddress implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -50,7 +51,7 @@ class PlumguideListingListResponse implements ModelInterface, ArrayAccess, JsonS
      *
      * @var string
      */
-    protected static string $openAPIModelName = 'PlumguideListingListResponse';
+    protected static string $openAPIModelName = 'PostalAddress';
 
     /**
      * Array of property to type mappings. Used for (de)serialization
@@ -58,8 +59,12 @@ class PlumguideListingListResponse implements ModelInterface, ArrayAccess, JsonS
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'data' => '\Repull\Model\PlumguideListing[]',
-        'pagination' => '\Repull\Model\Pagination'
+        'line1' => 'string',
+        'line2' => 'string',
+        'city' => 'string',
+        'state' => 'string',
+        'postal_code' => 'string',
+        'country_code' => 'string'
     ];
 
     /**
@@ -68,8 +73,12 @@ class PlumguideListingListResponse implements ModelInterface, ArrayAccess, JsonS
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'data' => null,
-        'pagination' => null
+        'line1' => null,
+        'line2' => null,
+        'city' => null,
+        'state' => null,
+        'postal_code' => null,
+        'country_code' => null
     ];
 
     /**
@@ -78,8 +87,12 @@ class PlumguideListingListResponse implements ModelInterface, ArrayAccess, JsonS
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'data' => false,
-        'pagination' => false
+        'line1' => true,
+        'line2' => true,
+        'city' => true,
+        'state' => true,
+        'postal_code' => true,
+        'country_code' => true
     ];
 
     /**
@@ -158,8 +171,12 @@ class PlumguideListingListResponse implements ModelInterface, ArrayAccess, JsonS
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'data' => 'data',
-        'pagination' => 'pagination'
+        'line1' => 'line1',
+        'line2' => 'line2',
+        'city' => 'city',
+        'state' => 'state',
+        'postal_code' => 'postalCode',
+        'country_code' => 'countryCode'
     ];
 
     /**
@@ -168,8 +185,12 @@ class PlumguideListingListResponse implements ModelInterface, ArrayAccess, JsonS
      * @var array<string, string>
      */
     protected static array $setters = [
-        'data' => 'setData',
-        'pagination' => 'setPagination'
+        'line1' => 'setLine1',
+        'line2' => 'setLine2',
+        'city' => 'setCity',
+        'state' => 'setState',
+        'postal_code' => 'setPostalCode',
+        'country_code' => 'setCountryCode'
     ];
 
     /**
@@ -178,8 +199,12 @@ class PlumguideListingListResponse implements ModelInterface, ArrayAccess, JsonS
      * @var array<string, string>
      */
     protected static array $getters = [
-        'data' => 'getData',
-        'pagination' => 'getPagination'
+        'line1' => 'getLine1',
+        'line2' => 'getLine2',
+        'city' => 'getCity',
+        'state' => 'getState',
+        'postal_code' => 'getPostalCode',
+        'country_code' => 'getCountryCode'
     ];
 
     /**
@@ -229,8 +254,12 @@ class PlumguideListingListResponse implements ModelInterface, ArrayAccess, JsonS
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('data', $data ?? [], null);
-        $this->setIfExists('pagination', $data ?? [], null);
+        $this->setIfExists('line1', $data ?? [], null);
+        $this->setIfExists('line2', $data ?? [], null);
+        $this->setIfExists('city', $data ?? [], null);
+        $this->setIfExists('state', $data ?? [], null);
+        $this->setIfExists('postal_code', $data ?? [], null);
+        $this->setIfExists('country_code', $data ?? [], null);
     }
 
     /**
@@ -258,6 +287,24 @@ class PlumguideListingListResponse implements ModelInterface, ArrayAccess, JsonS
     {
         $invalidProperties = [];
 
+        if ($this->container['line1'] === null && !$this->isNullableSetToNull('line1')) {
+            $invalidProperties[] = "'line1' is required";
+        }
+        if ($this->container['line2'] === null && !$this->isNullableSetToNull('line2')) {
+            $invalidProperties[] = "'line2' is required";
+        }
+        if ($this->container['city'] === null && !$this->isNullableSetToNull('city')) {
+            $invalidProperties[] = "'city' is required";
+        }
+        if ($this->container['state'] === null && !$this->isNullableSetToNull('state')) {
+            $invalidProperties[] = "'state' is required";
+        }
+        if ($this->container['postal_code'] === null && !$this->isNullableSetToNull('postal_code')) {
+            $invalidProperties[] = "'postal_code' is required";
+        }
+        if ($this->container['country_code'] === null && !$this->isNullableSetToNull('country_code')) {
+            $invalidProperties[] = "'country_code' is required";
+        }
         return $invalidProperties;
     }
 
@@ -271,55 +318,205 @@ class PlumguideListingListResponse implements ModelInterface, ArrayAccess, JsonS
 
 
     /**
-     * Gets data
+     * Gets line1
      *
-     * @return \Repull\Model\PlumguideListing[]|null
+     * @return string|null
      */
-    public function getData(): ?array
+    public function getLine1(): ?string
     {
-        return $this->container['data'];
+        return $this->container['line1'];
     }
 
     /**
-     * Sets data
+     * Sets line1
      *
-     * @param \Repull\Model\PlumguideListing[]|null $data data
+     * @param string|null $line1 Street address: number and street.
      *
      * @return $this
      */
-    public function setData(?array $data): static
+    public function setLine1(?string $line1): static
     {
-        if (is_null($data)) {
-            throw new InvalidArgumentException('non-nullable data cannot be null');
+        if (is_null($line1)) {
+            array_push($this->openAPINullablesSetToNull, 'line1');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('line1', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['data'] = $data;
+        $this->container['line1'] = $line1;
 
         return $this;
     }
 
     /**
-     * Gets pagination
+     * Gets line2
      *
-     * @return \Repull\Model\Pagination|null
+     * @return string|null
      */
-    public function getPagination(): ?\Repull\Model\Pagination
+    public function getLine2(): ?string
     {
-        return $this->container['pagination'];
+        return $this->container['line2'];
     }
 
     /**
-     * Sets pagination
+     * Sets line2
      *
-     * @param \Repull\Model\Pagination|null $pagination pagination
+     * @param string|null $line2 Apartment, unit, suite or building.
      *
      * @return $this
      */
-    public function setPagination(?\Repull\Model\Pagination $pagination): static
+    public function setLine2(?string $line2): static
     {
-        if (is_null($pagination)) {
-            throw new InvalidArgumentException('non-nullable pagination cannot be null');
+        if (is_null($line2)) {
+            array_push($this->openAPINullablesSetToNull, 'line2');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('line2', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
-        $this->container['pagination'] = $pagination;
+        $this->container['line2'] = $line2;
+
+        return $this;
+    }
+
+    /**
+     * Gets city
+     *
+     * @return string|null
+     */
+    public function getCity(): ?string
+    {
+        return $this->container['city'];
+    }
+
+    /**
+     * Sets city
+     *
+     * @param string|null $city city
+     *
+     * @return $this
+     */
+    public function setCity(?string $city): static
+    {
+        if (is_null($city)) {
+            array_push($this->openAPINullablesSetToNull, 'city');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('city', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['city'] = $city;
+
+        return $this;
+    }
+
+    /**
+     * Gets state
+     *
+     * @return string|null
+     */
+    public function getState(): ?string
+    {
+        return $this->container['state'];
+    }
+
+    /**
+     * Sets state
+     *
+     * @param string|null $state State, province or region.
+     *
+     * @return $this
+     */
+    public function setState(?string $state): static
+    {
+        if (is_null($state)) {
+            array_push($this->openAPINullablesSetToNull, 'state');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('state', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['state'] = $state;
+
+        return $this;
+    }
+
+    /**
+     * Gets postal_code
+     *
+     * @return string|null
+     */
+    public function getPostalCode(): ?string
+    {
+        return $this->container['postal_code'];
+    }
+
+    /**
+     * Sets postal_code
+     *
+     * @param string|null $postal_code Postal or ZIP code.
+     *
+     * @return $this
+     */
+    public function setPostalCode(?string $postal_code): static
+    {
+        if (is_null($postal_code)) {
+            array_push($this->openAPINullablesSetToNull, 'postal_code');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('postal_code', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['postal_code'] = $postal_code;
+
+        return $this;
+    }
+
+    /**
+     * Gets country_code
+     *
+     * @return string|null
+     */
+    public function getCountryCode(): ?string
+    {
+        return $this->container['country_code'];
+    }
+
+    /**
+     * Sets country_code
+     *
+     * @param string|null $country_code ISO 3166-1 alpha-2 country code.
+     *
+     * @return $this
+     */
+    public function setCountryCode(?string $country_code): static
+    {
+        if (is_null($country_code)) {
+            array_push($this->openAPINullablesSetToNull, 'country_code');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('country_code', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['country_code'] = $country_code;
 
         return $this;
     }

@@ -71,8 +71,6 @@ enum WebhookEventType: string
 
     case LISTING_REACTIVATED = 'listing.reactivated';
 
-    case CALENDAR_UPDATED = 'calendar.updated';
-
     case ACCOUNT_CREATED = 'account.created';
 
     case CONNECT_SESSION_COMPLETED = 'connect.session.completed';

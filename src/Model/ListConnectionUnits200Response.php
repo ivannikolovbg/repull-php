@@ -61,6 +61,7 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         'connection_id' => 'string',
         'channel' => 'string',
         'status' => 'string',
+        'notification_email' => 'string',
         'units' => '\Repull\Model\ListConnectionUnits200ResponseUnitsInner[]',
         'listing_options' => '\Repull\Model\ListConnectionUnits200ResponseListingOptionsInner[]',
         'missing_capabilities' => 'string[]',
@@ -76,6 +77,7 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         'connection_id' => null,
         'channel' => null,
         'status' => null,
+        'notification_email' => null,
         'units' => null,
         'listing_options' => null,
         'missing_capabilities' => null,
@@ -91,6 +93,7 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         'connection_id' => false,
         'channel' => false,
         'status' => false,
+        'notification_email' => true,
         'units' => false,
         'listing_options' => false,
         'missing_capabilities' => false,
@@ -176,6 +179,7 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         'connection_id' => 'connection_id',
         'channel' => 'channel',
         'status' => 'status',
+        'notification_email' => 'notification_email',
         'units' => 'units',
         'listing_options' => 'listing_options',
         'missing_capabilities' => 'missing_capabilities',
@@ -191,6 +195,7 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         'connection_id' => 'setConnectionId',
         'channel' => 'setChannel',
         'status' => 'setStatus',
+        'notification_email' => 'setNotificationEmail',
         'units' => 'setUnits',
         'listing_options' => 'setListingOptions',
         'missing_capabilities' => 'setMissingCapabilities',
@@ -206,6 +211,7 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         'connection_id' => 'getConnectionId',
         'channel' => 'getChannel',
         'status' => 'getStatus',
+        'notification_email' => 'getNotificationEmail',
         'units' => 'getUnits',
         'listing_options' => 'getListingOptions',
         'missing_capabilities' => 'getMissingCapabilities',
@@ -279,6 +285,7 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         $this->setIfExists('connection_id', $data ?? [], null);
         $this->setIfExists('channel', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('notification_email', $data ?? [], null);
         $this->setIfExists('units', $data ?? [], null);
         $this->setIfExists('listing_options', $data ?? [], null);
         $this->setIfExists('missing_capabilities', $data ?? [], null);
@@ -409,6 +416,40 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets notification_email
+     *
+     * @return string|null
+     */
+    public function getNotificationEmail(): ?string
+    {
+        return $this->container['notification_email'];
+    }
+
+    /**
+     * Sets notification_email
+     *
+     * @param string|null $notification_email Vrbo only. Ask the host to add this address on Vrbo as a secondary email, with message and reservation notifications on. It is how new bookings, inquiries and guest messages reach Repull within a minute; without it they arrive at the next scheduled check. Hosted Connect asks for it on its mapping screen, so show it in your own flow when you map with `mapping: \"api\"`.
+     *
+     * @return $this
+     */
+    public function setNotificationEmail(?string $notification_email): static
+    {
+        if (is_null($notification_email)) {
+            array_push($this->openAPINullablesSetToNull, 'notification_email');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('notification_email', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['notification_email'] = $notification_email;
 
         return $this;
     }
