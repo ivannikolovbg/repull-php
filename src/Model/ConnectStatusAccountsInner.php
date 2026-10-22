@@ -65,6 +65,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'connected' => 'bool',
         'email' => 'string',
         'access_type' => 'string',
+        'notification_email' => 'string',
         'import' => '\Repull\Model\VrboImportStatus'
     ];
 
@@ -81,6 +82,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'connected' => null,
         'email' => null,
         'access_type' => null,
+        'notification_email' => null,
         'import' => null
     ];
 
@@ -97,6 +99,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'connected' => false,
         'email' => true,
         'access_type' => true,
+        'notification_email' => true,
         'import' => true
     ];
 
@@ -183,6 +186,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'connected' => 'connected',
         'email' => 'email',
         'access_type' => 'accessType',
+        'notification_email' => 'notificationEmail',
         'import' => 'import'
     ];
 
@@ -199,6 +203,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'connected' => 'setConnected',
         'email' => 'setEmail',
         'access_type' => 'setAccessType',
+        'notification_email' => 'setNotificationEmail',
         'import' => 'setImport'
     ];
 
@@ -215,6 +220,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'connected' => 'getConnected',
         'email' => 'getEmail',
         'access_type' => 'getAccessType',
+        'notification_email' => 'getNotificationEmail',
         'import' => 'getImport'
     ];
 
@@ -287,6 +293,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         $this->setIfExists('connected', $data ?? [], null);
         $this->setIfExists('email', $data ?? [], null);
         $this->setIfExists('access_type', $data ?? [], null);
+        $this->setIfExists('notification_email', $data ?? [], null);
         $this->setIfExists('import', $data ?? [], null);
     }
 
@@ -557,6 +564,40 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['access_type'] = $access_type;
+
+        return $this;
+    }
+
+    /**
+     * Gets notification_email
+     *
+     * @return string|null
+     */
+    public function getNotificationEmail(): ?string
+    {
+        return $this->container['notification_email'];
+    }
+
+    /**
+     * Sets notification_email
+     *
+     * @param string|null $notification_email Vrbo only. The address the host can add on Vrbo as a secondary email (with message and reservation notifications on) so new bookings, inquiries and messages arrive within a minute instead of at the scheduled check. Ask every host to add it: notifications are how Vrbo updates reach Repull, the scheduled check is the backup. Hosted Connect shows it on its mapping screen; show it in your own app when you create sessions with `mapping: \"api\"`.
+     *
+     * @return $this
+     */
+    public function setNotificationEmail(?string $notification_email): static
+    {
+        if (is_null($notification_email)) {
+            array_push($this->openAPINullablesSetToNull, 'notification_email');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('notification_email', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['notification_email'] = $notification_email;
 
         return $this;
     }

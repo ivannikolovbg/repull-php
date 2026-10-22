@@ -460,7 +460,7 @@ class ListConnectionUnits200ResponseUnitsInner implements ModelInterface, ArrayA
     /**
      * Sets meta
      *
-     * @param object|null $meta meta
+     * @param object|null $meta Channel details that identify the unit. Booking.com Extranet: `hotel` (property name), `hotelId` (Booking.com property ID), `roomId` (Booking.com room ID), `city`. Vrbo: `headline`, `address`, `vrboStatus`; the Vrbo listing ID is `unit_id`.
      *
      * @return $this
      */

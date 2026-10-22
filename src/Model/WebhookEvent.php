@@ -252,7 +252,6 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     public const EVENT_ACCOUNT_IMPORT_STARTED = 'account.import.started';
     public const EVENT_AI_OPERATION_COMPLETED = 'ai.operation.completed';
     public const EVENT_AI_OPERATION_FAILED = 'ai.operation.failed';
-    public const EVENT_CALENDAR_UPDATED = 'calendar.updated';
     public const EVENT_CONNECT_SESSION_COMPLETED = 'connect.session.completed';
     public const EVENT_INQUIRY_CREATED = 'inquiry.created';
     public const EVENT_INQUIRY_UPDATED = 'inquiry.updated';
@@ -296,7 +295,6 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
             self::EVENT_ACCOUNT_IMPORT_STARTED,
             self::EVENT_AI_OPERATION_COMPLETED,
             self::EVENT_AI_OPERATION_FAILED,
-            self::EVENT_CALENDAR_UPDATED,
             self::EVENT_CONNECT_SESSION_COMPLETED,
             self::EVENT_INQUIRY_CREATED,
             self::EVENT_INQUIRY_UPDATED,

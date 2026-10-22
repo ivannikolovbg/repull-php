@@ -61,6 +61,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'redirect_url' => 'string',
         'state' => 'string',
         'reservation_history_months' => 'int',
+        'mapping' => 'string',
         'access_type' => 'string',
         'allowed_providers' => 'string[]',
         'include_request_only' => 'bool',
@@ -80,6 +81,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'redirect_url' => 'uri',
         'state' => null,
         'reservation_history_months' => null,
+        'mapping' => null,
         'access_type' => null,
         'allowed_providers' => null,
         'include_request_only' => null,
@@ -99,6 +101,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'redirect_url' => false,
         'state' => true,
         'reservation_history_months' => false,
+        'mapping' => false,
         'access_type' => false,
         'allowed_providers' => true,
         'include_request_only' => false,
@@ -188,6 +191,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'redirect_url' => 'redirectUrl',
         'state' => 'state',
         'reservation_history_months' => 'reservationHistoryMonths',
+        'mapping' => 'mapping',
         'access_type' => 'accessType',
         'allowed_providers' => 'allowedProviders',
         'include_request_only' => 'includeRequestOnly',
@@ -207,6 +211,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'redirect_url' => 'setRedirectUrl',
         'state' => 'setState',
         'reservation_history_months' => 'setReservationHistoryMonths',
+        'mapping' => 'setMapping',
         'access_type' => 'setAccessType',
         'allowed_providers' => 'setAllowedProviders',
         'include_request_only' => 'setIncludeRequestOnly',
@@ -226,6 +231,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         'redirect_url' => 'getRedirectUrl',
         'state' => 'getState',
         'reservation_history_months' => 'getReservationHistoryMonths',
+        'mapping' => 'getMapping',
         'access_type' => 'getAccessType',
         'allowed_providers' => 'getAllowedProviders',
         'include_request_only' => 'getIncludeRequestOnly',
@@ -268,6 +274,8 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         return self::$openAPIModelName;
     }
 
+    public const MAPPING_HOSTED = 'hosted';
+    public const MAPPING_API = 'api';
     public const ACCESS_TYPE_FULL_ACCESS = 'full_access';
     public const ACCESS_TYPE_MESSAGING = 'messaging';
     public const ACCESS_TYPE_READ_ONLY = 'read_only';
@@ -288,6 +296,19 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     public const SCOPE_CALENDAR = 'calendar';
     public const SCOPE_RATES = 'rates';
     public const SCOPE_CHANNEL_IDS = 'channelIds';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getMappingAllowableValues()
+    {
+        return [
+            self::MAPPING_HOSTED,
+            self::MAPPING_API,
+        ];
+    }
 
     /**
      * Gets allowable values of the enum
@@ -359,6 +380,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         $this->setIfExists('redirect_url', $data ?? [], null);
         $this->setIfExists('state', $data ?? [], null);
         $this->setIfExists('reservation_history_months', $data ?? [], null);
+        $this->setIfExists('mapping', $data ?? [], 'hosted');
         $this->setIfExists('access_type', $data ?? [], null);
         $this->setIfExists('allowed_providers', $data ?? [], null);
         $this->setIfExists('include_request_only', $data ?? [], false);
@@ -403,6 +425,15 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
 
         if (!is_null($this->container['reservation_history_months']) && ($this->container['reservation_history_months'] < 1)) {
             $invalidProperties[] = "invalid value for 'reservation_history_months', must be bigger than or equal to 1.";
+        }
+
+        $allowedValues = self::getMappingAllowableValues();
+        if (!is_null($this->container['mapping']) && !in_array($this->container['mapping'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'mapping', must be one of '%s'",
+                $this->container['mapping'],
+                implode("', '", $allowedValues)
+            );
         }
 
         $allowedValues = self::getAccessTypeAllowableValues();
@@ -527,6 +558,34 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
         }
 
         $this->container['reservation_history_months'] = $reservation_history_months;
+
+        return $this;
+    }
+
+    /**
+     * Gets mapping
+     *
+     * @return string|null
+     */
+    public function getMapping(): ?string
+    {
+        return $this->container['mapping'];
+    }
+
+    /**
+     * Sets mapping
+     *
+     * @param string|null $mapping Where the channel's units get linked to listings. `hosted` (default): after a Vrbo or Booking.com Extranet sign-in, Connect shows a mapping step and returns to `redirectUrl` when it's confirmed. `api`: Connect skips that step and finishes right after sign-in. The connection reaches you in the `connect.session.completed` webhook (and as `connectionId` in the popup message), its handle is `vrbo:{connectionId}` or `booking_extranet:{connectionId}`; you list the units with `GET /v1/connections/{id}/units` and link them with `POST /v1/connections/{id}/mappings`. Nothing is imported until you post the mappings. Other providers ignore it.
+     *
+     * @return $this
+     */
+    public function setMapping(?string $mapping): static
+    {
+        if (is_null($mapping)) {
+            throw new InvalidArgumentException('non-nullable mapping cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['mapping'] = $mapping;
 
         return $this;
     }

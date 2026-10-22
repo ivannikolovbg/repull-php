@@ -404,7 +404,7 @@ class ConnectSessionCompletedPayload implements ModelInterface, ArrayAccess, Jso
     /**
      * Sets provider
      *
-     * @param string|null $provider Channel or PMS: airbnb, booking, booking_extranet, vrbo, plumguide, hostaway, …
+     * @param string|null $provider Channel or PMS: airbnb, booking, booking_extranet, vrbo, hostaway, …
      *
      * @return $this
      */

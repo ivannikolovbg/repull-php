@@ -63,8 +63,6 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => 'string',
         'reservation_history_months' => 'int',
         'state' => 'string',
-        'client_id' => 'string',
-        'client_secret' => 'string',
         'locale' => 'string'
     ];
 
@@ -78,8 +76,6 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => null,
         'reservation_history_months' => null,
         'state' => null,
-        'client_id' => null,
-        'client_secret' => null,
         'locale' => null
     ];
 
@@ -93,8 +89,6 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => false,
         'reservation_history_months' => false,
         'state' => false,
-        'client_id' => false,
-        'client_secret' => false,
         'locale' => true
     ];
 
@@ -178,8 +172,6 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => 'accessType',
         'reservation_history_months' => 'reservationHistoryMonths',
         'state' => 'state',
-        'client_id' => 'clientId',
-        'client_secret' => 'clientSecret',
         'locale' => 'locale'
     ];
 
@@ -193,8 +185,6 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => 'setAccessType',
         'reservation_history_months' => 'setReservationHistoryMonths',
         'state' => 'setState',
-        'client_id' => 'setClientId',
-        'client_secret' => 'setClientSecret',
         'locale' => 'setLocale'
     ];
 
@@ -208,8 +198,6 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => 'getAccessType',
         'reservation_history_months' => 'getReservationHistoryMonths',
         'state' => 'getState',
-        'client_id' => 'getClientId',
-        'client_secret' => 'getClientSecret',
         'locale' => 'getLocale'
     ];
 
@@ -281,8 +269,6 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         $this->setIfExists('access_type', $data ?? [], 'full_access');
         $this->setIfExists('reservation_history_months', $data ?? [], null);
         $this->setIfExists('state', $data ?? [], null);
-        $this->setIfExists('client_id', $data ?? [], null);
-        $this->setIfExists('client_secret', $data ?? [], null);
         $this->setIfExists('locale', $data ?? [], null);
     }
 
@@ -380,7 +366,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets access_type
      *
-     * @param string|null $access_type Airbnb only — selects the OAuth scope set. 'read_only' grants read-only scopes; 'messaging' grants read scopes plus message read/send but NOT property management, so it can coexist with another app (e.g. an existing PMS) that already holds property management on the same Airbnb account; 'full_access' (default) grants full host scopes including the exclusive property management (only one app per Airbnb account can hold it). The hosted consent screen normally lets the host pick a tier; passing `accessType` explicitly fixes the tier and hides that choice, so the host can only continue with the tier you requested. Omit it to let the host choose.
+     * @param string|null $access_type Airbnb only — selects the OAuth scope set. 'read_only' grants read-only scopes; 'messaging' (shown to hosts as \"Messaging & reviews\") grants read scopes plus message read/send and review writes (reply to guest reviews, submit host reviews — Airbnb's reviews_write) but NOT property management, so it can coexist with another app (e.g. an existing PMS) that already holds property management on the same Airbnb account; 'full_access' (default) grants full host scopes including the exclusive property management (only one app per Airbnb account can hold it). The hosted consent screen normally lets the host pick a tier; passing `accessType` explicitly fixes the tier and hides that choice, so the host can only continue with the tier you requested. Omit it to let the host choose.
      *
      * @return $this
      */
@@ -453,60 +439,6 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
             throw new InvalidArgumentException('non-nullable state cannot be null');
         }
         $this->container['state'] = $state;
-
-        return $this;
-    }
-
-    /**
-     * Gets client_id
-     *
-     * @return string|null
-     */
-    public function getClientId(): ?string
-    {
-        return $this->container['client_id'];
-    }
-
-    /**
-     * Sets client_id
-     *
-     * @param string|null $client_id Plumguide — client ID.
-     *
-     * @return $this
-     */
-    public function setClientId(?string $client_id): static
-    {
-        if (is_null($client_id)) {
-            throw new InvalidArgumentException('non-nullable client_id cannot be null');
-        }
-        $this->container['client_id'] = $client_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets client_secret
-     *
-     * @return string|null
-     */
-    public function getClientSecret(): ?string
-    {
-        return $this->container['client_secret'];
-    }
-
-    /**
-     * Sets client_secret
-     *
-     * @param string|null $client_secret Plumguide — client secret.
-     *
-     * @return $this
-     */
-    public function setClientSecret(?string $client_secret): static
-    {
-        if (is_null($client_secret)) {
-            throw new InvalidArgumentException('non-nullable client_secret cannot be null');
-        }
-        $this->container['client_secret'] = $client_secret;
 
         return $this;
     }

@@ -5,6 +5,15 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.36] - 2026-10-22
+
+### Added
+- `Property::getAddressDetails()` (`PostalAddress`) on list/get properties: `line1`, `line2`, `city`, `state`, `postalCode`, `countryCode`. `line2` carries the apartment / unit number. The existing `address` string and `city` are unchanged.
+- `ListingAddress` gains `line1`, `line2`, `state`, `postalCode`, `countryCode` next to `street` and `city`.
+
+### Changed
+- Regenerated from the live spec (also picks up the Plum Guide channel hidden until certified, and `calendar.updated` removed from webhook events).
+
 ## [0.2.35] - 2026-10-16
 
 ### Added
