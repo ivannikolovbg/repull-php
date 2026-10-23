@@ -252,6 +252,9 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     public const EVENT_ACCOUNT_IMPORT_STARTED = 'account.import.started';
     public const EVENT_AI_OPERATION_COMPLETED = 'ai.operation.completed';
     public const EVENT_AI_OPERATION_FAILED = 'ai.operation.failed';
+    public const EVENT_BOOKING_UNACKNOWLEDGED = 'booking.unacknowledged';
+    public const EVENT_CHANNEL_DEGRADED = 'channel.degraded';
+    public const EVENT_CHANNEL_SYNC_FAILED = 'channel.sync.failed';
     public const EVENT_CONNECT_SESSION_COMPLETED = 'connect.session.completed';
     public const EVENT_INQUIRY_CREATED = 'inquiry.created';
     public const EVENT_INQUIRY_UPDATED = 'inquiry.updated';
@@ -275,6 +278,7 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     public const EVENT_RESERVATION_MESSAGE_UPDATED = 'reservation.message.updated';
     public const EVENT_RESERVATION_REQUEST_CREATED = 'reservation.request.created';
     public const EVENT_RESERVATION_REQUEST_UPDATED = 'reservation.request.updated';
+    public const EVENT_RESERVATION_THREAD_ASSIGNED = 'reservation.thread.assigned';
     public const EVENT_RESERVATION_UPDATED = 'reservation.updated';
     public const EVENT_REVIEW_CREATED = 'review.created';
     public const EVENT_REVIEW_RESPONDED = 'review.responded';
@@ -295,6 +299,9 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
             self::EVENT_ACCOUNT_IMPORT_STARTED,
             self::EVENT_AI_OPERATION_COMPLETED,
             self::EVENT_AI_OPERATION_FAILED,
+            self::EVENT_BOOKING_UNACKNOWLEDGED,
+            self::EVENT_CHANNEL_DEGRADED,
+            self::EVENT_CHANNEL_SYNC_FAILED,
             self::EVENT_CONNECT_SESSION_COMPLETED,
             self::EVENT_INQUIRY_CREATED,
             self::EVENT_INQUIRY_UPDATED,
@@ -318,6 +325,7 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
             self::EVENT_RESERVATION_MESSAGE_UPDATED,
             self::EVENT_RESERVATION_REQUEST_CREATED,
             self::EVENT_RESERVATION_REQUEST_UPDATED,
+            self::EVENT_RESERVATION_THREAD_ASSIGNED,
             self::EVENT_RESERVATION_UPDATED,
             self::EVENT_REVIEW_CREATED,
             self::EVENT_REVIEW_RESPONDED,

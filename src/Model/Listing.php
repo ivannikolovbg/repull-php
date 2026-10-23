@@ -74,6 +74,13 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'amenities' => '\Repull\Model\ListingAmenity[]',
         'content' => '\Repull\Model\ListingContent',
         'details' => '\Repull\Model\ListingDetails',
+        'rooms' => '\Repull\Model\ListingRoom[]',
+        'policies' => '\Repull\Model\ListingPolicies',
+        'rules' => '\Repull\Model\ListingRules',
+        'pricing' => '\Repull\Model\ListingPricingSettings',
+        'fees' => '\Repull\Model\ListingFee[]',
+        'taxes' => '\Repull\Model\ListingTax[]',
+        'photos' => '\Repull\Model\ListingContentPhoto[]',
         'created_at' => '\DateTime',
         'updated_at' => '\DateTime'
     ];
@@ -99,6 +106,13 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'amenities' => null,
         'content' => null,
         'details' => null,
+        'rooms' => null,
+        'policies' => null,
+        'rules' => null,
+        'pricing' => null,
+        'fees' => null,
+        'taxes' => null,
+        'photos' => null,
         'created_at' => 'date-time',
         'updated_at' => 'date-time'
     ];
@@ -124,6 +138,13 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'amenities' => false,
         'content' => true,
         'details' => true,
+        'rooms' => false,
+        'policies' => true,
+        'rules' => true,
+        'pricing' => true,
+        'fees' => false,
+        'taxes' => false,
+        'photos' => false,
         'created_at' => false,
         'updated_at' => false
     ];
@@ -219,6 +240,13 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'amenities' => 'amenities',
         'content' => 'content',
         'details' => 'details',
+        'rooms' => 'rooms',
+        'policies' => 'policies',
+        'rules' => 'rules',
+        'pricing' => 'pricing',
+        'fees' => 'fees',
+        'taxes' => 'taxes',
+        'photos' => 'photos',
         'created_at' => 'createdAt',
         'updated_at' => 'updatedAt'
     ];
@@ -244,6 +272,13 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'amenities' => 'setAmenities',
         'content' => 'setContent',
         'details' => 'setDetails',
+        'rooms' => 'setRooms',
+        'policies' => 'setPolicies',
+        'rules' => 'setRules',
+        'pricing' => 'setPricing',
+        'fees' => 'setFees',
+        'taxes' => 'setTaxes',
+        'photos' => 'setPhotos',
         'created_at' => 'setCreatedAt',
         'updated_at' => 'setUpdatedAt'
     ];
@@ -269,6 +304,13 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'amenities' => 'getAmenities',
         'content' => 'getContent',
         'details' => 'getDetails',
+        'rooms' => 'getRooms',
+        'policies' => 'getPolicies',
+        'rules' => 'getRules',
+        'pricing' => 'getPricing',
+        'fees' => 'getFees',
+        'taxes' => 'getTaxes',
+        'photos' => 'getPhotos',
         'created_at' => 'getCreatedAt',
         'updated_at' => 'getUpdatedAt'
     ];
@@ -367,6 +409,13 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('amenities', $data ?? [], null);
         $this->setIfExists('content', $data ?? [], null);
         $this->setIfExists('details', $data ?? [], null);
+        $this->setIfExists('rooms', $data ?? [], null);
+        $this->setIfExists('policies', $data ?? [], null);
+        $this->setIfExists('rules', $data ?? [], null);
+        $this->setIfExists('pricing', $data ?? [], null);
+        $this->setIfExists('fees', $data ?? [], null);
+        $this->setIfExists('taxes', $data ?? [], null);
+        $this->setIfExists('photos', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
         $this->setIfExists('updated_at', $data ?? [], null);
     }
@@ -873,6 +922,216 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['details'] = $details;
+
+        return $this;
+    }
+
+    /**
+     * Gets rooms
+     *
+     * @return \Repull\Model\ListingRoom[]|null
+     */
+    public function getRooms(): ?array
+    {
+        return $this->container['rooms'];
+    }
+
+    /**
+     * Sets rooms
+     *
+     * @param \Repull\Model\ListingRoom[]|null $rooms **Only present with `?include=rooms`.** Each room and its beds. `[]` when none are stored.
+     *
+     * @return $this
+     */
+    public function setRooms(?array $rooms): static
+    {
+        if (is_null($rooms)) {
+            throw new InvalidArgumentException('non-nullable rooms cannot be null');
+        }
+        $this->container['rooms'] = $rooms;
+
+        return $this;
+    }
+
+    /**
+     * Gets policies
+     *
+     * @return \Repull\Model\ListingPolicies|null
+     */
+    public function getPolicies(): ?\Repull\Model\ListingPolicies
+    {
+        return $this->container['policies'];
+    }
+
+    /**
+     * Sets policies
+     *
+     * @param \Repull\Model\ListingPolicies|null $policies **Only present with `?include=policies`.** Cancellation, house rules, check-in and check-out, pets/smoking/events/children, quiet hours, deposit.
+     *
+     * @return $this
+     */
+    public function setPolicies(?\Repull\Model\ListingPolicies $policies): static
+    {
+        if (is_null($policies)) {
+            array_push($this->openAPINullablesSetToNull, 'policies');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('policies', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['policies'] = $policies;
+
+        return $this;
+    }
+
+    /**
+     * Gets rules
+     *
+     * @return \Repull\Model\ListingRules|null
+     */
+    public function getRules(): ?\Repull\Model\ListingRules
+    {
+        return $this->container['rules'];
+    }
+
+    /**
+     * Sets rules
+     *
+     * @param \Repull\Model\ListingRules|null $rules **Only present with `?include=rules`.** Stay rules: min/max nights, booking window, advance notice, preparation time, and whether booking requests are allowed.
+     *
+     * @return $this
+     */
+    public function setRules(?\Repull\Model\ListingRules $rules): static
+    {
+        if (is_null($rules)) {
+            array_push($this->openAPINullablesSetToNull, 'rules');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('rules', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['rules'] = $rules;
+
+        return $this;
+    }
+
+    /**
+     * Gets pricing
+     *
+     * @return \Repull\Model\ListingPricingSettings|null
+     */
+    public function getPricing(): ?\Repull\Model\ListingPricingSettings
+    {
+        return $this->container['pricing'];
+    }
+
+    /**
+     * Sets pricing
+     *
+     * @param \Repull\Model\ListingPricingSettings|null $pricing **Only present with `?include=pricing`.** Standing prices: base and weekend rate, cleaning and extra-guest fees, deposit, weekly/monthly discounts. `null` when none are stored.
+     *
+     * @return $this
+     */
+    public function setPricing(?\Repull\Model\ListingPricingSettings $pricing): static
+    {
+        if (is_null($pricing)) {
+            array_push($this->openAPINullablesSetToNull, 'pricing');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('pricing', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['pricing'] = $pricing;
+
+        return $this;
+    }
+
+    /**
+     * Gets fees
+     *
+     * @return \Repull\Model\ListingFee[]|null
+     */
+    public function getFees(): ?array
+    {
+        return $this->container['fees'];
+    }
+
+    /**
+     * Sets fees
+     *
+     * @param \Repull\Model\ListingFee[]|null $fees **Only present with `?include=fees`.** Every fee, the cleaning fee included, whatever channel or PMS it came from. `[]` when none.
+     *
+     * @return $this
+     */
+    public function setFees(?array $fees): static
+    {
+        if (is_null($fees)) {
+            throw new InvalidArgumentException('non-nullable fees cannot be null');
+        }
+        $this->container['fees'] = $fees;
+
+        return $this;
+    }
+
+    /**
+     * Gets taxes
+     *
+     * @return \Repull\Model\ListingTax[]|null
+     */
+    public function getTaxes(): ?array
+    {
+        return $this->container['taxes'];
+    }
+
+    /**
+     * Sets taxes
+     *
+     * @param \Repull\Model\ListingTax[]|null $taxes **Only present with `?include=taxes`.** Taxes charged to the guest. `[]` when none.
+     *
+     * @return $this
+     */
+    public function setTaxes(?array $taxes): static
+    {
+        if (is_null($taxes)) {
+            throw new InvalidArgumentException('non-nullable taxes cannot be null');
+        }
+        $this->container['taxes'] = $taxes;
+
+        return $this;
+    }
+
+    /**
+     * Gets photos
+     *
+     * @return \Repull\Model\ListingContentPhoto[]|null
+     */
+    public function getPhotos(): ?array
+    {
+        return $this->container['photos'];
+    }
+
+    /**
+     * Sets photos
+     *
+     * @param \Repull\Model\ListingContentPhoto[]|null $photos **Only present with `?include=photos`.** The listing photos in display order.
+     *
+     * @return $this
+     */
+    public function setPhotos(?array $photos): static
+    {
+        if (is_null($photos)) {
+            throw new InvalidArgumentException('non-nullable photos cannot be null');
+        }
+        $this->container['photos'] = $photos;
 
         return $this;
     }

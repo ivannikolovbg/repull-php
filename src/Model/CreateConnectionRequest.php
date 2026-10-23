@@ -456,7 +456,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets locale
      *
-     * @param string|null $locale Airbnb only — optional UI language for the hosted Connect pages. Accepts any supported locale code (currently `en`, `fr`); unknown codes are ignored and resolution falls back to the workspace `default_language`, then `Accept-Language`, then `en`.
+     * @param string|null $locale Airbnb and Booking.com — optional UI language for the hosted Connect pages. Accepts any supported locale code (currently `en`, `fr`, `de`, `es`, `it`, `nl`); unknown codes are ignored and resolution falls back to the workspace `default_language`, then `Accept-Language`, then `en`.
      *
      * @return $this
      */

@@ -57,6 +57,14 @@ enum WebhookEventType: string
 
     case RESERVATION_REQUEST_UPDATED = 'reservation.request.updated';
 
+    case BOOKING_UNACKNOWLEDGED = 'booking.unacknowledged';
+
+    case CHANNEL_SYNC_FAILED = 'channel.sync.failed';
+
+    case CHANNEL_DEGRADED = 'channel.degraded';
+
+    case RESERVATION_THREAD_ASSIGNED = 'reservation.thread.assigned';
+
     case INQUIRY_CREATED = 'inquiry.created';
 
     case INQUIRY_UPDATED = 'inquiry.updated';

@@ -5,6 +5,14 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.37] - 2026-10-23
+
+### Added
+- Listing expansions on `ListingsApi::listListings()` / `getListing()`: pass `$include = 'rooms,policies,rules,pricing,fees,taxes,photos'` (comma-separated, combinable with `content` / `details`). `Listing` gains `getRooms()` (`ListingRoom[]`), `getPolicies()` (`ListingPolicies`), `getRules()` (`ListingRules`), `getPricing()` (`ListingPricingSettings`), `getFees()` (`ListingFee[]`), `getTaxes()` (`ListingTax[]`) and `getPhotos()` (`ListingContentPhoto[]`). Fees and taxes carry `chargedPer` (`ChargePer`: `stay`, `night`, `guest`, `guest_night`); rules carry `allowsBookingRequests` and `instantBook`.
+
+### Changed
+- Regenerated from the live spec (also picks up `POST /v1/migrations/channex` and the `booking.unacknowledged`, `channel.degraded`, `channel.sync.failed` and `reservation.thread.assigned` webhook events).
+
 ## [0.2.36] - 2026-10-22
 
 ### Added
