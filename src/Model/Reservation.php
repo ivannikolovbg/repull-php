@@ -79,6 +79,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'platform' => 'string',
         'confirmation_code' => 'string',
         'unit' => '\Repull\Model\ReservationUnit',
+        'pms_reservation_id' => 'string',
+        'access_codes' => '\Repull\Model\ReservationAccessCode[]',
         'primary_guest' => '\Repull\Model\ReservationPrimaryGuest',
         'occupancy' => '\Repull\Model\ReservationOccupancy',
         'financials' => '\Repull\Model\ReservationFinancials',
@@ -117,6 +119,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'platform' => null,
         'confirmation_code' => null,
         'unit' => null,
+        'pms_reservation_id' => null,
+        'access_codes' => null,
         'primary_guest' => null,
         'occupancy' => null,
         'financials' => null,
@@ -155,6 +159,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'platform' => true,
         'confirmation_code' => false,
         'unit' => true,
+        'pms_reservation_id' => true,
+        'access_codes' => true,
         'primary_guest' => false,
         'occupancy' => false,
         'financials' => false,
@@ -263,6 +269,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'platform' => 'platform',
         'confirmation_code' => 'confirmationCode',
         'unit' => 'unit',
+        'pms_reservation_id' => 'pmsReservationId',
+        'access_codes' => 'accessCodes',
         'primary_guest' => 'primaryGuest',
         'occupancy' => 'occupancy',
         'financials' => 'financials',
@@ -301,6 +309,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'platform' => 'setPlatform',
         'confirmation_code' => 'setConfirmationCode',
         'unit' => 'setUnit',
+        'pms_reservation_id' => 'setPmsReservationId',
+        'access_codes' => 'setAccessCodes',
         'primary_guest' => 'setPrimaryGuest',
         'occupancy' => 'setOccupancy',
         'financials' => 'setFinancials',
@@ -339,6 +349,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'platform' => 'getPlatform',
         'confirmation_code' => 'getConfirmationCode',
         'unit' => 'getUnit',
+        'pms_reservation_id' => 'getPmsReservationId',
+        'access_codes' => 'getAccessCodes',
         'primary_guest' => 'getPrimaryGuest',
         'occupancy' => 'getOccupancy',
         'financials' => 'getFinancials',
@@ -531,6 +543,8 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('platform', $data ?? [], null);
         $this->setIfExists('confirmation_code', $data ?? [], null);
         $this->setIfExists('unit', $data ?? [], null);
+        $this->setIfExists('pms_reservation_id', $data ?? [], null);
+        $this->setIfExists('access_codes', $data ?? [], null);
         $this->setIfExists('primary_guest', $data ?? [], null);
         $this->setIfExists('occupancy', $data ?? [], null);
         $this->setIfExists('financials', $data ?? [], null);
@@ -1264,6 +1278,74 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['unit'] = $unit;
+
+        return $this;
+    }
+
+    /**
+     * Gets pms_reservation_id
+     *
+     * @return string|null
+     */
+    public function getPmsReservationId(): ?string
+    {
+        return $this->container['pms_reservation_id'];
+    }
+
+    /**
+     * Sets pms_reservation_id
+     *
+     * @param string|null $pms_reservation_id The PMS's own id for this reservation (for example Guesty's reservation `_id`), so you can look it up in the PMS. `null` when the reservation did not come from a PMS.
+     *
+     * @return $this
+     */
+    public function setPmsReservationId(?string $pms_reservation_id): static
+    {
+        if (is_null($pms_reservation_id)) {
+            array_push($this->openAPINullablesSetToNull, 'pms_reservation_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('pms_reservation_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['pms_reservation_id'] = $pms_reservation_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets access_codes
+     *
+     * @return \Repull\Model\ReservationAccessCode[]|null
+     */
+    public function getAccessCodes(): ?array
+    {
+        return $this->container['access_codes'];
+    }
+
+    /**
+     * Sets access_codes
+     *
+     * @param \Repull\Model\ReservationAccessCode[]|null $access_codes Door codes for the stay from the PMS's lock manager (today: Guesty Locks Manager), refreshed about every 30 minutes for stays checking in within 14 days that have not checked out. `null` when the reservation's codes are not read from a PMS. `[]` when they are and there is none yet, and for a cancelled stay.
+     *
+     * @return $this
+     */
+    public function setAccessCodes(?array $access_codes): static
+    {
+        if (is_null($access_codes)) {
+            array_push($this->openAPINullablesSetToNull, 'access_codes');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('access_codes', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['access_codes'] = $access_codes;
 
         return $this;
     }

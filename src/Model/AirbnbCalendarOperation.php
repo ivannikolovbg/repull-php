@@ -384,16 +384,16 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
             $invalidProperties[] = "invalid value for 'min_nights', must be smaller than or equal to 1125.";
         }
 
-        if (!is_null($this->container['min_nights']) && ($this->container['min_nights'] < 1)) {
-            $invalidProperties[] = "invalid value for 'min_nights', must be bigger than or equal to 1.";
+        if (!is_null($this->container['min_nights']) && ($this->container['min_nights'] < -1)) {
+            $invalidProperties[] = "invalid value for 'min_nights', must be bigger than or equal to -1.";
         }
 
         if (!is_null($this->container['max_nights']) && ($this->container['max_nights'] > 1125)) {
             $invalidProperties[] = "invalid value for 'max_nights', must be smaller than or equal to 1125.";
         }
 
-        if (!is_null($this->container['max_nights']) && ($this->container['max_nights'] < 1)) {
-            $invalidProperties[] = "invalid value for 'max_nights', must be bigger than or equal to 1.";
+        if (!is_null($this->container['max_nights']) && ($this->container['max_nights'] < -1)) {
+            $invalidProperties[] = "invalid value for 'max_nights', must be bigger than or equal to -1.";
         }
 
         return $invalidProperties;
@@ -637,7 +637,7 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets min_nights
      *
-     * @param int|null $min_nights Minimum length of stay for the date(s).
+     * @param int|null $min_nights Minimum length of stay for the date(s), 1–1125. Send `-1` to drop the date's own minimum so it follows the listing default again (`default_min_nights`). `0` and `null` do not clear it.
      *
      * @return $this
      */
@@ -657,8 +657,8 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
         if (!is_null($min_nights) && ($min_nights > 1125)) {
             throw new InvalidArgumentException('invalid value for $min_nights when calling AirbnbCalendarOperation., must be smaller than or equal to 1125.');
         }
-        if (!is_null($min_nights) && ($min_nights < 1)) {
-            throw new InvalidArgumentException('invalid value for $min_nights when calling AirbnbCalendarOperation., must be bigger than or equal to 1.');
+        if (!is_null($min_nights) && ($min_nights < -1)) {
+            throw new InvalidArgumentException('invalid value for $min_nights when calling AirbnbCalendarOperation., must be bigger than or equal to -1.');
         }
 
         $this->container['min_nights'] = $min_nights;
@@ -679,7 +679,7 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets max_nights
      *
-     * @param int|null $max_nights Maximum length of stay for the date(s); no lower than `min_nights`.
+     * @param int|null $max_nights Maximum length of stay for the date(s), 1–1125 and no lower than `min_nights`. Send `-1` to drop the date's own maximum so it follows the listing default again (`default_max_nights`).
      *
      * @return $this
      */
@@ -699,8 +699,8 @@ class AirbnbCalendarOperation implements ModelInterface, ArrayAccess, JsonSerial
         if (!is_null($max_nights) && ($max_nights > 1125)) {
             throw new InvalidArgumentException('invalid value for $max_nights when calling AirbnbCalendarOperation., must be smaller than or equal to 1125.');
         }
-        if (!is_null($max_nights) && ($max_nights < 1)) {
-            throw new InvalidArgumentException('invalid value for $max_nights when calling AirbnbCalendarOperation., must be bigger than or equal to 1.');
+        if (!is_null($max_nights) && ($max_nights < -1)) {
+            throw new InvalidArgumentException('invalid value for $max_nights when calling AirbnbCalendarOperation., must be bigger than or equal to -1.');
         }
 
         $this->container['max_nights'] = $max_nights;

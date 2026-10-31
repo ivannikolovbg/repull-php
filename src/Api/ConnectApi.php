@@ -140,6 +140,9 @@ class ConnectApi
         'submitBookingsyncCredentials' => [
             'application/json',
         ],
+        'submitCiirusCredentials' => [
+            'application/json',
+        ],
         'submitCloudbedsCredentials' => [
             'application/json',
         ],
@@ -6804,6 +6807,359 @@ class ConnectApi
                 $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($submit_bookingsync_credentials_request));
             } else {
                 $httpBody = $submit_bookingsync_credentials_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation submitCiirusCredentials
+     *
+     * Submit CiiRUS credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitCiirusCredentialsRequest $submit_ciirus_credentials_request submit_ciirus_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitCiirusCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\SubmitCiirusCredentials200Response|\Repull\Model\Error
+     */
+    public function submitCiirusCredentials(
+        \Repull\Model\SubmitCiirusCredentialsRequest $submit_ciirus_credentials_request,
+        string $contentType = self::contentTypes['submitCiirusCredentials'][0]
+    ): \Repull\Model\SubmitCiirusCredentials200Response|\Repull\Model\Error
+    {
+        list($response) = $this->submitCiirusCredentialsWithHttpInfo($submit_ciirus_credentials_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation submitCiirusCredentialsWithHttpInfo
+     *
+     * Submit CiiRUS credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitCiirusCredentialsRequest $submit_ciirus_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitCiirusCredentials'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\SubmitCiirusCredentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function submitCiirusCredentialsWithHttpInfo(
+        \Repull\Model\SubmitCiirusCredentialsRequest $submit_ciirus_credentials_request,
+        string $contentType = self::contentTypes['submitCiirusCredentials'][0]
+    ): array
+    {
+        $request = $this->submitCiirusCredentialsRequest($submit_ciirus_credentials_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SubmitCiirusCredentials200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SubmitCiirusCredentials200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SubmitCiirusCredentials200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation submitCiirusCredentialsAsync
+     *
+     * Submit CiiRUS credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitCiirusCredentialsRequest $submit_ciirus_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitCiirusCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitCiirusCredentialsAsync(
+        \Repull\Model\SubmitCiirusCredentialsRequest $submit_ciirus_credentials_request,
+        string $contentType = self::contentTypes['submitCiirusCredentials'][0]
+    ): PromiseInterface
+    {
+        return $this->submitCiirusCredentialsAsyncWithHttpInfo($submit_ciirus_credentials_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation submitCiirusCredentialsAsyncWithHttpInfo
+     *
+     * Submit CiiRUS credentials for a Connect session
+     *
+     * @param  \Repull\Model\SubmitCiirusCredentialsRequest $submit_ciirus_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitCiirusCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function submitCiirusCredentialsAsyncWithHttpInfo(
+        \Repull\Model\SubmitCiirusCredentialsRequest $submit_ciirus_credentials_request,
+        string $contentType = self::contentTypes['submitCiirusCredentials'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\SubmitCiirusCredentials200Response';
+        $request = $this->submitCiirusCredentialsRequest($submit_ciirus_credentials_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'submitCiirusCredentials'
+     *
+     * @param  \Repull\Model\SubmitCiirusCredentialsRequest $submit_ciirus_credentials_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['submitCiirusCredentials'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function submitCiirusCredentialsRequest(
+        \Repull\Model\SubmitCiirusCredentialsRequest $submit_ciirus_credentials_request,
+        string $contentType = self::contentTypes['submitCiirusCredentials'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'submit_ciirus_credentials_request' is set
+        if ($submit_ciirus_credentials_request === null || (is_array($submit_ciirus_credentials_request) && count($submit_ciirus_credentials_request) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $submit_ciirus_credentials_request when calling submitCiirusCredentials'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/ciirus/credentials';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($submit_ciirus_credentials_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($submit_ciirus_credentials_request));
+            } else {
+                $httpBody = $submit_ciirus_credentials_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {

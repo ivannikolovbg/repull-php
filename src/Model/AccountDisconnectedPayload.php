@@ -64,7 +64,8 @@ class AccountDisconnectedPayload implements ModelInterface, ArrayAccess, JsonSer
         'connection_id' => 'string',
         'provider' => 'string',
         'disconnected_at' => '\DateTime',
-        'reason' => 'string'
+        'reason' => 'string',
+        'listings' => '\Repull\Model\AccountDisconnectedPayloadListingsInner[]'
     ];
 
     /**
@@ -78,7 +79,8 @@ class AccountDisconnectedPayload implements ModelInterface, ArrayAccess, JsonSer
         'connection_id' => null,
         'provider' => null,
         'disconnected_at' => 'date-time',
-        'reason' => null
+        'reason' => null,
+        'listings' => null
     ];
 
     /**
@@ -92,7 +94,8 @@ class AccountDisconnectedPayload implements ModelInterface, ArrayAccess, JsonSer
         'connection_id' => true,
         'provider' => false,
         'disconnected_at' => false,
-        'reason' => false
+        'reason' => false,
+        'listings' => false
     ];
 
     /**
@@ -176,7 +179,8 @@ class AccountDisconnectedPayload implements ModelInterface, ArrayAccess, JsonSer
         'connection_id' => 'connectionId',
         'provider' => 'provider',
         'disconnected_at' => 'disconnectedAt',
-        'reason' => 'reason'
+        'reason' => 'reason',
+        'listings' => 'listings'
     ];
 
     /**
@@ -190,7 +194,8 @@ class AccountDisconnectedPayload implements ModelInterface, ArrayAccess, JsonSer
         'connection_id' => 'setConnectionId',
         'provider' => 'setProvider',
         'disconnected_at' => 'setDisconnectedAt',
-        'reason' => 'setReason'
+        'reason' => 'setReason',
+        'listings' => 'setListings'
     ];
 
     /**
@@ -204,7 +209,8 @@ class AccountDisconnectedPayload implements ModelInterface, ArrayAccess, JsonSer
         'connection_id' => 'getConnectionId',
         'provider' => 'getProvider',
         'disconnected_at' => 'getDisconnectedAt',
-        'reason' => 'getReason'
+        'reason' => 'getReason',
+        'listings' => 'getListings'
     ];
 
     /**
@@ -279,6 +285,7 @@ class AccountDisconnectedPayload implements ModelInterface, ArrayAccess, JsonSer
         $this->setIfExists('provider', $data ?? [], null);
         $this->setIfExists('disconnected_at', $data ?? [], null);
         $this->setIfExists('reason', $data ?? [], null);
+        $this->setIfExists('listings', $data ?? [], null);
     }
 
     /**
@@ -493,6 +500,33 @@ class AccountDisconnectedPayload implements ModelInterface, ArrayAccess, JsonSer
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['reason'] = $reason;
+
+        return $this;
+    }
+
+    /**
+     * Gets listings
+     *
+     * @return \Repull\Model\AccountDisconnectedPayloadListingsInner[]|null
+     */
+    public function getListings(): ?array
+    {
+        return $this->container['listings'];
+    }
+
+    /**
+     * Sets listings
+     *
+     * @param \Repull\Model\AccountDisconnectedPayloadListingsInner[]|null $listings The listings this account holds in your workspace — the ones that stop syncing until it is reconnected. Identity only; inactive listings included. Matches `channels[].account` on `GET /v1/listings`. Empty when the account has no listings here.
+     *
+     * @return $this
+     */
+    public function setListings(?array $listings): static
+    {
+        if (is_null($listings)) {
+            throw new InvalidArgumentException('non-nullable listings cannot be null');
+        }
+        $this->container['listings'] = $listings;
 
         return $this;
     }

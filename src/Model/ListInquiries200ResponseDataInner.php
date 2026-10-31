@@ -65,6 +65,7 @@ class ListInquiries200ResponseDataInner implements ModelInterface, ArrayAccess, 
         'status' => 'string',
         'check_in' => '\DateTime',
         'check_out' => '\DateTime',
+        'guest' => '\Repull\Model\ListInquiries200ResponseDataInnerGuest',
         'guests' => '\Repull\Model\ListInquiries200ResponseDataInnerGuests',
         'expected_payout' => '\Repull\Model\ListInquiries200ResponseDataInnerExpectedPayout',
         'reservation_id' => 'string',
@@ -88,6 +89,7 @@ class ListInquiries200ResponseDataInner implements ModelInterface, ArrayAccess, 
         'status' => null,
         'check_in' => 'date',
         'check_out' => 'date',
+        'guest' => null,
         'guests' => null,
         'expected_payout' => null,
         'reservation_id' => null,
@@ -111,6 +113,7 @@ class ListInquiries200ResponseDataInner implements ModelInterface, ArrayAccess, 
         'status' => false,
         'check_in' => true,
         'check_out' => true,
+        'guest' => false,
         'guests' => false,
         'expected_payout' => false,
         'reservation_id' => true,
@@ -204,6 +207,7 @@ class ListInquiries200ResponseDataInner implements ModelInterface, ArrayAccess, 
         'status' => 'status',
         'check_in' => 'checkIn',
         'check_out' => 'checkOut',
+        'guest' => 'guest',
         'guests' => 'guests',
         'expected_payout' => 'expectedPayout',
         'reservation_id' => 'reservationId',
@@ -227,6 +231,7 @@ class ListInquiries200ResponseDataInner implements ModelInterface, ArrayAccess, 
         'status' => 'setStatus',
         'check_in' => 'setCheckIn',
         'check_out' => 'setCheckOut',
+        'guest' => 'setGuest',
         'guests' => 'setGuests',
         'expected_payout' => 'setExpectedPayout',
         'reservation_id' => 'setReservationId',
@@ -250,6 +255,7 @@ class ListInquiries200ResponseDataInner implements ModelInterface, ArrayAccess, 
         'status' => 'getStatus',
         'check_in' => 'getCheckIn',
         'check_out' => 'getCheckOut',
+        'guest' => 'getGuest',
         'guests' => 'getGuests',
         'expected_payout' => 'getExpectedPayout',
         'reservation_id' => 'getReservationId',
@@ -339,6 +345,7 @@ class ListInquiries200ResponseDataInner implements ModelInterface, ArrayAccess, 
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('check_in', $data ?? [], null);
         $this->setIfExists('check_out', $data ?? [], null);
+        $this->setIfExists('guest', $data ?? [], null);
         $this->setIfExists('guests', $data ?? [], null);
         $this->setIfExists('expected_payout', $data ?? [], null);
         $this->setIfExists('reservation_id', $data ?? [], null);
@@ -403,6 +410,9 @@ class ListInquiries200ResponseDataInner implements ModelInterface, ArrayAccess, 
         }
         if ($this->container['check_out'] === null && !$this->isNullableSetToNull('check_out')) {
             $invalidProperties[] = "'check_out' is required";
+        }
+        if ($this->container['guest'] === null) {
+            $invalidProperties[] = "'guest' can't be null";
         }
         if ($this->container['guests'] === null) {
             $invalidProperties[] = "'guests' can't be null";
@@ -654,6 +664,33 @@ class ListInquiries200ResponseDataInner implements ModelInterface, ArrayAccess, 
             }
         }
         $this->container['check_out'] = $check_out;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest
+     *
+     * @return \Repull\Model\ListInquiries200ResponseDataInnerGuest
+     */
+    public function getGuest(): \Repull\Model\ListInquiries200ResponseDataInnerGuest
+    {
+        return $this->container['guest'];
+    }
+
+    /**
+     * Sets guest
+     *
+     * @param \Repull\Model\ListInquiries200ResponseDataInnerGuest $guest guest
+     *
+     * @return $this
+     */
+    public function setGuest(\Repull\Model\ListInquiries200ResponseDataInnerGuest $guest): static
+    {
+        if (is_null($guest)) {
+            throw new InvalidArgumentException('non-nullable guest cannot be null');
+        }
+        $this->container['guest'] = $guest;
 
         return $this;
     }

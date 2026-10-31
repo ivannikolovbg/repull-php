@@ -62,7 +62,8 @@ class ListingWebhookObjectChannelsInner implements ModelInterface, ArrayAccess, 
         'external_id' => 'string',
         'active' => 'bool',
         'sync_enabled' => 'bool',
-        'sync_category' => 'string'
+        'sync_category' => 'string',
+        'account' => '\Repull\Model\RecordAccount'
     ];
 
     /**
@@ -75,7 +76,8 @@ class ListingWebhookObjectChannelsInner implements ModelInterface, ArrayAccess, 
         'external_id' => null,
         'active' => null,
         'sync_enabled' => null,
-        'sync_category' => null
+        'sync_category' => null,
+        'account' => null
     ];
 
     /**
@@ -88,7 +90,8 @@ class ListingWebhookObjectChannelsInner implements ModelInterface, ArrayAccess, 
         'external_id' => false,
         'active' => false,
         'sync_enabled' => false,
-        'sync_category' => true
+        'sync_category' => true,
+        'account' => true
     ];
 
     /**
@@ -171,7 +174,8 @@ class ListingWebhookObjectChannelsInner implements ModelInterface, ArrayAccess, 
         'external_id' => 'externalId',
         'active' => 'active',
         'sync_enabled' => 'syncEnabled',
-        'sync_category' => 'syncCategory'
+        'sync_category' => 'syncCategory',
+        'account' => 'account'
     ];
 
     /**
@@ -184,7 +188,8 @@ class ListingWebhookObjectChannelsInner implements ModelInterface, ArrayAccess, 
         'external_id' => 'setExternalId',
         'active' => 'setActive',
         'sync_enabled' => 'setSyncEnabled',
-        'sync_category' => 'setSyncCategory'
+        'sync_category' => 'setSyncCategory',
+        'account' => 'setAccount'
     ];
 
     /**
@@ -197,7 +202,8 @@ class ListingWebhookObjectChannelsInner implements ModelInterface, ArrayAccess, 
         'external_id' => 'getExternalId',
         'active' => 'getActive',
         'sync_enabled' => 'getSyncEnabled',
-        'sync_category' => 'getSyncCategory'
+        'sync_category' => 'getSyncCategory',
+        'account' => 'getAccount'
     ];
 
     /**
@@ -252,6 +258,7 @@ class ListingWebhookObjectChannelsInner implements ModelInterface, ArrayAccess, 
         $this->setIfExists('active', $data ?? [], null);
         $this->setIfExists('sync_enabled', $data ?? [], null);
         $this->setIfExists('sync_category', $data ?? [], null);
+        $this->setIfExists('account', $data ?? [], null);
     }
 
     /**
@@ -429,6 +436,40 @@ class ListingWebhookObjectChannelsInner implements ModelInterface, ArrayAccess, 
             }
         }
         $this->container['sync_category'] = $sync_category;
+
+        return $this;
+    }
+
+    /**
+     * Gets account
+     *
+     * @return \Repull\Model\RecordAccount|null
+     */
+    public function getAccount(): ?\Repull\Model\RecordAccount
+    {
+        return $this->container['account'];
+    }
+
+    /**
+     * Sets account
+     *
+     * @param \Repull\Model\RecordAccount|null $account The connected account this listing belongs to on this channel — for Airbnb the host account (`externalAccountId` is the Airbnb host id). The same account `account.disconnected` names, so a disconnect can be matched to its listings. Null when it cannot be resolved.
+     *
+     * @return $this
+     */
+    public function setAccount(?\Repull\Model\RecordAccount $account): static
+    {
+        if (is_null($account)) {
+            array_push($this->openAPINullablesSetToNull, 'account');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('account', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['account'] = $account;
 
         return $this;
     }

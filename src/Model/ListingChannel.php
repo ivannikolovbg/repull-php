@@ -62,7 +62,8 @@ class ListingChannel implements ModelInterface, ArrayAccess, JsonSerializable
         'platform' => 'string',
         'external_id' => 'string',
         'active' => 'bool',
-        'sync_enabled' => 'bool'
+        'sync_enabled' => 'bool',
+        'account' => '\Repull\Model\RecordAccount'
     ];
 
     /**
@@ -74,7 +75,8 @@ class ListingChannel implements ModelInterface, ArrayAccess, JsonSerializable
         'platform' => null,
         'external_id' => null,
         'active' => null,
-        'sync_enabled' => null
+        'sync_enabled' => null,
+        'account' => null
     ];
 
     /**
@@ -86,7 +88,8 @@ class ListingChannel implements ModelInterface, ArrayAccess, JsonSerializable
         'platform' => false,
         'external_id' => false,
         'active' => false,
-        'sync_enabled' => false
+        'sync_enabled' => false,
+        'account' => true
     ];
 
     /**
@@ -168,7 +171,8 @@ class ListingChannel implements ModelInterface, ArrayAccess, JsonSerializable
         'platform' => 'platform',
         'external_id' => 'externalId',
         'active' => 'active',
-        'sync_enabled' => 'syncEnabled'
+        'sync_enabled' => 'syncEnabled',
+        'account' => 'account'
     ];
 
     /**
@@ -180,7 +184,8 @@ class ListingChannel implements ModelInterface, ArrayAccess, JsonSerializable
         'platform' => 'setPlatform',
         'external_id' => 'setExternalId',
         'active' => 'setActive',
-        'sync_enabled' => 'setSyncEnabled'
+        'sync_enabled' => 'setSyncEnabled',
+        'account' => 'setAccount'
     ];
 
     /**
@@ -192,7 +197,8 @@ class ListingChannel implements ModelInterface, ArrayAccess, JsonSerializable
         'platform' => 'getPlatform',
         'external_id' => 'getExternalId',
         'active' => 'getActive',
-        'sync_enabled' => 'getSyncEnabled'
+        'sync_enabled' => 'getSyncEnabled',
+        'account' => 'getAccount'
     ];
 
     /**
@@ -246,6 +252,7 @@ class ListingChannel implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('external_id', $data ?? [], null);
         $this->setIfExists('active', $data ?? [], null);
         $this->setIfExists('sync_enabled', $data ?? [], null);
+        $this->setIfExists('account', $data ?? [], null);
     }
 
     /**
@@ -389,6 +396,40 @@ class ListingChannel implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable sync_enabled cannot be null');
         }
         $this->container['sync_enabled'] = $sync_enabled;
+
+        return $this;
+    }
+
+    /**
+     * Gets account
+     *
+     * @return \Repull\Model\RecordAccount|null
+     */
+    public function getAccount(): ?\Repull\Model\RecordAccount
+    {
+        return $this->container['account'];
+    }
+
+    /**
+     * Sets account
+     *
+     * @param \Repull\Model\RecordAccount|null $account The connected account this listing belongs to on this channel — for Airbnb the host account (`externalAccountId` is the Airbnb host id). The same account `account.disconnected` names, so a disconnect can be matched to its listings. Null when it cannot be resolved.
+     *
+     * @return $this
+     */
+    public function setAccount(?\Repull\Model\RecordAccount $account): static
+    {
+        if (is_null($account)) {
+            array_push($this->openAPINullablesSetToNull, 'account');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('account', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['account'] = $account;
 
         return $this;
     }

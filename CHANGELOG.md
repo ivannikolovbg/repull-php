@@ -5,6 +5,17 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.38] - 2026-10-31
+
+### Added
+- `Reservation::getAccessCodes()` (`ReservationAccessCode[]`): door codes from the PMS's lock manager (Guesty Locks Manager) — `code`, `type` (`guest` / `backup` / `other`), `status`, `validFrom`, `validUntil`, `locks`, `source`, `updatedAt`. `null` when codes are not read for the reservation.
+- `Reservation::getPmsReservationId()`: the PMS's own reservation id (e.g. Guesty `_id`).
+- `ListingChannel::getAccount()`: which connected account each listing channel belongs to; `account.disconnected` payloads carry the account's `listings`.
+- `ConnectApi::submitCiirusCredentials()` (`POST /v1/connect/ciirus`).
+
+### Changed
+- Regenerated from the live spec.
+
 ## [0.2.37] - 2026-10-23
 
 ### Added

@@ -66,6 +66,7 @@ class InquiryWebhookObject implements ModelInterface, ArrayAccess, JsonSerializa
         'status' => 'string',
         'check_in' => '\DateTime',
         'check_out' => '\DateTime',
+        'guest' => '\Repull\Model\InquiryWebhookObjectGuest',
         'guests' => '\Repull\Model\InquiryWebhookObjectGuests',
         'expected_payout' => '\Repull\Model\InquiryWebhookObjectExpectedPayout',
         'reservation_id' => 'string',
@@ -89,6 +90,7 @@ class InquiryWebhookObject implements ModelInterface, ArrayAccess, JsonSerializa
         'status' => null,
         'check_in' => 'date',
         'check_out' => 'date',
+        'guest' => null,
         'guests' => null,
         'expected_payout' => null,
         'reservation_id' => null,
@@ -112,6 +114,7 @@ class InquiryWebhookObject implements ModelInterface, ArrayAccess, JsonSerializa
         'status' => false,
         'check_in' => true,
         'check_out' => true,
+        'guest' => false,
         'guests' => false,
         'expected_payout' => false,
         'reservation_id' => true,
@@ -205,6 +208,7 @@ class InquiryWebhookObject implements ModelInterface, ArrayAccess, JsonSerializa
         'status' => 'status',
         'check_in' => 'checkIn',
         'check_out' => 'checkOut',
+        'guest' => 'guest',
         'guests' => 'guests',
         'expected_payout' => 'expectedPayout',
         'reservation_id' => 'reservationId',
@@ -228,6 +232,7 @@ class InquiryWebhookObject implements ModelInterface, ArrayAccess, JsonSerializa
         'status' => 'setStatus',
         'check_in' => 'setCheckIn',
         'check_out' => 'setCheckOut',
+        'guest' => 'setGuest',
         'guests' => 'setGuests',
         'expected_payout' => 'setExpectedPayout',
         'reservation_id' => 'setReservationId',
@@ -251,6 +256,7 @@ class InquiryWebhookObject implements ModelInterface, ArrayAccess, JsonSerializa
         'status' => 'getStatus',
         'check_in' => 'getCheckIn',
         'check_out' => 'getCheckOut',
+        'guest' => 'getGuest',
         'guests' => 'getGuests',
         'expected_payout' => 'getExpectedPayout',
         'reservation_id' => 'getReservationId',
@@ -340,6 +346,7 @@ class InquiryWebhookObject implements ModelInterface, ArrayAccess, JsonSerializa
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('check_in', $data ?? [], null);
         $this->setIfExists('check_out', $data ?? [], null);
+        $this->setIfExists('guest', $data ?? [], null);
         $this->setIfExists('guests', $data ?? [], null);
         $this->setIfExists('expected_payout', $data ?? [], null);
         $this->setIfExists('reservation_id', $data ?? [], null);
@@ -616,6 +623,33 @@ class InquiryWebhookObject implements ModelInterface, ArrayAccess, JsonSerializa
             }
         }
         $this->container['check_out'] = $check_out;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest
+     *
+     * @return \Repull\Model\InquiryWebhookObjectGuest|null
+     */
+    public function getGuest(): ?\Repull\Model\InquiryWebhookObjectGuest
+    {
+        return $this->container['guest'];
+    }
+
+    /**
+     * Sets guest
+     *
+     * @param \Repull\Model\InquiryWebhookObjectGuest|null $guest guest
+     *
+     * @return $this
+     */
+    public function setGuest(?\Repull\Model\InquiryWebhookObjectGuest $guest): static
+    {
+        if (is_null($guest)) {
+            throw new InvalidArgumentException('non-nullable guest cannot be null');
+        }
+        $this->container['guest'] = $guest;
 
         return $this;
     }
