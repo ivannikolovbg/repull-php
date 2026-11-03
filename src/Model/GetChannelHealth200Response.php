@@ -217,6 +217,7 @@ class GetChannelHealth200Response implements ModelInterface, ArrayAccess, JsonSe
     public const STATUS_OK = 'ok';
     public const STATUS_DEGRADED = 'degraded';
     public const STATUS_DOWN = 'down';
+    public const STATUS_UNKNOWN = 'unknown';
 
     /**
      * Gets allowable values of the enum
@@ -229,6 +230,7 @@ class GetChannelHealth200Response implements ModelInterface, ArrayAccess, JsonSe
             self::STATUS_OK,
             self::STATUS_DEGRADED,
             self::STATUS_DOWN,
+            self::STATUS_UNKNOWN,
         ];
     }
 
