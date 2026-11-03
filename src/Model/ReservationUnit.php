@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * ReservationUnit Class Doc Comment
  *
- * @description The physical room the stay was assigned, for a hotel-model PMS (Mews, Cloudbeds) where the listing is a room type. &#x60;null&#x60; when no room is assigned yet, and for every listing that is a single home.
+ * @description The unit the stay is on: the room assigned by a hotel-model PMS (Mews, Cloudbeds) where the listing is a room type, or the unit of a Guesty multi-unit listing (the stay&#39;s &#x60;listingId&#x60; is then that unit&#39;s own listing). Matches the listing&#39;s &#x60;units[].id&#x60; and the per-night &#x60;units&#x60; on availability. &#x60;null&#x60; when no unit is assigned yet, and for every listing that is a single home.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

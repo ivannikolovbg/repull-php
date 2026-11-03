@@ -64,7 +64,8 @@ class ListListingUnits200ResponseDataInner implements ModelInterface, ArrayAcces
         'parent_id' => 'string',
         'housekeeping_status' => 'string',
         'floor' => 'string',
-        'source' => 'string'
+        'source' => 'string',
+        'listing_id' => 'string'
     ];
 
     /**
@@ -79,7 +80,8 @@ class ListListingUnits200ResponseDataInner implements ModelInterface, ArrayAcces
         'parent_id' => null,
         'housekeeping_status' => null,
         'floor' => null,
-        'source' => null
+        'source' => null,
+        'listing_id' => null
     ];
 
     /**
@@ -94,7 +96,8 @@ class ListListingUnits200ResponseDataInner implements ModelInterface, ArrayAcces
         'parent_id' => true,
         'housekeeping_status' => true,
         'floor' => true,
-        'source' => false
+        'source' => false,
+        'listing_id' => true
     ];
 
     /**
@@ -179,7 +182,8 @@ class ListListingUnits200ResponseDataInner implements ModelInterface, ArrayAcces
         'parent_id' => 'parentId',
         'housekeeping_status' => 'housekeepingStatus',
         'floor' => 'floor',
-        'source' => 'source'
+        'source' => 'source',
+        'listing_id' => 'listingId'
     ];
 
     /**
@@ -194,7 +198,8 @@ class ListListingUnits200ResponseDataInner implements ModelInterface, ArrayAcces
         'parent_id' => 'setParentId',
         'housekeeping_status' => 'setHousekeepingStatus',
         'floor' => 'setFloor',
-        'source' => 'setSource'
+        'source' => 'setSource',
+        'listing_id' => 'setListingId'
     ];
 
     /**
@@ -209,7 +214,8 @@ class ListListingUnits200ResponseDataInner implements ModelInterface, ArrayAcces
         'parent_id' => 'getParentId',
         'housekeeping_status' => 'getHousekeepingStatus',
         'floor' => 'getFloor',
-        'source' => 'getSource'
+        'source' => 'getSource',
+        'listing_id' => 'getListingId'
     ];
 
     /**
@@ -266,6 +272,7 @@ class ListListingUnits200ResponseDataInner implements ModelInterface, ArrayAcces
         $this->setIfExists('housekeeping_status', $data ?? [], null);
         $this->setIfExists('floor', $data ?? [], null);
         $this->setIfExists('source', $data ?? [], null);
+        $this->setIfExists('listing_id', $data ?? [], null);
     }
 
     /**
@@ -318,7 +325,7 @@ class ListListingUnits200ResponseDataInner implements ModelInterface, ArrayAcces
     /**
      * Sets id
      *
-     * @param string|null $id The PMS's id for the room; `reservation.unit.id` refers to it.
+     * @param string|null $id The PMS's id for the unit; `reservation.unit.id` and the per-night `units[].id` on `GET /v1/availability/{propertyId}` refer to it.
      *
      * @return $this
      */
@@ -501,7 +508,7 @@ class ListListingUnits200ResponseDataInner implements ModelInterface, ArrayAcces
     /**
      * Sets source
      *
-     * @param string|null $source source
+     * @param string|null $source The PMS the unit comes from: `cloudbeds`, `mews`, `guesty`, …
      *
      * @return $this
      */
@@ -511,6 +518,40 @@ class ListListingUnits200ResponseDataInner implements ModelInterface, ArrayAcces
             throw new InvalidArgumentException('non-nullable source cannot be null');
         }
         $this->container['source'] = $source;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_id
+     *
+     * @return string|null
+     */
+    public function getListingId(): ?string
+    {
+        return $this->container['listing_id'];
+    }
+
+    /**
+     * Sets listing_id
+     *
+     * @param string|null $listing_id The unit's own Repull listing id when the unit is a listing too (a Guesty multi-unit listing's units, each with its own calendar and stays), else null.
+     *
+     * @return $this
+     */
+    public function setListingId(?string $listing_id): static
+    {
+        if (is_null($listing_id)) {
+            array_push($this->openAPINullablesSetToNull, 'listing_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('listing_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['listing_id'] = $listing_id;
 
         return $this;
     }

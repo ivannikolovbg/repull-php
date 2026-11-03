@@ -5,6 +5,11 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.2.40 — 2026-11-03
+
+- Availability: each day on a listing with units (Cloudbeds/Mews room type, Guesty multi-unit listing) carries `units: [{ id, available }]` — which unit is free that night.
+- Listings: `parent` on a unit of a Guesty multi-unit listing; `units[].listingId` (the unit's own listing).
+
 ## 0.2.39 — 2026-11-03
 
 - Channel health `status` can now be `unknown`: the health numbers could not be read at that moment (HTTP 200, `message` gives the reason). Regenerated from the live spec.

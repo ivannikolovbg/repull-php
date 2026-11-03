@@ -61,6 +61,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPITypes = [
         'capabilities' => '\Repull\Model\ListingCapabilities',
         'kind' => 'string',
+        'parent' => '\Repull\Model\ListingParent',
         'hotel' => '\Repull\Model\ListingHotel',
         'unit_count' => 'int',
         'units' => '\Repull\Model\ListingUnitsInner[]',
@@ -93,6 +94,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPIFormats = [
         'capabilities' => null,
         'kind' => null,
+        'parent' => null,
         'hotel' => null,
         'unit_count' => null,
         'units' => null,
@@ -125,6 +127,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPINullables = [
         'capabilities' => false,
         'kind' => false,
+        'parent' => true,
         'hotel' => true,
         'unit_count' => false,
         'units' => false,
@@ -227,6 +230,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $attributeMap = [
         'capabilities' => 'capabilities',
         'kind' => 'kind',
+        'parent' => 'parent',
         'hotel' => 'hotel',
         'unit_count' => 'unitCount',
         'units' => 'units',
@@ -259,6 +263,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $setters = [
         'capabilities' => 'setCapabilities',
         'kind' => 'setKind',
+        'parent' => 'setParent',
         'hotel' => 'setHotel',
         'unit_count' => 'setUnitCount',
         'units' => 'setUnits',
@@ -291,6 +296,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $getters = [
         'capabilities' => 'getCapabilities',
         'kind' => 'getKind',
+        'parent' => 'getParent',
         'hotel' => 'getHotel',
         'unit_count' => 'getUnitCount',
         'units' => 'getUnits',
@@ -396,6 +402,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $this->setIfExists('capabilities', $data ?? [], null);
         $this->setIfExists('kind', $data ?? [], null);
+        $this->setIfExists('parent', $data ?? [], null);
         $this->setIfExists('hotel', $data ?? [], null);
         $this->setIfExists('unit_count', $data ?? [], null);
         $this->setIfExists('units', $data ?? [], null);
@@ -519,7 +526,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets kind
      *
-     * @param string|null $kind `room_type` when the listing sells several identical units (a hotel room type: `unitCount` > 1) or is a hotel PMS room type; `home` otherwise. See the Hotels & multi-unit guide.
+     * @param string|null $kind `room_type` when the listing sells several units (a hotel room type or a Guesty multi-unit listing: `unitCount` > 1) or is a hotel PMS room type; `home` otherwise. See the Hotels & multi-unit guide.
      *
      * @return $this
      */
@@ -530,6 +537,40 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['kind'] = $kind;
+
+        return $this;
+    }
+
+    /**
+     * Gets parent
+     *
+     * @return \Repull\Model\ListingParent|null
+     */
+    public function getParent(): ?\Repull\Model\ListingParent
+    {
+        return $this->container['parent'];
+    }
+
+    /**
+     * Sets parent
+     *
+     * @param \Repull\Model\ListingParent|null $parent parent
+     *
+     * @return $this
+     */
+    public function setParent(?\Repull\Model\ListingParent $parent): static
+    {
+        if (is_null($parent)) {
+            array_push($this->openAPINullablesSetToNull, 'parent');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('parent', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['parent'] = $parent;
 
         return $this;
     }
@@ -581,7 +622,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets unit_count
      *
-     * @param int|null $unit_count How many identical units (rooms) this listing sells: the hotel PMS rooms of the room type, the room count on Booking.com, or 1 for a home. Rooms left per night are `availableUnits` on `GET /v1/availability/{propertyId}`.
+     * @param int|null $unit_count How many units (rooms) this listing sells: the hotel PMS rooms of the room type, the units of a Guesty multi-unit listing, the room count on Booking.com, or 1 for a home. Units left per night are `availableUnits` on `GET /v1/availability/{propertyId}`, and which unit is free is `units` there.
      *
      * @return $this
      */
@@ -613,7 +654,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets units
      *
-     * @param \Repull\Model\ListingUnitsInner[]|null $units `GET /v1/listings/{id}` only. The physical rooms under a hotel-model listing (a Mews or Cloudbeds room type); empty for a single home. Same items as `GET /v1/listings/{id}/units`.
+     * @param \Repull\Model\ListingUnitsInner[]|null $units `GET /v1/listings/{id}` only. The units under the listing: a Mews or Cloudbeds room type's rooms, or a Guesty multi-unit listing's units; empty for a single home. Same items as `GET /v1/listings/{id}/units`.
      *
      * @return $this
      */

@@ -63,7 +63,8 @@ class PropertyAvailabilityDay implements ModelInterface, ArrayAccess, JsonSerial
         'available' => 'bool',
         'price' => 'float',
         'min_nights' => 'int',
-        'available_units' => 'int'
+        'available_units' => 'int',
+        'units' => '\Repull\Model\PropertyAvailabilityUnit[]'
     ];
 
     /**
@@ -76,7 +77,8 @@ class PropertyAvailabilityDay implements ModelInterface, ArrayAccess, JsonSerial
         'available' => null,
         'price' => null,
         'min_nights' => null,
-        'available_units' => null
+        'available_units' => null,
+        'units' => null
     ];
 
     /**
@@ -89,7 +91,8 @@ class PropertyAvailabilityDay implements ModelInterface, ArrayAccess, JsonSerial
         'available' => false,
         'price' => false,
         'min_nights' => false,
-        'available_units' => false
+        'available_units' => false,
+        'units' => false
     ];
 
     /**
@@ -172,7 +175,8 @@ class PropertyAvailabilityDay implements ModelInterface, ArrayAccess, JsonSerial
         'available' => 'available',
         'price' => 'price',
         'min_nights' => 'minNights',
-        'available_units' => 'availableUnits'
+        'available_units' => 'availableUnits',
+        'units' => 'units'
     ];
 
     /**
@@ -185,7 +189,8 @@ class PropertyAvailabilityDay implements ModelInterface, ArrayAccess, JsonSerial
         'available' => 'setAvailable',
         'price' => 'setPrice',
         'min_nights' => 'setMinNights',
-        'available_units' => 'setAvailableUnits'
+        'available_units' => 'setAvailableUnits',
+        'units' => 'setUnits'
     ];
 
     /**
@@ -198,7 +203,8 @@ class PropertyAvailabilityDay implements ModelInterface, ArrayAccess, JsonSerial
         'available' => 'getAvailable',
         'price' => 'getPrice',
         'min_nights' => 'getMinNights',
-        'available_units' => 'getAvailableUnits'
+        'available_units' => 'getAvailableUnits',
+        'units' => 'getUnits'
     ];
 
     /**
@@ -253,6 +259,7 @@ class PropertyAvailabilityDay implements ModelInterface, ArrayAccess, JsonSerial
         $this->setIfExists('price', $data ?? [], null);
         $this->setIfExists('min_nights', $data ?? [], null);
         $this->setIfExists('available_units', $data ?? [], null);
+        $this->setIfExists('units', $data ?? [], null);
     }
 
     /**
@@ -432,7 +439,7 @@ class PropertyAvailabilityDay implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets available_units
      *
-     * @param int $available_units Units still sellable that night. 1 or 0 for a single home. For a hotel-model listing (a Mews or Cloudbeds room type) the rooms of that type left, e.g. 3 of 5 — see `GET /v1/listings/{id}/units`. `available` is false whenever this is 0.
+     * @param int $available_units Units still sellable that night. 1 or 0 for a single home. For a listing with units (a Mews or Cloudbeds room type, a Guesty multi-unit listing) the units left, e.g. 3 of 5 — see `GET /v1/listings/{id}/units`. `available` is false whenever this is 0.
      *
      * @return $this
      */
@@ -447,6 +454,33 @@ class PropertyAvailabilityDay implements ModelInterface, ArrayAccess, JsonSerial
         }
 
         $this->container['available_units'] = $available_units;
+
+        return $this;
+    }
+
+    /**
+     * Gets units
+     *
+     * @return \Repull\Model\PropertyAvailabilityUnit[]|null
+     */
+    public function getUnits(): ?array
+    {
+        return $this->container['units'];
+    }
+
+    /**
+     * Sets units
+     *
+     * @param \Repull\Model\PropertyAvailabilityUnit[]|null $units Only on a listing with units (a Mews or Cloudbeds room type, a Guesty multi-unit listing): each active unit and whether it is free that night. A unit is taken when a stay is on it, a room block covers it, or (for a unit that is a listing of its own) its own calendar is closed. Ids are the listing's `units[].id` and a reservation's `unit.id`.
+     *
+     * @return $this
+     */
+    public function setUnits(?array $units): static
+    {
+        if (is_null($units)) {
+            throw new InvalidArgumentException('non-nullable units cannot be null');
+        }
+        $this->container['units'] = $units;
 
         return $this;
     }
