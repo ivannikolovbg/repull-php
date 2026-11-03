@@ -3576,7 +3576,7 @@ class ListingsApi
     /**
      * Operation listListingUnits
      *
-     * List a listing&#39;s units (rooms)
+     * List a listing&#39;s units
      *
      * @param  int $id Listing id. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listListingUnits'] to see the possible values for this operation
@@ -3597,7 +3597,7 @@ class ListingsApi
     /**
      * Operation listListingUnitsWithHttpInfo
      *
-     * List a listing&#39;s units (rooms)
+     * List a listing&#39;s units
      *
      * @param  int $id Listing id. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listListingUnits'] to see the possible values for this operation
@@ -3724,7 +3724,7 @@ class ListingsApi
     /**
      * Operation listListingUnitsAsync
      *
-     * List a listing&#39;s units (rooms)
+     * List a listing&#39;s units
      *
      * @param  int $id Listing id. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listListingUnits'] to see the possible values for this operation
@@ -3748,7 +3748,7 @@ class ListingsApi
     /**
      * Operation listListingUnitsAsyncWithHttpInfo
      *
-     * List a listing&#39;s units (rooms)
+     * List a listing&#39;s units
      *
      * @param  int $id Listing id. (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listListingUnits'] to see the possible values for this operation
