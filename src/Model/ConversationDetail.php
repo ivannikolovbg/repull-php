@@ -443,7 +443,7 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
     /**
      * Sets account
      *
-     * @param \Repull\Model\RecordAccount|null $account The connected account this conversation belongs to. List endpoint.
+     * @param \Repull\Model\RecordAccount|null $account The connected account this conversation belongs to, the same block as the message webhooks. On the list and on `GET /v1/conversations/{id}`.
      *
      * @return $this
      */
