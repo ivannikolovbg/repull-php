@@ -69,6 +69,8 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'name' => 'string',
         'public_name' => 'string',
         'address' => '\Repull\Model\ListingAddress',
+        'latitude' => 'string',
+        'longitude' => 'string',
         'thumbnail_url' => 'string',
         'status' => 'string',
         'channels' => '\Repull\Model\ListingChannel[]',
@@ -102,6 +104,8 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'name' => null,
         'public_name' => null,
         'address' => null,
+        'latitude' => null,
+        'longitude' => null,
         'thumbnail_url' => 'uri',
         'status' => null,
         'channels' => null,
@@ -135,6 +139,8 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'name' => false,
         'public_name' => true,
         'address' => false,
+        'latitude' => true,
+        'longitude' => true,
         'thumbnail_url' => true,
         'status' => false,
         'channels' => false,
@@ -238,6 +244,8 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'name' => 'name',
         'public_name' => 'publicName',
         'address' => 'address',
+        'latitude' => 'latitude',
+        'longitude' => 'longitude',
         'thumbnail_url' => 'thumbnailUrl',
         'status' => 'status',
         'channels' => 'channels',
@@ -271,6 +279,8 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'name' => 'setName',
         'public_name' => 'setPublicName',
         'address' => 'setAddress',
+        'latitude' => 'setLatitude',
+        'longitude' => 'setLongitude',
         'thumbnail_url' => 'setThumbnailUrl',
         'status' => 'setStatus',
         'channels' => 'setChannels',
@@ -304,6 +314,8 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'name' => 'getName',
         'public_name' => 'getPublicName',
         'address' => 'getAddress',
+        'latitude' => 'getLatitude',
+        'longitude' => 'getLongitude',
         'thumbnail_url' => 'getThumbnailUrl',
         'status' => 'getStatus',
         'channels' => 'getChannels',
@@ -410,6 +422,8 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('name', $data ?? [], null);
         $this->setIfExists('public_name', $data ?? [], null);
         $this->setIfExists('address', $data ?? [], null);
+        $this->setIfExists('latitude', $data ?? [], null);
+        $this->setIfExists('longitude', $data ?? [], null);
         $this->setIfExists('thumbnail_url', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('channels', $data ?? [], null);
@@ -779,6 +793,74 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable address cannot be null');
         }
         $this->container['address'] = $address;
+
+        return $this;
+    }
+
+    /**
+     * Gets latitude
+     *
+     * @return string|null
+     */
+    public function getLatitude(): ?string
+    {
+        return $this->container['latitude'];
+    }
+
+    /**
+     * Sets latitude
+     *
+     * @param string|null $latitude `GET /v1/listings/{id}` only. Map pin latitude in decimal degrees, as a string; the same value as `GET /v1/properties/{id}`. Null when the listing has no coordinates.
+     *
+     * @return $this
+     */
+    public function setLatitude(?string $latitude): static
+    {
+        if (is_null($latitude)) {
+            array_push($this->openAPINullablesSetToNull, 'latitude');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('latitude', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['latitude'] = $latitude;
+
+        return $this;
+    }
+
+    /**
+     * Gets longitude
+     *
+     * @return string|null
+     */
+    public function getLongitude(): ?string
+    {
+        return $this->container['longitude'];
+    }
+
+    /**
+     * Sets longitude
+     *
+     * @param string|null $longitude `GET /v1/listings/{id}` only. Map pin longitude in decimal degrees, as a string; the same value as `GET /v1/properties/{id}`. Null when the listing has no coordinates.
+     *
+     * @return $this
+     */
+    public function setLongitude(?string $longitude): static
+    {
+        if (is_null($longitude)) {
+            array_push($this->openAPINullablesSetToNull, 'longitude');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('longitude', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['longitude'] = $longitude;
 
         return $this;
     }
