@@ -74,6 +74,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'thumbnail_url' => 'string',
         'status' => 'string',
         'channels' => '\Repull\Model\ListingChannel[]',
+        'airbnb_access' => '\Repull\Model\AirbnbAccess',
         'amenities' => '\Repull\Model\ListingAmenity[]',
         'content' => '\Repull\Model\ListingContent',
         'details' => '\Repull\Model\ListingDetails',
@@ -109,6 +110,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'thumbnail_url' => 'uri',
         'status' => null,
         'channels' => null,
+        'airbnb_access' => null,
         'amenities' => null,
         'content' => null,
         'details' => null,
@@ -144,6 +146,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'thumbnail_url' => true,
         'status' => false,
         'channels' => false,
+        'airbnb_access' => false,
         'amenities' => false,
         'content' => true,
         'details' => true,
@@ -249,6 +252,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'thumbnail_url' => 'thumbnailUrl',
         'status' => 'status',
         'channels' => 'channels',
+        'airbnb_access' => 'airbnbAccess',
         'amenities' => 'amenities',
         'content' => 'content',
         'details' => 'details',
@@ -284,6 +288,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'thumbnail_url' => 'setThumbnailUrl',
         'status' => 'setStatus',
         'channels' => 'setChannels',
+        'airbnb_access' => 'setAirbnbAccess',
         'amenities' => 'setAmenities',
         'content' => 'setContent',
         'details' => 'setDetails',
@@ -319,6 +324,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         'thumbnail_url' => 'getThumbnailUrl',
         'status' => 'getStatus',
         'channels' => 'getChannels',
+        'airbnb_access' => 'getAirbnbAccess',
         'amenities' => 'getAmenities',
         'content' => 'getContent',
         'details' => 'getDetails',
@@ -427,6 +433,7 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('thumbnail_url', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('channels', $data ?? [], null);
+        $this->setIfExists('airbnb_access', $data ?? [], null);
         $this->setIfExists('amenities', $data ?? [], null);
         $this->setIfExists('content', $data ?? [], null);
         $this->setIfExists('details', $data ?? [], null);
@@ -950,6 +957,33 @@ class Listing implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable channels cannot be null');
         }
         $this->container['channels'] = $channels;
+
+        return $this;
+    }
+
+    /**
+     * Gets airbnb_access
+     *
+     * @return \Repull\Model\AirbnbAccess|null
+     */
+    public function getAirbnbAccess(): ?\Repull\Model\AirbnbAccess
+    {
+        return $this->container['airbnb_access'];
+    }
+
+    /**
+     * Sets airbnb_access
+     *
+     * @param \Repull\Model\AirbnbAccess|null $airbnb_access Airbnb listings: every account on the listing (owner and co-hosts), whether each is connected, and which one acts by default. `defaultAccount: null` means no connected account can reach the listing — connect one of `accounts`.
+     *
+     * @return $this
+     */
+    public function setAirbnbAccess(?\Repull\Model\AirbnbAccess $airbnb_access): static
+    {
+        if (is_null($airbnb_access)) {
+            throw new InvalidArgumentException('non-nullable airbnb_access cannot be null');
+        }
+        $this->container['airbnb_access'] = $airbnb_access;
 
         return $this;
     }

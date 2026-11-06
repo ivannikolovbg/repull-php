@@ -60,6 +60,7 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     protected static array $openAPITypes = [
         'account' => '\Repull\Model\RecordAccount',
+        'airbnb_access' => '\Repull\Model\AirbnbAccess',
         'id' => 'string',
         'platform' => 'string',
         'external_thread_id' => 'string',
@@ -85,6 +86,7 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     protected static array $openAPIFormats = [
         'account' => null,
+        'airbnb_access' => null,
         'id' => null,
         'platform' => null,
         'external_thread_id' => null,
@@ -110,6 +112,7 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     protected static array $openAPINullables = [
         'account' => true,
+        'airbnb_access' => true,
         'id' => false,
         'platform' => true,
         'external_thread_id' => true,
@@ -205,6 +208,7 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     protected static array $attributeMap = [
         'account' => 'account',
+        'airbnb_access' => 'airbnbAccess',
         'id' => 'id',
         'platform' => 'platform',
         'external_thread_id' => 'externalThreadId',
@@ -230,6 +234,7 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     protected static array $setters = [
         'account' => 'setAccount',
+        'airbnb_access' => 'setAirbnbAccess',
         'id' => 'setId',
         'platform' => 'setPlatform',
         'external_thread_id' => 'setExternalThreadId',
@@ -255,6 +260,7 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
      */
     protected static array $getters = [
         'account' => 'getAccount',
+        'airbnb_access' => 'getAirbnbAccess',
         'id' => 'getId',
         'platform' => 'getPlatform',
         'external_thread_id' => 'getExternalThreadId',
@@ -357,6 +363,7 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
     public function __construct(?array $data = null)
     {
         $this->setIfExists('account', $data ?? [], null);
+        $this->setIfExists('airbnb_access', $data ?? [], null);
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
         $this->setIfExists('external_thread_id', $data ?? [], null);
@@ -460,6 +467,40 @@ class ConversationDetail implements ModelInterface, ArrayAccess, JsonSerializabl
             }
         }
         $this->container['account'] = $account;
+
+        return $this;
+    }
+
+    /**
+     * Gets airbnb_access
+     *
+     * @return \Repull\Model\AirbnbAccess|null
+     */
+    public function getAirbnbAccess(): ?\Repull\Model\AirbnbAccess
+    {
+        return $this->container['airbnb_access'];
+    }
+
+    /**
+     * Sets airbnb_access
+     *
+     * @param \Repull\Model\AirbnbAccess|null $airbnb_access Airbnb conversations, on `GET /v1/conversations/{id}`: every account on the listing (owner and co-hosts) with its state, and `defaultAccount` — the one a send uses when `account` is not given. Pass any connected one as `account` on `POST /v1/conversations/{id}/messages` to send as it.
+     *
+     * @return $this
+     */
+    public function setAirbnbAccess(?\Repull\Model\AirbnbAccess $airbnb_access): static
+    {
+        if (is_null($airbnb_access)) {
+            array_push($this->openAPINullablesSetToNull, 'airbnb_access');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('airbnb_access', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['airbnb_access'] = $airbnb_access;
 
         return $this;
     }

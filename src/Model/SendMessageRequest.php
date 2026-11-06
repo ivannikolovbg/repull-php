@@ -61,6 +61,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     protected static array $openAPITypes = [
         'message' => 'string',
         'channel' => 'string',
+        'account' => 'string',
         'attachments' => '\Repull\Model\SendMessageAttachment[]'
     ];
 
@@ -72,6 +73,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     protected static array $openAPIFormats = [
         'message' => null,
         'channel' => null,
+        'account' => null,
         'attachments' => null
     ];
 
@@ -83,6 +85,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     protected static array $openAPINullables = [
         'message' => false,
         'channel' => false,
+        'account' => false,
         'attachments' => false
     ];
 
@@ -164,6 +167,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     protected static array $attributeMap = [
         'message' => 'message',
         'channel' => 'channel',
+        'account' => 'account',
         'attachments' => 'attachments'
     ];
 
@@ -175,6 +179,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     protected static array $setters = [
         'message' => 'setMessage',
         'channel' => 'setChannel',
+        'account' => 'setAccount',
         'attachments' => 'setAttachments'
     ];
 
@@ -186,6 +191,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     protected static array $getters = [
         'message' => 'getMessage',
         'channel' => 'getChannel',
+        'account' => 'getAccount',
         'attachments' => 'getAttachments'
     ];
 
@@ -238,6 +244,7 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
     {
         $this->setIfExists('message', $data ?? [], null);
         $this->setIfExists('channel', $data ?? [], null);
+        $this->setIfExists('account', $data ?? [], null);
         $this->setIfExists('attachments', $data ?? [], null);
     }
 
@@ -268,6 +275,10 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
 
         if (!is_null($this->container['message']) && (mb_strlen($this->container['message']) > 4000)) {
             $invalidProperties[] = "invalid value for 'message', the character length must be smaller than or equal to 4000.";
+        }
+
+        if (!is_null($this->container['account']) && !preg_match("/^airbnb:\\d+$/", $this->container['account'])) {
+            $invalidProperties[] = "invalid value for 'account', must be conform to the pattern /^airbnb:\\d+$/.";
         }
 
         if (!is_null($this->container['attachments']) && (count($this->container['attachments']) > 5)) {
@@ -344,6 +355,38 @@ class SendMessageRequest implements ModelInterface, ArrayAccess, JsonSerializabl
             throw new InvalidArgumentException('non-nullable channel cannot be null');
         }
         $this->container['channel'] = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Gets account
+     *
+     * @return string|null
+     */
+    public function getAccount(): ?string
+    {
+        return $this->container['account'];
+    }
+
+    /**
+     * Sets account
+     *
+     * @param string|null $account Airbnb conversations: send as exactly this connected account — the listing's owner or one of its co-hosts — e.g. your team co-host. Never swapped for another account: if it is disconnected or not on the listing, nothing is sent and the error says why. Omit it and the conversation's own account sends while it is connected, otherwise the listing's owner, otherwise a connected co-host. Connected accounts are on `GET /v1/connect`.
+     *
+     * @return $this
+     */
+    public function setAccount(?string $account): static
+    {
+        if (is_null($account)) {
+            throw new InvalidArgumentException('non-nullable account cannot be null');
+        }
+
+        if ((!preg_match("/^airbnb:\\d+$/", ObjectSerializer::toString($account)))) {
+            throw new InvalidArgumentException("invalid value for \$account when calling SendMessageRequest., must conform to the pattern /^airbnb:\\d+$/.");
+        }
+
+        $this->container['account'] = $account;
 
         return $this;
     }
