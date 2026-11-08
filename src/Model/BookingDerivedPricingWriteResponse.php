@@ -1,0 +1,581 @@
+<?php
+/**
+ * BookingDerivedPricingWriteResponse
+ *
+ * PHP version 8.1
+ *
+ * @package  Repull
+ * @author   OpenAPI Generator team
+ * @link     https://openapi-generator.tech
+ */
+
+/**
+ * Repull API
+ *
+ * The unified API for vacation rental tech. Connect to 50+ PMS platforms and 4 OTA channels through one REST API. Built-in AI operations for guest communication, pricing, and listing optimization.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_live_YOUR_API_KEY ```  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resetsAt` fields.  ## Plan listing limits Each plan includes a number of **active listings**:  | Tier | Active listings | |---|---| | `free` | 3 | | `starter` | no cap: 10 included, then billed per listing | | `custom` | no cap |  Going over the plan never blocks your API calls. Listings beyond the plan are **held back**: they stay connected and keep syncing, but they are not served. A held-back listing answers `403 listing_inactive` with `reason: \"plan_limit\"`, and collection routes leave it out. Every JSON response then carries a `planNotice` and the `X-Repull-Listings-Held-Back` header, so you know there is more to see.  Choose which listings are active with `POST /v1/listings/status`, or upgrade at `https://repull.dev/dashboard/billing` to activate them all.  Only a call that would itself take you over the plan is refused, with **`402 listings_limit_exceeded`**: activating listings (`PATCH /v1/listings/{id}` with `{ \"active\": true }`, `POST /v1/listings/status`) or creating one (`POST /v1/listings`). Nothing else changes. The envelope carries the tier, the limit, the active count and an upgrade link next to the standard `code` / `message` / `fix` / `docs_url` / `request_id`.  If an account has more active listings than its plan (for example after a downgrade), calls are still served and `planNotice` says so (code \"listings_over_plan\").
+ *
+ * The version of the OpenAPI document: 1.0.0
+ * @generated Generated by: https://openapi-generator.tech
+ * Generator version: 7.22.0
+ */
+
+/**
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+
+namespace Repull\Model;
+
+use ArrayAccess;
+use JsonSerializable;
+use InvalidArgumentException;
+use ReturnTypeWillChange;
+use Repull\ObjectSerializer;
+
+/**
+ * BookingDerivedPricingWriteResponse Class Doc Comment
+ *
+ * @description Returned by &#x60;PUT /v1/channels/booking/availability&#x60; with &#x60;type: \&quot;derived-pricing\&quot;&#x60;.
+ * @package  Repull
+ * @author   OpenAPI Generator team
+ * @link     https://openapi-generator.tech
+ * @implements ArrayAccess<string, mixed>
+ */
+class BookingDerivedPricingWriteResponse implements ModelInterface, ArrayAccess, JsonSerializable
+{
+    public const DISCRIMINATOR = null;
+
+    /**
+     * The original name of the model.
+     *
+     * @var string
+     */
+    protected static string $openAPIModelName = 'BookingDerivedPricingWriteResponse';
+
+    /**
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var array<string, string>
+     */
+    protected static array $openAPITypes = [
+        'property_id' => 'string',
+        'requested' => 'int',
+        'applied' => 'string',
+        'rates' => '\Repull\Model\BookingDerivedPricingWriteResponseRatesInner[]',
+        'verification' => '\Repull\Model\BookingDerivedPricingWriteResponseVerification',
+        'booking' => 'array<string,mixed>'
+    ];
+
+    /**
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @var array<string, string|null>
+     */
+    protected static array $openAPIFormats = [
+        'property_id' => null,
+        'requested' => null,
+        'applied' => null,
+        'rates' => null,
+        'verification' => null,
+        'booking' => null
+    ];
+
+    /**
+     * Array of nullable properties. Used for (de)serialization
+     *
+     * @var array<string, bool>
+     */
+    protected static array $openAPINullables = [
+        'property_id' => false,
+        'requested' => false,
+        'applied' => false,
+        'rates' => false,
+        'verification' => false,
+        'booking' => false
+    ];
+
+    /**
+     * If a nullable field gets set to null, insert it here
+     *
+     * @var array<string, bool>
+     */
+    protected array $openAPINullablesSetToNull = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function openAPITypes(): array
+    {
+        return self::$openAPITypes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function openAPIFormats(): array
+    {
+        return self::$openAPIFormats;
+    }
+
+    /**
+     * Array of nullable properties
+     *
+     * @return array<string, bool>
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return array<string, bool>
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param array<string, bool> $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+    }
+
+    /**
+     * Array of attributes where the key is the local name,
+     * and the value is the original name
+     *
+     * @var array<string, string>
+     */
+    protected static array $attributeMap = [
+        'property_id' => 'propertyId',
+        'requested' => 'requested',
+        'applied' => 'applied',
+        'rates' => 'rates',
+        'verification' => 'verification',
+        'booking' => 'booking'
+    ];
+
+    /**
+     * Array of attributes to setter functions (for deserialization of responses)
+     *
+     * @var array<string, string>
+     */
+    protected static array $setters = [
+        'property_id' => 'setPropertyId',
+        'requested' => 'setRequested',
+        'applied' => 'setApplied',
+        'rates' => 'setRates',
+        'verification' => 'setVerification',
+        'booking' => 'setBooking'
+    ];
+
+    /**
+     * Array of attributes to getter functions (for serialization of requests)
+     *
+     * @var array<string, string>
+     */
+    protected static array $getters = [
+        'property_id' => 'getPropertyId',
+        'requested' => 'getRequested',
+        'applied' => 'getApplied',
+        'rates' => 'getRates',
+        'verification' => 'getVerification',
+        'booking' => 'getBooking'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function attributeMap(): array
+    {
+        return self::$attributeMap;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function setters(): array
+    {
+        return self::$setters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getters(): array
+    {
+        return self::$getters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getModelName(): string
+    {
+        return self::$openAPIModelName;
+    }
+
+    public const APPLIED_VERIFIED = 'verified';
+    public const APPLIED_MISMATCH = 'mismatch';
+    public const APPLIED_UNVERIFIED = 'unverified';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getAppliedAllowableValues()
+    {
+        return [
+            self::APPLIED_VERIFIED,
+            self::APPLIED_MISMATCH,
+            self::APPLIED_UNVERIFIED,
+        ];
+    }
+
+    /**
+     * Associative array for storing property values
+     *
+     * @var array
+     */
+    protected array $container = [];
+
+    /**
+     * Constructor
+     *
+     * @param array $data Associated array of property values initializing the model
+     */
+    public function __construct(?array $data = null)
+    {
+        $this->setIfExists('property_id', $data ?? [], null);
+        $this->setIfExists('requested', $data ?? [], null);
+        $this->setIfExists('applied', $data ?? [], null);
+        $this->setIfExists('rates', $data ?? [], null);
+        $this->setIfExists('verification', $data ?? [], null);
+        $this->setIfExists('booking', $data ?? [], null);
+    }
+
+    /**
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     *
+     * @param string $variableName
+     * @param array  $fields
+     * @param mixed  $defaultValue
+     */
+    private function setIfExists(string $variableName, array $fields, mixed $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function listInvalidProperties(): array
+    {
+        $invalidProperties = [];
+
+        $allowedValues = self::getAppliedAllowableValues();
+        if (!is_null($this->container['applied']) && !in_array($this->container['applied'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'applied', must be one of '%s'",
+                $this->container['applied'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        return $invalidProperties;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function valid(): bool
+    {
+        return count($this->listInvalidProperties()) === 0;
+    }
+
+
+    /**
+     * Gets property_id
+     *
+     * @return string|null
+     */
+    public function getPropertyId(): ?string
+    {
+        return $this->container['property_id'];
+    }
+
+    /**
+     * Sets property_id
+     *
+     * @param string|null $property_id property_id
+     *
+     * @return $this
+     */
+    public function setPropertyId(?string $property_id): static
+    {
+        if (is_null($property_id)) {
+            throw new InvalidArgumentException('non-nullable property_id cannot be null');
+        }
+        $this->container['property_id'] = $property_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets requested
+     *
+     * @return int|null
+     */
+    public function getRequested(): ?int
+    {
+        return $this->container['requested'];
+    }
+
+    /**
+     * Sets requested
+     *
+     * @param int|null $requested requested
+     *
+     * @return $this
+     */
+    public function setRequested(?int $requested): static
+    {
+        if (is_null($requested)) {
+            throw new InvalidArgumentException('non-nullable requested cannot be null');
+        }
+        $this->container['requested'] = $requested;
+
+        return $this;
+    }
+
+    /**
+     * Gets applied
+     *
+     * @return string|null
+     */
+    public function getApplied(): ?string
+    {
+        return $this->container['applied'];
+    }
+
+    /**
+     * Sets applied
+     *
+     * @param string|null $applied `verified` — read back, each rate plan holds exactly the rules sent. `mismatch` — read back and they differ (`verification.rows`). `unverified` — `verify: false`, or the read failed. A refusal is `422 booking_rejected`, not a 200.
+     *
+     * @return $this
+     */
+    public function setApplied(?string $applied): static
+    {
+        if (is_null($applied)) {
+            throw new InvalidArgumentException('non-nullable applied cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['applied'] = $applied;
+
+        return $this;
+    }
+
+    /**
+     * Gets rates
+     *
+     * @return \Repull\Model\BookingDerivedPricingWriteResponseRatesInner[]|null
+     */
+    public function getRates(): ?array
+    {
+        return $this->container['rates'];
+    }
+
+    /**
+     * Sets rates
+     *
+     * @param \Repull\Model\BookingDerivedPricingWriteResponseRatesInner[]|null $rates Per rate plan, the rules it holds now (as read back; as sent when unverified).
+     *
+     * @return $this
+     */
+    public function setRates(?array $rates): static
+    {
+        if (is_null($rates)) {
+            throw new InvalidArgumentException('non-nullable rates cannot be null');
+        }
+        $this->container['rates'] = $rates;
+
+        return $this;
+    }
+
+    /**
+     * Gets verification
+     *
+     * @return \Repull\Model\BookingDerivedPricingWriteResponseVerification|null
+     */
+    public function getVerification(): ?\Repull\Model\BookingDerivedPricingWriteResponseVerification
+    {
+        return $this->container['verification'];
+    }
+
+    /**
+     * Sets verification
+     *
+     * @param \Repull\Model\BookingDerivedPricingWriteResponseVerification|null $verification verification
+     *
+     * @return $this
+     */
+    public function setVerification(?\Repull\Model\BookingDerivedPricingWriteResponseVerification $verification): static
+    {
+        if (is_null($verification)) {
+            throw new InvalidArgumentException('non-nullable verification cannot be null');
+        }
+        $this->container['verification'] = $verification;
+
+        return $this;
+    }
+
+    /**
+     * Gets booking
+     *
+     * @return array<string,mixed>|null
+     */
+    public function getBooking(): ?array
+    {
+        return $this->container['booking'];
+    }
+
+    /**
+     * Sets booking
+     *
+     * @param array<string,mixed>|null $booking Booking.com's answer, verbatim.
+     *
+     * @return $this
+     */
+    public function setBooking(?array $booking): static
+    {
+        if (is_null($booking)) {
+            throw new InvalidArgumentException('non-nullable booking cannot be null');
+        }
+        $this->container['booking'] = $booking;
+
+        return $this;
+    }
+    /**
+     * Returns true if offset exists. False otherwise.
+     *
+     * @param int|string $offset Offset
+     *
+     * @return boolean
+     */
+    public function offsetExists(mixed $offset): bool
+    {
+        return isset($this->container[$offset]);
+    }
+
+    /**
+     * Gets offset.
+     *
+     * @param int|string $offset Offset
+     *
+     * @return mixed|null
+     */
+    #[ReturnTypeWillChange]
+    public function offsetGet(mixed $offset): mixed
+    {
+        return $this->container[$offset] ?? null;
+    }
+
+    /**
+     * Sets value based on offset.
+     *
+     * @param int|string|null $offset Offset
+     * @param mixed    $value  Value to be set
+     *
+     * @return void
+     */
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        if (is_null($offset)) {
+            $this->container[] = $value;
+        } else {
+            $this->container[$offset] = $value;
+        }
+    }
+
+    /**
+     * Unsets offset.
+     *
+     * @param int|string $offset Offset
+     *
+     * @return void
+     */
+    public function offsetUnset(mixed $offset): void
+    {
+        unset($this->container[$offset]);
+    }
+
+    /**
+     * Serializes the object to a value that can be serialized natively by json_encode().
+     * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
+     *
+     * @return mixed Returns data which can be serialized by json_encode(), which is a value
+     * of any type other than a resource.
+     */
+    #[ReturnTypeWillChange]
+    public function jsonSerialize(): mixed
+    {
+       return ObjectSerializer::sanitizeForSerialization($this);
+    }
+
+    /**
+     * Gets the string presentation of the object
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return json_encode(
+            ObjectSerializer::sanitizeForSerialization($this),
+            JSON_PRETTY_PRINT
+        );
+    }
+
+    /**
+     * Gets a header-safe presentation of the object
+     *
+     * @return string
+     */
+    public function toHeaderValue(): string
+    {
+        return json_encode(ObjectSerializer::sanitizeForSerialization($this));
+    }
+}
+
+
