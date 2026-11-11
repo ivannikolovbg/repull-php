@@ -1,6 +1,6 @@
 {
     "name": "repull/sdk",
-    "description": "PHP SDK for Repull — the unified API for vacation-rental tech (50+ PMS platforms, Airbnb / Booking.com / VRBO / Plumguide). Generated from OpenAPI.",
+    "description": "PHP SDK for Repull — one API for vacation-rental tech: Airbnb, Booking.com, Vrbo and more channels, plus 15 PMS platforms. Generated from OpenAPI.",
     "type": "library",
     "keywords": [
         "repull",
@@ -8,7 +8,6 @@
         "airbnb",
         "booking.com",
         "vrbo",
-        "plumguide",
         "pms",
         "channel-manager",
         "sdk",
@@ -18,9 +17,9 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Vanio AI",
+            "name": "Repull",
             "email": "hello@repull.dev",
-            "homepage": "https://vanio.ai"
+            "homepage": "https://repull.dev"
         }
     ],
     "support": {

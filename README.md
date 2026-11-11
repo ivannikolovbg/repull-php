@@ -1,36 +1,23 @@
 # Repull PHP SDK
 
-> PHP SDK for [Repull](https://repull.dev) — the unified API for vacation-rental tech (50+ PMS platforms, Airbnb / Booking.com / VRBO / Plumguide channels, AI ops). Generated from OpenAPI. **PHP 8.1+**.
-
-> **Status:** v0.1.0 — alpha. Not yet on Packagist. API surface may break before v1.0.
+> PHP SDK for [Repull](https://repull.dev) — one API for vacation-rental tech: Airbnb, Booking.com, Vrbo and more channels, plus 15 PMS platforms, behind one key. Generated from OpenAPI. **PHP 8.1+**.
 
 ## Why a PHP SDK?
 
 WordPress is the dominant CMS for direct-booking websites in the vacation-rental industry. If you're building a booking flow, channel-manager dashboard, or guest portal in PHP, the Repull PHP SDK is your on-ramp to:
 
-- 50+ PMS / channel-manager integrations through one REST API
-- Airbnb, Booking.com, VRBO, Plumguide as native channels
-- Built-in AI for guest replies, intent classification, listing generation, dynamic pricing
-- White-label OAuth Connect flows
+- Airbnb, Booking.com, Vrbo and more channels through one REST API
+- 15 PMS platforms behind the same endpoints and data model
+- Reservations, listings, calendars, guest messaging, reviews and webhooks
+- White-label Connect flows for linking your users' accounts
 
 ## Install
 
-Not on Packagist yet — install from git:
-
-```json
-{
-  "repositories": [
-    { "type": "vcs", "url": "https://github.com/ivannikolovbg/repull-php" }
-  ],
-  "require": {
-    "repull/sdk": "dev-main"
-  }
-}
-```
-
 ```bash
-composer update repull/sdk
+composer require repull/sdk
 ```
+
+Published on [Packagist](https://packagist.org/packages/repull/sdk).
 
 ## Quick start
 
@@ -85,9 +72,7 @@ $config = Configuration::getDefaultConfiguration()
 
 ## What's in the box
 
-14 API classes covering every endpoint of the Repull API:
-
-`AIApi`, `AirbnbApi`, `AvailabilityApi`, `BillingApi`, `BookingComApi`, `ConnectApi`, `ConversationsApi`, `GuestsApi`, `PlumguideApi`, `PropertiesApi`, `ReservationsApi`, `SystemApi`, `VRBOApi`, `WebhooksApi`.
+One API class per tag of the Repull API — for example `ReservationsApi`, `PropertiesApi`, `ListingsApi`, `ConversationsApi`, `ConnectApi`, `AirbnbApi`, `BookingComApi`, `VRBOApi` and `WebhooksApi`. The full set lives in [`src/Api/`](src/Api).
 
 Plus typed model classes for `Property`, `Reservation`, `Guest`, `CalendarDay`, `Conversation`, `Message`, `Connection`, `WebhookSubscription`, etc.
 
