@@ -12,7 +12,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect Airbnb, Booking.com, Vrbo and more channels, plus 14 PMS platforms, through one REST API.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_live_YOUR_API_KEY ```  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, and `resetsAt` fields.  ## Plan listing limits Each plan includes a number of **active listings**:  | Tier | Active listings | |---|---| | `free` | 3 | | `starter` | no cap: 10 included, then billed per listing | | `custom` | no cap |  Going over the plan never blocks your API calls. Listings beyond the plan are **held back**: they stay connected and keep syncing, but they are not served. A held-back listing answers `403 listing_inactive` with `reason: \"plan_limit\"`, and collection routes leave it out. Every JSON response then carries a `planNotice` and the `X-Repull-Listings-Held-Back` header, so you know there is more to see.  Choose which listings are active with `POST /v1/listings/status`, or upgrade at `https://repull.dev/dashboard/billing` to activate them all.  Only a call that would itself take you over the plan is refused, with **`402 listings_limit_exceeded`**: activating listings (`PATCH /v1/listings/{id}` with `{ \"active\": true }`, `POST /v1/listings/status`) or creating one (`POST /v1/listings`). Nothing else changes. The envelope carries the tier, the limit, the active count and an upgrade link next to the standard `code` / `message` / `fix` / `docs_url` / `request_id`.  If an account has more active listings than its plan (for example after a downgrade), calls are still served and `planNotice` says so (code \"listings_over_plan\").
+ * The unified API for vacation rental tech. Connect Airbnb, Booking.com, Vrbo and more channels, plus 14 PMS platforms, through one REST API.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_live_YOUR_API_KEY ```  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, `limit`, `used` and `resets_at` fields.  **The way past a request quota.** The monthly quota refusal (`429 rate_limit_exceeded` with `scope: \"monthly\"`), `402 credits_exhausted` and `429 daily_limit_exceeded` also carry `upgrade` (the cheapest plan that covers your usage: its exact monthly price for your listings, its request quotas and a `checkout_url` that opens checkout for that price; `plan: \"custom\"` with a `contact_email` when no self-serve plan covers it), `credits` (pay-as-you-go: `usd_per_1000_requests`, `top_up_url`, your `balance_usd`), `resets_at` and `projected_monthly_requests`. The per-minute 429 (`scope: \"per_api_key\"`) carries none of these: wait `Retry-After`.  ## Plan listing limits Each plan includes a number of **active listings**:  | Tier | Active listings | |---|---| | `free` | 3 | | `starter` | no cap: 10 included, then billed per listing | | `custom` | no cap |  Going over the plan never blocks your API calls. Listings beyond the plan are **held back**: they stay connected and keep syncing, but they are not served. A held-back listing answers `403 listing_inactive` with `reason: \"plan_limit\"`, and collection routes leave it out. Every JSON response then carries a `planNotice` and the `X-Repull-Listings-Held-Back` header, so you know there is more to see.  Choose which listings are active with `POST /v1/listings/status`, or upgrade at `https://repull.dev/dashboard/billing` to activate them all.  Only a call that would itself take you over the plan is refused, with **`402 listings_limit_exceeded`**: activating listings (`PATCH /v1/listings/{id}` with `{ \"active\": true }`, `POST /v1/listings/status`) or creating one (`POST /v1/listings`). Nothing else changes. The envelope carries the tier, the limit, the active count and an upgrade link next to the standard `code` / `message` / `fix` / `docs_url` / `request_id`.  If an account has more active listings than its plan (for example after a downgrade), calls are still served and `planNotice` says so (code \"listings_over_plan\").
  *
  * The version of the OpenAPI document: 1.0.0
  * @generated Generated by: https://openapi-generator.tech
@@ -76,6 +76,14 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'airbnb_listing_id' => 'string',
         'sync_category' => 'string',
         'retry_after' => 'int',
+        'tier' => 'string',
+        'scope' => 'string',
+        'limit' => 'int',
+        'used' => 'int',
+        'resets_at' => '\DateTime',
+        'projected_monthly_requests' => 'int',
+        'upgrade' => '\Repull\Model\ErrorErrorUpgrade',
+        'credits' => '\Repull\Model\ErrorErrorCredits',
         'support' => '\Repull\Model\ErrorErrorSupport'
     ];
 
@@ -103,6 +111,14 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'airbnb_listing_id' => null,
         'sync_category' => null,
         'retry_after' => null,
+        'tier' => null,
+        'scope' => null,
+        'limit' => null,
+        'used' => null,
+        'resets_at' => 'date-time',
+        'projected_monthly_requests' => null,
+        'upgrade' => null,
+        'credits' => null,
         'support' => null
     ];
 
@@ -130,6 +146,14 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'airbnb_listing_id' => false,
         'sync_category' => false,
         'retry_after' => false,
+        'tier' => false,
+        'scope' => false,
+        'limit' => false,
+        'used' => false,
+        'resets_at' => false,
+        'projected_monthly_requests' => false,
+        'upgrade' => false,
+        'credits' => false,
         'support' => false
     ];
 
@@ -227,6 +251,14 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'airbnb_listing_id' => 'airbnb_listing_id',
         'sync_category' => 'sync_category',
         'retry_after' => 'retry_after',
+        'tier' => 'tier',
+        'scope' => 'scope',
+        'limit' => 'limit',
+        'used' => 'used',
+        'resets_at' => 'resets_at',
+        'projected_monthly_requests' => 'projected_monthly_requests',
+        'upgrade' => 'upgrade',
+        'credits' => 'credits',
         'support' => 'support'
     ];
 
@@ -254,6 +286,14 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'airbnb_listing_id' => 'setAirbnbListingId',
         'sync_category' => 'setSyncCategory',
         'retry_after' => 'setRetryAfter',
+        'tier' => 'setTier',
+        'scope' => 'setScope',
+        'limit' => 'setLimit',
+        'used' => 'setUsed',
+        'resets_at' => 'setResetsAt',
+        'projected_monthly_requests' => 'setProjectedMonthlyRequests',
+        'upgrade' => 'setUpgrade',
+        'credits' => 'setCredits',
         'support' => 'setSupport'
     ];
 
@@ -281,6 +321,14 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         'airbnb_listing_id' => 'getAirbnbListingId',
         'sync_category' => 'getSyncCategory',
         'retry_after' => 'getRetryAfter',
+        'tier' => 'getTier',
+        'scope' => 'getScope',
+        'limit' => 'getLimit',
+        'used' => 'getUsed',
+        'resets_at' => 'getResetsAt',
+        'projected_monthly_requests' => 'getProjectedMonthlyRequests',
+        'upgrade' => 'getUpgrade',
+        'credits' => 'getCredits',
         'support' => 'getSupport'
     ];
 
@@ -349,6 +397,14 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('airbnb_listing_id', $data ?? [], null);
         $this->setIfExists('sync_category', $data ?? [], null);
         $this->setIfExists('retry_after', $data ?? [], null);
+        $this->setIfExists('tier', $data ?? [], null);
+        $this->setIfExists('scope', $data ?? [], null);
+        $this->setIfExists('limit', $data ?? [], null);
+        $this->setIfExists('used', $data ?? [], null);
+        $this->setIfExists('resets_at', $data ?? [], null);
+        $this->setIfExists('projected_monthly_requests', $data ?? [], null);
+        $this->setIfExists('upgrade', $data ?? [], null);
+        $this->setIfExists('credits', $data ?? [], null);
         $this->setIfExists('support', $data ?? [], null);
     }
 
@@ -895,6 +951,222 @@ class ErrorError implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable retry_after cannot be null');
         }
         $this->container['retry_after'] = $retry_after;
+
+        return $this;
+    }
+
+    /**
+     * Gets tier
+     *
+     * @return string|null
+     */
+    public function getTier(): ?string
+    {
+        return $this->container['tier'];
+    }
+
+    /**
+     * Sets tier
+     *
+     * @param string|null $tier The plan the request was counted against. Present on quota refusals (`rate_limit_exceeded`, `daily_limit_exceeded`, `credits_exhausted`).
+     *
+     * @return $this
+     */
+    public function setTier(?string $tier): static
+    {
+        if (is_null($tier)) {
+            throw new InvalidArgumentException('non-nullable tier cannot be null');
+        }
+        $this->container['tier'] = $tier;
+
+        return $this;
+    }
+
+    /**
+     * Gets scope
+     *
+     * @return string|null
+     */
+    public function getScope(): ?string
+    {
+        return $this->container['scope'];
+    }
+
+    /**
+     * Sets scope
+     *
+     * @param string|null $scope Which limit refused the request: `monthly` (the plan's request quota), `daily` (the daily loop guard), the daily AI quota, or `per_api_key` (the per-minute limiter: wait `Retry-After`, nothing else).
+     *
+     * @return $this
+     */
+    public function setScope(?string $scope): static
+    {
+        if (is_null($scope)) {
+            throw new InvalidArgumentException('non-nullable scope cannot be null');
+        }
+        $this->container['scope'] = $scope;
+
+        return $this;
+    }
+
+    /**
+     * Gets limit
+     *
+     * @return int|null
+     */
+    public function getLimit(): ?int
+    {
+        return $this->container['limit'];
+    }
+
+    /**
+     * Sets limit
+     *
+     * @param int|null $limit The limit that was reached. Present on quota refusals.
+     *
+     * @return $this
+     */
+    public function setLimit(?int $limit): static
+    {
+        if (is_null($limit)) {
+            throw new InvalidArgumentException('non-nullable limit cannot be null');
+        }
+        $this->container['limit'] = $limit;
+
+        return $this;
+    }
+
+    /**
+     * Gets used
+     *
+     * @return int|null
+     */
+    public function getUsed(): ?int
+    {
+        return $this->container['used'];
+    }
+
+    /**
+     * Sets used
+     *
+     * @param int|null $used How much of `limit` is used. Present on quota refusals.
+     *
+     * @return $this
+     */
+    public function setUsed(?int $used): static
+    {
+        if (is_null($used)) {
+            throw new InvalidArgumentException('non-nullable used cannot be null');
+        }
+        $this->container['used'] = $used;
+
+        return $this;
+    }
+
+    /**
+     * Gets resets_at
+     *
+     * @return \DateTime|null
+     */
+    public function getResetsAt(): ?\DateTime
+    {
+        return $this->container['resets_at'];
+    }
+
+    /**
+     * Sets resets_at
+     *
+     * @param \DateTime|null $resets_at When the refused quota resets. Present on quota refusals.
+     *
+     * @return $this
+     */
+    public function setResetsAt(?\DateTime $resets_at): static
+    {
+        if (is_null($resets_at)) {
+            throw new InvalidArgumentException('non-nullable resets_at cannot be null');
+        }
+        $this->container['resets_at'] = $resets_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets projected_monthly_requests
+     *
+     * @return int|null
+     */
+    public function getProjectedMonthlyRequests(): ?int
+    {
+        return $this->container['projected_monthly_requests'];
+    }
+
+    /**
+     * Sets projected_monthly_requests
+     *
+     * @param int|null $projected_monthly_requests This month's requests extrapolated to the whole month — the usage `upgrade` was sized for. Present with `upgrade`.
+     *
+     * @return $this
+     */
+    public function setProjectedMonthlyRequests(?int $projected_monthly_requests): static
+    {
+        if (is_null($projected_monthly_requests)) {
+            throw new InvalidArgumentException('non-nullable projected_monthly_requests cannot be null');
+        }
+        $this->container['projected_monthly_requests'] = $projected_monthly_requests;
+
+        return $this;
+    }
+
+    /**
+     * Gets upgrade
+     *
+     * @return \Repull\Model\ErrorErrorUpgrade|null
+     */
+    public function getUpgrade(): ?\Repull\Model\ErrorErrorUpgrade
+    {
+        return $this->container['upgrade'];
+    }
+
+    /**
+     * Sets upgrade
+     *
+     * @param \Repull\Model\ErrorErrorUpgrade|null $upgrade upgrade
+     *
+     * @return $this
+     */
+    public function setUpgrade(?\Repull\Model\ErrorErrorUpgrade $upgrade): static
+    {
+        if (is_null($upgrade)) {
+            throw new InvalidArgumentException('non-nullable upgrade cannot be null');
+        }
+        $this->container['upgrade'] = $upgrade;
+
+        return $this;
+    }
+
+    /**
+     * Gets credits
+     *
+     * @return \Repull\Model\ErrorErrorCredits|null
+     */
+    public function getCredits(): ?\Repull\Model\ErrorErrorCredits
+    {
+        return $this->container['credits'];
+    }
+
+    /**
+     * Sets credits
+     *
+     * @param \Repull\Model\ErrorErrorCredits|null $credits credits
+     *
+     * @return $this
+     */
+    public function setCredits(?\Repull\Model\ErrorErrorCredits $credits): static
+    {
+        if (is_null($credits)) {
+            throw new InvalidArgumentException('non-nullable credits cannot be null');
+        }
+        $this->container['credits'] = $credits;
 
         return $this;
     }
