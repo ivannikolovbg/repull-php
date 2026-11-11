@@ -1,13 +1,13 @@
 # Repull PHP SDK
 
-> PHP SDK for [Repull](https://repull.dev) — one API for vacation-rental tech: Airbnb, Booking.com, Vrbo and more channels, plus 15 PMS platforms, behind one key. Generated from OpenAPI. **PHP 8.1+**.
+> PHP SDK for [Repull](https://repull.dev) — one API for vacation-rental tech: Airbnb, Booking.com, Vrbo and more channels, plus 14 PMS platforms, behind one key. Generated from OpenAPI. **PHP 8.1+**.
 
 ## Why a PHP SDK?
 
 WordPress is the dominant CMS for direct-booking websites in the vacation-rental industry. If you're building a booking flow, channel-manager dashboard, or guest portal in PHP, the Repull PHP SDK is your on-ramp to:
 
 - Airbnb, Booking.com, Vrbo and more channels through one REST API
-- 15 PMS platforms behind the same endpoints and data model
+- 14 PMS platforms behind the same endpoints and data model
 - Reservations, listings, calendars, guest messaging, reviews and webhooks
 - White-label Connect flows for linking your users' accounts
 
