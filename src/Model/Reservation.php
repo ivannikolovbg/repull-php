@@ -62,6 +62,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'account' => '\Repull\Model\RecordAccount',
         'id' => 'string',
         'listing_id' => 'string',
+        'listing_name' => 'string',
         'guest_id' => 'string',
         'check_in' => '\DateTime',
         'check_out' => '\DateTime',
@@ -102,6 +103,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'account' => null,
         'id' => null,
         'listing_id' => null,
+        'listing_name' => null,
         'guest_id' => null,
         'check_in' => 'date',
         'check_out' => 'date',
@@ -142,6 +144,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'account' => true,
         'id' => false,
         'listing_id' => false,
+        'listing_name' => true,
         'guest_id' => false,
         'check_in' => false,
         'check_out' => false,
@@ -252,6 +255,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'account' => 'account',
         'id' => 'id',
         'listing_id' => 'listingId',
+        'listing_name' => 'listingName',
         'guest_id' => 'guestId',
         'check_in' => 'checkIn',
         'check_out' => 'checkOut',
@@ -292,6 +296,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'account' => 'setAccount',
         'id' => 'setId',
         'listing_id' => 'setListingId',
+        'listing_name' => 'setListingName',
         'guest_id' => 'setGuestId',
         'check_in' => 'setCheckIn',
         'check_out' => 'setCheckOut',
@@ -332,6 +337,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'account' => 'getAccount',
         'id' => 'getId',
         'listing_id' => 'getListingId',
+        'listing_name' => 'getListingName',
         'guest_id' => 'getGuestId',
         'check_in' => 'getCheckIn',
         'check_out' => 'getCheckOut',
@@ -526,6 +532,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('account', $data ?? [], null);
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('listing_name', $data ?? [], null);
         $this->setIfExists('guest_id', $data ?? [], null);
         $this->setIfExists('check_in', $data ?? [], null);
         $this->setIfExists('check_out', $data ?? [], null);
@@ -747,6 +754,40 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable listing_id cannot be null');
         }
         $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_name
+     *
+     * @return string|null
+     */
+    public function getListingName(): ?string
+    {
+        return $this->container['listing_name'];
+    }
+
+    /**
+     * Sets listing_name
+     *
+     * @param string|null $listing_name Name of the listing this reservation is on, so a report or message can name it without a second lookup.
+     *
+     * @return $this
+     */
+    public function setListingName(?string $listing_name): static
+    {
+        if (is_null($listing_name)) {
+            array_push($this->openAPINullablesSetToNull, 'listing_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('listing_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['listing_name'] = $listing_name;
 
         return $this;
     }

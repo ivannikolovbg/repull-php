@@ -273,6 +273,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     public const EVENT_RESERVATION_ALTERATION_RESPONDED = 'reservation.alteration.responded';
     public const EVENT_RESERVATION_CANCELLED = 'reservation.cancelled';
     public const EVENT_RESERVATION_CREATED = 'reservation.created';
+    public const EVENT_RESERVATION_MESSAGE_REACTION = 'reservation.message.reaction';
+    public const EVENT_RESERVATION_MESSAGE_READ = 'reservation.message.read';
     public const EVENT_RESERVATION_MESSAGE_RECEIVED = 'reservation.message.received';
     public const EVENT_RESERVATION_MESSAGE_SENT = 'reservation.message.sent';
     public const EVENT_RESERVATION_MESSAGE_UPDATED = 'reservation.message.updated';
@@ -320,6 +322,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
             self::EVENT_RESERVATION_ALTERATION_RESPONDED,
             self::EVENT_RESERVATION_CANCELLED,
             self::EVENT_RESERVATION_CREATED,
+            self::EVENT_RESERVATION_MESSAGE_REACTION,
+            self::EVENT_RESERVATION_MESSAGE_READ,
             self::EVENT_RESERVATION_MESSAGE_RECEIVED,
             self::EVENT_RESERVATION_MESSAGE_SENT,
             self::EVENT_RESERVATION_MESSAGE_UPDATED,

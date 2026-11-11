@@ -49,6 +49,10 @@ enum WebhookEventType: string
 
     case RESERVATION_MESSAGE_UPDATED = 'reservation.message.updated';
 
+    case RESERVATION_MESSAGE_READ = 'reservation.message.read';
+
+    case RESERVATION_MESSAGE_REACTION = 'reservation.message.reaction';
+
     case RESERVATION_ALTERATION_CREATED = 'reservation.alteration.created';
 
     case RESERVATION_ALTERATION_RESPONDED = 'reservation.alteration.responded';

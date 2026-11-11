@@ -89,6 +89,9 @@ class ReservationsApi
         'getReservation' => [
             'application/json',
         ],
+        'getReservationSummary' => [
+            'application/json',
+        ],
         'listReservations' => [
             'application/json',
         ],
@@ -2169,6 +2172,493 @@ class ReservationsApi
                 $resourcePath
             );
         }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getReservationSummary
+     *
+     * Summarize reservations for a period
+     *
+     * @param  \DateTime $from First day of the period. (required)
+     * @param  \DateTime $to Last day of the period (inclusive). At most 732 days after &#x60;from&#x60;. (required)
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
+     * @param  string|null $basis Which date puts a reservation in the period: the nights stayed (&#x60;stay&#x60;), the check-in date, or the booking date. (optional, default to 'stay')
+     * @param  string|null $group_by Up to two of &#x60;month&#x60;, &#x60;listing&#x60;, &#x60;channel&#x60;, comma-separated. Omit for totals only. (optional)
+     * @param  \DateTime|null $as_of Count only what was on the books at the end of this day. A reservation cancelled without a reported cancellation date counts as cancelled. (optional)
+     * @param  int|null $listing_id One listing only. (optional)
+     * @param  string|null $platform One channel only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReservationSummary'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\GetReservationSummary200Response|\Repull\Model\Error
+     */
+    public function getReservationSummary(
+        \DateTime $from,
+        \DateTime $to,
+        ?string $account = null,
+        ?string $basis = 'stay',
+        ?string $group_by = null,
+        ?\DateTime $as_of = null,
+        ?int $listing_id = null,
+        ?string $platform = null,
+        string $contentType = self::contentTypes['getReservationSummary'][0]
+    ): \Repull\Model\GetReservationSummary200Response|\Repull\Model\Error
+    {
+        list($response) = $this->getReservationSummaryWithHttpInfo($from, $to, $account, $basis, $group_by, $as_of, $listing_id, $platform, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getReservationSummaryWithHttpInfo
+     *
+     * Summarize reservations for a period
+     *
+     * @param  \DateTime $from First day of the period. (required)
+     * @param  \DateTime $to Last day of the period (inclusive). At most 732 days after &#x60;from&#x60;. (required)
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
+     * @param  string|null $basis Which date puts a reservation in the period: the nights stayed (&#x60;stay&#x60;), the check-in date, or the booking date. (optional, default to 'stay')
+     * @param  string|null $group_by Up to two of &#x60;month&#x60;, &#x60;listing&#x60;, &#x60;channel&#x60;, comma-separated. Omit for totals only. (optional)
+     * @param  \DateTime|null $as_of Count only what was on the books at the end of this day. A reservation cancelled without a reported cancellation date counts as cancelled. (optional)
+     * @param  int|null $listing_id One listing only. (optional)
+     * @param  string|null $platform One channel only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReservationSummary'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\GetReservationSummary200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getReservationSummaryWithHttpInfo(
+        \DateTime $from,
+        \DateTime $to,
+        ?string $account = null,
+        ?string $basis = 'stay',
+        ?string $group_by = null,
+        ?\DateTime $as_of = null,
+        ?int $listing_id = null,
+        ?string $platform = null,
+        string $contentType = self::contentTypes['getReservationSummary'][0]
+    ): array
+    {
+        $request = $this->getReservationSummaryRequest($from, $to, $account, $basis, $group_by, $as_of, $listing_id, $platform, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\GetReservationSummary200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\GetReservationSummary200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\GetReservationSummary200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getReservationSummaryAsync
+     *
+     * Summarize reservations for a period
+     *
+     * @param  \DateTime $from First day of the period. (required)
+     * @param  \DateTime $to Last day of the period (inclusive). At most 732 days after &#x60;from&#x60;. (required)
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
+     * @param  string|null $basis Which date puts a reservation in the period: the nights stayed (&#x60;stay&#x60;), the check-in date, or the booking date. (optional, default to 'stay')
+     * @param  string|null $group_by Up to two of &#x60;month&#x60;, &#x60;listing&#x60;, &#x60;channel&#x60;, comma-separated. Omit for totals only. (optional)
+     * @param  \DateTime|null $as_of Count only what was on the books at the end of this day. A reservation cancelled without a reported cancellation date counts as cancelled. (optional)
+     * @param  int|null $listing_id One listing only. (optional)
+     * @param  string|null $platform One channel only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReservationSummary'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getReservationSummaryAsync(
+        \DateTime $from,
+        \DateTime $to,
+        ?string $account = null,
+        ?string $basis = 'stay',
+        ?string $group_by = null,
+        ?\DateTime $as_of = null,
+        ?int $listing_id = null,
+        ?string $platform = null,
+        string $contentType = self::contentTypes['getReservationSummary'][0]
+    ): PromiseInterface
+    {
+        return $this->getReservationSummaryAsyncWithHttpInfo($from, $to, $account, $basis, $group_by, $as_of, $listing_id, $platform, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getReservationSummaryAsyncWithHttpInfo
+     *
+     * Summarize reservations for a period
+     *
+     * @param  \DateTime $from First day of the period. (required)
+     * @param  \DateTime $to Last day of the period (inclusive). At most 732 days after &#x60;from&#x60;. (required)
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
+     * @param  string|null $basis Which date puts a reservation in the period: the nights stayed (&#x60;stay&#x60;), the check-in date, or the booking date. (optional, default to 'stay')
+     * @param  string|null $group_by Up to two of &#x60;month&#x60;, &#x60;listing&#x60;, &#x60;channel&#x60;, comma-separated. Omit for totals only. (optional)
+     * @param  \DateTime|null $as_of Count only what was on the books at the end of this day. A reservation cancelled without a reported cancellation date counts as cancelled. (optional)
+     * @param  int|null $listing_id One listing only. (optional)
+     * @param  string|null $platform One channel only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReservationSummary'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getReservationSummaryAsyncWithHttpInfo(
+        \DateTime $from,
+        \DateTime $to,
+        ?string $account = null,
+        ?string $basis = 'stay',
+        ?string $group_by = null,
+        ?\DateTime $as_of = null,
+        ?int $listing_id = null,
+        ?string $platform = null,
+        string $contentType = self::contentTypes['getReservationSummary'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\GetReservationSummary200Response';
+        $request = $this->getReservationSummaryRequest($from, $to, $account, $basis, $group_by, $as_of, $listing_id, $platform, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getReservationSummary'
+     *
+     * @param  \DateTime $from First day of the period. (required)
+     * @param  \DateTime $to Last day of the period (inclusive). At most 732 days after &#x60;from&#x60;. (required)
+     * @param  string|null $account Only the records of one connected account, as &#x60;provider:externalAccountId&#x60; — the pair from a webhook &#x60;account&#x60; block, &#x60;connect.session.completed&#x60;, or &#x60;GET /v1/connect/{provider}&#x60; → &#x60;accounts&#x60;. A record belongs to an account when it is on that account&#39;s listings and on its channel (a PMS account: came in through that PMS). An account with no listings returns an empty page. (optional)
+     * @param  string|null $basis Which date puts a reservation in the period: the nights stayed (&#x60;stay&#x60;), the check-in date, or the booking date. (optional, default to 'stay')
+     * @param  string|null $group_by Up to two of &#x60;month&#x60;, &#x60;listing&#x60;, &#x60;channel&#x60;, comma-separated. Omit for totals only. (optional)
+     * @param  \DateTime|null $as_of Count only what was on the books at the end of this day. A reservation cancelled without a reported cancellation date counts as cancelled. (optional)
+     * @param  int|null $listing_id One listing only. (optional)
+     * @param  string|null $platform One channel only. (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getReservationSummary'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getReservationSummaryRequest(
+        \DateTime $from,
+        \DateTime $to,
+        ?string $account = null,
+        ?string $basis = 'stay',
+        ?string $group_by = null,
+        ?\DateTime $as_of = null,
+        ?int $listing_id = null,
+        ?string $platform = null,
+        string $contentType = self::contentTypes['getReservationSummary'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'from' is set
+        if ($from === null || (is_array($from) && count($from) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $from when calling getReservationSummary'
+            );
+        }
+
+        // verify the required parameter 'to' is set
+        if ($to === null || (is_array($to) && count($to) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $to when calling getReservationSummary'
+            );
+        }
+
+
+
+
+
+
+
+
+        $resourcePath = '/v1/reservations/summary';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $account,
+            'account', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $from,
+            'from', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $to,
+            'to', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $basis,
+            'basis', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $group_by,
+            'group_by', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $as_of,
+            'as_of', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $listing_id,
+            'listing_id', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $platform,
+            'platform', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+
+
 
 
         $headers = $this->headerSelector->selectHeaders(

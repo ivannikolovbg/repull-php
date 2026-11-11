@@ -101,6 +101,9 @@ class ListingsApi
         'getListingPublishStatus' => [
             'application/json',
         ],
+        'getVrboPublishJob' => [
+            'application/json',
+        ],
         'listListingPhotos' => [
             'application/json',
         ],
@@ -114,6 +117,9 @@ class ListingsApi
             'application/json',
         ],
         'publishListingToBooking' => [
+            'application/json',
+        ],
+        'publishListingToVrbo' => [
             'application/json',
         ],
         'pullListingFromAirbnb' => [
@@ -3248,6 +3254,358 @@ class ListingsApi
     }
 
     /**
+     * Operation getVrboPublishJob
+     *
+     * Progress of a Vrbo listing creation
+     *
+     * @param  int $id Repull listing id (required)
+     * @param  string $job_id &#x60;job.jobId&#x60; from the POST. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getVrboPublishJob'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\GetVrboPublishJob200Response|\Repull\Model\Error
+     */
+    public function getVrboPublishJob(
+        int $id,
+        string $job_id,
+        string $contentType = self::contentTypes['getVrboPublishJob'][0]
+    ): \Repull\Model\GetVrboPublishJob200Response|\Repull\Model\Error
+    {
+        list($response) = $this->getVrboPublishJobWithHttpInfo($id, $job_id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getVrboPublishJobWithHttpInfo
+     *
+     * Progress of a Vrbo listing creation
+     *
+     * @param  int $id Repull listing id (required)
+     * @param  string $job_id &#x60;job.jobId&#x60; from the POST. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getVrboPublishJob'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\GetVrboPublishJob200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getVrboPublishJobWithHttpInfo(
+        int $id,
+        string $job_id,
+        string $contentType = self::contentTypes['getVrboPublishJob'][0]
+    ): array
+    {
+        $request = $this->getVrboPublishJobRequest($id, $job_id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\GetVrboPublishJob200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\GetVrboPublishJob200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\GetVrboPublishJob200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getVrboPublishJobAsync
+     *
+     * Progress of a Vrbo listing creation
+     *
+     * @param  int $id Repull listing id (required)
+     * @param  string $job_id &#x60;job.jobId&#x60; from the POST. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getVrboPublishJob'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getVrboPublishJobAsync(
+        int $id,
+        string $job_id,
+        string $contentType = self::contentTypes['getVrboPublishJob'][0]
+    ): PromiseInterface
+    {
+        return $this->getVrboPublishJobAsyncWithHttpInfo($id, $job_id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getVrboPublishJobAsyncWithHttpInfo
+     *
+     * Progress of a Vrbo listing creation
+     *
+     * @param  int $id Repull listing id (required)
+     * @param  string $job_id &#x60;job.jobId&#x60; from the POST. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getVrboPublishJob'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getVrboPublishJobAsyncWithHttpInfo(
+        int $id,
+        string $job_id,
+        string $contentType = self::contentTypes['getVrboPublishJob'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\GetVrboPublishJob200Response';
+        $request = $this->getVrboPublishJobRequest($id, $job_id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getVrboPublishJob'
+     *
+     * @param  int $id Repull listing id (required)
+     * @param  string $job_id &#x60;job.jobId&#x60; from the POST. (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getVrboPublishJob'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getVrboPublishJobRequest(
+        int $id,
+        string $job_id,
+        string $contentType = self::contentTypes['getVrboPublishJob'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling getVrboPublishJob'
+            );
+        }
+
+        // verify the required parameter 'job_id' is set
+        if ($job_id === null || (is_array($job_id) && count($job_id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $job_id when calling getVrboPublishJob'
+            );
+        }
+
+
+        $resourcePath = '/v1/listings/{id}/publish/vrbo';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $job_id,
+            'jobId', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true // required
+        ) ?? []);
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation listListingPhotos
      *
      * List a listing&#39;s stored photos
@@ -5084,6 +5442,392 @@ class ListingsApi
                 $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($listing_publish_booking_request));
             } else {
                 $httpBody = $listing_publish_booking_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation publishListingToVrbo
+     *
+     * Create a listing on Vrbo
+     *
+     * @param  int $id Repull listing id (required)
+     * @param  \Repull\Model\PublishListingToVrboRequest|null $publish_listing_to_vrbo_request publish_listing_to_vrbo_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['publishListingToVrbo'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\GetVrboPublishJob200Response|\Repull\Model\Error
+     */
+    public function publishListingToVrbo(
+        int $id,
+        ?\Repull\Model\PublishListingToVrboRequest $publish_listing_to_vrbo_request = null,
+        string $contentType = self::contentTypes['publishListingToVrbo'][0]
+    ): \Repull\Model\GetVrboPublishJob200Response|\Repull\Model\Error
+    {
+        list($response) = $this->publishListingToVrboWithHttpInfo($id, $publish_listing_to_vrbo_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation publishListingToVrboWithHttpInfo
+     *
+     * Create a listing on Vrbo
+     *
+     * @param  int $id Repull listing id (required)
+     * @param  \Repull\Model\PublishListingToVrboRequest|null $publish_listing_to_vrbo_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['publishListingToVrbo'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\GetVrboPublishJob200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function publishListingToVrboWithHttpInfo(
+        int $id,
+        ?\Repull\Model\PublishListingToVrboRequest $publish_listing_to_vrbo_request = null,
+        string $contentType = self::contentTypes['publishListingToVrbo'][0]
+    ): array
+    {
+        $request = $this->publishListingToVrboRequest($id, $publish_listing_to_vrbo_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 202:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\GetVrboPublishJob200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\GetVrboPublishJob200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 202:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\GetVrboPublishJob200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation publishListingToVrboAsync
+     *
+     * Create a listing on Vrbo
+     *
+     * @param  int $id Repull listing id (required)
+     * @param  \Repull\Model\PublishListingToVrboRequest|null $publish_listing_to_vrbo_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['publishListingToVrbo'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function publishListingToVrboAsync(
+        int $id,
+        ?\Repull\Model\PublishListingToVrboRequest $publish_listing_to_vrbo_request = null,
+        string $contentType = self::contentTypes['publishListingToVrbo'][0]
+    ): PromiseInterface
+    {
+        return $this->publishListingToVrboAsyncWithHttpInfo($id, $publish_listing_to_vrbo_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation publishListingToVrboAsyncWithHttpInfo
+     *
+     * Create a listing on Vrbo
+     *
+     * @param  int $id Repull listing id (required)
+     * @param  \Repull\Model\PublishListingToVrboRequest|null $publish_listing_to_vrbo_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['publishListingToVrbo'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function publishListingToVrboAsyncWithHttpInfo(
+        int $id,
+        ?\Repull\Model\PublishListingToVrboRequest $publish_listing_to_vrbo_request = null,
+        string $contentType = self::contentTypes['publishListingToVrbo'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\GetVrboPublishJob200Response';
+        $request = $this->publishListingToVrboRequest($id, $publish_listing_to_vrbo_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'publishListingToVrbo'
+     *
+     * @param  int $id Repull listing id (required)
+     * @param  \Repull\Model\PublishListingToVrboRequest|null $publish_listing_to_vrbo_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['publishListingToVrbo'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function publishListingToVrboRequest(
+        int $id,
+        ?\Repull\Model\PublishListingToVrboRequest $publish_listing_to_vrbo_request = null,
+        string $contentType = self::contentTypes['publishListingToVrbo'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling publishListingToVrbo'
+            );
+        }
+
+
+
+        $resourcePath = '/v1/listings/{id}/publish/vrbo';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($publish_listing_to_vrbo_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($publish_listing_to_vrbo_request));
+            } else {
+                $httpBody = $publish_listing_to_vrbo_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {

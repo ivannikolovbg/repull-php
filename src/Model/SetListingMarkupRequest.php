@@ -60,7 +60,8 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
     protected static array $openAPITypes = [
         'channel' => 'string',
         'markup_percent' => 'float',
-        'hotel_id' => 'string'
+        'hotel_id' => 'string',
+        'account_id' => 'string'
     ];
 
     /**
@@ -71,7 +72,8 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
     protected static array $openAPIFormats = [
         'channel' => null,
         'markup_percent' => null,
-        'hotel_id' => null
+        'hotel_id' => null,
+        'account_id' => null
     ];
 
     /**
@@ -82,7 +84,8 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
     protected static array $openAPINullables = [
         'channel' => false,
         'markup_percent' => true,
-        'hotel_id' => false
+        'hotel_id' => false,
+        'account_id' => false
     ];
 
     /**
@@ -163,7 +166,8 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
     protected static array $attributeMap = [
         'channel' => 'channel',
         'markup_percent' => 'markupPercent',
-        'hotel_id' => 'hotelId'
+        'hotel_id' => 'hotelId',
+        'account_id' => 'accountId'
     ];
 
     /**
@@ -174,7 +178,8 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
     protected static array $setters = [
         'channel' => 'setChannel',
         'markup_percent' => 'setMarkupPercent',
-        'hotel_id' => 'setHotelId'
+        'hotel_id' => 'setHotelId',
+        'account_id' => 'setAccountId'
     ];
 
     /**
@@ -185,7 +190,8 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
     protected static array $getters = [
         'channel' => 'getChannel',
         'markup_percent' => 'getMarkupPercent',
-        'hotel_id' => 'getHotelId'
+        'hotel_id' => 'getHotelId',
+        'account_id' => 'getAccountId'
     ];
 
     /**
@@ -222,6 +228,7 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
 
     public const CHANNEL_AIRBNB = 'airbnb';
     public const CHANNEL_BOOKING = 'booking';
+    public const CHANNEL_VRBO = 'vrbo';
 
     /**
      * Gets allowable values of the enum
@@ -233,6 +240,7 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
         return [
             self::CHANNEL_AIRBNB,
             self::CHANNEL_BOOKING,
+            self::CHANNEL_VRBO,
         ];
     }
 
@@ -253,6 +261,7 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
         $this->setIfExists('channel', $data ?? [], null);
         $this->setIfExists('markup_percent', $data ?? [], null);
         $this->setIfExists('hotel_id', $data ?? [], null);
+        $this->setIfExists('account_id', $data ?? [], null);
     }
 
     /**
@@ -408,6 +417,33 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
             throw new InvalidArgumentException('non-nullable hotel_id cannot be null');
         }
         $this->container['hotel_id'] = $hotel_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets account_id
+     *
+     * @return string|null
+     */
+    public function getAccountId(): ?string
+    {
+        return $this->container['account_id'];
+    }
+
+    /**
+     * Sets account_id
+     *
+     * @param string|null $account_id Vrbo account (`vrbo:13`) — required when the listing is linked on more than one.
+     *
+     * @return $this
+     */
+    public function setAccountId(?string $account_id): static
+    {
+        if (is_null($account_id)) {
+            throw new InvalidArgumentException('non-nullable account_id cannot be null');
+        }
+        $this->container['account_id'] = $account_id;
 
         return $this;
     }

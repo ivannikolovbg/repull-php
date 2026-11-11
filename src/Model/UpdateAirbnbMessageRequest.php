@@ -376,7 +376,7 @@ class UpdateAirbnbMessageRequest implements ModelInterface, ArrayAccess, JsonSer
     /**
      * Sets reaction
      *
-     * @param string|null $reaction Reaction to add. Required when `action` is `react`.
+     * @param string|null $reaction Reaction to add, e.g. `👍`. Required when `action` is `react`. At most 32 characters; Airbnb decides which reactions it accepts.
      *
      * @return $this
      */

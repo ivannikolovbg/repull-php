@@ -64,7 +64,9 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         'session_id' => 'string',
         'connection_id' => 'string',
         'reservations_imported' => 'int',
-        'reservations_found' => 'int'
+        'reservations_found' => 'int',
+        'needs_calendar' => 'string[]',
+        'calendar_note' => 'string'
     ];
 
     /**
@@ -79,7 +81,9 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         'session_id' => null,
         'connection_id' => null,
         'reservations_imported' => null,
-        'reservations_found' => null
+        'reservations_found' => null,
+        'needs_calendar' => null,
+        'calendar_note' => null
     ];
 
     /**
@@ -94,7 +98,9 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         'session_id' => false,
         'connection_id' => false,
         'reservations_imported' => true,
-        'reservations_found' => true
+        'reservations_found' => true,
+        'needs_calendar' => false,
+        'calendar_note' => false
     ];
 
     /**
@@ -179,7 +185,9 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         'session_id' => 'sessionId',
         'connection_id' => 'connectionId',
         'reservations_imported' => 'reservationsImported',
-        'reservations_found' => 'reservationsFound'
+        'reservations_found' => 'reservationsFound',
+        'needs_calendar' => 'needsCalendar',
+        'calendar_note' => 'calendarNote'
     ];
 
     /**
@@ -194,7 +202,9 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         'session_id' => 'setSessionId',
         'connection_id' => 'setConnectionId',
         'reservations_imported' => 'setReservationsImported',
-        'reservations_found' => 'setReservationsFound'
+        'reservations_found' => 'setReservationsFound',
+        'needs_calendar' => 'setNeedsCalendar',
+        'calendar_note' => 'setCalendarNote'
     ];
 
     /**
@@ -209,7 +219,9 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         'session_id' => 'getSessionId',
         'connection_id' => 'getConnectionId',
         'reservations_imported' => 'getReservationsImported',
-        'reservations_found' => 'getReservationsFound'
+        'reservations_found' => 'getReservationsFound',
+        'needs_calendar' => 'getNeedsCalendar',
+        'calendar_note' => 'getCalendarNote'
     ];
 
     /**
@@ -266,6 +278,8 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         $this->setIfExists('connection_id', $data ?? [], null);
         $this->setIfExists('reservations_imported', $data ?? [], null);
         $this->setIfExists('reservations_found', $data ?? [], null);
+        $this->setIfExists('needs_calendar', $data ?? [], null);
+        $this->setIfExists('calendar_note', $data ?? [], null);
     }
 
     /**
@@ -304,6 +318,9 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
         }
         if ($this->container['connection_id'] === null) {
             $invalidProperties[] = "'connection_id' can't be null";
+        }
+        if ($this->container['needs_calendar'] === null) {
+            $invalidProperties[] = "'needs_calendar' can't be null";
         }
         return $invalidProperties;
     }
@@ -516,6 +533,60 @@ class MapConnectBookingRoomsResponse implements ModelInterface, ArrayAccess, Jso
             }
         }
         $this->container['reservations_found'] = $reservations_found;
+
+        return $this;
+    }
+
+    /**
+     * Gets needs_calendar
+     *
+     * @return string[]
+     */
+    public function getNeedsCalendar(): array
+    {
+        return $this->container['needs_calendar'];
+    }
+
+    /**
+     * Sets needs_calendar
+     *
+     * @param string[] $needs_calendar Ids of the listings this call created from Booking.com rooms (`create: true`). They start without a calendar: Booking.com shows those rooms closed and nothing is sent to Booking.com for them until they have one. Give a listing a calendar by setting its prices and availability with `PUT /v1/availability/{propertyId}`, or by mapping the same home from Airbnb so its calendar is used. Rooms mapped to an existing listing are not listed: that listing's calendar is pushed as before.
+     *
+     * @return $this
+     */
+    public function setNeedsCalendar(array $needs_calendar): static
+    {
+        if (is_null($needs_calendar)) {
+            throw new InvalidArgumentException('non-nullable needs_calendar cannot be null');
+        }
+        $this->container['needs_calendar'] = $needs_calendar;
+
+        return $this;
+    }
+
+    /**
+     * Gets calendar_note
+     *
+     * @return string|null
+     */
+    public function getCalendarNote(): ?string
+    {
+        return $this->container['calendar_note'];
+    }
+
+    /**
+     * Sets calendar_note
+     *
+     * @param string|null $calendar_note Plain-language explanation of `needsCalendar`, present only when it is non-empty.
+     *
+     * @return $this
+     */
+    public function setCalendarNote(?string $calendar_note): static
+    {
+        if (is_null($calendar_note)) {
+            throw new InvalidArgumentException('non-nullable calendar_note cannot be null');
+        }
+        $this->container['calendar_note'] = $calendar_note;
 
         return $this;
     }

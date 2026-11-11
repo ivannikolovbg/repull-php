@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * ReservationMessageUpdatedPayload Class Doc Comment
  *
- * @description Payload for &#x60;reservation.message.updated&#x60;: a message was edited on the channel. &#x60;body&#x60; is the new text; &#x60;previousBody&#x60; what it replaced. Read receipts and reactions do not fire it.
+ * @description Payload for &#x60;reservation.message.updated&#x60;: a message was edited on the channel. &#x60;body&#x60; is the new text; &#x60;previousBody&#x60; what it replaced. Read receipts and reactions do not fire it: they have their own events, &#x60;reservation.message.read&#x60; and &#x60;reservation.message.reaction&#x60;.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

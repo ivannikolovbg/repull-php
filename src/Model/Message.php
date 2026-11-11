@@ -75,7 +75,9 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         'ai_generated' => 'bool',
         'sent_at' => '\DateTime',
         'delivered_at' => '\DateTime',
-        'read_at' => '\DateTime'
+        'read_at' => '\DateTime',
+        'host_read_at' => '\DateTime',
+        'reactions' => '\Repull\Model\MessageReaction[]'
     ];
 
     /**
@@ -100,7 +102,9 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         'ai_generated' => null,
         'sent_at' => 'date-time',
         'delivered_at' => 'date-time',
-        'read_at' => 'date-time'
+        'read_at' => 'date-time',
+        'host_read_at' => 'date-time',
+        'reactions' => null
     ];
 
     /**
@@ -125,7 +129,9 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         'ai_generated' => false,
         'sent_at' => false,
         'delivered_at' => true,
-        'read_at' => true
+        'read_at' => true,
+        'host_read_at' => true,
+        'reactions' => false
     ];
 
     /**
@@ -220,7 +226,9 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         'ai_generated' => 'aiGenerated',
         'sent_at' => 'sentAt',
         'delivered_at' => 'deliveredAt',
-        'read_at' => 'readAt'
+        'read_at' => 'readAt',
+        'host_read_at' => 'hostReadAt',
+        'reactions' => 'reactions'
     ];
 
     /**
@@ -245,7 +253,9 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         'ai_generated' => 'setAiGenerated',
         'sent_at' => 'setSentAt',
         'delivered_at' => 'setDeliveredAt',
-        'read_at' => 'setReadAt'
+        'read_at' => 'setReadAt',
+        'host_read_at' => 'setHostReadAt',
+        'reactions' => 'setReactions'
     ];
 
     /**
@@ -270,7 +280,9 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         'ai_generated' => 'getAiGenerated',
         'sent_at' => 'getSentAt',
         'delivered_at' => 'getDeliveredAt',
-        'read_at' => 'getReadAt'
+        'read_at' => 'getReadAt',
+        'host_read_at' => 'getHostReadAt',
+        'reactions' => 'getReactions'
     ];
 
     /**
@@ -371,6 +383,8 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('sent_at', $data ?? [], null);
         $this->setIfExists('delivered_at', $data ?? [], null);
         $this->setIfExists('read_at', $data ?? [], null);
+        $this->setIfExists('host_read_at', $data ?? [], null);
+        $this->setIfExists('reactions', $data ?? [], null);
     }
 
     /**
@@ -924,7 +938,7 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets read_at
      *
-     * @param \DateTime|null $read_at read_at
+     * @param \DateTime|null $read_at Who read it depends on `direction`. **Outbound** (your message): when the guest first read it, from the channel's read receipts — Airbnb reports them; on other channels it stays `null`. Changes are sent as `reservation.message.read`. **Inbound** (the guest's message): when your team answered it or marked it handled.
      *
      * @return $this
      */
@@ -941,6 +955,67 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['read_at'] = $read_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets host_read_at
+     *
+     * @return \DateTime|null
+     */
+    public function getHostReadAt(): ?\DateTime
+    {
+        return $this->container['host_read_at'];
+    }
+
+    /**
+     * Sets host_read_at
+     *
+     * @param \DateTime|null $host_read_at Inbound messages only: when the host or a co-host first read it on the channel, from the channel's read receipts (Airbnb reports them). `null` for your own messages, on other channels, and until your side has opened the conversation since it arrived.
+     *
+     * @return $this
+     */
+    public function setHostReadAt(?\DateTime $host_read_at): static
+    {
+        if (is_null($host_read_at)) {
+            array_push($this->openAPINullablesSetToNull, 'host_read_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('host_read_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['host_read_at'] = $host_read_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets reactions
+     *
+     * @return \Repull\Model\MessageReaction[]|null
+     */
+    public function getReactions(): ?array
+    {
+        return $this->container['reactions'];
+    }
+
+    /**
+     * Sets reactions
+     *
+     * @param \Repull\Model\MessageReaction[]|null $reactions Reactions on this message, oldest first. Airbnb reports them; empty on other channels. Added and removed reactions are sent as `reservation.message.reaction`. To react, `PATCH /v1/channels/airbnb/messaging/{threadId}/messages/{messageId}` with `action: \"react\"`.
+     *
+     * @return $this
+     */
+    public function setReactions(?array $reactions): static
+    {
+        if (is_null($reactions)) {
+            throw new InvalidArgumentException('non-nullable reactions cannot be null');
+        }
+        $this->container['reactions'] = $reactions;
 
         return $this;
     }

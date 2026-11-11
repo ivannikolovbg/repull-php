@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * AccountDisconnectedPayload Class Doc Comment
  *
- * @description Payload for &#x60;account.disconnected&#x60;. A PMS or channel connection was revoked, expired, or rejected by the upstream provider.
+ * @description Payload for &#x60;account.disconnected&#x60;. A PMS or channel connection was revoked, expired, or rejected by the upstream provider. Sent for Airbnb, Booking.com Extranet logins, Vrbo logins and PMS connections (Hostaway, Guesty, Smoobu, Lodgify, Beds24, Hospitable, OwnerRez, iGMS, BookingSync, Track, Mews, Cloudbeds, Zeevou, RentalReady, CiiRUS, …). A PMS connection is reported when the PMS refuses its credentials (API key revoked or invalid, 401/403, token refresh refused); timeouts, rate limits and 5xx errors are retried and never reported. Sent once per disconnect, not on every failed sync. When the connection works again — credentials fixed in the PMS, or reconnected — Repull re-imports the changes made while it was down and sends their &#x60;reservation.*&#x60; events, so nothing missed has to be fetched by hand.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -435,7 +435,7 @@ class AccountDisconnectedPayload implements ModelInterface, ArrayAccess, JsonSer
     /**
      * Sets provider
      *
-     * @param string|null $provider provider
+     * @param string|null $provider Channel or PMS id: `airbnb`, `booking_extranet`, `vrbo`, or the PMS (`hostaway`, `guesty`, `smoobu`, …).
      *
      * @return $this
      */
@@ -489,7 +489,7 @@ class AccountDisconnectedPayload implements ModelInterface, ArrayAccess, JsonSer
     /**
      * Sets reason
      *
-     * @param string|null $reason Why the connection was lost. `refresh_token_rejected` — upstream OAuth refresh endpoint returned a hard rejection. `manual_disconnect` — host/admin disconnected via the dashboard. `auth_expired` — credentials aged out without ever being used. `revoked_upstream` — provider notified us the user revoked access.
+     * @param string|null $reason Why the connection was lost. `refresh_token_rejected` — upstream OAuth refresh endpoint returned a hard rejection. `manual_disconnect` — host/admin disconnected via the dashboard. `auth_expired` — the saved credentials stopped working: an Extranet or Vrbo login was signed out, or a PMS rejected its API key or token (401/403). `revoked_upstream` — provider notified us the user revoked access.
      *
      * @return $this
      */

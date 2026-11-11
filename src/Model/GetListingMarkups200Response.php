@@ -60,7 +60,8 @@ class GetListingMarkups200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPITypes = [
         'id' => 'string',
         'airbnb' => '\Repull\Model\GetListingMarkups200ResponseAirbnbInner[]',
-        'booking' => '\Repull\Model\GetListingMarkups200ResponseBookingInner[]'
+        'booking' => '\Repull\Model\GetListingMarkups200ResponseBookingInner[]',
+        'vrbo' => '\Repull\Model\GetListingMarkups200ResponseVrboInner[]'
     ];
 
     /**
@@ -71,7 +72,8 @@ class GetListingMarkups200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPIFormats = [
         'id' => null,
         'airbnb' => null,
-        'booking' => null
+        'booking' => null,
+        'vrbo' => null
     ];
 
     /**
@@ -82,7 +84,8 @@ class GetListingMarkups200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPINullables = [
         'id' => false,
         'airbnb' => false,
-        'booking' => false
+        'booking' => false,
+        'vrbo' => false
     ];
 
     /**
@@ -163,7 +166,8 @@ class GetListingMarkups200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $attributeMap = [
         'id' => 'id',
         'airbnb' => 'airbnb',
-        'booking' => 'booking'
+        'booking' => 'booking',
+        'vrbo' => 'vrbo'
     ];
 
     /**
@@ -174,7 +178,8 @@ class GetListingMarkups200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $setters = [
         'id' => 'setId',
         'airbnb' => 'setAirbnb',
-        'booking' => 'setBooking'
+        'booking' => 'setBooking',
+        'vrbo' => 'setVrbo'
     ];
 
     /**
@@ -185,7 +190,8 @@ class GetListingMarkups200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $getters = [
         'id' => 'getId',
         'airbnb' => 'getAirbnb',
-        'booking' => 'getBooking'
+        'booking' => 'getBooking',
+        'vrbo' => 'getVrbo'
     ];
 
     /**
@@ -238,6 +244,7 @@ class GetListingMarkups200Response implements ModelInterface, ArrayAccess, JsonS
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('airbnb', $data ?? [], null);
         $this->setIfExists('booking', $data ?? [], null);
+        $this->setIfExists('vrbo', $data ?? [], null);
     }
 
     /**
@@ -354,6 +361,33 @@ class GetListingMarkups200Response implements ModelInterface, ArrayAccess, JsonS
             throw new InvalidArgumentException('non-nullable booking cannot be null');
         }
         $this->container['booking'] = $booking;
+
+        return $this;
+    }
+
+    /**
+     * Gets vrbo
+     *
+     * @return \Repull\Model\GetListingMarkups200ResponseVrboInner[]|null
+     */
+    public function getVrbo(): ?array
+    {
+        return $this->container['vrbo'];
+    }
+
+    /**
+     * Sets vrbo
+     *
+     * @param \Repull\Model\GetListingMarkups200ResponseVrboInner[]|null $vrbo vrbo
+     *
+     * @return $this
+     */
+    public function setVrbo(?array $vrbo): static
+    {
+        if (is_null($vrbo)) {
+            throw new InvalidArgumentException('non-nullable vrbo cannot be null');
+        }
+        $this->container['vrbo'] = $vrbo;
 
         return $this;
     }
