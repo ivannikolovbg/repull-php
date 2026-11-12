@@ -1855,7 +1855,8 @@ class ConversationsApi
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $platform Restrict to threads on a single channel. (optional)
-     * @param  \DateTime|null $updated_since ISO 8601 instant. Only conversations with activity at or after it, oldest change first. Keep it on every page of the walk; use the last row&#39;s &#x60;updatedAt&#x60; as the next value. (optional)
+     * @param  \DateTime|null $updated_since ISO 8601 instant. Only conversations whose record changed at or after it, oldest change first. Keep it on every page of the walk; use the last row&#39;s &#x60;updatedAt&#x60; as the next value. (optional)
+     * @param  string|null $order &#x60;recent&#x60; (default): most recent activity first — for an inbox or \&quot;what changed lately\&quot;. A conversation that gets a new message while you page moves to the front, behind your walk, so a walk can miss it. &#x60;created&#x60;: newest conversation first, stable for the whole walk — use it to sync every conversation exactly once. Ignored with &#x60;updated_since&#x60; (always oldest change first). Keep the same value on every page of a walk. (optional, default to 'recent')
      * @param  string|null $status Filter by archive status. &#x60;archived&#x60; currently always returns an empty page — kept for forward-compat. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConversations'] to see the possible values for this operation
      *
@@ -1871,11 +1872,12 @@ class ConversationsApi
         ?int $limit = 20,
         ?string $platform = null,
         ?\DateTime $updated_since = null,
+        ?string $order = 'recent',
         ?string $status = null,
         string $contentType = self::contentTypes['listConversations'][0]
     ): \Repull\Model\ConversationListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listConversationsWithHttpInfo($account, $x_schema, $cursor, $offset, $limit, $platform, $updated_since, $status, $contentType);
+        list($response) = $this->listConversationsWithHttpInfo($account, $x_schema, $cursor, $offset, $limit, $platform, $updated_since, $order, $status, $contentType);
         return $response;
     }
 
@@ -1890,7 +1892,8 @@ class ConversationsApi
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $platform Restrict to threads on a single channel. (optional)
-     * @param  \DateTime|null $updated_since ISO 8601 instant. Only conversations with activity at or after it, oldest change first. Keep it on every page of the walk; use the last row&#39;s &#x60;updatedAt&#x60; as the next value. (optional)
+     * @param  \DateTime|null $updated_since ISO 8601 instant. Only conversations whose record changed at or after it, oldest change first. Keep it on every page of the walk; use the last row&#39;s &#x60;updatedAt&#x60; as the next value. (optional)
+     * @param  string|null $order &#x60;recent&#x60; (default): most recent activity first — for an inbox or \&quot;what changed lately\&quot;. A conversation that gets a new message while you page moves to the front, behind your walk, so a walk can miss it. &#x60;created&#x60;: newest conversation first, stable for the whole walk — use it to sync every conversation exactly once. Ignored with &#x60;updated_since&#x60; (always oldest change first). Keep the same value on every page of a walk. (optional, default to 'recent')
      * @param  string|null $status Filter by archive status. &#x60;archived&#x60; currently always returns an empty page — kept for forward-compat. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConversations'] to see the possible values for this operation
      *
@@ -1906,11 +1909,12 @@ class ConversationsApi
         ?int $limit = 20,
         ?string $platform = null,
         ?\DateTime $updated_since = null,
+        ?string $order = 'recent',
         ?string $status = null,
         string $contentType = self::contentTypes['listConversations'][0]
     ): array
     {
-        $request = $this->listConversationsRequest($account, $x_schema, $cursor, $offset, $limit, $platform, $updated_since, $status, $contentType);
+        $request = $this->listConversationsRequest($account, $x_schema, $cursor, $offset, $limit, $platform, $updated_since, $order, $status, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -2045,7 +2049,8 @@ class ConversationsApi
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $platform Restrict to threads on a single channel. (optional)
-     * @param  \DateTime|null $updated_since ISO 8601 instant. Only conversations with activity at or after it, oldest change first. Keep it on every page of the walk; use the last row&#39;s &#x60;updatedAt&#x60; as the next value. (optional)
+     * @param  \DateTime|null $updated_since ISO 8601 instant. Only conversations whose record changed at or after it, oldest change first. Keep it on every page of the walk; use the last row&#39;s &#x60;updatedAt&#x60; as the next value. (optional)
+     * @param  string|null $order &#x60;recent&#x60; (default): most recent activity first — for an inbox or \&quot;what changed lately\&quot;. A conversation that gets a new message while you page moves to the front, behind your walk, so a walk can miss it. &#x60;created&#x60;: newest conversation first, stable for the whole walk — use it to sync every conversation exactly once. Ignored with &#x60;updated_since&#x60; (always oldest change first). Keep the same value on every page of a walk. (optional, default to 'recent')
      * @param  string|null $status Filter by archive status. &#x60;archived&#x60; currently always returns an empty page — kept for forward-compat. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConversations'] to see the possible values for this operation
      *
@@ -2060,11 +2065,12 @@ class ConversationsApi
         ?int $limit = 20,
         ?string $platform = null,
         ?\DateTime $updated_since = null,
+        ?string $order = 'recent',
         ?string $status = null,
         string $contentType = self::contentTypes['listConversations'][0]
     ): PromiseInterface
     {
-        return $this->listConversationsAsyncWithHttpInfo($account, $x_schema, $cursor, $offset, $limit, $platform, $updated_since, $status, $contentType)
+        return $this->listConversationsAsyncWithHttpInfo($account, $x_schema, $cursor, $offset, $limit, $platform, $updated_since, $order, $status, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -2083,7 +2089,8 @@ class ConversationsApi
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $platform Restrict to threads on a single channel. (optional)
-     * @param  \DateTime|null $updated_since ISO 8601 instant. Only conversations with activity at or after it, oldest change first. Keep it on every page of the walk; use the last row&#39;s &#x60;updatedAt&#x60; as the next value. (optional)
+     * @param  \DateTime|null $updated_since ISO 8601 instant. Only conversations whose record changed at or after it, oldest change first. Keep it on every page of the walk; use the last row&#39;s &#x60;updatedAt&#x60; as the next value. (optional)
+     * @param  string|null $order &#x60;recent&#x60; (default): most recent activity first — for an inbox or \&quot;what changed lately\&quot;. A conversation that gets a new message while you page moves to the front, behind your walk, so a walk can miss it. &#x60;created&#x60;: newest conversation first, stable for the whole walk — use it to sync every conversation exactly once. Ignored with &#x60;updated_since&#x60; (always oldest change first). Keep the same value on every page of a walk. (optional, default to 'recent')
      * @param  string|null $status Filter by archive status. &#x60;archived&#x60; currently always returns an empty page — kept for forward-compat. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConversations'] to see the possible values for this operation
      *
@@ -2098,12 +2105,13 @@ class ConversationsApi
         ?int $limit = 20,
         ?string $platform = null,
         ?\DateTime $updated_since = null,
+        ?string $order = 'recent',
         ?string $status = null,
         string $contentType = self::contentTypes['listConversations'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\ConversationListResponse';
-        $request = $this->listConversationsRequest($account, $x_schema, $cursor, $offset, $limit, $platform, $updated_since, $status, $contentType);
+        $request = $this->listConversationsRequest($account, $x_schema, $cursor, $offset, $limit, $platform, $updated_since, $order, $status, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -2150,7 +2158,8 @@ class ConversationsApi
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 20)
      * @param  string|null $platform Restrict to threads on a single channel. (optional)
-     * @param  \DateTime|null $updated_since ISO 8601 instant. Only conversations with activity at or after it, oldest change first. Keep it on every page of the walk; use the last row&#39;s &#x60;updatedAt&#x60; as the next value. (optional)
+     * @param  \DateTime|null $updated_since ISO 8601 instant. Only conversations whose record changed at or after it, oldest change first. Keep it on every page of the walk; use the last row&#39;s &#x60;updatedAt&#x60; as the next value. (optional)
+     * @param  string|null $order &#x60;recent&#x60; (default): most recent activity first — for an inbox or \&quot;what changed lately\&quot;. A conversation that gets a new message while you page moves to the front, behind your walk, so a walk can miss it. &#x60;created&#x60;: newest conversation first, stable for the whole walk — use it to sync every conversation exactly once. Ignored with &#x60;updated_since&#x60; (always oldest change first). Keep the same value on every page of a walk. (optional, default to 'recent')
      * @param  string|null $status Filter by archive status. &#x60;archived&#x60; currently always returns an empty page — kept for forward-compat. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConversations'] to see the possible values for this operation
      *
@@ -2165,6 +2174,7 @@ class ConversationsApi
         ?int $limit = 20,
         ?string $platform = null,
         ?\DateTime $updated_since = null,
+        ?string $order = 'recent',
         ?string $status = null,
         string $contentType = self::contentTypes['listConversations'][0]
     ): Request
@@ -2187,6 +2197,7 @@ class ConversationsApi
             throw new InvalidArgumentException('invalid value for "$limit" when calling ConversationsApi.listConversations, must be bigger than or equal to 1.');
         }
         
+
 
 
 
@@ -2247,6 +2258,15 @@ class ConversationsApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $updated_since,
             'updated_since', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $order,
+            'order', // param base name
             'string', // openApiType
             'form', // style
             true, // explode

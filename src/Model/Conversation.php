@@ -729,7 +729,7 @@ class Conversation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets last_message_at
      *
-     * @param \DateTime|null $last_message_at last_message_at
+     * @param \DateTime|null $last_message_at The conversation's newest activity: the time of its newest message (after an import, the newest imported message's own time, not the import time), or of a later change to the conversation. `GET /v1/conversations` sorts on it by default.
      *
      * @return $this
      */
@@ -879,7 +879,7 @@ class Conversation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets updated_at
      *
-     * @param \DateTime|null $updated_at updated_at
+     * @param \DateTime|null $updated_at When the conversation record last changed; the watermark for `updated_since`.
      *
      * @return $this
      */

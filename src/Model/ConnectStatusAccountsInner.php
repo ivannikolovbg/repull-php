@@ -65,7 +65,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'status' => 'string',
         'connected' => 'bool',
         'email' => 'string',
-        'access_type' => 'string',
+        'access_type' => '\Repull\Model\ConnectionAccessType',
         'notification_email' => 'string',
         'import' => '\Repull\Model\VrboImportStatus'
     ];
@@ -262,21 +262,6 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         return self::$openAPIModelName;
     }
 
-    public const ACCESS_TYPE_MESSAGING = 'messaging';
-    public const ACCESS_TYPE_FULL_ACCESS = 'full_access';
-
-    /**
-     * Gets allowable values of the enum
-     *
-     * @return string[]
-     */
-    public static function getAccessTypeAllowableValues()
-    {
-        return [
-            self::ACCESS_TYPE_MESSAGING,
-            self::ACCESS_TYPE_FULL_ACCESS,
-        ];
-    }
 
     /**
      * Associative array for storing property values
@@ -328,15 +313,6 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
     public function listInvalidProperties(): array
     {
         $invalidProperties = [];
-
-        $allowedValues = self::getAccessTypeAllowableValues();
-        if (!is_null($this->container['access_type']) && !in_array($this->container['access_type'], $allowedValues, true)) {
-            $invalidProperties[] = sprintf(
-                "invalid value '%s' for 'access_type', must be one of '%s'",
-                $this->container['access_type'],
-                implode("', '", $allowedValues)
-            );
-        }
 
         return $invalidProperties;
     }
@@ -584,9 +560,9 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
     /**
      * Gets access_type
      *
-     * @return string|null
+     * @return \Repull\Model\ConnectionAccessType|null
      */
-    public function getAccessType(): ?string
+    public function getAccessType(): ?\Repull\Model\ConnectionAccessType
     {
         return $this->container['access_type'];
     }
@@ -594,11 +570,11 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
     /**
      * Sets access_type
      *
-     * @param string|null $access_type Vrbo only.
+     * @param \Repull\Model\ConnectionAccessType|null $access_type What this account may do. Airbnb: the tier the host's token was granted with (`read_only`, `messaging`, `full_access`). Vrbo: `messaging` (bookings and messages, no calendar push) or `full_access` (also pushes prices and availability). `null` when unknown.
      *
      * @return $this
      */
-    public function setAccessType(?string $access_type): static
+    public function setAccessType(?\Repull\Model\ConnectionAccessType $access_type): static
     {
         if (is_null($access_type)) {
             array_push($this->openAPINullablesSetToNull, 'access_type');
@@ -610,7 +586,6 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-        // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['access_type'] = $access_type;
 
         return $this;

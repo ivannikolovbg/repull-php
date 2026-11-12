@@ -62,6 +62,7 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'provider' => 'string',
         'status' => 'string',
         'external_account_id' => 'string',
+        'access_type' => '\Repull\Model\ConnectionAccessType',
         'created_at' => '\DateTime',
         'host' => '\Repull\Model\ConnectHost',
         'action' => '\Repull\Model\ConnectionAction',
@@ -79,6 +80,7 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'provider' => null,
         'status' => null,
         'external_account_id' => null,
+        'access_type' => null,
         'created_at' => 'date-time',
         'host' => null,
         'action' => null,
@@ -96,6 +98,7 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'provider' => false,
         'status' => false,
         'external_account_id' => true,
+        'access_type' => true,
         'created_at' => false,
         'host' => true,
         'action' => true,
@@ -183,6 +186,7 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'provider' => 'provider',
         'status' => 'status',
         'external_account_id' => 'externalAccountId',
+        'access_type' => 'accessType',
         'created_at' => 'createdAt',
         'host' => 'host',
         'action' => 'action',
@@ -200,6 +204,7 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'provider' => 'setProvider',
         'status' => 'setStatus',
         'external_account_id' => 'setExternalAccountId',
+        'access_type' => 'setAccessType',
         'created_at' => 'setCreatedAt',
         'host' => 'setHost',
         'action' => 'setAction',
@@ -217,6 +222,7 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'provider' => 'getProvider',
         'status' => 'getStatus',
         'external_account_id' => 'getExternalAccountId',
+        'access_type' => 'getAccessType',
         'created_at' => 'getCreatedAt',
         'host' => 'getHost',
         'action' => 'getAction',
@@ -298,6 +304,7 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('provider', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('external_account_id', $data ?? [], null);
+        $this->setIfExists('access_type', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
         $this->setIfExists('host', $data ?? [], null);
         $this->setIfExists('action', $data ?? [], null);
@@ -463,6 +470,40 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['external_account_id'] = $external_account_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets access_type
+     *
+     * @return \Repull\Model\ConnectionAccessType|null
+     */
+    public function getAccessType(): ?\Repull\Model\ConnectionAccessType
+    {
+        return $this->container['access_type'];
+    }
+
+    /**
+     * Sets access_type
+     *
+     * @param \Repull\Model\ConnectionAccessType|null $access_type What this connection may do: `read_only`, `messaging` or `full_access` (see `ConnectionAccessType` for the meaning per provider). Airbnb: the tier of the host in `externalAccountId`. `null` when unknown.
+     *
+     * @return $this
+     */
+    public function setAccessType(?\Repull\Model\ConnectionAccessType $access_type): static
+    {
+        if (is_null($access_type)) {
+            array_push($this->openAPINullablesSetToNull, 'access_type');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('access_type', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['access_type'] = $access_type;
 
         return $this;
     }

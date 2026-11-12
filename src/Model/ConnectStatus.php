@@ -66,6 +66,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'string',
         'external_account_id' => 'string',
         'created_at' => '\DateTime',
+        'access_type' => '\Repull\Model\ConnectionAccessType',
         'host' => '\Repull\Model\ConnectHost',
         'accounts' => '\Repull\Model\ConnectStatusAccountsInner[]',
         'write_policy' => '\Repull\Model\PmsWritePolicy',
@@ -88,6 +89,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => null,
         'external_account_id' => null,
         'created_at' => 'date-time',
+        'access_type' => null,
         'host' => null,
         'accounts' => null,
         'write_policy' => null,
@@ -110,6 +112,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => false,
         'external_account_id' => true,
         'created_at' => false,
+        'access_type' => true,
         'host' => true,
         'accounts' => false,
         'write_policy' => false,
@@ -202,6 +205,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'status',
         'external_account_id' => 'externalAccountId',
         'created_at' => 'createdAt',
+        'access_type' => 'accessType',
         'host' => 'host',
         'accounts' => 'accounts',
         'write_policy' => 'writePolicy',
@@ -224,6 +228,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'setStatus',
         'external_account_id' => 'setExternalAccountId',
         'created_at' => 'setCreatedAt',
+        'access_type' => 'setAccessType',
         'host' => 'setHost',
         'accounts' => 'setAccounts',
         'write_policy' => 'setWritePolicy',
@@ -246,6 +251,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'status' => 'getStatus',
         'external_account_id' => 'getExternalAccountId',
         'created_at' => 'getCreatedAt',
+        'access_type' => 'getAccessType',
         'host' => 'getHost',
         'accounts' => 'getAccounts',
         'write_policy' => 'getWritePolicy',
@@ -326,6 +332,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('external_account_id', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('access_type', $data ?? [], null);
         $this->setIfExists('host', $data ?? [], null);
         $this->setIfExists('accounts', $data ?? [], null);
         $this->setIfExists('write_policy', $data ?? [], null);
@@ -579,6 +586,40 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Gets access_type
+     *
+     * @return \Repull\Model\ConnectionAccessType|null
+     */
+    public function getAccessType(): ?\Repull\Model\ConnectionAccessType
+    {
+        return $this->container['access_type'];
+    }
+
+    /**
+     * Sets access_type
+     *
+     * @param \Repull\Model\ConnectionAccessType|null $access_type What the connection may do: `read_only`, `messaging` or `full_access` (see `ConnectionAccessType` for the meaning per provider). Airbnb: the tier of the host in `externalAccountId`; each host's own is on `accounts[].accessType`. Absent when `connected` is false and on `GET /v1/connect/vrbo-login` (per account there); `null` when unknown.
+     *
+     * @return $this
+     */
+    public function setAccessType(?\Repull\Model\ConnectionAccessType $access_type): static
+    {
+        if (is_null($access_type)) {
+            array_push($this->openAPINullablesSetToNull, 'access_type');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('access_type', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['access_type'] = $access_type;
+
+        return $this;
+    }
+
+    /**
      * Gets host
      *
      * @return \Repull\Model\ConnectHost|null
@@ -625,7 +666,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets accounts
      *
-     * @param \Repull\Model\ConnectStatusAccountsInner[]|null $accounts Airbnb: every Airbnb account this workspace has connected, including ones since disconnected. Pass `externalAccountId` as `accountId` to `DELETE /v1/connect/airbnb` to disconnect one account. Vrbo (`GET /v1/connect/vrbo-login`): every signed-in Vrbo account, each with `accessType` and `import` (a `VrboImportStatus`), plus a top-level `dataFreshness`. `externalAccountId` is the platform's own id (Airbnb host id, Vrbo account id; `null` for a Vrbo sign-in whose account id is not captured yet) and `connectionId` our connection record.
+     * @param \Repull\Model\ConnectStatusAccountsInner[]|null $accounts Airbnb: every Airbnb account this workspace has connected, including ones since disconnected, each with its own `accessType`. Pass `externalAccountId` as `accountId` to `DELETE /v1/connect/airbnb` to disconnect one account. Vrbo (`GET /v1/connect/vrbo-login`): every signed-in Vrbo account, each with `accessType` and `import` (a `VrboImportStatus`), plus a top-level `dataFreshness`. `externalAccountId` is the platform's own id (Airbnb host id, Vrbo account id; `null` for a Vrbo sign-in whose account id is not captured yet) and `connectionId` our connection record.
      *
      * @return $this
      */
