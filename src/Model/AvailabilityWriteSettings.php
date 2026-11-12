@@ -63,6 +63,8 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         'price' => 'float',
         'min_nights' => 'int',
         'max_nights' => 'int',
+        'closed_to_arrival' => 'bool',
+        'closed_to_departure' => 'bool',
         'available_units' => 'int'
     ];
 
@@ -76,6 +78,8 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         'price' => null,
         'min_nights' => null,
         'max_nights' => null,
+        'closed_to_arrival' => null,
+        'closed_to_departure' => null,
         'available_units' => null
     ];
 
@@ -89,6 +93,8 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         'price' => false,
         'min_nights' => false,
         'max_nights' => false,
+        'closed_to_arrival' => false,
+        'closed_to_departure' => false,
         'available_units' => false
     ];
 
@@ -172,6 +178,8 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         'price' => 'price',
         'min_nights' => 'minNights',
         'max_nights' => 'maxNights',
+        'closed_to_arrival' => 'closedToArrival',
+        'closed_to_departure' => 'closedToDeparture',
         'available_units' => 'availableUnits'
     ];
 
@@ -185,6 +193,8 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         'price' => 'setPrice',
         'min_nights' => 'setMinNights',
         'max_nights' => 'setMaxNights',
+        'closed_to_arrival' => 'setClosedToArrival',
+        'closed_to_departure' => 'setClosedToDeparture',
         'available_units' => 'setAvailableUnits'
     ];
 
@@ -198,6 +208,8 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         'price' => 'getPrice',
         'min_nights' => 'getMinNights',
         'max_nights' => 'getMaxNights',
+        'closed_to_arrival' => 'getClosedToArrival',
+        'closed_to_departure' => 'getClosedToDeparture',
         'available_units' => 'getAvailableUnits'
     ];
 
@@ -252,6 +264,8 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         $this->setIfExists('price', $data ?? [], null);
         $this->setIfExists('min_nights', $data ?? [], null);
         $this->setIfExists('max_nights', $data ?? [], null);
+        $this->setIfExists('closed_to_arrival', $data ?? [], null);
+        $this->setIfExists('closed_to_departure', $data ?? [], null);
         $this->setIfExists('available_units', $data ?? [], null);
     }
 
@@ -403,7 +417,7 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
     /**
      * Sets max_nights
      *
-     * @param int|null $max_nights max_nights
+     * @param int|null $max_nights Maximum stay for an arrival on these dates. Sent to Airbnb and Booking.com. Vrbo has no per-date maximum stay, so it is not sent there.
      *
      * @return $this
      */
@@ -418,6 +432,60 @@ class AvailabilityWriteSettings implements ModelInterface, ArrayAccess, JsonSeri
         }
 
         $this->container['max_nights'] = $max_nights;
+
+        return $this;
+    }
+
+    /**
+     * Gets closed_to_arrival
+     *
+     * @return bool|null
+     */
+    public function getClosedToArrival(): ?bool
+    {
+        return $this->container['closed_to_arrival'];
+    }
+
+    /**
+     * Sets closed_to_arrival
+     *
+     * @param bool|null $closed_to_arrival No check-in on these dates (`true`), or check-in allowed again (`false`). Sent to Airbnb, Booking.com and Vrbo. Leaving it out keeps the current value.
+     *
+     * @return $this
+     */
+    public function setClosedToArrival(?bool $closed_to_arrival): static
+    {
+        if (is_null($closed_to_arrival)) {
+            throw new InvalidArgumentException('non-nullable closed_to_arrival cannot be null');
+        }
+        $this->container['closed_to_arrival'] = $closed_to_arrival;
+
+        return $this;
+    }
+
+    /**
+     * Gets closed_to_departure
+     *
+     * @return bool|null
+     */
+    public function getClosedToDeparture(): ?bool
+    {
+        return $this->container['closed_to_departure'];
+    }
+
+    /**
+     * Sets closed_to_departure
+     *
+     * @param bool|null $closed_to_departure No check-out on these dates (`true`), or check-out allowed again (`false`). Sent to Airbnb, Booking.com and Vrbo. Leaving it out keeps the current value.
+     *
+     * @return $this
+     */
+    public function setClosedToDeparture(?bool $closed_to_departure): static
+    {
+        if (is_null($closed_to_departure)) {
+            throw new InvalidArgumentException('non-nullable closed_to_departure cannot be null');
+        }
+        $this->container['closed_to_departure'] = $closed_to_departure;
 
         return $this;
     }

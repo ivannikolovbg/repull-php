@@ -62,7 +62,8 @@ class AvailabilityWriteResultSynced implements ModelInterface, ArrayAccess, Json
         'attempted' => 'int',
         'succeeded' => 'int',
         'failed' => 'int',
-        'auth_errors' => 'int'
+        'auth_errors' => 'int',
+        'channels' => '\Repull\Model\AvailabilityWriteResultSyncedChannelsInner[]'
     ];
 
     /**
@@ -74,7 +75,8 @@ class AvailabilityWriteResultSynced implements ModelInterface, ArrayAccess, Json
         'attempted' => null,
         'succeeded' => null,
         'failed' => null,
-        'auth_errors' => null
+        'auth_errors' => null,
+        'channels' => null
     ];
 
     /**
@@ -86,7 +88,8 @@ class AvailabilityWriteResultSynced implements ModelInterface, ArrayAccess, Json
         'attempted' => false,
         'succeeded' => false,
         'failed' => false,
-        'auth_errors' => false
+        'auth_errors' => false,
+        'channels' => false
     ];
 
     /**
@@ -168,7 +171,8 @@ class AvailabilityWriteResultSynced implements ModelInterface, ArrayAccess, Json
         'attempted' => 'attempted',
         'succeeded' => 'succeeded',
         'failed' => 'failed',
-        'auth_errors' => 'authErrors'
+        'auth_errors' => 'authErrors',
+        'channels' => 'channels'
     ];
 
     /**
@@ -180,7 +184,8 @@ class AvailabilityWriteResultSynced implements ModelInterface, ArrayAccess, Json
         'attempted' => 'setAttempted',
         'succeeded' => 'setSucceeded',
         'failed' => 'setFailed',
-        'auth_errors' => 'setAuthErrors'
+        'auth_errors' => 'setAuthErrors',
+        'channels' => 'setChannels'
     ];
 
     /**
@@ -192,7 +197,8 @@ class AvailabilityWriteResultSynced implements ModelInterface, ArrayAccess, Json
         'attempted' => 'getAttempted',
         'succeeded' => 'getSucceeded',
         'failed' => 'getFailed',
-        'auth_errors' => 'getAuthErrors'
+        'auth_errors' => 'getAuthErrors',
+        'channels' => 'getChannels'
     ];
 
     /**
@@ -246,6 +252,7 @@ class AvailabilityWriteResultSynced implements ModelInterface, ArrayAccess, Json
         $this->setIfExists('succeeded', $data ?? [], null);
         $this->setIfExists('failed', $data ?? [], null);
         $this->setIfExists('auth_errors', $data ?? [], null);
+        $this->setIfExists('channels', $data ?? [], null);
     }
 
     /**
@@ -389,6 +396,33 @@ class AvailabilityWriteResultSynced implements ModelInterface, ArrayAccess, Json
             throw new InvalidArgumentException('non-nullable auth_errors cannot be null');
         }
         $this->container['auth_errors'] = $auth_errors;
+
+        return $this;
+    }
+
+    /**
+     * Gets channels
+     *
+     * @return \Repull\Model\AvailabilityWriteResultSyncedChannelsInner[]|null
+     */
+    public function getChannels(): ?array
+    {
+        return $this->container['channels'];
+    }
+
+    /**
+     * Sets channels
+     *
+     * @param \Repull\Model\AvailabilityWriteResultSyncedChannelsInner[]|null $channels One entry per listing per connected channel: which channel took the write and which refused it.
+     *
+     * @return $this
+     */
+    public function setChannels(?array $channels): static
+    {
+        if (is_null($channels)) {
+            throw new InvalidArgumentException('non-nullable channels cannot be null');
+        }
+        $this->container['channels'] = $channels;
 
         return $this;
     }
