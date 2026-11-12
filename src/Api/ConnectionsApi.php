@@ -11,7 +11,7 @@
 /**
  * Repull API
  *
- * The unified API for vacation rental tech. Connect Airbnb, Booking.com, Vrbo and more channels, plus 14 PMS platforms, through one REST API.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_live_YOUR_API_KEY ```  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, `limit`, `used` and `resets_at` fields.  **The way past a request quota.** The monthly quota refusal (`429 rate_limit_exceeded` with `scope: \"monthly\"`), `402 credits_exhausted` and `429 daily_limit_exceeded` also carry `upgrade` (the cheapest plan that covers your usage: its exact monthly price for your listings, its request quotas and a `checkout_url` that opens checkout for that price; `plan: \"custom\"` with a `contact_email` when no self-serve plan covers it), `credits` (pay-as-you-go: `usd_per_1000_requests`, `top_up_url`, your `balance_usd`), `resets_at` and `projected_monthly_requests`. The per-minute 429 (`scope: \"per_api_key\"`) carries none of these: wait `Retry-After`.  ## Plan listing limits Each plan includes a number of **active listings**:  | Tier | Active listings | |---|---| | `free` | 3 | | `starter` | no cap: 10 included, then billed per listing | | `custom` | no cap |  Going over the plan never blocks your API calls. Listings beyond the plan are **held back**: they stay connected and keep syncing, but they are not served. A held-back listing answers `403 listing_inactive` with `reason: \"plan_limit\"`, and collection routes leave it out. Every JSON response then carries a `planNotice` and the `X-Repull-Listings-Held-Back` header, so you know there is more to see.  Choose which listings are active with `POST /v1/listings/status`, or upgrade at `https://repull.dev/dashboard/billing` to activate them all.  Only a call that would itself take you over the plan is refused, with **`402 listings_limit_exceeded`**: activating listings (`PATCH /v1/listings/{id}` with `{ \"active\": true }`, `POST /v1/listings/status`) or creating one (`POST /v1/listings`). Nothing else changes. The envelope carries the tier, the limit, the active count and an upgrade link next to the standard `code` / `message` / `fix` / `docs_url` / `request_id`.  If an account has more active listings than its plan (for example after a downgrade), calls are still served and `planNotice` says so (code \"listings_over_plan\").
+ * The unified API for vacation rental tech. Connect Airbnb, Booking.com, Vrbo and more channels, plus 14 PMS platforms, through one REST API.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_live_YOUR_API_KEY ```  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, `limit`, `used` and `resets_at` fields.  **The way past a request quota.** The monthly quota refusal (`429 rate_limit_exceeded` with `scope: \"monthly\"`), `402 credits_exhausted` and `429 daily_limit_exceeded` also carry `upgrade` (the cheapest plan that covers your usage: its exact monthly price for your listings, its request quotas and a `checkout_url` that opens checkout for that price; `plan: \"custom\"` with a `contact_email` when no self-serve plan covers it), `credits` (pay-as-you-go: `usd_per_1000_requests`, `top_up_url`, your `balance_usd`), `resets_at` and `projected_monthly_requests`. The per-minute 429 (`scope: \"per_api_key\"`) carries none of these: wait `Retry-After`.  ## Plan listing limits Each plan includes a number of **active listings**:  | Tier | Active listings | |---|---| | `free` | 3 | | `starter` | no cap: 10 included, then billed per listing | | `custom` | no cap |  Going over the plan never blocks your API calls. Listings beyond the plan are **held back**: they stay connected and keep syncing, but they are not served. A held-back listing answers `403 listing_inactive` with `reason: \"plan_limit\"`, and collection routes leave it out. Every JSON response then carries a `planNotice` and the `X-Repull-Listings-Held-Back` header, so you know there is more to see.  Choose which listings are active with `POST /v1/listings/status`. Upgrading at `https://repull.dev/dashboard/billing` lifts the cap but does not switch held-back listings on: you choose which to activate afterwards, with the same call or from the dashboard, and each one you switch on is billed from then.  Only a call that would itself take you over the plan is refused, with **`402 listings_limit_exceeded`**: activating listings (`PATCH /v1/listings/{id}` with `{ \"active\": true }`, `POST /v1/listings/status`) or creating one (`POST /v1/listings`). Nothing else changes. The envelope carries the tier, the limit, the active count and an upgrade link next to the standard `code` / `message` / `fix` / `docs_url` / `request_id`.  If an account has more active listings than its plan (for example after a downgrade), calls are still served and `planNotice` says so (code \"listings_over_plan\").
  *
  * The version of the OpenAPI document: 1.0.0
  * @generated Generated by: https://openapi-generator.tech
@@ -142,7 +142,7 @@ class ConnectionsApi
      *
      * Map, unmap or create listings for units
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request apply_connection_mappings_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['applyConnectionMappings'] to see the possible values for this operation
      *
@@ -165,7 +165,7 @@ class ConnectionsApi
      *
      * Map, unmap or create listings for units
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['applyConnectionMappings'] to see the possible values for this operation
      *
@@ -252,7 +252,7 @@ class ConnectionsApi
      *
      * Map, unmap or create listings for units
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['applyConnectionMappings'] to see the possible values for this operation
      *
@@ -278,7 +278,7 @@ class ConnectionsApi
      *
      * Map, unmap or create listings for units
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['applyConnectionMappings'] to see the possible values for this operation
      *
@@ -333,7 +333,7 @@ class ConnectionsApi
     /**
      * Create request for operation 'applyConnectionMappings'
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['applyConnectionMappings'] to see the possible values for this operation
      *
@@ -450,7 +450,7 @@ class ConnectionsApi
      *
      * Auto-map units by exact name
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  \Repull\Model\AutoMapConnectionUnitsRequest|null $auto_map_connection_units_request auto_map_connection_units_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['autoMapConnectionUnits'] to see the possible values for this operation
      *
@@ -473,7 +473,7 @@ class ConnectionsApi
      *
      * Auto-map units by exact name
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  \Repull\Model\AutoMapConnectionUnitsRequest|null $auto_map_connection_units_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['autoMapConnectionUnits'] to see the possible values for this operation
      *
@@ -560,7 +560,7 @@ class ConnectionsApi
      *
      * Auto-map units by exact name
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  \Repull\Model\AutoMapConnectionUnitsRequest|null $auto_map_connection_units_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['autoMapConnectionUnits'] to see the possible values for this operation
      *
@@ -586,7 +586,7 @@ class ConnectionsApi
      *
      * Auto-map units by exact name
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  \Repull\Model\AutoMapConnectionUnitsRequest|null $auto_map_connection_units_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['autoMapConnectionUnits'] to see the possible values for this operation
      *
@@ -641,7 +641,7 @@ class ConnectionsApi
     /**
      * Create request for operation 'autoMapConnectionUnits'
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  \Repull\Model\AutoMapConnectionUnitsRequest|null $auto_map_connection_units_request (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['autoMapConnectionUnits'] to see the possible values for this operation
      *
@@ -752,7 +752,7 @@ class ConnectionsApi
      *
      * List a connection&#39;s imports
      *
-     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:36&#x60;, &#x60;vrbo:12&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
+     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:20123456&#x60;, &#x60;vrbo:7001234&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; (&#x60;externalAccountId&#x60; is always the platform&#39;s own account id; the old Extranet / Vrbo login-id forms resolve until 2027-02-12) — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
      * @param  int|null $limit How many runs to return, newest first. (optional, default to 20)
      * @param  string|null $session_id The Connect session ID (capability token). (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionImports'] to see the possible values for this operation
@@ -777,7 +777,7 @@ class ConnectionsApi
      *
      * List a connection&#39;s imports
      *
-     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:36&#x60;, &#x60;vrbo:12&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
+     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:20123456&#x60;, &#x60;vrbo:7001234&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; (&#x60;externalAccountId&#x60; is always the platform&#39;s own account id; the old Extranet / Vrbo login-id forms resolve until 2027-02-12) — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
      * @param  int|null $limit How many runs to return, newest first. (optional, default to 20)
      * @param  string|null $session_id The Connect session ID (capability token). (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionImports'] to see the possible values for this operation
@@ -894,7 +894,7 @@ class ConnectionsApi
      *
      * List a connection&#39;s imports
      *
-     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:36&#x60;, &#x60;vrbo:12&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
+     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:20123456&#x60;, &#x60;vrbo:7001234&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; (&#x60;externalAccountId&#x60; is always the platform&#39;s own account id; the old Extranet / Vrbo login-id forms resolve until 2027-02-12) — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
      * @param  int|null $limit How many runs to return, newest first. (optional, default to 20)
      * @param  string|null $session_id The Connect session ID (capability token). (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionImports'] to see the possible values for this operation
@@ -922,7 +922,7 @@ class ConnectionsApi
      *
      * List a connection&#39;s imports
      *
-     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:36&#x60;, &#x60;vrbo:12&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
+     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:20123456&#x60;, &#x60;vrbo:7001234&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; (&#x60;externalAccountId&#x60; is always the platform&#39;s own account id; the old Extranet / Vrbo login-id forms resolve until 2027-02-12) — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
      * @param  int|null $limit How many runs to return, newest first. (optional, default to 20)
      * @param  string|null $session_id The Connect session ID (capability token). (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionImports'] to see the possible values for this operation
@@ -979,7 +979,7 @@ class ConnectionsApi
     /**
      * Create request for operation 'listConnectionImports'
      *
-     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:36&#x60;, &#x60;vrbo:12&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
+     * @param  string $id Connection handle &#x60;{provider}:{externalAccountId}&#x60;, e.g. &#x60;booking_extranet:20123456&#x60;, &#x60;vrbo:7001234&#x60;, &#x60;airbnb:1234567&#x60;, &#x60;hostaway:27434&#x60; (&#x60;externalAccountId&#x60; is always the platform&#39;s own account id; the old Extranet / Vrbo login-id forms resolve until 2027-02-12) — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of a connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
      * @param  int|null $limit How many runs to return, newest first. (optional, default to 20)
      * @param  string|null $session_id The Connect session ID (capability token). (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionImports'] to see the possible values for this operation
@@ -1110,7 +1110,7 @@ class ConnectionsApi
      *
      * List a connection&#39;s mappable units
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  string|null $session_id The Connect session ID (capability token). (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionUnits'] to see the possible values for this operation
      *
@@ -1133,7 +1133,7 @@ class ConnectionsApi
      *
      * List a connection&#39;s mappable units
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  string|null $session_id The Connect session ID (capability token). (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionUnits'] to see the possible values for this operation
      *
@@ -1220,7 +1220,7 @@ class ConnectionsApi
      *
      * List a connection&#39;s mappable units
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  string|null $session_id The Connect session ID (capability token). (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionUnits'] to see the possible values for this operation
      *
@@ -1246,7 +1246,7 @@ class ConnectionsApi
      *
      * List a connection&#39;s mappable units
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  string|null $session_id The Connect session ID (capability token). (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionUnits'] to see the possible values for this operation
      *
@@ -1301,7 +1301,7 @@ class ConnectionsApi
     /**
      * Create request for operation 'listConnectionUnits'
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, e.g. &#x60;vrbo:12&#x60; or &#x60;booking_extranet:36&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  string|null $session_id The Connect session ID (capability token). (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listConnectionUnits'] to see the possible values for this operation
      *
@@ -1414,7 +1414,7 @@ class ConnectionsApi
      *
      * Search listings a unit can be mapped to
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  string|null $q Text to match (name, city or listing id). (optional)
      * @param  int|null $limit limit (optional, default to 20)
      * @param  string|null $session_id session_id (optional)
@@ -1441,7 +1441,7 @@ class ConnectionsApi
      *
      * Search listings a unit can be mapped to
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  string|null $q Text to match (name, city or listing id). (optional)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $session_id (optional)
@@ -1532,7 +1532,7 @@ class ConnectionsApi
      *
      * Search listings a unit can be mapped to
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  string|null $q Text to match (name, city or listing id). (optional)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $session_id (optional)
@@ -1562,7 +1562,7 @@ class ConnectionsApi
      *
      * Search listings a unit can be mapped to
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  string|null $q Text to match (name, city or listing id). (optional)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $session_id (optional)
@@ -1621,7 +1621,7 @@ class ConnectionsApi
     /**
      * Create request for operation 'searchConnectionListingOptions'
      *
-     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;. (required)
+     * @param  string $id Connection handle &#x60;{channel}:{externalAccountId}&#x60;, where &#x60;externalAccountId&#x60; is the platform&#39;s own account id: &#x60;booking_extranet:20123456&#x60; (the Booking.com account id) or &#x60;vrbo:7001234&#x60; (the Vrbo account id). The old forms with our login id (&#x60;booking_extranet:88&#x60;, &#x60;vrbo:46&#x60;) still resolve until 2027-02-12 and are never returned. (required)
      * @param  string|null $q Text to match (name, city or listing id). (optional)
      * @param  int|null $limit (optional, default to 20)
      * @param  string|null $session_id (optional)
