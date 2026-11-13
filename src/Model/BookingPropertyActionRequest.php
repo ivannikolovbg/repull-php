@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * BookingPropertyActionRequest Class Doc Comment
  *
- * @description Take this listing&#39;s Booking.com property off sale, or put it back.
+ * @description Take this listing&#39;s Booking.com property off sale or put it back (&#x60;unlist&#x60; / &#x60;relist&#x60;), or open or close the property itself on Booking.com (&#x60;open&#x60; / &#x60;close&#x60;).
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -60,6 +60,7 @@ class BookingPropertyActionRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPITypes = [
         'action' => 'string',
+        'reason' => 'string',
         'hotel_id' => 'string'
     ];
 
@@ -70,6 +71,7 @@ class BookingPropertyActionRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPIFormats = [
         'action' => null,
+        'reason' => null,
         'hotel_id' => null
     ];
 
@@ -80,6 +82,7 @@ class BookingPropertyActionRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPINullables = [
         'action' => false,
+        'reason' => false,
         'hotel_id' => false
     ];
 
@@ -160,6 +163,7 @@ class BookingPropertyActionRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $attributeMap = [
         'action' => 'action',
+        'reason' => 'reason',
         'hotel_id' => 'hotelId'
     ];
 
@@ -170,6 +174,7 @@ class BookingPropertyActionRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $setters = [
         'action' => 'setAction',
+        'reason' => 'setReason',
         'hotel_id' => 'setHotelId'
     ];
 
@@ -180,6 +185,7 @@ class BookingPropertyActionRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $getters = [
         'action' => 'getAction',
+        'reason' => 'getReason',
         'hotel_id' => 'getHotelId'
     ];
 
@@ -217,6 +223,16 @@ class BookingPropertyActionRequest implements ModelInterface, ArrayAccess, JsonS
 
     public const ACTION_UNLIST = 'unlist';
     public const ACTION_RELIST = 'relist';
+    public const ACTION_OPEN = 'open';
+    public const ACTION_CLOSE = 'close';
+    public const REASON_SEASON = 'SEASON';
+    public const REASON_RENOVATION = 'RENOVATION';
+    public const REASON_PROPERTY_NOT_AVAILABLE = 'PROPERTY_NOT_AVAILABLE';
+    public const REASON_FULLY_BOOKED = 'FULLY_BOOKED';
+    public const REASON_ISSUES_GUESTS = 'ISSUES_GUESTS';
+    public const REASON_ISSUES_BOOKING = 'ISSUES_BOOKING';
+    public const REASON_STRATEGY = 'STRATEGY';
+    public const REASON_OTHER = 'OTHER';
 
     /**
      * Gets allowable values of the enum
@@ -228,6 +244,27 @@ class BookingPropertyActionRequest implements ModelInterface, ArrayAccess, JsonS
         return [
             self::ACTION_UNLIST,
             self::ACTION_RELIST,
+            self::ACTION_OPEN,
+            self::ACTION_CLOSE,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getReasonAllowableValues()
+    {
+        return [
+            self::REASON_SEASON,
+            self::REASON_RENOVATION,
+            self::REASON_PROPERTY_NOT_AVAILABLE,
+            self::REASON_FULLY_BOOKED,
+            self::REASON_ISSUES_GUESTS,
+            self::REASON_ISSUES_BOOKING,
+            self::REASON_STRATEGY,
+            self::REASON_OTHER,
         ];
     }
 
@@ -246,6 +283,7 @@ class BookingPropertyActionRequest implements ModelInterface, ArrayAccess, JsonS
     public function __construct(?array $data = null)
     {
         $this->setIfExists('action', $data ?? [], null);
+        $this->setIfExists('reason', $data ?? [], null);
         $this->setIfExists('hotel_id', $data ?? [], null);
     }
 
@@ -286,6 +324,15 @@ class BookingPropertyActionRequest implements ModelInterface, ArrayAccess, JsonS
             );
         }
 
+        $allowedValues = self::getReasonAllowableValues();
+        if (!is_null($this->container['reason']) && !in_array($this->container['reason'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'reason', must be one of '%s'",
+                $this->container['reason'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         return $invalidProperties;
     }
 
@@ -311,7 +358,7 @@ class BookingPropertyActionRequest implements ModelInterface, ArrayAccess, JsonS
     /**
      * Sets action
      *
-     * @param string $action `unlist` closes the room's availability across the whole forward window, so the property stops selling. `relist` re-syncs the real calendar: dates that are genuinely blocked (a reservation, an owner stay) stay blocked, and only the closure `unlist` wrote lifts. They are not mirror images, and that is deliberate.
+     * @param string $action `unlist` closes the room's availability across the whole forward window, so the property stops selling. `relist` re-syncs the real calendar: dates that are genuinely blocked (a reservation, an owner stay) stay blocked, and only the closure `unlist` wrote lifts. They are not mirror images, and that is deliberate.  `open` runs Booking.com's readiness check and opens the property only if it passes — on a property that is not ready it changes nothing and answers `422 booking_rejected` with Booking.com's reasons in `blockers`. It opens a property Booking.com has in a build stage (`XML: Being built`, `XML: Ready to open`) or closed. `close` closes the property on Booking.com with `reason`.
      *
      * @return $this
      */
@@ -322,6 +369,34 @@ class BookingPropertyActionRequest implements ModelInterface, ArrayAccess, JsonS
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['action'] = $action;
+
+        return $this;
+    }
+
+    /**
+     * Gets reason
+     *
+     * @return string|null
+     */
+    public function getReason(): ?string
+    {
+        return $this->container['reason'];
+    }
+
+    /**
+     * Sets reason
+     *
+     * @param string|null $reason `close` only: the reason Booking.com records for closing the property. Default `PROPERTY_NOT_AVAILABLE`.
+     *
+     * @return $this
+     */
+    public function setReason(?string $reason): static
+    {
+        if (is_null($reason)) {
+            throw new InvalidArgumentException('non-nullable reason cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['reason'] = $reason;
 
         return $this;
     }

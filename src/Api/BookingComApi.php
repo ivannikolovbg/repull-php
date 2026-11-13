@@ -465,7 +465,7 @@ class BookingComApi
     /**
      * Operation bookingPropertyAction
      *
-     * Take a property off sale / put it back (unlist/relist)
+     * Take a property off sale / put it back, or open / close it (unlist/relist/open/close)
      *
      * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
      * @param  \Repull\Model\BookingPropertyActionRequest $booking_property_action_request booking_property_action_request (required)
@@ -492,7 +492,7 @@ class BookingComApi
     /**
      * Operation bookingPropertyActionWithHttpInfo
      *
-     * Take a property off sale / put it back (unlist/relist)
+     * Take a property off sale / put it back, or open / close it (unlist/relist/open/close)
      *
      * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
      * @param  \Repull\Model\BookingPropertyActionRequest $booking_property_action_request (required)
@@ -723,7 +723,7 @@ class BookingComApi
     /**
      * Operation bookingPropertyActionAsync
      *
-     * Take a property off sale / put it back (unlist/relist)
+     * Take a property off sale / put it back, or open / close it (unlist/relist/open/close)
      *
      * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
      * @param  \Repull\Model\BookingPropertyActionRequest $booking_property_action_request (required)
@@ -753,7 +753,7 @@ class BookingComApi
     /**
      * Operation bookingPropertyActionAsyncWithHttpInfo
      *
-     * Take a property off sale / put it back (unlist/relist)
+     * Take a property off sale / put it back, or open / close it (unlist/relist/open/close)
      *
      * @param  int $id Repull listing id — NOT a Booking.com hotel id. (required)
      * @param  \Repull\Model\BookingPropertyActionRequest $booking_property_action_request (required)

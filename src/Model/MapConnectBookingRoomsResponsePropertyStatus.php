@@ -238,6 +238,8 @@ class MapConnectBookingRoomsResponsePropertyStatus implements ModelInterface, Ar
     public const OUTCOME_NOT_NEEDED = 'not_needed';
     public const OUTCOME_STATUS_UNKNOWN = 'status_unknown';
     public const OUTCOME_FAILED = 'failed';
+    public const OUTCOME_LISTING_INACTIVE = 'listing_inactive';
+    public const OUTCOME_NO_LISTING = 'no_listing';
 
     /**
      * Gets allowable values of the enum
@@ -252,6 +254,8 @@ class MapConnectBookingRoomsResponsePropertyStatus implements ModelInterface, Ar
             self::OUTCOME_NOT_NEEDED,
             self::OUTCOME_STATUS_UNKNOWN,
             self::OUTCOME_FAILED,
+            self::OUTCOME_LISTING_INACTIVE,
+            self::OUTCOME_NO_LISTING,
         ];
     }
 
@@ -362,7 +366,7 @@ class MapConnectBookingRoomsResponsePropertyStatus implements ModelInterface, Ar
     /**
      * Sets outcome
      *
-     * @param string|null $outcome `opened`: it was being built and is now open. `not_needed`: it was already past that stage. `blocked`: Booking.com will not open it yet — see `blockers`. `status_unknown`: its status could not be read. `failed`: Booking.com did not answer the open request.
+     * @param string|null $outcome `opened`: it was being built and is now open. `not_needed`: it was already past that stage. `blocked`: Booking.com will not open it yet — see `blockers`. `status_unknown`: its status could not be read. `failed`: Booking.com did not answer the open request. `listing_inactive`: a listing mapped to the property is inactive, so it was not opened — activate it when it is ready and Repull opens the property. `no_listing`: no listing is mapped to it.
      *
      * @return $this
      */

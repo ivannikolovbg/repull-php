@@ -59,7 +59,8 @@ class ListingActiveResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     protected static array $openAPITypes = [
         'id' => 'string',
-        'active' => 'bool'
+        'active' => 'bool',
+        'booking_properties' => '\Repull\Model\BookingPropertyOpenResult[]'
     ];
 
     /**
@@ -69,7 +70,8 @@ class ListingActiveResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     protected static array $openAPIFormats = [
         'id' => null,
-        'active' => null
+        'active' => null,
+        'booking_properties' => null
     ];
 
     /**
@@ -79,7 +81,8 @@ class ListingActiveResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     protected static array $openAPINullables = [
         'id' => false,
-        'active' => false
+        'active' => false,
+        'booking_properties' => false
     ];
 
     /**
@@ -159,7 +162,8 @@ class ListingActiveResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     protected static array $attributeMap = [
         'id' => 'id',
-        'active' => 'active'
+        'active' => 'active',
+        'booking_properties' => 'bookingProperties'
     ];
 
     /**
@@ -169,7 +173,8 @@ class ListingActiveResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     protected static array $setters = [
         'id' => 'setId',
-        'active' => 'setActive'
+        'active' => 'setActive',
+        'booking_properties' => 'setBookingProperties'
     ];
 
     /**
@@ -179,7 +184,8 @@ class ListingActiveResponse implements ModelInterface, ArrayAccess, JsonSerializ
      */
     protected static array $getters = [
         'id' => 'getId',
-        'active' => 'getActive'
+        'active' => 'getActive',
+        'booking_properties' => 'getBookingProperties'
     ];
 
     /**
@@ -231,6 +237,7 @@ class ListingActiveResponse implements ModelInterface, ArrayAccess, JsonSerializ
     {
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('active', $data ?? [], null);
+        $this->setIfExists('booking_properties', $data ?? [], null);
     }
 
     /**
@@ -320,6 +327,33 @@ class ListingActiveResponse implements ModelInterface, ArrayAccess, JsonSerializ
             throw new InvalidArgumentException('non-nullable active cannot be null');
         }
         $this->container['active'] = $active;
+
+        return $this;
+    }
+
+    /**
+     * Gets booking_properties
+     *
+     * @return \Repull\Model\BookingPropertyOpenResult[]|null
+     */
+    public function getBookingProperties(): ?array
+    {
+        return $this->container['booking_properties'];
+    }
+
+    /**
+     * Sets booking_properties
+     *
+     * @param \Repull\Model\BookingPropertyOpenResult[]|null $booking_properties Only when activating: what happened to the Booking.com properties this listing is mapped to. Activating a listing opens its Booking.com property if Booking.com still has it in a build stage. Empty when the listing has no Booking.com property.
+     *
+     * @return $this
+     */
+    public function setBookingProperties(?array $booking_properties): static
+    {
+        if (is_null($booking_properties)) {
+            throw new InvalidArgumentException('non-nullable booking_properties cannot be null');
+        }
+        $this->container['booking_properties'] = $booking_properties;
 
         return $this;
     }

@@ -60,7 +60,8 @@ class ListingStatusBatchResponse implements ModelInterface, ArrayAccess, JsonSer
     protected static array $openAPITypes = [
         'active' => 'bool',
         'updated' => 'string[]',
-        'unchanged' => 'string[]'
+        'unchanged' => 'string[]',
+        'booking_properties' => '\Repull\Model\BookingPropertyOpenResult[]'
     ];
 
     /**
@@ -71,7 +72,8 @@ class ListingStatusBatchResponse implements ModelInterface, ArrayAccess, JsonSer
     protected static array $openAPIFormats = [
         'active' => null,
         'updated' => null,
-        'unchanged' => null
+        'unchanged' => null,
+        'booking_properties' => null
     ];
 
     /**
@@ -82,7 +84,8 @@ class ListingStatusBatchResponse implements ModelInterface, ArrayAccess, JsonSer
     protected static array $openAPINullables = [
         'active' => false,
         'updated' => false,
-        'unchanged' => false
+        'unchanged' => false,
+        'booking_properties' => false
     ];
 
     /**
@@ -163,7 +166,8 @@ class ListingStatusBatchResponse implements ModelInterface, ArrayAccess, JsonSer
     protected static array $attributeMap = [
         'active' => 'active',
         'updated' => 'updated',
-        'unchanged' => 'unchanged'
+        'unchanged' => 'unchanged',
+        'booking_properties' => 'bookingProperties'
     ];
 
     /**
@@ -174,7 +178,8 @@ class ListingStatusBatchResponse implements ModelInterface, ArrayAccess, JsonSer
     protected static array $setters = [
         'active' => 'setActive',
         'updated' => 'setUpdated',
-        'unchanged' => 'setUnchanged'
+        'unchanged' => 'setUnchanged',
+        'booking_properties' => 'setBookingProperties'
     ];
 
     /**
@@ -185,7 +190,8 @@ class ListingStatusBatchResponse implements ModelInterface, ArrayAccess, JsonSer
     protected static array $getters = [
         'active' => 'getActive',
         'updated' => 'getUpdated',
-        'unchanged' => 'getUnchanged'
+        'unchanged' => 'getUnchanged',
+        'booking_properties' => 'getBookingProperties'
     ];
 
     /**
@@ -238,6 +244,7 @@ class ListingStatusBatchResponse implements ModelInterface, ArrayAccess, JsonSer
         $this->setIfExists('active', $data ?? [], null);
         $this->setIfExists('updated', $data ?? [], null);
         $this->setIfExists('unchanged', $data ?? [], null);
+        $this->setIfExists('booking_properties', $data ?? [], null);
     }
 
     /**
@@ -363,6 +370,33 @@ class ListingStatusBatchResponse implements ModelInterface, ArrayAccess, JsonSer
             throw new InvalidArgumentException('non-nullable unchanged cannot be null');
         }
         $this->container['unchanged'] = $unchanged;
+
+        return $this;
+    }
+
+    /**
+     * Gets booking_properties
+     *
+     * @return \Repull\Model\BookingPropertyOpenResult[]|null
+     */
+    public function getBookingProperties(): ?array
+    {
+        return $this->container['booking_properties'];
+    }
+
+    /**
+     * Sets booking_properties
+     *
+     * @param \Repull\Model\BookingPropertyOpenResult[]|null $booking_properties Only when `active` is true: one entry per Booking.com property the listings in the request are mapped to, saying whether it was opened. Every listing in the request counts, including those in `unchanged`, so sending `active: true` again retries an open Booking.com refused. Empty when none of the listings has a Booking.com property.
+     *
+     * @return $this
+     */
+    public function setBookingProperties(?array $booking_properties): static
+    {
+        if (is_null($booking_properties)) {
+            throw new InvalidArgumentException('non-nullable booking_properties cannot be null');
+        }
+        $this->container['booking_properties'] = $booking_properties;
 
         return $this;
     }

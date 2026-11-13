@@ -61,6 +61,9 @@ class BookingPropertyActionResponse implements ModelInterface, ArrayAccess, Json
         'listing_id' => 'string',
         'channel' => 'string',
         'action' => 'string',
+        'property_status' => 'string',
+        'changed' => 'bool',
+        'booking_status' => 'string',
         'hotel_id' => 'string',
         'room_booking_id' => 'string',
         'selling' => 'bool'
@@ -75,6 +78,9 @@ class BookingPropertyActionResponse implements ModelInterface, ArrayAccess, Json
         'listing_id' => null,
         'channel' => null,
         'action' => null,
+        'property_status' => null,
+        'changed' => null,
+        'booking_status' => null,
         'hotel_id' => null,
         'room_booking_id' => null,
         'selling' => null
@@ -89,6 +95,9 @@ class BookingPropertyActionResponse implements ModelInterface, ArrayAccess, Json
         'listing_id' => false,
         'channel' => false,
         'action' => false,
+        'property_status' => false,
+        'changed' => false,
+        'booking_status' => true,
         'hotel_id' => false,
         'room_booking_id' => true,
         'selling' => false
@@ -173,6 +182,9 @@ class BookingPropertyActionResponse implements ModelInterface, ArrayAccess, Json
         'listing_id' => 'listingId',
         'channel' => 'channel',
         'action' => 'action',
+        'property_status' => 'propertyStatus',
+        'changed' => 'changed',
+        'booking_status' => 'bookingStatus',
         'hotel_id' => 'hotelId',
         'room_booking_id' => 'roomBookingId',
         'selling' => 'selling'
@@ -187,6 +199,9 @@ class BookingPropertyActionResponse implements ModelInterface, ArrayAccess, Json
         'listing_id' => 'setListingId',
         'channel' => 'setChannel',
         'action' => 'setAction',
+        'property_status' => 'setPropertyStatus',
+        'changed' => 'setChanged',
+        'booking_status' => 'setBookingStatus',
         'hotel_id' => 'setHotelId',
         'room_booking_id' => 'setRoomBookingId',
         'selling' => 'setSelling'
@@ -201,6 +216,9 @@ class BookingPropertyActionResponse implements ModelInterface, ArrayAccess, Json
         'listing_id' => 'getListingId',
         'channel' => 'getChannel',
         'action' => 'getAction',
+        'property_status' => 'getPropertyStatus',
+        'changed' => 'getChanged',
+        'booking_status' => 'getBookingStatus',
         'hotel_id' => 'getHotelId',
         'room_booking_id' => 'getRoomBookingId',
         'selling' => 'getSelling'
@@ -241,6 +259,10 @@ class BookingPropertyActionResponse implements ModelInterface, ArrayAccess, Json
     public const CHANNEL_BOOKING = 'booking';
     public const ACTION_UNLIST = 'unlist';
     public const ACTION_RELIST = 'relist';
+    public const ACTION_OPEN = 'open';
+    public const ACTION_CLOSE = 'close';
+    public const PROPERTY_STATUS_OPEN = 'open';
+    public const PROPERTY_STATUS_CLOSED = 'closed';
 
     /**
      * Gets allowable values of the enum
@@ -264,6 +286,21 @@ class BookingPropertyActionResponse implements ModelInterface, ArrayAccess, Json
         return [
             self::ACTION_UNLIST,
             self::ACTION_RELIST,
+            self::ACTION_OPEN,
+            self::ACTION_CLOSE,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getPropertyStatusAllowableValues()
+    {
+        return [
+            self::PROPERTY_STATUS_OPEN,
+            self::PROPERTY_STATUS_CLOSED,
         ];
     }
 
@@ -284,6 +321,9 @@ class BookingPropertyActionResponse implements ModelInterface, ArrayAccess, Json
         $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('channel', $data ?? [], null);
         $this->setIfExists('action', $data ?? [], null);
+        $this->setIfExists('property_status', $data ?? [], null);
+        $this->setIfExists('changed', $data ?? [], null);
+        $this->setIfExists('booking_status', $data ?? [], null);
         $this->setIfExists('hotel_id', $data ?? [], null);
         $this->setIfExists('room_booking_id', $data ?? [], null);
         $this->setIfExists('selling', $data ?? [], null);
@@ -341,11 +381,17 @@ class BookingPropertyActionResponse implements ModelInterface, ArrayAccess, Json
             );
         }
 
+        $allowedValues = self::getPropertyStatusAllowableValues();
+        if (!is_null($this->container['property_status']) && !in_array($this->container['property_status'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'property_status', must be one of '%s'",
+                $this->container['property_status'],
+                implode("', '", $allowedValues)
+            );
+        }
+
         if ($this->container['hotel_id'] === null) {
             $invalidProperties[] = "'hotel_id' can't be null";
-        }
-        if ($this->container['selling'] === null) {
-            $invalidProperties[] = "'selling' can't be null";
         }
         return $invalidProperties;
     }
@@ -443,6 +489,95 @@ class BookingPropertyActionResponse implements ModelInterface, ArrayAccess, Json
     }
 
     /**
+     * Gets property_status
+     *
+     * @return string|null
+     */
+    public function getPropertyStatus(): ?string
+    {
+        return $this->container['property_status'];
+    }
+
+    /**
+     * Sets property_status
+     *
+     * @param string|null $property_status `open` / `close` only: the property's state on Booking.com after the call.
+     *
+     * @return $this
+     */
+    public function setPropertyStatus(?string $property_status): static
+    {
+        if (is_null($property_status)) {
+            throw new InvalidArgumentException('non-nullable property_status cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['property_status'] = $property_status;
+
+        return $this;
+    }
+
+    /**
+     * Gets changed
+     *
+     * @return bool|null
+     */
+    public function getChanged(): ?bool
+    {
+        return $this->container['changed'];
+    }
+
+    /**
+     * Sets changed
+     *
+     * @param bool|null $changed `open` / `close` only: false when the property was already in that state, so nothing was sent.
+     *
+     * @return $this
+     */
+    public function setChanged(?bool $changed): static
+    {
+        if (is_null($changed)) {
+            throw new InvalidArgumentException('non-nullable changed cannot be null');
+        }
+        $this->container['changed'] = $changed;
+
+        return $this;
+    }
+
+    /**
+     * Gets booking_status
+     *
+     * @return string|null
+     */
+    public function getBookingStatus(): ?string
+    {
+        return $this->container['booking_status'];
+    }
+
+    /**
+     * Sets booking_status
+     *
+     * @param string|null $booking_status `open` / `close` only: Booking.com's status for the property before the call, e.g. `XML: Ready to open`.
+     *
+     * @return $this
+     */
+    public function setBookingStatus(?string $booking_status): static
+    {
+        if (is_null($booking_status)) {
+            array_push($this->openAPINullablesSetToNull, 'booking_status');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('booking_status', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['booking_status'] = $booking_status;
+
+        return $this;
+    }
+
+    /**
      * Gets hotel_id
      *
      * @return string
@@ -506,9 +641,9 @@ class BookingPropertyActionResponse implements ModelInterface, ArrayAccess, Json
     /**
      * Gets selling
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getSelling(): bool
+    public function getSelling(): ?bool
     {
         return $this->container['selling'];
     }
@@ -516,11 +651,11 @@ class BookingPropertyActionResponse implements ModelInterface, ArrayAccess, Json
     /**
      * Sets selling
      *
-     * @param bool $selling Whether the property is now on sale. **This is the state of the property on Booking.com, not of the listing in Repull** — `active` (what Repull bills and serves) is untouched by both actions and is deliberately not echoed here so the two can never be read as one field.
+     * @param bool|null $selling `unlist` / `relist` only. Whether the property is now on sale. **This is the state of the property on Booking.com, not of the listing in Repull** — `active` (what Repull bills and serves) is untouched by both actions and is deliberately not echoed here so the two can never be read as one field.
      *
      * @return $this
      */
-    public function setSelling(bool $selling): static
+    public function setSelling(?bool $selling): static
     {
         if (is_null($selling)) {
             throw new InvalidArgumentException('non-nullable selling cannot be null');
