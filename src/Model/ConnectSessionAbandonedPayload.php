@@ -66,6 +66,8 @@ class ConnectSessionAbandonedPayload implements ModelInterface, ArrayAccess, Jso
         'reason' => 'string',
         'last_error_code' => 'string',
         'external_account_id' => 'string',
+        'connection_id' => 'string',
+        'fix_url' => 'string',
         'next_step' => 'string',
         'created_at' => '\DateTime',
         'last_activity_at' => '\DateTime'
@@ -84,6 +86,8 @@ class ConnectSessionAbandonedPayload implements ModelInterface, ArrayAccess, Jso
         'reason' => null,
         'last_error_code' => null,
         'external_account_id' => null,
+        'connection_id' => null,
+        'fix_url' => 'uri',
         'next_step' => null,
         'created_at' => 'date-time',
         'last_activity_at' => 'date-time'
@@ -102,6 +106,8 @@ class ConnectSessionAbandonedPayload implements ModelInterface, ArrayAccess, Jso
         'reason' => false,
         'last_error_code' => true,
         'external_account_id' => true,
+        'connection_id' => true,
+        'fix_url' => true,
         'next_step' => false,
         'created_at' => false,
         'last_activity_at' => false
@@ -190,6 +196,8 @@ class ConnectSessionAbandonedPayload implements ModelInterface, ArrayAccess, Jso
         'reason' => 'reason',
         'last_error_code' => 'lastErrorCode',
         'external_account_id' => 'externalAccountId',
+        'connection_id' => 'connectionId',
+        'fix_url' => 'fixUrl',
         'next_step' => 'nextStep',
         'created_at' => 'createdAt',
         'last_activity_at' => 'lastActivityAt'
@@ -208,6 +216,8 @@ class ConnectSessionAbandonedPayload implements ModelInterface, ArrayAccess, Jso
         'reason' => 'setReason',
         'last_error_code' => 'setLastErrorCode',
         'external_account_id' => 'setExternalAccountId',
+        'connection_id' => 'setConnectionId',
+        'fix_url' => 'setFixUrl',
         'next_step' => 'setNextStep',
         'created_at' => 'setCreatedAt',
         'last_activity_at' => 'setLastActivityAt'
@@ -226,6 +236,8 @@ class ConnectSessionAbandonedPayload implements ModelInterface, ArrayAccess, Jso
         'reason' => 'getReason',
         'last_error_code' => 'getLastErrorCode',
         'external_account_id' => 'getExternalAccountId',
+        'connection_id' => 'getConnectionId',
+        'fix_url' => 'getFixUrl',
         'next_step' => 'getNextStep',
         'created_at' => 'getCreatedAt',
         'last_activity_at' => 'getLastActivityAt'
@@ -321,6 +333,8 @@ class ConnectSessionAbandonedPayload implements ModelInterface, ArrayAccess, Jso
         $this->setIfExists('reason', $data ?? [], null);
         $this->setIfExists('last_error_code', $data ?? [], null);
         $this->setIfExists('external_account_id', $data ?? [], null);
+        $this->setIfExists('connection_id', $data ?? [], null);
+        $this->setIfExists('fix_url', $data ?? [], null);
         $this->setIfExists('next_step', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
         $this->setIfExists('last_activity_at', $data ?? [], null);
@@ -579,7 +593,7 @@ class ConnectSessionAbandonedPayload implements ModelInterface, ArrayAccess, Jso
     /**
      * Sets external_account_id
      *
-     * @param string|null $external_account_id Booking.com: the Hotel ID the user entered while waiting for the Extranet approval.
+     * @param string|null $external_account_id Booking.com: the Hotel ID the user entered while waiting for the Extranet approval. Booking.com Extranet in `awaiting_room_mapping`: the Booking.com account id of the connected login.
      *
      * @return $this
      */
@@ -596,6 +610,74 @@ class ConnectSessionAbandonedPayload implements ModelInterface, ArrayAccess, Jso
             }
         }
         $this->container['external_account_id'] = $external_account_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets connection_id
+     *
+     * @return string|null
+     */
+    public function getConnectionId(): ?string
+    {
+        return $this->container['connection_id'];
+    }
+
+    /**
+     * Sets connection_id
+     *
+     * @param string|null $connection_id Booking.com Extranet in `awaiting_room_mapping`: the connection record of the connected login (the `X-Account-Id`). Absent otherwise.
+     *
+     * @return $this
+     */
+    public function setConnectionId(?string $connection_id): static
+    {
+        if (is_null($connection_id)) {
+            array_push($this->openAPINullablesSetToNull, 'connection_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('connection_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['connection_id'] = $connection_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets fix_url
+     *
+     * @return string|null
+     */
+    public function getFixUrl(): ?string
+    {
+        return $this->container['fix_url'];
+    }
+
+    /**
+     * Sets fix_url
+     *
+     * @param string|null $fix_url Booking.com Extranet in `awaiting_room_mapping`: a durable link that reopens Connect on the room-mapping step for this login. Send the host there to finish. `null` when there is nothing to resume.
+     *
+     * @return $this
+     */
+    public function setFixUrl(?string $fix_url): static
+    {
+        if (is_null($fix_url)) {
+            array_push($this->openAPINullablesSetToNull, 'fix_url');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('fix_url', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['fix_url'] = $fix_url;
 
         return $this;
     }
