@@ -582,7 +582,7 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets action
      *
-     * @param \Repull\Model\ConnectionAction|null $action Set when the host must do something before the connection works (e.g. grant the invited Booking.com Extranet user full access). `null` when no action is pending.
+     * @param \Repull\Model\ConnectionAction|null $action Set when the host must do something before the connection works (e.g. grant the invited Booking.com Extranet user full access), or has units still to map (`reason: needs_mapping` — Booking.com Extranet rooms, Vrbo units; `required` is false when only some Vrbo units are left). `null` when no action is pending.
      *
      * @return $this
      */
@@ -616,7 +616,7 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets fix_url
      *
-     * @param string|null $fix_url Durable link that reopens the hosted Connect flow bound to this account on the fix screen — send the host here to resolve `action`. Present only when `action.required` is true; `null` otherwise.
+     * @param string|null $fix_url Durable link that reopens the hosted Connect flow bound to this account on the fix screen — send the host here to resolve `action`. For `needs_mapping` it opens the unit mapping directly (no new sign-in). Present whenever `action` is set; `null` otherwise.
      *
      * @return $this
      */

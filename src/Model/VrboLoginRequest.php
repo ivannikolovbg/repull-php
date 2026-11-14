@@ -246,6 +246,7 @@ class VrboLoginRequest implements ModelInterface, ArrayAccess, JsonSerializable
 
     public const ACTION_LOGIN = 'login';
     public const ACTION_OTP = 'otp';
+    public const ACTION_RESEND = 'resend';
     public const ACCESS_TYPE_FULL_ACCESS = 'full_access';
     public const ACCESS_TYPE_MESSAGING = 'messaging';
 
@@ -259,6 +260,7 @@ class VrboLoginRequest implements ModelInterface, ArrayAccess, JsonSerializable
         return [
             self::ACTION_LOGIN,
             self::ACTION_OTP,
+            self::ACTION_RESEND,
         ];
     }
 
