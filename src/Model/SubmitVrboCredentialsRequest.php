@@ -59,7 +59,9 @@ class SubmitVrboCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPITypes = [
         'session_id' => 'string',
-        'credentials' => 'array<string,mixed>'
+        'advertiser_external_id' => 'string',
+        'endpoint_url' => 'string',
+        'rotate' => 'bool'
     ];
 
     /**
@@ -69,7 +71,9 @@ class SubmitVrboCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPIFormats = [
         'session_id' => null,
-        'credentials' => null
+        'advertiser_external_id' => null,
+        'endpoint_url' => null,
+        'rotate' => null
     ];
 
     /**
@@ -79,7 +83,9 @@ class SubmitVrboCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $openAPINullables = [
         'session_id' => false,
-        'credentials' => false
+        'advertiser_external_id' => false,
+        'endpoint_url' => false,
+        'rotate' => false
     ];
 
     /**
@@ -159,7 +165,9 @@ class SubmitVrboCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $attributeMap = [
         'session_id' => 'sessionId',
-        'credentials' => 'credentials'
+        'advertiser_external_id' => 'advertiserExternalId',
+        'endpoint_url' => 'endpointUrl',
+        'rotate' => 'rotate'
     ];
 
     /**
@@ -169,7 +177,9 @@ class SubmitVrboCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $setters = [
         'session_id' => 'setSessionId',
-        'credentials' => 'setCredentials'
+        'advertiser_external_id' => 'setAdvertiserExternalId',
+        'endpoint_url' => 'setEndpointUrl',
+        'rotate' => 'setRotate'
     ];
 
     /**
@@ -179,7 +189,9 @@ class SubmitVrboCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
      */
     protected static array $getters = [
         'session_id' => 'getSessionId',
-        'credentials' => 'getCredentials'
+        'advertiser_external_id' => 'getAdvertiserExternalId',
+        'endpoint_url' => 'getEndpointUrl',
+        'rotate' => 'getRotate'
     ];
 
     /**
@@ -230,7 +242,9 @@ class SubmitVrboCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
     public function __construct(?array $data = null)
     {
         $this->setIfExists('session_id', $data ?? [], null);
-        $this->setIfExists('credentials', $data ?? [], null);
+        $this->setIfExists('advertiser_external_id', $data ?? [], null);
+        $this->setIfExists('endpoint_url', $data ?? [], null);
+        $this->setIfExists('rotate', $data ?? [], null);
     }
 
     /**
@@ -258,9 +272,13 @@ class SubmitVrboCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
     {
         $invalidProperties = [];
 
-        if ($this->container['credentials'] === null) {
-            $invalidProperties[] = "'credentials' can't be null";
+        if ($this->container['advertiser_external_id'] === null) {
+            $invalidProperties[] = "'advertiser_external_id' can't be null";
         }
+        if (!preg_match("/^[A-Za-z0-9_-]{1,255}$/", $this->container['advertiser_external_id'])) {
+            $invalidProperties[] = "invalid value for 'advertiser_external_id', must be conform to the pattern /^[A-Za-z0-9_-]{1,255}$/.";
+        }
+
         return $invalidProperties;
     }
 
@@ -301,28 +319,87 @@ class SubmitVrboCredentialsRequest implements ModelInterface, ArrayAccess, JsonS
     }
 
     /**
-     * Gets credentials
+     * Gets advertiser_external_id
      *
-     * @return array<string,mixed>
+     * @return string
      */
-    public function getCredentials(): array
+    public function getAdvertiserExternalId(): string
     {
-        return $this->container['credentials'];
+        return $this->container['advertiser_external_id'];
     }
 
     /**
-     * Sets credentials
+     * Sets advertiser_external_id
      *
-     * @param array<string,mixed> $credentials Activation handshake — Repull mints the Basic-Auth pair the host pastes into Vrbo Partner Central.
+     * @param string $advertiser_external_id The host's Vrbo advertiser id. Repull mints the Basic-Auth pair for it, which the host pastes into Vrbo Partner Central.
      *
      * @return $this
      */
-    public function setCredentials(array $credentials): static
+    public function setAdvertiserExternalId(string $advertiser_external_id): static
     {
-        if (is_null($credentials)) {
-            throw new InvalidArgumentException('non-nullable credentials cannot be null');
+        if (is_null($advertiser_external_id)) {
+            throw new InvalidArgumentException('non-nullable advertiser_external_id cannot be null');
         }
-        $this->container['credentials'] = $credentials;
+
+        if ((!preg_match("/^[A-Za-z0-9_-]{1,255}$/", ObjectSerializer::toString($advertiser_external_id)))) {
+            throw new InvalidArgumentException("invalid value for \$advertiser_external_id when calling SubmitVrboCredentialsRequest., must conform to the pattern /^[A-Za-z0-9_-]{1,255}$/.");
+        }
+
+        $this->container['advertiser_external_id'] = $advertiser_external_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets endpoint_url
+     *
+     * @return string|null
+     */
+    public function getEndpointUrl(): ?string
+    {
+        return $this->container['endpoint_url'];
+    }
+
+    /**
+     * Sets endpoint_url
+     *
+     * @param string|null $endpoint_url Optional. Vrbo Partner Central sets this itself.
+     *
+     * @return $this
+     */
+    public function setEndpointUrl(?string $endpoint_url): static
+    {
+        if (is_null($endpoint_url)) {
+            throw new InvalidArgumentException('non-nullable endpoint_url cannot be null');
+        }
+        $this->container['endpoint_url'] = $endpoint_url;
+
+        return $this;
+    }
+
+    /**
+     * Gets rotate
+     *
+     * @return bool|null
+     */
+    public function getRotate(): ?bool
+    {
+        return $this->container['rotate'];
+    }
+
+    /**
+     * Sets rotate
+     *
+     * @param bool|null $rotate Replace the advertiser's existing password and return the new one. The old password stops working.
+     *
+     * @return $this
+     */
+    public function setRotate(?bool $rotate): static
+    {
+        if (is_null($rotate)) {
+            throw new InvalidArgumentException('non-nullable rotate cannot be null');
+        }
+        $this->container['rotate'] = $rotate;
 
         return $this;
     }

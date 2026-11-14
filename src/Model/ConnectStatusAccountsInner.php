@@ -66,6 +66,8 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'connected' => 'bool',
         'email' => 'string',
         'access_type' => '\Repull\Model\ConnectionAccessType',
+        'action' => 'object',
+        'fix_url' => 'string',
         'notification_email' => 'string',
         'import' => '\Repull\Model\VrboImportStatus'
     ];
@@ -84,6 +86,8 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'connected' => null,
         'email' => null,
         'access_type' => null,
+        'action' => null,
+        'fix_url' => null,
         'notification_email' => null,
         'import' => null
     ];
@@ -102,6 +106,8 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'connected' => false,
         'email' => true,
         'access_type' => true,
+        'action' => true,
+        'fix_url' => true,
         'notification_email' => true,
         'import' => true
     ];
@@ -190,6 +196,8 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'connected' => 'connected',
         'email' => 'email',
         'access_type' => 'accessType',
+        'action' => 'action',
+        'fix_url' => 'fixUrl',
         'notification_email' => 'notificationEmail',
         'import' => 'import'
     ];
@@ -208,6 +216,8 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'connected' => 'setConnected',
         'email' => 'setEmail',
         'access_type' => 'setAccessType',
+        'action' => 'setAction',
+        'fix_url' => 'setFixUrl',
         'notification_email' => 'setNotificationEmail',
         'import' => 'setImport'
     ];
@@ -226,6 +236,8 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'connected' => 'getConnected',
         'email' => 'getEmail',
         'access_type' => 'getAccessType',
+        'action' => 'getAction',
+        'fix_url' => 'getFixUrl',
         'notification_email' => 'getNotificationEmail',
         'import' => 'getImport'
     ];
@@ -285,6 +297,8 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         $this->setIfExists('connected', $data ?? [], null);
         $this->setIfExists('email', $data ?? [], null);
         $this->setIfExists('access_type', $data ?? [], null);
+        $this->setIfExists('action', $data ?? [], null);
+        $this->setIfExists('fix_url', $data ?? [], null);
         $this->setIfExists('notification_email', $data ?? [], null);
         $this->setIfExists('import', $data ?? [], null);
     }
@@ -339,7 +353,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
     /**
      * Sets external_account_id
      *
-     * @param string|null $external_account_id Airbnb: the host id, as a string (it can exceed 2^53). Vrbo: Vrbo's own account id; `null` until it is captured at sign-in.
+     * @param string|null $external_account_id Airbnb: the host id, as a string (it can exceed 2^53). Booking.com: the hotel id. Vrbo: Vrbo's own account id; `null` until it is captured at sign-in. Extranet: the Booking.com account id. PMS: the PMS account id.
      *
      * @return $this
      */
@@ -587,6 +601,74 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
             }
         }
         $this->container['access_type'] = $access_type;
+
+        return $this;
+    }
+
+    /**
+     * Gets action
+     *
+     * @return object|null
+     */
+    public function getAction(): ?object
+    {
+        return $this->container['action'];
+    }
+
+    /**
+     * Sets action
+     *
+     * @param object|null $action Booking.com: `{ required, reason: \"needs_mapping\", message }` while a room of this hotel is matched to no listing (nothing syncs for that room). Null when nothing is needed.
+     *
+     * @return $this
+     */
+    public function setAction(?object $action): static
+    {
+        if (is_null($action)) {
+            array_push($this->openAPINullablesSetToNull, 'action');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('action', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['action'] = $action;
+
+        return $this;
+    }
+
+    /**
+     * Gets fix_url
+     *
+     * @return string|null
+     */
+    public function getFixUrl(): ?string
+    {
+        return $this->container['fix_url'];
+    }
+
+    /**
+     * Sets fix_url
+     *
+     * @param string|null $fix_url Booking.com: a link that opens room mapping for this hotel (no new Connect session needed). Send the host to it when `action` is set.
+     *
+     * @return $this
+     */
+    public function setFixUrl(?string $fix_url): static
+    {
+        if (is_null($fix_url)) {
+            array_push($this->openAPINullablesSetToNull, 'fix_url');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('fix_url', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['fix_url'] = $fix_url;
 
         return $this;
     }
