@@ -68,6 +68,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'access_type' => '\Repull\Model\ConnectionAccessType',
         'action' => 'object',
         'fix_url' => 'string',
+        'notification_received_at' => '\DateTime',
         'notification_email' => 'string',
         'import' => '\Repull\Model\VrboImportStatus'
     ];
@@ -88,6 +89,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'access_type' => null,
         'action' => null,
         'fix_url' => null,
+        'notification_received_at' => 'date-time',
         'notification_email' => null,
         'import' => null
     ];
@@ -108,6 +110,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'access_type' => true,
         'action' => true,
         'fix_url' => true,
+        'notification_received_at' => true,
         'notification_email' => true,
         'import' => true
     ];
@@ -198,6 +201,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'access_type' => 'accessType',
         'action' => 'action',
         'fix_url' => 'fixUrl',
+        'notification_received_at' => 'notificationReceivedAt',
         'notification_email' => 'notificationEmail',
         'import' => 'import'
     ];
@@ -218,6 +222,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'access_type' => 'setAccessType',
         'action' => 'setAction',
         'fix_url' => 'setFixUrl',
+        'notification_received_at' => 'setNotificationReceivedAt',
         'notification_email' => 'setNotificationEmail',
         'import' => 'setImport'
     ];
@@ -238,6 +243,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'access_type' => 'getAccessType',
         'action' => 'getAction',
         'fix_url' => 'getFixUrl',
+        'notification_received_at' => 'getNotificationReceivedAt',
         'notification_email' => 'getNotificationEmail',
         'import' => 'getImport'
     ];
@@ -299,6 +305,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         $this->setIfExists('access_type', $data ?? [], null);
         $this->setIfExists('action', $data ?? [], null);
         $this->setIfExists('fix_url', $data ?? [], null);
+        $this->setIfExists('notification_received_at', $data ?? [], null);
         $this->setIfExists('notification_email', $data ?? [], null);
         $this->setIfExists('import', $data ?? [], null);
     }
@@ -669,6 +676,40 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
             }
         }
         $this->container['fix_url'] = $fix_url;
+
+        return $this;
+    }
+
+    /**
+     * Gets notification_received_at
+     *
+     * @return \DateTime|null
+     */
+    public function getNotificationReceivedAt(): ?\DateTime
+    {
+        return $this->container['notification_received_at'];
+    }
+
+    /**
+     * Sets notification_received_at
+     *
+     * @param \DateTime|null $notification_received_at Vrbo only. When Vrbo's first notification reached `notificationEmail`, i.e. the host added it with notifications on. `null` until then.
+     *
+     * @return $this
+     */
+    public function setNotificationReceivedAt(?\DateTime $notification_received_at): static
+    {
+        if (is_null($notification_received_at)) {
+            array_push($this->openAPINullablesSetToNull, 'notification_received_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('notification_received_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['notification_received_at'] = $notification_received_at;
 
         return $this;
     }
