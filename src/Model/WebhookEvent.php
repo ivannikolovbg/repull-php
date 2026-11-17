@@ -245,6 +245,7 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         return self::$openAPIModelName;
     }
 
+    public const EVENT_ACCOUNT_CALENDAR_ACCESS_CHANGED = 'account.calendar_access_changed';
     public const EVENT_ACCOUNT_CREATED = 'account.created';
     public const EVENT_ACCOUNT_DISCONNECTED = 'account.disconnected';
     public const EVENT_ACCOUNT_IMPORT_COMPLETED = 'account.import.completed';
@@ -296,6 +297,7 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     public static function getEventAllowableValues()
     {
         return [
+            self::EVENT_ACCOUNT_CALENDAR_ACCESS_CHANGED,
             self::EVENT_ACCOUNT_CREATED,
             self::EVENT_ACCOUNT_DISCONNECTED,
             self::EVENT_ACCOUNT_IMPORT_COMPLETED,

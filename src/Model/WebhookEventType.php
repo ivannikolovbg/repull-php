@@ -99,6 +99,8 @@ enum WebhookEventType: string
 
     case ACCOUNT_UNITS_ADDED = 'account.units.added';
 
+    case ACCOUNT_CALENDAR_ACCESS_CHANGED = 'account.calendar_access_changed';
+
     case REVIEW_CREATED = 'review.created';
 
     case REVIEW_RESPONDED = 'review.responded';

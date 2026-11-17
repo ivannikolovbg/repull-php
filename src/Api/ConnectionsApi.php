@@ -151,13 +151,13 @@ class ConnectionsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\ApplyConnectionMappings200Response
+     * @return \Repull\Model\ApplyConnectionMappings200Response|\Repull\Model\Error
      */
     public function applyConnectionMappings(
         string $id,
         \Repull\Model\ApplyConnectionMappingsRequest $apply_connection_mappings_request,
         string $contentType = self::contentTypes['applyConnectionMappings'][0]
-    ): \Repull\Model\ApplyConnectionMappings200Response
+    ): \Repull\Model\ApplyConnectionMappings200Response|\Repull\Model\Error
     {
         list($response) = $this->applyConnectionMappingsWithHttpInfo($id, $apply_connection_mappings_request, $contentType);
         return $response;
@@ -174,7 +174,7 @@ class ConnectionsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\ApplyConnectionMappings200Response, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ApplyConnectionMappings200Response|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function applyConnectionMappingsWithHttpInfo(
         string $id,
@@ -213,6 +213,12 @@ class ConnectionsApi
                         $request,
                         $response,
                     );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
             }
             
 
@@ -240,6 +246,14 @@ class ConnectionsApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\ApplyConnectionMappings200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);

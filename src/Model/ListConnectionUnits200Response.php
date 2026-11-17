@@ -62,6 +62,7 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         'channel' => 'string',
         'status' => 'string',
         'notification_email' => 'string',
+        'calendar' => '\Repull\Model\VrboCalendarAccess',
         'units' => '\Repull\Model\ListConnectionUnits200ResponseUnitsInner[]',
         'listing_options' => '\Repull\Model\ListConnectionUnits200ResponseListingOptionsInner[]',
         'missing_capabilities' => 'string[]',
@@ -78,6 +79,7 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         'channel' => null,
         'status' => null,
         'notification_email' => null,
+        'calendar' => null,
         'units' => null,
         'listing_options' => null,
         'missing_capabilities' => null,
@@ -94,6 +96,7 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         'channel' => false,
         'status' => false,
         'notification_email' => true,
+        'calendar' => false,
         'units' => false,
         'listing_options' => false,
         'missing_capabilities' => false,
@@ -180,6 +183,7 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         'channel' => 'channel',
         'status' => 'status',
         'notification_email' => 'notification_email',
+        'calendar' => 'calendar',
         'units' => 'units',
         'listing_options' => 'listing_options',
         'missing_capabilities' => 'missing_capabilities',
@@ -196,6 +200,7 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         'channel' => 'setChannel',
         'status' => 'setStatus',
         'notification_email' => 'setNotificationEmail',
+        'calendar' => 'setCalendar',
         'units' => 'setUnits',
         'listing_options' => 'setListingOptions',
         'missing_capabilities' => 'setMissingCapabilities',
@@ -212,6 +217,7 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         'channel' => 'getChannel',
         'status' => 'getStatus',
         'notification_email' => 'getNotificationEmail',
+        'calendar' => 'getCalendar',
         'units' => 'getUnits',
         'listing_options' => 'getListingOptions',
         'missing_capabilities' => 'getMissingCapabilities',
@@ -286,6 +292,7 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
         $this->setIfExists('channel', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('notification_email', $data ?? [], null);
+        $this->setIfExists('calendar', $data ?? [], null);
         $this->setIfExists('units', $data ?? [], null);
         $this->setIfExists('listing_options', $data ?? [], null);
         $this->setIfExists('missing_capabilities', $data ?? [], null);
@@ -450,6 +457,33 @@ class ListConnectionUnits200Response implements ModelInterface, ArrayAccess, Jso
             }
         }
         $this->container['notification_email'] = $notification_email;
+
+        return $this;
+    }
+
+    /**
+     * Gets calendar
+     *
+     * @return \Repull\Model\VrboCalendarAccess|null
+     */
+    public function getCalendar(): ?\Repull\Model\VrboCalendarAccess
+    {
+        return $this->container['calendar'];
+    }
+
+    /**
+     * Sets calendar
+     *
+     * @param \Repull\Model\VrboCalendarAccess|null $calendar calendar
+     *
+     * @return $this
+     */
+    public function setCalendar(?\Repull\Model\VrboCalendarAccess $calendar): static
+    {
+        if (is_null($calendar)) {
+            throw new InvalidArgumentException('non-nullable calendar cannot be null');
+        }
+        $this->container['calendar'] = $calendar;
 
         return $this;
     }

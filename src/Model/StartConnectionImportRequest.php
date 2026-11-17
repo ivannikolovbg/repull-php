@@ -298,7 +298,7 @@ class StartConnectionImportRequest implements ModelInterface, ArrayAccess, JsonS
     /**
      * Sets scope
      *
-     * @param string|null $scope What to import. `listings` = the account's listings and their calendars (pricing and availability). The only scope; the full import runs when an account is connected.
+     * @param string|null $scope What to import. `listings` = the account's listings. New listings come in with their calendar (pricing and availability); on a full-access connection, calendars of listings already in Repull are not re-read. The only scope; the full import runs when an account is connected.
      *
      * @return $this
      */

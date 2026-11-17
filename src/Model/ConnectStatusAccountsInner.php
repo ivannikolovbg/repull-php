@@ -69,6 +69,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'action' => 'object',
         'fix_url' => 'string',
         'notification_received_at' => '\DateTime',
+        'calendar' => '\Repull\Model\VrboCalendarAccess',
         'notification_email' => 'string',
         'import' => '\Repull\Model\VrboImportStatus'
     ];
@@ -90,6 +91,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'action' => null,
         'fix_url' => null,
         'notification_received_at' => 'date-time',
+        'calendar' => null,
         'notification_email' => null,
         'import' => null
     ];
@@ -111,6 +113,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'action' => true,
         'fix_url' => true,
         'notification_received_at' => true,
+        'calendar' => true,
         'notification_email' => true,
         'import' => true
     ];
@@ -202,6 +205,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'action' => 'action',
         'fix_url' => 'fixUrl',
         'notification_received_at' => 'notificationReceivedAt',
+        'calendar' => 'calendar',
         'notification_email' => 'notificationEmail',
         'import' => 'import'
     ];
@@ -223,6 +227,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'action' => 'setAction',
         'fix_url' => 'setFixUrl',
         'notification_received_at' => 'setNotificationReceivedAt',
+        'calendar' => 'setCalendar',
         'notification_email' => 'setNotificationEmail',
         'import' => 'setImport'
     ];
@@ -244,6 +249,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'action' => 'getAction',
         'fix_url' => 'getFixUrl',
         'notification_received_at' => 'getNotificationReceivedAt',
+        'calendar' => 'getCalendar',
         'notification_email' => 'getNotificationEmail',
         'import' => 'getImport'
     ];
@@ -306,6 +312,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         $this->setIfExists('action', $data ?? [], null);
         $this->setIfExists('fix_url', $data ?? [], null);
         $this->setIfExists('notification_received_at', $data ?? [], null);
+        $this->setIfExists('calendar', $data ?? [], null);
         $this->setIfExists('notification_email', $data ?? [], null);
         $this->setIfExists('import', $data ?? [], null);
     }
@@ -710,6 +717,40 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
             }
         }
         $this->container['notification_received_at'] = $notification_received_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets calendar
+     *
+     * @return \Repull\Model\VrboCalendarAccess|null
+     */
+    public function getCalendar(): ?\Repull\Model\VrboCalendarAccess
+    {
+        return $this->container['calendar'];
+    }
+
+    /**
+     * Sets calendar
+     *
+     * @param \Repull\Model\VrboCalendarAccess|null $calendar Vrbo only. Whether another tool (such as a PMS) manages this account's calendar; while `calendar.managedBy` is set, calendar sync is off for all its units.
+     *
+     * @return $this
+     */
+    public function setCalendar(?\Repull\Model\VrboCalendarAccess $calendar): static
+    {
+        if (is_null($calendar)) {
+            array_push($this->openAPINullablesSetToNull, 'calendar');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('calendar', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['calendar'] = $calendar;
 
         return $this;
     }

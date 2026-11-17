@@ -460,7 +460,7 @@ class ListConnectionUnits200ResponseUnitsInner implements ModelInterface, ArrayA
     /**
      * Sets meta
      *
-     * @param object|null $meta Channel details that identify the unit. Booking.com Extranet: `hotel` (property name), `hotelId` (Booking.com property ID), `roomId` (Booking.com room ID), `city`. Vrbo: `headline`, `address`, `vrboStatus`; the Vrbo listing ID is `unit_id`.
+     * @param object|null $meta Channel details that identify the unit. Booking.com Extranet: `hotel` (property name), `hotelId` (Booking.com property ID), `roomId` (Booking.com room ID), `city`. Vrbo: `headline`, `address`, `vrboStatus`, `calendarSync` (whether the unit's prices and availability are pushed to Vrbo) and, while Vrbo says another tool manages the account's calendar, `calendarSyncBlocked: \"calendar_managed_elsewhere\"`; the Vrbo listing ID is `unit_id`.
      *
      * @return $this
      */

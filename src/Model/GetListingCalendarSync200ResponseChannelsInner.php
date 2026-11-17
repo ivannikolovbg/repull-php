@@ -62,6 +62,8 @@ class GetListingCalendarSync200ResponseChannelsInner implements ModelInterface, 
         'platform_id' => 'string',
         'sync_enabled' => 'bool',
         'status' => 'string',
+        'off_reason' => 'string',
+        'docs_url' => 'string',
         'last_sync_at' => '\DateTime',
         'nights_with_problems' => 'int',
         'problems' => '\Repull\Model\GetListingCalendarSync200ResponseChannelsInnerProblemsInner[]',
@@ -78,6 +80,8 @@ class GetListingCalendarSync200ResponseChannelsInner implements ModelInterface, 
         'platform_id' => null,
         'sync_enabled' => null,
         'status' => null,
+        'off_reason' => null,
+        'docs_url' => 'uri',
         'last_sync_at' => 'date-time',
         'nights_with_problems' => null,
         'problems' => null,
@@ -94,6 +98,8 @@ class GetListingCalendarSync200ResponseChannelsInner implements ModelInterface, 
         'platform_id' => true,
         'sync_enabled' => false,
         'status' => false,
+        'off_reason' => false,
+        'docs_url' => false,
         'last_sync_at' => true,
         'nights_with_problems' => false,
         'problems' => false,
@@ -180,6 +186,8 @@ class GetListingCalendarSync200ResponseChannelsInner implements ModelInterface, 
         'platform_id' => 'platformId',
         'sync_enabled' => 'syncEnabled',
         'status' => 'status',
+        'off_reason' => 'offReason',
+        'docs_url' => 'docsUrl',
         'last_sync_at' => 'lastSyncAt',
         'nights_with_problems' => 'nightsWithProblems',
         'problems' => 'problems',
@@ -196,6 +204,8 @@ class GetListingCalendarSync200ResponseChannelsInner implements ModelInterface, 
         'platform_id' => 'setPlatformId',
         'sync_enabled' => 'setSyncEnabled',
         'status' => 'setStatus',
+        'off_reason' => 'setOffReason',
+        'docs_url' => 'setDocsUrl',
         'last_sync_at' => 'setLastSyncAt',
         'nights_with_problems' => 'setNightsWithProblems',
         'problems' => 'setProblems',
@@ -212,6 +222,8 @@ class GetListingCalendarSync200ResponseChannelsInner implements ModelInterface, 
         'platform_id' => 'getPlatformId',
         'sync_enabled' => 'getSyncEnabled',
         'status' => 'getStatus',
+        'off_reason' => 'getOffReason',
+        'docs_url' => 'getDocsUrl',
         'last_sync_at' => 'getLastSyncAt',
         'nights_with_problems' => 'getNightsWithProblems',
         'problems' => 'getProblems',
@@ -253,6 +265,7 @@ class GetListingCalendarSync200ResponseChannelsInner implements ModelInterface, 
     public const STATUS_IN_SYNC = 'in_sync';
     public const STATUS_PROBLEMS = 'problems';
     public const STATUS_OFF = 'off';
+    public const OFF_REASON_CALENDAR_MANAGED_ELSEWHERE = 'calendar_managed_elsewhere';
 
     /**
      * Gets allowable values of the enum
@@ -265,6 +278,18 @@ class GetListingCalendarSync200ResponseChannelsInner implements ModelInterface, 
             self::STATUS_IN_SYNC,
             self::STATUS_PROBLEMS,
             self::STATUS_OFF,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getOffReasonAllowableValues()
+    {
+        return [
+            self::OFF_REASON_CALENDAR_MANAGED_ELSEWHERE,
         ];
     }
 
@@ -286,6 +311,8 @@ class GetListingCalendarSync200ResponseChannelsInner implements ModelInterface, 
         $this->setIfExists('platform_id', $data ?? [], null);
         $this->setIfExists('sync_enabled', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('off_reason', $data ?? [], null);
+        $this->setIfExists('docs_url', $data ?? [], null);
         $this->setIfExists('last_sync_at', $data ?? [], null);
         $this->setIfExists('nights_with_problems', $data ?? [], null);
         $this->setIfExists('problems', $data ?? [], null);
@@ -334,6 +361,15 @@ class GetListingCalendarSync200ResponseChannelsInner implements ModelInterface, 
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'status', must be one of '%s'",
                 $this->container['status'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        $allowedValues = self::getOffReasonAllowableValues();
+        if (!is_null($this->container['off_reason']) && !in_array($this->container['off_reason'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'off_reason', must be one of '%s'",
+                $this->container['off_reason'],
                 implode("', '", $allowedValues)
             );
         }
@@ -471,6 +507,61 @@ class GetListingCalendarSync200ResponseChannelsInner implements ModelInterface, 
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets off_reason
+     *
+     * @return string|null
+     */
+    public function getOffReason(): ?string
+    {
+        return $this->container['off_reason'];
+    }
+
+    /**
+     * Sets off_reason
+     *
+     * @param string|null $off_reason Vrbo only, when Repull turned calendar sync off: Vrbo says another tool (such as a PMS) manages the account's calendar. Absent when the host turned it off.
+     *
+     * @return $this
+     */
+    public function setOffReason(?string $off_reason): static
+    {
+        if (is_null($off_reason)) {
+            throw new InvalidArgumentException('non-nullable off_reason cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['off_reason'] = $off_reason;
+
+        return $this;
+    }
+
+    /**
+     * Gets docs_url
+     *
+     * @return string|null
+     */
+    public function getDocsUrl(): ?string
+    {
+        return $this->container['docs_url'];
+    }
+
+    /**
+     * Sets docs_url
+     *
+     * @param string|null $docs_url Explains `offReason` and how to turn calendar sync back on.
+     *
+     * @return $this
+     */
+    public function setDocsUrl(?string $docs_url): static
+    {
+        if (is_null($docs_url)) {
+            throw new InvalidArgumentException('non-nullable docs_url cannot be null');
+        }
+        $this->container['docs_url'] = $docs_url;
 
         return $this;
     }
