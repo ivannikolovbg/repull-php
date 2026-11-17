@@ -251,6 +251,7 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     public const EVENT_ACCOUNT_IMPORT_COMPLETED = 'account.import.completed';
     public const EVENT_ACCOUNT_IMPORT_FAILED = 'account.import.failed';
     public const EVENT_ACCOUNT_IMPORT_STARTED = 'account.import.started';
+    public const EVENT_ACCOUNT_NOTIFICATIONS_MISSING = 'account.notifications_missing';
     public const EVENT_ACCOUNT_UNITS_ADDED = 'account.units.added';
     public const EVENT_AI_OPERATION_COMPLETED = 'ai.operation.completed';
     public const EVENT_AI_OPERATION_FAILED = 'ai.operation.failed';
@@ -259,6 +260,7 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     public const EVENT_CHANNEL_SYNC_FAILED = 'channel.sync.failed';
     public const EVENT_CONNECT_SESSION_ABANDONED = 'connect.session.abandoned';
     public const EVENT_CONNECT_SESSION_COMPLETED = 'connect.session.completed';
+    public const EVENT_CONVERSATION_MESSAGE_STATUS_CHANGED = 'conversation.message.status_changed';
     public const EVENT_INQUIRY_CREATED = 'inquiry.created';
     public const EVENT_INQUIRY_UPDATED = 'inquiry.updated';
     public const EVENT_LISTING_CREATED = 'listing.created';
@@ -303,6 +305,7 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
             self::EVENT_ACCOUNT_IMPORT_COMPLETED,
             self::EVENT_ACCOUNT_IMPORT_FAILED,
             self::EVENT_ACCOUNT_IMPORT_STARTED,
+            self::EVENT_ACCOUNT_NOTIFICATIONS_MISSING,
             self::EVENT_ACCOUNT_UNITS_ADDED,
             self::EVENT_AI_OPERATION_COMPLETED,
             self::EVENT_AI_OPERATION_FAILED,
@@ -311,6 +314,7 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
             self::EVENT_CHANNEL_SYNC_FAILED,
             self::EVENT_CONNECT_SESSION_ABANDONED,
             self::EVENT_CONNECT_SESSION_COMPLETED,
+            self::EVENT_CONVERSATION_MESSAGE_STATUS_CHANGED,
             self::EVENT_INQUIRY_CREATED,
             self::EVENT_INQUIRY_UPDATED,
             self::EVENT_LISTING_CREATED,

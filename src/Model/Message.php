@@ -321,6 +321,7 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     public const DIRECTION_OUTBOUND = 'outbound';
     public const STATUS_RECEIVED = 'received';
     public const STATUS_SENDING = 'sending';
+    public const STATUS_QUEUED = 'queued';
     public const STATUS_SENT = 'sent';
     public const STATUS_FAILED = 'failed';
 
@@ -347,6 +348,7 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
         return [
             self::STATUS_RECEIVED,
             self::STATUS_SENDING,
+            self::STATUS_QUEUED,
             self::STATUS_SENT,
             self::STATUS_FAILED,
         ];
@@ -544,7 +546,7 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets status
      *
-     * @param string|null $status Delivery state. Inbound messages are `received`. An outbound message is `sending` while it is queued to the channel, `sent` once the channel accepted it, or `failed`. Only `sent` (or `received`) means the guest can see it.
+     * @param string|null $status Delivery state. Inbound messages are `received`. An outbound message is `sending` while it is handed to the channel, `queued` when the channel was busy and Repull is still delivering it in the background (Vrbo), `sent` once the channel accepted it, or `failed`. Only `sent` (or `received`) means the guest can see it. A change from `queued` is sent as `conversation.message.status_changed`.
      *
      * @return $this
      */
@@ -572,7 +574,7 @@ class Message implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets status_reason
      *
-     * @param string|null $status_reason Why a message is still `sending` or `failed`, in plain words. `null` otherwise.
+     * @param string|null $status_reason Why a message is still `sending` or `queued`, or why it `failed`, in plain words. `null` otherwise.
      *
      * @return $this
      */

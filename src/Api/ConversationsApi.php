@@ -3668,7 +3668,7 @@ class ConversationsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\SendMessageResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SendMessageResponse|\Repull\Model\SendMessageResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function sendConversationMessageWithHttpInfo(
         int $id,
@@ -3703,6 +3703,12 @@ class ConversationsApi
 
             switch($statusCode) {
                 case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SendMessageResponse',
+                        $request,
+                        $response,
+                    );
+                case 202:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\SendMessageResponse',
                         $request,
@@ -3768,6 +3774,14 @@ class ConversationsApi
         } catch (ApiException $e) {
             switch ($e->getCode()) {
                 case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SendMessageResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 202:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\Repull\Model\SendMessageResponse',

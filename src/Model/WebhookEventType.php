@@ -45,6 +45,8 @@ enum WebhookEventType: string
 
     case RESERVATION_MESSAGE_RECEIVED = 'reservation.message.received';
 
+    case CONVERSATION_MESSAGE_STATUS_CHANGED = 'conversation.message.status_changed';
+
     case RESERVATION_MESSAGE_SENT = 'reservation.message.sent';
 
     case RESERVATION_MESSAGE_UPDATED = 'reservation.message.updated';
@@ -100,6 +102,8 @@ enum WebhookEventType: string
     case ACCOUNT_UNITS_ADDED = 'account.units.added';
 
     case ACCOUNT_CALENDAR_ACCESS_CHANGED = 'account.calendar_access_changed';
+
+    case ACCOUNT_NOTIFICATIONS_MISSING = 'account.notifications_missing';
 
     case REVIEW_CREATED = 'review.created';
 

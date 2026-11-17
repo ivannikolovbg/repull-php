@@ -69,6 +69,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'action' => 'object',
         'fix_url' => 'string',
         'notification_received_at' => '\DateTime',
+        'notifications' => '\Repull\Model\VrboNotifications',
         'calendar' => '\Repull\Model\VrboCalendarAccess',
         'notification_email' => 'string',
         'import' => '\Repull\Model\VrboImportStatus'
@@ -91,6 +92,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'action' => null,
         'fix_url' => null,
         'notification_received_at' => 'date-time',
+        'notifications' => null,
         'calendar' => null,
         'notification_email' => null,
         'import' => null
@@ -113,6 +115,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'action' => true,
         'fix_url' => true,
         'notification_received_at' => true,
+        'notifications' => false,
         'calendar' => true,
         'notification_email' => true,
         'import' => true
@@ -205,6 +208,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'action' => 'action',
         'fix_url' => 'fixUrl',
         'notification_received_at' => 'notificationReceivedAt',
+        'notifications' => 'notifications',
         'calendar' => 'calendar',
         'notification_email' => 'notificationEmail',
         'import' => 'import'
@@ -227,6 +231,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'action' => 'setAction',
         'fix_url' => 'setFixUrl',
         'notification_received_at' => 'setNotificationReceivedAt',
+        'notifications' => 'setNotifications',
         'calendar' => 'setCalendar',
         'notification_email' => 'setNotificationEmail',
         'import' => 'setImport'
@@ -249,6 +254,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         'action' => 'getAction',
         'fix_url' => 'getFixUrl',
         'notification_received_at' => 'getNotificationReceivedAt',
+        'notifications' => 'getNotifications',
         'calendar' => 'getCalendar',
         'notification_email' => 'getNotificationEmail',
         'import' => 'getImport'
@@ -312,6 +318,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
         $this->setIfExists('action', $data ?? [], null);
         $this->setIfExists('fix_url', $data ?? [], null);
         $this->setIfExists('notification_received_at', $data ?? [], null);
+        $this->setIfExists('notifications', $data ?? [], null);
         $this->setIfExists('calendar', $data ?? [], null);
         $this->setIfExists('notification_email', $data ?? [], null);
         $this->setIfExists('import', $data ?? [], null);
@@ -691,6 +698,7 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
      * Gets notification_received_at
      *
      * @return \DateTime|null
+     * @deprecated
      */
     public function getNotificationReceivedAt(): ?\DateTime
     {
@@ -700,9 +708,10 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
     /**
      * Sets notification_received_at
      *
-     * @param \DateTime|null $notification_received_at Vrbo only. When Vrbo's first notification reached `notificationEmail`, i.e. the host added it with notifications on. `null` until then.
+     * @param \DateTime|null $notification_received_at Deprecated: use `notifications`. Vrbo only. When Vrbo's FIRST notification reached `notificationEmail`; it stays set even if notifications later stop. `null` until then.
      *
      * @return $this
+     * @deprecated
      */
     public function setNotificationReceivedAt(?\DateTime $notification_received_at): static
     {
@@ -717,6 +726,33 @@ class ConnectStatusAccountsInner implements ModelInterface, ArrayAccess, JsonSer
             }
         }
         $this->container['notification_received_at'] = $notification_received_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets notifications
+     *
+     * @return \Repull\Model\VrboNotifications|null
+     */
+    public function getNotifications(): ?\Repull\Model\VrboNotifications
+    {
+        return $this->container['notifications'];
+    }
+
+    /**
+     * Sets notifications
+     *
+     * @param \Repull\Model\VrboNotifications|null $notifications Vrbo only. Whether Vrbo's notification emails reach Repull now (`state`), when the last one did, and the address to add. When `state` is `missing`, ask the host to add `address` on Vrbo; `account.notifications_missing` is sent when that happens.
+     *
+     * @return $this
+     */
+    public function setNotifications(?\Repull\Model\VrboNotifications $notifications): static
+    {
+        if (is_null($notifications)) {
+            throw new InvalidArgumentException('non-nullable notifications cannot be null');
+        }
+        $this->container['notifications'] = $notifications;
 
         return $this;
     }
