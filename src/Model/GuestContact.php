@@ -63,7 +63,8 @@ class GuestContact implements ModelInterface, ArrayAccess, JsonSerializable
         'value' => 'string',
         'verified' => 'bool',
         'is_primary' => 'bool',
-        'last_used' => '\DateTime'
+        'last_used' => '\DateTime',
+        'phone_type' => '\Repull\Model\GuestPhoneType'
     ];
 
     /**
@@ -76,7 +77,8 @@ class GuestContact implements ModelInterface, ArrayAccess, JsonSerializable
         'value' => null,
         'verified' => null,
         'is_primary' => null,
-        'last_used' => 'date-time'
+        'last_used' => 'date-time',
+        'phone_type' => null
     ];
 
     /**
@@ -89,7 +91,8 @@ class GuestContact implements ModelInterface, ArrayAccess, JsonSerializable
         'value' => false,
         'verified' => false,
         'is_primary' => false,
-        'last_used' => true
+        'last_used' => true,
+        'phone_type' => false
     ];
 
     /**
@@ -172,7 +175,8 @@ class GuestContact implements ModelInterface, ArrayAccess, JsonSerializable
         'value' => 'value',
         'verified' => 'verified',
         'is_primary' => 'isPrimary',
-        'last_used' => 'lastUsed'
+        'last_used' => 'lastUsed',
+        'phone_type' => 'phoneType'
     ];
 
     /**
@@ -185,7 +189,8 @@ class GuestContact implements ModelInterface, ArrayAccess, JsonSerializable
         'value' => 'setValue',
         'verified' => 'setVerified',
         'is_primary' => 'setIsPrimary',
-        'last_used' => 'setLastUsed'
+        'last_used' => 'setLastUsed',
+        'phone_type' => 'setPhoneType'
     ];
 
     /**
@@ -198,7 +203,8 @@ class GuestContact implements ModelInterface, ArrayAccess, JsonSerializable
         'value' => 'getValue',
         'verified' => 'getVerified',
         'is_primary' => 'getIsPrimary',
-        'last_used' => 'getLastUsed'
+        'last_used' => 'getLastUsed',
+        'phone_type' => 'getPhoneType'
     ];
 
     /**
@@ -253,6 +259,7 @@ class GuestContact implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('verified', $data ?? [], null);
         $this->setIfExists('is_primary', $data ?? [], null);
         $this->setIfExists('last_used', $data ?? [], null);
+        $this->setIfExists('phone_type', $data ?? [], null);
     }
 
     /**
@@ -430,6 +437,33 @@ class GuestContact implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['last_used'] = $last_used;
+
+        return $this;
+    }
+
+    /**
+     * Gets phone_type
+     *
+     * @return \Repull\Model\GuestPhoneType|null
+     */
+    public function getPhoneType(): ?\Repull\Model\GuestPhoneType
+    {
+        return $this->container['phone_type'];
+    }
+
+    /**
+     * Sets phone_type
+     *
+     * @param \Repull\Model\GuestPhoneType|null $phone_type Phone contacts only: `airbnb_relay` when this is a temporary Airbnb relay number (SMS only, expires 48h after checkout, shared across hosts, never a guest identifier); `guest` otherwise.
+     *
+     * @return $this
+     */
+    public function setPhoneType(?\Repull\Model\GuestPhoneType $phone_type): static
+    {
+        if (is_null($phone_type)) {
+            throw new InvalidArgumentException('non-nullable phone_type cannot be null');
+        }
+        $this->container['phone_type'] = $phone_type;
 
         return $this;
     }

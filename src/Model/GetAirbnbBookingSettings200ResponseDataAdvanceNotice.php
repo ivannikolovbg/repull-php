@@ -61,6 +61,7 @@ class GetAirbnbBookingSettings200ResponseDataAdvanceNotice implements ModelInter
     protected static array $openAPITypes = [
         'hours' => 'int',
         'same_day_bookings_allowed' => 'bool',
+        'same_day_cutoff' => 'string',
         'allow_request_to_book' => 'bool'
     ];
 
@@ -72,6 +73,7 @@ class GetAirbnbBookingSettings200ResponseDataAdvanceNotice implements ModelInter
     protected static array $openAPIFormats = [
         'hours' => null,
         'same_day_bookings_allowed' => null,
+        'same_day_cutoff' => null,
         'allow_request_to_book' => null
     ];
 
@@ -83,6 +85,7 @@ class GetAirbnbBookingSettings200ResponseDataAdvanceNotice implements ModelInter
     protected static array $openAPINullables = [
         'hours' => true,
         'same_day_bookings_allowed' => true,
+        'same_day_cutoff' => true,
         'allow_request_to_book' => true
     ];
 
@@ -164,6 +167,7 @@ class GetAirbnbBookingSettings200ResponseDataAdvanceNotice implements ModelInter
     protected static array $attributeMap = [
         'hours' => 'hours',
         'same_day_bookings_allowed' => 'sameDayBookingsAllowed',
+        'same_day_cutoff' => 'sameDayCutoff',
         'allow_request_to_book' => 'allowRequestToBook'
     ];
 
@@ -175,6 +179,7 @@ class GetAirbnbBookingSettings200ResponseDataAdvanceNotice implements ModelInter
     protected static array $setters = [
         'hours' => 'setHours',
         'same_day_bookings_allowed' => 'setSameDayBookingsAllowed',
+        'same_day_cutoff' => 'setSameDayCutoff',
         'allow_request_to_book' => 'setAllowRequestToBook'
     ];
 
@@ -186,6 +191,7 @@ class GetAirbnbBookingSettings200ResponseDataAdvanceNotice implements ModelInter
     protected static array $getters = [
         'hours' => 'getHours',
         'same_day_bookings_allowed' => 'getSameDayBookingsAllowed',
+        'same_day_cutoff' => 'getSameDayCutoff',
         'allow_request_to_book' => 'getAllowRequestToBook'
     ];
 
@@ -238,6 +244,7 @@ class GetAirbnbBookingSettings200ResponseDataAdvanceNotice implements ModelInter
     {
         $this->setIfExists('hours', $data ?? [], null);
         $this->setIfExists('same_day_bookings_allowed', $data ?? [], null);
+        $this->setIfExists('same_day_cutoff', $data ?? [], null);
         $this->setIfExists('allow_request_to_book', $data ?? [], null);
     }
 
@@ -291,7 +298,7 @@ class GetAirbnbBookingSettings200ResponseDataAdvanceNotice implements ModelInter
     /**
      * Sets hours
      *
-     * @param int|null $hours Whole hours of notice. `0` allows same-day bookings.
+     * @param int|null $hours Airbnb's advance notice: 0-24, 48, 72 or 168. Airbnb counts it back from 11:59 PM on the check-in day, in the listing's time zone, so 0-23 is a same-day cutoff: `0` = same-day bookings until midnight, `1` = until 11 PM, `3` = until 9 PM. `24` and above = no same-day bookings.
      *
      * @return $this
      */
@@ -325,7 +332,7 @@ class GetAirbnbBookingSettings200ResponseDataAdvanceNotice implements ModelInter
     /**
      * Sets same_day_bookings_allowed
      *
-     * @param bool|null $same_day_bookings_allowed Derived: `hours === 0`.
+     * @param bool|null $same_day_bookings_allowed Derived: `hours < 24`.
      *
      * @return $this
      */
@@ -342,6 +349,40 @@ class GetAirbnbBookingSettings200ResponseDataAdvanceNotice implements ModelInter
             }
         }
         $this->container['same_day_bookings_allowed'] = $same_day_bookings_allowed;
+
+        return $this;
+    }
+
+    /**
+     * Gets same_day_cutoff
+     *
+     * @return string|null
+     */
+    public function getSameDayCutoff(): ?string
+    {
+        return $this->container['same_day_cutoff'];
+    }
+
+    /**
+     * Sets same_day_cutoff
+     *
+     * @param string|null $same_day_cutoff Derived: the last time a same-day booking is accepted, `HH:mm` in the listing's time (`00:00` = midnight). `null` when same-day bookings are off.
+     *
+     * @return $this
+     */
+    public function setSameDayCutoff(?string $same_day_cutoff): static
+    {
+        if (is_null($same_day_cutoff)) {
+            array_push($this->openAPINullablesSetToNull, 'same_day_cutoff');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('same_day_cutoff', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['same_day_cutoff'] = $same_day_cutoff;
 
         return $this;
     }

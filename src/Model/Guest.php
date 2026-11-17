@@ -66,6 +66,7 @@ class Guest implements ModelInterface, ArrayAccess, JsonSerializable
         'language' => 'string',
         'country' => 'string',
         'phone' => 'string',
+        'phone_type' => '\Repull\Model\GuestPhoneType',
         'email' => 'string',
         'total_reservations' => 'int',
         'total_revenue' => 'string',
@@ -87,6 +88,7 @@ class Guest implements ModelInterface, ArrayAccess, JsonSerializable
         'language' => null,
         'country' => null,
         'phone' => null,
+        'phone_type' => null,
         'email' => 'email',
         'total_reservations' => null,
         'total_revenue' => null,
@@ -108,6 +110,7 @@ class Guest implements ModelInterface, ArrayAccess, JsonSerializable
         'language' => true,
         'country' => true,
         'phone' => true,
+        'phone_type' => true,
         'email' => true,
         'total_reservations' => false,
         'total_revenue' => false,
@@ -199,6 +202,7 @@ class Guest implements ModelInterface, ArrayAccess, JsonSerializable
         'language' => 'language',
         'country' => 'country',
         'phone' => 'phone',
+        'phone_type' => 'phoneType',
         'email' => 'email',
         'total_reservations' => 'totalReservations',
         'total_revenue' => 'totalRevenue',
@@ -220,6 +224,7 @@ class Guest implements ModelInterface, ArrayAccess, JsonSerializable
         'language' => 'setLanguage',
         'country' => 'setCountry',
         'phone' => 'setPhone',
+        'phone_type' => 'setPhoneType',
         'email' => 'setEmail',
         'total_reservations' => 'setTotalReservations',
         'total_revenue' => 'setTotalRevenue',
@@ -241,6 +246,7 @@ class Guest implements ModelInterface, ArrayAccess, JsonSerializable
         'language' => 'getLanguage',
         'country' => 'getCountry',
         'phone' => 'getPhone',
+        'phone_type' => 'getPhoneType',
         'email' => 'getEmail',
         'total_reservations' => 'getTotalReservations',
         'total_revenue' => 'getTotalRevenue',
@@ -303,6 +309,7 @@ class Guest implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('language', $data ?? [], null);
         $this->setIfExists('country', $data ?? [], null);
         $this->setIfExists('phone', $data ?? [], null);
+        $this->setIfExists('phone_type', $data ?? [], null);
         $this->setIfExists('email', $data ?? [], null);
         $this->setIfExists('total_reservations', $data ?? [], null);
         $this->setIfExists('total_revenue', $data ?? [], null);
@@ -544,7 +551,7 @@ class Guest implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets phone
      *
-     * @param string|null $phone Primary phone contact (or first non-primary if no primary set).
+     * @param string|null $phone Primary phone contact (or first non-primary if no primary set). May be an Airbnb relay number — check `phoneType`.
      *
      * @return $this
      */
@@ -561,6 +568,40 @@ class Guest implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['phone'] = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Gets phone_type
+     *
+     * @return \Repull\Model\GuestPhoneType|null
+     */
+    public function getPhoneType(): ?\Repull\Model\GuestPhoneType
+    {
+        return $this->container['phone_type'];
+    }
+
+    /**
+     * Sets phone_type
+     *
+     * @param \Repull\Model\GuestPhoneType|null $phone_type `airbnb_relay` when `phone` is a temporary Airbnb relay number (SMS only, expires 48h after checkout, shared across hosts, never a guest identifier); `guest` otherwise; `null` when there is no phone.
+     *
+     * @return $this
+     */
+    public function setPhoneType(?\Repull\Model\GuestPhoneType $phone_type): static
+    {
+        if (is_null($phone_type)) {
+            array_push($this->openAPINullablesSetToNull, 'phone_type');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('phone_type', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['phone_type'] = $phone_type;
 
         return $this;
     }

@@ -64,6 +64,8 @@ class ReservationPrimaryGuest implements ModelInterface, ArrayAccess, JsonSerial
         'last_name' => 'string',
         'email' => 'string',
         'phone' => 'string',
+        'phone_type' => '\Repull\Model\GuestPhoneType',
+        'phone_expires_at' => '\DateTime',
         'language' => 'string'
     ];
 
@@ -78,6 +80,8 @@ class ReservationPrimaryGuest implements ModelInterface, ArrayAccess, JsonSerial
         'last_name' => null,
         'email' => 'email',
         'phone' => null,
+        'phone_type' => null,
+        'phone_expires_at' => 'date-time',
         'language' => null
     ];
 
@@ -92,6 +96,8 @@ class ReservationPrimaryGuest implements ModelInterface, ArrayAccess, JsonSerial
         'last_name' => true,
         'email' => true,
         'phone' => true,
+        'phone_type' => false,
+        'phone_expires_at' => true,
         'language' => true
     ];
 
@@ -176,6 +182,8 @@ class ReservationPrimaryGuest implements ModelInterface, ArrayAccess, JsonSerial
         'last_name' => 'lastName',
         'email' => 'email',
         'phone' => 'phone',
+        'phone_type' => 'phoneType',
+        'phone_expires_at' => 'phoneExpiresAt',
         'language' => 'language'
     ];
 
@@ -190,6 +198,8 @@ class ReservationPrimaryGuest implements ModelInterface, ArrayAccess, JsonSerial
         'last_name' => 'setLastName',
         'email' => 'setEmail',
         'phone' => 'setPhone',
+        'phone_type' => 'setPhoneType',
+        'phone_expires_at' => 'setPhoneExpiresAt',
         'language' => 'setLanguage'
     ];
 
@@ -204,6 +214,8 @@ class ReservationPrimaryGuest implements ModelInterface, ArrayAccess, JsonSerial
         'last_name' => 'getLastName',
         'email' => 'getEmail',
         'phone' => 'getPhone',
+        'phone_type' => 'getPhoneType',
+        'phone_expires_at' => 'getPhoneExpiresAt',
         'language' => 'getLanguage'
     ];
 
@@ -259,6 +271,8 @@ class ReservationPrimaryGuest implements ModelInterface, ArrayAccess, JsonSerial
         $this->setIfExists('last_name', $data ?? [], null);
         $this->setIfExists('email', $data ?? [], null);
         $this->setIfExists('phone', $data ?? [], null);
+        $this->setIfExists('phone_type', $data ?? [], null);
+        $this->setIfExists('phone_expires_at', $data ?? [], null);
         $this->setIfExists('language', $data ?? [], null);
     }
 
@@ -441,7 +455,7 @@ class ReservationPrimaryGuest implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets phone
      *
-     * @param string|null $phone Primary phone contact (or first non-primary if no primary set).
+     * @param string|null $phone Primary phone contact (or first non-primary if no primary set). For an Airbnb stay this may be an Airbnb relay number — check `phoneType`.
      *
      * @return $this
      */
@@ -458,6 +472,67 @@ class ReservationPrimaryGuest implements ModelInterface, ArrayAccess, JsonSerial
             }
         }
         $this->container['phone'] = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Gets phone_type
+     *
+     * @return \Repull\Model\GuestPhoneType|null
+     */
+    public function getPhoneType(): ?\Repull\Model\GuestPhoneType
+    {
+        return $this->container['phone_type'];
+    }
+
+    /**
+     * Sets phone_type
+     *
+     * @param \Repull\Model\GuestPhoneType|null $phone_type Present whenever `phone` is. `airbnb_relay` when `phone` is a temporary Airbnb relay number (SMS only, expires 48h after checkout, shared across hosts, never a guest identifier); `guest` otherwise.
+     *
+     * @return $this
+     */
+    public function setPhoneType(?\Repull\Model\GuestPhoneType $phone_type): static
+    {
+        if (is_null($phone_type)) {
+            throw new InvalidArgumentException('non-nullable phone_type cannot be null');
+        }
+        $this->container['phone_type'] = $phone_type;
+
+        return $this;
+    }
+
+    /**
+     * Gets phone_expires_at
+     *
+     * @return \DateTime|null
+     */
+    public function getPhoneExpiresAt(): ?\DateTime
+    {
+        return $this->container['phone_expires_at'];
+    }
+
+    /**
+     * Sets phone_expires_at
+     *
+     * @param \DateTime|null $phone_expires_at Only next to an Airbnb relay number: when it stops working (checkout + 48 hours). `null` when Airbnb did not give the checkout time with its offset. A cancelled reservation's relay number stops working at cancellation, whatever this says.
+     *
+     * @return $this
+     */
+    public function setPhoneExpiresAt(?\DateTime $phone_expires_at): static
+    {
+        if (is_null($phone_expires_at)) {
+            array_push($this->openAPINullablesSetToNull, 'phone_expires_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('phone_expires_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['phone_expires_at'] = $phone_expires_at;
 
         return $this;
     }

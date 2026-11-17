@@ -82,6 +82,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'unit' => '\Repull\Model\ReservationUnit',
         'pms_reservation_id' => 'string',
         'access_codes' => '\Repull\Model\ReservationAccessCode[]',
+        'suggested_door_code' => 'string',
         'primary_guest' => '\Repull\Model\ReservationPrimaryGuest',
         'occupancy' => '\Repull\Model\ReservationOccupancy',
         'financials' => '\Repull\Model\ReservationFinancials',
@@ -123,6 +124,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'unit' => null,
         'pms_reservation_id' => null,
         'access_codes' => null,
+        'suggested_door_code' => null,
         'primary_guest' => null,
         'occupancy' => null,
         'financials' => null,
@@ -164,6 +166,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'unit' => true,
         'pms_reservation_id' => true,
         'access_codes' => true,
+        'suggested_door_code' => false,
         'primary_guest' => false,
         'occupancy' => false,
         'financials' => false,
@@ -275,6 +278,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'unit' => 'unit',
         'pms_reservation_id' => 'pmsReservationId',
         'access_codes' => 'accessCodes',
+        'suggested_door_code' => 'suggestedDoorCode',
         'primary_guest' => 'primaryGuest',
         'occupancy' => 'occupancy',
         'financials' => 'financials',
@@ -316,6 +320,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'unit' => 'setUnit',
         'pms_reservation_id' => 'setPmsReservationId',
         'access_codes' => 'setAccessCodes',
+        'suggested_door_code' => 'setSuggestedDoorCode',
         'primary_guest' => 'setPrimaryGuest',
         'occupancy' => 'setOccupancy',
         'financials' => 'setFinancials',
@@ -357,6 +362,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         'unit' => 'getUnit',
         'pms_reservation_id' => 'getPmsReservationId',
         'access_codes' => 'getAccessCodes',
+        'suggested_door_code' => 'getSuggestedDoorCode',
         'primary_guest' => 'getPrimaryGuest',
         'occupancy' => 'getOccupancy',
         'financials' => 'getFinancials',
@@ -552,6 +558,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('unit', $data ?? [], null);
         $this->setIfExists('pms_reservation_id', $data ?? [], null);
         $this->setIfExists('access_codes', $data ?? [], null);
+        $this->setIfExists('suggested_door_code', $data ?? [], null);
         $this->setIfExists('primary_guest', $data ?? [], null);
         $this->setIfExists('occupancy', $data ?? [], null);
         $this->setIfExists('financials', $data ?? [], null);
@@ -1387,6 +1394,33 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['access_codes'] = $access_codes;
+
+        return $this;
+    }
+
+    /**
+     * Gets suggested_door_code
+     *
+     * @return string|null
+     */
+    public function getSuggestedDoorCode(): ?string
+    {
+        return $this->container['suggested_door_code'];
+    }
+
+    /**
+     * Sets suggested_door_code
+     *
+     * @param string|null $suggested_door_code Airbnb reservations only, when Airbnb sends it: the door code Airbnb suggests — the last 4 digits of the booker's verified phone number, or random digits when there is none. Use it instead of deriving a code from the guest's phone, which Airbnb no longer shares. Omitted on every other reservation.
+     *
+     * @return $this
+     */
+    public function setSuggestedDoorCode(?string $suggested_door_code): static
+    {
+        if (is_null($suggested_door_code)) {
+            throw new InvalidArgumentException('non-nullable suggested_door_code cannot be null');
+        }
+        $this->container['suggested_door_code'] = $suggested_door_code;
 
         return $this;
     }

@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * UpdateAirbnbBookingSettingsRequestAdvanceNotice Class Doc Comment
  *
- * @description Send &#x60;hours&#x60;, &#x60;allowRequestToBook&#x60;, or both. The half you omit keeps the value Airbnb currently holds.
+ * @description Send &#x60;hours&#x60; (or &#x60;sameDayCutoff&#x60;), &#x60;allowRequestToBook&#x60;, or both. The half you omit keeps the value Airbnb currently holds. &#x60;hours&#x60; and &#x60;sameDayCutoff&#x60; are the same setting: send one.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -60,6 +60,7 @@ class UpdateAirbnbBookingSettingsRequestAdvanceNotice implements ModelInterface,
      */
     protected static array $openAPITypes = [
         'hours' => 'int',
+        'same_day_cutoff' => 'string',
         'allow_request_to_book' => 'bool'
     ];
 
@@ -70,6 +71,7 @@ class UpdateAirbnbBookingSettingsRequestAdvanceNotice implements ModelInterface,
      */
     protected static array $openAPIFormats = [
         'hours' => null,
+        'same_day_cutoff' => null,
         'allow_request_to_book' => null
     ];
 
@@ -80,6 +82,7 @@ class UpdateAirbnbBookingSettingsRequestAdvanceNotice implements ModelInterface,
      */
     protected static array $openAPINullables = [
         'hours' => true,
+        'same_day_cutoff' => true,
         'allow_request_to_book' => true
     ];
 
@@ -160,6 +163,7 @@ class UpdateAirbnbBookingSettingsRequestAdvanceNotice implements ModelInterface,
      */
     protected static array $attributeMap = [
         'hours' => 'hours',
+        'same_day_cutoff' => 'sameDayCutoff',
         'allow_request_to_book' => 'allowRequestToBook'
     ];
 
@@ -170,6 +174,7 @@ class UpdateAirbnbBookingSettingsRequestAdvanceNotice implements ModelInterface,
      */
     protected static array $setters = [
         'hours' => 'setHours',
+        'same_day_cutoff' => 'setSameDayCutoff',
         'allow_request_to_book' => 'setAllowRequestToBook'
     ];
 
@@ -180,6 +185,7 @@ class UpdateAirbnbBookingSettingsRequestAdvanceNotice implements ModelInterface,
      */
     protected static array $getters = [
         'hours' => 'getHours',
+        'same_day_cutoff' => 'getSameDayCutoff',
         'allow_request_to_book' => 'getAllowRequestToBook'
     ];
 
@@ -215,6 +221,73 @@ class UpdateAirbnbBookingSettingsRequestAdvanceNotice implements ModelInterface,
         return self::$openAPIModelName;
     }
 
+    public const HOURS_NUMBER_0 = 0;
+    public const HOURS_NUMBER_1 = 1;
+    public const HOURS_NUMBER_2 = 2;
+    public const HOURS_NUMBER_3 = 3;
+    public const HOURS_NUMBER_4 = 4;
+    public const HOURS_NUMBER_5 = 5;
+    public const HOURS_NUMBER_6 = 6;
+    public const HOURS_NUMBER_7 = 7;
+    public const HOURS_NUMBER_8 = 8;
+    public const HOURS_NUMBER_9 = 9;
+    public const HOURS_NUMBER_10 = 10;
+    public const HOURS_NUMBER_11 = 11;
+    public const HOURS_NUMBER_12 = 12;
+    public const HOURS_NUMBER_13 = 13;
+    public const HOURS_NUMBER_14 = 14;
+    public const HOURS_NUMBER_15 = 15;
+    public const HOURS_NUMBER_16 = 16;
+    public const HOURS_NUMBER_17 = 17;
+    public const HOURS_NUMBER_18 = 18;
+    public const HOURS_NUMBER_19 = 19;
+    public const HOURS_NUMBER_20 = 20;
+    public const HOURS_NUMBER_21 = 21;
+    public const HOURS_NUMBER_22 = 22;
+    public const HOURS_NUMBER_23 = 23;
+    public const HOURS_NUMBER_24 = 24;
+    public const HOURS_NUMBER_48 = 48;
+    public const HOURS_NUMBER_72 = 72;
+    public const HOURS_NUMBER_168 = 168;
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getHoursAllowableValues()
+    {
+        return [
+            self::HOURS_NUMBER_0,
+            self::HOURS_NUMBER_1,
+            self::HOURS_NUMBER_2,
+            self::HOURS_NUMBER_3,
+            self::HOURS_NUMBER_4,
+            self::HOURS_NUMBER_5,
+            self::HOURS_NUMBER_6,
+            self::HOURS_NUMBER_7,
+            self::HOURS_NUMBER_8,
+            self::HOURS_NUMBER_9,
+            self::HOURS_NUMBER_10,
+            self::HOURS_NUMBER_11,
+            self::HOURS_NUMBER_12,
+            self::HOURS_NUMBER_13,
+            self::HOURS_NUMBER_14,
+            self::HOURS_NUMBER_15,
+            self::HOURS_NUMBER_16,
+            self::HOURS_NUMBER_17,
+            self::HOURS_NUMBER_18,
+            self::HOURS_NUMBER_19,
+            self::HOURS_NUMBER_20,
+            self::HOURS_NUMBER_21,
+            self::HOURS_NUMBER_22,
+            self::HOURS_NUMBER_23,
+            self::HOURS_NUMBER_24,
+            self::HOURS_NUMBER_48,
+            self::HOURS_NUMBER_72,
+            self::HOURS_NUMBER_168,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -231,6 +304,7 @@ class UpdateAirbnbBookingSettingsRequestAdvanceNotice implements ModelInterface,
     public function __construct(?array $data = null)
     {
         $this->setIfExists('hours', $data ?? [], null);
+        $this->setIfExists('same_day_cutoff', $data ?? [], null);
         $this->setIfExists('allow_request_to_book', $data ?? [], null);
     }
 
@@ -259,12 +333,17 @@ class UpdateAirbnbBookingSettingsRequestAdvanceNotice implements ModelInterface,
     {
         $invalidProperties = [];
 
-        if (!is_null($this->container['hours']) && ($this->container['hours'] > 168)) {
-            $invalidProperties[] = "invalid value for 'hours', must be smaller than or equal to 168.";
+        $allowedValues = self::getHoursAllowableValues();
+        if (!is_null($this->container['hours']) && !in_array($this->container['hours'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'hours', must be one of '%s'",
+                $this->container['hours'],
+                implode("', '", $allowedValues)
+            );
         }
 
-        if (!is_null($this->container['hours']) && ($this->container['hours'] < 0)) {
-            $invalidProperties[] = "invalid value for 'hours', must be bigger than or equal to 0.";
+        if (!is_null($this->container['same_day_cutoff']) && !preg_match("/^([01][0-9]|2[0-3]):00$/", $this->container['same_day_cutoff'])) {
+            $invalidProperties[] = "invalid value for 'same_day_cutoff', must be conform to the pattern /^([01][0-9]|2[0-3]):00$/.";
         }
 
         return $invalidProperties;
@@ -292,7 +371,7 @@ class UpdateAirbnbBookingSettingsRequestAdvanceNotice implements ModelInterface,
     /**
      * Sets hours
      *
-     * @param int|null $hours hours
+     * @param int|null $hours Counted back from 11:59 PM on the check-in day (listing time): `0` = same-day bookings until midnight, `1` = until 11 PM, `24` = no same-day bookings.
      *
      * @return $this
      */
@@ -308,15 +387,47 @@ class UpdateAirbnbBookingSettingsRequestAdvanceNotice implements ModelInterface,
                 $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
             }
         }
-
-        if (!is_null($hours) && ($hours > 168)) {
-            throw new InvalidArgumentException('invalid value for $hours when calling UpdateAirbnbBookingSettingsRequestAdvanceNotice., must be smaller than or equal to 168.');
-        }
-        if (!is_null($hours) && ($hours < 0)) {
-            throw new InvalidArgumentException('invalid value for $hours when calling UpdateAirbnbBookingSettingsRequestAdvanceNotice., must be bigger than or equal to 0.');
-        }
-
+        // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['hours'] = $hours;
+
+        return $this;
+    }
+
+    /**
+     * Gets same_day_cutoff
+     *
+     * @return string|null
+     */
+    public function getSameDayCutoff(): ?string
+    {
+        return $this->container['same_day_cutoff'];
+    }
+
+    /**
+     * Sets same_day_cutoff
+     *
+     * @param string|null $same_day_cutoff The last time a same-day booking is accepted, whole hours in the listing's time (`23:00` = 11 PM, `00:00` = midnight). Converted to `hours` (`23:00` = 1).
+     *
+     * @return $this
+     */
+    public function setSameDayCutoff(?string $same_day_cutoff): static
+    {
+        if (is_null($same_day_cutoff)) {
+            array_push($this->openAPINullablesSetToNull, 'same_day_cutoff');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('same_day_cutoff', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+
+        if (!is_null($same_day_cutoff) && (!preg_match("/^([01][0-9]|2[0-3]):00$/", ObjectSerializer::toString($same_day_cutoff)))) {
+            throw new InvalidArgumentException("invalid value for \$same_day_cutoff when calling UpdateAirbnbBookingSettingsRequestAdvanceNotice., must conform to the pattern /^([01][0-9]|2[0-3]):00$/.");
+        }
+
+        $this->container['same_day_cutoff'] = $same_day_cutoff;
 
         return $this;
     }
