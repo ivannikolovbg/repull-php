@@ -265,6 +265,7 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     public const EVENT_INQUIRY_UPDATED = 'inquiry.updated';
     public const EVENT_LISTING_CREATED = 'listing.created';
     public const EVENT_LISTING_DELETED = 'listing.deleted';
+    public const EVENT_LISTING_ICAL_FEED_CHANGED = 'listing.ical_feed_changed';
     public const EVENT_LISTING_REACTIVATED = 'listing.reactivated';
     public const EVENT_LISTING_SUSPENDED = 'listing.suspended';
     public const EVENT_LISTING_UPDATED = 'listing.updated';
@@ -319,6 +320,7 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
             self::EVENT_INQUIRY_UPDATED,
             self::EVENT_LISTING_CREATED,
             self::EVENT_LISTING_DELETED,
+            self::EVENT_LISTING_ICAL_FEED_CHANGED,
             self::EVENT_LISTING_REACTIVATED,
             self::EVENT_LISTING_SUSPENDED,
             self::EVENT_LISTING_UPDATED,

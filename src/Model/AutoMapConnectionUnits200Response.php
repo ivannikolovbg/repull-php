@@ -61,7 +61,7 @@ class AutoMapConnectionUnits200Response implements ModelInterface, ArrayAccess, 
         'connection_id' => 'string',
         'channel' => 'string',
         'applied' => 'bool',
-        'results' => '\Repull\Model\ApplyConnectionMappings200ResponseResultsInner[]'
+        'results' => '\Repull\Model\AutoMapConnectionUnits200ResponseResultsInner[]'
     ];
 
     /**
@@ -368,7 +368,7 @@ class AutoMapConnectionUnits200Response implements ModelInterface, ArrayAccess, 
     /**
      * Gets results
      *
-     * @return \Repull\Model\ApplyConnectionMappings200ResponseResultsInner[]|null
+     * @return \Repull\Model\AutoMapConnectionUnits200ResponseResultsInner[]|null
      */
     public function getResults(): ?array
     {
@@ -378,7 +378,7 @@ class AutoMapConnectionUnits200Response implements ModelInterface, ArrayAccess, 
     /**
      * Sets results
      *
-     * @param \Repull\Model\ApplyConnectionMappings200ResponseResultsInner[]|null $results results
+     * @param \Repull\Model\AutoMapConnectionUnits200ResponseResultsInner[]|null $results results
      *
      * @return $this
      */

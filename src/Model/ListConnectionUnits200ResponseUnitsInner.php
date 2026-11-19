@@ -460,7 +460,7 @@ class ListConnectionUnits200ResponseUnitsInner implements ModelInterface, ArrayA
     /**
      * Sets meta
      *
-     * @param object|null $meta Channel details that identify the unit. Booking.com Extranet: `hotel` (property name), `hotelId` (Booking.com property ID), `roomId` (Booking.com room ID), `city`. Vrbo: `headline`, `address`, `vrboStatus`, `calendarSync` (whether the unit's prices and availability are pushed to Vrbo) and, while Vrbo says another tool manages the account's calendar, `calendarSyncBlocked: \"calendar_managed_elsewhere\"`; the Vrbo listing ID is `unit_id`.
+     * @param object|null $meta Channel details that identify the unit. Booking.com Extranet: `hotel` (property name), `hotelId` (Booking.com property ID), `roomId` (Booking.com room ID), `city`. Vrbo: `headline`, `address`, `vrboStatus`, `calendarSync` (whether the unit's prices and availability are pushed to Vrbo) and, while Vrbo says another tool manages the account's calendar, `calendarSyncBlocked: \"calendar_managed_elsewhere\"`, and for a mapped unit `icalBackup`: `{ feedUrl, status, otherFeeds }` — the listing's Repull iCal backup feed and whether Vrbo imports it (`status` as on `GET /v1/listings/{id}/ical`: `imported`, `pending`, `failed`, `not_imported`, `off`; Repull adds it itself, so only on `failed` does the host add `feedUrl` in Vrbo → Calendar → Import calendar, named \"Repull\"); the Vrbo listing ID is `unit_id`.
      *
      * @return $this
      */

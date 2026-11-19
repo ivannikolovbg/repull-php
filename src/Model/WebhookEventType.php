@@ -85,6 +85,8 @@ enum WebhookEventType: string
 
     case LISTING_REACTIVATED = 'listing.reactivated';
 
+    case LISTING_ICAL_FEED_CHANGED = 'listing.ical_feed_changed';
+
     case ACCOUNT_CREATED = 'account.created';
 
     case CONNECT_SESSION_COMPLETED = 'connect.session.completed';

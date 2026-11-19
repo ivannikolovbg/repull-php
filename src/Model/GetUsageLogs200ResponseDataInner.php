@@ -70,6 +70,7 @@ class GetUsageLogs200ResponseDataInner implements ModelInterface, ArrayAccess, J
         'ip_address' => 'string',
         'user_agent' => 'string',
         'error_code' => 'string',
+        'dashboard_surface' => 'string',
         'created_at' => '\DateTime'
     ];
 
@@ -91,6 +92,7 @@ class GetUsageLogs200ResponseDataInner implements ModelInterface, ArrayAccess, J
         'ip_address' => null,
         'user_agent' => null,
         'error_code' => null,
+        'dashboard_surface' => null,
         'created_at' => 'date-time'
     ];
 
@@ -112,6 +114,7 @@ class GetUsageLogs200ResponseDataInner implements ModelInterface, ArrayAccess, J
         'ip_address' => true,
         'user_agent' => true,
         'error_code' => true,
+        'dashboard_surface' => true,
         'created_at' => false
     ];
 
@@ -203,6 +206,7 @@ class GetUsageLogs200ResponseDataInner implements ModelInterface, ArrayAccess, J
         'ip_address' => 'ipAddress',
         'user_agent' => 'userAgent',
         'error_code' => 'errorCode',
+        'dashboard_surface' => 'dashboardSurface',
         'created_at' => 'createdAt'
     ];
 
@@ -224,6 +228,7 @@ class GetUsageLogs200ResponseDataInner implements ModelInterface, ArrayAccess, J
         'ip_address' => 'setIpAddress',
         'user_agent' => 'setUserAgent',
         'error_code' => 'setErrorCode',
+        'dashboard_surface' => 'setDashboardSurface',
         'created_at' => 'setCreatedAt'
     ];
 
@@ -245,6 +250,7 @@ class GetUsageLogs200ResponseDataInner implements ModelInterface, ArrayAccess, J
         'ip_address' => 'getIpAddress',
         'user_agent' => 'getUserAgent',
         'error_code' => 'getErrorCode',
+        'dashboard_surface' => 'getDashboardSurface',
         'created_at' => 'getCreatedAt'
     ];
 
@@ -307,6 +313,7 @@ class GetUsageLogs200ResponseDataInner implements ModelInterface, ArrayAccess, J
         $this->setIfExists('ip_address', $data ?? [], null);
         $this->setIfExists('user_agent', $data ?? [], null);
         $this->setIfExists('error_code', $data ?? [], null);
+        $this->setIfExists('dashboard_surface', $data ?? [], null);
         $this->setIfExists('created_at', $data ?? [], null);
     }
 
@@ -730,6 +737,40 @@ class GetUsageLogs200ResponseDataInner implements ModelInterface, ArrayAccess, J
             }
         }
         $this->container['error_code'] = $error_code;
+
+        return $this;
+    }
+
+    /**
+     * Gets dashboard_surface
+     *
+     * @return string|null
+     */
+    public function getDashboardSurface(): ?string
+    {
+        return $this->container['dashboard_surface'];
+    }
+
+    /**
+     * Sets dashboard_surface
+     *
+     * @param string|null $dashboard_surface The repull.dev dashboard page this call was run from (`keys`, `playground`, `quickstart`, `connect`, `settings/connect`), or null for a call your own code made. Dashboard calls don't count toward your plan's request quota.
+     *
+     * @return $this
+     */
+    public function setDashboardSurface(?string $dashboard_surface): static
+    {
+        if (is_null($dashboard_surface)) {
+            array_push($this->openAPINullablesSetToNull, 'dashboard_surface');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('dashboard_surface', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['dashboard_surface'] = $dashboard_surface;
 
         return $this;
     }

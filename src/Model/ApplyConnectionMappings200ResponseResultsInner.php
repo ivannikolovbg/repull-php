@@ -62,7 +62,8 @@ class ApplyConnectionMappings200ResponseResultsInner implements ModelInterface, 
         'listing_id' => 'int',
         'created' => 'bool',
         'ok' => 'bool',
-        'error' => 'string'
+        'error' => 'string',
+        'ical_feed_url' => 'string'
     ];
 
     /**
@@ -75,7 +76,8 @@ class ApplyConnectionMappings200ResponseResultsInner implements ModelInterface, 
         'listing_id' => null,
         'created' => null,
         'ok' => null,
-        'error' => null
+        'error' => null,
+        'ical_feed_url' => 'uri'
     ];
 
     /**
@@ -88,7 +90,8 @@ class ApplyConnectionMappings200ResponseResultsInner implements ModelInterface, 
         'listing_id' => true,
         'created' => false,
         'ok' => false,
-        'error' => false
+        'error' => false,
+        'ical_feed_url' => false
     ];
 
     /**
@@ -171,7 +174,8 @@ class ApplyConnectionMappings200ResponseResultsInner implements ModelInterface, 
         'listing_id' => 'listing_id',
         'created' => 'created',
         'ok' => 'ok',
-        'error' => 'error'
+        'error' => 'error',
+        'ical_feed_url' => 'ical_feed_url'
     ];
 
     /**
@@ -184,7 +188,8 @@ class ApplyConnectionMappings200ResponseResultsInner implements ModelInterface, 
         'listing_id' => 'setListingId',
         'created' => 'setCreated',
         'ok' => 'setOk',
-        'error' => 'setError'
+        'error' => 'setError',
+        'ical_feed_url' => 'setIcalFeedUrl'
     ];
 
     /**
@@ -197,7 +202,8 @@ class ApplyConnectionMappings200ResponseResultsInner implements ModelInterface, 
         'listing_id' => 'getListingId',
         'created' => 'getCreated',
         'ok' => 'getOk',
-        'error' => 'getError'
+        'error' => 'getError',
+        'ical_feed_url' => 'getIcalFeedUrl'
     ];
 
     /**
@@ -252,6 +258,7 @@ class ApplyConnectionMappings200ResponseResultsInner implements ModelInterface, 
         $this->setIfExists('created', $data ?? [], null);
         $this->setIfExists('ok', $data ?? [], null);
         $this->setIfExists('error', $data ?? [], null);
+        $this->setIfExists('ical_feed_url', $data ?? [], null);
     }
 
     /**
@@ -429,6 +436,33 @@ class ApplyConnectionMappings200ResponseResultsInner implements ModelInterface, 
             throw new InvalidArgumentException('non-nullable error cannot be null');
         }
         $this->container['error'] = $error;
+
+        return $this;
+    }
+
+    /**
+     * Gets ical_feed_url
+     *
+     * @return string|null
+     */
+    public function getIcalFeedUrl(): ?string
+    {
+        return $this->container['ical_feed_url'];
+    }
+
+    /**
+     * Sets ical_feed_url
+     *
+     * @param string|null $ical_feed_url Vrbo, for a mapped unit: the listing's Repull iCal backup feed (`GET /v1/listings/{id}/ical`). With calendar sync on, Repull imports it into the Vrbo unit by itself (Vrbo → Calendar → Import calendar, named \"Repull\") and removes other tools' imported feeds; `listing.ical_feed_changed` reports it. Only if that fails does the host add it by hand.
+     *
+     * @return $this
+     */
+    public function setIcalFeedUrl(?string $ical_feed_url): static
+    {
+        if (is_null($ical_feed_url)) {
+            throw new InvalidArgumentException('non-nullable ical_feed_url cannot be null');
+        }
+        $this->container['ical_feed_url'] = $ical_feed_url;
 
         return $this;
     }
