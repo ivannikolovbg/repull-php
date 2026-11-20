@@ -62,8 +62,7 @@ class ConversationHost implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'string',
         'airbnb_id' => 'string',
         'first_name' => 'string',
-        'display_name' => 'string',
-        'avatar_url' => 'string'
+        'display_name' => 'string'
     ];
 
     /**
@@ -75,8 +74,7 @@ class ConversationHost implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => null,
         'airbnb_id' => null,
         'first_name' => null,
-        'display_name' => null,
-        'avatar_url' => 'uri'
+        'display_name' => null
     ];
 
     /**
@@ -88,8 +86,7 @@ class ConversationHost implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => false,
         'airbnb_id' => false,
         'first_name' => false,
-        'display_name' => false,
-        'avatar_url' => true
+        'display_name' => false
     ];
 
     /**
@@ -171,8 +168,7 @@ class ConversationHost implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'id',
         'airbnb_id' => 'airbnbId',
         'first_name' => 'firstName',
-        'display_name' => 'displayName',
-        'avatar_url' => 'avatarUrl'
+        'display_name' => 'displayName'
     ];
 
     /**
@@ -184,8 +180,7 @@ class ConversationHost implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'setId',
         'airbnb_id' => 'setAirbnbId',
         'first_name' => 'setFirstName',
-        'display_name' => 'setDisplayName',
-        'avatar_url' => 'setAvatarUrl'
+        'display_name' => 'setDisplayName'
     ];
 
     /**
@@ -197,8 +192,7 @@ class ConversationHost implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'getId',
         'airbnb_id' => 'getAirbnbId',
         'first_name' => 'getFirstName',
-        'display_name' => 'getDisplayName',
-        'avatar_url' => 'getAvatarUrl'
+        'display_name' => 'getDisplayName'
     ];
 
     /**
@@ -252,7 +246,6 @@ class ConversationHost implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('airbnb_id', $data ?? [], null);
         $this->setIfExists('first_name', $data ?? [], null);
         $this->setIfExists('display_name', $data ?? [], null);
-        $this->setIfExists('avatar_url', $data ?? [], null);
     }
 
     /**
@@ -396,40 +389,6 @@ class ConversationHost implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable display_name cannot be null');
         }
         $this->container['display_name'] = $display_name;
-
-        return $this;
-    }
-
-    /**
-     * Gets avatar_url
-     *
-     * @return string|null
-     */
-    public function getAvatarUrl(): ?string
-    {
-        return $this->container['avatar_url'];
-    }
-
-    /**
-     * Sets avatar_url
-     *
-     * @param string|null $avatar_url avatar_url
-     *
-     * @return $this
-     */
-    public function setAvatarUrl(?string $avatar_url): static
-    {
-        if (is_null($avatar_url)) {
-            array_push($this->openAPINullablesSetToNull, 'avatar_url');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('avatar_url', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['avatar_url'] = $avatar_url;
 
         return $this;
     }

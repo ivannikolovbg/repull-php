@@ -61,7 +61,6 @@ class ConversationGuest implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPITypes = [
         'id' => 'string',
         'display_name' => 'string',
-        'avatar_url' => 'string',
         'contacts' => '\Repull\Model\ConversationGuestContact[]'
     ];
 
@@ -73,7 +72,6 @@ class ConversationGuest implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPIFormats = [
         'id' => null,
         'display_name' => null,
-        'avatar_url' => 'uri',
         'contacts' => null
     ];
 
@@ -85,7 +83,6 @@ class ConversationGuest implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $openAPINullables = [
         'id' => false,
         'display_name' => false,
-        'avatar_url' => true,
         'contacts' => false
     ];
 
@@ -167,7 +164,6 @@ class ConversationGuest implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $attributeMap = [
         'id' => 'id',
         'display_name' => 'displayName',
-        'avatar_url' => 'avatarUrl',
         'contacts' => 'contacts'
     ];
 
@@ -179,7 +175,6 @@ class ConversationGuest implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $setters = [
         'id' => 'setId',
         'display_name' => 'setDisplayName',
-        'avatar_url' => 'setAvatarUrl',
         'contacts' => 'setContacts'
     ];
 
@@ -191,7 +186,6 @@ class ConversationGuest implements ModelInterface, ArrayAccess, JsonSerializable
     protected static array $getters = [
         'id' => 'getId',
         'display_name' => 'getDisplayName',
-        'avatar_url' => 'getAvatarUrl',
         'contacts' => 'getContacts'
     ];
 
@@ -244,7 +238,6 @@ class ConversationGuest implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('display_name', $data ?? [], null);
-        $this->setIfExists('avatar_url', $data ?? [], null);
         $this->setIfExists('contacts', $data ?? [], null);
     }
 
@@ -335,40 +328,6 @@ class ConversationGuest implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable display_name cannot be null');
         }
         $this->container['display_name'] = $display_name;
-
-        return $this;
-    }
-
-    /**
-     * Gets avatar_url
-     *
-     * @return string|null
-     */
-    public function getAvatarUrl(): ?string
-    {
-        return $this->container['avatar_url'];
-    }
-
-    /**
-     * Sets avatar_url
-     *
-     * @param string|null $avatar_url avatar_url
-     *
-     * @return $this
-     */
-    public function setAvatarUrl(?string $avatar_url): static
-    {
-        if (is_null($avatar_url)) {
-            array_push($this->openAPINullablesSetToNull, 'avatar_url');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('avatar_url', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['avatar_url'] = $avatar_url;
 
         return $this;
     }

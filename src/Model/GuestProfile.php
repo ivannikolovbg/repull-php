@@ -62,7 +62,6 @@ class GuestProfile implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'string',
         'display_name' => 'string',
         'display_name_long' => 'string',
-        'avatar_url' => 'string',
         'language' => 'string',
         'country' => 'string',
         'phone' => 'string',
@@ -91,7 +90,6 @@ class GuestProfile implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => null,
         'display_name' => null,
         'display_name_long' => null,
-        'avatar_url' => 'uri',
         'language' => null,
         'country' => null,
         'phone' => null,
@@ -120,7 +118,6 @@ class GuestProfile implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => false,
         'display_name' => false,
         'display_name_long' => false,
-        'avatar_url' => true,
         'language' => true,
         'country' => true,
         'phone' => true,
@@ -219,7 +216,6 @@ class GuestProfile implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'id',
         'display_name' => 'displayName',
         'display_name_long' => 'displayNameLong',
-        'avatar_url' => 'avatarUrl',
         'language' => 'language',
         'country' => 'country',
         'phone' => 'phone',
@@ -248,7 +244,6 @@ class GuestProfile implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'setId',
         'display_name' => 'setDisplayName',
         'display_name_long' => 'setDisplayNameLong',
-        'avatar_url' => 'setAvatarUrl',
         'language' => 'setLanguage',
         'country' => 'setCountry',
         'phone' => 'setPhone',
@@ -277,7 +272,6 @@ class GuestProfile implements ModelInterface, ArrayAccess, JsonSerializable
         'id' => 'getId',
         'display_name' => 'getDisplayName',
         'display_name_long' => 'getDisplayNameLong',
-        'avatar_url' => 'getAvatarUrl',
         'language' => 'getLanguage',
         'country' => 'getCountry',
         'phone' => 'getPhone',
@@ -347,7 +341,6 @@ class GuestProfile implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('display_name', $data ?? [], null);
         $this->setIfExists('display_name_long', $data ?? [], null);
-        $this->setIfExists('avatar_url', $data ?? [], null);
         $this->setIfExists('language', $data ?? [], null);
         $this->setIfExists('country', $data ?? [], null);
         $this->setIfExists('phone', $data ?? [], null);
@@ -481,40 +474,6 @@ class GuestProfile implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable display_name_long cannot be null');
         }
         $this->container['display_name_long'] = $display_name_long;
-
-        return $this;
-    }
-
-    /**
-     * Gets avatar_url
-     *
-     * @return string|null
-     */
-    public function getAvatarUrl(): ?string
-    {
-        return $this->container['avatar_url'];
-    }
-
-    /**
-     * Sets avatar_url
-     *
-     * @param string|null $avatar_url avatar_url
-     *
-     * @return $this
-     */
-    public function setAvatarUrl(?string $avatar_url): static
-    {
-        if (is_null($avatar_url)) {
-            array_push($this->openAPINullablesSetToNull, 'avatar_url');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('avatar_url', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['avatar_url'] = $avatar_url;
 
         return $this;
     }
