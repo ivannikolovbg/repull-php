@@ -60,7 +60,7 @@ class UpdateAirbnbListingRoomRequestRoomAmenitiesInner implements ModelInterface
     protected static array $openAPITypes = [
         'id' => 'string',
         'name' => 'string',
-        'value' => '\Repull\Model\UpdateAirbnbListingRoomRequestRoomAmenitiesInnerValue'
+        'value' => 'mixed'
     ];
 
     /**
@@ -82,7 +82,7 @@ class UpdateAirbnbListingRoomRequestRoomAmenitiesInner implements ModelInterface
     protected static array $openAPINullables = [
         'id' => false,
         'name' => false,
-        'value' => false
+        'value' => true
     ];
 
     /**
@@ -337,9 +337,9 @@ class UpdateAirbnbListingRoomRequestRoomAmenitiesInner implements ModelInterface
     /**
      * Gets value
      *
-     * @return \Repull\Model\UpdateAirbnbListingRoomRequestRoomAmenitiesInnerValue|null
+     * @return mixed|null
      */
-    public function getValue(): ?\Repull\Model\UpdateAirbnbListingRoomRequestRoomAmenitiesInnerValue
+    public function getValue(): mixed
     {
         return $this->container['value'];
     }
@@ -347,14 +347,21 @@ class UpdateAirbnbListingRoomRequestRoomAmenitiesInner implements ModelInterface
     /**
      * Sets value
      *
-     * @param \Repull\Model\UpdateAirbnbListingRoomRequestRoomAmenitiesInnerValue|null $value value
+     * @param mixed|null $value value
      *
      * @return $this
      */
-    public function setValue(?\Repull\Model\UpdateAirbnbListingRoomRequestRoomAmenitiesInnerValue $value): static
+    public function setValue(mixed $value): static
     {
         if (is_null($value)) {
-            throw new InvalidArgumentException('non-nullable value cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'value');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('value', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['value'] = $value;
 

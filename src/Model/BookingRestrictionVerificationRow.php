@@ -63,8 +63,8 @@ class BookingRestrictionVerificationRow implements ModelInterface, ArrayAccess, 
         'rate_id' => 'string',
         'date' => '\DateTime',
         'field' => 'string',
-        'expected' => '\Repull\Model\BookingRestrictionVerificationRowExpected',
-        'booking_value' => '\Repull\Model\BookingRestrictionVerificationRowBookingValue',
+        'expected' => 'mixed',
+        'booking_value' => 'mixed',
         'match' => 'bool'
     ];
 
@@ -93,7 +93,7 @@ class BookingRestrictionVerificationRow implements ModelInterface, ArrayAccess, 
         'rate_id' => false,
         'date' => false,
         'field' => false,
-        'expected' => false,
+        'expected' => true,
         'booking_value' => true,
         'match' => false
     ];
@@ -450,9 +450,9 @@ class BookingRestrictionVerificationRow implements ModelInterface, ArrayAccess, 
     /**
      * Gets expected
      *
-     * @return \Repull\Model\BookingRestrictionVerificationRowExpected|null
+     * @return mixed|null
      */
-    public function getExpected(): ?\Repull\Model\BookingRestrictionVerificationRowExpected
+    public function getExpected(): mixed
     {
         return $this->container['expected'];
     }
@@ -460,14 +460,21 @@ class BookingRestrictionVerificationRow implements ModelInterface, ArrayAccess, 
     /**
      * Sets expected
      *
-     * @param \Repull\Model\BookingRestrictionVerificationRowExpected|null $expected expected
+     * @param mixed|null $expected The value that was sent.
      *
      * @return $this
      */
-    public function setExpected(?\Repull\Model\BookingRestrictionVerificationRowExpected $expected): static
+    public function setExpected(mixed $expected): static
     {
         if (is_null($expected)) {
-            throw new InvalidArgumentException('non-nullable expected cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'expected');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('expected', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['expected'] = $expected;
 
@@ -477,9 +484,9 @@ class BookingRestrictionVerificationRow implements ModelInterface, ArrayAccess, 
     /**
      * Gets booking_value
      *
-     * @return \Repull\Model\BookingRestrictionVerificationRowBookingValue|null
+     * @return mixed|null
      */
-    public function getBookingValue(): ?\Repull\Model\BookingRestrictionVerificationRowBookingValue
+    public function getBookingValue(): mixed
     {
         return $this->container['booking_value'];
     }
@@ -487,11 +494,11 @@ class BookingRestrictionVerificationRow implements ModelInterface, ArrayAccess, 
     /**
      * Sets booking_value
      *
-     * @param \Repull\Model\BookingRestrictionVerificationRowBookingValue|null $booking_value booking_value
+     * @param mixed|null $booking_value What Booking.com holds for that night now; `null` when they reported nothing for the field either way.
      *
      * @return $this
      */
-    public function setBookingValue(?\Repull\Model\BookingRestrictionVerificationRowBookingValue $booking_value): static
+    public function setBookingValue(mixed $booking_value): static
     {
         if (is_null($booking_value)) {
             array_push($this->openAPINullablesSetToNull, 'booking_value');

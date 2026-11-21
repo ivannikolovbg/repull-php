@@ -1115,7 +1115,8 @@ class PricingApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1124,7 +1125,8 @@ class PricingApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
 
 
@@ -1568,7 +1570,8 @@ class PricingApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1577,7 +1580,8 @@ class PricingApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1586,7 +1590,8 @@ class PricingApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1595,7 +1600,8 @@ class PricingApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1604,7 +1610,8 @@ class PricingApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 

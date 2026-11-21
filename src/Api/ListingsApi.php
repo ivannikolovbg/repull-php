@@ -2189,7 +2189,8 @@ class ListingsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
         // header params
@@ -3877,7 +3878,8 @@ class ListingsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -4933,7 +4935,8 @@ class ListingsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -4942,7 +4945,8 @@ class ListingsApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -4951,7 +4955,8 @@ class ListingsApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -4960,7 +4965,8 @@ class ListingsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -4969,7 +4975,8 @@ class ListingsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -4978,7 +4985,8 @@ class ListingsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -4987,7 +4995,8 @@ class ListingsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
         // header params
@@ -5758,7 +5767,8 @@ class ListingsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -7610,7 +7620,8 @@ class ListingsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
         // header params
@@ -8020,7 +8031,8 @@ class ListingsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
         // header params

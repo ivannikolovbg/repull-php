@@ -61,7 +61,7 @@ class UpdateVrboListingHouseRulesRequestPets implements ModelInterface, ArrayAcc
         'allowed' => 'bool',
         'max' => 'int',
         'allowed_pets' => '\Repull\Model\UpdateVrboListingHouseRulesRequestPetsAllowedPets',
-        'max_weight' => '\Repull\Model\UpdateVrboListingHouseRulesRequestPetsMaxWeight',
+        'max_weight' => 'mixed',
         'note' => 'string'
     ];
 
@@ -389,9 +389,9 @@ class UpdateVrboListingHouseRulesRequestPets implements ModelInterface, ArrayAcc
     /**
      * Gets max_weight
      *
-     * @return \Repull\Model\UpdateVrboListingHouseRulesRequestPetsMaxWeight|null
+     * @return mixed|null
      */
-    public function getMaxWeight(): ?\Repull\Model\UpdateVrboListingHouseRulesRequestPetsMaxWeight
+    public function getMaxWeight(): mixed
     {
         return $this->container['max_weight'];
     }
@@ -399,11 +399,11 @@ class UpdateVrboListingHouseRulesRequestPets implements ModelInterface, ArrayAcc
     /**
      * Sets max_weight
      *
-     * @param \Repull\Model\UpdateVrboListingHouseRulesRequestPetsMaxWeight|null $max_weight max_weight
+     * @param mixed|null $max_weight max_weight
      *
      * @return $this
      */
-    public function setMaxWeight(?\Repull\Model\UpdateVrboListingHouseRulesRequestPetsMaxWeight $max_weight): static
+    public function setMaxWeight(mixed $max_weight): static
     {
         if (is_null($max_weight)) {
             array_push($this->openAPINullablesSetToNull, 'max_weight');

@@ -1020,7 +1020,8 @@ class BillingApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1029,7 +1030,8 @@ class BillingApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1038,7 +1040,8 @@ class BillingApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1047,7 +1050,8 @@ class BillingApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1056,7 +1060,8 @@ class BillingApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1065,7 +1070,8 @@ class BillingApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1074,7 +1080,8 @@ class BillingApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1083,7 +1090,8 @@ class BillingApi
             'boolean', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -1390,7 +1398,8 @@ class BillingApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 

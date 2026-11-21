@@ -3428,7 +3428,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -3808,7 +3809,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -5282,7 +5284,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -6241,7 +6244,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -7459,7 +7463,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -7833,7 +7838,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -8210,7 +8216,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -9205,7 +9212,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -9214,7 +9222,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -9223,7 +9232,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -9954,7 +9964,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -9963,7 +9974,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -10351,7 +10363,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -11641,7 +11654,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -11650,7 +11664,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -11659,7 +11674,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -12066,7 +12082,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -12075,7 +12092,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -12084,7 +12102,8 @@ class AirbnbApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -12093,7 +12112,8 @@ class AirbnbApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -12102,7 +12122,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -12111,7 +12132,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -12120,7 +12142,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -12129,7 +12152,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -12138,7 +12162,8 @@ class AirbnbApi
             'boolean', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -12445,7 +12470,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -12766,7 +12792,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -12775,7 +12802,8 @@ class AirbnbApi
             'boolean', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -13090,7 +13118,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -13519,7 +13548,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -13528,7 +13558,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -13537,7 +13568,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -13546,7 +13578,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -13555,7 +13588,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -13564,7 +13598,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -13573,7 +13608,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -13582,7 +13618,8 @@ class AirbnbApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -13591,7 +13628,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -16196,7 +16234,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -20048,7 +20087,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -21513,7 +21553,8 @@ class AirbnbApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            null // openApiFormat
         ) ?? []);
 
 

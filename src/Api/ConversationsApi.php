@@ -1742,7 +1742,8 @@ class ConversationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1751,7 +1752,8 @@ class ConversationsApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1760,7 +1762,8 @@ class ConversationsApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1769,7 +1772,8 @@ class ConversationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
         // header params
@@ -2216,7 +2220,8 @@ class ConversationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2225,7 +2230,8 @@ class ConversationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2234,7 +2240,8 @@ class ConversationsApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2243,7 +2250,8 @@ class ConversationsApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2252,7 +2260,8 @@ class ConversationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2261,7 +2270,8 @@ class ConversationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date-time' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2270,7 +2280,8 @@ class ConversationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2279,7 +2290,8 @@ class ConversationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
         // header params
@@ -2682,7 +2694,8 @@ class ConversationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2691,7 +2704,8 @@ class ConversationsApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2700,7 +2714,8 @@ class ConversationsApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2709,7 +2724,8 @@ class ConversationsApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2718,7 +2734,8 @@ class ConversationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2727,7 +2744,8 @@ class ConversationsApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2736,7 +2754,8 @@ class ConversationsApi
             'boolean', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 

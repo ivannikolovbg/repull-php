@@ -2592,7 +2592,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2601,7 +2602,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2610,7 +2612,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2619,7 +2622,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2628,7 +2632,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2637,7 +2642,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2646,7 +2652,8 @@ class ReservationsApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -2655,7 +2662,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -3183,7 +3191,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3192,7 +3201,8 @@ class ReservationsApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3201,7 +3211,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3210,7 +3221,8 @@ class ReservationsApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3219,7 +3231,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3228,7 +3241,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3237,7 +3251,8 @@ class ReservationsApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3246,7 +3261,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3255,7 +3271,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3264,7 +3281,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3273,7 +3291,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3282,7 +3301,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3291,7 +3311,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3300,7 +3321,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3309,7 +3331,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3318,7 +3341,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3327,7 +3351,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3336,7 +3361,8 @@ class ReservationsApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date-time' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -3345,7 +3371,8 @@ class ReservationsApi
             'boolean', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
         // header params

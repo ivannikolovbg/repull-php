@@ -62,7 +62,7 @@ class GetVrboListingAmenities200ResponseDataGroupsValueFieldsInner implements Mo
         'type' => 'string',
         'title' => 'string',
         'section' => 'string',
-        'value' => '\Repull\Model\GetVrboListingAmenities200ResponseDataGroupsValueFieldsInnerValue',
+        'value' => 'mixed',
         'options' => '\Repull\Model\GetVrboListingAmenities200ResponseDataGroupsValueFieldsInnerOptionsInner[]',
         'min' => 'float',
         'max' => 'float',
@@ -484,9 +484,9 @@ class GetVrboListingAmenities200ResponseDataGroupsValueFieldsInner implements Mo
     /**
      * Gets value
      *
-     * @return \Repull\Model\GetVrboListingAmenities200ResponseDataGroupsValueFieldsInnerValue|null
+     * @return mixed|null
      */
-    public function getValue(): ?\Repull\Model\GetVrboListingAmenities200ResponseDataGroupsValueFieldsInnerValue
+    public function getValue(): mixed
     {
         return $this->container['value'];
     }
@@ -494,11 +494,11 @@ class GetVrboListingAmenities200ResponseDataGroupsValueFieldsInner implements Mo
     /**
      * Sets value
      *
-     * @param \Repull\Model\GetVrboListingAmenities200ResponseDataGroupsValueFieldsInnerValue|null $value value
+     * @param mixed|null $value Checkbox: true/false. Choice: one of `options[].value`. Text / number as such.
      *
      * @return $this
      */
-    public function setValue(?\Repull\Model\GetVrboListingAmenities200ResponseDataGroupsValueFieldsInnerValue $value): static
+    public function setValue(mixed $value): static
     {
         if (is_null($value)) {
             array_push($this->openAPINullablesSetToNull, 'value');

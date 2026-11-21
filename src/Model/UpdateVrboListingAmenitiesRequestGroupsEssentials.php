@@ -58,7 +58,7 @@ class UpdateVrboListingAmenitiesRequestGroupsEssentials implements ModelInterfac
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'values' => 'array<string,\Repull\Model\UpdateVrboListingAmenitiesRequestGroupsEssentialsValuesValue>'
+        'values' => 'array<string,mixed>'
     ];
 
     /**
@@ -269,7 +269,7 @@ class UpdateVrboListingAmenitiesRequestGroupsEssentials implements ModelInterfac
     /**
      * Gets values
      *
-     * @return array<string,\Repull\Model\UpdateVrboListingAmenitiesRequestGroupsEssentialsValuesValue>
+     * @return array<string,mixed>
      */
     public function getValues(): array
     {
@@ -279,7 +279,7 @@ class UpdateVrboListingAmenitiesRequestGroupsEssentials implements ModelInterfac
     /**
      * Sets values
      *
-     * @param array<string,\Repull\Model\UpdateVrboListingAmenitiesRequestGroupsEssentialsValuesValue> $values `{fieldId: value}`
+     * @param array<string,mixed> $values `{fieldId: value}`
      *
      * @return $this
      */

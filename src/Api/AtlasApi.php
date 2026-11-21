@@ -448,7 +448,8 @@ class AtlasApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -457,7 +458,8 @@ class AtlasApi
             'number', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -876,7 +878,8 @@ class AtlasApi
             'number', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -885,7 +888,8 @@ class AtlasApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -894,7 +898,8 @@ class AtlasApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -903,7 +908,8 @@ class AtlasApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            'date' // openApiFormat
         ) ?? []);
 
 

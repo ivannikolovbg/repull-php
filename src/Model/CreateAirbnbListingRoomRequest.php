@@ -64,7 +64,7 @@ class CreateAirbnbListingRoomRequest implements ModelInterface, ArrayAccess, Jso
         'room_amenities' => '\Repull\Model\UpdateAirbnbListingRoomRequestRoomAmenitiesInner[]',
         'is_private' => 'bool',
         'metadata' => 'array<string,mixed>',
-        'listing_id' => '\Repull\Model\UploadAirbnbListingPhotosRequestPhotosInnerListingId'
+        'listing_id' => 'mixed'
     ];
 
     /**
@@ -94,7 +94,7 @@ class CreateAirbnbListingRoomRequest implements ModelInterface, ArrayAccess, Jso
         'room_amenities' => false,
         'is_private' => false,
         'metadata' => false,
-        'listing_id' => false
+        'listing_id' => true
     ];
 
     /**
@@ -548,10 +548,10 @@ class CreateAirbnbListingRoomRequest implements ModelInterface, ArrayAccess, Jso
     /**
      * Gets listing_id
      *
-     * @return \Repull\Model\UploadAirbnbListingPhotosRequestPhotosInnerListingId|null
+     * @return mixed|null
      * @deprecated
      */
-    public function getListingId(): ?\Repull\Model\UploadAirbnbListingPhotosRequestPhotosInnerListingId
+    public function getListingId(): mixed
     {
         return $this->container['listing_id'];
     }
@@ -559,15 +559,22 @@ class CreateAirbnbListingRoomRequest implements ModelInterface, ArrayAccess, Jso
     /**
      * Sets listing_id
      *
-     * @param \Repull\Model\UploadAirbnbListingPhotosRequestPhotosInnerListingId|null $listing_id listing_id
+     * @param mixed|null $listing_id Accepted and ignored — the listing comes from the path.
      *
      * @return $this
      * @deprecated
      */
-    public function setListingId(?\Repull\Model\UploadAirbnbListingPhotosRequestPhotosInnerListingId $listing_id): static
+    public function setListingId(mixed $listing_id): static
     {
         if (is_null($listing_id)) {
-            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'listing_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('listing_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['listing_id'] = $listing_id;
 

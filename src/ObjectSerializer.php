@@ -225,7 +225,8 @@ class ObjectSerializer
         string $openApiType = 'string',
         string $style = 'form',
         bool $explode = true,
-        bool $required = true
+        bool $required = true,
+        ?string $openApiFormat = null
     ): array {
 
         // Check if we should omit this parameter from the query. This should only happen when:
@@ -240,9 +241,13 @@ class ObjectSerializer
             }
         }
 
-        // Handle DateTime objects in query
-        if ($openApiType === "\\DateTime" && $value instanceof DateTime) {
-            return ["{$paramName}" => $value->format(self::$dateTimeFormat)];
+        // Handle DateTime objects in query. A `format: date` / `date-time` parameter
+        // has openApiType 'string', so this keys off the value and the format, not
+        // the type: `format: date` sends Y-m-d, anything else the date-time format.
+        // [repull] patched template: upstream only matched openApiType "\\DateTime",
+        // so a DateTime for a date query parameter threw before the request was sent.
+        if ($value instanceof DateTimeInterface) {
+            return ["{$paramName}" => ($openApiFormat === 'date') ? $value->format('Y-m-d') : $value->format(self::$dateTimeFormat)];
         }
 
         $query = [];

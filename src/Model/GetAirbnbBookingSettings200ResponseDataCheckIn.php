@@ -59,8 +59,8 @@ class GetAirbnbBookingSettings200ResponseDataCheckIn implements ModelInterface, 
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'start' => '\Repull\Model\GetAirbnbBookingSettings200ResponseDataCheckInStart',
-        'end' => '\Repull\Model\GetAirbnbBookingSettings200ResponseDataCheckInStart'
+        'start' => 'mixed',
+        'end' => 'mixed'
     ];
 
     /**
@@ -274,9 +274,9 @@ class GetAirbnbBookingSettings200ResponseDataCheckIn implements ModelInterface, 
     /**
      * Gets start
      *
-     * @return \Repull\Model\GetAirbnbBookingSettings200ResponseDataCheckInStart|null
+     * @return mixed|null
      */
-    public function getStart(): ?\Repull\Model\GetAirbnbBookingSettings200ResponseDataCheckInStart
+    public function getStart(): mixed
     {
         return $this->container['start'];
     }
@@ -284,11 +284,11 @@ class GetAirbnbBookingSettings200ResponseDataCheckIn implements ModelInterface, 
     /**
      * Sets start
      *
-     * @param \Repull\Model\GetAirbnbBookingSettings200ResponseDataCheckInStart|null $start start
+     * @param mixed|null $start start
      *
      * @return $this
      */
-    public function setStart(?\Repull\Model\GetAirbnbBookingSettings200ResponseDataCheckInStart $start): static
+    public function setStart(mixed $start): static
     {
         if (is_null($start)) {
             array_push($this->openAPINullablesSetToNull, 'start');
@@ -308,9 +308,9 @@ class GetAirbnbBookingSettings200ResponseDataCheckIn implements ModelInterface, 
     /**
      * Gets end
      *
-     * @return \Repull\Model\GetAirbnbBookingSettings200ResponseDataCheckInStart|null
+     * @return mixed|null
      */
-    public function getEnd(): ?\Repull\Model\GetAirbnbBookingSettings200ResponseDataCheckInStart
+    public function getEnd(): mixed
     {
         return $this->container['end'];
     }
@@ -318,11 +318,11 @@ class GetAirbnbBookingSettings200ResponseDataCheckIn implements ModelInterface, 
     /**
      * Sets end
      *
-     * @param \Repull\Model\GetAirbnbBookingSettings200ResponseDataCheckInStart|null $end end
+     * @param mixed|null $end end
      *
      * @return $this
      */
-    public function setEnd(?\Repull\Model\GetAirbnbBookingSettings200ResponseDataCheckInStart $end): static
+    public function setEnd(mixed $end): static
     {
         if (is_null($end)) {
             array_push($this->openAPINullablesSetToNull, 'end');

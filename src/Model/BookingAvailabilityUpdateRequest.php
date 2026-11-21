@@ -61,7 +61,7 @@ class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, J
     protected static array $openAPITypes = [
         'type' => 'string',
         'verify' => 'bool',
-        'property_id' => '\Repull\Model\BookingAvailabilityUpdateRequestPropertyId',
+        'property_id' => 'mixed',
         'updates' => '\Repull\Model\BookingAvailabilityUpdateRequestUpdatesInner[]'
     ];
 
@@ -85,7 +85,7 @@ class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, J
     protected static array $openAPINullables = [
         'type' => false,
         'verify' => true,
-        'property_id' => false,
+        'property_id' => true,
         'updates' => false
     ];
 
@@ -302,8 +302,8 @@ class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, J
             );
         }
 
-        if ($this->container['property_id'] === null) {
-            $invalidProperties[] = "'property_id' can't be null";
+        if ($this->container['property_id'] === null && !$this->isNullableSetToNull('property_id')) {
+            $invalidProperties[] = "'property_id' is required";
         }
         if ($this->container['updates'] === null) {
             $invalidProperties[] = "'updates' can't be null";
@@ -389,9 +389,9 @@ class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, J
     /**
      * Gets property_id
      *
-     * @return \Repull\Model\BookingAvailabilityUpdateRequestPropertyId
+     * @return mixed|null
      */
-    public function getPropertyId(): \Repull\Model\BookingAvailabilityUpdateRequestPropertyId
+    public function getPropertyId(): mixed
     {
         return $this->container['property_id'];
     }
@@ -399,14 +399,21 @@ class BookingAvailabilityUpdateRequest implements ModelInterface, ArrayAccess, J
     /**
      * Sets property_id
      *
-     * @param \Repull\Model\BookingAvailabilityUpdateRequestPropertyId $property_id property_id
+     * @param mixed|null $property_id Booking.com hotel/property id (numeric; accepted as int or numeric string).
      *
      * @return $this
      */
-    public function setPropertyId(\Repull\Model\BookingAvailabilityUpdateRequestPropertyId $property_id): static
+    public function setPropertyId(mixed $property_id): static
     {
         if (is_null($property_id)) {
-            throw new InvalidArgumentException('non-nullable property_id cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'property_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('property_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['property_id'] = $property_id;
 

@@ -59,7 +59,7 @@ class UpdateVrboListingRegistrationRequestSettingsInner implements ModelInterfac
      */
     protected static array $openAPITypes = [
         'name' => 'string',
-        'value' => '\Repull\Model\UpdateVrboListingRegistrationRequestSettingsInnerValue'
+        'value' => 'mixed'
     ];
 
     /**
@@ -306,9 +306,9 @@ class UpdateVrboListingRegistrationRequestSettingsInner implements ModelInterfac
     /**
      * Gets value
      *
-     * @return \Repull\Model\UpdateVrboListingRegistrationRequestSettingsInnerValue|null
+     * @return mixed|null
      */
-    public function getValue(): ?\Repull\Model\UpdateVrboListingRegistrationRequestSettingsInnerValue
+    public function getValue(): mixed
     {
         return $this->container['value'];
     }
@@ -316,11 +316,11 @@ class UpdateVrboListingRegistrationRequestSettingsInner implements ModelInterfac
     /**
      * Sets value
      *
-     * @param \Repull\Model\UpdateVrboListingRegistrationRequestSettingsInnerValue|null $value value
+     * @param mixed|null $value value
      *
      * @return $this
      */
-    public function setValue(?\Repull\Model\UpdateVrboListingRegistrationRequestSettingsInnerValue $value): static
+    public function setValue(mixed $value): static
     {
         if (is_null($value)) {
             array_push($this->openAPINullablesSetToNull, 'value');

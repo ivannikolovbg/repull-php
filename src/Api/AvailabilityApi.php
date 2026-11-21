@@ -782,7 +782,8 @@ class AvailabilityApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            'date' // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -791,7 +792,8 @@ class AvailabilityApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            'date' // openApiFormat
         ) ?? []);
 
 

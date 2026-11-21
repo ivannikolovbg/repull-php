@@ -5,6 +5,12 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.2.56 — 2026-11-21
+
+- Fix: a `\DateTime` passed to a date query parameter (e.g. `start`/`end` on `getVrboListingRates`, `from`/`to` on `getReservationSummary`, `updated_since` on `listConversations`) threw "Object of class DateTime could not be converted to string" before the request was sent. `format: date` parameters now send `Y-m-d`; `format: date-time` sends the configured date-time format. Fixed in the generator templates (`templates/`).
+- Fix: fields that take a boolean, number or string (Vrbo amenity and registration values, Vrbo pet `maxWeight`, Airbnb room amenity `value`, Airbnb check-in `start`/`end`, and others) are now typed `mixed` and send the plain value. They were empty wrapper classes that could not hold a value and serialised to `{}`; those wrapper classes are removed. Fixed in the generator input (`scripts/prepare-spec.php`).
+- Tests: `tests/RequestSerializationTest.php` asserts the exact request (method, path, query, JSON body) for these calls.
+
 ## 0.2.55 — 2026-11-21
 
 - New: `DELETE /v1/channels/vrbo/listings/{id}/videos`

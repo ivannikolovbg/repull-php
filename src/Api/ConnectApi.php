@@ -1349,7 +1349,8 @@ class ConnectApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -1642,7 +1643,8 @@ class ConnectApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -1939,7 +1941,8 @@ class ConnectApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -1948,7 +1951,8 @@ class ConnectApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -2824,7 +2828,8 @@ class ConnectApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -3452,7 +3457,8 @@ class ConnectApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -3726,7 +3732,8 @@ class ConnectApi
             'boolean', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -4949,7 +4956,8 @@ class ConnectApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -4958,7 +4966,8 @@ class ConnectApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -4967,7 +4976,8 @@ class ConnectApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -5216,7 +5226,8 @@ class ConnectApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -5524,7 +5535,8 @@ class ConnectApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -5533,7 +5545,8 @@ class ConnectApi
             'integer', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
@@ -12140,7 +12153,8 @@ class ConnectApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -12149,7 +12163,8 @@ class ConnectApi
             'string', // openApiType
             'form', // style
             true, // explode
-            true // required
+            true, // required
+            null // openApiFormat
         ) ?? []);
         // query params
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
@@ -12158,7 +12173,8 @@ class ConnectApi
             'string', // openApiType
             'form', // style
             true, // explode
-            false // required
+            false, // required
+            null // openApiFormat
         ) ?? []);
 
 
