@@ -25,8 +25,8 @@ use Repull\Model\UpdateVrboListingAmenitiesRequestGroups;
 use Repull\Model\UpdateVrboListingAmenitiesRequestGroupsEssentials;
 use Repull\Model\UpdateVrboListingHouseRulesRequest;
 use Repull\Model\UpdateVrboListingHouseRulesRequestPets;
-use Repull\Model\UpdateVrboListingRegistrationRequest;
-use Repull\Model\UpdateVrboListingRegistrationRequestSettingsInner;
+use Repull\Model\UpdateVrboListingPermitsRequest;
+use Repull\Model\UpdateVrboListingPermitsRequestSettingsInner;
 
 /**
  * Asserts the exact request each call puts on the wire (method, path, query,
@@ -144,19 +144,19 @@ final class RequestSerializationTest extends TestCase
         );
     }
 
-    public function testVrboRegistrationSendsPlainValues(): void
+    public function testVrboPermitsSendsPlainValues(): void
     {
         $api = new VRBOApi($this->http, $this->config);
-        $api->updateVrboListingRegistration('6199', new UpdateVrboListingRegistrationRequest([
+        $api->updateVrboListingPermits('6199', new UpdateVrboListingPermitsRequest([
             'settings' => [
-                new UpdateVrboListingRegistrationRequestSettingsInner(['name' => 'licenseNumber', 'value' => 'STR-2026-0042']),
-                new UpdateVrboListingRegistrationRequestSettingsInner(['name' => 'exempt', 'value' => false]),
-                new UpdateVrboListingRegistrationRequestSettingsInner(['name' => 'bedrooms', 'value' => 3]),
+                new UpdateVrboListingPermitsRequestSettingsInner(['name' => 'licenseNumber', 'value' => 'STR-2026-0042']),
+                new UpdateVrboListingPermitsRequestSettingsInner(['name' => 'exempt', 'value' => false]),
+                new UpdateVrboListingPermitsRequestSettingsInner(['name' => 'bedrooms', 'value' => 3]),
             ],
         ]));
 
         $this->assertSame(
-            ['PUT', '/v1/channels/vrbo/listings/6199/registration', '', ['settings' => [
+            ['PUT', '/v1/channels/vrbo/listings/6199/permits', '', ['settings' => [
                 ['name' => 'licenseNumber', 'value' => 'STR-2026-0042'],
                 ['name' => 'exempt', 'value' => false],
                 ['name' => 'bedrooms', 'value' => 3],
