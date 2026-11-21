@@ -226,8 +226,8 @@ class PublishListingToVrboRequest implements ModelInterface, ArrayAccess, JsonSe
         return self::$openAPIModelName;
     }
 
-    public const SECTIONS_DESCRIPTION = 'description';
-    public const SECTIONS_PROPERTY = 'property';
+    public const SECTIONS_DESCRIPTIONS = 'descriptions';
+    public const SECTIONS_DETAILS = 'details';
     public const SECTIONS_AMENITIES = 'amenities';
     public const SECTIONS_HOUSE_RULES = 'house-rules';
     public const SECTIONS_BOOKING_SETTINGS = 'booking-settings';
@@ -244,8 +244,8 @@ class PublishListingToVrboRequest implements ModelInterface, ArrayAccess, JsonSe
     public static function getSectionsAllowableValues()
     {
         return [
-            self::SECTIONS_DESCRIPTION,
-            self::SECTIONS_PROPERTY,
+            self::SECTIONS_DESCRIPTIONS,
+            self::SECTIONS_DETAILS,
             self::SECTIONS_AMENITIES,
             self::SECTIONS_HOUSE_RULES,
             self::SECTIONS_BOOKING_SETTINGS,

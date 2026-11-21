@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * GetVrboListingContent200ResponseSections Class Doc Comment
  *
- * @description Keyed by section; each is the data of &#x60;GET /v1/channels/vrbo/listings/{id}/{section}&#x60;, or &#x60;{ error: { code, message } }&#x60; when that section failed.
+ * @description Keyed by section; each is the &#x60;data&#x60; of &#x60;GET /v1/channels/vrbo/listings/{id}/{section}&#x60;, or &#x60;{ error: { code, message } }&#x60; when that section failed.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -59,11 +59,10 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'description' => '\Repull\Model\GetVrboListingContent200ResponseSectionsDescription',
-        'property' => '\Repull\Model\GetVrboListingContent200ResponseSectionsProperty',
+        'descriptions' => '\Repull\Model\GetVrboListingContent200ResponseSectionsDescriptionsInner[]',
+        'details' => '\Repull\Model\GetVrboListingContent200ResponseSectionsDetails',
         'story' => '\Repull\Model\GetVrboListingContent200ResponseSectionsStory',
         'additional_info' => '\Repull\Model\GetVrboListingContent200ResponseSectionsAdditionalInfo',
-        'translations' => '\Repull\Model\GetVrboListingContent200ResponseSectionsTranslations',
         'photos' => '\Repull\Model\GetVrboListingContent200ResponseSectionsPhotos',
         'amenities' => '\Repull\Model\GetVrboListingContent200ResponseSectionsAmenities',
         'rooms' => '\Repull\Model\GetVrboListingContent200ResponseSectionsRooms',
@@ -73,12 +72,11 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
         'cancellation' => '\Repull\Model\GetVrboListingContent200ResponseSectionsCancellation',
         'fees' => '\Repull\Model\GetVrboListingContent200ResponseSectionsFees',
         'pricing' => '\Repull\Model\GetVrboListingContent200ResponseSectionsPricing',
-        'rates' => '\Repull\Model\GetVrboListingContent200ResponseSectionsRates',
         'payment_terms' => '\Repull\Model\GetVrboListingContent200ResponseSectionsPaymentTerms',
         'protection' => '\Repull\Model\GetVrboListingContent200ResponseSectionsProtection',
         'taxes' => '\Repull\Model\GetVrboListingContent200ResponseSectionsTaxes',
-        'registration' => '\Repull\Model\GetVrboListingContent200ResponseSectionsRegistration',
-        'welcome_guide' => '\Repull\Model\GetVrboListingContent200ResponseSectionsWelcomeGuide',
+        'permits' => '\Repull\Model\GetVrboListingContent200ResponseSectionsPermits',
+        'checkin_guide' => '\Repull\Model\GetVrboListingContent200ResponseSectionsCheckinGuide',
         'videos' => '\Repull\Model\GetVrboListingContent200ResponseSectionsVideos'
     ];
 
@@ -88,11 +86,10 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'description' => null,
-        'property' => null,
+        'descriptions' => null,
+        'details' => null,
         'story' => null,
         'additional_info' => null,
-        'translations' => null,
         'photos' => null,
         'amenities' => null,
         'rooms' => null,
@@ -102,12 +99,11 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
         'cancellation' => null,
         'fees' => null,
         'pricing' => null,
-        'rates' => null,
         'payment_terms' => null,
         'protection' => null,
         'taxes' => null,
-        'registration' => null,
-        'welcome_guide' => null,
+        'permits' => null,
+        'checkin_guide' => null,
         'videos' => null
     ];
 
@@ -117,11 +113,10 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'description' => false,
-        'property' => false,
+        'descriptions' => false,
+        'details' => false,
         'story' => false,
         'additional_info' => false,
-        'translations' => false,
         'photos' => false,
         'amenities' => false,
         'rooms' => false,
@@ -131,12 +126,11 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
         'cancellation' => false,
         'fees' => false,
         'pricing' => false,
-        'rates' => false,
         'payment_terms' => false,
         'protection' => false,
         'taxes' => false,
-        'registration' => false,
-        'welcome_guide' => false,
+        'permits' => false,
+        'checkin_guide' => false,
         'videos' => false
     ];
 
@@ -216,11 +210,10 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'description' => 'description',
-        'property' => 'property',
+        'descriptions' => 'descriptions',
+        'details' => 'details',
         'story' => 'story',
         'additional_info' => 'additional-info',
-        'translations' => 'translations',
         'photos' => 'photos',
         'amenities' => 'amenities',
         'rooms' => 'rooms',
@@ -230,12 +223,11 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
         'cancellation' => 'cancellation',
         'fees' => 'fees',
         'pricing' => 'pricing',
-        'rates' => 'rates',
         'payment_terms' => 'payment-terms',
         'protection' => 'protection',
         'taxes' => 'taxes',
-        'registration' => 'registration',
-        'welcome_guide' => 'welcome-guide',
+        'permits' => 'permits',
+        'checkin_guide' => 'checkin-guide',
         'videos' => 'videos'
     ];
 
@@ -245,11 +237,10 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
      * @var array<string, string>
      */
     protected static array $setters = [
-        'description' => 'setDescription',
-        'property' => 'setProperty',
+        'descriptions' => 'setDescriptions',
+        'details' => 'setDetails',
         'story' => 'setStory',
         'additional_info' => 'setAdditionalInfo',
-        'translations' => 'setTranslations',
         'photos' => 'setPhotos',
         'amenities' => 'setAmenities',
         'rooms' => 'setRooms',
@@ -259,12 +250,11 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
         'cancellation' => 'setCancellation',
         'fees' => 'setFees',
         'pricing' => 'setPricing',
-        'rates' => 'setRates',
         'payment_terms' => 'setPaymentTerms',
         'protection' => 'setProtection',
         'taxes' => 'setTaxes',
-        'registration' => 'setRegistration',
-        'welcome_guide' => 'setWelcomeGuide',
+        'permits' => 'setPermits',
+        'checkin_guide' => 'setCheckinGuide',
         'videos' => 'setVideos'
     ];
 
@@ -274,11 +264,10 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
      * @var array<string, string>
      */
     protected static array $getters = [
-        'description' => 'getDescription',
-        'property' => 'getProperty',
+        'descriptions' => 'getDescriptions',
+        'details' => 'getDetails',
         'story' => 'getStory',
         'additional_info' => 'getAdditionalInfo',
-        'translations' => 'getTranslations',
         'photos' => 'getPhotos',
         'amenities' => 'getAmenities',
         'rooms' => 'getRooms',
@@ -288,12 +277,11 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
         'cancellation' => 'getCancellation',
         'fees' => 'getFees',
         'pricing' => 'getPricing',
-        'rates' => 'getRates',
         'payment_terms' => 'getPaymentTerms',
         'protection' => 'getProtection',
         'taxes' => 'getTaxes',
-        'registration' => 'getRegistration',
-        'welcome_guide' => 'getWelcomeGuide',
+        'permits' => 'getPermits',
+        'checkin_guide' => 'getCheckinGuide',
         'videos' => 'getVideos'
     ];
 
@@ -344,11 +332,10 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('description', $data ?? [], null);
-        $this->setIfExists('property', $data ?? [], null);
+        $this->setIfExists('descriptions', $data ?? [], null);
+        $this->setIfExists('details', $data ?? [], null);
         $this->setIfExists('story', $data ?? [], null);
         $this->setIfExists('additional_info', $data ?? [], null);
-        $this->setIfExists('translations', $data ?? [], null);
         $this->setIfExists('photos', $data ?? [], null);
         $this->setIfExists('amenities', $data ?? [], null);
         $this->setIfExists('rooms', $data ?? [], null);
@@ -358,12 +345,11 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
         $this->setIfExists('cancellation', $data ?? [], null);
         $this->setIfExists('fees', $data ?? [], null);
         $this->setIfExists('pricing', $data ?? [], null);
-        $this->setIfExists('rates', $data ?? [], null);
         $this->setIfExists('payment_terms', $data ?? [], null);
         $this->setIfExists('protection', $data ?? [], null);
         $this->setIfExists('taxes', $data ?? [], null);
-        $this->setIfExists('registration', $data ?? [], null);
-        $this->setIfExists('welcome_guide', $data ?? [], null);
+        $this->setIfExists('permits', $data ?? [], null);
+        $this->setIfExists('checkin_guide', $data ?? [], null);
         $this->setIfExists('videos', $data ?? [], null);
     }
 
@@ -405,55 +391,55 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
 
 
     /**
-     * Gets description
+     * Gets descriptions
      *
-     * @return \Repull\Model\GetVrboListingContent200ResponseSectionsDescription|null
+     * @return \Repull\Model\GetVrboListingContent200ResponseSectionsDescriptionsInner[]|null
      */
-    public function getDescription(): ?\Repull\Model\GetVrboListingContent200ResponseSectionsDescription
+    public function getDescriptions(): ?array
     {
-        return $this->container['description'];
+        return $this->container['descriptions'];
     }
 
     /**
-     * Sets description
+     * Sets descriptions
      *
-     * @param \Repull\Model\GetVrboListingContent200ResponseSectionsDescription|null $description description
+     * @param \Repull\Model\GetVrboListingContent200ResponseSectionsDescriptionsInner[]|null $descriptions descriptions
      *
      * @return $this
      */
-    public function setDescription(?\Repull\Model\GetVrboListingContent200ResponseSectionsDescription $description): static
+    public function setDescriptions(?array $descriptions): static
     {
-        if (is_null($description)) {
-            throw new InvalidArgumentException('non-nullable description cannot be null');
+        if (is_null($descriptions)) {
+            throw new InvalidArgumentException('non-nullable descriptions cannot be null');
         }
-        $this->container['description'] = $description;
+        $this->container['descriptions'] = $descriptions;
 
         return $this;
     }
 
     /**
-     * Gets property
+     * Gets details
      *
-     * @return \Repull\Model\GetVrboListingContent200ResponseSectionsProperty|null
+     * @return \Repull\Model\GetVrboListingContent200ResponseSectionsDetails|null
      */
-    public function getProperty(): ?\Repull\Model\GetVrboListingContent200ResponseSectionsProperty
+    public function getDetails(): ?\Repull\Model\GetVrboListingContent200ResponseSectionsDetails
     {
-        return $this->container['property'];
+        return $this->container['details'];
     }
 
     /**
-     * Sets property
+     * Sets details
      *
-     * @param \Repull\Model\GetVrboListingContent200ResponseSectionsProperty|null $property property
+     * @param \Repull\Model\GetVrboListingContent200ResponseSectionsDetails|null $details details
      *
      * @return $this
      */
-    public function setProperty(?\Repull\Model\GetVrboListingContent200ResponseSectionsProperty $property): static
+    public function setDetails(?\Repull\Model\GetVrboListingContent200ResponseSectionsDetails $details): static
     {
-        if (is_null($property)) {
-            throw new InvalidArgumentException('non-nullable property cannot be null');
+        if (is_null($details)) {
+            throw new InvalidArgumentException('non-nullable details cannot be null');
         }
-        $this->container['property'] = $property;
+        $this->container['details'] = $details;
 
         return $this;
     }
@@ -508,33 +494,6 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
             throw new InvalidArgumentException('non-nullable additional_info cannot be null');
         }
         $this->container['additional_info'] = $additional_info;
-
-        return $this;
-    }
-
-    /**
-     * Gets translations
-     *
-     * @return \Repull\Model\GetVrboListingContent200ResponseSectionsTranslations|null
-     */
-    public function getTranslations(): ?\Repull\Model\GetVrboListingContent200ResponseSectionsTranslations
-    {
-        return $this->container['translations'];
-    }
-
-    /**
-     * Sets translations
-     *
-     * @param \Repull\Model\GetVrboListingContent200ResponseSectionsTranslations|null $translations translations
-     *
-     * @return $this
-     */
-    public function setTranslations(?\Repull\Model\GetVrboListingContent200ResponseSectionsTranslations $translations): static
-    {
-        if (is_null($translations)) {
-            throw new InvalidArgumentException('non-nullable translations cannot be null');
-        }
-        $this->container['translations'] = $translations;
 
         return $this;
     }
@@ -783,33 +742,6 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
     }
 
     /**
-     * Gets rates
-     *
-     * @return \Repull\Model\GetVrboListingContent200ResponseSectionsRates|null
-     */
-    public function getRates(): ?\Repull\Model\GetVrboListingContent200ResponseSectionsRates
-    {
-        return $this->container['rates'];
-    }
-
-    /**
-     * Sets rates
-     *
-     * @param \Repull\Model\GetVrboListingContent200ResponseSectionsRates|null $rates rates
-     *
-     * @return $this
-     */
-    public function setRates(?\Repull\Model\GetVrboListingContent200ResponseSectionsRates $rates): static
-    {
-        if (is_null($rates)) {
-            throw new InvalidArgumentException('non-nullable rates cannot be null');
-        }
-        $this->container['rates'] = $rates;
-
-        return $this;
-    }
-
-    /**
      * Gets payment_terms
      *
      * @return \Repull\Model\GetVrboListingContent200ResponseSectionsPaymentTerms|null
@@ -891,55 +823,55 @@ class GetVrboListingContent200ResponseSections implements ModelInterface, ArrayA
     }
 
     /**
-     * Gets registration
+     * Gets permits
      *
-     * @return \Repull\Model\GetVrboListingContent200ResponseSectionsRegistration|null
+     * @return \Repull\Model\GetVrboListingContent200ResponseSectionsPermits|null
      */
-    public function getRegistration(): ?\Repull\Model\GetVrboListingContent200ResponseSectionsRegistration
+    public function getPermits(): ?\Repull\Model\GetVrboListingContent200ResponseSectionsPermits
     {
-        return $this->container['registration'];
+        return $this->container['permits'];
     }
 
     /**
-     * Sets registration
+     * Sets permits
      *
-     * @param \Repull\Model\GetVrboListingContent200ResponseSectionsRegistration|null $registration registration
+     * @param \Repull\Model\GetVrboListingContent200ResponseSectionsPermits|null $permits permits
      *
      * @return $this
      */
-    public function setRegistration(?\Repull\Model\GetVrboListingContent200ResponseSectionsRegistration $registration): static
+    public function setPermits(?\Repull\Model\GetVrboListingContent200ResponseSectionsPermits $permits): static
     {
-        if (is_null($registration)) {
-            throw new InvalidArgumentException('non-nullable registration cannot be null');
+        if (is_null($permits)) {
+            throw new InvalidArgumentException('non-nullable permits cannot be null');
         }
-        $this->container['registration'] = $registration;
+        $this->container['permits'] = $permits;
 
         return $this;
     }
 
     /**
-     * Gets welcome_guide
+     * Gets checkin_guide
      *
-     * @return \Repull\Model\GetVrboListingContent200ResponseSectionsWelcomeGuide|null
+     * @return \Repull\Model\GetVrboListingContent200ResponseSectionsCheckinGuide|null
      */
-    public function getWelcomeGuide(): ?\Repull\Model\GetVrboListingContent200ResponseSectionsWelcomeGuide
+    public function getCheckinGuide(): ?\Repull\Model\GetVrboListingContent200ResponseSectionsCheckinGuide
     {
-        return $this->container['welcome_guide'];
+        return $this->container['checkin_guide'];
     }
 
     /**
-     * Sets welcome_guide
+     * Sets checkin_guide
      *
-     * @param \Repull\Model\GetVrboListingContent200ResponseSectionsWelcomeGuide|null $welcome_guide welcome_guide
+     * @param \Repull\Model\GetVrboListingContent200ResponseSectionsCheckinGuide|null $checkin_guide checkin_guide
      *
      * @return $this
      */
-    public function setWelcomeGuide(?\Repull\Model\GetVrboListingContent200ResponseSectionsWelcomeGuide $welcome_guide): static
+    public function setCheckinGuide(?\Repull\Model\GetVrboListingContent200ResponseSectionsCheckinGuide $checkin_guide): static
     {
-        if (is_null($welcome_guide)) {
-            throw new InvalidArgumentException('non-nullable welcome_guide cannot be null');
+        if (is_null($checkin_guide)) {
+            throw new InvalidArgumentException('non-nullable checkin_guide cannot be null');
         }
-        $this->container['welcome_guide'] = $welcome_guide;
+        $this->container['checkin_guide'] = $checkin_guide;
 
         return $this;
     }

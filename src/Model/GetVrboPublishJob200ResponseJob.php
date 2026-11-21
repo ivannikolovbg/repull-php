@@ -853,7 +853,7 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
     /**
      * Sets skipped
      *
-     * @param \Repull\Model\GetVrboPublishJob200ResponseJobSkippedInner[]|null $skipped Update only: sections the push leaves as they are on Vrbo, and why (rooms, photos, registration, or no value in the listing content).
+     * @param \Repull\Model\GetVrboPublishJob200ResponseJobSkippedInner[]|null $skipped Update only: sections the push leaves as they are on Vrbo, and why (rooms, photos, permits, or no value in the listing content).
      *
      * @return $this
      */

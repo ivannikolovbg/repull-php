@@ -58,11 +58,9 @@ class GetVrboListingPhotos200Response implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'listing_id' => 'string',
-        'vrbo_listing_number' => 'string',
-        'property_id' => 'string',
-        'section' => 'string',
-        'data' => '\Repull\Model\GetVrboListingPhotos200ResponseData'
+        'data' => '\Repull\Model\GetVrboListingPhotos200ResponseData',
+        'data_freshness' => '\Repull\Model\GetVrboListingAdditionalInfo200ResponseDataFreshness',
+        'vrbo_listing_number' => 'string'
     ];
 
     /**
@@ -71,11 +69,9 @@ class GetVrboListingPhotos200Response implements ModelInterface, ArrayAccess, Js
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'listing_id' => null,
-        'vrbo_listing_number' => null,
-        'property_id' => null,
-        'section' => null,
-        'data' => null
+        'data' => null,
+        'data_freshness' => null,
+        'vrbo_listing_number' => null
     ];
 
     /**
@@ -84,11 +80,9 @@ class GetVrboListingPhotos200Response implements ModelInterface, ArrayAccess, Js
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'listing_id' => false,
-        'vrbo_listing_number' => false,
-        'property_id' => false,
-        'section' => false,
-        'data' => false
+        'data' => false,
+        'data_freshness' => false,
+        'vrbo_listing_number' => false
     ];
 
     /**
@@ -167,11 +161,9 @@ class GetVrboListingPhotos200Response implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'listing_id' => 'listingId',
-        'vrbo_listing_number' => 'vrboListingNumber',
-        'property_id' => 'propertyId',
-        'section' => 'section',
-        'data' => 'data'
+        'data' => 'data',
+        'data_freshness' => 'dataFreshness',
+        'vrbo_listing_number' => 'vrboListingNumber'
     ];
 
     /**
@@ -180,11 +172,9 @@ class GetVrboListingPhotos200Response implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $setters = [
-        'listing_id' => 'setListingId',
-        'vrbo_listing_number' => 'setVrboListingNumber',
-        'property_id' => 'setPropertyId',
-        'section' => 'setSection',
-        'data' => 'setData'
+        'data' => 'setData',
+        'data_freshness' => 'setDataFreshness',
+        'vrbo_listing_number' => 'setVrboListingNumber'
     ];
 
     /**
@@ -193,11 +183,9 @@ class GetVrboListingPhotos200Response implements ModelInterface, ArrayAccess, Js
      * @var array<string, string>
      */
     protected static array $getters = [
-        'listing_id' => 'getListingId',
-        'vrbo_listing_number' => 'getVrboListingNumber',
-        'property_id' => 'getPropertyId',
-        'section' => 'getSection',
-        'data' => 'getData'
+        'data' => 'getData',
+        'data_freshness' => 'getDataFreshness',
+        'vrbo_listing_number' => 'getVrboListingNumber'
     ];
 
     /**
@@ -247,11 +235,9 @@ class GetVrboListingPhotos200Response implements ModelInterface, ArrayAccess, Js
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('listing_id', $data ?? [], null);
-        $this->setIfExists('vrbo_listing_number', $data ?? [], null);
-        $this->setIfExists('property_id', $data ?? [], null);
-        $this->setIfExists('section', $data ?? [], null);
         $this->setIfExists('data', $data ?? [], null);
+        $this->setIfExists('data_freshness', $data ?? [], null);
+        $this->setIfExists('vrbo_listing_number', $data ?? [], null);
     }
 
     /**
@@ -279,20 +265,14 @@ class GetVrboListingPhotos200Response implements ModelInterface, ArrayAccess, Js
     {
         $invalidProperties = [];
 
-        if ($this->container['listing_id'] === null) {
-            $invalidProperties[] = "'listing_id' can't be null";
+        if ($this->container['data'] === null) {
+            $invalidProperties[] = "'data' can't be null";
+        }
+        if ($this->container['data_freshness'] === null) {
+            $invalidProperties[] = "'data_freshness' can't be null";
         }
         if ($this->container['vrbo_listing_number'] === null) {
             $invalidProperties[] = "'vrbo_listing_number' can't be null";
-        }
-        if ($this->container['property_id'] === null) {
-            $invalidProperties[] = "'property_id' can't be null";
-        }
-        if ($this->container['section'] === null) {
-            $invalidProperties[] = "'section' can't be null";
-        }
-        if ($this->container['data'] === null) {
-            $invalidProperties[] = "'data' can't be null";
         }
         return $invalidProperties;
     }
@@ -305,114 +285,6 @@ class GetVrboListingPhotos200Response implements ModelInterface, ArrayAccess, Js
         return count($this->listInvalidProperties()) === 0;
     }
 
-
-    /**
-     * Gets listing_id
-     *
-     * @return string
-     */
-    public function getListingId(): string
-    {
-        return $this->container['listing_id'];
-    }
-
-    /**
-     * Sets listing_id
-     *
-     * @param string $listing_id listing_id
-     *
-     * @return $this
-     */
-    public function setListingId(string $listing_id): static
-    {
-        if (is_null($listing_id)) {
-            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
-        }
-        $this->container['listing_id'] = $listing_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets vrbo_listing_number
-     *
-     * @return string
-     */
-    public function getVrboListingNumber(): string
-    {
-        return $this->container['vrbo_listing_number'];
-    }
-
-    /**
-     * Sets vrbo_listing_number
-     *
-     * @param string $vrbo_listing_number vrbo_listing_number
-     *
-     * @return $this
-     */
-    public function setVrboListingNumber(string $vrbo_listing_number): static
-    {
-        if (is_null($vrbo_listing_number)) {
-            throw new InvalidArgumentException('non-nullable vrbo_listing_number cannot be null');
-        }
-        $this->container['vrbo_listing_number'] = $vrbo_listing_number;
-
-        return $this;
-    }
-
-    /**
-     * Gets property_id
-     *
-     * @return string
-     */
-    public function getPropertyId(): string
-    {
-        return $this->container['property_id'];
-    }
-
-    /**
-     * Sets property_id
-     *
-     * @param string $property_id Vrbo's property id for the unit.
-     *
-     * @return $this
-     */
-    public function setPropertyId(string $property_id): static
-    {
-        if (is_null($property_id)) {
-            throw new InvalidArgumentException('non-nullable property_id cannot be null');
-        }
-        $this->container['property_id'] = $property_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets section
-     *
-     * @return string
-     */
-    public function getSection(): string
-    {
-        return $this->container['section'];
-    }
-
-    /**
-     * Sets section
-     *
-     * @param string $section section
-     *
-     * @return $this
-     */
-    public function setSection(string $section): static
-    {
-        if (is_null($section)) {
-            throw new InvalidArgumentException('non-nullable section cannot be null');
-        }
-        $this->container['section'] = $section;
-
-        return $this;
-    }
 
     /**
      * Gets data
@@ -437,6 +309,60 @@ class GetVrboListingPhotos200Response implements ModelInterface, ArrayAccess, Js
             throw new InvalidArgumentException('non-nullable data cannot be null');
         }
         $this->container['data'] = $data;
+
+        return $this;
+    }
+
+    /**
+     * Gets data_freshness
+     *
+     * @return \Repull\Model\GetVrboListingAdditionalInfo200ResponseDataFreshness
+     */
+    public function getDataFreshness(): \Repull\Model\GetVrboListingAdditionalInfo200ResponseDataFreshness
+    {
+        return $this->container['data_freshness'];
+    }
+
+    /**
+     * Sets data_freshness
+     *
+     * @param \Repull\Model\GetVrboListingAdditionalInfo200ResponseDataFreshness $data_freshness data_freshness
+     *
+     * @return $this
+     */
+    public function setDataFreshness(\Repull\Model\GetVrboListingAdditionalInfo200ResponseDataFreshness $data_freshness): static
+    {
+        if (is_null($data_freshness)) {
+            throw new InvalidArgumentException('non-nullable data_freshness cannot be null');
+        }
+        $this->container['data_freshness'] = $data_freshness;
+
+        return $this;
+    }
+
+    /**
+     * Gets vrbo_listing_number
+     *
+     * @return string
+     */
+    public function getVrboListingNumber(): string
+    {
+        return $this->container['vrbo_listing_number'];
+    }
+
+    /**
+     * Sets vrbo_listing_number
+     *
+     * @param string $vrbo_listing_number The Vrbo listing number this is about.
+     *
+     * @return $this
+     */
+    public function setVrboListingNumber(string $vrbo_listing_number): static
+    {
+        if (is_null($vrbo_listing_number)) {
+            throw new InvalidArgumentException('non-nullable vrbo_listing_number cannot be null');
+        }
+        $this->container['vrbo_listing_number'] = $vrbo_listing_number;
 
         return $this;
     }
