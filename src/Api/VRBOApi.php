@@ -185,6 +185,9 @@ class VRBOApi
         'listVrboReservations' => [
             'application/json',
         ],
+        'listVrboTransactions' => [
+            'application/json',
+        ],
         'mapVrboListing' => [
             'application/json',
         ],
@@ -192,6 +195,9 @@ class VRBOApi
             'application/json',
         ],
         'setVrboListingCoverPhoto' => [
+            'application/json',
+        ],
+        'syncVrboTransactions' => [
             'application/json',
         ],
         'updateVrboListingAdditionalInfo' => [
@@ -16514,6 +16520,471 @@ class VRBOApi
     }
 
     /**
+     * Operation listVrboTransactions
+     *
+     * List Vrbo transactions (payout ledger)
+     *
+     * @param  string|null $account_id Only this Vrbo account (&#x60;accountId&#x60; from &#x60;GET /v1/channels/vrbo/connection&#x60;). (optional)
+     * @param  \DateTime|null $start_date Inclusive lower bound on the deposit&#39;s date. YYYY-MM-DD. (optional)
+     * @param  \DateTime|null $end_date Inclusive upper bound on the deposit&#39;s date. YYYY-MM-DD. (optional)
+     * @param  string|null $status status (optional)
+     * @param  string|null $type &#x60;Payout&#x60;, &#x60;Reservation&#x60; or &#x60;Adjustment&#x60;. (optional)
+     * @param  string|null $payout_id One deposit (its reference number) and its lines. (optional)
+     * @param  string|null $confirmation_code confirmation_code (optional)
+     * @param  string|null $cursor From the previous page&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $limit Rows per page (default 100, at most 500). (optional, default to 100)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listVrboTransactions'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\ListVrboTransactions200Response|\Repull\Model\Error
+     */
+    public function listVrboTransactions(
+        ?string $account_id = null,
+        ?\DateTime $start_date = null,
+        ?\DateTime $end_date = null,
+        ?string $status = null,
+        ?string $type = null,
+        ?string $payout_id = null,
+        ?string $confirmation_code = null,
+        ?string $cursor = null,
+        ?int $limit = 100,
+        string $contentType = self::contentTypes['listVrboTransactions'][0]
+    ): \Repull\Model\ListVrboTransactions200Response|\Repull\Model\Error
+    {
+        list($response) = $this->listVrboTransactionsWithHttpInfo($account_id, $start_date, $end_date, $status, $type, $payout_id, $confirmation_code, $cursor, $limit, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation listVrboTransactionsWithHttpInfo
+     *
+     * List Vrbo transactions (payout ledger)
+     *
+     * @param  string|null $account_id Only this Vrbo account (&#x60;accountId&#x60; from &#x60;GET /v1/channels/vrbo/connection&#x60;). (optional)
+     * @param  \DateTime|null $start_date Inclusive lower bound on the deposit&#39;s date. YYYY-MM-DD. (optional)
+     * @param  \DateTime|null $end_date Inclusive upper bound on the deposit&#39;s date. YYYY-MM-DD. (optional)
+     * @param  string|null $status (optional)
+     * @param  string|null $type &#x60;Payout&#x60;, &#x60;Reservation&#x60; or &#x60;Adjustment&#x60;. (optional)
+     * @param  string|null $payout_id One deposit (its reference number) and its lines. (optional)
+     * @param  string|null $confirmation_code (optional)
+     * @param  string|null $cursor From the previous page&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $limit Rows per page (default 100, at most 500). (optional, default to 100)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listVrboTransactions'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\ListVrboTransactions200Response|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function listVrboTransactionsWithHttpInfo(
+        ?string $account_id = null,
+        ?\DateTime $start_date = null,
+        ?\DateTime $end_date = null,
+        ?string $status = null,
+        ?string $type = null,
+        ?string $payout_id = null,
+        ?string $confirmation_code = null,
+        ?string $cursor = null,
+        ?int $limit = 100,
+        string $contentType = self::contentTypes['listVrboTransactions'][0]
+    ): array
+    {
+        $request = $this->listVrboTransactionsRequest($account_id, $start_date, $end_date, $status, $type, $payout_id, $confirmation_code, $cursor, $limit, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\ListVrboTransactions200Response',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\ListVrboTransactions200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\ListVrboTransactions200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation listVrboTransactionsAsync
+     *
+     * List Vrbo transactions (payout ledger)
+     *
+     * @param  string|null $account_id Only this Vrbo account (&#x60;accountId&#x60; from &#x60;GET /v1/channels/vrbo/connection&#x60;). (optional)
+     * @param  \DateTime|null $start_date Inclusive lower bound on the deposit&#39;s date. YYYY-MM-DD. (optional)
+     * @param  \DateTime|null $end_date Inclusive upper bound on the deposit&#39;s date. YYYY-MM-DD. (optional)
+     * @param  string|null $status (optional)
+     * @param  string|null $type &#x60;Payout&#x60;, &#x60;Reservation&#x60; or &#x60;Adjustment&#x60;. (optional)
+     * @param  string|null $payout_id One deposit (its reference number) and its lines. (optional)
+     * @param  string|null $confirmation_code (optional)
+     * @param  string|null $cursor From the previous page&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $limit Rows per page (default 100, at most 500). (optional, default to 100)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listVrboTransactions'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function listVrboTransactionsAsync(
+        ?string $account_id = null,
+        ?\DateTime $start_date = null,
+        ?\DateTime $end_date = null,
+        ?string $status = null,
+        ?string $type = null,
+        ?string $payout_id = null,
+        ?string $confirmation_code = null,
+        ?string $cursor = null,
+        ?int $limit = 100,
+        string $contentType = self::contentTypes['listVrboTransactions'][0]
+    ): PromiseInterface
+    {
+        return $this->listVrboTransactionsAsyncWithHttpInfo($account_id, $start_date, $end_date, $status, $type, $payout_id, $confirmation_code, $cursor, $limit, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation listVrboTransactionsAsyncWithHttpInfo
+     *
+     * List Vrbo transactions (payout ledger)
+     *
+     * @param  string|null $account_id Only this Vrbo account (&#x60;accountId&#x60; from &#x60;GET /v1/channels/vrbo/connection&#x60;). (optional)
+     * @param  \DateTime|null $start_date Inclusive lower bound on the deposit&#39;s date. YYYY-MM-DD. (optional)
+     * @param  \DateTime|null $end_date Inclusive upper bound on the deposit&#39;s date. YYYY-MM-DD. (optional)
+     * @param  string|null $status (optional)
+     * @param  string|null $type &#x60;Payout&#x60;, &#x60;Reservation&#x60; or &#x60;Adjustment&#x60;. (optional)
+     * @param  string|null $payout_id One deposit (its reference number) and its lines. (optional)
+     * @param  string|null $confirmation_code (optional)
+     * @param  string|null $cursor From the previous page&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $limit Rows per page (default 100, at most 500). (optional, default to 100)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listVrboTransactions'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function listVrboTransactionsAsyncWithHttpInfo(
+        ?string $account_id = null,
+        ?\DateTime $start_date = null,
+        ?\DateTime $end_date = null,
+        ?string $status = null,
+        ?string $type = null,
+        ?string $payout_id = null,
+        ?string $confirmation_code = null,
+        ?string $cursor = null,
+        ?int $limit = 100,
+        string $contentType = self::contentTypes['listVrboTransactions'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\ListVrboTransactions200Response';
+        $request = $this->listVrboTransactionsRequest($account_id, $start_date, $end_date, $status, $type, $payout_id, $confirmation_code, $cursor, $limit, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'listVrboTransactions'
+     *
+     * @param  string|null $account_id Only this Vrbo account (&#x60;accountId&#x60; from &#x60;GET /v1/channels/vrbo/connection&#x60;). (optional)
+     * @param  \DateTime|null $start_date Inclusive lower bound on the deposit&#39;s date. YYYY-MM-DD. (optional)
+     * @param  \DateTime|null $end_date Inclusive upper bound on the deposit&#39;s date. YYYY-MM-DD. (optional)
+     * @param  string|null $status (optional)
+     * @param  string|null $type &#x60;Payout&#x60;, &#x60;Reservation&#x60; or &#x60;Adjustment&#x60;. (optional)
+     * @param  string|null $payout_id One deposit (its reference number) and its lines. (optional)
+     * @param  string|null $confirmation_code (optional)
+     * @param  string|null $cursor From the previous page&#39;s &#x60;pagination.nextCursor&#x60;. (optional)
+     * @param  int|null $limit Rows per page (default 100, at most 500). (optional, default to 100)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listVrboTransactions'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function listVrboTransactionsRequest(
+        ?string $account_id = null,
+        ?\DateTime $start_date = null,
+        ?\DateTime $end_date = null,
+        ?string $status = null,
+        ?string $type = null,
+        ?string $payout_id = null,
+        ?string $confirmation_code = null,
+        ?string $cursor = null,
+        ?int $limit = 100,
+        string $contentType = self::contentTypes['listVrboTransactions'][0]
+    ): Request
+    {
+
+
+
+
+
+
+
+
+
+        if ($limit !== null && $limit > 500) {
+            throw new InvalidArgumentException('invalid value for "$limit" when calling VRBOApi.listVrboTransactions, must be smaller than or equal to 500.');
+        }
+        
+
+        $resourcePath = '/v1/channels/vrbo/transactions';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $account_id,
+            'account_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            null // openApiFormat
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $start_date,
+            'start_date', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            'date' // openApiFormat
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $end_date,
+            'end_date', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            'date' // openApiFormat
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $status,
+            'status', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            null // openApiFormat
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $type,
+            'type', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            null // openApiFormat
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $payout_id,
+            'payout_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            null // openApiFormat
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $confirmation_code,
+            'confirmation_code', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            null // openApiFormat
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $cursor,
+            'cursor', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            null // openApiFormat
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $limit,
+            'limit', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            null // openApiFormat
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation mapVrboListing
      *
      * Link a Vrbo listing to a Repull listing
@@ -17770,6 +18241,332 @@ class VRBOApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'PUT',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation syncVrboTransactions
+     *
+     * Refresh the Vrbo payout ledger
+     *
+     * @param  string|null $account_id Only this Vrbo account (&#x60;accountId&#x60; from &#x60;GET /v1/channels/vrbo/connection&#x60;). (optional)
+     * @param  \Repull\Model\SyncVrboTransactionsRequest|null $sync_vrbo_transactions_request sync_vrbo_transactions_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['syncVrboTransactions'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\SyncVrboTransactions200Response|\Repull\Model\Error
+     */
+    public function syncVrboTransactions(
+        ?string $account_id = null,
+        ?\Repull\Model\SyncVrboTransactionsRequest $sync_vrbo_transactions_request = null,
+        string $contentType = self::contentTypes['syncVrboTransactions'][0]
+    ): \Repull\Model\SyncVrboTransactions200Response|\Repull\Model\Error
+    {
+        list($response) = $this->syncVrboTransactionsWithHttpInfo($account_id, $sync_vrbo_transactions_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation syncVrboTransactionsWithHttpInfo
+     *
+     * Refresh the Vrbo payout ledger
+     *
+     * @param  string|null $account_id Only this Vrbo account (&#x60;accountId&#x60; from &#x60;GET /v1/channels/vrbo/connection&#x60;). (optional)
+     * @param  \Repull\Model\SyncVrboTransactionsRequest|null $sync_vrbo_transactions_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['syncVrboTransactions'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\SyncVrboTransactions200Response|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function syncVrboTransactionsWithHttpInfo(
+        ?string $account_id = null,
+        ?\Repull\Model\SyncVrboTransactionsRequest $sync_vrbo_transactions_request = null,
+        string $contentType = self::contentTypes['syncVrboTransactions'][0]
+    ): array
+    {
+        $request = $this->syncVrboTransactionsRequest($account_id, $sync_vrbo_transactions_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\SyncVrboTransactions200Response',
+                        $request,
+                        $response,
+                    );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\SyncVrboTransactions200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\SyncVrboTransactions200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation syncVrboTransactionsAsync
+     *
+     * Refresh the Vrbo payout ledger
+     *
+     * @param  string|null $account_id Only this Vrbo account (&#x60;accountId&#x60; from &#x60;GET /v1/channels/vrbo/connection&#x60;). (optional)
+     * @param  \Repull\Model\SyncVrboTransactionsRequest|null $sync_vrbo_transactions_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['syncVrboTransactions'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function syncVrboTransactionsAsync(
+        ?string $account_id = null,
+        ?\Repull\Model\SyncVrboTransactionsRequest $sync_vrbo_transactions_request = null,
+        string $contentType = self::contentTypes['syncVrboTransactions'][0]
+    ): PromiseInterface
+    {
+        return $this->syncVrboTransactionsAsyncWithHttpInfo($account_id, $sync_vrbo_transactions_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation syncVrboTransactionsAsyncWithHttpInfo
+     *
+     * Refresh the Vrbo payout ledger
+     *
+     * @param  string|null $account_id Only this Vrbo account (&#x60;accountId&#x60; from &#x60;GET /v1/channels/vrbo/connection&#x60;). (optional)
+     * @param  \Repull\Model\SyncVrboTransactionsRequest|null $sync_vrbo_transactions_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['syncVrboTransactions'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function syncVrboTransactionsAsyncWithHttpInfo(
+        ?string $account_id = null,
+        ?\Repull\Model\SyncVrboTransactionsRequest $sync_vrbo_transactions_request = null,
+        string $contentType = self::contentTypes['syncVrboTransactions'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\SyncVrboTransactions200Response';
+        $request = $this->syncVrboTransactionsRequest($account_id, $sync_vrbo_transactions_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'syncVrboTransactions'
+     *
+     * @param  string|null $account_id Only this Vrbo account (&#x60;accountId&#x60; from &#x60;GET /v1/channels/vrbo/connection&#x60;). (optional)
+     * @param  \Repull\Model\SyncVrboTransactionsRequest|null $sync_vrbo_transactions_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['syncVrboTransactions'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function syncVrboTransactionsRequest(
+        ?string $account_id = null,
+        ?\Repull\Model\SyncVrboTransactionsRequest $sync_vrbo_transactions_request = null,
+        string $contentType = self::contentTypes['syncVrboTransactions'][0]
+    ): Request
+    {
+
+
+
+
+        $resourcePath = '/v1/channels/vrbo/transactions';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $account_id,
+            'account_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            null // openApiFormat
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($sync_vrbo_transactions_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($sync_vrbo_transactions_request));
+            } else {
+                $httpBody = $sync_vrbo_transactions_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
