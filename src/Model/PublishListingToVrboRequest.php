@@ -59,7 +59,9 @@ class PublishListingToVrboRequest implements ModelInterface, ArrayAccess, JsonSe
      */
     protected static array $openAPITypes = [
         'account_id' => 'string',
-        'property_id' => 'string'
+        'property_id' => 'string',
+        'sections' => 'string[]',
+        'vrbo_listing_number' => 'string'
     ];
 
     /**
@@ -69,7 +71,9 @@ class PublishListingToVrboRequest implements ModelInterface, ArrayAccess, JsonSe
      */
     protected static array $openAPIFormats = [
         'account_id' => null,
-        'property_id' => null
+        'property_id' => null,
+        'sections' => null,
+        'vrbo_listing_number' => null
     ];
 
     /**
@@ -79,7 +83,9 @@ class PublishListingToVrboRequest implements ModelInterface, ArrayAccess, JsonSe
      */
     protected static array $openAPINullables = [
         'account_id' => false,
-        'property_id' => false
+        'property_id' => false,
+        'sections' => false,
+        'vrbo_listing_number' => false
     ];
 
     /**
@@ -159,7 +165,9 @@ class PublishListingToVrboRequest implements ModelInterface, ArrayAccess, JsonSe
      */
     protected static array $attributeMap = [
         'account_id' => 'accountId',
-        'property_id' => 'propertyId'
+        'property_id' => 'propertyId',
+        'sections' => 'sections',
+        'vrbo_listing_number' => 'vrboListingNumber'
     ];
 
     /**
@@ -169,7 +177,9 @@ class PublishListingToVrboRequest implements ModelInterface, ArrayAccess, JsonSe
      */
     protected static array $setters = [
         'account_id' => 'setAccountId',
-        'property_id' => 'setPropertyId'
+        'property_id' => 'setPropertyId',
+        'sections' => 'setSections',
+        'vrbo_listing_number' => 'setVrboListingNumber'
     ];
 
     /**
@@ -179,7 +189,9 @@ class PublishListingToVrboRequest implements ModelInterface, ArrayAccess, JsonSe
      */
     protected static array $getters = [
         'account_id' => 'getAccountId',
-        'property_id' => 'getPropertyId'
+        'property_id' => 'getPropertyId',
+        'sections' => 'getSections',
+        'vrbo_listing_number' => 'getVrboListingNumber'
     ];
 
     /**
@@ -214,6 +226,35 @@ class PublishListingToVrboRequest implements ModelInterface, ArrayAccess, JsonSe
         return self::$openAPIModelName;
     }
 
+    public const SECTIONS_DESCRIPTION = 'description';
+    public const SECTIONS_PROPERTY = 'property';
+    public const SECTIONS_AMENITIES = 'amenities';
+    public const SECTIONS_HOUSE_RULES = 'house-rules';
+    public const SECTIONS_BOOKING_SETTINGS = 'booking-settings';
+    public const SECTIONS_CANCELLATION = 'cancellation';
+    public const SECTIONS_FEES = 'fees';
+    public const SECTIONS_PRICING = 'pricing';
+    public const SECTIONS_RATES = 'rates';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getSectionsAllowableValues()
+    {
+        return [
+            self::SECTIONS_DESCRIPTION,
+            self::SECTIONS_PROPERTY,
+            self::SECTIONS_AMENITIES,
+            self::SECTIONS_HOUSE_RULES,
+            self::SECTIONS_BOOKING_SETTINGS,
+            self::SECTIONS_CANCELLATION,
+            self::SECTIONS_FEES,
+            self::SECTIONS_PRICING,
+            self::SECTIONS_RATES,
+        ];
+    }
 
     /**
      * Associative array for storing property values
@@ -231,6 +272,8 @@ class PublishListingToVrboRequest implements ModelInterface, ArrayAccess, JsonSe
     {
         $this->setIfExists('account_id', $data ?? [], null);
         $this->setIfExists('property_id', $data ?? [], null);
+        $this->setIfExists('sections', $data ?? [], null);
+        $this->setIfExists('vrbo_listing_number', $data ?? [], null);
     }
 
     /**
@@ -320,6 +363,69 @@ class PublishListingToVrboRequest implements ModelInterface, ArrayAccess, JsonSe
             throw new InvalidArgumentException('non-nullable property_id cannot be null');
         }
         $this->container['property_id'] = $property_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets sections
+     *
+     * @return string[]|null
+     */
+    public function getSections(): ?array
+    {
+        return $this->container['sections'];
+    }
+
+    /**
+     * Sets sections
+     *
+     * @param string[]|null $sections Update only: push just these sections (default: all of them).
+     *
+     * @return $this
+     */
+    public function setSections(?array $sections): static
+    {
+        if (is_null($sections)) {
+            throw new InvalidArgumentException('non-nullable sections cannot be null');
+        }
+        $allowedValues = self::getSectionsAllowableValues();
+        if (array_diff($sections, $allowedValues)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    "Invalid value for 'sections', must be one of '%s'",
+                    implode("', '", $allowedValues)
+                )
+            );
+        }
+        $this->container['sections'] = $sections;
+
+        return $this;
+    }
+
+    /**
+     * Gets vrbo_listing_number
+     *
+     * @return string|null
+     */
+    public function getVrboListingNumber(): ?string
+    {
+        return $this->container['vrbo_listing_number'];
+    }
+
+    /**
+     * Sets vrbo_listing_number
+     *
+     * @param string|null $vrbo_listing_number Update only: the Vrbo listing to push to, when the listing is linked to several.
+     *
+     * @return $this
+     */
+    public function setVrboListingNumber(?string $vrbo_listing_number): static
+    {
+        if (is_null($vrbo_listing_number)) {
+            throw new InvalidArgumentException('non-nullable vrbo_listing_number cannot be null');
+        }
+        $this->container['vrbo_listing_number'] = $vrbo_listing_number;
 
         return $this;
     }

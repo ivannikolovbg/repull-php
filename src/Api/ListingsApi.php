@@ -3599,7 +3599,7 @@ class ListingsApi
     /**
      * Operation getVrboPublishJob
      *
-     * Progress of a Vrbo listing creation
+     * Progress of a Vrbo listing creation or update
      *
      * @param  int $id Repull listing id (required)
      * @param  string $job_id &#x60;job.jobId&#x60; from the POST. (required)
@@ -3622,7 +3622,7 @@ class ListingsApi
     /**
      * Operation getVrboPublishJobWithHttpInfo
      *
-     * Progress of a Vrbo listing creation
+     * Progress of a Vrbo listing creation or update
      *
      * @param  int $id Repull listing id (required)
      * @param  string $job_id &#x60;job.jobId&#x60; from the POST. (required)
@@ -3751,7 +3751,7 @@ class ListingsApi
     /**
      * Operation getVrboPublishJobAsync
      *
-     * Progress of a Vrbo listing creation
+     * Progress of a Vrbo listing creation or update
      *
      * @param  int $id Repull listing id (required)
      * @param  string $job_id &#x60;job.jobId&#x60; from the POST. (required)
@@ -3777,7 +3777,7 @@ class ListingsApi
     /**
      * Operation getVrboPublishJobAsyncWithHttpInfo
      *
-     * Progress of a Vrbo listing creation
+     * Progress of a Vrbo listing creation or update
      *
      * @param  int $id Repull listing id (required)
      * @param  string $job_id &#x60;job.jobId&#x60; from the POST. (required)
@@ -5839,7 +5839,7 @@ class ListingsApi
     /**
      * Operation publishListingToVrbo
      *
-     * Create a listing on Vrbo
+     * Create or update a listing on Vrbo
      *
      * @param  int $id Repull listing id (required)
      * @param  \Repull\Model\PublishListingToVrboRequest|null $publish_listing_to_vrbo_request publish_listing_to_vrbo_request (optional)
@@ -5862,7 +5862,7 @@ class ListingsApi
     /**
      * Operation publishListingToVrboWithHttpInfo
      *
-     * Create a listing on Vrbo
+     * Create or update a listing on Vrbo
      *
      * @param  int $id Repull listing id (required)
      * @param  \Repull\Model\PublishListingToVrboRequest|null $publish_listing_to_vrbo_request (optional)
@@ -5870,7 +5870,7 @@ class ListingsApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\GetVrboPublishJob200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\GetVrboPublishJob200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function publishListingToVrboWithHttpInfo(
         int $id,
@@ -5940,6 +5940,18 @@ class ListingsApi
                         $response,
                     );
                 case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 503:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 504:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\Error',
                         $request,
@@ -6024,6 +6036,22 @@ class ListingsApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 503:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 504:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
             throw $e;
@@ -6033,7 +6061,7 @@ class ListingsApi
     /**
      * Operation publishListingToVrboAsync
      *
-     * Create a listing on Vrbo
+     * Create or update a listing on Vrbo
      *
      * @param  int $id Repull listing id (required)
      * @param  \Repull\Model\PublishListingToVrboRequest|null $publish_listing_to_vrbo_request (optional)
@@ -6059,7 +6087,7 @@ class ListingsApi
     /**
      * Operation publishListingToVrboAsyncWithHttpInfo
      *
-     * Create a listing on Vrbo
+     * Create or update a listing on Vrbo
      *
      * @param  int $id Repull listing id (required)
      * @param  \Repull\Model\PublishListingToVrboRequest|null $publish_listing_to_vrbo_request (optional)

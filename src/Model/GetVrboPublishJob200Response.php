@@ -60,6 +60,7 @@ class GetVrboPublishJob200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPITypes = [
         'listing_id' => 'int',
         'channel' => 'string',
+        'mode' => 'string',
         'job' => '\Repull\Model\GetVrboPublishJob200ResponseJob'
     ];
 
@@ -71,6 +72,7 @@ class GetVrboPublishJob200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPIFormats = [
         'listing_id' => null,
         'channel' => null,
+        'mode' => null,
         'job' => null
     ];
 
@@ -82,6 +84,7 @@ class GetVrboPublishJob200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPINullables = [
         'listing_id' => false,
         'channel' => false,
+        'mode' => false,
         'job' => false
     ];
 
@@ -163,6 +166,7 @@ class GetVrboPublishJob200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $attributeMap = [
         'listing_id' => 'listingId',
         'channel' => 'channel',
+        'mode' => 'mode',
         'job' => 'job'
     ];
 
@@ -174,6 +178,7 @@ class GetVrboPublishJob200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $setters = [
         'listing_id' => 'setListingId',
         'channel' => 'setChannel',
+        'mode' => 'setMode',
         'job' => 'setJob'
     ];
 
@@ -185,6 +190,7 @@ class GetVrboPublishJob200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $getters = [
         'listing_id' => 'getListingId',
         'channel' => 'getChannel',
+        'mode' => 'getMode',
         'job' => 'getJob'
     ];
 
@@ -221,6 +227,8 @@ class GetVrboPublishJob200Response implements ModelInterface, ArrayAccess, JsonS
     }
 
     public const CHANNEL_VRBO = 'vrbo';
+    public const MODE_CREATE = 'create';
+    public const MODE_UPDATE = 'update';
 
     /**
      * Gets allowable values of the enum
@@ -231,6 +239,19 @@ class GetVrboPublishJob200Response implements ModelInterface, ArrayAccess, JsonS
     {
         return [
             self::CHANNEL_VRBO,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getModeAllowableValues()
+    {
+        return [
+            self::MODE_CREATE,
+            self::MODE_UPDATE,
         ];
     }
 
@@ -250,6 +271,7 @@ class GetVrboPublishJob200Response implements ModelInterface, ArrayAccess, JsonS
     {
         $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('channel', $data ?? [], null);
+        $this->setIfExists('mode', $data ?? [], null);
         $this->setIfExists('job', $data ?? [], null);
     }
 
@@ -283,6 +305,15 @@ class GetVrboPublishJob200Response implements ModelInterface, ArrayAccess, JsonS
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'channel', must be one of '%s'",
                 $this->container['channel'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        $allowedValues = self::getModeAllowableValues();
+        if (!is_null($this->container['mode']) && !in_array($this->container['mode'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'mode', must be one of '%s'",
+                $this->container['mode'],
                 implode("', '", $allowedValues)
             );
         }
@@ -350,6 +381,34 @@ class GetVrboPublishJob200Response implements ModelInterface, ArrayAccess, JsonS
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['channel'] = $channel;
+
+        return $this;
+    }
+
+    /**
+     * Gets mode
+     *
+     * @return string|null
+     */
+    public function getMode(): ?string
+    {
+        return $this->container['mode'];
+    }
+
+    /**
+     * Sets mode
+     *
+     * @param string|null $mode mode
+     *
+     * @return $this
+     */
+    public function setMode(?string $mode): static
+    {
+        if (is_null($mode)) {
+            throw new InvalidArgumentException('non-nullable mode cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['mode'] = $mode;
 
         return $this;
     }

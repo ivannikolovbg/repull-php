@@ -59,6 +59,7 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
      */
     protected static array $openAPITypes = [
         'job_id' => 'string',
+        'mode' => 'string',
         'status' => 'string',
         'listing_id' => 'int',
         'account_id' => 'string',
@@ -69,7 +70,11 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
         'linked' => 'bool',
         'rejected_photos' => '\Repull\Model\GetVrboPublishJob200ResponseJobRejectedPhotosInner[]',
         'adjustments' => 'string[]',
-        'resumed_property_id' => 'string'
+        'resumed_property_id' => 'string',
+        'sections' => '\Repull\Model\GetVrboPublishJob200ResponseJobSectionsInner[]',
+        'skipped' => '\Repull\Model\GetVrboPublishJob200ResponseJobSkippedInner[]',
+        'started_at' => '\DateTime',
+        'finished_at' => '\DateTime'
     ];
 
     /**
@@ -79,6 +84,7 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
      */
     protected static array $openAPIFormats = [
         'job_id' => null,
+        'mode' => null,
         'status' => null,
         'listing_id' => null,
         'account_id' => null,
@@ -89,7 +95,11 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
         'linked' => null,
         'rejected_photos' => null,
         'adjustments' => null,
-        'resumed_property_id' => null
+        'resumed_property_id' => null,
+        'sections' => null,
+        'skipped' => null,
+        'started_at' => 'date-time',
+        'finished_at' => 'date-time'
     ];
 
     /**
@@ -99,6 +109,7 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
      */
     protected static array $openAPINullables = [
         'job_id' => false,
+        'mode' => false,
         'status' => false,
         'listing_id' => false,
         'account_id' => true,
@@ -109,7 +120,11 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
         'linked' => false,
         'rejected_photos' => false,
         'adjustments' => false,
-        'resumed_property_id' => true
+        'resumed_property_id' => true,
+        'sections' => false,
+        'skipped' => false,
+        'started_at' => false,
+        'finished_at' => true
     ];
 
     /**
@@ -189,6 +204,7 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
      */
     protected static array $attributeMap = [
         'job_id' => 'jobId',
+        'mode' => 'mode',
         'status' => 'status',
         'listing_id' => 'listingId',
         'account_id' => 'accountId',
@@ -199,7 +215,11 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
         'linked' => 'linked',
         'rejected_photos' => 'rejectedPhotos',
         'adjustments' => 'adjustments',
-        'resumed_property_id' => 'resumedPropertyId'
+        'resumed_property_id' => 'resumedPropertyId',
+        'sections' => 'sections',
+        'skipped' => 'skipped',
+        'started_at' => 'startedAt',
+        'finished_at' => 'finishedAt'
     ];
 
     /**
@@ -209,6 +229,7 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
      */
     protected static array $setters = [
         'job_id' => 'setJobId',
+        'mode' => 'setMode',
         'status' => 'setStatus',
         'listing_id' => 'setListingId',
         'account_id' => 'setAccountId',
@@ -219,7 +240,11 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
         'linked' => 'setLinked',
         'rejected_photos' => 'setRejectedPhotos',
         'adjustments' => 'setAdjustments',
-        'resumed_property_id' => 'setResumedPropertyId'
+        'resumed_property_id' => 'setResumedPropertyId',
+        'sections' => 'setSections',
+        'skipped' => 'setSkipped',
+        'started_at' => 'setStartedAt',
+        'finished_at' => 'setFinishedAt'
     ];
 
     /**
@@ -229,6 +254,7 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
      */
     protected static array $getters = [
         'job_id' => 'getJobId',
+        'mode' => 'getMode',
         'status' => 'getStatus',
         'listing_id' => 'getListingId',
         'account_id' => 'getAccountId',
@@ -239,7 +265,11 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
         'linked' => 'getLinked',
         'rejected_photos' => 'getRejectedPhotos',
         'adjustments' => 'getAdjustments',
-        'resumed_property_id' => 'getResumedPropertyId'
+        'resumed_property_id' => 'getResumedPropertyId',
+        'sections' => 'getSections',
+        'skipped' => 'getSkipped',
+        'started_at' => 'getStartedAt',
+        'finished_at' => 'getFinishedAt'
     ];
 
     /**
@@ -274,9 +304,24 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
         return self::$openAPIModelName;
     }
 
+    public const MODE_CREATE = 'create';
+    public const MODE_UPDATE = 'update';
     public const STATUS_RUNNING = 'running';
     public const STATUS_DONE = 'done';
     public const STATUS_FAILED = 'failed';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getModeAllowableValues()
+    {
+        return [
+            self::MODE_CREATE,
+            self::MODE_UPDATE,
+        ];
+    }
 
     /**
      * Gets allowable values of the enum
@@ -307,6 +352,7 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
     public function __construct(?array $data = null)
     {
         $this->setIfExists('job_id', $data ?? [], null);
+        $this->setIfExists('mode', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('account_id', $data ?? [], null);
@@ -318,6 +364,10 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
         $this->setIfExists('rejected_photos', $data ?? [], null);
         $this->setIfExists('adjustments', $data ?? [], null);
         $this->setIfExists('resumed_property_id', $data ?? [], null);
+        $this->setIfExists('sections', $data ?? [], null);
+        $this->setIfExists('skipped', $data ?? [], null);
+        $this->setIfExists('started_at', $data ?? [], null);
+        $this->setIfExists('finished_at', $data ?? [], null);
     }
 
     /**
@@ -344,6 +394,15 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
     public function listInvalidProperties(): array
     {
         $invalidProperties = [];
+
+        $allowedValues = self::getModeAllowableValues();
+        if (!is_null($this->container['mode']) && !in_array($this->container['mode'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'mode', must be one of '%s'",
+                $this->container['mode'],
+                implode("', '", $allowedValues)
+            );
+        }
 
         $allowedValues = self::getStatusAllowableValues();
         if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
@@ -379,7 +438,7 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
     /**
      * Sets job_id
      *
-     * @param string|null $job_id Pass to `GET /v1/listings/{id}/publish/vrbo?jobId=`.
+     * @param string|null $job_id Pass to `GET /v1/listings/{id}/publish/vrbo?jobId=`. A creation is `vrbo_<n>_<n>`, a push onto an existing Vrbo listing `vrbo_push_<n>_<n>`.
      *
      * @return $this
      */
@@ -389,6 +448,34 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
             throw new InvalidArgumentException('non-nullable job_id cannot be null');
         }
         $this->container['job_id'] = $job_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets mode
+     *
+     * @return string|null
+     */
+    public function getMode(): ?string
+    {
+        return $this->container['mode'];
+    }
+
+    /**
+     * Sets mode
+     *
+     * @param string|null $mode `create`: the listing is being created on Vrbo. `update`: it was already on Vrbo and its content is being pushed onto that listing.
+     *
+     * @return $this
+     */
+    public function setMode(?string $mode): static
+    {
+        if (is_null($mode)) {
+            throw new InvalidArgumentException('non-nullable mode cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['mode'] = $mode;
 
         return $this;
     }
@@ -722,6 +809,121 @@ class GetVrboPublishJob200ResponseJob implements ModelInterface, ArrayAccess, Js
             }
         }
         $this->container['resumed_property_id'] = $resumed_property_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets sections
+     *
+     * @return \Repull\Model\GetVrboPublishJob200ResponseJobSectionsInner[]|null
+     */
+    public function getSections(): ?array
+    {
+        return $this->container['sections'];
+    }
+
+    /**
+     * Sets sections
+     *
+     * @param \Repull\Model\GetVrboPublishJob200ResponseJobSectionsInner[]|null $sections Update only: each section pushed, in order, with what was sent, Vrbo's refusals and what Vrbo has stored after the write.
+     *
+     * @return $this
+     */
+    public function setSections(?array $sections): static
+    {
+        if (is_null($sections)) {
+            throw new InvalidArgumentException('non-nullable sections cannot be null');
+        }
+        $this->container['sections'] = $sections;
+
+        return $this;
+    }
+
+    /**
+     * Gets skipped
+     *
+     * @return \Repull\Model\GetVrboPublishJob200ResponseJobSkippedInner[]|null
+     */
+    public function getSkipped(): ?array
+    {
+        return $this->container['skipped'];
+    }
+
+    /**
+     * Sets skipped
+     *
+     * @param \Repull\Model\GetVrboPublishJob200ResponseJobSkippedInner[]|null $skipped Update only: sections the push leaves as they are on Vrbo, and why (rooms, photos, registration, or no value in the listing content).
+     *
+     * @return $this
+     */
+    public function setSkipped(?array $skipped): static
+    {
+        if (is_null($skipped)) {
+            throw new InvalidArgumentException('non-nullable skipped cannot be null');
+        }
+        $this->container['skipped'] = $skipped;
+
+        return $this;
+    }
+
+    /**
+     * Gets started_at
+     *
+     * @return \DateTime|null
+     */
+    public function getStartedAt(): ?\DateTime
+    {
+        return $this->container['started_at'];
+    }
+
+    /**
+     * Sets started_at
+     *
+     * @param \DateTime|null $started_at Update only.
+     *
+     * @return $this
+     */
+    public function setStartedAt(?\DateTime $started_at): static
+    {
+        if (is_null($started_at)) {
+            throw new InvalidArgumentException('non-nullable started_at cannot be null');
+        }
+        $this->container['started_at'] = $started_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets finished_at
+     *
+     * @return \DateTime|null
+     */
+    public function getFinishedAt(): ?\DateTime
+    {
+        return $this->container['finished_at'];
+    }
+
+    /**
+     * Sets finished_at
+     *
+     * @param \DateTime|null $finished_at Update only.
+     *
+     * @return $this
+     */
+    public function setFinishedAt(?\DateTime $finished_at): static
+    {
+        if (is_null($finished_at)) {
+            array_push($this->openAPINullablesSetToNull, 'finished_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('finished_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['finished_at'] = $finished_at;
 
         return $this;
     }
