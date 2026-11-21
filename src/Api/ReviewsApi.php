@@ -1476,7 +1476,7 @@ class ReviewsApi
     /**
      * Operation submitGuestReview
      *
-     * Review a guest (publishes, final)
+     * Review a guest
      *
      * @param  int $id The review &#x60;id&#x60; from &#x60;GET /v1/reviews&#x60;. (required)
      * @param  \Repull\Model\AirbnbHostReviewSubmit $airbnb_host_review_submit airbnb_host_review_submit (required)
@@ -1499,7 +1499,7 @@ class ReviewsApi
     /**
      * Operation submitGuestReviewWithHttpInfo
      *
-     * Review a guest (publishes, final)
+     * Review a guest
      *
      * @param  int $id The review &#x60;id&#x60; from &#x60;GET /v1/reviews&#x60;. (required)
      * @param  \Repull\Model\AirbnbHostReviewSubmit $airbnb_host_review_submit (required)
@@ -1684,7 +1684,7 @@ class ReviewsApi
     /**
      * Operation submitGuestReviewAsync
      *
-     * Review a guest (publishes, final)
+     * Review a guest
      *
      * @param  int $id The review &#x60;id&#x60; from &#x60;GET /v1/reviews&#x60;. (required)
      * @param  \Repull\Model\AirbnbHostReviewSubmit $airbnb_host_review_submit (required)
@@ -1710,7 +1710,7 @@ class ReviewsApi
     /**
      * Operation submitGuestReviewAsyncWithHttpInfo
      *
-     * Review a guest (publishes, final)
+     * Review a guest
      *
      * @param  int $id The review &#x60;id&#x60; from &#x60;GET /v1/reviews&#x60;. (required)
      * @param  \Repull\Model\AirbnbHostReviewSubmit $airbnb_host_review_submit (required)

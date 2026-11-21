@@ -60,7 +60,9 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPITypes = [
         'id' => 'string',
         'external_review_id' => 'string',
-        'submitted' => 'bool'
+        'submitted' => 'bool',
+        'platform' => 'string',
+        'rating' => 'array<string,mixed>'
     ];
 
     /**
@@ -71,7 +73,9 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPIFormats = [
         'id' => null,
         'external_review_id' => null,
-        'submitted' => null
+        'submitted' => null,
+        'platform' => null,
+        'rating' => null
     ];
 
     /**
@@ -82,7 +86,9 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $openAPINullables = [
         'id' => false,
         'external_review_id' => false,
-        'submitted' => false
+        'submitted' => false,
+        'platform' => false,
+        'rating' => false
     ];
 
     /**
@@ -163,7 +169,9 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $attributeMap = [
         'id' => 'id',
         'external_review_id' => 'externalReviewId',
-        'submitted' => 'submitted'
+        'submitted' => 'submitted',
+        'platform' => 'platform',
+        'rating' => 'rating'
     ];
 
     /**
@@ -174,7 +182,9 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $setters = [
         'id' => 'setId',
         'external_review_id' => 'setExternalReviewId',
-        'submitted' => 'setSubmitted'
+        'submitted' => 'setSubmitted',
+        'platform' => 'setPlatform',
+        'rating' => 'setRating'
     ];
 
     /**
@@ -185,7 +195,9 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
     protected static array $getters = [
         'id' => 'getId',
         'external_review_id' => 'getExternalReviewId',
-        'submitted' => 'getSubmitted'
+        'submitted' => 'getSubmitted',
+        'platform' => 'getPlatform',
+        'rating' => 'getRating'
     ];
 
     /**
@@ -238,6 +250,8 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('external_review_id', $data ?? [], null);
         $this->setIfExists('submitted', $data ?? [], null);
+        $this->setIfExists('platform', $data ?? [], null);
+        $this->setIfExists('rating', $data ?? [], null);
     }
 
     /**
@@ -354,6 +368,60 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
             throw new InvalidArgumentException('non-nullable submitted cannot be null');
         }
         $this->container['submitted'] = $submitted;
+
+        return $this;
+    }
+
+    /**
+     * Gets platform
+     *
+     * @return string|null
+     */
+    public function getPlatform(): ?string
+    {
+        return $this->container['platform'];
+    }
+
+    /**
+     * Sets platform
+     *
+     * @param string|null $platform `vrbo` for a Vrbo rating.
+     *
+     * @return $this
+     */
+    public function setPlatform(?string $platform): static
+    {
+        if (is_null($platform)) {
+            throw new InvalidArgumentException('non-nullable platform cannot be null');
+        }
+        $this->container['platform'] = $platform;
+
+        return $this;
+    }
+
+    /**
+     * Gets rating
+     *
+     * @return array<string,mixed>|null
+     */
+    public function getRating(): ?array
+    {
+        return $this->container['rating'];
+    }
+
+    /**
+     * Sets rating
+     *
+     * @param array<string,mixed>|null $rating Vrbo: the rating as sent to Vrbo.
+     *
+     * @return $this
+     */
+    public function setRating(?array $rating): static
+    {
+        if (is_null($rating)) {
+            throw new InvalidArgumentException('non-nullable rating cannot be null');
+        }
+        $this->container['rating'] = $rating;
 
         return $this;
     }
