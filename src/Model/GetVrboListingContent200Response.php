@@ -58,11 +58,9 @@ class GetVrboListingContent200Response implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
-        'listing_id' => 'string',
-        'vrbo_listing_number' => 'string',
-        'property_id' => 'string',
-        'listing' => '\Repull\Model\GetVrboListingContent200ResponseListing',
-        'sections' => '\Repull\Model\GetVrboListingContent200ResponseSections'
+        'sections' => '\Repull\Model\GetVrboListingContent200ResponseSections',
+        'data_freshness' => '\Repull\Model\GetVrboListingAdditionalInfo200ResponseDataFreshness',
+        'vrbo_listing_number' => 'string'
     ];
 
     /**
@@ -71,11 +69,9 @@ class GetVrboListingContent200Response implements ModelInterface, ArrayAccess, J
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
-        'listing_id' => null,
-        'vrbo_listing_number' => null,
-        'property_id' => null,
-        'listing' => null,
-        'sections' => null
+        'sections' => null,
+        'data_freshness' => null,
+        'vrbo_listing_number' => null
     ];
 
     /**
@@ -84,11 +80,9 @@ class GetVrboListingContent200Response implements ModelInterface, ArrayAccess, J
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'listing_id' => false,
-        'vrbo_listing_number' => false,
-        'property_id' => false,
-        'listing' => true,
-        'sections' => false
+        'sections' => false,
+        'data_freshness' => false,
+        'vrbo_listing_number' => false
     ];
 
     /**
@@ -167,11 +161,9 @@ class GetVrboListingContent200Response implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'listing_id' => 'listingId',
-        'vrbo_listing_number' => 'vrboListingNumber',
-        'property_id' => 'propertyId',
-        'listing' => 'listing',
-        'sections' => 'sections'
+        'sections' => 'sections',
+        'data_freshness' => 'dataFreshness',
+        'vrbo_listing_number' => 'vrboListingNumber'
     ];
 
     /**
@@ -180,11 +172,9 @@ class GetVrboListingContent200Response implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $setters = [
-        'listing_id' => 'setListingId',
-        'vrbo_listing_number' => 'setVrboListingNumber',
-        'property_id' => 'setPropertyId',
-        'listing' => 'setListing',
-        'sections' => 'setSections'
+        'sections' => 'setSections',
+        'data_freshness' => 'setDataFreshness',
+        'vrbo_listing_number' => 'setVrboListingNumber'
     ];
 
     /**
@@ -193,11 +183,9 @@ class GetVrboListingContent200Response implements ModelInterface, ArrayAccess, J
      * @var array<string, string>
      */
     protected static array $getters = [
-        'listing_id' => 'getListingId',
-        'vrbo_listing_number' => 'getVrboListingNumber',
-        'property_id' => 'getPropertyId',
-        'listing' => 'getListing',
-        'sections' => 'getSections'
+        'sections' => 'getSections',
+        'data_freshness' => 'getDataFreshness',
+        'vrbo_listing_number' => 'getVrboListingNumber'
     ];
 
     /**
@@ -247,11 +235,9 @@ class GetVrboListingContent200Response implements ModelInterface, ArrayAccess, J
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('listing_id', $data ?? [], null);
-        $this->setIfExists('vrbo_listing_number', $data ?? [], null);
-        $this->setIfExists('property_id', $data ?? [], null);
-        $this->setIfExists('listing', $data ?? [], null);
         $this->setIfExists('sections', $data ?? [], null);
+        $this->setIfExists('data_freshness', $data ?? [], null);
+        $this->setIfExists('vrbo_listing_number', $data ?? [], null);
     }
 
     /**
@@ -279,17 +265,14 @@ class GetVrboListingContent200Response implements ModelInterface, ArrayAccess, J
     {
         $invalidProperties = [];
 
-        if ($this->container['listing_id'] === null) {
-            $invalidProperties[] = "'listing_id' can't be null";
+        if ($this->container['sections'] === null) {
+            $invalidProperties[] = "'sections' can't be null";
+        }
+        if ($this->container['data_freshness'] === null) {
+            $invalidProperties[] = "'data_freshness' can't be null";
         }
         if ($this->container['vrbo_listing_number'] === null) {
             $invalidProperties[] = "'vrbo_listing_number' can't be null";
-        }
-        if ($this->container['property_id'] === null) {
-            $invalidProperties[] = "'property_id' can't be null";
-        }
-        if ($this->container['sections'] === null) {
-            $invalidProperties[] = "'sections' can't be null";
         }
         return $invalidProperties;
     }
@@ -304,28 +287,55 @@ class GetVrboListingContent200Response implements ModelInterface, ArrayAccess, J
 
 
     /**
-     * Gets listing_id
+     * Gets sections
      *
-     * @return string
+     * @return \Repull\Model\GetVrboListingContent200ResponseSections
      */
-    public function getListingId(): string
+    public function getSections(): \Repull\Model\GetVrboListingContent200ResponseSections
     {
-        return $this->container['listing_id'];
+        return $this->container['sections'];
     }
 
     /**
-     * Sets listing_id
+     * Sets sections
      *
-     * @param string $listing_id listing_id
+     * @param \Repull\Model\GetVrboListingContent200ResponseSections $sections sections
      *
      * @return $this
      */
-    public function setListingId(string $listing_id): static
+    public function setSections(\Repull\Model\GetVrboListingContent200ResponseSections $sections): static
     {
-        if (is_null($listing_id)) {
-            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
+        if (is_null($sections)) {
+            throw new InvalidArgumentException('non-nullable sections cannot be null');
         }
-        $this->container['listing_id'] = $listing_id;
+        $this->container['sections'] = $sections;
+
+        return $this;
+    }
+
+    /**
+     * Gets data_freshness
+     *
+     * @return \Repull\Model\GetVrboListingAdditionalInfo200ResponseDataFreshness
+     */
+    public function getDataFreshness(): \Repull\Model\GetVrboListingAdditionalInfo200ResponseDataFreshness
+    {
+        return $this->container['data_freshness'];
+    }
+
+    /**
+     * Sets data_freshness
+     *
+     * @param \Repull\Model\GetVrboListingAdditionalInfo200ResponseDataFreshness $data_freshness data_freshness
+     *
+     * @return $this
+     */
+    public function setDataFreshness(\Repull\Model\GetVrboListingAdditionalInfo200ResponseDataFreshness $data_freshness): static
+    {
+        if (is_null($data_freshness)) {
+            throw new InvalidArgumentException('non-nullable data_freshness cannot be null');
+        }
+        $this->container['data_freshness'] = $data_freshness;
 
         return $this;
     }
@@ -353,94 +363,6 @@ class GetVrboListingContent200Response implements ModelInterface, ArrayAccess, J
             throw new InvalidArgumentException('non-nullable vrbo_listing_number cannot be null');
         }
         $this->container['vrbo_listing_number'] = $vrbo_listing_number;
-
-        return $this;
-    }
-
-    /**
-     * Gets property_id
-     *
-     * @return string
-     */
-    public function getPropertyId(): string
-    {
-        return $this->container['property_id'];
-    }
-
-    /**
-     * Sets property_id
-     *
-     * @param string $property_id property_id
-     *
-     * @return $this
-     */
-    public function setPropertyId(string $property_id): static
-    {
-        if (is_null($property_id)) {
-            throw new InvalidArgumentException('non-nullable property_id cannot be null');
-        }
-        $this->container['property_id'] = $property_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets listing
-     *
-     * @return \Repull\Model\GetVrboListingContent200ResponseListing|null
-     */
-    public function getListing(): ?\Repull\Model\GetVrboListingContent200ResponseListing
-    {
-        return $this->container['listing'];
-    }
-
-    /**
-     * Sets listing
-     *
-     * @param \Repull\Model\GetVrboListingContent200ResponseListing|null $listing listing
-     *
-     * @return $this
-     */
-    public function setListing(?\Repull\Model\GetVrboListingContent200ResponseListing $listing): static
-    {
-        if (is_null($listing)) {
-            array_push($this->openAPINullablesSetToNull, 'listing');
-        } else {
-            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
-            $index = array_search('listing', $nullablesSetToNull);
-            if ($index !== FALSE) {
-                unset($nullablesSetToNull[$index]);
-                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
-            }
-        }
-        $this->container['listing'] = $listing;
-
-        return $this;
-    }
-
-    /**
-     * Gets sections
-     *
-     * @return \Repull\Model\GetVrboListingContent200ResponseSections
-     */
-    public function getSections(): \Repull\Model\GetVrboListingContent200ResponseSections
-    {
-        return $this->container['sections'];
-    }
-
-    /**
-     * Sets sections
-     *
-     * @param \Repull\Model\GetVrboListingContent200ResponseSections $sections sections
-     *
-     * @return $this
-     */
-    public function setSections(\Repull\Model\GetVrboListingContent200ResponseSections $sections): static
-    {
-        if (is_null($sections)) {
-            throw new InvalidArgumentException('non-nullable sections cannot be null');
-        }
-        $this->container['sections'] = $sections;
 
         return $this;
     }

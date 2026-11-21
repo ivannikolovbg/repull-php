@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * GetVrboListingRooms200ResponseData Class Doc Comment
  *
- * @description The section as Vrbo has it now.
+ * @description The section as Vrbo has it.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech

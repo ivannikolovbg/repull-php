@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * GetVrboListingRates200ResponseData Class Doc Comment
  *
- * @description The section as Vrbo has it now.
+ * @description The section as Vrbo has it.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -62,7 +62,7 @@ class GetVrboListingRates200ResponseData implements ModelInterface, ArrayAccess,
         'start' => 'string',
         'end' => 'string',
         'currency' => 'string',
-        'days' => '\Repull\Model\GetVrboListingContent200ResponseSectionsRatesDaysInner[]'
+        'days' => '\Repull\Model\GetVrboListingRates200ResponseDataDaysInner[]'
     ];
 
     /**
@@ -376,7 +376,7 @@ class GetVrboListingRates200ResponseData implements ModelInterface, ArrayAccess,
     /**
      * Gets days
      *
-     * @return \Repull\Model\GetVrboListingContent200ResponseSectionsRatesDaysInner[]|null
+     * @return \Repull\Model\GetVrboListingRates200ResponseDataDaysInner[]|null
      */
     public function getDays(): ?array
     {
@@ -386,7 +386,7 @@ class GetVrboListingRates200ResponseData implements ModelInterface, ArrayAccess,
     /**
      * Sets days
      *
-     * @param \Repull\Model\GetVrboListingContent200ResponseSectionsRatesDaysInner[]|null $days days
+     * @param \Repull\Model\GetVrboListingRates200ResponseDataDaysInner[]|null $days days
      *
      * @return $this
      */

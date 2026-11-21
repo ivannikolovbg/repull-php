@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * UpdateVrboListingStory200ResponseData Class Doc Comment
  *
- * @description What Vrbo has stored for the section, read back after the write.
+ * @description What Vrbo has after the write, read back from Vrbo.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
