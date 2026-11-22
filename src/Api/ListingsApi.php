@@ -128,6 +128,9 @@ class ListingsApi
         'pullListingFromAirbnb' => [
             'application/json',
         ],
+        'pullListingFromVrbo' => [
+            'application/json',
+        ],
         'setListingMarkup' => [
             'application/json',
         ],
@@ -6595,6 +6598,448 @@ class ListingsApi
                 $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($listing_pull_airbnb_request));
             } else {
                 $httpBody = $listing_pull_airbnb_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation pullListingFromVrbo
+     *
+     * Refresh a listing from Vrbo
+     *
+     * @param  string $id Repull listing id (numeric string) of a listing linked to Vrbo. (required)
+     * @param  \Repull\Model\PullListingFromVrboRequest|null $pull_listing_from_vrbo_request pull_listing_from_vrbo_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pullListingFromVrbo'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\PullListingFromVrbo200Response|\Repull\Model\Error
+     */
+    public function pullListingFromVrbo(
+        string $id,
+        ?\Repull\Model\PullListingFromVrboRequest $pull_listing_from_vrbo_request = null,
+        string $contentType = self::contentTypes['pullListingFromVrbo'][0]
+    ): \Repull\Model\PullListingFromVrbo200Response|\Repull\Model\Error
+    {
+        list($response) = $this->pullListingFromVrboWithHttpInfo($id, $pull_listing_from_vrbo_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation pullListingFromVrboWithHttpInfo
+     *
+     * Refresh a listing from Vrbo
+     *
+     * @param  string $id Repull listing id (numeric string) of a listing linked to Vrbo. (required)
+     * @param  \Repull\Model\PullListingFromVrboRequest|null $pull_listing_from_vrbo_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pullListingFromVrbo'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\PullListingFromVrbo200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function pullListingFromVrboWithHttpInfo(
+        string $id,
+        ?\Repull\Model\PullListingFromVrboRequest $pull_listing_from_vrbo_request = null,
+        string $contentType = self::contentTypes['pullListingFromVrbo'][0]
+    ): array
+    {
+        $request = $this->pullListingFromVrboRequest($id, $pull_listing_from_vrbo_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\PullListingFromVrbo200Response',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 403:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 429:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 502:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 503:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 504:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\PullListingFromVrbo200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\PullListingFromVrbo200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 403:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 502:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 503:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 504:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation pullListingFromVrboAsync
+     *
+     * Refresh a listing from Vrbo
+     *
+     * @param  string $id Repull listing id (numeric string) of a listing linked to Vrbo. (required)
+     * @param  \Repull\Model\PullListingFromVrboRequest|null $pull_listing_from_vrbo_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pullListingFromVrbo'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function pullListingFromVrboAsync(
+        string $id,
+        ?\Repull\Model\PullListingFromVrboRequest $pull_listing_from_vrbo_request = null,
+        string $contentType = self::contentTypes['pullListingFromVrbo'][0]
+    ): PromiseInterface
+    {
+        return $this->pullListingFromVrboAsyncWithHttpInfo($id, $pull_listing_from_vrbo_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation pullListingFromVrboAsyncWithHttpInfo
+     *
+     * Refresh a listing from Vrbo
+     *
+     * @param  string $id Repull listing id (numeric string) of a listing linked to Vrbo. (required)
+     * @param  \Repull\Model\PullListingFromVrboRequest|null $pull_listing_from_vrbo_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pullListingFromVrbo'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function pullListingFromVrboAsyncWithHttpInfo(
+        string $id,
+        ?\Repull\Model\PullListingFromVrboRequest $pull_listing_from_vrbo_request = null,
+        string $contentType = self::contentTypes['pullListingFromVrbo'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\PullListingFromVrbo200Response';
+        $request = $this->pullListingFromVrboRequest($id, $pull_listing_from_vrbo_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'pullListingFromVrbo'
+     *
+     * @param  string $id Repull listing id (numeric string) of a listing linked to Vrbo. (required)
+     * @param  \Repull\Model\PullListingFromVrboRequest|null $pull_listing_from_vrbo_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['pullListingFromVrbo'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function pullListingFromVrboRequest(
+        string $id,
+        ?\Repull\Model\PullListingFromVrboRequest $pull_listing_from_vrbo_request = null,
+        string $contentType = self::contentTypes['pullListingFromVrbo'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'id' is set
+        if ($id === null || (is_array($id) && count($id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $id when calling pullListingFromVrbo'
+            );
+        }
+
+
+
+        $resourcePath = '/v1/listings/{id}/pull/vrbo';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($id !== null) {
+            $resourcePath = str_replace(
+                '{id}',
+                ObjectSerializer::toPathValue($id),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($pull_listing_from_vrbo_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($pull_listing_from_vrbo_request));
+            } else {
+                $httpBody = $pull_listing_from_vrbo_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {

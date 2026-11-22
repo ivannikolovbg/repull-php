@@ -307,7 +307,7 @@ class MapVrboListingRequest implements ModelInterface, ArrayAccess, JsonSerializ
     /**
      * Sets vrbo_listing_number
      *
-     * @param string $vrbo_listing_number The number in the Vrbo URL (vrbo.com/5506023).
+     * @param string $vrbo_listing_number The number in the Vrbo URL (vrbo.com/4512345).
      *
      * @return $this
      */
