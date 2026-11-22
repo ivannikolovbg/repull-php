@@ -246,6 +246,7 @@ class VrboLogin200Response implements ModelInterface, ArrayAccess, JsonSerializa
 
     public const STATUS_CONNECTED = 'connected';
     public const STATUS_OTP_REQUIRED = 'otp_required';
+    public const STATUS_PHONE_REQUIRED = 'phone_required';
     public const STATUS_PENDING = 'pending';
     public const STATUS_FAILED = 'failed';
 
@@ -259,6 +260,7 @@ class VrboLogin200Response implements ModelInterface, ArrayAccess, JsonSerializa
         return [
             self::STATUS_CONNECTED,
             self::STATUS_OTP_REQUIRED,
+            self::STATUS_PHONE_REQUIRED,
             self::STATUS_PENDING,
             self::STATUS_FAILED,
         ];

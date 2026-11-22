@@ -64,6 +64,7 @@ class VrboLoginRequest implements ModelInterface, ArrayAccess, JsonSerializable
         'password' => 'string',
         'account_id' => 'int',
         'code' => 'string',
+        'phone' => 'string',
         'access_type' => 'string'
     ];
 
@@ -79,6 +80,7 @@ class VrboLoginRequest implements ModelInterface, ArrayAccess, JsonSerializable
         'password' => null,
         'account_id' => null,
         'code' => null,
+        'phone' => null,
         'access_type' => null
     ];
 
@@ -94,6 +96,7 @@ class VrboLoginRequest implements ModelInterface, ArrayAccess, JsonSerializable
         'password' => false,
         'account_id' => false,
         'code' => false,
+        'phone' => false,
         'access_type' => false
     ];
 
@@ -179,6 +182,7 @@ class VrboLoginRequest implements ModelInterface, ArrayAccess, JsonSerializable
         'password' => 'password',
         'account_id' => 'accountId',
         'code' => 'code',
+        'phone' => 'phone',
         'access_type' => 'accessType'
     ];
 
@@ -194,6 +198,7 @@ class VrboLoginRequest implements ModelInterface, ArrayAccess, JsonSerializable
         'password' => 'setPassword',
         'account_id' => 'setAccountId',
         'code' => 'setCode',
+        'phone' => 'setPhone',
         'access_type' => 'setAccessType'
     ];
 
@@ -209,6 +214,7 @@ class VrboLoginRequest implements ModelInterface, ArrayAccess, JsonSerializable
         'password' => 'getPassword',
         'account_id' => 'getAccountId',
         'code' => 'getCode',
+        'phone' => 'getPhone',
         'access_type' => 'getAccessType'
     ];
 
@@ -247,6 +253,7 @@ class VrboLoginRequest implements ModelInterface, ArrayAccess, JsonSerializable
     public const ACTION_LOGIN = 'login';
     public const ACTION_OTP = 'otp';
     public const ACTION_RESEND = 'resend';
+    public const ACTION_PHONE = 'phone';
     public const ACCESS_TYPE_FULL_ACCESS = 'full_access';
     public const ACCESS_TYPE_MESSAGING = 'messaging';
 
@@ -261,6 +268,7 @@ class VrboLoginRequest implements ModelInterface, ArrayAccess, JsonSerializable
             self::ACTION_LOGIN,
             self::ACTION_OTP,
             self::ACTION_RESEND,
+            self::ACTION_PHONE,
         ];
     }
 
@@ -297,6 +305,7 @@ class VrboLoginRequest implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('password', $data ?? [], null);
         $this->setIfExists('account_id', $data ?? [], null);
         $this->setIfExists('code', $data ?? [], null);
+        $this->setIfExists('phone', $data ?? [], null);
         $this->setIfExists('access_type', $data ?? [], null);
     }
 
@@ -520,6 +529,33 @@ class VrboLoginRequest implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable code cannot be null');
         }
         $this->container['code'] = $code;
+
+        return $this;
+    }
+
+    /**
+     * Gets phone
+     *
+     * @return string|null
+     */
+    public function getPhone(): ?string
+    {
+        return $this->container['phone'];
+    }
+
+    /**
+     * Sets phone
+     *
+     * @param string|null $phone `action: phone` — the contact phone with its country code, e.g. `+373 69 123 456`.
+     *
+     * @return $this
+     */
+    public function setPhone(?string $phone): static
+    {
+        if (is_null($phone)) {
+            throw new InvalidArgumentException('non-nullable phone cannot be null');
+        }
+        $this->container['phone'] = $phone;
 
         return $this;
     }
