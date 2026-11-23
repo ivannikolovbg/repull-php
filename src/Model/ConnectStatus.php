@@ -666,7 +666,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets accounts
      *
-     * @param \Repull\Model\ConnectStatusAccountsInner[]|null $accounts One entry per connected account, for every provider: Airbnb, every host account connected (including ones since disconnected), each with its own `accessType`; Booking.com, every hotel (`externalAccountId` is the hotel id); Vrbo, every sign-in; Booking.com Extranet, every hotel login; a PMS, its one account. Pass `externalAccountId` as `accountId` to `DELETE /v1/connect/{provider}` to disconnect one. The top-level fields describe one record and stay for existing integrations; show `accounts[]` to list what is connected. Vrbo sign-ins also carry `accessType` and `import` (a `VrboImportStatus`), with a top-level `dataFreshness` on `GET /v1/connect/vrbo-login`.
+     * @param \Repull\Model\ConnectStatusAccountsInner[]|null $accounts One entry per connected account, for every provider: Airbnb, every host account connected (including ones since disconnected), each with its own `accessType`; Booking.com, every hotel (`externalAccountId` is the hotel id); Vrbo, every sign-in; Booking.com Extranet, every hotel login; a PMS, its one account; PriceLabs (an app), every key, each a connection with its `health` (see `Connection`). Pass `externalAccountId` as `accountId` to `DELETE /v1/connect/{provider}` to disconnect one. The top-level fields describe one record and stay for existing integrations; show `accounts[]` to list what is connected. Vrbo sign-ins also carry `accessType` and `import` (a `VrboImportStatus`), with a top-level `dataFreshness` on `GET /v1/connect/vrbo-login`.
      *
      * @return $this
      */

@@ -265,11 +265,13 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
 
     public const CATEGORY_OTA = 'ota';
     public const CATEGORY_PMS = 'pms';
+    public const CATEGORY_APP = 'app';
     public const CONNECT_PATTERN_OAUTH = 'oauth';
     public const CONNECT_PATTERN_CREDENTIALS = 'credentials';
     public const CONNECT_PATTERN_ACTIVATION = 'activation';
     public const CONNECT_PATTERN_CLAIM = 'claim';
     public const CONNECT_PATTERN_EXTRANET = 'extranet';
+    public const CONNECT_PATTERN_KEY = 'key';
     public const STATUS_LIVE = 'live';
     public const STATUS_BETA = 'beta';
     public const STATUS_COMING_SOON = 'coming-soon';
@@ -285,6 +287,7 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
         return [
             self::CATEGORY_OTA,
             self::CATEGORY_PMS,
+            self::CATEGORY_APP,
         ];
     }
 
@@ -301,6 +304,7 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
             self::CONNECT_PATTERN_ACTIVATION,
             self::CONNECT_PATTERN_CLAIM,
             self::CONNECT_PATTERN_EXTRANET,
+            self::CONNECT_PATTERN_KEY,
         ];
     }
 
@@ -500,7 +504,7 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets category
      *
-     * @param string $category Channel category — OTAs are listing marketplaces; PMSes are property management systems.
+     * @param string $category Category — OTAs are listing marketplaces; PMSes are property management systems; apps are tools that work on the workspace's data (PriceLabs).
      *
      * @return $this
      */
@@ -528,7 +532,7 @@ class ConnectProvider implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets connect_pattern
      *
-     * @param string $connect_pattern How the host is connected. `oauth`: provider-side consent screen. `credentials`: hosted form collects API keys. `activation`: push-only handshake. `claim`: connectivity-provider designation in the channel's Extranet (Booking.com). `extranet`: the host signs in with their Booking.com Extranet user.
+     * @param string $connect_pattern How the host is connected. `oauth`: provider-side consent screen. `credentials`: hosted form collects API keys. `activation`: push-only handshake. `claim`: connectivity-provider designation in the channel's Extranet (Booking.com). `extranet`: the host signs in with their Booking.com Extranet user. `key`: an app — the hosted page shows a key the host pastes into the app, and the session completes on the app's first call.
      *
      * @return $this
      */

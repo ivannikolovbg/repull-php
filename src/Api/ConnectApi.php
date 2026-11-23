@@ -83,6 +83,9 @@ class ConnectApi
         'createConnection' => [
             'application/json',
         ],
+        'createPriceLabsKey' => [
+            'application/json',
+        ],
         'deleteConnection' => [
             'application/json',
         ],
@@ -96,6 +99,9 @@ class ConnectApi
             'application/json',
         ],
         'getConnectWritePolicy' => [
+            'application/json',
+        ],
+        'getPriceLabsSessionStatus' => [
             'application/json',
         ],
         'getVrboConnectImport' => [
@@ -1061,12 +1067,360 @@ class ConnectApi
     }
 
     /**
+     * Operation createPriceLabsKey
+     *
+     * Create a PriceLabs key (headless)
+     *
+     * @param  \Repull\Model\CreatePriceLabsKeyRequest|null $create_price_labs_key_request create_price_labs_key_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createPriceLabsKey'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\CreatePriceLabsKey201Response|\Repull\Model\Error
+     */
+    public function createPriceLabsKey(
+        ?\Repull\Model\CreatePriceLabsKeyRequest $create_price_labs_key_request = null,
+        string $contentType = self::contentTypes['createPriceLabsKey'][0]
+    ): \Repull\Model\CreatePriceLabsKey201Response|\Repull\Model\Error
+    {
+        list($response) = $this->createPriceLabsKeyWithHttpInfo($create_price_labs_key_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation createPriceLabsKeyWithHttpInfo
+     *
+     * Create a PriceLabs key (headless)
+     *
+     * @param  \Repull\Model\CreatePriceLabsKeyRequest|null $create_price_labs_key_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createPriceLabsKey'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\CreatePriceLabsKey201Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function createPriceLabsKeyWithHttpInfo(
+        ?\Repull\Model\CreatePriceLabsKeyRequest $create_price_labs_key_request = null,
+        string $contentType = self::contentTypes['createPriceLabsKey'][0]
+    ): array
+    {
+        $request = $this->createPriceLabsKeyRequest($create_price_labs_key_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 201:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\CreatePriceLabsKey201Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 401:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 422:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 500:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\CreatePriceLabsKey201Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 201:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\CreatePriceLabsKey201Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 401:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation createPriceLabsKeyAsync
+     *
+     * Create a PriceLabs key (headless)
+     *
+     * @param  \Repull\Model\CreatePriceLabsKeyRequest|null $create_price_labs_key_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createPriceLabsKey'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function createPriceLabsKeyAsync(
+        ?\Repull\Model\CreatePriceLabsKeyRequest $create_price_labs_key_request = null,
+        string $contentType = self::contentTypes['createPriceLabsKey'][0]
+    ): PromiseInterface
+    {
+        return $this->createPriceLabsKeyAsyncWithHttpInfo($create_price_labs_key_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation createPriceLabsKeyAsyncWithHttpInfo
+     *
+     * Create a PriceLabs key (headless)
+     *
+     * @param  \Repull\Model\CreatePriceLabsKeyRequest|null $create_price_labs_key_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createPriceLabsKey'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function createPriceLabsKeyAsyncWithHttpInfo(
+        ?\Repull\Model\CreatePriceLabsKeyRequest $create_price_labs_key_request = null,
+        string $contentType = self::contentTypes['createPriceLabsKey'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\CreatePriceLabsKey201Response';
+        $request = $this->createPriceLabsKeyRequest($create_price_labs_key_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'createPriceLabsKey'
+     *
+     * @param  \Repull\Model\CreatePriceLabsKeyRequest|null $create_price_labs_key_request (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createPriceLabsKey'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function createPriceLabsKeyRequest(
+        ?\Repull\Model\CreatePriceLabsKeyRequest $create_price_labs_key_request = null,
+        string $contentType = self::contentTypes['createPriceLabsKey'][0]
+    ): Request
+    {
+
+
+
+        $resourcePath = '/v1/connect/pricelabs/key';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($create_price_labs_key_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($create_price_labs_key_request));
+            } else {
+                $httpBody = $create_price_labs_key_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (API Key) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
      * Operation deleteConnection
      *
      * Disconnect provider
      *
      * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
      * @param  string|null $account_id The account to disconnect: the Airbnb host id (&#x60;accounts[].externalAccountId&#x60; on &#x60;GET /v1/connect/airbnb&#x60;) or the Booking.com hotel id. Required when the workspace has more than one connected account for the provider. Not the same as the &#x60;X-Account-Id&#x60; header. (optional)
+     * @param  string|null $id PriceLabs only: the connection to revoke (&#x60;accounts[].id&#x60; on &#x60;GET /v1/connect/pricelabs&#x60;). Required when the workspace has more than one. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteConnection'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -1076,10 +1430,11 @@ class ConnectApi
     public function deleteConnection(
         string $provider,
         ?string $account_id = null,
+        ?string $id = null,
         string $contentType = self::contentTypes['deleteConnection'][0]
     ): \Repull\Model\DeleteConnection200Response|\Repull\Model\Error
     {
-        list($response) = $this->deleteConnectionWithHttpInfo($provider, $account_id, $contentType);
+        list($response) = $this->deleteConnectionWithHttpInfo($provider, $account_id, $id, $contentType);
         return $response;
     }
 
@@ -1090,6 +1445,7 @@ class ConnectApi
      *
      * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
      * @param  string|null $account_id The account to disconnect: the Airbnb host id (&#x60;accounts[].externalAccountId&#x60; on &#x60;GET /v1/connect/airbnb&#x60;) or the Booking.com hotel id. Required when the workspace has more than one connected account for the provider. Not the same as the &#x60;X-Account-Id&#x60; header. (optional)
+     * @param  string|null $id PriceLabs only: the connection to revoke (&#x60;accounts[].id&#x60; on &#x60;GET /v1/connect/pricelabs&#x60;). Required when the workspace has more than one. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteConnection'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -1099,10 +1455,11 @@ class ConnectApi
     public function deleteConnectionWithHttpInfo(
         string $provider,
         ?string $account_id = null,
+        ?string $id = null,
         string $contentType = self::contentTypes['deleteConnection'][0]
     ): array
     {
-        $request = $this->deleteConnectionRequest($provider, $account_id, $contentType);
+        $request = $this->deleteConnectionRequest($provider, $account_id, $id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1233,6 +1590,7 @@ class ConnectApi
      *
      * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
      * @param  string|null $account_id The account to disconnect: the Airbnb host id (&#x60;accounts[].externalAccountId&#x60; on &#x60;GET /v1/connect/airbnb&#x60;) or the Booking.com hotel id. Required when the workspace has more than one connected account for the provider. Not the same as the &#x60;X-Account-Id&#x60; header. (optional)
+     * @param  string|null $id PriceLabs only: the connection to revoke (&#x60;accounts[].id&#x60; on &#x60;GET /v1/connect/pricelabs&#x60;). Required when the workspace has more than one. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteConnection'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1241,10 +1599,11 @@ class ConnectApi
     public function deleteConnectionAsync(
         string $provider,
         ?string $account_id = null,
+        ?string $id = null,
         string $contentType = self::contentTypes['deleteConnection'][0]
     ): PromiseInterface
     {
-        return $this->deleteConnectionAsyncWithHttpInfo($provider, $account_id, $contentType)
+        return $this->deleteConnectionAsyncWithHttpInfo($provider, $account_id, $id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1259,6 +1618,7 @@ class ConnectApi
      *
      * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
      * @param  string|null $account_id The account to disconnect: the Airbnb host id (&#x60;accounts[].externalAccountId&#x60; on &#x60;GET /v1/connect/airbnb&#x60;) or the Booking.com hotel id. Required when the workspace has more than one connected account for the provider. Not the same as the &#x60;X-Account-Id&#x60; header. (optional)
+     * @param  string|null $id PriceLabs only: the connection to revoke (&#x60;accounts[].id&#x60; on &#x60;GET /v1/connect/pricelabs&#x60;). Required when the workspace has more than one. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteConnection'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1267,11 +1627,12 @@ class ConnectApi
     public function deleteConnectionAsyncWithHttpInfo(
         string $provider,
         ?string $account_id = null,
+        ?string $id = null,
         string $contentType = self::contentTypes['deleteConnection'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\DeleteConnection200Response';
-        $request = $this->deleteConnectionRequest($provider, $account_id, $contentType);
+        $request = $this->deleteConnectionRequest($provider, $account_id, $id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1314,6 +1675,7 @@ class ConnectApi
      *
      * @param  string $provider PMS provider slug (e.g., hostaway, guesty, ownerrez) (required)
      * @param  string|null $account_id The account to disconnect: the Airbnb host id (&#x60;accounts[].externalAccountId&#x60; on &#x60;GET /v1/connect/airbnb&#x60;) or the Booking.com hotel id. Required when the workspace has more than one connected account for the provider. Not the same as the &#x60;X-Account-Id&#x60; header. (optional)
+     * @param  string|null $id PriceLabs only: the connection to revoke (&#x60;accounts[].id&#x60; on &#x60;GET /v1/connect/pricelabs&#x60;). Required when the workspace has more than one. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['deleteConnection'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -1322,6 +1684,7 @@ class ConnectApi
     public function deleteConnectionRequest(
         string $provider,
         ?string $account_id = null,
+        ?string $id = null,
         string $contentType = self::contentTypes['deleteConnection'][0]
     ): Request
     {
@@ -1332,6 +1695,7 @@ class ConnectApi
                 'Missing the required parameter $provider when calling deleteConnection'
             );
         }
+
 
 
 
@@ -1346,6 +1710,16 @@ class ConnectApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $account_id,
             'accountId', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            null // openApiFormat
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $id,
+            'id', // param base name
             'string', // openApiType
             'form', // style
             true, // explode
@@ -2583,6 +2957,343 @@ class ConnectApi
         // this endpoint requires Bearer (API Key) authentication (access token)
         if (!empty($this->config->getAccessToken())) {
             $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation getPriceLabsSessionStatus
+     *
+     * PriceLabs session status
+     *
+     * @param  string $session_id session_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPriceLabsSessionStatus'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return \Repull\Model\GetPriceLabsSessionStatus200Response|\Repull\Model\Error
+     */
+    public function getPriceLabsSessionStatus(
+        string $session_id,
+        string $contentType = self::contentTypes['getPriceLabsSessionStatus'][0]
+    ): \Repull\Model\GetPriceLabsSessionStatus200Response|\Repull\Model\Error
+    {
+        list($response) = $this->getPriceLabsSessionStatusWithHttpInfo($session_id, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation getPriceLabsSessionStatusWithHttpInfo
+     *
+     * PriceLabs session status
+     *
+     * @param  string $session_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPriceLabsSessionStatus'] to see the possible values for this operation
+     *
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
+     * @return array of \Repull\Model\GetPriceLabsSessionStatus200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function getPriceLabsSessionStatusWithHttpInfo(
+        string $session_id,
+        string $contentType = self::contentTypes['getPriceLabsSessionStatus'][0]
+    ): array
+    {
+        $request = $this->getPriceLabsSessionStatusRequest($session_id, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            switch($statusCode) {
+                case 200:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\GetPriceLabsSessionStatus200Response',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+                case 410:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
+                        $request,
+                        $response,
+                    );
+            }
+            
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            return $this->handleResponseWithDataType(
+                '\Repull\Model\GetPriceLabsSessionStatus200Response',
+                $request,
+                $response,
+            );
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\GetPriceLabsSessionStatus200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 410:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+            }
+        
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation getPriceLabsSessionStatusAsync
+     *
+     * PriceLabs session status
+     *
+     * @param  string $session_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPriceLabsSessionStatus'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getPriceLabsSessionStatusAsync(
+        string $session_id,
+        string $contentType = self::contentTypes['getPriceLabsSessionStatus'][0]
+    ): PromiseInterface
+    {
+        return $this->getPriceLabsSessionStatusAsyncWithHttpInfo($session_id, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation getPriceLabsSessionStatusAsyncWithHttpInfo
+     *
+     * PriceLabs session status
+     *
+     * @param  string $session_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPriceLabsSessionStatus'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return PromiseInterface
+     */
+    public function getPriceLabsSessionStatusAsyncWithHttpInfo(
+        string $session_id,
+        string $contentType = self::contentTypes['getPriceLabsSessionStatus'][0]
+    ): PromiseInterface
+    {
+        $returnType = '\Repull\Model\GetPriceLabsSessionStatus200Response';
+        $request = $this->getPriceLabsSessionStatusRequest($session_id, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'getPriceLabsSessionStatus'
+     *
+     * @param  string $session_id (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getPriceLabsSessionStatus'] to see the possible values for this operation
+     *
+     * @throws InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function getPriceLabsSessionStatusRequest(
+        string $session_id,
+        string $contentType = self::contentTypes['getPriceLabsSessionStatus'][0]
+    ): Request
+    {
+
+        // verify the required parameter 'session_id' is set
+        if ($session_id === null || (is_array($session_id) && count($session_id) === 0)) {
+            throw new InvalidArgumentException(
+                'Missing the required parameter $session_id when calling getPriceLabsSessionStatus'
+            );
+        }
+
+
+        $resourcePath = '/v1/connect/pricelabs/session';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $session_id,
+            'sessionId', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            true, // required
+            null // openApiFormat
+        ) ?? []);
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
         }
 
         $defaultHeaders = [];

@@ -1,0 +1,1129 @@
+<?php
+/**
+ * CreatePriceLabsKey201Response
+ *
+ * PHP version 8.1
+ *
+ * @package  Repull
+ * @author   OpenAPI Generator team
+ * @link     https://openapi-generator.tech
+ */
+
+/**
+ * Repull API
+ *
+ * The unified API for vacation rental tech. Connect Airbnb, Booking.com, Vrbo and more channels, plus 14 PMS platforms, through one REST API.  ## Designed for AI agents Every error response on this API includes machine-parseable fields so an LLM (Claude in MCP, Cursor, Cline, GPT, etc.) can self-recover without escalating to a human: - `error.code` — stable string identifier (e.g. `invalid_params`, `rate_limit_exceeded`) - `error.message` — human-readable cause - `error.fix` — exact recovery steps (e.g. \"Pass `check_in_after` as ISO 8601: `?check_in_after=2026-01-15`\") - `error.docs_url` — link to the canonical write-up at `https://repull.dev/docs/errors/{code}` - `error.request_id` — id to correlate with server-side logs - `error.field` / `error.value_received` / `error.valid_values` / `error.did_you_mean` — when the error is parameter-specific - `error.retry_after` — seconds to wait before retrying (rate-limit + transient upstream)  `Access-Control-Expose-Headers` lists `x-request-id` and the `X-RateLimit-*` family so browsers can read them on cross-origin responses.  ## Quick Start 1. Get an API key at https://repull.dev/dashboard 2. Connect a PMS: `POST /v1/connect/{provider}` 3. List properties: `GET /v1/properties` 4. Get reservations: `GET /v1/reservations`  ## Authentication All requests require a Bearer token: ``` Authorization: Bearer sk_live_YOUR_API_KEY ```  ## Request Correlation (X-Request-ID) Every response carries an `X-Request-ID` header, e.g. `X-Request-ID: req_01HXY...`. Include this id in support tickets and bug reports — we can trace the full request lifecycle (auth, rate limit, handler, downstream calls, log row) from a single id.  You may set the header on the inbound request to forward your own trace id; we will echo it back instead of generating a new one. Accepted format: `^[\\\\w.-]{1,128}$`.  The id is also embedded in error envelopes as `request_id` so server-side log diffs work even when the response headers are stripped by an intermediate proxy.  ## Rate Limits The public API enforces a per-API-key sliding-window rate limit on top of the per-tier monthly + daily-AI quotas.  **Default policy:** 600 requests per 60 seconds, per API key. Sliding window — there is no fixed-minute boundary you can burst across.  Every response includes:  | Header | Meaning | |---|---| | `X-RateLimit-Limit` | Requests permitted in the current window. | | `X-RateLimit-Remaining` | Requests left in the current window after this call. | | `X-RateLimit-Reset` | Unix epoch (seconds) when the next slot opens. | | `X-RateLimit-Policy` | Machine-readable policy descriptor, e.g. `600;w=60`. | | `Retry-After` | Seconds to wait before retrying. **Only present on 429 responses.** |  **On 429 (rate_limit_exceeded):** the response body matches the standard error envelope with `code: \"rate_limit_exceeded\"`, plus `limit`, `window_seconds`, `retry_after`, and `request_id` fields. SDKs MUST honor `Retry-After` and use exponential backoff with jitter on subsequent retries — never a tight loop.  Recommended backoff: ``` sleep_ms = (Retry-After * 1000) + random(0..250) ```  Monthly + daily-AI tier quotas (`free`, `starter`, `custom`) are enforced separately and also surface as 429s; they include `tier`, `scope`, `limit`, `used` and `resets_at` fields.  **The way past a request quota.** The monthly quota refusal (`429 rate_limit_exceeded` with `scope: \"monthly\"`), `402 credits_exhausted` and `429 daily_limit_exceeded` also carry `upgrade` (the cheapest plan that covers your usage: its exact monthly price for your listings, its request quotas and a `checkout_url` that opens checkout for that price; `plan: \"custom\"` with a `contact_email` when no self-serve plan covers it), `credits` (pay-as-you-go: `usd_per_1000_requests`, `top_up_url`, your `balance_usd`), `resets_at` and `projected_monthly_requests`. The per-minute 429 (`scope: \"per_api_key\"`) carries none of these: wait `Retry-After`.  ## Plan listing limits Each plan includes a number of **active listings**:  | Tier | Active listings | |---|---| | `free` | 3 | | `starter` | no cap: 10 included, then billed per listing | | `custom` | no cap |  Going over the plan never blocks your API calls. Listings beyond the plan are **held back**: they stay connected and keep syncing, but they are not served. A held-back listing answers `403 listing_inactive` with `reason: \"plan_limit\"`, and collection routes leave it out. Every JSON response then carries a `planNotice` and the `X-Repull-Listings-Held-Back` header, so you know there is more to see.  Choose which listings are active with `POST /v1/listings/status`. Upgrading at `https://repull.dev/dashboard/billing` lifts the cap but does not switch held-back listings on: you choose which to activate afterwards, with the same call or from the dashboard, and each one you switch on is billed from then.  Only a call that would itself take you over the plan is refused, with **`402 listings_limit_exceeded`**: activating listings (`PATCH /v1/listings/{id}` with `{ \"active\": true }`, `POST /v1/listings/status`) or creating one (`POST /v1/listings`). Nothing else changes. The envelope carries the tier, the limit, the active count and an upgrade link next to the standard `code` / `message` / `fix` / `docs_url` / `request_id`.  If an account has more active listings than its plan (for example after a downgrade), calls are still served and `planNotice` says so (code \"listings_over_plan\").  ## Failed payments If your plan's renewal payment fails, nothing is blocked: your API calls keep working while Stripe retries the card. Every successful JSON response then carries a `billingNotice` (code `payment_failed`) with the amount, when it failed, the next automatic retry (`nextRetryAt`) and `payUrl`, the invoice to pay. It disappears once the invoice is paid.
+ *
+ * The version of the OpenAPI document: 1.0.0
+ * @generated Generated by: https://openapi-generator.tech
+ * Generator version: 7.22.0
+ */
+
+/**
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+
+namespace Repull\Model;
+
+use ArrayAccess;
+use JsonSerializable;
+use InvalidArgumentException;
+use ReturnTypeWillChange;
+use Repull\ObjectSerializer;
+
+/**
+ * CreatePriceLabsKey201Response Class Doc Comment
+ *
+ * @package  Repull
+ * @author   OpenAPI Generator team
+ * @link     https://openapi-generator.tech
+ * @implements ArrayAccess<string, mixed>
+ */
+class CreatePriceLabsKey201Response implements ModelInterface, ArrayAccess, JsonSerializable
+{
+    public const DISCRIMINATOR = null;
+
+    /**
+     * The original name of the model.
+     *
+     * @var string
+     */
+    protected static string $openAPIModelName = 'createPriceLabsKey_201_response';
+
+    /**
+     * Array of property to type mappings. Used for (de)serialization
+     *
+     * @var array<string, string>
+     */
+    protected static array $openAPITypes = [
+        'id' => 'string',
+        'provider' => 'string',
+        'status' => 'string',
+        'external_account_id' => 'string',
+        'access_type' => '\Repull\Model\ConnectionAccessType',
+        'created_at' => '\DateTime',
+        'host' => '\Repull\Model\ConnectHost',
+        'action' => '\Repull\Model\ConnectionAction',
+        'fix_url' => 'string',
+        'import' => '\Repull\Model\AccountImport',
+        'scope' => 'string',
+        'listing_ids' => 'string[]',
+        'listing_count' => 'int',
+        'key_masked' => 'string',
+        'label' => 'string',
+        'disconnected_at' => '\DateTime',
+        'health' => '\Repull\Model\AppConnectionHealth',
+        'key' => 'string',
+        'instructions' => '\Repull\Model\CreatePriceLabsKey201ResponseAllOfInstructions'
+    ];
+
+    /**
+     * Array of property to format mappings. Used for (de)serialization
+     *
+     * @var array<string, string|null>
+     */
+    protected static array $openAPIFormats = [
+        'id' => null,
+        'provider' => null,
+        'status' => null,
+        'external_account_id' => null,
+        'access_type' => null,
+        'created_at' => 'date-time',
+        'host' => null,
+        'action' => null,
+        'fix_url' => 'uri',
+        'import' => null,
+        'scope' => null,
+        'listing_ids' => null,
+        'listing_count' => null,
+        'key_masked' => null,
+        'label' => null,
+        'disconnected_at' => 'date-time',
+        'health' => null,
+        'key' => null,
+        'instructions' => null
+    ];
+
+    /**
+     * Array of nullable properties. Used for (de)serialization
+     *
+     * @var array<string, bool>
+     */
+    protected static array $openAPINullables = [
+        'id' => false,
+        'provider' => false,
+        'status' => false,
+        'external_account_id' => true,
+        'access_type' => true,
+        'created_at' => false,
+        'host' => true,
+        'action' => true,
+        'fix_url' => true,
+        'import' => true,
+        'scope' => false,
+        'listing_ids' => true,
+        'listing_count' => false,
+        'key_masked' => false,
+        'label' => true,
+        'disconnected_at' => true,
+        'health' => true,
+        'key' => false,
+        'instructions' => false
+    ];
+
+    /**
+     * If a nullable field gets set to null, insert it here
+     *
+     * @var array<string, bool>
+     */
+    protected array $openAPINullablesSetToNull = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function openAPITypes(): array
+    {
+        return self::$openAPITypes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function openAPIFormats(): array
+    {
+        return self::$openAPIFormats;
+    }
+
+    /**
+     * Array of nullable properties
+     *
+     * @return array<string, bool>
+     */
+    protected static function openAPINullables(): array
+    {
+        return self::$openAPINullables;
+    }
+
+    /**
+     * Array of nullable field names deliberately set to null
+     *
+     * @return array<string, bool>
+     */
+    private function getOpenAPINullablesSetToNull(): array
+    {
+        return $this->openAPINullablesSetToNull;
+    }
+
+    /**
+     * Setter - Array of nullable field names deliberately set to null
+     *
+     * @param array<string, bool> $openAPINullablesSetToNull
+     */
+    private function setOpenAPINullablesSetToNull(array $openAPINullablesSetToNull): void
+    {
+        $this->openAPINullablesSetToNull = $openAPINullablesSetToNull;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function isNullable(string $property): bool
+    {
+        return self::openAPINullables()[$property] ?? false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isNullableSetToNull(string $property): bool
+    {
+        return in_array($property, $this->getOpenAPINullablesSetToNull(), true);
+    }
+
+    /**
+     * Array of attributes where the key is the local name,
+     * and the value is the original name
+     *
+     * @var array<string, string>
+     */
+    protected static array $attributeMap = [
+        'id' => 'id',
+        'provider' => 'provider',
+        'status' => 'status',
+        'external_account_id' => 'externalAccountId',
+        'access_type' => 'accessType',
+        'created_at' => 'createdAt',
+        'host' => 'host',
+        'action' => 'action',
+        'fix_url' => 'fixUrl',
+        'import' => 'import',
+        'scope' => 'scope',
+        'listing_ids' => 'listingIds',
+        'listing_count' => 'listingCount',
+        'key_masked' => 'keyMasked',
+        'label' => 'label',
+        'disconnected_at' => 'disconnectedAt',
+        'health' => 'health',
+        'key' => 'key',
+        'instructions' => 'instructions'
+    ];
+
+    /**
+     * Array of attributes to setter functions (for deserialization of responses)
+     *
+     * @var array<string, string>
+     */
+    protected static array $setters = [
+        'id' => 'setId',
+        'provider' => 'setProvider',
+        'status' => 'setStatus',
+        'external_account_id' => 'setExternalAccountId',
+        'access_type' => 'setAccessType',
+        'created_at' => 'setCreatedAt',
+        'host' => 'setHost',
+        'action' => 'setAction',
+        'fix_url' => 'setFixUrl',
+        'import' => 'setImport',
+        'scope' => 'setScope',
+        'listing_ids' => 'setListingIds',
+        'listing_count' => 'setListingCount',
+        'key_masked' => 'setKeyMasked',
+        'label' => 'setLabel',
+        'disconnected_at' => 'setDisconnectedAt',
+        'health' => 'setHealth',
+        'key' => 'setKey',
+        'instructions' => 'setInstructions'
+    ];
+
+    /**
+     * Array of attributes to getter functions (for serialization of requests)
+     *
+     * @var array<string, string>
+     */
+    protected static array $getters = [
+        'id' => 'getId',
+        'provider' => 'getProvider',
+        'status' => 'getStatus',
+        'external_account_id' => 'getExternalAccountId',
+        'access_type' => 'getAccessType',
+        'created_at' => 'getCreatedAt',
+        'host' => 'getHost',
+        'action' => 'getAction',
+        'fix_url' => 'getFixUrl',
+        'import' => 'getImport',
+        'scope' => 'getScope',
+        'listing_ids' => 'getListingIds',
+        'listing_count' => 'getListingCount',
+        'key_masked' => 'getKeyMasked',
+        'label' => 'getLabel',
+        'disconnected_at' => 'getDisconnectedAt',
+        'health' => 'getHealth',
+        'key' => 'getKey',
+        'instructions' => 'getInstructions'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function attributeMap(): array
+    {
+        return self::$attributeMap;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function setters(): array
+    {
+        return self::$setters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getters(): array
+    {
+        return self::$getters;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getModelName(): string
+    {
+        return self::$openAPIModelName;
+    }
+
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_INACTIVE = 'inactive';
+    public const STATUS_ERROR = 'error';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_DISCONNECTED = 'disconnected';
+    public const STATUS_NEEDS_PERMISSIONS = 'needs_permissions';
+    public const SCOPE_WORKSPACE = 'workspace';
+    public const SCOPE_LISTINGS = 'listings';
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getStatusAllowableValues()
+    {
+        return [
+            self::STATUS_ACTIVE,
+            self::STATUS_INACTIVE,
+            self::STATUS_ERROR,
+            self::STATUS_PENDING,
+            self::STATUS_DISCONNECTED,
+            self::STATUS_NEEDS_PERMISSIONS,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getScopeAllowableValues()
+    {
+        return [
+            self::SCOPE_WORKSPACE,
+            self::SCOPE_LISTINGS,
+        ];
+    }
+
+    /**
+     * Associative array for storing property values
+     *
+     * @var array
+     */
+    protected array $container = [];
+
+    /**
+     * Constructor
+     *
+     * @param array $data Associated array of property values initializing the model
+     */
+    public function __construct(?array $data = null)
+    {
+        $this->setIfExists('id', $data ?? [], null);
+        $this->setIfExists('provider', $data ?? [], null);
+        $this->setIfExists('status', $data ?? [], null);
+        $this->setIfExists('external_account_id', $data ?? [], null);
+        $this->setIfExists('access_type', $data ?? [], null);
+        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('host', $data ?? [], null);
+        $this->setIfExists('action', $data ?? [], null);
+        $this->setIfExists('fix_url', $data ?? [], null);
+        $this->setIfExists('import', $data ?? [], null);
+        $this->setIfExists('scope', $data ?? [], null);
+        $this->setIfExists('listing_ids', $data ?? [], null);
+        $this->setIfExists('listing_count', $data ?? [], null);
+        $this->setIfExists('key_masked', $data ?? [], null);
+        $this->setIfExists('label', $data ?? [], null);
+        $this->setIfExists('disconnected_at', $data ?? [], null);
+        $this->setIfExists('health', $data ?? [], null);
+        $this->setIfExists('key', $data ?? [], null);
+        $this->setIfExists('instructions', $data ?? [], null);
+    }
+
+    /**
+     * Sets $this->container[$variableName] to the given data or to the given default Value; if $variableName
+     * is nullable and its value is set to null in the $fields array, then mark it as "set to null" in the
+     * $this->openAPINullablesSetToNull array
+     *
+     * @param string $variableName
+     * @param array  $fields
+     * @param mixed  $defaultValue
+     */
+    private function setIfExists(string $variableName, array $fields, mixed $defaultValue): void
+    {
+        if (self::isNullable($variableName) && array_key_exists($variableName, $fields) && is_null($fields[$variableName])) {
+            $this->openAPINullablesSetToNull[] = $variableName;
+        }
+
+        $this->container[$variableName] = $fields[$variableName] ?? $defaultValue;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function listInvalidProperties(): array
+    {
+        $invalidProperties = [];
+
+        $allowedValues = self::getStatusAllowableValues();
+        if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'status', must be one of '%s'",
+                $this->container['status'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        $allowedValues = self::getScopeAllowableValues();
+        if (!is_null($this->container['scope']) && !in_array($this->container['scope'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'scope', must be one of '%s'",
+                $this->container['scope'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        if ($this->container['key'] === null) {
+            $invalidProperties[] = "'key' can't be null";
+        }
+        if ($this->container['instructions'] === null) {
+            $invalidProperties[] = "'instructions' can't be null";
+        }
+        return $invalidProperties;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function valid(): bool
+    {
+        return count($this->listInvalidProperties()) === 0;
+    }
+
+
+    /**
+     * Gets id
+     *
+     * @return string|null
+     */
+    public function getId(): ?string
+    {
+        return $this->container['id'];
+    }
+
+    /**
+     * Sets id
+     *
+     * @param string|null $id id
+     *
+     * @return $this
+     */
+    public function setId(?string $id): static
+    {
+        if (is_null($id)) {
+            throw new InvalidArgumentException('non-nullable id cannot be null');
+        }
+        $this->container['id'] = $id;
+
+        return $this;
+    }
+
+    /**
+     * Gets provider
+     *
+     * @return string|null
+     */
+    public function getProvider(): ?string
+    {
+        return $this->container['provider'];
+    }
+
+    /**
+     * Sets provider
+     *
+     * @param string|null $provider provider
+     *
+     * @return $this
+     */
+    public function setProvider(?string $provider): static
+    {
+        if (is_null($provider)) {
+            throw new InvalidArgumentException('non-nullable provider cannot be null');
+        }
+        $this->container['provider'] = $provider;
+
+        return $this;
+    }
+
+    /**
+     * Gets status
+     *
+     * @return string|null
+     */
+    public function getStatus(): ?string
+    {
+        return $this->container['status'];
+    }
+
+    /**
+     * Sets status
+     *
+     * @param string|null $status `active` — connected and working. `pending` — still settling. `needs_permissions` — connected but the host must grant more access before it works (see `action`/`fixUrl`). An `active` connection can also carry an `action` (e.g. a Smoobu legacy API key that must be replaced with a key + secret before October 31, 2026). `error` — the last operation failed. `disconnected` — revoked or superseded.
+     *
+     * @return $this
+     */
+    public function setStatus(?string $status): static
+    {
+        if (is_null($status)) {
+            throw new InvalidArgumentException('non-nullable status cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['status'] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Gets external_account_id
+     *
+     * @return string|null
+     */
+    public function getExternalAccountId(): ?string
+    {
+        return $this->container['external_account_id'];
+    }
+
+    /**
+     * Sets external_account_id
+     *
+     * @param string|null $external_account_id The platform's own account id: Airbnb host id; Booking.com hotel id (`booking`); the Booking.com account id behind the Extranet login (`booking_extranet`); Vrbo's account id (`vrbo`); the PMS's own account or company id. `null` when the platform id is not known yet (a Vrbo sign-in before its account id is captured, a PMS that does not expose one); never a Repull id. Use `id` for our record.
+     *
+     * @return $this
+     */
+    public function setExternalAccountId(?string $external_account_id): static
+    {
+        if (is_null($external_account_id)) {
+            array_push($this->openAPINullablesSetToNull, 'external_account_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('external_account_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['external_account_id'] = $external_account_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets access_type
+     *
+     * @return \Repull\Model\ConnectionAccessType|null
+     */
+    public function getAccessType(): ?\Repull\Model\ConnectionAccessType
+    {
+        return $this->container['access_type'];
+    }
+
+    /**
+     * Sets access_type
+     *
+     * @param \Repull\Model\ConnectionAccessType|null $access_type What this connection may do: `read_only`, `messaging` or `full_access` (see `ConnectionAccessType` for the meaning per provider). Airbnb: the tier of the host in `externalAccountId`. `null` when unknown.
+     *
+     * @return $this
+     */
+    public function setAccessType(?\Repull\Model\ConnectionAccessType $access_type): static
+    {
+        if (is_null($access_type)) {
+            array_push($this->openAPINullablesSetToNull, 'access_type');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('access_type', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['access_type'] = $access_type;
+
+        return $this;
+    }
+
+    /**
+     * Gets created_at
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->container['created_at'];
+    }
+
+    /**
+     * Sets created_at
+     *
+     * @param \DateTime|null $created_at created_at
+     *
+     * @return $this
+     */
+    public function setCreatedAt(?\DateTime $created_at): static
+    {
+        if (is_null($created_at)) {
+            throw new InvalidArgumentException('non-nullable created_at cannot be null');
+        }
+        $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets host
+     *
+     * @return \Repull\Model\ConnectHost|null
+     */
+    public function getHost(): ?\Repull\Model\ConnectHost
+    {
+        return $this->container['host'];
+    }
+
+    /**
+     * Sets host
+     *
+     * @param \Repull\Model\ConnectHost|null $host Host metadata for the linked account. Currently populated for Airbnb only; null for other providers.
+     *
+     * @return $this
+     */
+    public function setHost(?\Repull\Model\ConnectHost $host): static
+    {
+        if (is_null($host)) {
+            array_push($this->openAPINullablesSetToNull, 'host');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('host', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['host'] = $host;
+
+        return $this;
+    }
+
+    /**
+     * Gets action
+     *
+     * @return \Repull\Model\ConnectionAction|null
+     */
+    public function getAction(): ?\Repull\Model\ConnectionAction
+    {
+        return $this->container['action'];
+    }
+
+    /**
+     * Sets action
+     *
+     * @param \Repull\Model\ConnectionAction|null $action Set when the host must do something before the connection works (e.g. grant the invited Booking.com Extranet user full access), or has units still to map (`reason: needs_mapping` — Booking.com Extranet rooms, Vrbo units; `required` is false when only some Vrbo units are left). `null` when no action is pending.
+     *
+     * @return $this
+     */
+    public function setAction(?\Repull\Model\ConnectionAction $action): static
+    {
+        if (is_null($action)) {
+            array_push($this->openAPINullablesSetToNull, 'action');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('action', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['action'] = $action;
+
+        return $this;
+    }
+
+    /**
+     * Gets fix_url
+     *
+     * @return string|null
+     */
+    public function getFixUrl(): ?string
+    {
+        return $this->container['fix_url'];
+    }
+
+    /**
+     * Sets fix_url
+     *
+     * @param string|null $fix_url Durable link that reopens the hosted Connect flow bound to this account on the fix screen — send the host here to resolve `action`. For `needs_mapping` it opens the unit mapping directly (no new sign-in). Present whenever `action` is set; `null` otherwise.
+     *
+     * @return $this
+     */
+    public function setFixUrl(?string $fix_url): static
+    {
+        if (is_null($fix_url)) {
+            array_push($this->openAPINullablesSetToNull, 'fix_url');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('fix_url', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['fix_url'] = $fix_url;
+
+        return $this;
+    }
+
+    /**
+     * Gets import
+     *
+     * @return \Repull\Model\AccountImport|null
+     */
+    public function getImport(): ?\Repull\Model\AccountImport
+    {
+        return $this->container['import'];
+    }
+
+    /**
+     * Sets import
+     *
+     * @param \Repull\Model\AccountImport|null $import The account's latest import — `status: running` while the first sync (or a later one) is going, then `completed` or `failed`. `null` when no import has been recorded. The same run is announced by the `account.import.*` webhooks; the history is on `GET /v1/connections/{id}/imports`.
+     *
+     * @return $this
+     */
+    public function setImport(?\Repull\Model\AccountImport $import): static
+    {
+        if (is_null($import)) {
+            array_push($this->openAPINullablesSetToNull, 'import');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('import', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['import'] = $import;
+
+        return $this;
+    }
+
+    /**
+     * Gets scope
+     *
+     * @return string|null
+     */
+    public function getScope(): ?string
+    {
+        return $this->container['scope'];
+    }
+
+    /**
+     * Sets scope
+     *
+     * @param string|null $scope Apps (`pricelabs`) only. `workspace`: every listing of the workspace, including listings added later. `listings`: only `listingIds`.
+     *
+     * @return $this
+     */
+    public function setScope(?string $scope): static
+    {
+        if (is_null($scope)) {
+            throw new InvalidArgumentException('non-nullable scope cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['scope'] = $scope;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_ids
+     *
+     * @return string[]|null
+     */
+    public function getListingIds(): ?array
+    {
+        return $this->container['listing_ids'];
+    }
+
+    /**
+     * Sets listing_ids
+     *
+     * @param string[]|null $listing_ids Apps only: the listings a `listings`-scoped connection covers; `null` for `workspace`.
+     *
+     * @return $this
+     */
+    public function setListingIds(?array $listing_ids): static
+    {
+        if (is_null($listing_ids)) {
+            array_push($this->openAPINullablesSetToNull, 'listing_ids');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('listing_ids', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['listing_ids'] = $listing_ids;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_count
+     *
+     * @return int|null
+     */
+    public function getListingCount(): ?int
+    {
+        return $this->container['listing_count'];
+    }
+
+    /**
+     * Sets listing_count
+     *
+     * @param int|null $listing_count Apps only: listings the connection covers now.
+     *
+     * @return $this
+     */
+    public function setListingCount(?int $listing_count): static
+    {
+        if (is_null($listing_count)) {
+            throw new InvalidArgumentException('non-nullable listing_count cannot be null');
+        }
+        $this->container['listing_count'] = $listing_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets key_masked
+     *
+     * @return string|null
+     */
+    public function getKeyMasked(): ?string
+    {
+        return $this->container['key_masked'];
+    }
+
+    /**
+     * Sets key_masked
+     *
+     * @param string|null $key_masked Apps only: the key the app uses, masked. The key itself is shown once, when created.
+     *
+     * @return $this
+     */
+    public function setKeyMasked(?string $key_masked): static
+    {
+        if (is_null($key_masked)) {
+            throw new InvalidArgumentException('non-nullable key_masked cannot be null');
+        }
+        $this->container['key_masked'] = $key_masked;
+
+        return $this;
+    }
+
+    /**
+     * Gets label
+     *
+     * @return string|null
+     */
+    public function getLabel(): ?string
+    {
+        return $this->container['label'];
+    }
+
+    /**
+     * Sets label
+     *
+     * @param string|null $label Apps only: the name given to the key.
+     *
+     * @return $this
+     */
+    public function setLabel(?string $label): static
+    {
+        if (is_null($label)) {
+            array_push($this->openAPINullablesSetToNull, 'label');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('label', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['label'] = $label;
+
+        return $this;
+    }
+
+    /**
+     * Gets disconnected_at
+     *
+     * @return \DateTime|null
+     */
+    public function getDisconnectedAt(): ?\DateTime
+    {
+        return $this->container['disconnected_at'];
+    }
+
+    /**
+     * Sets disconnected_at
+     *
+     * @param \DateTime|null $disconnected_at Apps only: when the connection was revoked.
+     *
+     * @return $this
+     */
+    public function setDisconnectedAt(?\DateTime $disconnected_at): static
+    {
+        if (is_null($disconnected_at)) {
+            array_push($this->openAPINullablesSetToNull, 'disconnected_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('disconnected_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['disconnected_at'] = $disconnected_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets health
+     *
+     * @return \Repull\Model\AppConnectionHealth|null
+     */
+    public function getHealth(): ?\Repull\Model\AppConnectionHealth
+    {
+        return $this->container['health'];
+    }
+
+    /**
+     * Sets health
+     *
+     * @param \Repull\Model\AppConnectionHealth|null $health Apps only: how the app is doing on this connection. `null` once disconnected.
+     *
+     * @return $this
+     */
+    public function setHealth(?\Repull\Model\AppConnectionHealth $health): static
+    {
+        if (is_null($health)) {
+            array_push($this->openAPINullablesSetToNull, 'health');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('health', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['health'] = $health;
+
+        return $this;
+    }
+
+    /**
+     * Gets key
+     *
+     * @return string
+     */
+    public function getKey(): string
+    {
+        return $this->container['key'];
+    }
+
+    /**
+     * Sets key
+     *
+     * @param string $key The key to paste into PriceLabs. Returned only here.
+     *
+     * @return $this
+     */
+    public function setKey(string $key): static
+    {
+        if (is_null($key)) {
+            throw new InvalidArgumentException('non-nullable key cannot be null');
+        }
+        $this->container['key'] = $key;
+
+        return $this;
+    }
+
+    /**
+     * Gets instructions
+     *
+     * @return \Repull\Model\CreatePriceLabsKey201ResponseAllOfInstructions
+     */
+    public function getInstructions(): \Repull\Model\CreatePriceLabsKey201ResponseAllOfInstructions
+    {
+        return $this->container['instructions'];
+    }
+
+    /**
+     * Sets instructions
+     *
+     * @param \Repull\Model\CreatePriceLabsKey201ResponseAllOfInstructions $instructions instructions
+     *
+     * @return $this
+     */
+    public function setInstructions(\Repull\Model\CreatePriceLabsKey201ResponseAllOfInstructions $instructions): static
+    {
+        if (is_null($instructions)) {
+            throw new InvalidArgumentException('non-nullable instructions cannot be null');
+        }
+        $this->container['instructions'] = $instructions;
+
+        return $this;
+    }
+    /**
+     * Returns true if offset exists. False otherwise.
+     *
+     * @param int|string $offset Offset
+     *
+     * @return boolean
+     */
+    public function offsetExists(mixed $offset): bool
+    {
+        return isset($this->container[$offset]);
+    }
+
+    /**
+     * Gets offset.
+     *
+     * @param int|string $offset Offset
+     *
+     * @return mixed|null
+     */
+    #[ReturnTypeWillChange]
+    public function offsetGet(mixed $offset): mixed
+    {
+        return $this->container[$offset] ?? null;
+    }
+
+    /**
+     * Sets value based on offset.
+     *
+     * @param int|string|null $offset Offset
+     * @param mixed    $value  Value to be set
+     *
+     * @return void
+     */
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        if (is_null($offset)) {
+            $this->container[] = $value;
+        } else {
+            $this->container[$offset] = $value;
+        }
+    }
+
+    /**
+     * Unsets offset.
+     *
+     * @param int|string $offset Offset
+     *
+     * @return void
+     */
+    public function offsetUnset(mixed $offset): void
+    {
+        unset($this->container[$offset]);
+    }
+
+    /**
+     * Serializes the object to a value that can be serialized natively by json_encode().
+     * @link https://www.php.net/manual/en/jsonserializable.jsonserialize.php
+     *
+     * @return mixed Returns data which can be serialized by json_encode(), which is a value
+     * of any type other than a resource.
+     */
+    #[ReturnTypeWillChange]
+    public function jsonSerialize(): mixed
+    {
+       return ObjectSerializer::sanitizeForSerialization($this);
+    }
+
+    /**
+     * Gets the string presentation of the object
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return json_encode(
+            ObjectSerializer::sanitizeForSerialization($this),
+            JSON_PRETTY_PRINT
+        );
+    }
+
+    /**
+     * Gets a header-safe presentation of the object
+     *
+     * @return string
+     */
+    public function toHeaderValue(): string
+    {
+        return json_encode(ObjectSerializer::sanitizeForSerialization($this));
+    }
+}
+
+

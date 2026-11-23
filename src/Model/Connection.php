@@ -67,7 +67,14 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => '\Repull\Model\ConnectHost',
         'action' => '\Repull\Model\ConnectionAction',
         'fix_url' => 'string',
-        'import' => '\Repull\Model\AccountImport'
+        'import' => '\Repull\Model\AccountImport',
+        'scope' => 'string',
+        'listing_ids' => 'string[]',
+        'listing_count' => 'int',
+        'key_masked' => 'string',
+        'label' => 'string',
+        'disconnected_at' => '\DateTime',
+        'health' => '\Repull\Model\AppConnectionHealth'
     ];
 
     /**
@@ -85,7 +92,14 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => null,
         'action' => null,
         'fix_url' => 'uri',
-        'import' => null
+        'import' => null,
+        'scope' => null,
+        'listing_ids' => null,
+        'listing_count' => null,
+        'key_masked' => null,
+        'label' => null,
+        'disconnected_at' => 'date-time',
+        'health' => null
     ];
 
     /**
@@ -103,7 +117,14 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => true,
         'action' => true,
         'fix_url' => true,
-        'import' => true
+        'import' => true,
+        'scope' => false,
+        'listing_ids' => true,
+        'listing_count' => false,
+        'key_masked' => false,
+        'label' => true,
+        'disconnected_at' => true,
+        'health' => true
     ];
 
     /**
@@ -191,7 +212,14 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => 'host',
         'action' => 'action',
         'fix_url' => 'fixUrl',
-        'import' => 'import'
+        'import' => 'import',
+        'scope' => 'scope',
+        'listing_ids' => 'listingIds',
+        'listing_count' => 'listingCount',
+        'key_masked' => 'keyMasked',
+        'label' => 'label',
+        'disconnected_at' => 'disconnectedAt',
+        'health' => 'health'
     ];
 
     /**
@@ -209,7 +237,14 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => 'setHost',
         'action' => 'setAction',
         'fix_url' => 'setFixUrl',
-        'import' => 'setImport'
+        'import' => 'setImport',
+        'scope' => 'setScope',
+        'listing_ids' => 'setListingIds',
+        'listing_count' => 'setListingCount',
+        'key_masked' => 'setKeyMasked',
+        'label' => 'setLabel',
+        'disconnected_at' => 'setDisconnectedAt',
+        'health' => 'setHealth'
     ];
 
     /**
@@ -227,7 +262,14 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => 'getHost',
         'action' => 'getAction',
         'fix_url' => 'getFixUrl',
-        'import' => 'getImport'
+        'import' => 'getImport',
+        'scope' => 'getScope',
+        'listing_ids' => 'getListingIds',
+        'listing_count' => 'getListingCount',
+        'key_masked' => 'getKeyMasked',
+        'label' => 'getLabel',
+        'disconnected_at' => 'getDisconnectedAt',
+        'health' => 'getHealth'
     ];
 
     /**
@@ -268,6 +310,8 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
     public const STATUS_PENDING = 'pending';
     public const STATUS_DISCONNECTED = 'disconnected';
     public const STATUS_NEEDS_PERMISSIONS = 'needs_permissions';
+    public const SCOPE_WORKSPACE = 'workspace';
+    public const SCOPE_LISTINGS = 'listings';
 
     /**
      * Gets allowable values of the enum
@@ -283,6 +327,19 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
             self::STATUS_PENDING,
             self::STATUS_DISCONNECTED,
             self::STATUS_NEEDS_PERMISSIONS,
+        ];
+    }
+
+    /**
+     * Gets allowable values of the enum
+     *
+     * @return string[]
+     */
+    public static function getScopeAllowableValues()
+    {
+        return [
+            self::SCOPE_WORKSPACE,
+            self::SCOPE_LISTINGS,
         ];
     }
 
@@ -310,6 +367,13 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('action', $data ?? [], null);
         $this->setIfExists('fix_url', $data ?? [], null);
         $this->setIfExists('import', $data ?? [], null);
+        $this->setIfExists('scope', $data ?? [], null);
+        $this->setIfExists('listing_ids', $data ?? [], null);
+        $this->setIfExists('listing_count', $data ?? [], null);
+        $this->setIfExists('key_masked', $data ?? [], null);
+        $this->setIfExists('label', $data ?? [], null);
+        $this->setIfExists('disconnected_at', $data ?? [], null);
+        $this->setIfExists('health', $data ?? [], null);
     }
 
     /**
@@ -342,6 +406,15 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
             $invalidProperties[] = sprintf(
                 "invalid value '%s' for 'status', must be one of '%s'",
                 $this->container['status'],
+                implode("', '", $allowedValues)
+            );
+        }
+
+        $allowedValues = self::getScopeAllowableValues();
+        if (!is_null($this->container['scope']) && !in_array($this->container['scope'], $allowedValues, true)) {
+            $invalidProperties[] = sprintf(
+                "invalid value '%s' for 'scope', must be one of '%s'",
+                $this->container['scope'],
                 implode("', '", $allowedValues)
             );
         }
@@ -667,6 +740,224 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['import'] = $import;
+
+        return $this;
+    }
+
+    /**
+     * Gets scope
+     *
+     * @return string|null
+     */
+    public function getScope(): ?string
+    {
+        return $this->container['scope'];
+    }
+
+    /**
+     * Sets scope
+     *
+     * @param string|null $scope Apps (`pricelabs`) only. `workspace`: every listing of the workspace, including listings added later. `listings`: only `listingIds`.
+     *
+     * @return $this
+     */
+    public function setScope(?string $scope): static
+    {
+        if (is_null($scope)) {
+            throw new InvalidArgumentException('non-nullable scope cannot be null');
+        }
+        // (relax-enums.php) accept unknown enum values for forward compat
+        $this->container['scope'] = $scope;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_ids
+     *
+     * @return string[]|null
+     */
+    public function getListingIds(): ?array
+    {
+        return $this->container['listing_ids'];
+    }
+
+    /**
+     * Sets listing_ids
+     *
+     * @param string[]|null $listing_ids Apps only: the listings a `listings`-scoped connection covers; `null` for `workspace`.
+     *
+     * @return $this
+     */
+    public function setListingIds(?array $listing_ids): static
+    {
+        if (is_null($listing_ids)) {
+            array_push($this->openAPINullablesSetToNull, 'listing_ids');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('listing_ids', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['listing_ids'] = $listing_ids;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_count
+     *
+     * @return int|null
+     */
+    public function getListingCount(): ?int
+    {
+        return $this->container['listing_count'];
+    }
+
+    /**
+     * Sets listing_count
+     *
+     * @param int|null $listing_count Apps only: listings the connection covers now.
+     *
+     * @return $this
+     */
+    public function setListingCount(?int $listing_count): static
+    {
+        if (is_null($listing_count)) {
+            throw new InvalidArgumentException('non-nullable listing_count cannot be null');
+        }
+        $this->container['listing_count'] = $listing_count;
+
+        return $this;
+    }
+
+    /**
+     * Gets key_masked
+     *
+     * @return string|null
+     */
+    public function getKeyMasked(): ?string
+    {
+        return $this->container['key_masked'];
+    }
+
+    /**
+     * Sets key_masked
+     *
+     * @param string|null $key_masked Apps only: the key the app uses, masked. The key itself is shown once, when created.
+     *
+     * @return $this
+     */
+    public function setKeyMasked(?string $key_masked): static
+    {
+        if (is_null($key_masked)) {
+            throw new InvalidArgumentException('non-nullable key_masked cannot be null');
+        }
+        $this->container['key_masked'] = $key_masked;
+
+        return $this;
+    }
+
+    /**
+     * Gets label
+     *
+     * @return string|null
+     */
+    public function getLabel(): ?string
+    {
+        return $this->container['label'];
+    }
+
+    /**
+     * Sets label
+     *
+     * @param string|null $label Apps only: the name given to the key.
+     *
+     * @return $this
+     */
+    public function setLabel(?string $label): static
+    {
+        if (is_null($label)) {
+            array_push($this->openAPINullablesSetToNull, 'label');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('label', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['label'] = $label;
+
+        return $this;
+    }
+
+    /**
+     * Gets disconnected_at
+     *
+     * @return \DateTime|null
+     */
+    public function getDisconnectedAt(): ?\DateTime
+    {
+        return $this->container['disconnected_at'];
+    }
+
+    /**
+     * Sets disconnected_at
+     *
+     * @param \DateTime|null $disconnected_at Apps only: when the connection was revoked.
+     *
+     * @return $this
+     */
+    public function setDisconnectedAt(?\DateTime $disconnected_at): static
+    {
+        if (is_null($disconnected_at)) {
+            array_push($this->openAPINullablesSetToNull, 'disconnected_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('disconnected_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['disconnected_at'] = $disconnected_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets health
+     *
+     * @return \Repull\Model\AppConnectionHealth|null
+     */
+    public function getHealth(): ?\Repull\Model\AppConnectionHealth
+    {
+        return $this->container['health'];
+    }
+
+    /**
+     * Sets health
+     *
+     * @param \Repull\Model\AppConnectionHealth|null $health Apps only: how the app is doing on this connection. `null` once disconnected.
+     *
+     * @return $this
+     */
+    public function setHealth(?\Repull\Model\AppConnectionHealth $health): static
+    {
+        if (is_null($health)) {
+            array_push($this->openAPINullablesSetToNull, 'health');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('health', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['health'] = $health;
 
         return $this;
     }

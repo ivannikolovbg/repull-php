@@ -63,6 +63,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => 'string',
         'reservation_history_months' => 'int',
         'state' => 'string',
+        'workspace' => '\Repull\Model\CreateConnectionRequestWorkspace',
         'locale' => 'string'
     ];
 
@@ -76,6 +77,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => null,
         'reservation_history_months' => null,
         'state' => null,
+        'workspace' => null,
         'locale' => null
     ];
 
@@ -89,6 +91,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => false,
         'reservation_history_months' => false,
         'state' => false,
+        'workspace' => false,
         'locale' => true
     ];
 
@@ -172,6 +175,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => 'accessType',
         'reservation_history_months' => 'reservationHistoryMonths',
         'state' => 'state',
+        'workspace' => 'workspace',
         'locale' => 'locale'
     ];
 
@@ -185,6 +189,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => 'setAccessType',
         'reservation_history_months' => 'setReservationHistoryMonths',
         'state' => 'setState',
+        'workspace' => 'setWorkspace',
         'locale' => 'setLocale'
     ];
 
@@ -198,6 +203,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'access_type' => 'getAccessType',
         'reservation_history_months' => 'getReservationHistoryMonths',
         'state' => 'getState',
+        'workspace' => 'getWorkspace',
         'locale' => 'getLocale'
     ];
 
@@ -269,6 +275,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         $this->setIfExists('access_type', $data ?? [], 'full_access');
         $this->setIfExists('reservation_history_months', $data ?? [], null);
         $this->setIfExists('state', $data ?? [], null);
+        $this->setIfExists('workspace', $data ?? [], null);
         $this->setIfExists('locale', $data ?? [], null);
     }
 
@@ -439,6 +446,33 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
             throw new InvalidArgumentException('non-nullable state cannot be null');
         }
         $this->container['state'] = $state;
+
+        return $this;
+    }
+
+    /**
+     * Gets workspace
+     *
+     * @return \Repull\Model\CreateConnectionRequestWorkspace|null
+     */
+    public function getWorkspace(): ?\Repull\Model\CreateConnectionRequestWorkspace
+    {
+        return $this->container['workspace'];
+    }
+
+    /**
+     * Sets workspace
+     *
+     * @param \Repull\Model\CreateConnectionRequestWorkspace|null $workspace workspace
+     *
+     * @return $this
+     */
+    public function setWorkspace(?\Repull\Model\CreateConnectionRequestWorkspace $workspace): static
+    {
+        if (is_null($workspace)) {
+            throw new InvalidArgumentException('non-nullable workspace cannot be null');
+        }
+        $this->container['workspace'] = $workspace;
 
         return $this;
     }
