@@ -5,6 +5,12 @@ All notable changes to the Repull PHP SDK are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.2.60 — 2026-11-23
+
+- New: `GET /v1/connect/pricelabs/session`
+- New: `POST /v1/connect/pricelabs/key`
+- Regenerated from the live spec (automated spec refresh).
+
 ## 0.2.59 — 2026-11-22
 
 - New: `DELETE /v1/channels/vrbo/offers`
