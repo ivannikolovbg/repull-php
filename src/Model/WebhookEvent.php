@@ -64,8 +64,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         'api_version' => 'string',
         'timestamp' => '\DateTime',
         'account' => '\Repull\Model\WebhookEventAccount',
-        'data' => '\Repull\Model\MigrationImportPayload',
-        'workspace_id' => 'int'
+        'workspace_id' => 'int',
+        'data' => '\Repull\Model\MigrationImportPayload'
     ];
 
     /**
@@ -79,8 +79,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         'api_version' => null,
         'timestamp' => 'date-time',
         'account' => null,
-        'data' => null,
-        'workspace_id' => null
+        'workspace_id' => null,
+        'data' => null
     ];
 
     /**
@@ -94,8 +94,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         'api_version' => false,
         'timestamp' => false,
         'account' => true,
-        'data' => false,
-        'workspace_id' => false
+        'workspace_id' => false,
+        'data' => false
     ];
 
     /**
@@ -179,8 +179,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         'api_version' => 'apiVersion',
         'timestamp' => 'timestamp',
         'account' => 'account',
-        'data' => 'data',
-        'workspace_id' => 'workspaceId'
+        'workspace_id' => 'workspaceId',
+        'data' => 'data'
     ];
 
     /**
@@ -194,8 +194,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         'api_version' => 'setApiVersion',
         'timestamp' => 'setTimestamp',
         'account' => 'setAccount',
-        'data' => 'setData',
-        'workspace_id' => 'setWorkspaceId'
+        'workspace_id' => 'setWorkspaceId',
+        'data' => 'setData'
     ];
 
     /**
@@ -209,8 +209,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         'api_version' => 'getApiVersion',
         'timestamp' => 'getTimestamp',
         'account' => 'getAccount',
-        'data' => 'getData',
-        'workspace_id' => 'getWorkspaceId'
+        'workspace_id' => 'getWorkspaceId',
+        'data' => 'getData'
     ];
 
     /**
@@ -371,8 +371,8 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('api_version', $data ?? [], null);
         $this->setIfExists('timestamp', $data ?? [], null);
         $this->setIfExists('account', $data ?? [], null);
-        $this->setIfExists('data', $data ?? [], null);
         $this->setIfExists('workspace_id', $data ?? [], null);
+        $this->setIfExists('data', $data ?? [], null);
     }
 
     /**
@@ -421,11 +421,11 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
         if ($this->container['timestamp'] === null) {
             $invalidProperties[] = "'timestamp' can't be null";
         }
-        if ($this->container['data'] === null) {
-            $invalidProperties[] = "'data' can't be null";
-        }
         if ($this->container['workspace_id'] === null) {
             $invalidProperties[] = "'workspace_id' can't be null";
+        }
+        if ($this->container['data'] === null) {
+            $invalidProperties[] = "'data' can't be null";
         }
         return $invalidProperties;
     }
@@ -583,6 +583,33 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     /**
+     * Gets workspace_id
+     *
+     * @return int
+     */
+    public function getWorkspaceId(): int
+    {
+        return $this->container['workspace_id'];
+    }
+
+    /**
+     * Sets workspace_id
+     *
+     * @param int $workspace_id The migration's workspace — pass it as `X-Workspace-Id`, or to `GET /v1/migrations/{workspaceId}`. Always present on migration events. A JSON number here; `POST /v1/connect` and `GET /v1/workspaces` return the same id as a string, so compare as strings.
+     *
+     * @return $this
+     */
+    public function setWorkspaceId(int $workspace_id): static
+    {
+        if (is_null($workspace_id)) {
+            throw new InvalidArgumentException('non-nullable workspace_id cannot be null');
+        }
+        $this->container['workspace_id'] = $workspace_id;
+
+        return $this;
+    }
+
+    /**
      * Gets data
      *
      * @return \Repull\Model\MigrationImportPayload
@@ -605,33 +632,6 @@ class WebhookEvent implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable data cannot be null');
         }
         $this->container['data'] = $data;
-
-        return $this;
-    }
-
-    /**
-     * Gets workspace_id
-     *
-     * @return int
-     */
-    public function getWorkspaceId(): int
-    {
-        return $this->container['workspace_id'];
-    }
-
-    /**
-     * Sets workspace_id
-     *
-     * @param int $workspace_id The migration's workspace — pass it as `X-Workspace-Id`, or to `GET /v1/migrations/{workspaceId}`.
-     *
-     * @return $this
-     */
-    public function setWorkspaceId(int $workspace_id): static
-    {
-        if (is_null($workspace_id)) {
-            throw new InvalidArgumentException('non-nullable workspace_id cannot be null');
-        }
-        $this->container['workspace_id'] = $workspace_id;
 
         return $this;
     }

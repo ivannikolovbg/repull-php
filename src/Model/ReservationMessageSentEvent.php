@@ -63,6 +63,7 @@ class ReservationMessageSentEvent implements ModelInterface, ArrayAccess, JsonSe
         'api_version' => 'string',
         'timestamp' => '\DateTime',
         'account' => '\Repull\Model\WebhookEventAccount',
+        'workspace_id' => 'int',
         'data' => '\Repull\Model\ReservationMessageSentPayload'
     ];
 
@@ -77,6 +78,7 @@ class ReservationMessageSentEvent implements ModelInterface, ArrayAccess, JsonSe
         'api_version' => null,
         'timestamp' => 'date-time',
         'account' => null,
+        'workspace_id' => null,
         'data' => null
     ];
 
@@ -91,6 +93,7 @@ class ReservationMessageSentEvent implements ModelInterface, ArrayAccess, JsonSe
         'api_version' => false,
         'timestamp' => false,
         'account' => true,
+        'workspace_id' => false,
         'data' => false
     ];
 
@@ -175,6 +178,7 @@ class ReservationMessageSentEvent implements ModelInterface, ArrayAccess, JsonSe
         'api_version' => 'apiVersion',
         'timestamp' => 'timestamp',
         'account' => 'account',
+        'workspace_id' => 'workspaceId',
         'data' => 'data'
     ];
 
@@ -189,6 +193,7 @@ class ReservationMessageSentEvent implements ModelInterface, ArrayAccess, JsonSe
         'api_version' => 'setApiVersion',
         'timestamp' => 'setTimestamp',
         'account' => 'setAccount',
+        'workspace_id' => 'setWorkspaceId',
         'data' => 'setData'
     ];
 
@@ -203,6 +208,7 @@ class ReservationMessageSentEvent implements ModelInterface, ArrayAccess, JsonSe
         'api_version' => 'getApiVersion',
         'timestamp' => 'getTimestamp',
         'account' => 'getAccount',
+        'workspace_id' => 'getWorkspaceId',
         'data' => 'getData'
     ];
 
@@ -271,6 +277,7 @@ class ReservationMessageSentEvent implements ModelInterface, ArrayAccess, JsonSe
         $this->setIfExists('api_version', $data ?? [], null);
         $this->setIfExists('timestamp', $data ?? [], null);
         $this->setIfExists('account', $data ?? [], null);
+        $this->setIfExists('workspace_id', $data ?? [], null);
         $this->setIfExists('data', $data ?? [], null);
     }
 
@@ -474,6 +481,33 @@ class ReservationMessageSentEvent implements ModelInterface, ArrayAccess, JsonSe
             }
         }
         $this->container['account'] = $account;
+
+        return $this;
+    }
+
+    /**
+     * Gets workspace_id
+     *
+     * @return int|null
+     */
+    public function getWorkspaceId(): ?int
+    {
+        return $this->container['workspace_id'];
+    }
+
+    /**
+     * Sets workspace_id
+     *
+     * @param int|null $workspace_id The sub-workspace this event happened in. Present only on events from a sub-workspace your workspace opened (`POST /v1/connect` with `workspace`, or Repull Migrate); omitted on your own workspace's events. It is the same workspace as `workspaceId` on `POST /v1/connect` and `GET /v1/workspaces` and the `X-Workspace-Id` header, but those return it as a string (`\"2042\"`) while the event carries a JSON number (`2042`): compare as strings, e.g. `String(event.workspaceId) === workspace.workspaceId`. The UUID `data.workspaceId` on `account.created` / `account.disconnected` is a different identifier.
+     *
+     * @return $this
+     */
+    public function setWorkspaceId(?int $workspace_id): static
+    {
+        if (is_null($workspace_id)) {
+            throw new InvalidArgumentException('non-nullable workspace_id cannot be null');
+        }
+        $this->container['workspace_id'] = $workspace_id;
 
         return $this;
     }

@@ -502,7 +502,7 @@ class MigrationCompletedEvent implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets workspace_id
      *
-     * @param int $workspace_id The migration's workspace — pass it as `X-Workspace-Id`, or to `GET /v1/migrations/{workspaceId}`.
+     * @param int $workspace_id The migration's workspace — pass it as `X-Workspace-Id`, or to `GET /v1/migrations/{workspaceId}`. Always present on migration events. A JSON number here; `POST /v1/connect` and `GET /v1/workspaces` return the same id as a string, so compare as strings.
      *
      * @return $this
      */
