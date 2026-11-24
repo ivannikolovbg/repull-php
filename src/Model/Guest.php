@@ -90,8 +90,8 @@ class Guest implements ModelInterface, ArrayAccess, JsonSerializable
         'email' => 'email',
         'total_reservations' => null,
         'total_revenue' => null,
-        'last_stayed_at' => 'date-time',
-        'first_stayed_at' => 'date-time',
+        'last_stayed_at' => 'date',
+        'first_stayed_at' => 'date',
         'created_at' => 'date-time'
     ];
 
@@ -666,7 +666,7 @@ class Guest implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets last_stayed_at
      *
-     * @param \DateTime|null $last_stayed_at last_stayed_at
+     * @param \DateTime|null $last_stayed_at Check-out date of the guest's most recent stay (YYYY-MM-DD).
      *
      * @return $this
      */
@@ -700,7 +700,7 @@ class Guest implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets first_stayed_at
      *
-     * @param \DateTime|null $first_stayed_at first_stayed_at
+     * @param \DateTime|null $first_stayed_at Check-in date of the guest's first stay (YYYY-MM-DD).
      *
      * @return $this
      */

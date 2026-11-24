@@ -536,7 +536,7 @@ class AccountImport implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets reason
      *
-     * @param string|null $reason `failed` imports only: why it stopped — e.g. `needs_permissions`, `duplicate_account`, `stalled`.
+     * @param string|null $reason `failed` imports only: why it stopped — e.g. `needs_permissions`, `duplicate_account`, `stalled` (stopped reporting progress), `did_not_start` (queued, but no worker picked it up within 10 minutes: start it again with `POST /v1/connections/{id}/imports`), `queue_failed` (could not be queued).
      *
      * @return $this
      */

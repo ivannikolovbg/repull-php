@@ -36,7 +36,7 @@ use Repull\ObjectSerializer;
 /**
  * AirbnbReservation Class Doc Comment
  *
- * @description An Airbnb reservation as returned by the channel API. Use &#x60;confirmationCode&#x60; to address it in Airbnb operations.
+ * @description An Airbnb reservation as returned by the channel API. Use &#x60;confirmationCode&#x60; to address it in Airbnb operations, and &#x60;reservationId&#x60; to open the same stay on &#x60;GET /v1/reservations/{id}&#x60;. The fields after &#x60;payoutCurrency&#x60; are the Airbnb record as stored (Airbnb&#39;s raw status, amounts as decimal strings, stay datetimes); they are kept for existing integrations.
  * @package  Repull
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -59,8 +59,11 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $openAPITypes = [
+        'id' => 'string',
         'confirmation_code' => 'string',
+        'reservation_id' => 'string',
         'listing_id' => 'string',
+        'airbnb_listing_id' => 'string',
         'account_id' => 'string',
         'account_name' => 'string',
         'status' => 'string',
@@ -69,7 +72,31 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
         'guest_name' => 'string',
         'guest_count' => 'int',
         'total_price' => 'float',
-        'currency' => 'string'
+        'currency' => 'string',
+        'payout' => 'float',
+        'payout_currency' => 'string',
+        'listing_airbnb_id' => 'string',
+        'airbnb_reservation_id' => 'string',
+        'host_id' => 'string',
+        'guest_airbnb_id' => 'string',
+        'guest_first_name' => 'string',
+        'guest_last_name' => 'string',
+        'guest_profile_picture' => 'string',
+        'airbnb_status' => 'string',
+        'cancellation_policy' => 'string',
+        'cancellation_reason' => 'string',
+        'total_paid_amount' => 'string',
+        'total_paid_currency' => 'string',
+        'expected_payout_amount' => 'string',
+        'expected_payout_currency' => 'string',
+        'canceled_at' => '\DateTime',
+        'created_at' => '\DateTime',
+        'updated_at' => '\DateTime',
+        'check_in_datetime' => '\DateTime',
+        'check_out_datetime' => '\DateTime',
+        'time_zone' => 'string',
+        'customer_id' => 'string',
+        'guest_id' => 'string'
     ];
 
     /**
@@ -78,8 +105,11 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string|null>
      */
     protected static array $openAPIFormats = [
+        'id' => null,
         'confirmation_code' => null,
+        'reservation_id' => null,
         'listing_id' => null,
+        'airbnb_listing_id' => null,
         'account_id' => null,
         'account_name' => null,
         'status' => null,
@@ -88,7 +118,31 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
         'guest_name' => null,
         'guest_count' => null,
         'total_price' => null,
-        'currency' => null
+        'currency' => null,
+        'payout' => null,
+        'payout_currency' => null,
+        'listing_airbnb_id' => null,
+        'airbnb_reservation_id' => null,
+        'host_id' => null,
+        'guest_airbnb_id' => null,
+        'guest_first_name' => null,
+        'guest_last_name' => null,
+        'guest_profile_picture' => null,
+        'airbnb_status' => null,
+        'cancellation_policy' => null,
+        'cancellation_reason' => null,
+        'total_paid_amount' => null,
+        'total_paid_currency' => null,
+        'expected_payout_amount' => null,
+        'expected_payout_currency' => null,
+        'canceled_at' => 'date-time',
+        'created_at' => 'date-time',
+        'updated_at' => 'date-time',
+        'check_in_datetime' => 'date-time',
+        'check_out_datetime' => 'date-time',
+        'time_zone' => null,
+        'customer_id' => null,
+        'guest_id' => null
     ];
 
     /**
@@ -97,17 +151,44 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, bool>
      */
     protected static array $openAPINullables = [
-        'confirmation_code' => false,
-        'listing_id' => false,
+        'id' => false,
+        'confirmation_code' => true,
+        'reservation_id' => true,
+        'listing_id' => true,
+        'airbnb_listing_id' => true,
         'account_id' => true,
         'account_name' => true,
-        'status' => false,
-        'check_in' => false,
-        'check_out' => false,
+        'status' => true,
+        'check_in' => true,
+        'check_out' => true,
         'guest_name' => true,
         'guest_count' => true,
         'total_price' => true,
-        'currency' => true
+        'currency' => true,
+        'payout' => true,
+        'payout_currency' => true,
+        'listing_airbnb_id' => true,
+        'airbnb_reservation_id' => true,
+        'host_id' => true,
+        'guest_airbnb_id' => true,
+        'guest_first_name' => true,
+        'guest_last_name' => true,
+        'guest_profile_picture' => true,
+        'airbnb_status' => true,
+        'cancellation_policy' => true,
+        'cancellation_reason' => true,
+        'total_paid_amount' => true,
+        'total_paid_currency' => true,
+        'expected_payout_amount' => true,
+        'expected_payout_currency' => true,
+        'canceled_at' => true,
+        'created_at' => true,
+        'updated_at' => true,
+        'check_in_datetime' => true,
+        'check_out_datetime' => true,
+        'time_zone' => true,
+        'customer_id' => true,
+        'guest_id' => true
     ];
 
     /**
@@ -186,8 +267,11 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $attributeMap = [
+        'id' => 'id',
         'confirmation_code' => 'confirmationCode',
+        'reservation_id' => 'reservationId',
         'listing_id' => 'listingId',
+        'airbnb_listing_id' => 'airbnbListingId',
         'account_id' => 'accountId',
         'account_name' => 'accountName',
         'status' => 'status',
@@ -196,7 +280,31 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
         'guest_name' => 'guestName',
         'guest_count' => 'guestCount',
         'total_price' => 'totalPrice',
-        'currency' => 'currency'
+        'currency' => 'currency',
+        'payout' => 'payout',
+        'payout_currency' => 'payoutCurrency',
+        'listing_airbnb_id' => 'listingAirbnbId',
+        'airbnb_reservation_id' => 'airbnbReservationId',
+        'host_id' => 'hostId',
+        'guest_airbnb_id' => 'guestAirbnbId',
+        'guest_first_name' => 'guestFirstName',
+        'guest_last_name' => 'guestLastName',
+        'guest_profile_picture' => 'guestProfilePicture',
+        'airbnb_status' => 'airbnbStatus',
+        'cancellation_policy' => 'cancellationPolicy',
+        'cancellation_reason' => 'cancellationReason',
+        'total_paid_amount' => 'totalPaidAmount',
+        'total_paid_currency' => 'totalPaidCurrency',
+        'expected_payout_amount' => 'expectedPayoutAmount',
+        'expected_payout_currency' => 'expectedPayoutCurrency',
+        'canceled_at' => 'canceledAt',
+        'created_at' => 'createdAt',
+        'updated_at' => 'updatedAt',
+        'check_in_datetime' => 'checkInDatetime',
+        'check_out_datetime' => 'checkOutDatetime',
+        'time_zone' => 'timeZone',
+        'customer_id' => 'customerId',
+        'guest_id' => 'guestId'
     ];
 
     /**
@@ -205,8 +313,11 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $setters = [
+        'id' => 'setId',
         'confirmation_code' => 'setConfirmationCode',
+        'reservation_id' => 'setReservationId',
         'listing_id' => 'setListingId',
+        'airbnb_listing_id' => 'setAirbnbListingId',
         'account_id' => 'setAccountId',
         'account_name' => 'setAccountName',
         'status' => 'setStatus',
@@ -215,7 +326,31 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
         'guest_name' => 'setGuestName',
         'guest_count' => 'setGuestCount',
         'total_price' => 'setTotalPrice',
-        'currency' => 'setCurrency'
+        'currency' => 'setCurrency',
+        'payout' => 'setPayout',
+        'payout_currency' => 'setPayoutCurrency',
+        'listing_airbnb_id' => 'setListingAirbnbId',
+        'airbnb_reservation_id' => 'setAirbnbReservationId',
+        'host_id' => 'setHostId',
+        'guest_airbnb_id' => 'setGuestAirbnbId',
+        'guest_first_name' => 'setGuestFirstName',
+        'guest_last_name' => 'setGuestLastName',
+        'guest_profile_picture' => 'setGuestProfilePicture',
+        'airbnb_status' => 'setAirbnbStatus',
+        'cancellation_policy' => 'setCancellationPolicy',
+        'cancellation_reason' => 'setCancellationReason',
+        'total_paid_amount' => 'setTotalPaidAmount',
+        'total_paid_currency' => 'setTotalPaidCurrency',
+        'expected_payout_amount' => 'setExpectedPayoutAmount',
+        'expected_payout_currency' => 'setExpectedPayoutCurrency',
+        'canceled_at' => 'setCanceledAt',
+        'created_at' => 'setCreatedAt',
+        'updated_at' => 'setUpdatedAt',
+        'check_in_datetime' => 'setCheckInDatetime',
+        'check_out_datetime' => 'setCheckOutDatetime',
+        'time_zone' => 'setTimeZone',
+        'customer_id' => 'setCustomerId',
+        'guest_id' => 'setGuestId'
     ];
 
     /**
@@ -224,8 +359,11 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
      * @var array<string, string>
      */
     protected static array $getters = [
+        'id' => 'getId',
         'confirmation_code' => 'getConfirmationCode',
+        'reservation_id' => 'getReservationId',
         'listing_id' => 'getListingId',
+        'airbnb_listing_id' => 'getAirbnbListingId',
         'account_id' => 'getAccountId',
         'account_name' => 'getAccountName',
         'status' => 'getStatus',
@@ -234,7 +372,31 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
         'guest_name' => 'getGuestName',
         'guest_count' => 'getGuestCount',
         'total_price' => 'getTotalPrice',
-        'currency' => 'getCurrency'
+        'currency' => 'getCurrency',
+        'payout' => 'getPayout',
+        'payout_currency' => 'getPayoutCurrency',
+        'listing_airbnb_id' => 'getListingAirbnbId',
+        'airbnb_reservation_id' => 'getAirbnbReservationId',
+        'host_id' => 'getHostId',
+        'guest_airbnb_id' => 'getGuestAirbnbId',
+        'guest_first_name' => 'getGuestFirstName',
+        'guest_last_name' => 'getGuestLastName',
+        'guest_profile_picture' => 'getGuestProfilePicture',
+        'airbnb_status' => 'getAirbnbStatus',
+        'cancellation_policy' => 'getCancellationPolicy',
+        'cancellation_reason' => 'getCancellationReason',
+        'total_paid_amount' => 'getTotalPaidAmount',
+        'total_paid_currency' => 'getTotalPaidCurrency',
+        'expected_payout_amount' => 'getExpectedPayoutAmount',
+        'expected_payout_currency' => 'getExpectedPayoutCurrency',
+        'canceled_at' => 'getCanceledAt',
+        'created_at' => 'getCreatedAt',
+        'updated_at' => 'getUpdatedAt',
+        'check_in_datetime' => 'getCheckInDatetime',
+        'check_out_datetime' => 'getCheckOutDatetime',
+        'time_zone' => 'getTimeZone',
+        'customer_id' => 'getCustomerId',
+        'guest_id' => 'getGuestId'
     ];
 
     /**
@@ -273,7 +435,10 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
     public const STATUS_PENDING = 'pending';
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_DENIED = 'denied';
-    public const STATUS_INQUIRY = 'inquiry';
+    public const STATUS_FAILED_VERIFICATION = 'failed_verification';
+    public const STATUS_REQUEST_VOIDED = 'request_voided';
+    public const STATUS_EXPIRED = 'expired';
+    public const STATUS_ERROR = 'error';
 
     /**
      * Gets allowable values of the enum
@@ -287,7 +452,10 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
             self::STATUS_PENDING,
             self::STATUS_CANCELLED,
             self::STATUS_DENIED,
-            self::STATUS_INQUIRY,
+            self::STATUS_FAILED_VERIFICATION,
+            self::STATUS_REQUEST_VOIDED,
+            self::STATUS_EXPIRED,
+            self::STATUS_ERROR,
         ];
     }
 
@@ -305,8 +473,11 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
      */
     public function __construct(?array $data = null)
     {
+        $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('confirmation_code', $data ?? [], null);
+        $this->setIfExists('reservation_id', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
+        $this->setIfExists('airbnb_listing_id', $data ?? [], null);
         $this->setIfExists('account_id', $data ?? [], null);
         $this->setIfExists('account_name', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
@@ -316,6 +487,30 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('guest_count', $data ?? [], null);
         $this->setIfExists('total_price', $data ?? [], null);
         $this->setIfExists('currency', $data ?? [], null);
+        $this->setIfExists('payout', $data ?? [], null);
+        $this->setIfExists('payout_currency', $data ?? [], null);
+        $this->setIfExists('listing_airbnb_id', $data ?? [], null);
+        $this->setIfExists('airbnb_reservation_id', $data ?? [], null);
+        $this->setIfExists('host_id', $data ?? [], null);
+        $this->setIfExists('guest_airbnb_id', $data ?? [], null);
+        $this->setIfExists('guest_first_name', $data ?? [], null);
+        $this->setIfExists('guest_last_name', $data ?? [], null);
+        $this->setIfExists('guest_profile_picture', $data ?? [], null);
+        $this->setIfExists('airbnb_status', $data ?? [], null);
+        $this->setIfExists('cancellation_policy', $data ?? [], null);
+        $this->setIfExists('cancellation_reason', $data ?? [], null);
+        $this->setIfExists('total_paid_amount', $data ?? [], null);
+        $this->setIfExists('total_paid_currency', $data ?? [], null);
+        $this->setIfExists('expected_payout_amount', $data ?? [], null);
+        $this->setIfExists('expected_payout_currency', $data ?? [], null);
+        $this->setIfExists('canceled_at', $data ?? [], null);
+        $this->setIfExists('created_at', $data ?? [], null);
+        $this->setIfExists('updated_at', $data ?? [], null);
+        $this->setIfExists('check_in_datetime', $data ?? [], null);
+        $this->setIfExists('check_out_datetime', $data ?? [], null);
+        $this->setIfExists('time_zone', $data ?? [], null);
+        $this->setIfExists('customer_id', $data ?? [], null);
+        $this->setIfExists('guest_id', $data ?? [], null);
     }
 
     /**
@@ -343,6 +538,30 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
+        if ($this->container['id'] === null) {
+            $invalidProperties[] = "'id' can't be null";
+        }
+        if ($this->container['confirmation_code'] === null && !$this->isNullableSetToNull('confirmation_code')) {
+            $invalidProperties[] = "'confirmation_code' is required";
+        }
+        if ($this->container['reservation_id'] === null && !$this->isNullableSetToNull('reservation_id')) {
+            $invalidProperties[] = "'reservation_id' is required";
+        }
+        if ($this->container['listing_id'] === null && !$this->isNullableSetToNull('listing_id')) {
+            $invalidProperties[] = "'listing_id' is required";
+        }
+        if ($this->container['airbnb_listing_id'] === null && !$this->isNullableSetToNull('airbnb_listing_id')) {
+            $invalidProperties[] = "'airbnb_listing_id' is required";
+        }
+        if ($this->container['account_id'] === null && !$this->isNullableSetToNull('account_id')) {
+            $invalidProperties[] = "'account_id' is required";
+        }
+        if ($this->container['account_name'] === null && !$this->isNullableSetToNull('account_name')) {
+            $invalidProperties[] = "'account_name' is required";
+        }
+        if ($this->container['status'] === null && !$this->isNullableSetToNull('status')) {
+            $invalidProperties[] = "'status' is required";
+        }
         $allowedValues = self::getStatusAllowableValues();
         if (!is_null($this->container['status']) && !in_array($this->container['status'], $allowedValues, true)) {
             $invalidProperties[] = sprintf(
@@ -352,6 +571,30 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
             );
         }
 
+        if ($this->container['check_in'] === null && !$this->isNullableSetToNull('check_in')) {
+            $invalidProperties[] = "'check_in' is required";
+        }
+        if ($this->container['check_out'] === null && !$this->isNullableSetToNull('check_out')) {
+            $invalidProperties[] = "'check_out' is required";
+        }
+        if ($this->container['guest_name'] === null && !$this->isNullableSetToNull('guest_name')) {
+            $invalidProperties[] = "'guest_name' is required";
+        }
+        if ($this->container['guest_count'] === null && !$this->isNullableSetToNull('guest_count')) {
+            $invalidProperties[] = "'guest_count' is required";
+        }
+        if ($this->container['total_price'] === null && !$this->isNullableSetToNull('total_price')) {
+            $invalidProperties[] = "'total_price' is required";
+        }
+        if ($this->container['currency'] === null && !$this->isNullableSetToNull('currency')) {
+            $invalidProperties[] = "'currency' is required";
+        }
+        if ($this->container['payout'] === null && !$this->isNullableSetToNull('payout')) {
+            $invalidProperties[] = "'payout' is required";
+        }
+        if ($this->container['payout_currency'] === null && !$this->isNullableSetToNull('payout_currency')) {
+            $invalidProperties[] = "'payout_currency' is required";
+        }
         return $invalidProperties;
     }
 
@@ -363,6 +606,33 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
         return count($this->listInvalidProperties()) === 0;
     }
 
+
+    /**
+     * Gets id
+     *
+     * @return string
+     */
+    public function getId(): string
+    {
+        return $this->container['id'];
+    }
+
+    /**
+     * Sets id
+     *
+     * @param string $id This Airbnb record's id in Repull.
+     *
+     * @return $this
+     */
+    public function setId(string $id): static
+    {
+        if (is_null($id)) {
+            throw new InvalidArgumentException('non-nullable id cannot be null');
+        }
+        $this->container['id'] = $id;
+
+        return $this;
+    }
 
     /**
      * Gets confirmation_code
@@ -377,16 +647,57 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets confirmation_code
      *
-     * @param string|null $confirmation_code confirmation_code
+     * @param string|null $confirmation_code Airbnb confirmation code.
      *
      * @return $this
      */
     public function setConfirmationCode(?string $confirmation_code): static
     {
         if (is_null($confirmation_code)) {
-            throw new InvalidArgumentException('non-nullable confirmation_code cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'confirmation_code');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('confirmation_code', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['confirmation_code'] = $confirmation_code;
+
+        return $this;
+    }
+
+    /**
+     * Gets reservation_id
+     *
+     * @return string|null
+     */
+    public function getReservationId(): ?string
+    {
+        return $this->container['reservation_id'];
+    }
+
+    /**
+     * Sets reservation_id
+     *
+     * @param string|null $reservation_id The same stay on the unified reservations API: `GET /v1/reservations/{id}`. Null only while that record is still being created.
+     *
+     * @return $this
+     */
+    public function setReservationId(?string $reservation_id): static
+    {
+        if (is_null($reservation_id)) {
+            array_push($this->openAPINullablesSetToNull, 'reservation_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('reservation_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['reservation_id'] = $reservation_id;
 
         return $this;
     }
@@ -404,16 +715,57 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets listing_id
      *
-     * @param string|null $listing_id listing_id
+     * @param string|null $listing_id The Repull listing id (`GET /v1/listings/{id}`).
      *
      * @return $this
      */
     public function setListingId(?string $listing_id): static
     {
         if (is_null($listing_id)) {
-            throw new InvalidArgumentException('non-nullable listing_id cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'listing_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('listing_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['listing_id'] = $listing_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets airbnb_listing_id
+     *
+     * @return string|null
+     */
+    public function getAirbnbListingId(): ?string
+    {
+        return $this->container['airbnb_listing_id'];
+    }
+
+    /**
+     * Sets airbnb_listing_id
+     *
+     * @param string|null $airbnb_listing_id Airbnb's own listing id — the value `?listing_id=` takes.
+     *
+     * @return $this
+     */
+    public function setAirbnbListingId(?string $airbnb_listing_id): static
+    {
+        if (is_null($airbnb_listing_id)) {
+            array_push($this->openAPINullablesSetToNull, 'airbnb_listing_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('airbnb_listing_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['airbnb_listing_id'] = $airbnb_listing_id;
 
         return $this;
     }
@@ -499,14 +851,21 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets status
      *
-     * @param string|null $status status
+     * @param string|null $status Normalised status. Airbnb's own value is in `airbnbStatus`.
      *
      * @return $this
      */
     public function setStatus(?string $status): static
     {
         if (is_null($status)) {
-            throw new InvalidArgumentException('non-nullable status cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'status');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('status', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         // (relax-enums.php) accept unknown enum values for forward compat
         $this->container['status'] = $status;
@@ -534,7 +893,14 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
     public function setCheckIn(?\DateTime $check_in): static
     {
         if (is_null($check_in)) {
-            throw new InvalidArgumentException('non-nullable check_in cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'check_in');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('check_in', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['check_in'] = $check_in;
 
@@ -561,7 +927,14 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
     public function setCheckOut(?\DateTime $check_out): static
     {
         if (is_null($check_out)) {
-            throw new InvalidArgumentException('non-nullable check_out cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'check_out');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('check_out', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['check_out'] = $check_out;
 
@@ -649,7 +1022,7 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets total_price
      *
-     * @param float|null $total_price total_price
+     * @param float|null $total_price What the guest paid, in `currency`.
      *
      * @return $this
      */
@@ -700,6 +1073,828 @@ class AirbnbReservation implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['currency'] = $currency;
+
+        return $this;
+    }
+
+    /**
+     * Gets payout
+     *
+     * @return float|null
+     */
+    public function getPayout(): ?float
+    {
+        return $this->container['payout'];
+    }
+
+    /**
+     * Sets payout
+     *
+     * @param float|null $payout What the host is expected to receive, in `payoutCurrency`.
+     *
+     * @return $this
+     */
+    public function setPayout(?float $payout): static
+    {
+        if (is_null($payout)) {
+            array_push($this->openAPINullablesSetToNull, 'payout');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('payout', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['payout'] = $payout;
+
+        return $this;
+    }
+
+    /**
+     * Gets payout_currency
+     *
+     * @return string|null
+     */
+    public function getPayoutCurrency(): ?string
+    {
+        return $this->container['payout_currency'];
+    }
+
+    /**
+     * Sets payout_currency
+     *
+     * @param string|null $payout_currency payout_currency
+     *
+     * @return $this
+     */
+    public function setPayoutCurrency(?string $payout_currency): static
+    {
+        if (is_null($payout_currency)) {
+            array_push($this->openAPINullablesSetToNull, 'payout_currency');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('payout_currency', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['payout_currency'] = $payout_currency;
+
+        return $this;
+    }
+
+    /**
+     * Gets listing_airbnb_id
+     *
+     * @return string|null
+     * @deprecated
+     */
+    public function getListingAirbnbId(): ?string
+    {
+        return $this->container['listing_airbnb_id'];
+    }
+
+    /**
+     * Sets listing_airbnb_id
+     *
+     * @param string|null $listing_airbnb_id Internal link id of the Airbnb listing. Use `airbnbListingId` or `listingId` instead.
+     *
+     * @return $this
+     * @deprecated
+     */
+    public function setListingAirbnbId(?string $listing_airbnb_id): static
+    {
+        if (is_null($listing_airbnb_id)) {
+            array_push($this->openAPINullablesSetToNull, 'listing_airbnb_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('listing_airbnb_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['listing_airbnb_id'] = $listing_airbnb_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets airbnb_reservation_id
+     *
+     * @return string|null
+     * @deprecated
+     */
+    public function getAirbnbReservationId(): ?string
+    {
+        return $this->container['airbnb_reservation_id'];
+    }
+
+    /**
+     * Sets airbnb_reservation_id
+     *
+     * @param string|null $airbnb_reservation_id Same as `confirmationCode`.
+     *
+     * @return $this
+     * @deprecated
+     */
+    public function setAirbnbReservationId(?string $airbnb_reservation_id): static
+    {
+        if (is_null($airbnb_reservation_id)) {
+            array_push($this->openAPINullablesSetToNull, 'airbnb_reservation_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('airbnb_reservation_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['airbnb_reservation_id'] = $airbnb_reservation_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets host_id
+     *
+     * @return string|null
+     * @deprecated
+     */
+    public function getHostId(): ?string
+    {
+        return $this->container['host_id'];
+    }
+
+    /**
+     * Sets host_id
+     *
+     * @param string|null $host_id Same as `accountId`.
+     *
+     * @return $this
+     * @deprecated
+     */
+    public function setHostId(?string $host_id): static
+    {
+        if (is_null($host_id)) {
+            array_push($this->openAPINullablesSetToNull, 'host_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('host_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['host_id'] = $host_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest_airbnb_id
+     *
+     * @return string|null
+     */
+    public function getGuestAirbnbId(): ?string
+    {
+        return $this->container['guest_airbnb_id'];
+    }
+
+    /**
+     * Sets guest_airbnb_id
+     *
+     * @param string|null $guest_airbnb_id The guest's Airbnb user id.
+     *
+     * @return $this
+     */
+    public function setGuestAirbnbId(?string $guest_airbnb_id): static
+    {
+        if (is_null($guest_airbnb_id)) {
+            array_push($this->openAPINullablesSetToNull, 'guest_airbnb_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('guest_airbnb_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['guest_airbnb_id'] = $guest_airbnb_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest_first_name
+     *
+     * @return string|null
+     */
+    public function getGuestFirstName(): ?string
+    {
+        return $this->container['guest_first_name'];
+    }
+
+    /**
+     * Sets guest_first_name
+     *
+     * @param string|null $guest_first_name guest_first_name
+     *
+     * @return $this
+     */
+    public function setGuestFirstName(?string $guest_first_name): static
+    {
+        if (is_null($guest_first_name)) {
+            array_push($this->openAPINullablesSetToNull, 'guest_first_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('guest_first_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['guest_first_name'] = $guest_first_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest_last_name
+     *
+     * @return string|null
+     */
+    public function getGuestLastName(): ?string
+    {
+        return $this->container['guest_last_name'];
+    }
+
+    /**
+     * Sets guest_last_name
+     *
+     * @param string|null $guest_last_name guest_last_name
+     *
+     * @return $this
+     */
+    public function setGuestLastName(?string $guest_last_name): static
+    {
+        if (is_null($guest_last_name)) {
+            array_push($this->openAPINullablesSetToNull, 'guest_last_name');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('guest_last_name', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['guest_last_name'] = $guest_last_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest_profile_picture
+     *
+     * @return string|null
+     */
+    public function getGuestProfilePicture(): ?string
+    {
+        return $this->container['guest_profile_picture'];
+    }
+
+    /**
+     * Sets guest_profile_picture
+     *
+     * @param string|null $guest_profile_picture guest_profile_picture
+     *
+     * @return $this
+     */
+    public function setGuestProfilePicture(?string $guest_profile_picture): static
+    {
+        if (is_null($guest_profile_picture)) {
+            array_push($this->openAPINullablesSetToNull, 'guest_profile_picture');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('guest_profile_picture', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['guest_profile_picture'] = $guest_profile_picture;
+
+        return $this;
+    }
+
+    /**
+     * Gets airbnb_status
+     *
+     * @return string|null
+     */
+    public function getAirbnbStatus(): ?string
+    {
+        return $this->container['airbnb_status'];
+    }
+
+    /**
+     * Sets airbnb_status
+     *
+     * @param string|null $airbnb_status Airbnb's raw status: `accept`, `pending`, `cancelled_by_guest`, `cancelled_by_host`, `cancelled_by_admin`, `deny`, `failed_verification`, `pending_voided`, `checkpoint_voided`, `timeout`, …
+     *
+     * @return $this
+     */
+    public function setAirbnbStatus(?string $airbnb_status): static
+    {
+        if (is_null($airbnb_status)) {
+            array_push($this->openAPINullablesSetToNull, 'airbnb_status');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('airbnb_status', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['airbnb_status'] = $airbnb_status;
+
+        return $this;
+    }
+
+    /**
+     * Gets cancellation_policy
+     *
+     * @return string|null
+     */
+    public function getCancellationPolicy(): ?string
+    {
+        return $this->container['cancellation_policy'];
+    }
+
+    /**
+     * Sets cancellation_policy
+     *
+     * @param string|null $cancellation_policy cancellation_policy
+     *
+     * @return $this
+     */
+    public function setCancellationPolicy(?string $cancellation_policy): static
+    {
+        if (is_null($cancellation_policy)) {
+            array_push($this->openAPINullablesSetToNull, 'cancellation_policy');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('cancellation_policy', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['cancellation_policy'] = $cancellation_policy;
+
+        return $this;
+    }
+
+    /**
+     * Gets cancellation_reason
+     *
+     * @return string|null
+     */
+    public function getCancellationReason(): ?string
+    {
+        return $this->container['cancellation_reason'];
+    }
+
+    /**
+     * Sets cancellation_reason
+     *
+     * @param string|null $cancellation_reason cancellation_reason
+     *
+     * @return $this
+     */
+    public function setCancellationReason(?string $cancellation_reason): static
+    {
+        if (is_null($cancellation_reason)) {
+            array_push($this->openAPINullablesSetToNull, 'cancellation_reason');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('cancellation_reason', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['cancellation_reason'] = $cancellation_reason;
+
+        return $this;
+    }
+
+    /**
+     * Gets total_paid_amount
+     *
+     * @return string|null
+     */
+    public function getTotalPaidAmount(): ?string
+    {
+        return $this->container['total_paid_amount'];
+    }
+
+    /**
+     * Sets total_paid_amount
+     *
+     * @param string|null $total_paid_amount `totalPrice` as a decimal string.
+     *
+     * @return $this
+     */
+    public function setTotalPaidAmount(?string $total_paid_amount): static
+    {
+        if (is_null($total_paid_amount)) {
+            array_push($this->openAPINullablesSetToNull, 'total_paid_amount');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('total_paid_amount', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['total_paid_amount'] = $total_paid_amount;
+
+        return $this;
+    }
+
+    /**
+     * Gets total_paid_currency
+     *
+     * @return string|null
+     */
+    public function getTotalPaidCurrency(): ?string
+    {
+        return $this->container['total_paid_currency'];
+    }
+
+    /**
+     * Sets total_paid_currency
+     *
+     * @param string|null $total_paid_currency total_paid_currency
+     *
+     * @return $this
+     */
+    public function setTotalPaidCurrency(?string $total_paid_currency): static
+    {
+        if (is_null($total_paid_currency)) {
+            array_push($this->openAPINullablesSetToNull, 'total_paid_currency');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('total_paid_currency', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['total_paid_currency'] = $total_paid_currency;
+
+        return $this;
+    }
+
+    /**
+     * Gets expected_payout_amount
+     *
+     * @return string|null
+     */
+    public function getExpectedPayoutAmount(): ?string
+    {
+        return $this->container['expected_payout_amount'];
+    }
+
+    /**
+     * Sets expected_payout_amount
+     *
+     * @param string|null $expected_payout_amount `payout` as a decimal string.
+     *
+     * @return $this
+     */
+    public function setExpectedPayoutAmount(?string $expected_payout_amount): static
+    {
+        if (is_null($expected_payout_amount)) {
+            array_push($this->openAPINullablesSetToNull, 'expected_payout_amount');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('expected_payout_amount', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['expected_payout_amount'] = $expected_payout_amount;
+
+        return $this;
+    }
+
+    /**
+     * Gets expected_payout_currency
+     *
+     * @return string|null
+     */
+    public function getExpectedPayoutCurrency(): ?string
+    {
+        return $this->container['expected_payout_currency'];
+    }
+
+    /**
+     * Sets expected_payout_currency
+     *
+     * @param string|null $expected_payout_currency expected_payout_currency
+     *
+     * @return $this
+     */
+    public function setExpectedPayoutCurrency(?string $expected_payout_currency): static
+    {
+        if (is_null($expected_payout_currency)) {
+            array_push($this->openAPINullablesSetToNull, 'expected_payout_currency');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('expected_payout_currency', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['expected_payout_currency'] = $expected_payout_currency;
+
+        return $this;
+    }
+
+    /**
+     * Gets canceled_at
+     *
+     * @return \DateTime|null
+     */
+    public function getCanceledAt(): ?\DateTime
+    {
+        return $this->container['canceled_at'];
+    }
+
+    /**
+     * Sets canceled_at
+     *
+     * @param \DateTime|null $canceled_at canceled_at
+     *
+     * @return $this
+     */
+    public function setCanceledAt(?\DateTime $canceled_at): static
+    {
+        if (is_null($canceled_at)) {
+            array_push($this->openAPINullablesSetToNull, 'canceled_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('canceled_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['canceled_at'] = $canceled_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets created_at
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->container['created_at'];
+    }
+
+    /**
+     * Sets created_at
+     *
+     * @param \DateTime|null $created_at created_at
+     *
+     * @return $this
+     */
+    public function setCreatedAt(?\DateTime $created_at): static
+    {
+        if (is_null($created_at)) {
+            array_push($this->openAPINullablesSetToNull, 'created_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('created_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['created_at'] = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets updated_at
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->container['updated_at'];
+    }
+
+    /**
+     * Sets updated_at
+     *
+     * @param \DateTime|null $updated_at updated_at
+     *
+     * @return $this
+     */
+    public function setUpdatedAt(?\DateTime $updated_at): static
+    {
+        if (is_null($updated_at)) {
+            array_push($this->openAPINullablesSetToNull, 'updated_at');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('updated_at', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['updated_at'] = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets check_in_datetime
+     *
+     * @return \DateTime|null
+     */
+    public function getCheckInDatetime(): ?\DateTime
+    {
+        return $this->container['check_in_datetime'];
+    }
+
+    /**
+     * Sets check_in_datetime
+     *
+     * @param \DateTime|null $check_in_datetime Check-in date at 00:00 UTC. Prefer `checkIn`.
+     *
+     * @return $this
+     */
+    public function setCheckInDatetime(?\DateTime $check_in_datetime): static
+    {
+        if (is_null($check_in_datetime)) {
+            array_push($this->openAPINullablesSetToNull, 'check_in_datetime');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('check_in_datetime', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['check_in_datetime'] = $check_in_datetime;
+
+        return $this;
+    }
+
+    /**
+     * Gets check_out_datetime
+     *
+     * @return \DateTime|null
+     */
+    public function getCheckOutDatetime(): ?\DateTime
+    {
+        return $this->container['check_out_datetime'];
+    }
+
+    /**
+     * Sets check_out_datetime
+     *
+     * @param \DateTime|null $check_out_datetime Check-out date at 00:00 UTC. Prefer `checkOut`.
+     *
+     * @return $this
+     */
+    public function setCheckOutDatetime(?\DateTime $check_out_datetime): static
+    {
+        if (is_null($check_out_datetime)) {
+            array_push($this->openAPINullablesSetToNull, 'check_out_datetime');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('check_out_datetime', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['check_out_datetime'] = $check_out_datetime;
+
+        return $this;
+    }
+
+    /**
+     * Gets time_zone
+     *
+     * @return string|null
+     */
+    public function getTimeZone(): ?string
+    {
+        return $this->container['time_zone'];
+    }
+
+    /**
+     * Sets time_zone
+     *
+     * @param string|null $time_zone time_zone
+     *
+     * @return $this
+     */
+    public function setTimeZone(?string $time_zone): static
+    {
+        if (is_null($time_zone)) {
+            array_push($this->openAPINullablesSetToNull, 'time_zone');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('time_zone', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['time_zone'] = $time_zone;
+
+        return $this;
+    }
+
+    /**
+     * Gets customer_id
+     *
+     * @return string|null
+     */
+    public function getCustomerId(): ?string
+    {
+        return $this->container['customer_id'];
+    }
+
+    /**
+     * Sets customer_id
+     *
+     * @param string|null $customer_id Your workspace id.
+     *
+     * @return $this
+     */
+    public function setCustomerId(?string $customer_id): static
+    {
+        if (is_null($customer_id)) {
+            array_push($this->openAPINullablesSetToNull, 'customer_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('customer_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['customer_id'] = $customer_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets guest_id
+     *
+     * @return string|null
+     */
+    public function getGuestId(): ?string
+    {
+        return $this->container['guest_id'];
+    }
+
+    /**
+     * Sets guest_id
+     *
+     * @param string|null $guest_id The guest on `GET /v1/guests/{id}`.
+     *
+     * @return $this
+     */
+    public function setGuestId(?string $guest_id): static
+    {
+        if (is_null($guest_id)) {
+            array_push($this->openAPINullablesSetToNull, 'guest_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('guest_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['guest_id'] = $guest_id;
 
         return $this;
     }

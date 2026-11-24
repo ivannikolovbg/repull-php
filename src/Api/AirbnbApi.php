@@ -10014,12 +10014,12 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\AirbnbReservation|\Repull\Model\Error
+     * @return \Repull\Model\AirbnbReservationDetailResponse|\Repull\Model\Error
      */
     public function getAirbnbReservation(
         string $code,
         string $contentType = self::contentTypes['getAirbnbReservation'][0]
-    ): \Repull\Model\AirbnbReservation|\Repull\Model\Error
+    ): \Repull\Model\AirbnbReservationDetailResponse|\Repull\Model\Error
     {
         list($response) = $this->getAirbnbReservationWithHttpInfo($code, $contentType);
         return $response;
@@ -10035,7 +10035,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AirbnbReservation|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbReservationDetailResponse|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function getAirbnbReservationWithHttpInfo(
         string $code,
@@ -10069,7 +10069,7 @@ class AirbnbApi
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Repull\Model\AirbnbReservation',
+                        '\Repull\Model\AirbnbReservationDetailResponse',
                         $request,
                         $response,
                     );
@@ -10096,7 +10096,7 @@ class AirbnbApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Repull\Model\AirbnbReservation',
+                '\Repull\Model\AirbnbReservationDetailResponse',
                 $request,
                 $response,
             );
@@ -10105,7 +10105,7 @@ class AirbnbApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Repull\Model\AirbnbReservation',
+                        '\Repull\Model\AirbnbReservationDetailResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -10164,7 +10164,7 @@ class AirbnbApi
         string $contentType = self::contentTypes['getAirbnbReservation'][0]
     ): PromiseInterface
     {
-        $returnType = '\Repull\Model\AirbnbReservation';
+        $returnType = '\Repull\Model\AirbnbReservationDetailResponse';
         $request = $this->getAirbnbReservationRequest($code, $contentType);
 
         return $this->client
@@ -13472,7 +13472,7 @@ class AirbnbApi
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
      * @param  string|null $listing_id Filter to one Airbnb listing id (numeric string). (optional)
-     * @param  string|null $status Filter by reservation status. Omit to receive all statuses. (optional)
+     * @param  string|null $status Filter by the normalised &#x60;status&#x60;. &#x60;completed&#x60; &#x3D; accepted and already checked out. Airbnb&#39;s raw values (&#x60;accept&#x60;, &#x60;cancelled_by_guest&#x60;, …) are accepted too. Omit to receive all statuses; an unknown value returns &#x60;400 invalid_params&#x60;. (optional)
      * @param  \DateTime|null $start_date ISO 8601 (YYYY-MM-DD) lower bound on Airbnb&#39;s date range filter. (optional)
      * @param  \DateTime|null $end_date ISO 8601 (YYYY-MM-DD) upper bound on Airbnb&#39;s date range filter. (optional)
      * @param  bool|null $include_total Whether to include &#x60;pagination.total&#x60;. Always populated when Airbnb returns a total count (effectively always); accepted for shape symmetry with the rest of the API. (optional, default to true)
@@ -13509,7 +13509,7 @@ class AirbnbApi
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
      * @param  string|null $listing_id Filter to one Airbnb listing id (numeric string). (optional)
-     * @param  string|null $status Filter by reservation status. Omit to receive all statuses. (optional)
+     * @param  string|null $status Filter by the normalised &#x60;status&#x60;. &#x60;completed&#x60; &#x3D; accepted and already checked out. Airbnb&#39;s raw values (&#x60;accept&#x60;, &#x60;cancelled_by_guest&#x60;, …) are accepted too. Omit to receive all statuses; an unknown value returns &#x60;400 invalid_params&#x60;. (optional)
      * @param  \DateTime|null $start_date ISO 8601 (YYYY-MM-DD) lower bound on Airbnb&#39;s date range filter. (optional)
      * @param  \DateTime|null $end_date ISO 8601 (YYYY-MM-DD) upper bound on Airbnb&#39;s date range filter. (optional)
      * @param  bool|null $include_total Whether to include &#x60;pagination.total&#x60;. Always populated when Airbnb returns a total count (effectively always); accepted for shape symmetry with the rest of the API. (optional, default to true)
@@ -13517,7 +13517,7 @@ class AirbnbApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\AirbnbReservationListResponse|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\AirbnbReservationListResponse|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function listAirbnbReservationsWithHttpInfo(
         ?string $account_id = null,
@@ -13560,6 +13560,12 @@ class AirbnbApi
                 case 200:
                     return $this->handleResponseWithDataType(
                         '\Repull\Model\AirbnbReservationListResponse',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\Repull\Model\Error',
                         $request,
                         $response,
                     );
@@ -13606,6 +13612,14 @@ class AirbnbApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Repull\Model\Error',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
@@ -13638,7 +13652,7 @@ class AirbnbApi
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
      * @param  string|null $listing_id Filter to one Airbnb listing id (numeric string). (optional)
-     * @param  string|null $status Filter by reservation status. Omit to receive all statuses. (optional)
+     * @param  string|null $status Filter by the normalised &#x60;status&#x60;. &#x60;completed&#x60; &#x3D; accepted and already checked out. Airbnb&#39;s raw values (&#x60;accept&#x60;, &#x60;cancelled_by_guest&#x60;, …) are accepted too. Omit to receive all statuses; an unknown value returns &#x60;400 invalid_params&#x60;. (optional)
      * @param  \DateTime|null $start_date ISO 8601 (YYYY-MM-DD) lower bound on Airbnb&#39;s date range filter. (optional)
      * @param  \DateTime|null $end_date ISO 8601 (YYYY-MM-DD) upper bound on Airbnb&#39;s date range filter. (optional)
      * @param  bool|null $include_total Whether to include &#x60;pagination.total&#x60;. Always populated when Airbnb returns a total count (effectively always); accepted for shape symmetry with the rest of the API. (optional, default to true)
@@ -13678,7 +13692,7 @@ class AirbnbApi
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
      * @param  string|null $listing_id Filter to one Airbnb listing id (numeric string). (optional)
-     * @param  string|null $status Filter by reservation status. Omit to receive all statuses. (optional)
+     * @param  string|null $status Filter by the normalised &#x60;status&#x60;. &#x60;completed&#x60; &#x3D; accepted and already checked out. Airbnb&#39;s raw values (&#x60;accept&#x60;, &#x60;cancelled_by_guest&#x60;, …) are accepted too. Omit to receive all statuses; an unknown value returns &#x60;400 invalid_params&#x60;. (optional)
      * @param  \DateTime|null $start_date ISO 8601 (YYYY-MM-DD) lower bound on Airbnb&#39;s date range filter. (optional)
      * @param  \DateTime|null $end_date ISO 8601 (YYYY-MM-DD) upper bound on Airbnb&#39;s date range filter. (optional)
      * @param  bool|null $include_total Whether to include &#x60;pagination.total&#x60;. Always populated when Airbnb returns a total count (effectively always); accepted for shape symmetry with the rest of the API. (optional, default to true)
@@ -13747,7 +13761,7 @@ class AirbnbApi
      * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
      * @param  int|null $limit Max items per page. Hard cap is 100. (optional, default to 50)
      * @param  string|null $listing_id Filter to one Airbnb listing id (numeric string). (optional)
-     * @param  string|null $status Filter by reservation status. Omit to receive all statuses. (optional)
+     * @param  string|null $status Filter by the normalised &#x60;status&#x60;. &#x60;completed&#x60; &#x3D; accepted and already checked out. Airbnb&#39;s raw values (&#x60;accept&#x60;, &#x60;cancelled_by_guest&#x60;, …) are accepted too. Omit to receive all statuses; an unknown value returns &#x60;400 invalid_params&#x60;. (optional)
      * @param  \DateTime|null $start_date ISO 8601 (YYYY-MM-DD) lower bound on Airbnb&#39;s date range filter. (optional)
      * @param  \DateTime|null $end_date ISO 8601 (YYYY-MM-DD) upper bound on Airbnb&#39;s date range filter. (optional)
      * @param  bool|null $include_total Whether to include &#x60;pagination.total&#x60;. Always populated when Airbnb returns a total count (effectively always); accepted for shape symmetry with the rest of the API. (optional, default to true)

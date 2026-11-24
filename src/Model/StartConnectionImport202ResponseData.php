@@ -61,7 +61,9 @@ class StartConnectionImport202ResponseData implements ModelInterface, ArrayAcces
         'connection' => 'string',
         'scope' => 'string',
         'status' => 'string',
-        'queued_at' => '\DateTime'
+        'queued_at' => '\DateTime',
+        'import_id' => 'string',
+        'replaced_import_id' => 'string'
     ];
 
     /**
@@ -73,7 +75,9 @@ class StartConnectionImport202ResponseData implements ModelInterface, ArrayAcces
         'connection' => null,
         'scope' => null,
         'status' => null,
-        'queued_at' => 'date-time'
+        'queued_at' => 'date-time',
+        'import_id' => null,
+        'replaced_import_id' => null
     ];
 
     /**
@@ -85,7 +89,9 @@ class StartConnectionImport202ResponseData implements ModelInterface, ArrayAcces
         'connection' => false,
         'scope' => false,
         'status' => false,
-        'queued_at' => false
+        'queued_at' => false,
+        'import_id' => true,
+        'replaced_import_id' => true
     ];
 
     /**
@@ -167,7 +173,9 @@ class StartConnectionImport202ResponseData implements ModelInterface, ArrayAcces
         'connection' => 'connection',
         'scope' => 'scope',
         'status' => 'status',
-        'queued_at' => 'queuedAt'
+        'queued_at' => 'queuedAt',
+        'import_id' => 'importId',
+        'replaced_import_id' => 'replacedImportId'
     ];
 
     /**
@@ -179,7 +187,9 @@ class StartConnectionImport202ResponseData implements ModelInterface, ArrayAcces
         'connection' => 'setConnection',
         'scope' => 'setScope',
         'status' => 'setStatus',
-        'queued_at' => 'setQueuedAt'
+        'queued_at' => 'setQueuedAt',
+        'import_id' => 'setImportId',
+        'replaced_import_id' => 'setReplacedImportId'
     ];
 
     /**
@@ -191,7 +201,9 @@ class StartConnectionImport202ResponseData implements ModelInterface, ArrayAcces
         'connection' => 'getConnection',
         'scope' => 'getScope',
         'status' => 'getStatus',
-        'queued_at' => 'getQueuedAt'
+        'queued_at' => 'getQueuedAt',
+        'import_id' => 'getImportId',
+        'replaced_import_id' => 'getReplacedImportId'
     ];
 
     /**
@@ -228,6 +240,7 @@ class StartConnectionImport202ResponseData implements ModelInterface, ArrayAcces
 
     public const SCOPE_LISTINGS = 'listings';
     public const SCOPE_RESERVATIONS = 'reservations';
+    public const SCOPE_FULL = 'full';
     public const STATUS_QUEUED = 'queued';
 
     /**
@@ -240,6 +253,7 @@ class StartConnectionImport202ResponseData implements ModelInterface, ArrayAcces
         return [
             self::SCOPE_LISTINGS,
             self::SCOPE_RESERVATIONS,
+            self::SCOPE_FULL,
         ];
     }
 
@@ -273,6 +287,8 @@ class StartConnectionImport202ResponseData implements ModelInterface, ArrayAcces
         $this->setIfExists('scope', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('queued_at', $data ?? [], null);
+        $this->setIfExists('import_id', $data ?? [], null);
+        $this->setIfExists('replaced_import_id', $data ?? [], null);
     }
 
     /**
@@ -329,6 +345,12 @@ class StartConnectionImport202ResponseData implements ModelInterface, ArrayAcces
 
         if ($this->container['queued_at'] === null) {
             $invalidProperties[] = "'queued_at' can't be null";
+        }
+        if ($this->container['import_id'] === null && !$this->isNullableSetToNull('import_id')) {
+            $invalidProperties[] = "'import_id' is required";
+        }
+        if ($this->container['replaced_import_id'] === null && !$this->isNullableSetToNull('replaced_import_id')) {
+            $invalidProperties[] = "'replaced_import_id' is required";
         }
         return $invalidProperties;
     }
@@ -448,6 +470,74 @@ class StartConnectionImport202ResponseData implements ModelInterface, ArrayAcces
             throw new InvalidArgumentException('non-nullable queued_at cannot be null');
         }
         $this->container['queued_at'] = $queued_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets import_id
+     *
+     * @return string|null
+     */
+    public function getImportId(): ?string
+    {
+        return $this->container['import_id'];
+    }
+
+    /**
+     * Sets import_id
+     *
+     * @param string|null $import_id The import's id on `GET /v1/connections/{id}/imports` and in the `account.import.*` webhooks.
+     *
+     * @return $this
+     */
+    public function setImportId(?string $import_id): static
+    {
+        if (is_null($import_id)) {
+            array_push($this->openAPINullablesSetToNull, 'import_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('import_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['import_id'] = $import_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets replaced_import_id
+     *
+     * @return string|null
+     */
+    public function getReplacedImportId(): ?string
+    {
+        return $this->container['replaced_import_id'];
+    }
+
+    /**
+     * Sets replaced_import_id
+     *
+     * @param string|null $replaced_import_id `full` only: an earlier import of this account that no worker had picked up, closed as `failed` (`did_not_start`) and replaced by this one.
+     *
+     * @return $this
+     */
+    public function setReplacedImportId(?string $replaced_import_id): static
+    {
+        if (is_null($replaced_import_id)) {
+            array_push($this->openAPINullablesSetToNull, 'replaced_import_id');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('replaced_import_id', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['replaced_import_id'] = $replaced_import_id;
 
         return $this;
     }

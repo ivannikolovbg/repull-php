@@ -90,7 +90,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
         'redirect_url' => false,
         'access_type' => false,
         'reservation_history_months' => false,
-        'state' => false,
+        'state' => true,
         'workspace' => false,
         'locale' => true
     ];
@@ -346,7 +346,7 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets redirect_url
      *
-     * @param string|null $redirect_url Airbnb + Booking.com — where to redirect the user after they finish the hosted connect flow.
+     * @param string|null $redirect_url Airbnb, Booking.com and PriceLabs — where to send the user after they finish (or cancel) the hosted connect flow. Every return to it carries `status` (`connected`, `cancelled`, `error` with a `code`, `expired`, `pending` when the host chose to finish later, or `requested` for a request-only PMS), `sessionId` (the id this call returns) and `state` when you sent one; a connected return adds `connectionId` and `externalAccountId` (and `hostId` for Airbnb). Your existing query string is kept.
      *
      * @return $this
      */
@@ -436,14 +436,21 @@ class CreateConnectionRequest implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets state
      *
-     * @param string|null $state Airbnb + Booking.com — your own correlation token, e.g. your user id (at most 500 characters). Echoed on the redirect back (`&state=`) and in the `connect.session.completed` webhook.
+     * @param string|null $state Your own correlation token, e.g. your user id (at most 500 characters), for every hosted flow (Airbnb, Booking.com, PriceLabs). Echoed in this response, on every redirect back (`&state=`, whatever the outcome), in the popup message, and in the `connect.session.completed` webhook. Without it, match the return by `sessionId`.
      *
      * @return $this
      */
     public function setState(?string $state): static
     {
         if (is_null($state)) {
-            throw new InvalidArgumentException('non-nullable state cannot be null');
+            array_push($this->openAPINullablesSetToNull, 'state');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('state', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
         }
         $this->container['state'] = $state;
 

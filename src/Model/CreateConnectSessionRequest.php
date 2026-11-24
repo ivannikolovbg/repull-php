@@ -479,7 +479,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Sets redirect_url
      *
-     * @param string $redirect_url Where to send the user after they finish (or cancel). Status query params are appended.
+     * @param string $redirect_url Where to send the user after they finish (or cancel). Every return to it carries `status` (`connected`, `cancelled`, `error` with a `code`, `expired`, `pending` when the host chose to finish later, or `requested` for a request-only PMS), `sessionId` (the id this call returns) and `state` when you sent one; a connected return adds `connectionId` and `externalAccountId` (and `hostId` for Airbnb). Your existing query string is kept.
      *
      * @return $this
      */
@@ -506,7 +506,7 @@ class CreateConnectSessionRequest implements ModelInterface, ArrayAccess, JsonSe
     /**
      * Sets state
      *
-     * @param string|null $state Your own correlation token, e.g. your user id (at most 500 characters). Echoed in this response, on the redirect back (`&state=`), in the popup message, and in the `connect.session.completed` webhook.
+     * @param string|null $state Your own correlation token, e.g. your user id (at most 500 characters). Echoed in this response, on every redirect back (`&state=`, whatever the outcome), in the popup message, and in the `connect.session.completed` webhook. Without it, match the return by `sessionId`.
      *
      * @return $this
      */

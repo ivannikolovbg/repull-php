@@ -1785,7 +1785,7 @@ class ConnectionsApi
     /**
      * Operation startConnectionImport
      *
-     * Refresh a connection&#39;s listings or reservations
+     * Start an import of a connection
      *
      * @param  string $id Airbnb connection handle &#x60;airbnb:{hostId}&#x60; — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of an Airbnb connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
      * @param  \Repull\Model\StartConnectionImportRequest|null $start_connection_import_request start_connection_import_request (optional)
@@ -1808,7 +1808,7 @@ class ConnectionsApi
     /**
      * Operation startConnectionImportWithHttpInfo
      *
-     * Refresh a connection&#39;s listings or reservations
+     * Start an import of a connection
      *
      * @param  string $id Airbnb connection handle &#x60;airbnb:{hostId}&#x60; — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of an Airbnb connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
      * @param  \Repull\Model\StartConnectionImportRequest|null $start_connection_import_request (optional)
@@ -1951,7 +1951,7 @@ class ConnectionsApi
     /**
      * Operation startConnectionImportAsync
      *
-     * Refresh a connection&#39;s listings or reservations
+     * Start an import of a connection
      *
      * @param  string $id Airbnb connection handle &#x60;airbnb:{hostId}&#x60; — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of an Airbnb connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
      * @param  \Repull\Model\StartConnectionImportRequest|null $start_connection_import_request (optional)
@@ -1977,7 +1977,7 @@ class ConnectionsApi
     /**
      * Operation startConnectionImportAsyncWithHttpInfo
      *
-     * Refresh a connection&#39;s listings or reservations
+     * Start an import of a connection
      *
      * @param  string $id Airbnb connection handle &#x60;airbnb:{hostId}&#x60; — the &#x60;provider&#x60; and &#x60;externalAccountId&#x60; of an Airbnb connection on &#x60;GET /v1/connect&#x60;, or the account of an &#x60;account.*&#x60; webhook. (required)
      * @param  \Repull\Model\StartConnectionImportRequest|null $start_connection_import_request (optional)

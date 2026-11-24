@@ -775,13 +775,13 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\Connection
+     * @return \Repull\Model\ConnectProviderSession
      */
     public function createConnection(
         string $provider,
         ?\Repull\Model\CreateConnectionRequest $create_connection_request = null,
         string $contentType = self::contentTypes['createConnection'][0]
-    ): \Repull\Model\Connection
+    ): \Repull\Model\ConnectProviderSession
     {
         list($response) = $this->createConnectionWithHttpInfo($provider, $create_connection_request, $contentType);
         return $response;
@@ -798,7 +798,7 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\Connection, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\ConnectProviderSession, HTTP status code, HTTP response headers (array of strings)
      */
     public function createConnectionWithHttpInfo(
         string $provider,
@@ -833,7 +833,7 @@ class ConnectApi
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Repull\Model\Connection',
+                        '\Repull\Model\ConnectProviderSession',
                         $request,
                         $response,
                     );
@@ -854,7 +854,7 @@ class ConnectApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Repull\Model\Connection',
+                '\Repull\Model\ConnectProviderSession',
                 $request,
                 $response,
             );
@@ -863,7 +863,7 @@ class ConnectApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Repull\Model\Connection',
+                        '\Repull\Model\ConnectProviderSession',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -918,7 +918,7 @@ class ConnectApi
         string $contentType = self::contentTypes['createConnection'][0]
     ): PromiseInterface
     {
-        $returnType = '\Repull\Model\Connection';
+        $returnType = '\Repull\Model\ConnectProviderSession';
         $request = $this->createConnectionRequest($provider, $create_connection_request, $contentType);
 
         return $this->client
