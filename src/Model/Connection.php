@@ -74,7 +74,8 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'key_masked' => 'string',
         'label' => 'string',
         'disconnected_at' => '\DateTime',
-        'health' => '\Repull\Model\AppConnectionHealth'
+        'health' => '\Repull\Model\AppConnectionHealth',
+        'webhook' => '\Repull\Model\HospitableWebhook'
     ];
 
     /**
@@ -99,7 +100,8 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'key_masked' => null,
         'label' => null,
         'disconnected_at' => 'date-time',
-        'health' => null
+        'health' => null,
+        'webhook' => null
     ];
 
     /**
@@ -124,7 +126,8 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'key_masked' => false,
         'label' => true,
         'disconnected_at' => true,
-        'health' => true
+        'health' => true,
+        'webhook' => true
     ];
 
     /**
@@ -219,7 +222,8 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'key_masked' => 'keyMasked',
         'label' => 'label',
         'disconnected_at' => 'disconnectedAt',
-        'health' => 'health'
+        'health' => 'health',
+        'webhook' => 'webhook'
     ];
 
     /**
@@ -244,7 +248,8 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'key_masked' => 'setKeyMasked',
         'label' => 'setLabel',
         'disconnected_at' => 'setDisconnectedAt',
-        'health' => 'setHealth'
+        'health' => 'setHealth',
+        'webhook' => 'setWebhook'
     ];
 
     /**
@@ -269,7 +274,8 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         'key_masked' => 'getKeyMasked',
         'label' => 'getLabel',
         'disconnected_at' => 'getDisconnectedAt',
-        'health' => 'getHealth'
+        'health' => 'getHealth',
+        'webhook' => 'getWebhook'
     ];
 
     /**
@@ -374,6 +380,7 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('label', $data ?? [], null);
         $this->setIfExists('disconnected_at', $data ?? [], null);
         $this->setIfExists('health', $data ?? [], null);
+        $this->setIfExists('webhook', $data ?? [], null);
     }
 
     /**
@@ -958,6 +965,40 @@ class Connection implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['health'] = $health;
+
+        return $this;
+    }
+
+    /**
+     * Gets webhook
+     *
+     * @return \Repull\Model\HospitableWebhook|null
+     */
+    public function getWebhook(): ?\Repull\Model\HospitableWebhook
+    {
+        return $this->container['webhook'];
+    }
+
+    /**
+     * Sets webhook
+     *
+     * @param \Repull\Model\HospitableWebhook|null $webhook Hospitable only: the webhook URL the host pastes into Hospitable (Apps → Webhooks → + Add new) and whether deliveries are arriving. Show it in your own UI so the host can set it up. Absent for other providers.
+     *
+     * @return $this
+     */
+    public function setWebhook(?\Repull\Model\HospitableWebhook $webhook): static
+    {
+        if (is_null($webhook)) {
+            array_push($this->openAPINullablesSetToNull, 'webhook');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('webhook', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['webhook'] = $webhook;
 
         return $this;
     }

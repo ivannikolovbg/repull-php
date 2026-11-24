@@ -70,6 +70,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => '\Repull\Model\ConnectHost',
         'accounts' => '\Repull\Model\ConnectStatusAccountsInner[]',
         'write_policy' => '\Repull\Model\PmsWritePolicy',
+        'webhook' => '\Repull\Model\HospitableWebhook',
         'capabilities' => '\Repull\Model\ConnectStatusCapabilities',
         'data_freshness' => 'object',
         'action' => '\Repull\Model\ConnectionAction',
@@ -93,6 +94,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => null,
         'accounts' => null,
         'write_policy' => null,
+        'webhook' => null,
         'capabilities' => null,
         'data_freshness' => null,
         'action' => null,
@@ -116,6 +118,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => true,
         'accounts' => false,
         'write_policy' => false,
+        'webhook' => true,
         'capabilities' => false,
         'data_freshness' => false,
         'action' => true,
@@ -209,6 +212,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => 'host',
         'accounts' => 'accounts',
         'write_policy' => 'writePolicy',
+        'webhook' => 'webhook',
         'capabilities' => 'capabilities',
         'data_freshness' => 'dataFreshness',
         'action' => 'action',
@@ -232,6 +236,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => 'setHost',
         'accounts' => 'setAccounts',
         'write_policy' => 'setWritePolicy',
+        'webhook' => 'setWebhook',
         'capabilities' => 'setCapabilities',
         'data_freshness' => 'setDataFreshness',
         'action' => 'setAction',
@@ -255,6 +260,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         'host' => 'getHost',
         'accounts' => 'getAccounts',
         'write_policy' => 'getWritePolicy',
+        'webhook' => 'getWebhook',
         'capabilities' => 'getCapabilities',
         'data_freshness' => 'getDataFreshness',
         'action' => 'getAction',
@@ -336,6 +342,7 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('host', $data ?? [], null);
         $this->setIfExists('accounts', $data ?? [], null);
         $this->setIfExists('write_policy', $data ?? [], null);
+        $this->setIfExists('webhook', $data ?? [], null);
         $this->setIfExists('capabilities', $data ?? [], null);
         $this->setIfExists('data_freshness', $data ?? [], null);
         $this->setIfExists('action', $data ?? [], null);
@@ -703,6 +710,40 @@ class ConnectStatus implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable write_policy cannot be null');
         }
         $this->container['write_policy'] = $write_policy;
+
+        return $this;
+    }
+
+    /**
+     * Gets webhook
+     *
+     * @return \Repull\Model\HospitableWebhook|null
+     */
+    public function getWebhook(): ?\Repull\Model\HospitableWebhook
+    {
+        return $this->container['webhook'];
+    }
+
+    /**
+     * Sets webhook
+     *
+     * @param \Repull\Model\HospitableWebhook|null $webhook Hospitable only (`GET /v1/connect/hospitable`): the webhook URL the host pastes into Hospitable (Apps → Webhooks → + Add new) and whether deliveries are arriving.
+     *
+     * @return $this
+     */
+    public function setWebhook(?\Repull\Model\HospitableWebhook $webhook): static
+    {
+        if (is_null($webhook)) {
+            array_push($this->openAPINullablesSetToNull, 'webhook');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('webhook', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['webhook'] = $webhook;
 
         return $this;
     }

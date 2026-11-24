@@ -8623,12 +8623,12 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+     * @return \Repull\Model\SubmitHospitableCredentials200Response|\Repull\Model\Error
      */
     public function submitHospitableCredentials(
         \Repull\Model\SubmitHospitableCredentialsRequest $submit_hospitable_credentials_request,
         string $contentType = self::contentTypes['submitHospitableCredentials'][0]
-    ): \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error
+    ): \Repull\Model\SubmitHospitableCredentials200Response|\Repull\Model\Error
     {
         list($response) = $this->submitHospitableCredentialsWithHttpInfo($submit_hospitable_credentials_request, $contentType);
         return $response;
@@ -8644,7 +8644,7 @@ class ConnectApi
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
      * @throws InvalidArgumentException
-     * @return array of \Repull\Model\SubmitBeds24Credentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \Repull\Model\SubmitHospitableCredentials200Response|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error|\Repull\Model\Error, HTTP status code, HTTP response headers (array of strings)
      */
     public function submitHospitableCredentialsWithHttpInfo(
         \Repull\Model\SubmitHospitableCredentialsRequest $submit_hospitable_credentials_request,
@@ -8678,7 +8678,7 @@ class ConnectApi
             switch($statusCode) {
                 case 200:
                     return $this->handleResponseWithDataType(
-                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        '\Repull\Model\SubmitHospitableCredentials200Response',
                         $request,
                         $response,
                     );
@@ -8723,7 +8723,7 @@ class ConnectApi
             }
 
             return $this->handleResponseWithDataType(
-                '\Repull\Model\SubmitBeds24Credentials200Response',
+                '\Repull\Model\SubmitHospitableCredentials200Response',
                 $request,
                 $response,
             );
@@ -8732,7 +8732,7 @@ class ConnectApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Repull\Model\SubmitBeds24Credentials200Response',
+                        '\Repull\Model\SubmitHospitableCredentials200Response',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -8815,7 +8815,7 @@ class ConnectApi
         string $contentType = self::contentTypes['submitHospitableCredentials'][0]
     ): PromiseInterface
     {
-        $returnType = '\Repull\Model\SubmitBeds24Credentials200Response';
+        $returnType = '\Repull\Model\SubmitHospitableCredentials200Response';
         $request = $this->submitHospitableCredentialsRequest($submit_hospitable_credentials_request, $contentType);
 
         return $this->client

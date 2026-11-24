@@ -75,6 +75,7 @@ class CreatePriceLabsKey201Response implements ModelInterface, ArrayAccess, Json
         'label' => 'string',
         'disconnected_at' => '\DateTime',
         'health' => '\Repull\Model\AppConnectionHealth',
+        'webhook' => '\Repull\Model\HospitableWebhook',
         'key' => 'string',
         'instructions' => '\Repull\Model\CreatePriceLabsKey201ResponseAllOfInstructions'
     ];
@@ -102,6 +103,7 @@ class CreatePriceLabsKey201Response implements ModelInterface, ArrayAccess, Json
         'label' => null,
         'disconnected_at' => 'date-time',
         'health' => null,
+        'webhook' => null,
         'key' => null,
         'instructions' => null
     ];
@@ -129,6 +131,7 @@ class CreatePriceLabsKey201Response implements ModelInterface, ArrayAccess, Json
         'label' => true,
         'disconnected_at' => true,
         'health' => true,
+        'webhook' => true,
         'key' => false,
         'instructions' => false
     ];
@@ -226,6 +229,7 @@ class CreatePriceLabsKey201Response implements ModelInterface, ArrayAccess, Json
         'label' => 'label',
         'disconnected_at' => 'disconnectedAt',
         'health' => 'health',
+        'webhook' => 'webhook',
         'key' => 'key',
         'instructions' => 'instructions'
     ];
@@ -253,6 +257,7 @@ class CreatePriceLabsKey201Response implements ModelInterface, ArrayAccess, Json
         'label' => 'setLabel',
         'disconnected_at' => 'setDisconnectedAt',
         'health' => 'setHealth',
+        'webhook' => 'setWebhook',
         'key' => 'setKey',
         'instructions' => 'setInstructions'
     ];
@@ -280,6 +285,7 @@ class CreatePriceLabsKey201Response implements ModelInterface, ArrayAccess, Json
         'label' => 'getLabel',
         'disconnected_at' => 'getDisconnectedAt',
         'health' => 'getHealth',
+        'webhook' => 'getWebhook',
         'key' => 'getKey',
         'instructions' => 'getInstructions'
     ];
@@ -386,6 +392,7 @@ class CreatePriceLabsKey201Response implements ModelInterface, ArrayAccess, Json
         $this->setIfExists('label', $data ?? [], null);
         $this->setIfExists('disconnected_at', $data ?? [], null);
         $this->setIfExists('health', $data ?? [], null);
+        $this->setIfExists('webhook', $data ?? [], null);
         $this->setIfExists('key', $data ?? [], null);
         $this->setIfExists('instructions', $data ?? [], null);
     }
@@ -978,6 +985,40 @@ class CreatePriceLabsKey201Response implements ModelInterface, ArrayAccess, Json
             }
         }
         $this->container['health'] = $health;
+
+        return $this;
+    }
+
+    /**
+     * Gets webhook
+     *
+     * @return \Repull\Model\HospitableWebhook|null
+     */
+    public function getWebhook(): ?\Repull\Model\HospitableWebhook
+    {
+        return $this->container['webhook'];
+    }
+
+    /**
+     * Sets webhook
+     *
+     * @param \Repull\Model\HospitableWebhook|null $webhook Hospitable only: the webhook URL the host pastes into Hospitable (Apps → Webhooks → + Add new) and whether deliveries are arriving. Show it in your own UI so the host can set it up. Absent for other providers.
+     *
+     * @return $this
+     */
+    public function setWebhook(?\Repull\Model\HospitableWebhook $webhook): static
+    {
+        if (is_null($webhook)) {
+            array_push($this->openAPINullablesSetToNull, 'webhook');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('webhook', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['webhook'] = $webhook;
 
         return $this;
     }
