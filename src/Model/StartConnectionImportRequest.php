@@ -209,6 +209,7 @@ class StartConnectionImportRequest implements ModelInterface, ArrayAccess, JsonS
     }
 
     public const SCOPE_LISTINGS = 'listings';
+    public const SCOPE_RESERVATIONS = 'reservations';
 
     /**
      * Gets allowable values of the enum
@@ -219,6 +220,7 @@ class StartConnectionImportRequest implements ModelInterface, ArrayAccess, JsonS
     {
         return [
             self::SCOPE_LISTINGS,
+            self::SCOPE_RESERVATIONS,
         ];
     }
 
@@ -298,7 +300,7 @@ class StartConnectionImportRequest implements ModelInterface, ArrayAccess, JsonS
     /**
      * Sets scope
      *
-     * @param string|null $scope What to import. `listings` = the account's listings. New listings come in with their calendar (pricing and availability); on a full-access connection, calendars of listings already in Repull are not re-read. The only scope; the full import runs when an account is connected.
+     * @param string|null $scope What to import. `listings` = the account's listings; new listings come in with their calendar (pricing and availability); on a full-access connection, calendars of listings already in Repull are not re-read. `reservations` = the account's reservations, stays from the last month and every future one. The full import runs when an account is connected.
      *
      * @return $this
      */

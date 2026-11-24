@@ -319,7 +319,7 @@ class AirbnbTransactionPayout implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets payout_id
      *
-     * @param string|null $payout_id The payout this line was settled in (its own id on a Payout row). `null` on an UPCOMING line.
+     * @param string|null $payout_id The payout this line was settled in (its own id on a Payout row). `null` on an unpaid (`RELEASED` / `UPCOMING`) line.
      *
      * @return $this
      */
@@ -414,7 +414,7 @@ class AirbnbTransactionPayout implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets line_index
      *
-     * @param int|null $line_index Position within the payout, from 1. `null` on the Payout row and on UPCOMING lines.
+     * @param int|null $line_index Position within the payout, from 1. `null` on the Payout row and on unpaid lines.
      *
      * @return $this
      */

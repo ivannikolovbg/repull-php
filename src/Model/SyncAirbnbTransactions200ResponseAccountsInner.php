@@ -397,7 +397,7 @@ class SyncAirbnbTransactions200ResponseAccountsInner implements ModelInterface, 
     /**
      * Sets upcoming_removed
      *
-     * @param int $upcoming_removed UPCOMING lines Airbnb no longer lists (paid out or cancelled) and were removed.
+     * @param int $upcoming_removed Unpaid (RELEASED / UPCOMING) lines Airbnb no longer lists (paid out or cancelled) and were removed.
      *
      * @return $this
      */

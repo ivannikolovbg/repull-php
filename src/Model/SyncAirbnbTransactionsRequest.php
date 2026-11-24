@@ -368,7 +368,7 @@ class SyncAirbnbTransactionsRequest implements ModelInterface, ArrayAccess, Json
     /**
      * Sets transaction_type
      *
-     * @param string|null $transaction_type Refresh only settled or only upcoming lines. Both when omitted.
+     * @param string|null $transaction_type Airbnb's two buckets: `COMPLETED` refreshes paid-out lines only, `UPCOMING` every unpaid line (`RELEASED` and `UPCOMING`). Both when omitted.
      *
      * @return $this
      */

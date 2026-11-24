@@ -611,7 +611,7 @@ class Review implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets pms
      *
-     * @param string|null $pms The PMS this review was read from (`guesty`, `hostaway`, …) when it came through one — `platform` is still the channel the guest wrote it on. A reply (`POST /v1/reviews/{id}/reply`) goes through this PMS; `GET /v1/connect/{provider}` → `capabilities.pms.reviews.reply` says whether it can. `null` for a review from a directly connected channel.
+     * @param string|null $pms The PMS this review was read from (`guesty`, `hostaway`, `hospitable`, …) when it came through one — `platform` is still the channel the guest wrote it on, and `reservationId` / `reservationConfirmationCode` point at the stay. A review that also arrives from a directly connected channel is returned once, as the channel's copy (`pms: null`). A reply (`POST /v1/reviews/{id}/reply`) goes through this PMS; `GET /v1/connect/{provider}` → `capabilities.pms.reviews.reply` says whether it can. `null` for a review from a directly connected channel.
      *
      * @return $this
      */

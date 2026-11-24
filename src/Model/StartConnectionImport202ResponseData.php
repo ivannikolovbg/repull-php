@@ -227,6 +227,7 @@ class StartConnectionImport202ResponseData implements ModelInterface, ArrayAcces
     }
 
     public const SCOPE_LISTINGS = 'listings';
+    public const SCOPE_RESERVATIONS = 'reservations';
     public const STATUS_QUEUED = 'queued';
 
     /**
@@ -238,6 +239,7 @@ class StartConnectionImport202ResponseData implements ModelInterface, ArrayAcces
     {
         return [
             self::SCOPE_LISTINGS,
+            self::SCOPE_RESERVATIONS,
         ];
     }
 

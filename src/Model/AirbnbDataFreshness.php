@@ -311,7 +311,7 @@ class AirbnbDataFreshness implements ModelInterface, ArrayAccess, JsonSerializab
     /**
      * Sets last_synced_at
      *
-     * @param \DateTime|null $last_synced_at The most recent Airbnb import COMPLETED by any account in scope. `null` when none of them ever has. A run that failed or was rate-limited does not move it.
+     * @param \DateTime|null $last_synced_at The most recent Airbnb import COMPLETED by any account in scope — a full re-read of the account, which runs on connect, about once a day, and on `POST /v1/connections/{id}/imports`. `null` when none of them ever has. A run that failed or was rate-limited does not move it. It is not how current reservations and messages are: Airbnb notifies Repull of every new booking, change, cancellation and message as it happens, and those land within seconds between imports, on every access level.
      *
      * @return $this
      */

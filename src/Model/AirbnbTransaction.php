@@ -348,6 +348,7 @@ class AirbnbTransaction implements ModelInterface, ArrayAccess, JsonSerializable
     }
 
     public const STATUS_COMPLETED = 'COMPLETED';
+    public const STATUS_RELEASED = 'RELEASED';
     public const STATUS_UPCOMING = 'UPCOMING';
 
     /**
@@ -359,6 +360,7 @@ class AirbnbTransaction implements ModelInterface, ArrayAccess, JsonSerializable
     {
         return [
             self::STATUS_COMPLETED,
+            self::STATUS_RELEASED,
             self::STATUS_UPCOMING,
         ];
     }
@@ -581,7 +583,7 @@ class AirbnbTransaction implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets status
      *
-     * @param string $status `COMPLETED`: settled in a payout. `UPCOMING`: expected, not paid out yet.
+     * @param string $status `COMPLETED`: settled in a payout. `RELEASED`: Airbnb released it (its date has passed) but has not paid it out yet — the payout is held, or accumulating toward the host's next one; it becomes `COMPLETED` under its payout when paid. `UPCOMING`: expected, not released yet.
      *
      * @return $this
      */
