@@ -209,7 +209,6 @@ class StartConnectionImportRequest implements ModelInterface, ArrayAccess, JsonS
     }
 
     public const SCOPE_LISTINGS = 'listings';
-    public const SCOPE_RESERVATIONS = 'reservations';
     public const SCOPE_FULL = 'full';
 
     /**
@@ -221,7 +220,6 @@ class StartConnectionImportRequest implements ModelInterface, ArrayAccess, JsonS
     {
         return [
             self::SCOPE_LISTINGS,
-            self::SCOPE_RESERVATIONS,
             self::SCOPE_FULL,
         ];
     }
@@ -302,7 +300,7 @@ class StartConnectionImportRequest implements ModelInterface, ArrayAccess, JsonS
     /**
      * Sets scope
      *
-     * @param string|null $scope What to import. `full` = the first-connect import again (listings, calendars, reservations, payouts, reviews, conversations), for an account that has never fully imported. `listings` = the account's listings with their calendars. `reservations` = the account's reservations, stays from the last month and every future one. Omit to let Repull choose: `full` for an account that has never fully imported, else `listings`.
+     * @param string|null $scope What to import. `full` = the first-connect import again (listings, calendars, reservations, payouts, reviews, conversations), for an account that has never fully imported. `listings` = the account's listings with their calendars. Omit to let Repull choose: `full` for an account that has never fully imported, else `listings`.
      *
      * @return $this
      */
