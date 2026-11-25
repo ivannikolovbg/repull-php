@@ -474,7 +474,7 @@ class TiketConnectRoomsResponseRoomsInner implements ModelInterface, ArrayAccess
     /**
      * Sets room_booking_id
      *
-     * @param string|null $room_booking_id tiket.com room type id.
+     * @param string|null $room_booking_id tiket.com room type code (`roomTypeCode` on `GET /v1/channels/tiket/properties/{id}/rooms`), exactly as tiket.com sends it. Free-form text such as `DLX-KING`, so always a string — never parse it as a number.
      *
      * @return $this
      */
