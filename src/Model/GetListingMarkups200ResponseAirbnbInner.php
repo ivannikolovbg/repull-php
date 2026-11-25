@@ -310,7 +310,7 @@ class GetListingMarkups200ResponseAirbnbInner implements ModelInterface, ArrayAc
     /**
      * Sets markup_percent
      *
-     * @param float|null $markup_percent Percent added to the listing's price on Airbnb. 35 = +35%. `null` = none.
+     * @param float|null $markup_percent Percent added to the listing's price on Airbnb. 35 = +35%; negative = below the listing's price. `null` = none.
      *
      * @return $this
      */

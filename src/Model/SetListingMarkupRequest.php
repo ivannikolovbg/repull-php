@@ -308,8 +308,8 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
             $invalidProperties[] = "invalid value for 'markup_percent', must be smaller than 100.";
         }
 
-        if (!is_null($this->container['markup_percent']) && ($this->container['markup_percent'] < 0)) {
-            $invalidProperties[] = "invalid value for 'markup_percent', must be bigger than or equal to 0.";
+        if (!is_null($this->container['markup_percent']) && ($this->container['markup_percent'] <= -100)) {
+            $invalidProperties[] = "invalid value for 'markup_percent', must be bigger than -100.";
         }
 
         return $invalidProperties;
@@ -365,7 +365,7 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets markup_percent
      *
-     * @param float|null $markup_percent 15 = +15%. `null` removes the markup.
+     * @param float|null $markup_percent 15 = +15%; -2 = 2% below the listing's price. Above -100 and below 100. `null` removes the markup.
      *
      * @return $this
      */
@@ -385,8 +385,8 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
         if (!is_null($markup_percent) && ($markup_percent >= 100)) {
             throw new InvalidArgumentException('invalid value for $markup_percent when calling SetListingMarkupRequest., must be smaller than 100.');
         }
-        if (!is_null($markup_percent) && ($markup_percent < 0)) {
-            throw new InvalidArgumentException('invalid value for $markup_percent when calling SetListingMarkupRequest., must be bigger than or equal to 0.');
+        if (!is_null($markup_percent) && ($markup_percent <= -100)) {
+            throw new InvalidArgumentException('invalid value for $markup_percent when calling SetListingMarkupRequest., must be bigger than -100.');
         }
 
         $this->container['markup_percent'] = $markup_percent;
