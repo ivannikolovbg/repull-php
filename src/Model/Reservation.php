@@ -423,15 +423,17 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     public const PENDING_REASON_GUEST_PAYMENT = 'guest_payment';
     public const PENDING_REASON_GUEST_VERIFICATION = 'guest_verification';
     public const SOURCE_AIRBNB = 'airbnb';
-    public const SOURCE_BOOKING_COM = 'booking.com';
+    public const SOURCE_BOOKING = 'booking';
     public const SOURCE_VRBO = 'vrbo';
+    public const SOURCE_TIKET = 'tiket';
     public const SOURCE_DIRECT = 'direct';
     public const SOURCE_WEBSITE = 'website';
     public const SOURCE_OWNER = 'owner';
     public const SOURCE_OTHER = 'other';
     public const PLATFORM_AIRBNB = 'airbnb';
-    public const PLATFORM_BOOKING_COM = 'booking.com';
+    public const PLATFORM_BOOKING = 'booking';
     public const PLATFORM_VRBO = 'vrbo';
+    public const PLATFORM_TIKET = 'tiket';
     public const PLATFORM_DIRECT = 'direct';
     public const PLATFORM_WEBSITE = 'website';
     public const PLATFORM_OWNER = 'owner';
@@ -494,8 +496,9 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     {
         return [
             self::SOURCE_AIRBNB,
-            self::SOURCE_BOOKING_COM,
+            self::SOURCE_BOOKING,
             self::SOURCE_VRBO,
+            self::SOURCE_TIKET,
             self::SOURCE_DIRECT,
             self::SOURCE_WEBSITE,
             self::SOURCE_OWNER,
@@ -512,8 +515,9 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     {
         return [
             self::PLATFORM_AIRBNB,
-            self::PLATFORM_BOOKING_COM,
+            self::PLATFORM_BOOKING,
             self::PLATFORM_VRBO,
+            self::PLATFORM_TIKET,
             self::PLATFORM_DIRECT,
             self::PLATFORM_WEBSITE,
             self::PLATFORM_OWNER,
@@ -1210,7 +1214,7 @@ class Reservation implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets source
      *
-     * @param string|null $source Booking source / channel. Lowercase. May be null on legacy rows. Canonical name as of 2026-05; `platform` is kept as an alias.
+     * @param string|null $source Booking source / channel. Lowercase. May be null on legacy rows. Booking.com reservations are `booking`. Canonical name as of 2026-05; `platform` is kept as an alias.
      *
      * @return $this
      */
