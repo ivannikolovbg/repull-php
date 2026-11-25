@@ -13970,6 +13970,10 @@ class AirbnbApi
      * List Airbnb reviews
      *
      * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
+     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $limit Max items per page — max 200 per page. A larger value returns 200 per page; follow &#x60;pagination.nextCursor&#x60; for the rest. (optional, default to 200)
+     * @param  string|null $listing_id Filter to one listing: its Airbnb listing id (&#x60;airbnbListingId&#x60; on each review) or its Repull listing id. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbReviews'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -13978,10 +13982,14 @@ class AirbnbApi
      */
     public function listAirbnbReviews(
         ?string $account_id = null,
+        ?string $cursor = null,
+        ?int $offset = 0,
+        ?int $limit = 200,
+        ?string $listing_id = null,
         string $contentType = self::contentTypes['listAirbnbReviews'][0]
     ): \Repull\Model\AirbnbReviewListResponse|\Repull\Model\Error
     {
-        list($response) = $this->listAirbnbReviewsWithHttpInfo($account_id, $contentType);
+        list($response) = $this->listAirbnbReviewsWithHttpInfo($account_id, $cursor, $offset, $limit, $listing_id, $contentType);
         return $response;
     }
 
@@ -13991,6 +13999,10 @@ class AirbnbApi
      * List Airbnb reviews
      *
      * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
+     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $limit Max items per page — max 200 per page. A larger value returns 200 per page; follow &#x60;pagination.nextCursor&#x60; for the rest. (optional, default to 200)
+     * @param  string|null $listing_id Filter to one listing: its Airbnb listing id (&#x60;airbnbListingId&#x60; on each review) or its Repull listing id. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbReviews'] to see the possible values for this operation
      *
      * @throws ApiException on non-2xx response or if the response body is not in the expected format
@@ -13999,10 +14011,14 @@ class AirbnbApi
      */
     public function listAirbnbReviewsWithHttpInfo(
         ?string $account_id = null,
+        ?string $cursor = null,
+        ?int $offset = 0,
+        ?int $limit = 200,
+        ?string $listing_id = null,
         string $contentType = self::contentTypes['listAirbnbReviews'][0]
     ): array
     {
-        $request = $this->listAirbnbReviewsRequest($account_id, $contentType);
+        $request = $this->listAirbnbReviewsRequest($account_id, $cursor, $offset, $limit, $listing_id, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -14104,6 +14120,10 @@ class AirbnbApi
      * List Airbnb reviews
      *
      * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
+     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $limit Max items per page — max 200 per page. A larger value returns 200 per page; follow &#x60;pagination.nextCursor&#x60; for the rest. (optional, default to 200)
+     * @param  string|null $listing_id Filter to one listing: its Airbnb listing id (&#x60;airbnbListingId&#x60; on each review) or its Repull listing id. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbReviews'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -14111,10 +14131,14 @@ class AirbnbApi
      */
     public function listAirbnbReviewsAsync(
         ?string $account_id = null,
+        ?string $cursor = null,
+        ?int $offset = 0,
+        ?int $limit = 200,
+        ?string $listing_id = null,
         string $contentType = self::contentTypes['listAirbnbReviews'][0]
     ): PromiseInterface
     {
-        return $this->listAirbnbReviewsAsyncWithHttpInfo($account_id, $contentType)
+        return $this->listAirbnbReviewsAsyncWithHttpInfo($account_id, $cursor, $offset, $limit, $listing_id, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -14128,6 +14152,10 @@ class AirbnbApi
      * List Airbnb reviews
      *
      * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
+     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $limit Max items per page — max 200 per page. A larger value returns 200 per page; follow &#x60;pagination.nextCursor&#x60; for the rest. (optional, default to 200)
+     * @param  string|null $listing_id Filter to one listing: its Airbnb listing id (&#x60;airbnbListingId&#x60; on each review) or its Repull listing id. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbReviews'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -14135,11 +14163,15 @@ class AirbnbApi
      */
     public function listAirbnbReviewsAsyncWithHttpInfo(
         ?string $account_id = null,
+        ?string $cursor = null,
+        ?int $offset = 0,
+        ?int $limit = 200,
+        ?string $listing_id = null,
         string $contentType = self::contentTypes['listAirbnbReviews'][0]
     ): PromiseInterface
     {
         $returnType = '\Repull\Model\AirbnbReviewListResponse';
-        $request = $this->listAirbnbReviewsRequest($account_id, $contentType);
+        $request = $this->listAirbnbReviewsRequest($account_id, $cursor, $offset, $limit, $listing_id, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -14181,6 +14213,10 @@ class AirbnbApi
      * Create request for operation 'listAirbnbReviews'
      *
      * @param  string|null $account_id Scope the response to ONE connected Airbnb account. The value is the Airbnb host id — the same &#x60;accounts[].externalAccountId&#x60; that &#x60;GET /v1/connect/airbnb&#x60; returns and &#x60;DELETE /v1/connect/airbnb?accountId&#x3D;&#x60; accepts.  A workspace can connect several Airbnb accounts. Omit this and you get every account&#39;s rows (the default, unchanged). Every row carries &#x60;accountId&#x60; + &#x60;accountName&#x60; either way, so you can group without a second call.  An id that is not connected to THIS workspace returns &#x60;404 not_found&#x60; with your own ids in &#x60;valid_values&#x60; — we do not distinguish \&quot;no such host\&quot; from \&quot;someone else&#39;s host\&quot;, because confirming the latter would leak another workspace&#39;s account.  Note this is NOT the &#x60;X-Account-Id&#x60; header, which carries a connection id and cannot tell two Airbnb hosts apart. (optional)
+     * @param  string|null $cursor Opaque cursor returned by the previous response&#39;s &#x60;pagination.nextCursor&#x60;. Omit to fetch the first page. (optional)
+     * @param  int|null $offset First-class alias for cursor-based pagination. Mutually exclusive with &#x60;cursor&#x60; — passing both returns 422. Accepts integers in &#x60;[0, 10000]&#x60;; deeper walks must use &#x60;cursor&#x60; (constant per-page cost). The response always includes &#x60;pagination.nextCursor&#x60; so consumers can switch from offset → cursor mid-walk for deep pagination without re-keying. (optional, default to 0)
+     * @param  int|null $limit Max items per page — max 200 per page. A larger value returns 200 per page; follow &#x60;pagination.nextCursor&#x60; for the rest. (optional, default to 200)
+     * @param  string|null $listing_id Filter to one listing: its Airbnb listing id (&#x60;airbnbListingId&#x60; on each review) or its Repull listing id. (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['listAirbnbReviews'] to see the possible values for this operation
      *
      * @throws InvalidArgumentException
@@ -14188,10 +14224,27 @@ class AirbnbApi
      */
     public function listAirbnbReviewsRequest(
         ?string $account_id = null,
+        ?string $cursor = null,
+        ?int $offset = 0,
+        ?int $limit = 200,
+        ?string $listing_id = null,
         string $contentType = self::contentTypes['listAirbnbReviews'][0]
     ): Request
     {
 
+
+
+        if ($offset !== null && $offset > 10000) {
+            throw new InvalidArgumentException('invalid value for "$offset" when calling AirbnbApi.listAirbnbReviews, must be smaller than or equal to 10000.');
+        }
+        if ($offset !== null && $offset < 0) {
+            throw new InvalidArgumentException('invalid value for "$offset" when calling AirbnbApi.listAirbnbReviews, must be bigger than or equal to 0.');
+        }
+        
+        if ($limit !== null && $limit < 1) {
+            throw new InvalidArgumentException('invalid value for "$limit" when calling AirbnbApi.listAirbnbReviews, must be bigger than or equal to 1.');
+        }
+        
 
 
         $resourcePath = '/v1/channels/airbnb/reviews';
@@ -14205,6 +14258,46 @@ class AirbnbApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $account_id,
             'account_id', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            null // openApiFormat
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $cursor,
+            'cursor', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            null // openApiFormat
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $offset,
+            'offset', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            null // openApiFormat
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $limit,
+            'limit', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false, // required
+            null // openApiFormat
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $listing_id,
+            'listing_id', // param base name
             'string', // openApiType
             'form', // style
             true, // explode

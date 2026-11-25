@@ -61,6 +61,7 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
         'id' => 'string',
         'external_review_id' => 'string',
         'submitted' => 'bool',
+        'review' => 'array<string,mixed>',
         'platform' => 'string',
         'rating' => 'array<string,mixed>'
     ];
@@ -74,6 +75,7 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
         'id' => null,
         'external_review_id' => null,
         'submitted' => null,
+        'review' => null,
         'platform' => null,
         'rating' => null
     ];
@@ -87,6 +89,7 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
         'id' => false,
         'external_review_id' => false,
         'submitted' => false,
+        'review' => true,
         'platform' => false,
         'rating' => false
     ];
@@ -170,6 +173,7 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
         'id' => 'id',
         'external_review_id' => 'externalReviewId',
         'submitted' => 'submitted',
+        'review' => 'review',
         'platform' => 'platform',
         'rating' => 'rating'
     ];
@@ -183,6 +187,7 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
         'id' => 'setId',
         'external_review_id' => 'setExternalReviewId',
         'submitted' => 'setSubmitted',
+        'review' => 'setReview',
         'platform' => 'setPlatform',
         'rating' => 'setRating'
     ];
@@ -196,6 +201,7 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
         'id' => 'getId',
         'external_review_id' => 'getExternalReviewId',
         'submitted' => 'getSubmitted',
+        'review' => 'getReview',
         'platform' => 'getPlatform',
         'rating' => 'getRating'
     ];
@@ -250,6 +256,7 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
         $this->setIfExists('id', $data ?? [], null);
         $this->setIfExists('external_review_id', $data ?? [], null);
         $this->setIfExists('submitted', $data ?? [], null);
+        $this->setIfExists('review', $data ?? [], null);
         $this->setIfExists('platform', $data ?? [], null);
         $this->setIfExists('rating', $data ?? [], null);
     }
@@ -368,6 +375,40 @@ class SubmitGuestReview200Response implements ModelInterface, ArrayAccess, JsonS
             throw new InvalidArgumentException('non-nullable submitted cannot be null');
         }
         $this->container['submitted'] = $submitted;
+
+        return $this;
+    }
+
+    /**
+     * Gets review
+     *
+     * @return array<string,mixed>|null
+     */
+    public function getReview(): ?array
+    {
+        return $this->container['review'];
+    }
+
+    /**
+     * Sets review
+     *
+     * @param array<string,mixed>|null $review Airbnb: the review as stored after the submission — the same object `GET /v1/reviews/{id}` returns, with `publicReview`, `rating`, `categories` and `submittedAt` set. It can stay `hidden` until the guest reviews too.
+     *
+     * @return $this
+     */
+    public function setReview(?array $review): static
+    {
+        if (is_null($review)) {
+            array_push($this->openAPINullablesSetToNull, 'review');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('review', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['review'] = $review;
 
         return $this;
     }
