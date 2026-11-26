@@ -425,6 +425,7 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
      * Gets account_id
      *
      * @return string|null
+     * @deprecated
      */
     public function getAccountId(): ?string
     {
@@ -434,9 +435,10 @@ class SetListingMarkupRequest implements ModelInterface, ArrayAccess, JsonSerial
     /**
      * Sets account_id
      *
-     * @param string|null $account_id Vrbo account (`vrbo:7001234`, Vrbo's own account id) — required when the listing is linked on more than one. The old sign-in ids (`vrbo:13`) still resolve until 2027-02-12.
+     * @param string|null $account_id Ignored. The Vrbo markup is per listing, so there is no account to name; accepted so existing calls keep working.
      *
      * @return $this
+     * @deprecated
      */
     public function setAccountId(?string $account_id): static
     {
