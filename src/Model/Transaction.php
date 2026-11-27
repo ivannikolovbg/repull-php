@@ -73,7 +73,8 @@ class Transaction implements ModelInterface, ArrayAccess, JsonSerializable
         'confirmation_code' => 'string',
         'reservation_id' => 'int',
         'listing_id' => 'int',
-        'synced_at' => '\DateTime'
+        'synced_at' => '\DateTime',
+        'booking_payments_api' => '\Repull\Model\TransactionBookingPaymentsApi'
     ];
 
     /**
@@ -96,7 +97,8 @@ class Transaction implements ModelInterface, ArrayAccess, JsonSerializable
         'confirmation_code' => null,
         'reservation_id' => null,
         'listing_id' => null,
-        'synced_at' => 'date-time'
+        'synced_at' => 'date-time',
+        'booking_payments_api' => null
     ];
 
     /**
@@ -119,7 +121,8 @@ class Transaction implements ModelInterface, ArrayAccess, JsonSerializable
         'confirmation_code' => true,
         'reservation_id' => true,
         'listing_id' => true,
-        'synced_at' => true
+        'synced_at' => true,
+        'booking_payments_api' => true
     ];
 
     /**
@@ -212,7 +215,8 @@ class Transaction implements ModelInterface, ArrayAccess, JsonSerializable
         'confirmation_code' => 'confirmationCode',
         'reservation_id' => 'reservationId',
         'listing_id' => 'listingId',
-        'synced_at' => 'syncedAt'
+        'synced_at' => 'syncedAt',
+        'booking_payments_api' => 'bookingPaymentsApi'
     ];
 
     /**
@@ -235,7 +239,8 @@ class Transaction implements ModelInterface, ArrayAccess, JsonSerializable
         'confirmation_code' => 'setConfirmationCode',
         'reservation_id' => 'setReservationId',
         'listing_id' => 'setListingId',
-        'synced_at' => 'setSyncedAt'
+        'synced_at' => 'setSyncedAt',
+        'booking_payments_api' => 'setBookingPaymentsApi'
     ];
 
     /**
@@ -258,7 +263,8 @@ class Transaction implements ModelInterface, ArrayAccess, JsonSerializable
         'confirmation_code' => 'getConfirmationCode',
         'reservation_id' => 'getReservationId',
         'listing_id' => 'getListingId',
-        'synced_at' => 'getSyncedAt'
+        'synced_at' => 'getSyncedAt',
+        'booking_payments_api' => 'getBookingPaymentsApi'
     ];
 
     /**
@@ -323,6 +329,7 @@ class Transaction implements ModelInterface, ArrayAccess, JsonSerializable
         $this->setIfExists('reservation_id', $data ?? [], null);
         $this->setIfExists('listing_id', $data ?? [], null);
         $this->setIfExists('synced_at', $data ?? [], null);
+        $this->setIfExists('booking_payments_api', $data ?? [], null);
     }
 
     /**
@@ -862,6 +869,40 @@ class Transaction implements ModelInterface, ArrayAccess, JsonSerializable
             }
         }
         $this->container['synced_at'] = $synced_at;
+
+        return $this;
+    }
+
+    /**
+     * Gets booking_payments_api
+     *
+     * @return \Repull\Model\TransactionBookingPaymentsApi|null
+     */
+    public function getBookingPaymentsApi(): ?\Repull\Model\TransactionBookingPaymentsApi
+    {
+        return $this->container['booking_payments_api'];
+    }
+
+    /**
+     * Sets booking_payments_api
+     *
+     * @param \Repull\Model\TransactionBookingPaymentsApi|null $booking_payments_api booking_payments_api
+     *
+     * @return $this
+     */
+    public function setBookingPaymentsApi(?\Repull\Model\TransactionBookingPaymentsApi $booking_payments_api): static
+    {
+        if (is_null($booking_payments_api)) {
+            array_push($this->openAPINullablesSetToNull, 'booking_payments_api');
+        } else {
+            $nullablesSetToNull = $this->getOpenAPINullablesSetToNull();
+            $index = array_search('booking_payments_api', $nullablesSetToNull);
+            if ($index !== FALSE) {
+                unset($nullablesSetToNull[$index]);
+                $this->setOpenAPINullablesSetToNull($nullablesSetToNull);
+            }
+        }
+        $this->container['booking_payments_api'] = $booking_payments_api;
 
         return $this;
     }
